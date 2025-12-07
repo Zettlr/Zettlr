@@ -1,55 +1,59 @@
 <template>
   <PopoverWrapper v-bind:target="target" v-on:close="emit('close')">
-    <h4>{{ props.file.name }}</h4>
-    <div class="properties-info-container">
-      <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
-      <div v-if="props.file.type === 'file'">
-        <span>{{ formattedWords }}</span>
-      </div>
-      <div v-else>
-        <span>Type: <span class="badge primary">{{ props.file.ext.substring(1) }}</span></span>
-      </div>
-    </div>
-    <div class="properties-info-container">
-      <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
-      <div><span>{{ formattedSize }}</span></div>
-    </div>
-    <template v-if="props.file.type === 'file' && props.file.tags.length > 0">
-      <hr>
-      <div>
-        <div v-for="(item, idx) in props.file.tags" v-bind:key="idx" class="badge">
-          <span
-            v-if="retrieveTagColour(item) !== ''"
-            class="color-circle"
-            v-bind:style="{
-              'background-color': retrieveTagColour(item)
-            }"
-          ></span>
-          <span>{{ item }}</span>
+    <div id="file-props">
+      <h4>{{ props.file.name }}</h4>
+      <div class="properties-info-container">
+        <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
+        <div v-if="props.file.type === 'file'">
+          <span>{{ formattedWords }}</span>
+        </div>
+        <div v-else>
+          <span>Type: <span class="badge primary">{{ props.file.ext.substring(1) }}</span></span>
         </div>
       </div>
-    </template>
-    <template v-if="props.file.type === 'file'">
-      <hr>
-      <p>
-        {{ writingTargetTitle }}
-      </p>
-      <NumberControl
-        v-model="internalTargetValue"
-        v-bind:inline="true"
-      ></NumberControl>
-      <SelectControl
-        v-model="internalTargetMode"
-        v-bind:inline="true"
-        v-bind:options="{
-          words: wordsLabel,
-          chars: charactersLabel
-        }"
-      ></SelectControl>
-      <button v-on:click="reset">
-        {{ resetLabel }}
-      </button>
-    </template>
+      <div class="properties-info-container">
+        <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
+        <div><span>{{ formattedSize }}</span></div>
+      </div>
+      <template v-if="props.file.type === 'file' && props.file.tags.length > 0">
+        <hr>
+        <div>
+          <div v-for="(item, idx) in props.file.tags" v-bind:key="idx" class="badge">
+            <span
+              v-if="retrieveTagColour(item) !== ''"
+              class="color-circle"
+              v-bind:style="{
+                'background-color': retrieveTagColour(item)
+              }"
+            ></span>
+            <span>{{ item }}</span>
+          </div>
+        </div>
+      </template>
+      <template v-if="props.file.type === 'file'">
+        <hr>
+        <p>
+          {{ writingTargetTitle }}
+        </p>
+        <div style="display: flex; align-items: center;">
+          <NumberControl
+            v-model="internalTargetValue"
+            v-bind:inline="true"
+          ></NumberControl>
+          <SelectControl
+            v-model="internalTargetMode"
+            v-bind:inline="true"
+            v-bind:options="{
+              words: wordsLabel,
+              chars: charactersLabel
+            }"
+          ></SelectControl>
+          <button v-on:click="reset">
+            {{ resetLabel }}
+          </button>
+        </div>
+      </template>
+    </div>
   </PopoverWrapper>
 </template>
 
@@ -150,18 +154,36 @@ function retrieveTagColour (tagName: string): string {
 </script>
 
 <style lang="less">
+body {
+  #file-props {
+    padding: 10px;
+    min-width: 240px;
+
+    h4 {
+      margin-bottom: 10px;
+    }
+
+    input.inline, select.inline {
+      margin: 0;
+    }
+
+    .form-control {
+      padding: 5px 0;
+    }
+  }
+}
+
 body div.popover {
 
   div.properties-info-container {
     color: rgb(90, 90, 90);
     font-size: 11px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     // Enable a table-like visual experience
     & > div {
       width: 100%;
-      padding: 0 10px;
       overflow: hidden;
 
       & > span {
