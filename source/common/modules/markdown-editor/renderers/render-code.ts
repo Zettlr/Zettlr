@@ -113,6 +113,7 @@ const codeTheme = EditorView.baseTheme({
   '.code .cm-changed': { color: YELLOW },
   '.code .cm-property': { color: MAGENTA },
   '.code .cm-comment': { color: BASE_1 },
+  '.code .cm-block-comment': { color: BASE_1 },
   '.code .cm-negative': { color: RED },
 })
 
