@@ -37,6 +37,7 @@ import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 import { hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import isDir from 'source/common/util/is-dir'
 
 type DocumentWindows = Record<string, DocumentTree>
 type DocumentWindowsJSON = Record<string, BranchNodeJSON|LeafNodeJSON>
@@ -792,6 +793,16 @@ current contents from the editor somewhere else, and restart the application.`
    */
   public async openFile (windowId: string|undefined, leafId: string|undefined, filePath: string, newTab?: boolean): Promise<boolean> {
     if (!isFile(filePath)) {
+      // The renderer process essentially just throws paths at the documents
+      // provider when the user intents to open them. Users can also link
+      // folders, so we just quickly check for that, and open them (similar to
+      // non-Markdown files a few lines below).
+      if (isDir(filePath)) {
+        await shell.openPath(filePath)
+        return false
+      }
+
+      // Else: Whatever this is, it was not a proper path.
       throw new Error(`Could not open file ${filePath}: Not an existing file.`)
     }
 

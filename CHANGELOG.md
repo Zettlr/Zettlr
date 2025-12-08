@@ -426,6 +426,7 @@ files.
 - Increase icon sizes in file manager.
 - Fixed a bug that would inadvertently emit metadata for the PO-file if
   translating an empty string.
+- Re-implemented linking to folders from within documents (#6023).
 
 ## Under the Hood
 
