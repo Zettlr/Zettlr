@@ -162,9 +162,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
     // Unload any path no longer part of the open paths.
     for (const existingPath of workspaceMap.value.keys()) {
-      console.log(`Checking existing path from workspace map ${existingPath}`)
       if (!value.includes(existingPath)) {
-        console.log('No longer present -> deleting!')
         workspaceMap.value.delete(existingPath)
       }
     }
