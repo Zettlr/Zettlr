@@ -79,6 +79,13 @@ export const pandocSpanParser: InlineParser = {
 export const pandocDivParser: BlockParser = {
   name: 'pandoc-div',
   parse: (ctx, line) => {
+    // Opening marks can only occur at the beginning of the line.
+    // Likewise, to avoid infinitely re-parsing the line, we only
+    // start testing the block if we are at the beginning.
+    if (line.pos > 0) {
+      return false
+    }
+
     // Valid lines have the pattern `::: {#id .classes key=value}`.
     const match = pandocDivOpeningRe.exec(line.text)
     if (!match?.indices?.groups) {
@@ -101,15 +108,25 @@ export const pandocDivParser: BlockParser = {
     // mark.
     ctx.startComposite('PandocDiv', 0, ctx.depth + 1)
 
+    // We need to move the line position after parsing,
+    // so we track the offset as we calculate markers
+    // This is a line-relative position, not document-
+    // relative.
+    let lineBasePos = 0
+
     // Opening mark
     const [ markFrom, markTo ] = match.indices.groups.mark
     ctx.addElement(ctx.elt('PandocDivMark', ctx.lineStart + markFrom, ctx.lineStart + markTo))
+
+    lineBasePos = markTo
 
     // Bare class names
     if (match.groups?.name !== undefined || match.groups?.class !== undefined) {
       const [ classFrom, classTo ] = match.indices.groups.name ?? match.indices.groups.class
 
       ctx.addElement(ctx.elt('PandocDivInfo', ctx.lineStart + classFrom, ctx.lineStart + classTo))
+
+      lineBasePos = classTo
     }
 
     // `PandocAttribute` nodes
@@ -129,12 +146,15 @@ export const pandocDivParser: BlockParser = {
         const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
         if (attr[0].type === nodeId) {
           ctx.addElement(attr[0])
+
+          lineBasePos = attrTo
         }
       }
     }
 
-    // We consume the whole line since there can be no other content
-    ctx.nextLine()
+    // Move the base position to avoid infinite loops
+    line.moveBase(lineBasePos)
+
     return null // composite blocks require returning `null` on success
   },
 
