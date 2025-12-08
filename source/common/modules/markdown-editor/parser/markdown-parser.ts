@@ -79,6 +79,7 @@ import { type ZknLinkParserConfig, zknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
 import { zknTagParser } from './zkn-tag-parser'
+import { pandocDivComposite, pandocDivParser, pandocSpanParser } from './pandoc-div-span-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   {
@@ -190,6 +191,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       // options here, since "extensions" also takes an array.
       wrap: yamlCodeParse(),
       parseBlock: [
+        pandocDivParser,
         // This BlockParser parses YAML frontmatters
         frontmatterParser,
         // This BlockParser parses math blocks
@@ -200,6 +202,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       ],
       parseInline: [
         // Add inline parsers that add AST elements for various additional types
+        pandocSpanParser,
         inlineMathParser,
         footnoteParser,
         citationParser,
@@ -207,13 +210,13 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         zknTagParser,
         pandocLinkParser,
         pandocAttributesParser,
-        highlightParser
+        highlightParser,
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
       // NOTE: Changes here must be reflected in util/custom-tags.ts and theme/syntax.ts!
       defineNodes: [
-        { name: 'YAMLFrontmatter' },
+        { name: 'YAMLFrontmatter', block: true },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
         // Citation elements
@@ -246,7 +249,17 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'ZknTag', style: customTags.ZknTag },
         { name: 'ZknTagContent', style: customTags.ZknTagContent },
         { name: 'PandocAttribute', style: customTags.PandocAttribute },
-        { name: 'PandocAttributeMark', style: customTags.PandocAttributeMark }
+        { name: 'PandocAttributeMark', style: customTags.PandocAttributeMark },
+        {
+          name: 'PandocDiv',
+          block: true,
+          style: { 'PandocDiv/...': customTags.PandocDiv },
+          composite: pandocDivComposite
+        },
+        { name: 'PandocDivInfo', style: customTags.PandocDivInfo },
+        { name: 'PandocDivMark', style: customTags.PandocDivMark },
+        { name: 'PandocSpan', style: { 'PandocSpan/...': customTags.PandocSpan } },
+        { name: 'PandocSpanMark', style: customTags.PandocSpanMark },
       ]
     }
   })

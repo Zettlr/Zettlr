@@ -313,6 +313,12 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
       const attr = renderNodeAttributes(node)
       return `${node.whitespaceBefore}<code${attr}>${_.escape(node.source)}</code>`
     }
+  } else if (node.type === 'PandocDiv') {
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<div${attr}>${nodeToHTML(node.children, options, indent)}</div>`
+  } else if (node.type === 'PandocSpan') {
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<span${attr}>${nodeToHTML(node.children, options, indent)}</span>`
   } else if (node.type === 'Generic') {
     // Generic nodes are differentiated by name. There are a few we can support,
     // but most we wrap in a div.
@@ -329,7 +335,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
 
     const open = `${node.whitespaceBefore}<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
     const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
-    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, options)
+    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, options, indent)
     return `${open}${body}${close}`
   } else if (node.type === 'ZettelkastenLink') {
     // NOTE: We count a ZettelkastenLink's title as a TextNode for various

@@ -48,6 +48,11 @@ export const customTags = {
   // Pandoc attributes, like: `# Heading or Title {.unnumbered}`
   PandocAttribute: Tag.define(),
   PandocAttributeMark: Tag.define(),
+  PandocDiv: Tag.define(),
+  PandocDivInfo: Tag.define(),
+  PandocDivMark: Tag.define(),
+  PandocSpan: Tag.define(),
+  PandocSpanMark: Tag.define(),
   HighlightMark: Tag.define(),
   HighlightContent: Tag.define()
 }

@@ -78,7 +78,9 @@ export function extractASTNodes (ast: ASTNode, nodeType: ASTNodeType, filter?: (
     case 'Emphasis':
     case 'FootnoteRef':
     case 'Highlight':
-    case 'ListItem': {
+    case 'ListItem':
+    case 'PandocSpan':
+    case 'PandocDiv': {
       for (const child of ast.children) {
         returnNodes = returnNodes.concat(extractASTNodes(child, nodeType, filter))
       }
@@ -139,7 +141,9 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
     case 'Emphasis':
     case 'FootnoteRef':
     case 'Highlight':
-    case 'ListItem': {
+    case 'ListItem':
+    case 'PandocSpan':
+    case 'PandocDiv': {
       for (const child of ast.children) {
         textNodes = textNodes.concat(extractTextnodes(child, filter))
       }
