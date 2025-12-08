@@ -7,7 +7,7 @@
     v-bind:initial-total-width="100"
   >
     <template #view1>
-      <div id="defaults-container-list">
+      <div class="asset-container-list">
         <SelectableList
           v-bind:items="listItems"
           v-bind:editable="true"
@@ -25,39 +25,46 @@
       </div>
     </template>
     <template #view2>
-      <div id="defaults-container">
-        <p>{{ defaultsExplanation }}</p>
-        <p>
+      <div class="asset-container">
+        <ZtrAdmonition type="info" class="asset-admonition">
+          {{ defaultsExplanation }}
+        </ZtrAdmonition>
+        <p class="asset-input">
           <TextControl
             v-model="currentFilename"
-            class="default-name-input"
+            class="asset-input-name"
             v-bind:inline="false"
             v-bind:disabled="currentItem < 0"
             v-on:confirm="renameFile()"
           ></TextControl>
           <ButtonControl
+            class="asset-input-button"
             v-bind:label="renameFileLabel"
             v-bind:inline="true"
             v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"
             v-on:click="renameFile()"
           ></ButtonControl>
         </p>
-        <ZtrAdmonition v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" type="info">
+        <ZtrAdmonition
+          v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true"
+          type="warning"
+          class="asset-admonition"
+        >
           {{ protectedProfileWarning }}
         </ZtrAdmonition>
-
-        <ZtrAdmonition v-if="visibleItems[currentItem]?.isInvalid">
+        <ZtrAdmonition
+          v-if="visibleItems[currentItem]?.isInvalid"
+          class="asset-admonition"
+        >
           {{ invalidProfileWarning }}
         </ZtrAdmonition>
-
         <CodeEditor
           ref="code-editor"
           v-model="editorContents"
           v-bind:mode="'yaml'"
         ></CodeEditor>
-
         <!-- This div is used to keep the buttons in a line despite the flex -->
-        <div class="save-default-file">
+        <div class="save-asset-file">
           <ButtonControl
             class="save-button"
             v-bind:primary="true"
@@ -259,11 +266,14 @@ function saveDefaultsFile (): void {
   } as AssetsProviderIPCAPI)
     .then(async () => {
       lastLoadedEditorContents.value = editorContents.value
-      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
+      savingStatus.value = trans('Saved!')
       await retrieveDefaultsFiles() // Always make sure to pull in any changes
-      setTimeout(() => { savingStatus.value = '' }, 2000)
+      setTimeout(() => { savingStatus.value = '' }, 1000)
     })
-    .catch(err => console.error(err))
+    .catch(err => {
+      savingStatus.value = trans('Could not save changes')
+      console.error(err)
+    })
 }
 
 function newDefaultsFile (newName?: string): void {
@@ -340,63 +350,5 @@ function openDefaultsDirectory (): void {
 </script>
 
 <style lang="less">
-#defaults-container-list {
-  display: flex;
-  flex-direction: column;
-  height: stretch;
-
-  .form-control {
-    display: flex;
-    padding: 10px;
-
-    button {
-      flex: 1;
-    }
-  }
-}
-
-#defaults-container {
-  padding: 0px 10px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .admonition {
-    margin-top: 15px;
-  }
-
-  .default-name-input {
-    flex: 1;
-  }
-
-  .save-default-file {
-    padding: 10px 0px;
-    display: flex;
-    gap: 15px;
-
-    button {
-      width: 50px;
-    }
-  }
-
-  .form-control {
-    button:not(.input-reset-button) {
-      height: stretch;
-    }
-  }
-
-  p {
-    display: flex;
-    gap: 15px;
-    margin-top: 5px;
-  }
-
-  .CodeMirror {
-    flex-grow: 1;
-  }
-
-  span.protected-info {
-    color: gray;
-  }
-}
+//
 </style>

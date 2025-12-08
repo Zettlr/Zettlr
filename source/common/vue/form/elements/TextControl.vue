@@ -113,8 +113,6 @@ body div.form-control {
     grid-template-areas: "text text text";
     justify-items: center;
     align-items: center;
-    margin-top: 2px;
-    margin-bottom: 5px;
 
     &.has-icon:not(.has-reset) { grid-template-areas: "icon text text"; }
     &.has-reset:not(.has-icon) { grid-template-areas: "text text reset"; }
@@ -161,7 +159,6 @@ body.darwin {
     border: 1px solid rgb(210, 210, 210);
     border-bottom-color: rgb(180, 180, 180);
     border-radius: 6px;
-    padding: 2px 4px;
     transition: 0.1s outline;
 
     &:focus-within {
@@ -185,7 +182,6 @@ body.win32 {
     border: 2px solid rgb(90, 90, 90);
     border-radius: 0px;
     min-width: 50px;
-    padding: 2px 8px;
   }
 
   &.dark {
@@ -203,7 +199,6 @@ body.linux {
     border: 1px solid #b4b4b4;
     border-radius: 4px;
     min-width: 50px;
-    padding: 2px 8px;
   }
 
   &.dark {

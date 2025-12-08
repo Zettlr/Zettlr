@@ -7,7 +7,7 @@
     v-bind:initial-total-width="100"
   >
     <template #view1>
-      <div id="snippets-container-list">
+      <div class="asset-container-list">
         <SelectableList
           v-bind:items="availableSnippets"
           v-bind:selected-item="currentItem"
@@ -25,40 +25,40 @@
       </div>
     </template>
     <template #view2>
-      <div id="snippets-container">
-        <ZtrAdmonition v-bind:type="'info'">
+      <div class="asset-container">
+        <ZtrAdmonition type="info" class="asset-admonition">
           {{ snippetsExplanation }}
         </ZtrAdmonition>
-
         <template v-if="currentItem < 0">
-          <ZtrAdmonition v-bind:type="'warning'" style="margin-top: 10px">
+          <ZtrAdmonition type="warning" class="asset-admonition">
             {{ noSnippetsMessage }}
           </ZtrAdmonition>
         </template>
         <template v-else>
-          <p>
+          <p class="asset-input">
             <TextControl
               v-model="currentSnippetText"
-              class="snippet-name-input"
+              class="asset-input-name"
               v-bind:inline="false"
               v-bind:disabled="currentItem < 0"
               v-on:confirm="renameSnippet()"
             ></TextControl>
             <ButtonControl
+              class="asset-input-button"
               v-bind:label="renameSnippetLabel"
               v-bind:inline="true"
               v-bind:disabled="availableSnippets.length === 0 || currentSnippetText === availableSnippets[currentItem]"
               v-on:click="renameSnippet()"
             ></ButtonControl>
           </p>
-
           <CodeEditor
             ref="code-editor"
             v-model="editorContents"
             v-bind:mode="'markdown-snippets'"
             v-bind:readonly="currentItem < 0"
           ></CodeEditor>
-          <div class="save-snippet-file">
+          <!-- This div is used to keep the buttons in a line despite the flex -->
+          <div class="save-asset-file">
             <ButtonControl
               v-bind:primary="true"
               v-bind:label="saveButtonLabel"
@@ -191,10 +191,13 @@ function saveSnippet (): void {
     }
   } as AssetsProviderIPCAPI)
     .then(() => {
-      setTimeout(() => { savingStatus.value = trans('Saved!') }, 1000)
-      setTimeout(() => { savingStatus.value = '' }, 2000)
+      savingStatus.value = trans('Saved!')
+      setTimeout(() => { savingStatus.value = '' }, 1000)
     })
-    .catch(err => console.error(err))
+    .catch(err => {
+      savingStatus.value = trans('Could not save changes')
+      console.error(err)
+    })
 }
 
 function addSnippet (newName?: string): void {
@@ -286,55 +289,5 @@ function openSnippetsDirectory (): void {
 </script>
 
 <style lang="less">
-#snippets-container-list {
-  display: flex;
-  flex-direction: column;
-  height: stretch;
-
-  .form-control {
-    display: flex;
-    padding: 10px;
-
-    button {
-      flex: 1;
-    }
-  }
-}
-
-#snippets-container {
-  padding: 10px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .snippet-name-input {
-    flex: 1;
-  }
-
-  .save-snippet-file {
-    padding: 10px 0px;
-    display: flex;
-    gap: 15px;
-
-    button {
-      width: 50px;
-    }
-  }
-
-  .form-control {
-    button:not(.input-reset-button) {
-      height: stretch;
-    }
-  }
-
-  p {
-    display: flex;
-    gap: 15px;
-    margin-top: 5px;
-  }
-
-  .CodeMirror {
-    flex-grow: 1;
-  }
-}
+//
 </style>
