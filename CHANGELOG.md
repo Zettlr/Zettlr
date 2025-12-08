@@ -289,6 +289,9 @@ files.
   suggestions (if any) from there, too.
 - **Feature**: Zettlr now renders horizontal rules, too, when the preview
   rendering mode is on.
+- **Feature**: Zettlr can now properly parse and pre-render native Pandoc divs
+  and spans. This includes the `#refs`-div as well as other elements, including
+  underlines or small caps (#6031).
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or
