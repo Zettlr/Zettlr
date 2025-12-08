@@ -19,7 +19,7 @@ const PandocSpanDelimiter: DelimiterType = {}
 
 const pandocSpanClosingRe = /^\](?<attr>\{[ \w\t\-.#:=;"')(]*\})/d
 
-const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]+(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.#:=;"')(]*\}))\s*$/d
+const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]*(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.%#:=;"')(]*\}))\s*$/d
 
 const pandocDivClosingRe = /^(?<mark>:{3,})\s*$/d
 
@@ -79,6 +79,13 @@ export const pandocSpanParser: InlineParser = {
 export const pandocDivParser: BlockParser = {
   name: 'pandoc-div',
   parse: (ctx, line) => {
+    // Opening marks can only occur at the beginning of the line.
+    // Likewise, to avoid infinitely re-parsing the line, we only
+    // start testing the block if we are at the beginning.
+    if (line.pos > 0) {
+      return false
+    }
+
     // Valid lines have the pattern `::: {#id .classes key=value}`.
     const match = pandocDivOpeningRe.exec(line.text)
     if (!match?.indices?.groups) {
@@ -101,15 +108,25 @@ export const pandocDivParser: BlockParser = {
     // mark.
     ctx.startComposite('PandocDiv', 0, ctx.depth + 1)
 
+    // We need to move the line position after parsing,
+    // so we track the offset as we calculate markers
+    // This is a line-relative position, not document-
+    // relative.
+    let lineBasePos = 0
+
     // Opening mark
     const [ markFrom, markTo ] = match.indices.groups.mark
     ctx.addElement(ctx.elt('PandocDivMark', ctx.lineStart + markFrom, ctx.lineStart + markTo))
+
+    lineBasePos = markTo
 
     // Bare class names
     if (match.groups?.name !== undefined || match.groups?.class !== undefined) {
       const [ classFrom, classTo ] = match.indices.groups.name ?? match.indices.groups.class
 
       ctx.addElement(ctx.elt('PandocDivInfo', ctx.lineStart + classFrom, ctx.lineStart + classTo))
+
+      lineBasePos = classTo
     }
 
     // `PandocAttribute` nodes
@@ -129,16 +146,27 @@ export const pandocDivParser: BlockParser = {
         const nodeId = ctx.parser.nodeSet.types.find(node => node.is('PandocAttribute'))?.id
         if (attr[0].type === nodeId) {
           ctx.addElement(attr[0])
+
+          lineBasePos = attrTo
         }
       }
     }
 
-    // We consume the whole line since there can be no other content
-    ctx.nextLine()
+    // Move the base position to avoid infinite loops
+    line.moveBase(lineBasePos)
+
     return null // composite blocks require returning `null` on success
   },
 
-  endLeaf: (_ctx, line, _leaf) => {
+  endLeaf: (ctx, line, _leaf) => {
+    // Opening marks can come one after the other without requiring
+    // a blank line in between. So we only interrupt if the line matches
+    // the opening mark if the parent is a `PandocDiv`. Otherrwise,
+    // only the closing mark can interrupt other nodes.
+    if (ctx.parentType().name === 'PandocDiv') {
+      return pandocDivClosingRe.test(line.text) || pandocDivOpeningRe.test(line.text)
+    }
+
     return pandocDivClosingRe.test(line.text)
   }
 }
