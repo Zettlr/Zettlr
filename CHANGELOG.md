@@ -283,6 +283,10 @@ files.
 - **Feature**: The exporting workflow is now smoother. The export button will be
   focused as soon as the export popover opens, meaning you can press `Enter` to
   start the export using the current settings.
+- **Feature**: Misspelling suggestions from the LanguageTool linter will now be
+  treated equivalently to misspellings from the Hunspell linter, meaning you can
+  add those to the user dictionary from the context menu, and apply any of the
+  suggestions (if any) from there, too.
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or

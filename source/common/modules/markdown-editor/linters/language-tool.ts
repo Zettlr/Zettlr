@@ -51,6 +51,42 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
   }
 })
 
+/**
+ * Utility function that can extract a list of all suggestions for a misspelling
+ * that LanguageTool has produced.
+ *
+ * @param   {Diagnostic}     diag  The diagnostic
+ *
+ * @return  {string[]|null}        Returns either null, if there are no
+ *                                 suggestions to extract, or a list of those
+ *                                 suggestions.
+ */
+export function extractLTSpellcheckSuggestionsFrom (diag: Diagnostic): string[]|null {
+  if (!isLanguageToolMisspelling(diag)) {
+    return null
+  }
+
+  if (diag.actions === undefined) {
+    return null
+  }
+
+  return diag.actions
+    .filter(action => action.markClass === 'cm-ltSuggestAction')
+    .map(action => action.name) // NOTE: If we ever change the name value below in the linter, we must adapt this line, too!
+}
+
+/**
+ * Checks whether the provided diagnostic corresponds to a misspelling as
+ * produced by the LanguageTool linter.
+ *
+ * @param   {Diagnostic}  diag  The diagnostic to check
+ *
+ * @return  {boolean}           Whether the diagnostic describes a spellcheck error.
+ */
+export function isLanguageToolMisspelling (diag: Diagnostic): boolean {
+  return diag.source === 'language-tool(misspelling)'
+}
+
 export interface LanguageToolStateField {
   running: boolean
   lastDetectedLanguage: string

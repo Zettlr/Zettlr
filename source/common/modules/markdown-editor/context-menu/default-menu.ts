@@ -21,6 +21,7 @@ import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 import { getTransformSubmenu } from './transform-items'
+import { extractLTSpellcheckSuggestionsFrom, isLanguageToolMisspelling } from '../linters/language-tool'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -91,12 +92,16 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
 
   const suggestions: string[] = []
   let diagnostic: Diagnostic|undefined
-  let word: string|undefined
+  let misspelledWord: string|undefined
 
   if (pos !== null) {
     forEachDiagnostic(view.state, (diag, from, to) => {
-      // We need a suggestion that's under the cursor and also of a spellcheck
-      if (from <= pos && to >= pos && diag.source === 'spellcheck') {
+      // We need a suggestion that's under the cursor and indicates a misspelling.
+      // These can be produced both my LanguageTool and the Hunspell dictionaries.
+      if (
+        from <= pos && to >= pos &&
+        (diag.source === 'spellcheck' || isLanguageToolMisspelling(diag))
+      ) {
         diagnostic = diag
       }
     })
@@ -104,15 +109,20 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
 
   // If we have a diagnostic, we can extract the word & select it
   if (diagnostic !== undefined) {
-    word = view.state.sliceDoc(diagnostic.from, diagnostic.to)
+    misspelledWord = view.state.sliceDoc(diagnostic.from, diagnostic.to)
     view.dispatch({
       selection: { anchor: diagnostic.from, head: diagnostic.to }
     })
   }
 
   // If we have a word, we can fetch suggestions ...
-  if (word !== undefined) {
-    suggestions.push(...await fetchSuggestions(word))
+  if (misspelledWord !== undefined && diagnostic !== undefined && isLanguageToolMisspelling(diagnostic)) {
+    const s = extractLTSpellcheckSuggestionsFrom(diagnostic)
+    if (s !== null) {
+      suggestions.push(...s)
+    }
+  } else if (misspelledWord !== undefined) {
+    suggestions.push(...await fetchSuggestions(misspelledWord))
   }
 
   // ... and transform them to menu items
@@ -152,7 +162,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       action () {
         ipcRenderer.invoke(
           'dictionary-provider',
-          { command: 'add', terms: [word] }
+          { command: 'add', terms: [misspelledWord] }
         )
           .then(() => {
             // After we've added the word to the dictionary, we have to invalidate
@@ -161,7 +171,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
             forEachDiagnostic(view.state, (d, from, to) => {
               if (d.source !== 'spellcheck') {
                 filteredDiagnostics.push(d)
-              } else if (view.state.sliceDoc(from, to) !== word) {
+              } else if (view.state.sliceDoc(from, to) !== misspelledWord) {
                 filteredDiagnostics.push(d)
               }
             })
@@ -271,7 +281,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   ]
 
   // If we found a diagnostic earlier and a word, add the suggestion items
-  if (diagnostic !== undefined && word !== undefined) {
+  if (diagnostic !== undefined && misspelledWord !== undefined) {
     tpl.unshift(...suggestionItems)
   }
 
