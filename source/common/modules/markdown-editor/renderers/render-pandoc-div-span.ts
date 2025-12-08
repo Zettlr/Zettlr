@@ -7,9 +7,9 @@
  * Maintainer:      Bennie Milburn
  * License:         GNU GPL v3
  *
- * Description:     This renderer displays Pandoc divs and spans,
- *                  rendering the attributes defined for the node
- *                  as they would be displayed by pandoc.
+ * Description:     This renderer displays Pandoc divs and spans using
+ *                  Decorations, rendering the attributes defined for
+ *                  the node as they would be displayed by pandoc
  *
  * END HEADER
  */
