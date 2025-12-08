@@ -158,7 +158,15 @@ export const pandocDivParser: BlockParser = {
     return null // composite blocks require returning `null` on success
   },
 
-  endLeaf: (_ctx, line, _leaf) => {
+  endLeaf: (ctx, line, _leaf) => {
+    // Opening marks can come one after the other without requiring
+    // a blank line in between. So we only interrupt if the line matches
+    // the opening mark if the parent is a `PandocDiv`. Otherrwise,
+    // only the closing mark can interrupt other nodes.
+    if (ctx.parentType().name === 'PandocDiv') {
+      return pandocDivClosingRe.test(line.text) || pandocDivOpeningRe.test(line.text)
+    }
+
     return pandocDivClosingRe.test(line.text)
   }
 }
