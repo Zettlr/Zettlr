@@ -89,7 +89,7 @@ function saveCSS (): void {
   })
     .then(() => {
       lastLoadedCSS.value = editorContents.value
-      setTimeout(() => { savingStatus.value = trans('Saved!') }, 0)
+      savingStatus.value = trans('Saved!')
       setTimeout(() => { savingStatus.value = '' }, 1000)
     })
     .catch(err => {
