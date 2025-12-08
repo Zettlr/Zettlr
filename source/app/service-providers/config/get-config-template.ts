@@ -179,6 +179,7 @@ export interface ConfigOptions {
     renderHTags: boolean
     renderEmphasis: boolean
     renderPandoc: boolean
+    renderHorizontalRules: boolean
   }
   files: {
     // Built-in files cannot be shown in the sidebar, will always be shown in
@@ -440,7 +441,8 @@ export function getConfigTemplate (): ConfigOptions {
       renderTasks: true,
       renderHTags: false,
       renderEmphasis: false,
-      renderPandoc: false
+      renderPandoc: false,
+      renderHorizontalRules: true
     },
     files: {
       builtin: { showInFilemanager: true, showInSidebar: false, openWith: 'zettlr' },

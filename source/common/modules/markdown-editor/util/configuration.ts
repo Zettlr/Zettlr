@@ -43,6 +43,7 @@ export interface EditorConfiguration {
   renderTables: boolean
   renderEmphasis: boolean
   renderPandoc: boolean
+  renderHorizontalRules: boolean
   imagePreviewWidth: number
   imagePreviewHeight: number
   idRE: string
@@ -103,6 +104,7 @@ export function getDefaultConfig (): EditorConfiguration {
     renderTables: true,
     renderEmphasis: true,
     renderPandoc: true,
+    renderHorizontalRules: true,
     imagePreviewWidth: 100,
     imagePreviewHeight: 100,
     idRE: '(\\d{14})',

@@ -287,6 +287,8 @@ files.
   treated equivalently to misspellings from the Hunspell linter, meaning you can
   add those to the user dictionary from the context menu, and apply any of the
   suggestions (if any) from there, too.
+- **Feature**: Zettlr now renders horizontal rules, too, when the preview
+  rendering mode is on.
 - **Change**: Zettlr now monitors your documents and will automatically remove
   footnotes and references without the corresponding reference or footnote. If
   you have any documents in which you have un-referenced footnotes, or

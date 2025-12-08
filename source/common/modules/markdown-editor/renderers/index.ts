@@ -31,6 +31,7 @@ import type { EditorView } from '@codemirror/view'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
 import { trans } from 'source/common/i18n-renderer'
 import type { StatusbarItem } from '../statusbar'
+import { renderHorizontalRules } from './render-hr'
 
 const renderCompartment = new Compartment()
 
@@ -69,6 +70,7 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
     updateExtension(renderIframes, config.renderIframes, ext)
     updateExtension(renderEmphasis, config.renderEmphasis, ext)
     updateExtension(renderPandoc, config.renderPandoc, ext)
+    updateExtension(renderHorizontalRules, config.renderHorizontalRules, ext)
   }
 
   return ext
@@ -93,6 +95,7 @@ const modeSwitcher = EditorState.transactionExtender.from(configField, config =>
         renderIframes: effect.value.renderIframes ?? config.renderIframes,
         renderEmphasis: effect.value.renderEmphasis ?? config.renderEmphasis,
         renderPandoc: effect.value.renderPandoc ?? config.renderPandoc,
+        renderHorizontalRules: effect.value.renderHorizontalRules?? config.renderHorizontalRules
       }
 
       const ext = renderCompartment.get(transaction.state) as Extension[]|undefined

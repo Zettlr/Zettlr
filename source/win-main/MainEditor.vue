@@ -264,6 +264,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     renderTables: editor.enableTableHelper,
     renderEmphasis: display.renderEmphasis,
     renderPandoc: display.renderPandoc,
+    renderHorizontalRules: display.renderHorizontalRules,
     zknLinkFormat: zkn.linkFormat,
     zknAddFileTitle: zkn.linkAddFileTitle,
     linkWithIDIfPossible: zkn.linkWithIDIfPossible,
