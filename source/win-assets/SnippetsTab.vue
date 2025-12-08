@@ -195,7 +195,7 @@ function saveSnippet (): void {
       setTimeout(() => { savingStatus.value = '' }, 1000)
     })
     .catch(err => {
-      savingStatus.value = trans('Saving failed')
+      savingStatus.value = trans('Could not save changes')
       console.error(err)
     })
 }
