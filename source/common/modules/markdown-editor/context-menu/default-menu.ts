@@ -169,7 +169,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
             // the spellcheck linter errors that mark this specific word as wrong.
             const filteredDiagnostics: Diagnostic[] = []
             forEachDiagnostic(view.state, (d, from, to) => {
-              if (d.source !== 'spellcheck') {
+              if (d.source !== 'spellcheck' && !isLanguageToolMisspelling(d)) {
                 filteredDiagnostics.push(d)
               } else if (view.state.sliceDoc(from, to) !== misspelledWord) {
                 filteredDiagnostics.push(d)
