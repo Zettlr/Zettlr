@@ -19,7 +19,7 @@ const PandocSpanDelimiter: DelimiterType = {}
 
 const pandocSpanClosingRe = /^\](?<attr>\{[ \w\t\-.#:=;"')(]*\})/d
 
-const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]+(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.#:=;"')(]*\}))\s*$/d
+const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]*(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.%#:=;"')(]*\}))\s*$/d
 
 const pandocDivClosingRe = /^(?<mark>:{3,})\s*$/d
 
