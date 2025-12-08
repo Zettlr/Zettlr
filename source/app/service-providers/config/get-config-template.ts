@@ -439,9 +439,9 @@ export function getConfigTemplate (): ConfigOptions {
       renderLinks: true,
       renderMath: true,
       renderTasks: true,
-      renderHTags: false,
-      renderEmphasis: false,
-      renderPandoc: false,
+      renderHTags: true,
+      renderEmphasis: true,
+      renderPandoc: true,
       renderHorizontalRules: true
     },
     files: {
