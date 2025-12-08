@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { syntaxTree } from '@codemirror/language'
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language'
 import type { EditorState, Range } from '@codemirror/state'
 import type { Rect, DecorationSet } from '@codemirror/view'
 import { WidgetType, EditorView, Decoration } from '@codemirror/view'
@@ -28,6 +28,12 @@ import { displayTableContextMenu } from './context-menu'
 import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import { configField } from '../util/configuration'
 
+/**
+ * This holds the last measured height of each rendered table to provide
+ * values for the `estimatedHeight` getter.
+ */
+const TABLE_HEIGHT_CACHE = new Map<string, number>()
+
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
   // TODO: This number appears to be highly important to preventing sudden
@@ -36,7 +42,7 @@ export class TableWidget extends WidgetType {
   // highest wrapped cell in a table to prevent any jumping. But I'll keep the
   // TODO here for as long as we don't really know why this works.
   // For more background, see issue #5940.
-  private readonly meanRowHeight = 500
+  private readonly meanRowHeight = 100
 
   constructor (readonly table: string, readonly node: SyntaxNode) {
     super()
@@ -60,6 +66,11 @@ export class TableWidget extends WidgetType {
   // Codemirror changed the viewport will it believe (itself). Anyways, now it
   // works -- much better than before.
   get estimatedHeight (): number {
+    const height = TABLE_HEIGHT_CACHE.get(this.cacheKey) ?? 0
+    if (height > 0) {
+      return height
+    }
+
     const tableAST = parseTableNode(this.node, this.table)
     if (tableAST.type !== 'Table') {
       return -1
@@ -69,6 +80,10 @@ export class TableWidget extends WidgetType {
     return tableAST.rows.length * this.meanRowHeight
   }
 
+  private get cacheKey (): string {
+    return `${this.node.from}-${this.node.to}`
+  }
+
   toDOM (view: EditorView): HTMLElement {
     try {
       const { wrapper, table } = generateEmptyTableWidgetElement()
@@ -76,7 +91,12 @@ export class TableWidget extends WidgetType {
       if (tableAST.type !== 'Table') {
         throw new Error('Cannot render table: Likely malformed')
       }
+
       updateTable(table, tableAST, view)
+
+      const height = table.getBoundingClientRect().height
+      TABLE_HEIGHT_CACHE.set(this.cacheKey, height)
+
       view.requestMeasure()
       return wrapper
     } catch (err: any) {
@@ -99,11 +119,14 @@ export class TableWidget extends WidgetType {
 
     const tableAST = parseTableNode(this.node, view.state.sliceDoc())
     if (tableAST.type === 'Table') {
-      const height = table.getBoundingClientRect().height
+      const prevHeight = TABLE_HEIGHT_CACHE.get(this.cacheKey) ?? 0
       updateTable(table, tableAST, view)
       // Instruct the editor to remeasure its height; see
       // https://discuss.codemirror.net/t/5604
-      if (height !== table.getBoundingClientRect().height) {
+      const height = table.getBoundingClientRect().height
+      if (prevHeight !== height) {
+        TABLE_HEIGHT_CACHE.set(this.cacheKey, height)
+
         view.requestMeasure()
       }
       return true
@@ -142,7 +165,7 @@ export class TableWidget extends WidgetType {
           to: parseInt(cell.dataset.cellTo!, 10)
         }
       })
-    
+
     const realPos = pos + this.node.from // NOTE that `pos` is only an offset.
 
     // NOTE: This code ignores the "side" parameter. Also, it ignores the offset
@@ -184,11 +207,17 @@ export class TableWidget extends WidgetType {
    * @return  {DecorationSet}         The DecorationSet
    */
   public static createForState (state: EditorState): DecorationSet {
-    const newDecos: Array<Range<Decoration>> = syntaxTree(state)
+    const markdown = state.sliceDoc()
+
+    // We try to retrieve the full syntax tree, and if that fails, fall back to
+    // the (possibly incomplete) syntax tree.
+    let tree = ensureSyntaxTree(state, state.doc.length, 500) ?? syntaxTree(state)
+
+    const newDecos: Array<Range<Decoration>> = tree
       // Get all Table nodes in the document
       .topNode.getChildren('Table')
       .filter(table => {
-        const ast = parseTableNode(table, state.sliceDoc())
+        const ast = parseTableNode(table, markdown)
         if (ast.type !== 'Table') {
           return false // There was an error in parsing the table
         }
@@ -203,9 +232,8 @@ export class TableWidget extends WidgetType {
         }
 
         // Finally, check that the table is proper.
-        return ast.rows
-          .map(r => r.cells.length)
-          .every(len => len === (ast.alignment?.length ?? 0))
+        const rowLength = ast.alignment?.length ?? 0
+        return ast.rows.every(r => r.cells.length === rowLength)
       })
       // Turn the nodes into Decorations
       .map(node => {
@@ -215,7 +243,7 @@ export class TableWidget extends WidgetType {
           block: true
         }).range(node.from, node.to)
       })
-    return Decoration.set(newDecos)
+    return Decoration.set(newDecos, true)
   }
 }
 
@@ -255,6 +283,7 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
     // Transfer the contents
     updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, coords)
   }
+
 }
 
 /**
@@ -311,14 +340,15 @@ function updateRow (
       // the existence of the table. Since the `view` will always be the same,
       // we only have to save the cellFrom and cellTo to the TDs dataset each
       // time around (see below).
-      td.addEventListener('mousedown', (e) => {
+      td.addEventListener('mousedown', (event) => {
         if (contentWrapper.classList.contains('editing')) {
           // There is already a subview inside this cell to handle selections.
           return
         }
 
-        e.preventDefault()
-        e.stopPropagation()
+        event.preventDefault()
+        event.stopPropagation()
+
         setSelectionToCell(td, cell, view)
       })
 
@@ -398,10 +428,19 @@ function updateRow (
       // So, here we enforce that the main selection is definitely somewhere
       // inside the table cell *content*.
       const sel = view.state.selection.main
-      let newFrom = Math.max(sel.from, cell.from)
-      newFrom = Math.min(newFrom, cell.to)
-      let newTo = Math.max(sel.to, cell.from)
-      newTo = Math.min(newTo, cell.to)
+      let { from: newFrom, to: newTo } = sel
+
+      if (newFrom < cell.from) {
+        newFrom = cell.from
+      } else if (newFrom > cell.to) {
+        newFrom = cell.to
+      }
+
+      if (newTo < cell.from) {
+        newTo = cell.from
+      } else if (newTo > cell.to) {
+        newTo = cell.to
+      }
 
       // NOTE: This entire code runs during updates (since that's when the
       // widget's updateDOM function will be called), so we must wait until that

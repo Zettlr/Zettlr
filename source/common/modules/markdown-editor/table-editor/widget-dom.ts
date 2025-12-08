@@ -57,6 +57,7 @@ export function generateColumnControls (view: EditorView): HTMLElement[] {
   addButtonLeft.classList.add('plus', 'left')
   addButtonLeft.innerHTML = plusIcon
   addButtonLeft.addEventListener('mousedown', event => {
+    event.preventDefault()
     event.stopPropagation()
     addColBefore(view)
   })
@@ -65,6 +66,7 @@ export function generateColumnControls (view: EditorView): HTMLElement[] {
   addButtonRight.classList.add('plus', 'right')
   addButtonRight.innerHTML = plusIcon
   addButtonRight.addEventListener('mousedown', event => {
+    event.preventDefault()
     event.stopPropagation()
     addColAfter(view)
   })

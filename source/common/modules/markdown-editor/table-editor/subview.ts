@@ -17,7 +17,7 @@
  */
 
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language'
-import { EditorState, Prec, StateField, type ChangeSpec, type Range } from '@codemirror/state'
+import { EditorState, MapMode, Prec, StateField, type ChangeSpec, type Range } from '@codemirror/state'
 import { EditorView, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 import markdownParser from '../parser/markdown-parser'
 import { tableEditorKeymap } from '../keymaps/table-editor'
@@ -38,6 +38,10 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
     return tr // Do not mess with synchronizing transactions
   }
 
+  if (!tr.docChanged) {
+    return tr
+  }
+
   // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
   // we can't use those since they strictly exclude *any* whitespace from the
   // cell's contents. This means that, would we use those to determine the
@@ -53,21 +57,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // only those through the ChangeSet and not recomputing the entire state
   // (e.g., by accessing tr.state), we keep the computational overhead small.
   // NOTE the associations (also in the hidden state updater)
-  const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField)
-    .cellRange.map((pos, idx) => tr.changes.mapPos(pos, idx - 1))
-
-  // First, find the longest cell range after the transaction has been
-  // applied. This is necessary to accurately figure out whether the selection
-  // will be moved past where the cell boundaries will end up after applying
-  // this transaction. In practical terms: If the user inserts a character at
-  // the very end of the table cell, the selection will be one position beyond
-  // the current cell range. This check means that we account for that.
-  let cellEndAfter = cellTo
-  tr.changes.iterChanges((fromA, toA, fromB, toB) => {
-    if (fromA >= cellFrom && toA <= cellTo && toB > cellEndAfter) {
-      cellEndAfter = toB
-    }
-  })
+  const [ cellFrom, cellTo ] = tr.startState.field(hiddenSpanField).cellRange
 
   // TODO: Right now it works all adequately for our purposes. There is one
   // edge-case, though: The CodeMirror parser counts as TableCell contents
@@ -79,16 +69,18 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // proper boundaries (they include any whitespace that was in the cell
   // before the view got instantiated, but exclude any whitespace added to the
   // cell after the fact.)
-  if (tr.selection !== undefined && cellFrom !== cellTo && cellTo > 0) {
+  if (tr.selection !== undefined) {
     const { from, to } = tr.selection.main
-    if (from < cellFrom || to > cellEndAfter) {
-      console.log('Disallowing transaction', { from, cellFrom, to, cellTo, cellEndAfter })
+
+    const mappedFrom = tr.changes.mapPos(cellFrom, -1, MapMode.TrackBefore)
+    const mappedTo =  tr.changes.mapPos(cellTo, 1, MapMode.TrackAfter)
+
+    const wasDeleted = mappedFrom === null || mappedTo === null
+
+    if (wasDeleted || from < mappedFrom || to > mappedTo) {
+      console.log(`Disallowing transaction: Selection: ${from} - ${to} | Cell: ${cellFrom} - ${cellTo} | Mapped: ${mappedFrom} - ${mappedTo}`)
       return [] // Disallow this transaction
     }
-  }
-
-  if (!tr.docChanged) {
-    return tr
   }
 
   // Ensure that any changes are safe to apply without breaking the table or
@@ -97,7 +89,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   let shouldOverrideTransaction = false
   tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
     // First: Ensure that the transaction does not mess with the hidden ranges
-    if (fromA < cellFrom || toA < cellFrom || fromA > cellTo) {
+    if (fromA < cellFrom || toA < cellFrom || fromA > cellTo || toA > cellTo) {
       // With this flag set, all other safe changes will be used to override
       // the transaction
       shouldOverrideTransaction = true
@@ -106,7 +98,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
 
     // Next, ensure that no newlines will be inserted into the table cell
     const ins = inserted.toString()
-    const safeInsertion = ins.includes('\n') ? ins.replace(/\n+/g, ' ') : ins
+    const safeInsertion = ins.replace(/\n+/g, ' ')
     safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
     if (safeInsertion !== ins) {
       shouldOverrideTransaction = true
@@ -134,10 +126,7 @@ export const hiddenSpanField = StateField.define<hiddenSpanState>({
     }
   },
   update (value, tr) {
-    if (!tr.docChanged) {
-      return value
-    } else {
-      // Ensure the range always stays the same
+    if (tr.docChanged) {
       return {
         decorations: value.decorations.map(tr.changes),
         cellRange: [
@@ -150,6 +139,8 @@ export const hiddenSpanField = StateField.define<hiddenSpanState>({
         ]
       }
     }
+
+    return value
   },
   provide: f => EditorView.decorations.from(f, (value) => value.decorations)
 })
