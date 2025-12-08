@@ -136,12 +136,6 @@ const tabs: WindowTab[] = [
 
     .asset-input-name {
       flex: 2;
-
-      .input-text-button-group {
-        height: stretch;
-        padding: 0px;
-        margin: 0px;
-      }
     }
 
     .asset-input-button {
