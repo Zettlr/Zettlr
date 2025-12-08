@@ -35,15 +35,16 @@
           </ZtrAdmonition>
         </template>
         <template v-else>
-          <p>
+          <p class="asset-input">
             <TextControl
               v-model="currentSnippetText"
-              class="asset-name-input"
+              class="asset-input-name"
               v-bind:inline="false"
               v-bind:disabled="currentItem < 0"
               v-on:confirm="renameSnippet()"
             ></TextControl>
             <ButtonControl
+              class="asset-input-button"
               v-bind:label="renameSnippetLabel"
               v-bind:inline="true"
               v-bind:disabled="availableSnippets.length === 0 || currentSnippetText === availableSnippets[currentItem]"

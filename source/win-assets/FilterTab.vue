@@ -35,15 +35,16 @@
           </ZtrAdmonition>
         </template>
         <template v-else>
-          <p>
+          <p class="asset-input">
             <TextControl
               v-model="currentFilterText"
-              class="asset-name-input"
+              class="asset-input-name"
               v-bind:inline="false"
               v-bind:disabled="currentItem < 0"
               v-on:confirm="renameFilter()"
             ></TextControl>
             <ButtonControl
+              class="asset-input-button"
               v-bind:label="renameFilterLabel"
               v-bind:inline="true"
               v-bind:disabled="availableFilters.length === 0 || currentFilterText === availableFilters[currentItem]"

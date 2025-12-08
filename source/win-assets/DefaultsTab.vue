@@ -29,15 +29,16 @@
         <ZtrAdmonition type="info" class="asset-admonition">
           {{ defaultsExplanation }}
         </ZtrAdmonition>
-        <p>
+        <p class="asset-input">
           <TextControl
             v-model="currentFilename"
-            class="asset-name-input"
+            class="asset-input-name"
             v-bind:inline="false"
             v-bind:disabled="currentItem < 0"
             v-on:confirm="renameFile()"
           ></TextControl>
           <ButtonControl
+            class="asset-input-button"
             v-bind:label="renameFileLabel"
             v-bind:inline="true"
             v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"

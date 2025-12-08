@@ -129,12 +129,25 @@ const tabs: WindowTab[] = [
     margin-top: 15px;
   }
 
-  .asset-name-input {
-    flex: 1;
+  .asset-input {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
 
-    .input-text-button-group {
-      padding: 0px;
-      margin: 0px;
+    .asset-input-name {
+      flex: 2;
+
+      .input-text-button-group {
+        height: stretch;
+        padding: 0px;
+        margin: 0px;
+      }
+    }
+
+    .asset-input-button {
+      button {
+        height: stretch;
+      }
     }
   }
 
@@ -146,18 +159,6 @@ const tabs: WindowTab[] = [
     button {
       width: 50px;
     }
-  }
-
-  .form-control {
-    button:not(.input-reset-button) {
-      height: stretch;
-    }
-  }
-
-  p {
-    display: flex;
-    gap: 15px;
-    margin-top: 5px;
   }
 
   .CodeMirror {
