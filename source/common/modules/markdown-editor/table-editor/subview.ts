@@ -86,13 +86,11 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // Ensure that any changes are safe to apply without breaking the table or
   // removing things people don't want to remove.
   const safeChanges: ChangeSpec[] = []
-  let shouldOverrideTransaction = false
   tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
     // First: Ensure that the transaction does not mess with the hidden ranges
     if (fromA < cellFrom || toA < cellFrom || fromA > cellTo || toA > cellTo) {
       // With this flag set, all other safe changes will be used to override
       // the transaction
-      shouldOverrideTransaction = true
       return
     }
 
@@ -100,12 +98,9 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
     const ins = inserted.toString()
     const safeInsertion = ins.replace(/\n+/g, ' ')
     safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
-    if (safeInsertion !== ins) {
-      shouldOverrideTransaction = true
-    }
   })
 
-  return shouldOverrideTransaction ? { ...tr, changes: safeChanges } : tr
+  return { ...tr, changes: safeChanges }
 })
 
 interface hiddenSpanState {
