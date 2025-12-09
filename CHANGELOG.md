@@ -195,6 +195,17 @@ files.
 > only set a specific YAML frontmatter property in your file before it is
 > exported. These filters check for this property and behave accordingly.
 
+## Horizontal Rules are now Rendered
+
+Even though we do not recommend using the Custom CSS feature to modify the app's
+geometry, we know that quite a few of our users have been using the Custom CSS
+feature to make horizontal rules (`***`) appear as actual horizontal rules. This
+is a PSA that you should remove your custom styles when updating to this
+release. This version will start rendering horizontal rules as actual elements
+that you can target directly (it's a simple `<hr>` element), and this means that
+there is a chance that any Custom CSS that has mimicked a horizontal rule
+element may interfere, or even break the main editor.
+
 ## GUI and Functionality
 
 - **Feature**: Full TableEditor Rewrite. The new TableEditor keeps most
