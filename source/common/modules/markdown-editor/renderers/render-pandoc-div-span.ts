@@ -19,6 +19,7 @@ import type { Range, RangeSet } from '@codemirror/state'
 import { Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
 import { parseLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 import { rangeInSelection } from '../util/range-in-selection'
+import type { SyntaxNode } from '@lezer/common'
 
 function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
   const ranges: Range<Decoration>[] = []
@@ -32,8 +33,8 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
         }
 
         let marks
-        let attrs
-        let info
+        let attrs: SyntaxNode|null = null
+        // let info
 
         let from
         let to
@@ -59,38 +60,38 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
             break
           }
 
-          case 'PandocDiv': {
-            marks = node.node.getChildren('PandocDivMark')
-            attrs = node.node.getChild('PandocAttribute')
-            info = node.node.getChild('PandocDivInfo')
+          // case 'PandocDiv': {
+          //   marks = node.node.getChildren('PandocDivMark')
+          //   attrs = node.node.getChild('PandocAttribute')
+          //   info = node.node.getChild('PandocDivInfo')
 
-            // Pandoc divs must have at least an info or an attribute node
-            if (!attrs && !info) {
-              return
-            }
+          //   // Pandoc divs must have at least an info or an attribute node
+          //   if (!attrs && !info) {
+          //     return
+          //   }
 
-            // Something went wrong
-            if (marks.length !== 2) {
-              return
-            }
+          //   // Something went wrong
+          //   if (marks.length !== 2) {
+          //     return
+          //   }
 
-            // Only style the lines within the marks
-            from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
-            to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
-            break
-          }
+          //   // Only style the lines within the marks
+          //   from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
+          //   to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
+          //   break
+          // }
 
           default: return
         }
 
         // Parse the classes and other attributes to render in the decoration.
-        const attributes = attrs ? parseLinkAttributes(view.state.sliceDoc(attrs.from, attrs.to)) : {}
+        const attributes = parseLinkAttributes(view.state.sliceDoc(attrs.from, attrs.to))
         const classes = attributes.classes ?? []
         const id = attributes.id ?? ''
 
-        if (info) {
-          classes.unshift(view.state.sliceDoc(info.from, info.to))
-        }
+        // if (info) {
+        //   classes.unshift(view.state.sliceDoc(info.from, info.to))
+        // }
 
         const deco = Decoration.mark({
           attributes: {
