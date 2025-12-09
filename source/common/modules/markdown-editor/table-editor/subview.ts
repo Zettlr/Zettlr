@@ -87,17 +87,13 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // removing things people don't want to remove.
   const safeChanges: ChangeSpec[] = []
   tr.changes.iterChanges((fromA, toA, fromB, toB, inserted) => {
-    // First: Ensure that the transaction does not mess with the hidden ranges
-    if (fromA < cellFrom || toA < cellFrom || fromA > cellTo || toA > cellTo) {
-      // With this flag set, all other safe changes will be used to override
-      // the transaction
-      return
+    // Only pass through changes which are within the cell boundaries.
+    if (fromA >= cellFrom && toA <= cellTo) {
+      // Ensure that no newlines will be inserted into the table cell
+      const ins = inserted.toString()
+      const safeInsertion = ins.replace(/\n+/g, ' ')
+      safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
     }
-
-    // Next, ensure that no newlines will be inserted into the table cell
-    const ins = inserted.toString()
-    const safeInsertion = ins.replace(/\n+/g, ' ')
-    safeChanges.push({ from: fromA, to: toA, insert: safeInsertion })
   })
 
   return { ...tr, changes: safeChanges }
