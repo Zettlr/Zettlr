@@ -112,16 +112,6 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             }
             break
           }
-          // For fenced divs
-          case 'PandocDiv': {
-            const marks = node.node.getChildren('PandocDivMark')
-            const name = node.node.getChildren('PandocDivName')
-            const attrs = node.node.getChildren('PandocAttribute')
-            for (const mark of marks.concat(attrs, name)) {
-              ranges.push(hiddenDeco.range(mark.from, mark.to))
-            }
-            break
-          }
           // For bracketed spans
           case 'PandocSpan': {
             const marks = node.node.getChildren('PandocSpanMark')
