@@ -52,7 +52,7 @@ export const themeBerlinLight = EditorView.theme({
   '.cm-attribute-value': { color: 'var(--green-0)' },
   '.cm-angle-bracket, .cm-definition-operator': { color: 'var(--grey-5)' },
   // Primary color
-  '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag, .cm-zkn-link': { color: primaryColor },
+  '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag': { color: primaryColor },
   '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-0)' },
   '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
   // Citation syntax
@@ -100,7 +100,7 @@ export const themeBerlinDark = EditorView.theme({
   '.cm-attribute-value': { color: 'var(--green-0)' },
   '.cm-angle-bracket, .cm-definition-operator': { color: 'var(--grey-5)' },
   '.cm-escape': { color: 'var(--grey-4)' },
-  '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag, .cm-zkn-link': { color: primaryColor },
+  '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag': { color: primaryColor },
   // Copied with my blood from the DOM; the example on the website is wrong.
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: selectionDark
