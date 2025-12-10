@@ -67,7 +67,18 @@ const scrollAndTheme = EditorState.transactionExtender.from(configField, config 
     effects.push(EditorView.scrollIntoView(transaction.state.selection.main.from, { y: 'center' }))
   }
 
-  return { effects }
+  // We MUST return `null` here if there is nothing to extend. Otherwise, stuff
+  // in other parts of the code starts to break. More specifically, we had the
+  // issue that, when we always return `effects`, snippet insertion would
+  // misbehave in the sense that the tab stops would stop recalculating their
+  // positions. I have the suspicion that this is wanted behavior in CodeMirror,
+  // where transaction extenders are powerful and they can override quite a lot
+  // of functionality. For more context, see #6058
+  if (effects.length === 0) {
+    return null
+  } else {
+    return { effects }
+  }
 })
 
 /**
