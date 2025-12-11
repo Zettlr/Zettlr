@@ -58,6 +58,23 @@ function resolveImageUrl (filePath: string, imageUrl: string): string {
   return isDataUrl(imageUrl) ? imageUrl : makeValidUri(imageUrl, basePath)
 }
 
+/**
+ * This function checks whether the provided size works with CSS. It returns
+ * undefined, if it doesn't recognize the size (e.g., `1\textwidth`), and the
+ * size but in lowercase if it does.
+ *
+ * @param   {string}            size  The arbitrary size argument
+ *
+ * @return  {string|undefined}        The normalized size if recognized, or undefined.
+ */
+function normalizeSize (size?: string): string|undefined {
+  if (size === undefined || !/[\d\.]+(?:cm|mm|in|px|pt|pc|em|ex|ch|rem|vw|vh|vmin|vmax|%)/i.test(size)) {
+    return undefined
+  }
+
+  return size.toLowerCase()
+}
+
 class ImageWidget extends WidgetType {
   constructor (
     readonly node: SyntaxNode,
@@ -85,8 +102,16 @@ class ImageWidget extends WidgetType {
     const { imagePreviewHeight, imagePreviewWidth } = view.state.field(configField)
     const defaultWidth = (!Number.isNaN(imagePreviewWidth)) ? `${imagePreviewWidth}%` : '100%'
     const defaultHeight = (!Number.isNaN(imagePreviewHeight) && imagePreviewHeight < 100) ? `${imagePreviewHeight}vh` : ''
-    figure.style.maxWidth = this.data.width !== undefined ? `min(${this.data.width}, ${defaultWidth})` : defaultWidth
-    figure.style.maxHeight = this.data.height !== undefined ? `min(${this.data.height}, ${defaultHeight})` : defaultHeight
+
+    // Normalize the local width/height arguments
+    const normWidth = normalizeSize(this.data.width)
+    const normHeight = normalizeSize(this.data.height)
+    // Generate maxWidth/height properties
+    const maxWidth = normWidth !== undefined ? `min(${normWidth}, ${defaultWidth})` : defaultWidth
+    const maxHeight = normHeight !== undefined ? `min(${normHeight}, ${defaultHeight})` : defaultHeight
+
+    figure.style.maxWidth = maxWidth
+    figure.style.maxHeight = maxHeight
 
     // Display a context menu with the current image node
     figure.addEventListener('contextmenu', (event) => {
@@ -100,10 +125,10 @@ class ImageWidget extends WidgetType {
     // IMG
     //////////////////////////////////////////
     const img = document.createElement('img')
-    // This ensures that overly tall images will not be cropped by a too-short
-    // figure, and instead scale down. The figure will also become narrower,
-    // accommodating only for the total width of the resized image.
-    img.style.maxHeight = this.data.width !== undefined ? `min(${this.data.width}, ${defaultWidth})` : defaultWidth
+    // We need to apply the same max width/height styles to the image as to the
+    // figure. Otherwise the image will be cropped.
+    img.style.maxWidth = maxWidth
+    img.style.maxHeight = maxHeight
     img.alt = this.altText
     img.title = this.imageTitle
 
