@@ -117,7 +117,10 @@ export const hiddenSpanField = StateField.define<hiddenSpanState>({
     }
   },
   update (value, tr) {
-    if (tr.docChanged) {
+    if (!tr.docChanged) {
+      return value
+    } else {
+      // Ensure the range always stays the same
       return {
         decorations: value.decorations.map(tr.changes),
         cellRange: [
@@ -130,8 +133,6 @@ export const hiddenSpanField = StateField.define<hiddenSpanState>({
         ]
       }
     }
-
-    return value
   },
   provide: f => EditorView.decorations.from(f, (value) => value.decorations)
 })
