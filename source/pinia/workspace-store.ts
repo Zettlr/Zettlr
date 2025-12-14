@@ -20,7 +20,8 @@ import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsa
 import { useDocumentTreeStore } from '.'
 import { isAbsolutePath, pathDirname, resolvePath } from 'source/common/util/renderer-path-polyfill'
 import { trans } from 'source/common/i18n-renderer'
-import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt, hasExt, isDotFile } from 'source/common/util/file-extention-checks'
+import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt, hasExt } from 'source/common/util/file-extention-checks'
+import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload } from 'source/app/service-providers/fsal'
 
 const ipcRenderer = window.ipc

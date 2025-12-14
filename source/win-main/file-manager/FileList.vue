@@ -108,8 +108,8 @@ import {
   hasMSOfficeExt,
   hasOpenOfficeExt,
   hasPDFExt,
-  isDotFile
 } from 'source/common/util/file-extention-checks'
+import { isDotFile } from 'source/common/util/ignore-path'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { getSorter } from 'source/common/util/directory-sorter'

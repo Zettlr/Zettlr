@@ -245,7 +245,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
               {
                 type: 'form-text',
                 display: 'plain',
-                contents: trans('Dot Files (.ztr-directory, .gitignore, etc.)')
+                contents: trans('Dot Files and Folders')
               },
               {
                 type: 'checkbox',

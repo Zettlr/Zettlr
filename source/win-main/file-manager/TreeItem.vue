@@ -180,9 +180,9 @@ import {
   hasOpenOfficeExt,
   hasPDFExt,
   hasExt,
-  isDotFile,
   hasMdOrCodeExt
 } from 'source/common/util/file-extention-checks'
+import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 
