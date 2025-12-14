@@ -135,17 +135,6 @@ export function hasDataExt (filePath: string): boolean {
 }
 
 /**
- * Check if the given filename is a dot file.
- *
- * @param   {string}   filename  The filename to check
- *
- * @return  {boolean}            Whether the file is a dot file
- */
-export function isDotFile (filename: string): boolean {
-  return filename.startsWith('.')
-}
-
-/**
  * Utility function that checks for *any* of the recognized file extensions
  * Zettlr supports to some degree.
  *

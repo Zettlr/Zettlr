@@ -20,7 +20,7 @@ import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
 import path from 'path'
 import type { EventName } from 'chokidar/handler'
-import ignoreDir from '@common/util/ignore-dir'
+import { ignorePath } from '@common/util/ignore-path'
 
 /**
 * Represents an event the watchdog can work with
@@ -43,7 +43,7 @@ export default class FSALWatchdog {
     this._config = config
 
     const options: ChokidarOptions = {
-      ignored: ignoreDir,
+      ignored: ignorePath,
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
       followSymlinks: true, // Follow symlinks
