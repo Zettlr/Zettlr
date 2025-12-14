@@ -6,13 +6,14 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file contains a utility function to check for ignored dirs.
+ * Description:     Utility functions to check for ignored file paths.
+ *
  *
  * END HEADER
  */
 
-// This is a list of path patterns that
-// should be ignored by the FSAL layer
+// A list of path patterns that should be ignored
+// by the FSAL layer and Chokidar watchdog process
 const IGNORE_PATH_RE: RegExp[] = [
   /(?:^|[\/\\])\.DS_Store$/i, // macOS directory files
   /(?:^|[\/\\])desktop.ini$/i, // Windows directory files
