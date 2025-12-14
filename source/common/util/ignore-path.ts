@@ -19,14 +19,20 @@
 const IGNORE_PATH_RE: RegExp[] = [
   // Ignore dot-dirs/files, except .git (to detect changes to possible
   // git-repos) and .ztr-files (which contain, e.g., directory settings)
-  /(?:^|[\/\\])\.DS_Store$/i,
+  /(?:^|[\/\\])\.DS_Store$/i, // macOS directory files
+  /(?:^|[\/\\])desktop.ini$/i, // Windows directory files
+  /(?:^|[\/\\])\.directory$/i, // KDE directory files
   /(?:^|[\/\\])\.app$/i,
-  /(?:^|[\/\\])\.textbundle$/i,
-  /(?:^|[\/\\])\.ztr-directory$/i,
-  /(?:^|[\/\\])\.git$/i,
-  /(?:^|[\/\\])\.hg$/i,
-  /(?:^|[\/\\])\.obsidian$/i,
-  /(?:^|[\/\\])\.quarto$/i,
+  /(?:^|[\/\\])\.textbundle$/i, // Textbundle
+  /(?:^|[\/\\])\.ztr-directory$/i, // Zettlr project settings
+  /(?:^|[\/\\])\.git$/i, // Git
+  /(?:^|[\/\\])\.hg$/i, // Mercurial
+  /(?:^|[\/\\])\.svn$/i, // SVN
+  /(?:^|[\/\\])\.obsidian$/i, // Obsidian config
+  /(?:^|[\/\\])\.quarto$/i, // Quarto config
+  /(?:^|[\/\\])\.dropbox/i, // Dropbox config
+  /(?:^|[\/\\])\.~lock\./i, // LibreOffice lockfiles
+  /(?:^|[\/\\])~\$.*\.(?:doc|dot|xls|ppt)x?$/i, // MS Office temporary files
 ]
 
 /**
