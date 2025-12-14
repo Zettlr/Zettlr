@@ -11,14 +11,9 @@
  * END HEADER
  */
 
-// chokidar's ignored-setting is compatible to anymatch, so we can
-// pass an array containing the standard dotted directory-indicators,
-// directories that should be ignored and a function that returns true
-// for all files that are _not_ in the filetypes list (whitelisting)
-// Further reading: https://github.com/micromatch/anymatch
+// This is a list of path patterns that
+// should be ignored by the FSAL layer
 const IGNORE_PATH_RE: RegExp[] = [
-  // Ignore dot-dirs/files, except .git (to detect changes to possible
-  // git-repos) and .ztr-files (which contain, e.g., directory settings)
   /(?:^|[\/\\])\.DS_Store$/i, // macOS directory files
   /(?:^|[\/\\])desktop.ini$/i, // Windows directory files
   /(?:^|[\/\\])\.directory$/i, // KDE directory files
@@ -36,22 +31,22 @@ const IGNORE_PATH_RE: RegExp[] = [
 ]
 
 /**
- * Check if the given filename is a dot file.
+ * Check if the given filename is a dot file or folder.
  *
- * @param   {string}   filePath  The filename to check
+ * @param   {string}   filePath  The path to check
  *
- * @return  {boolean}            Whether the file is a dot file
+ * @return  {boolean}            Whether the file is a dot file or folder
  */
 export function isDotFile (filePath: string): boolean {
   return /(?:^|[\/\\])\./.test(filePath)
 }
 
 /**
-* Returns true, if a directory should be ignored, and false, if not.
+* Check whether the provided filePath matches an ignored pattern
 *
-* @param    {string}    filePath   The path to the directory. It will be checked against some regexps.
+* @param    {string}    filePath   The path to check
 *
-* @return   {boolean}              True or false, depending on whether or not the dir should be ignored.
+* @return   {boolean}              Whether the path should be ignored
 */
 export function ignorePath (filePath: string): boolean {
   return IGNORE_PATH_RE.some(re => re.test(filePath))
