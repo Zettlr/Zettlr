@@ -281,8 +281,6 @@ const primaryIcon = computed(() => {
       return 'code'
     } else if (hasExt(props.item.path, attachmentExtensions)) {
       return 'file-group'
-    } else if (props.item.name === '.ztr-directory') {
-      return 'file-settings'
     } else {
       // Generic other file (this should not happen as they get filtered out before)
       if (!files.dotFiles.showInFilemanager) {

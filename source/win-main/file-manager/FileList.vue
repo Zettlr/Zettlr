@@ -166,58 +166,56 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
     .map(absPath => workspaceStore.descriptorMap.get(absPath)!)
 
   // ... sort them recursively ...
-  const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
+  const {
+    sorting,
+    sortFoldersFirst,
+    fileNameDisplay,
+    appLang,
+    fileMetaTime,
+    files,
+    attachmentExtensions
+  } = configStore.config
+
   const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
-  const sortedDescendants = retrieveChildrenAndSort(dir, allDescriptors, sorter)
 
   // ... and add them to our RecycleScroller.
-  const ret: RecycleScrollerData[] = []
-  const { files, attachmentExtensions } = configStore.config
-  for (let i = 0; i < sortedDescendants.length; i++) {
-    if (sortedDescendants[i].type === 'directory') {
-      if (isDotFile(sortedDescendants[i].name)) {
-        if (!files.dotFiles.showInFilemanager) {
-          continue
-        }
-      }
-    } else if (isDotFile(sortedDescendants[i].name)) {
+  const sortedDescendants = retrieveChildrenAndSort(dir, allDescriptors, sorter)
+    .filter((desc) => {
       // We have to check for hidden files first so they are not
       // included if they end in one of the accepted extensions
-      if (!files.dotFiles.showInFilemanager) {
-        continue
+      if (isDotFile(desc.name)) {
+        return files.dotFiles.showInFilemanager
       }
-    } else if (hasImageExt(sortedDescendants[i].path)) {
-      if (!files.images.showInFilemanager) {
-        continue
-      }
-    } else if (hasPDFExt(sortedDescendants[i].path)) {
-      if (!files.pdf.showInFilemanager) {
-        continue
-      }
-    } else if (hasMSOfficeExt(sortedDescendants[i].path)) {
-      if (!files.msoffice.showInFilemanager) {
-        continue
-      }
-    } else if (hasOpenOfficeExt(sortedDescendants[i].path)) {
-      if (!files.openOffice.showInFilemanager) {
-        continue
-      }
-    } else if (hasDataExt(sortedDescendants[i].path)) {
-      if (!files.dataFiles.showInFilemanager) {
-        continue
-      }
-    } else {
-      if (!hasMdOrCodeExt(sortedDescendants[i].path) && !hasExt(sortedDescendants[i].path, attachmentExtensions)) {
-        continue
-      }
-    }
 
-    ret.push({
-      id: i, // This helps the virtual scroller to adequately position the items
-      props: sortedDescendants[i] // The actual item
+      // Directories are not filtered based on extension
+      if (desc.type === 'directory') {
+        return true
+      } else if (hasMdOrCodeExt(desc.path)) {
+        return true
+      } else if (hasExt(desc.path, attachmentExtensions)) {
+        return true
+      } else if (hasImageExt(desc.path)) {
+        return files.images.showInFilemanager
+      } else if (hasPDFExt(desc.path)) {
+        return files.pdf.showInFilemanager
+      } else if (hasMSOfficeExt(desc.path)) {
+        return files.msoffice.showInFilemanager
+      } else if (hasOpenOfficeExt(desc.path)) {
+        return files.openOffice.showInFilemanager
+      } else if (hasDataExt(desc.path)) {
+        return files.dataFiles.showInFilemanager
+      }
+
+      return false
     })
-  }
-  return ret
+    .map((props, id) => {
+      return {
+        id, // This helps the virtual scroller to adequately position the items
+        props, // The actual item
+      }
+    })
+
+  return sortedDescendants
 })
 
 // Add an additional layer of filtering: This function applies a potential
