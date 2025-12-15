@@ -94,10 +94,15 @@ export class TableWidget extends WidgetType {
 
       updateTable(table, tableAST, view)
 
-      const height = table.getBoundingClientRect().height
-      TABLE_HEIGHT_CACHE.set(this.cacheKey, height)
+      const cacheKey = this.cacheKey
+      view.requestMeasure({
+        read () {
+          const height = table.getBoundingClientRect().height
+          TABLE_HEIGHT_CACHE.set(cacheKey, height)
+        },
+        key: cacheKey
+      })
 
-      view.requestMeasure()
       return wrapper
     } catch (err: any) {
       console.log('Could not create table', err)
@@ -125,9 +130,15 @@ export class TableWidget extends WidgetType {
       // https://discuss.codemirror.net/t/5604
       const height = table.getBoundingClientRect().height
       if (prevHeight !== height) {
-        TABLE_HEIGHT_CACHE.set(this.cacheKey, height)
 
-        view.requestMeasure()
+        const cacheKey = this.cacheKey
+        view.requestMeasure({
+          read () {
+            const height = table.getBoundingClientRect().height
+            TABLE_HEIGHT_CACHE.set(cacheKey, height)
+          },
+          key: cacheKey
+        })
       }
       return true
     }
@@ -207,33 +218,27 @@ export class TableWidget extends WidgetType {
    * @return  {DecorationSet}         The DecorationSet
    */
   public static createForState (state: EditorState): DecorationSet {
-    const markdown = state.sliceDoc()
-
     // We try to retrieve the full syntax tree, and if that fails, fall back to
     // the (possibly incomplete) syntax tree.
-    let tree = ensureSyntaxTree(state, state.doc.length, 500) ?? syntaxTree(state)
+    const tree = ensureSyntaxTree(state, state.doc.length, 500) ?? syntaxTree(state)
+    const markdown = state.sliceDoc()
 
     const newDecos: Array<Range<Decoration>> = tree
       // Get all Table nodes in the document
       .topNode.getChildren('Table')
       .filter(table => {
         const ast = parseTableNode(table, markdown)
-        if (ast.type !== 'Table') {
-          return false // There was an error in parsing the table
+        // The TableEditor cannot support grid tables, since they can have
+        // (a) colspans and rowspans, and (b) multiple lines, which is just
+        // too difficult to represent using our approach here. (Also, grids
+        // are much easier to parse visually than pipes and less common,
+        // reducing the need for us to support them.)
+        if (ast.type === 'Table' && ast.tableType === 'pipe') {
+          const rowLength = ast.alignment?.length ?? 0
+          return ast.rows.every(r => r.cells.length === rowLength)
         }
 
-        if (ast.tableType === 'grid') {
-          // The TableEditor cannot support grid tables, since they can have
-          // (a) colspans and rowspans, and (b) multiple lines, which is just
-          // too difficult to represent using our approach here. (Also, grids
-          // are much easier to parse visually than pipes and less common,
-          // reducing the need for us to support them.)
-          return false
-        }
-
-        // Finally, check that the table is proper.
-        const rowLength = ast.alignment?.length ?? 0
-        return ast.rows.every(r => r.cells.length === rowLength)
+        return false
       })
       // Turn the nodes into Decorations
       .map(node => {
@@ -428,19 +433,8 @@ function updateRow (
       // So, here we enforce that the main selection is definitely somewhere
       // inside the table cell *content*.
       const sel = view.state.selection.main
-      let { from: newFrom, to: newTo } = sel
-
-      if (newFrom < cell.from) {
-        newFrom = cell.from
-      } else if (newFrom > cell.to) {
-        newFrom = cell.to
-      }
-
-      if (newTo < cell.from) {
-        newTo = cell.from
-      } else if (newTo > cell.to) {
-        newTo = cell.to
-      }
+      const newFrom = Math.min(Math.max(sel.from, cell.from), cell.to)
+      const newTo = Math.min(Math.max(sel.to, cell.from), cell.to)
 
       // NOTE: This entire code runs during updates (since that's when the
       // widget's updateDOM function will be called), so we must wait until that
