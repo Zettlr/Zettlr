@@ -38,10 +38,6 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
     return tr // Do not mess with synchronizing transactions
   }
 
-  if (!tr.docChanged) {
-    return tr
-  }
-
   // NOTE: There are also cell boundaries written to the TD/TH's dataset, but
   // we can't use those since they strictly exclude *any* whitespace from the
   // cell's contents. This means that, would we use those to determine the
@@ -81,6 +77,10 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
       console.log(`Disallowing transaction: Selection: ${from} - ${to} | Cell: ${cellFrom} - ${cellTo} | Mapped: ${mappedFrom} - ${mappedTo}`)
       return [] // Disallow this transaction
     }
+  }
+
+  if (!tr.docChanged) {
+    return tr
   }
 
   // Ensure that any changes are safe to apply without breaking the table or
