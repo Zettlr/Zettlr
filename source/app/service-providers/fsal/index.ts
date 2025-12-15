@@ -236,9 +236,17 @@ export default class FSAL extends ProviderContract {
 
   private ignorePath (absPath: string): boolean {
     const { files } = this._config.get()
-    const showDotFiles = files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar
+    const showDotfiles = files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar
 
-    return ignorePath(absPath) || (showDotFiles ? false : isDotFile(absPath))
+    if (ignorePath(absPath)) {
+      return true
+    }
+
+    if (isDotFile(absPath) && !showDotfiles) {
+      return true
+    }
+
+    return false
   }
 
   /**
@@ -850,9 +858,6 @@ export default class FSAL extends ProviderContract {
       })
       .map(dirent => {
         const childPath = path.join(directoryPath, dirent.name)
-        if (this.ignorePath(dirent.name)) {
-          return Promise.resolve([])
-        }
 
         if (dirent.isFile()) {
           return Promise.resolve([childPath])
