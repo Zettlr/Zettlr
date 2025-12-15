@@ -244,6 +244,11 @@ function sel (event: MouseEvent): void {
 
 const shouldBeCollapsed = computed<boolean>(() => props.filterResults.length === 0 && collapsed.value)
 
+const showDotFiles = ref<boolean>(configStore.config.files.dotFiles.showInFilemanager)
+configStore.$subscribe((_mutation, state) => {
+  showDotFiles.value = state.config.files.dotFiles.showInFilemanager
+})
+
 /**
  * The secondary icon's shape -- this is the visually FIRST icon to be
  * displayed. Displays either an angle (for directories with children), or
@@ -500,6 +505,13 @@ watch(operationType, (newVal) => {
 // this way it does.
 watch(toRef(props, 'item'), function (value) {
   updateObject(value)
+})
+
+watch(showDotFiles, async function () {
+  if (props.item.type === 'directory') {
+    uncollapseIfApplicable()
+    await fetchChildren()
+  }
 })
 
 onMounted(async () => {
