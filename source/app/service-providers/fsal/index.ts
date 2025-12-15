@@ -236,19 +236,19 @@ export default class FSAL extends ProviderContract {
     }
   }
 
-  private ignorePath (absPath: string): boolean {
+  private handlePath (absPath: string): boolean {
     const { files } = this._config.get()
     const showDotfiles = files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar
 
     if (ignorePath(absPath)) {
-      return true
+      return false
     }
 
     if (isDotFile(absPath) && !showDotfiles) {
-      return true
+      return false
     }
 
-    return false
+    return true
   }
 
   /**
@@ -844,7 +844,7 @@ export default class FSAL extends ProviderContract {
 
     const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
       .filter(dirent => {
-        return ((dirent.isFile() || dirent.isDirectory()) && !this.ignorePath(dirent.name))
+        return ((dirent.isFile() || dirent.isDirectory()) && this.handlePath(dirent.name))
       })
       .map(dirent => {
         const childPath = path.join(directoryPath, dirent.name)
@@ -878,7 +878,7 @@ export default class FSAL extends ProviderContract {
     return await Promise.all(
       children
         .filter(dirent => {
-          return ((dirent.isFile() || dirent.isDirectory()) && !this.ignorePath(dirent.name))
+          return ((dirent.isFile() || dirent.isDirectory()) && this.handlePath(dirent.name))
         })
         .map(dirent => {
           const childPath = path.join(absPath, dirent.name)
