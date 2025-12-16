@@ -221,6 +221,9 @@ export class TableWidget extends WidgetType {
     // We try to retrieve the full syntax tree, and if that fails, fall back to
     // the (possibly incomplete) syntax tree.
     const tree = ensureSyntaxTree(state, state.doc.length, 500) ?? syntaxTree(state)
+    // Constantly calling `sliceDoc()` within the tree traversal
+    // below has some negative performance impacts, so we extract
+    // the markdown text outside of the loop
     const markdown = state.sliceDoc()
 
     const newDecos: Array<Range<Decoration>> = tree
