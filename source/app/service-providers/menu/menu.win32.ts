@@ -68,10 +68,8 @@ export default function getMenu (
           id: 'menu.recent_docs.' + item,
           label: path.basename(item),
           click: function (_menuitem, _focusedWindow) {
-            commands.run('open-file', {
-              path: item,
-              newTab: true
-            }).catch((e: any) => logger.error(`[Menu] Could not open recent document ${item}`, e))
+            documents.openFile(undefined, undefined, item, true)
+              .catch((e: any) => logger.error(`[Menu] Could not open recent document ${item}`, e))
           }
         }
 
