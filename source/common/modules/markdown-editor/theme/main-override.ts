@@ -63,9 +63,10 @@ export const mainOverride = EditorView.baseTheme({
     verticalAlign: 'super',
     fontSize: '0.8rem',
   },
-  '.footnote-ref': {
-    fontSize: '0.8rem',
-  },
+  // NOTE: Disabling because pre-rendered elements will not inherit this font size (see #5999)
+  // '.footnote-ref': {
+  //   fontSize: '0.8rem',
+  // },
   '.cm-emphasis': { fontStyle: 'italic' },
   // Provide the default YAML frontmatter indicator
   '.cm-yaml-frontmatter-start::after': {
