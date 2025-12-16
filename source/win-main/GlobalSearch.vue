@@ -223,8 +223,34 @@ const rootPaths = computed(() => ([...workspaceStore.workspaceMap.keys()]))
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const queryInputElement = ref<HTMLInputElement|null>(null)
-// All directories we've found in the file tree
-const directorySuggestions = computed<string[]>(() => fileTree.value.filter(d => d.type === 'directory').map(d => d.path))
+
+// All directories we've found in the file tree. NOTE: The search function
+// expects "workspace-relative" paths here. This has two reasons: (a) It removes
+// unnecessary paths segments before the workspace start, and (b) it makes the
+// list easier to parse. The remainder of the global search expects these
+// workspace-relative paths.
+// Example: We have a workspace loaded at /home/zettlr/Documents/my-workspace
+// which contains two folders "assets" and "My Project". This function will
+// return a list with "my-workspace", "my-workspace/assets" and
+// "my-workspace/My Project".
+const directorySuggestions = computed<string[]>(() => {
+  const suggestedDirectories: string[] = []
+  for (const [ rootPath, dirPaths ] of workspaceStore.workspaceMap.entries()) {
+    const rootDir = pathDirname(rootPath)
+    const wsRelativePaths = dirPaths
+      // Map paths to descriptors
+      .map(p => workspaceStore.descriptorMap.get(p))
+      // Only retain directories
+      .filter(d => d !== undefined && d.type === 'directory')
+      // Map from absolute to workspace-relative paths
+      .map(d => d.path.slice(rootDir.length + 1))
+      // Filter empty ones
+      .filter(p => p.length > 0)
+    
+    suggestedDirectories.push(...wsRelativePaths)
+  }
+  return suggestedDirectories
+})
 
 const searchResults = computed(() => {
   // NOTE: Vue's reactivity can be tricky, and one thing is to sort arrays.
