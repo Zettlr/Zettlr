@@ -81,7 +81,7 @@ export class TableWidget extends WidgetType {
   }
 
   private get cacheKey (): string {
-    return `${this.node.from}-${this.node.to}`
+    return `${this.node.from}`
   }
 
   toDOM (view: EditorView): HTMLElement {
