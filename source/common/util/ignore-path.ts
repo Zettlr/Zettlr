@@ -13,14 +13,13 @@
  */
 
 // A list of path patterns that should be ignored
-// by the FSAL layer and Chokidar watchdog process
-const IGNORE_PATH_RE: RegExp[] = [
+// by the chokidar watchdog process
+export const WATCHDOG_IGNORE_RE: RegExp[] = [
   /(?:^|[\/\\])\.DS_Store$/i, // macOS directory files
   /(?:^|[\/\\])desktop.ini$/i, // Windows directory files
   /(?:^|[\/\\])\.directory$/i, // KDE directory files
   /(?:^|[\/\\])\.app$/i,
   /(?:^|[\/\\])\.textbundle$/i, // Textbundle
-  /(?:^|[\/\\])\.ztr-directory$/i, // Zettlr project settings
   /(?:^|[\/\\])\.git$/i, // Git
   /(?:^|[\/\\])\.hg$/i, // Mercurial
   /(?:^|[\/\\])\.svn$/i, // SVN
@@ -29,6 +28,15 @@ const IGNORE_PATH_RE: RegExp[] = [
   /(?:^|[\/\\])\.dropbox/i, // Dropbox config
   /(?:^|[\/\\])\.~lock\./i, // LibreOffice lockfiles
   /(?:^|[\/\\])~\$.*\.(?:doc|dot|xls|ppt)x?$/i, // MS Office temporary files
+]
+
+// A list of path patterns that should be ignored
+// by the FSAL layer. These are paths that should
+// not appear in the UI, however, they should still
+// be watched for changes
+export const IGNORE_PATH_RE = [
+  /(?:^|[\/\\])\.ztr-directory$/i, // Zettlr project settings
+  ...WATCHDOG_IGNORE_RE
 ]
 
 /**
