@@ -31,6 +31,16 @@ import { SpaceWidget } from '../renderers/render-emphasis'
 // not to induce any problems when adjusting the indentation
 const BASE_PADDING = 6
 
+// These regexes are used to determine indentation level
+// Leading whitespace characters
+const WHITESPACE_RE = /^([ \t]*)/
+
+// List and task marker formatting characters
+const LISTMARK_RE = /^(\s*(?:[+*-](?:\s\[[x\s]\])?|\d+\.)\s)/
+
+// Blockquote formatting characters
+const QUOTEMARK_RE = /^((?:[ ]{0,3}\>)+[ ]?)/
+
 // Since tab characters have no fixed width in the editor,
 // we need to render every tab with the equivalent number of space
 // characters to prevent jumping in the editor.
@@ -55,21 +65,16 @@ function render (view: EditorView, measurements?: Map<string, number>): RangeSet
         continue
       }
 
-      // First determine the indent based on leading whitespace
-      const whitespaceMatch = /^[ \t]*/.exec(line.text)
-      const leadingWhitespace = whitespaceMatch !== null ? whitespaceMatch[0].length : 0
-
-      // Second, determine the offset based on list or blockquote elements.
-      const listMatch = /^\s*((?:[+*>-](?:\s\[[x\s]\])?|\d+\.)\s)/.exec(line.text)
-      const quoteMatch = /^([ ]{0,3}\>)+[ ]?/.exec(line.text)
-
-      const formatCharOffset = quoteMatch ? quoteMatch[0].length : listMatch ? listMatch[1].length : 0
-
-      const columnLineTextStart = leadingWhitespace + formatCharOffset
-
-      if (columnLineTextStart === 0) {
-        continue // Neither whitespace nor list elements on that line.
+      // Determine the indentation based on any preceding formatting marks
+      // for lists, tasks, or blockquotes, or any leading whitespace. The
+      // LISTMARK_RE and QUOTEMARK_RE include preceding whitespace.
+      const match = LISTMARK_RE.exec(line.text) ?? QUOTEMARK_RE.exec(line.text) ?? WHITESPACE_RE.exec(line.text)
+      if (match === null) {
+        continue // There was no indentation on the line
       }
+
+      // Get the position of the first non-formatting, non-whitespace character
+      const columnLineTextStart = match[1].length
 
       // Now that we know we need to indent this line, schedule a measurement so
       // that in the next round of this code running we have an accurate
@@ -84,9 +89,12 @@ function render (view: EditorView, measurements?: Map<string, number>): RangeSet
         read (view) {
           const pos = line.from + columnLineTextStart
 
+          // Skip drawing indentations if the line is within a
+          // folded region because it causes visual glitches
+          // and layout issues.
           const folded = foldedRanges(view.state).iter(pos)
           while (folded.value) {
-            if (pos < folded.to) {
+            if (pos >= folded.from && pos <= folded.to) {
               return
             }
             folded.next()
