@@ -291,7 +291,6 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
     // Transfer the contents
     updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, coords)
   }
-
 }
 
 /**
