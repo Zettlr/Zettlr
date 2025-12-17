@@ -30,9 +30,39 @@ import { configField } from '../util/configuration'
 
 /**
  * This holds the last measured height of each rendered table to provide
- * values for the `estimatedHeight` getter.
+ * values for the `estimatedHeight` getter. It implements a simple LRU
+ * cache so that the cache size does not get out of hand, otherwise we
+ * would end up with an entry for essentially every position in every
+ * open document.
  */
-const TABLE_HEIGHT_CACHE = new Map<string, number>()
+const TABLE_HEIGHT_CACHE = new (class {
+  private readonly cache = new Map<string, number>()
+  private readonly maxSize = 100 // Limit the number of entries. Currently an arbitrary number.
+
+  get (key: string): number|undefined {
+    const value = this.cache.get(key)
+    if (value !== undefined) {
+      // Refresh the key's position
+      this.cache.delete(key)
+      this.cache.set(key, value)
+    }
+    return value
+  }
+
+  set (key: string, value: number): void {
+    // Refresh the key's position
+    if (this.cache.has(key)) {
+      this.cache.delete(key)
+    // Prune the cache entries
+    } else if (this.cache.size === this.maxSize) {
+      const first = this.cache.keys().next().value
+      if (first !== undefined) {
+        this.cache.delete(first)
+      }
+    }
+    this.cache.set(key, value)
+  }
+})()
 
 // This widget holds a visual DOM representation of a table.
 export class TableWidget extends WidgetType {
@@ -80,6 +110,8 @@ export class TableWidget extends WidgetType {
     return tableAST.rows.length * this.meanRowHeight
   }
 
+  // By setting the cache key to the node's `from` position,
+  // we stabilize the cache while edits happen within the table.
   private get cacheKey (): string {
     return `${this.node.from}`
   }
