@@ -12,32 +12,48 @@
  * END HEADER
  */
 
-// A list of path patterns that should be ignored
-// by the chokidar watchdog process
-export const WATCHDOG_IGNORE_RE: RegExp[] = [
-  /(?:^|[\/\\])\.DS_Store$/i, // macOS directory files
-  /(?:^|[\/\\])desktop.ini$/i, // Windows directory files
-  /(?:^|[\/\\])\.directory$/i, // KDE directory files
-  /(?:^|[\/\\])\.app$/i,
-  /(?:^|[\/\\])\.textbundle$/i, // Textbundle
-  /(?:^|[\/\\])\.git$/i, // Git
-  /(?:^|[\/\\])\.hg$/i, // Mercurial
-  /(?:^|[\/\\])\.svn$/i, // SVN
-  /(?:^|[\/\\])\.obsidian$/i, // Obsidian config
-  /(?:^|[\/\\])\.quarto$/i, // Quarto config
-  /(?:^|[\/\\])\.dropbox/i, // Dropbox config
-  /(?:^|[\/\\])\.~lock\./i, // LibreOffice lockfiles
-  /(?:^|[\/\\])~\$.*\.(?:doc|dot|xls|ppt)x?$/i, // MS Office temporary files
+// A list of path names that should be ignored
+// by the chokidar watchdog process. Will be converted
+// to a RegExp object
+const WATCHDOG_IGNORE_PATHS: string[] = [
+  '\\.DS_Store', // macOS directory files
+  'desktop.ini', // Windows directory files
+  '\\.directory', // KDE directory files
+  '\\.app',
+  '\\.textbundle', // Textbundle
+  '\\.git', // Git
+  '\\.hg', // Mercurial
+  '\\.svn', // SVN
+  '\\.obsidian', // Obsidian config
+  '\\.quarto', // Quarto config
+  '\\.dropbox\\.', // Dropbox config
+  '\\.~lock\\.', // LibreOffice lockfiles
+  '~\\$.*\\.(?:doc|dot|xls|ppt)x?', // MS Office temporary files
 ]
 
-// A list of path patterns that should be ignored
+// A list of path names that should be ignored
 // by the FSAL layer. These are paths that should
 // not appear in the UI, however, they should still
-// be watched for changes
-export const IGNORE_PATH_RE = [
-  /(?:^|[\/\\])\.ztr-directory$/i, // Zettlr project settings
-  ...WATCHDOG_IGNORE_RE
+// be watched for changes. Will be converted
+// to a RegExp object
+const IGNORE_PATHS: string[] = [
+  '\\.ztr-directory', // Zettlr project settings
+  ...WATCHDOG_IGNORE_PATHS
 ]
+
+// Matches either the start of the line or
+// the first letter after a path separator.
+const re_prefix = '(?:^|[\\\/\\\\])'
+
+// Matches either the end of the line
+// or an internal segment of the path.
+const re_suffix = '(?:$|[\\\/\\\\])'
+
+export const WATCHDOG_IGNORE_RE: RegExp[] = WATCHDOG_IGNORE_PATHS
+  .map(re => new RegExp(`${re_prefix}${re}${re_suffix}`, 'i'))
+
+export const IGNORE_PATH_RE: RegExp[] = IGNORE_PATHS
+  .map(re => new RegExp(`${re_prefix}${re}${re_suffix}`, 'i'))
 
 /**
  * Check if the given filename is a dot file or folder.
