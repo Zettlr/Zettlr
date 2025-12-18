@@ -449,6 +449,7 @@ element may interfere, or even break the main editor.
 - Re-implemented linking to folders from within documents (#6023).
 - Fix wrong suggested directories in the global search (#6065).
 - Fixed recent documents on Linux or Windows not opening (#4825).
+- Improve the visual line indentation logic to make it more robust (#6045).
 
 ## Under the Hood
 
