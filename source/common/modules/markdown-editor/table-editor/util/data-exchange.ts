@@ -33,7 +33,10 @@ export function dispatchFromSubview (mainView: EditorView): (tr: Transaction, su
       if (userEvent !== undefined) {
         annotations.push(Transaction.userEvent.of(userEvent))
       }
-      mainView.dispatch({ ...tr, annotations })
+      // The TransactionSpecs will be merged, with
+      // the new annotations being appended to the
+      // end of the existing annotations list
+      mainView.dispatch(tr, { annotations })
     }
   }
 }
@@ -50,15 +53,15 @@ export function dispatchFromSubview (mainView: EditorView): (tr: Transaction, su
 * @param  {Transaction}  tr       The transaction from the main view
 */
 export function maybeDispatchToSubview (subview: EditorView, tr: Transaction): void {
-  if (tr.annotation(syncAnnotation) !== undefined || (!tr.docChanged && tr.effects.length === 0)) {
-    return
+  if (tr.annotation(syncAnnotation) === undefined && (tr.docChanged || tr.effects.length > 0)) {
+    const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
+    const userEvent = tr.annotation(Transaction.userEvent)
+    if (userEvent !== undefined) {
+      annotations.push(Transaction.userEvent.of(userEvent))
+    }
+    // The TransactionSpecs will be merged, with
+    // the new annotations being appended to the
+    // end of the existing annotations list
+    subview.dispatch(tr, { annotations })
   }
-
-  const annotations: Annotation<any>[] = [syncAnnotation.of(true)]
-  const userEvent = tr.annotation(Transaction.userEvent)
-  if (userEvent !== undefined) {
-    annotations.push(Transaction.userEvent.of(userEvent))
-  }
-
-  subview.dispatch({ ...tr, annotations })
 }
