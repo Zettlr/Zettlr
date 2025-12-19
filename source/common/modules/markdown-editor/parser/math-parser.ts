@@ -64,7 +64,12 @@ export const inlineMathParser: InlineParser = {
 
     // Inline closing delimiters cannot be preceded by a space or followed by a digit, but display math delimiters can
     if (!isInlineDisplayMath && (/\s/.test(ctx.slice(pos - 1, pos)) || /\d/.test(ctx.slice(pos + 1, pos + 2)))) {
-      return -1
+      // However, if this is an invalid closing delimiter, we need to check if
+      // it would be a valid  opening delimiter and add it to the tree if it is.
+      const invalidOpening = !isInlineDisplayMath && /\s/.test(ctx.slice(pos + 1, pos + 2))
+
+      // Either return -1 due to an invalid delimiter, or return the end position of the delimiter
+      return  invalidOpening ? -1 : ctx.addDelimiter(MathDelimiter, pos, pos + delimLength, true, false)
     }
 
     // Remove any elements that were parsed internally
