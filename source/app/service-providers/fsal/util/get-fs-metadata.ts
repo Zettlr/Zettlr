@@ -81,7 +81,7 @@ export async function getFilesystemMetadata (fileOrDirPath: string): Promise<Fil
   }
 
   // Access the info we require
-  const stat = await fs.stat(fileOrDirPath)
+  const stat = await fs.lstat(fileOrDirPath)
 
   metadata.birthtime = stat.birthtimeMs
   metadata.modtime = stat.mtimeMs

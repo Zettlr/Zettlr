@@ -450,6 +450,8 @@ element may interfere, or even break the main editor.
 - Fix wrong suggested directories in the global search (#6065).
 - Fixed recent documents on Linux or Windows not opening (#4825).
 - Improve the visual line indentation logic to make it more robust (#6045).
+- Fixed an issue where symbolic links (`ln -s`) in your workspaces would cause
+  severe crashes and prevent the app from loading (#5949).
 
 ## Under the Hood
 
