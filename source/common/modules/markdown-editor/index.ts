@@ -27,7 +27,7 @@ import './editor.css'
 import EventEmitter from 'events'
 
 // CodeMirror imports
-import { EditorView } from '@codemirror/view'
+import { Decoration, type DecorationSet, EditorView } from '@codemirror/view'
 import {
   type EditorSelection,
   EditorState,
@@ -36,7 +36,7 @@ import {
   type Extension,
   type SelectionRange
 } from '@codemirror/state'
-import { syntaxTree } from '@codemirror/language'
+import { foldEffect, foldState, syntaxTree } from '@codemirror/language'
 
 // Keymaps/Input modes
 import { emacs } from '@replit/codemirror-emacs'
@@ -172,6 +172,11 @@ export interface EditorViewPersistentState {
    * selections within the editor.
    */
   selection: EditorSelection
+
+  /**
+   * A decoration set containing currently folded ranges.
+   */
+  foldedRanges: DecorationSet
 }
 
 export default class MarkdownEditor extends EventEmitter {
@@ -432,23 +437,34 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
+
+    let selection
+    const effects: StateEffect<any>[] = []
+
     if (persistentState !== undefined) {
       // Now that the correct document has been loaded, there will be content
       // and we can restore the persisted information.
-      const { scrollSnapshot, selection } = persistentState
-      this._instance.dispatch({ selection, effects: scrollSnapshot })
+      const { scrollSnapshot, selection: editorSelection, foldedRanges } = persistentState
+      selection = editorSelection
+
+      effects.push(scrollSnapshot)
+
+      const cursor = foldedRanges.iter()
+      while (cursor.value) {
+        effects.push(foldEffect.of({ from: cursor.from, to: cursor.to }))
+        cursor.next()
+      }
     }
+
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
-    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
+    effects.push(configUpdateEffect.of(this.config))
+    effects.push(tagsUpdate.of(this.databaseCache.tags))
+    effects.push(citekeyUpdate.of(this.databaseCache.citations))
+    effects.push(snippetsUpdate.of(this.databaseCache.snippets))
+    effects.push(filesUpdate.of(this.databaseCache.files) )
 
-    // Provide the cached databases to the state (can be overridden by the
-    // caller afterwards by calling setCompletionDatabase)
-    this._instance.dispatch({ effects: tagsUpdate.of(this.databaseCache.tags) })
-    this._instance.dispatch({ effects: citekeyUpdate.of(this.databaseCache.citations) })
-    this._instance.dispatch({ effects: snippetsUpdate.of(this.databaseCache.snippets) })
-    this._instance.dispatch({ effects: filesUpdate.of(this.databaseCache.files) })
-
+    this._instance.dispatch({ selection, effects })
     // Determine if this is a code doc and add the corresponding class to the
     // outer content DOM so that we can style it.
     if (type !== DocumentType.Markdown) {
@@ -471,7 +487,8 @@ export default class MarkdownEditor extends EventEmitter {
   public get persistentState (): EditorViewPersistentState {
     return {
       scrollSnapshot: this._instance.scrollSnapshot(),
-      selection: this._instance.state.selection
+      selection: this._instance.state.selection,
+      foldedRanges: this._instance.state.field(foldState, false) ?? Decoration.set([])
     }
   }
 
