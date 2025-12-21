@@ -127,11 +127,10 @@ export const mainOverride = EditorView.baseTheme({
   },
   // Shown when a region is folded
   '.cm-foldPlaceholder': {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
   },
   // Shown when a region is folded
   '&dark .cm-foldPlaceholder': {
-    backgroundColor: '#2b2b2c',
     borderColor: '#888'
   }
 })
