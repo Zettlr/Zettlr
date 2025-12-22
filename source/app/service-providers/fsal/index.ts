@@ -72,6 +72,8 @@ export default class FSAL extends ProviderContract {
   private readonly _emitter: EventEmitter
   private readonly watchers: Map<string, FSALWatchdog>
 
+  private _loadedDescriptors: AnyDescriptor[]
+
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider
@@ -82,6 +84,8 @@ export default class FSAL extends ProviderContract {
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
     this.watchers = new Map()
+
+    this._loadedDescriptors = []
 
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
@@ -268,6 +272,8 @@ export default class FSAL extends ProviderContract {
     const factor = 10 ** roundToDigits
     const increment = Math.round(100 / pathsToIndex.length * factor) / factor
 
+    const loadedDescriptors: AnyDescriptor[] = []
+
     for (const absPath of pathsToIndex) {
       currentPercent += increment
       if (onFile !== undefined) {
@@ -276,8 +282,10 @@ export default class FSAL extends ProviderContract {
 
       // Requesting the descriptor will, behind the scenes, check for cache hits
       // and automatically recache if necessary.
-      await this.getDescriptorFor(absPath)
+      loadedDescriptors.push(await this.getDescriptorFor(absPath))
     }
+
+    this._loadedDescriptors = loadedDescriptors
 
     const reindexDuration = performance.now() - start
     if (reindexDuration < 1000) {
@@ -319,14 +327,15 @@ export default class FSAL extends ProviderContract {
    * @param  {string}  query  What to search for
    */
   public async findExact (query: string): Promise<MDFileDescriptor|undefined> {
-    const allFileDescriptors = (await this.getAllLoadedDescriptors())
-      .filter(descriptor => descriptor.type === 'file')
-
     const { zkn } = this._config.get()
     const isQueryID = getIDRE(zkn.idRE, true).test(query)
     const hasMdExt = hasMarkdownExt(query)
 
-    for (const descriptor of allFileDescriptors) {
+    for (const descriptor of this._loadedDescriptors) {
+      if (descriptor.type !== 'file') {
+        continue
+      }
+
       if (isQueryID && descriptor.id === query) {
         return descriptor
       }
@@ -459,12 +468,12 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<boolean>}           Returns true, if absPath is a dir
    */
   public async isDir (absPath: string): Promise<boolean> {
-    if (!await this.pathExists(absPath)) {
+    try {
+      const metadata = await getFilesystemMetadata(absPath)
+      return metadata.isDirectory
+    } catch (err: any) {
       return false
     }
-
-    const metadata = await getFilesystemMetadata(absPath)
-    return metadata.isDirectory
   }
 
   /**
@@ -475,12 +484,12 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<boolean>}           Returns true, if absPath is a file
    */
   public async isFile (absPath: string): Promise<boolean> {
-    if (!await this.pathExists(absPath)) {
+    try {
+      const metadata = await getFilesystemMetadata(absPath)
+      return metadata.isFile
+    } catch (err: any) {
       return false
     }
-
-    const metadata = await getFilesystemMetadata(absPath)
-    return metadata.isFile
   }
 
   /**
@@ -670,14 +679,6 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string>}           Resolves with a string
    */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
-    if (await this.isDir(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
-    }
-
-    if (!await this.isFile(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
-    }
-
     const descriptor = await this.getDescriptorForAnySupportedFile(absPath)
 
     if (descriptor.type === 'file') {
@@ -703,25 +704,22 @@ export default class FSAL extends ProviderContract {
    * @throws if the path is not a file
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    if (await this.isFile(absPath)) {
+      if (hasMarkdownExt(absPath)) {
+        return await FSALFile.parse(absPath, this._cache, this.getMarkdownFileParser())
+      } else if (hasCodeExt(absPath)) {
+        return await FSALCodeFile.parse(absPath, this._cache)
+      } else {
+        return await FSALAttachment.parse(absPath, this._cache)
+      }
+    }
+
     if (await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
 
-    if (!await this.isFile(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
-    }
+    throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
 
-    if (hasMarkdownExt(absPath)) {
-      const parser = this.getMarkdownFileParser()
-      const descriptor = await FSALFile.parse(absPath, this._cache, parser)
-      return descriptor
-    } else if (hasCodeExt(absPath)) {
-      const descriptor = await FSALCodeFile.parse(absPath, this._cache)
-      return descriptor
-    } else {
-      const descriptor = await FSALAttachment.parse(absPath, this._cache)
-      return descriptor
-    }
   }
 
   /**
@@ -741,7 +739,7 @@ export default class FSAL extends ProviderContract {
    *
    * @throws if the path does not exist
    */
-  public async getDescriptorFor (absPath: string, avoidDiskAccess = true): Promise<AnyDescriptor> {
+  public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor> {
     if (avoidDiskAccess) {
       const cacheHit = this._cache.get(absPath)
       if (cacheHit !== undefined) {
@@ -749,9 +747,9 @@ export default class FSAL extends ProviderContract {
       }
     }
 
-    if (await this.isDir(absPath)) {
+    try {
       return await this.getAnyDirectoryDescriptor(absPath)
-    } else {
+    } catch (err: any) {
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
   }
@@ -815,7 +813,7 @@ export default class FSAL extends ProviderContract {
    * whether a root path is a file or folder. If it is a directory, it will read
    * in the directory and any children recursively to construct a list of every
    * file and folder within `absPath` and return it.
-   * 
+   *
    * NOTE: This function will already exclude dotfiles and ignored directories,
    * so this function is safe to consume in terms of what Zettlr should display.
    *
