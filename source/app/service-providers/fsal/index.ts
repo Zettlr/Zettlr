@@ -268,8 +268,6 @@ export default class FSAL extends ProviderContract {
     const factor = 10 ** roundToDigits
     const increment = Math.round(100 / pathsToIndex.length * factor) / factor
 
-    const loadedDescriptors: AnyDescriptor[] = []
-
     for (const absPath of pathsToIndex) {
       currentPercent += increment
       if (onFile !== undefined) {
@@ -278,7 +276,7 @@ export default class FSAL extends ProviderContract {
 
       // Requesting the descriptor will, behind the scenes, check for cache hits
       // and automatically recache if necessary.
-      loadedDescriptors.push(await this.getDescriptorFor(absPath))
+      await this.getDescriptorFor(absPath)
     }
 
     const reindexDuration = performance.now() - start
