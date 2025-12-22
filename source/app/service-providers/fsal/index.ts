@@ -72,8 +72,6 @@ export default class FSAL extends ProviderContract {
   private readonly _emitter: EventEmitter
   private readonly watchers: Map<string, FSALWatchdog>
 
-  private _loadedDescriptors: AnyDescriptor[]
-
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider
@@ -84,8 +82,6 @@ export default class FSAL extends ProviderContract {
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
     this.watchers = new Map()
-
-    this._loadedDescriptors = []
 
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
@@ -285,8 +281,6 @@ export default class FSAL extends ProviderContract {
       loadedDescriptors.push(await this.getDescriptorFor(absPath))
     }
 
-    this._loadedDescriptors = loadedDescriptors
-
     const reindexDuration = performance.now() - start
     if (reindexDuration < 1000) {
       this._logger.info(`[FSAL] Re-indexed workspaces in ${Math.round(reindexDuration)}ms`)
@@ -327,15 +321,14 @@ export default class FSAL extends ProviderContract {
    * @param  {string}  query  What to search for
    */
   public async findExact (query: string): Promise<MDFileDescriptor|undefined> {
+    const allFileDescriptors = (await this.getAllLoadedDescriptors())
+      .filter(descriptor => descriptor.type === 'file')
+
     const { zkn } = this._config.get()
     const isQueryID = getIDRE(zkn.idRE, true).test(query)
     const hasMdExt = hasMarkdownExt(query)
 
-    for (const descriptor of this._loadedDescriptors) {
-      if (descriptor.type !== 'file') {
-        continue
-      }
-
+    for (const descriptor of allFileDescriptors) {
       if (isQueryID && descriptor.id === query) {
         return descriptor
       }
