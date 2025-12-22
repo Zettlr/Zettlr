@@ -14,12 +14,14 @@
 
 import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import { extractFromFileDescriptors } from '@common/util/extract-from-file-descriptors'
+import { hasMarkdownExt, MD_EXT } from '@common/util/file-extention-checks'
+import { getIDRE } from '@common/regular-expressions'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '@providers/log'
 import path from 'path'
 import type FSAL from '../fsal'
 import type ConfigProvider from '../config'
-import { extractFromFileDescriptors } from 'source/common/util/extract-from-file-descriptors'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -132,10 +134,37 @@ export default class LinkProvider extends ProviderContract {
       return []
     }
 
+    const loadedDescriptors = await this._fsal.getAllLoadedDescriptors()
     const outboundLinks: string[] = []
 
+    const { zkn } = this._config.get()
+    const idRe = getIDRE(zkn.idRE, true)
+
+    const findExact = async (query: string) => {
+      for (const descriptor of loadedDescriptors) {
+        if (descriptor.type !== 'file') {
+          continue
+        }
+
+        if (idRe.test(query) && descriptor.id === query) {
+          return descriptor
+        }
+
+        if (hasMarkdownExt(query) && descriptor.name === query) {
+          return descriptor
+        }
+
+        for (const type of MD_EXT) {
+          if (descriptor.name === query + type) {
+            return descriptor
+          }
+        }
+      }
+    }
+
     for (const link of dbLinks) {
-      const descriptor = await this._fsal.findExact(link)
+      const descriptor = await findExact(link)
+
       if (descriptor !== undefined) {
         outboundLinks.push(descriptor.path)
       }
