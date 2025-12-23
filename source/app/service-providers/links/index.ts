@@ -134,18 +134,16 @@ export default class LinkProvider extends ProviderContract {
       return []
     }
 
-    const loadedDescriptors = await this._fsal.getAllLoadedDescriptors()
     const outboundLinks: string[] = []
 
     const { zkn } = this._config.get()
     const idRe = getIDRE(zkn.idRE, true)
 
+    const loadedDescriptors = (await this._fsal.getAllLoadedDescriptors())
+      .filter(descriptor => descriptor.type === 'file')
+
     const findExact = async (query: string) => {
       for (const descriptor of loadedDescriptors) {
-        if (descriptor.type !== 'file') {
-          continue
-        }
-
         if (idRe.test(query) && descriptor.id === query) {
           return descriptor
         }
