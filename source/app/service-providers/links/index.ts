@@ -143,12 +143,15 @@ export default class LinkProvider extends ProviderContract {
       .filter(descriptor => descriptor.type === 'file')
 
     const findExact = async (query: string) => {
+      const isQueryID = idRe.test(query)
+      const hasMdExt = hasMarkdownExt(query)
+
       for (const descriptor of loadedDescriptors) {
-        if (idRe.test(query) && descriptor.id === query) {
+        if (isQueryID && descriptor.id === query) {
           return descriptor
         }
 
-        if (hasMarkdownExt(query) && descriptor.name === query) {
+        if (hasMdExt && descriptor.name === query) {
           return descriptor
         }
 
