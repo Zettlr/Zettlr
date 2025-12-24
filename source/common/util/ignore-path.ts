@@ -12,6 +12,8 @@
  * END HEADER
  */
 
+const DOTFILE_RE = /(?:^|[\/\\])\./
+
 // A list of path names that should be ignored
 // by the chokidar watchdog process. Will be converted
 // to a RegExp object
@@ -26,8 +28,8 @@ const WATCHDOG_IGNORE_PATHS: string[] = [
   '\\.svn', // SVN
   '\\.obsidian', // Obsidian config
   '\\.quarto', // Quarto config
-  '\\.dropbox\\.', // Dropbox config
-  '\\.~lock\\.', // LibreOffice lockfiles
+  '\\.dropbox.*', // Dropbox config
+  '\\.~lock.*', // LibreOffice lockfiles
   '~\\$.*\\.(?:doc|dot|xls|ppt)x?', // MS Office temporary files
 ]
 
@@ -63,7 +65,7 @@ export const IGNORE_PATH_RE: RegExp[] = IGNORE_PATHS
  * @return  {boolean}            Whether the file is a dot file or folder
  */
 export function isDotFile (filePath: string): boolean {
-  return /(?:^|[\/\\])\./.test(filePath)
+  return DOTFILE_RE.test(filePath)
 }
 
 /**
