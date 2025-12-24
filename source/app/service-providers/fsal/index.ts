@@ -34,7 +34,7 @@ import type { SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
-import { hasMarkdownExt, hasCodeExt, MD_EXT } from '@common/util/file-extention-checks'
+import { hasMarkdownExt, hasCodeExt } from '@common/util/file-extention-checks'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
@@ -335,10 +335,8 @@ export default class FSAL extends ProviderContract {
         return descriptor
       }
 
-      for (const type of MD_EXT) {
-        if (descriptor.name === query + type) {
-          return descriptor
-        }
+      if (descriptor.name === query + descriptor.ext) {
+        return descriptor
       }
     }
   }

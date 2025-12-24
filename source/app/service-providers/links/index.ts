@@ -15,7 +15,7 @@
 import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { extractFromFileDescriptors } from '@common/util/extract-from-file-descriptors'
-import { hasMarkdownExt, MD_EXT } from '@common/util/file-extention-checks'
+import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { getIDRE } from '@common/regular-expressions'
 import ProviderContract from '../provider-contract'
 import type LogProvider from '@providers/log'
@@ -152,10 +152,8 @@ export default class LinkProvider extends ProviderContract {
           return descriptor
         }
 
-        for (const type of MD_EXT) {
-          if (descriptor.name === query + type) {
-            return descriptor
-          }
+        if (descriptor.name === query + descriptor.ext) {
+          return descriptor
         }
       }
     }
