@@ -460,8 +460,8 @@ export default class FSAL extends ProviderContract {
    */
   public async isDir (absPath: string): Promise<boolean> {
     try {
-      const metadata = await getFilesystemMetadata(absPath)
-      return metadata.isDirectory
+      const stat = await fs.lstat(absPath)
+      return stat.isDirectory()
     } catch (err: any) {
       return false
     }
@@ -476,8 +476,8 @@ export default class FSAL extends ProviderContract {
    */
   public async isFile (absPath: string): Promise<boolean> {
     try {
-      const metadata = await getFilesystemMetadata(absPath)
-      return metadata.isFile
+      const stat = await fs.lstat(absPath)
+      return stat.isFile()
     } catch (err: any) {
       return false
     }
