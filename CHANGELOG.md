@@ -6,7 +6,23 @@
 
 ## Under the Hood
 
-(nothing here)
+- Added a new environment variable, `ZETTLR_DISABLE_UPDATE_CHECK`. If that
+  variable is detected during build, this will hard-disable update checks in the
+  application. This can be used by package maintainers to ensure update checks
+  from within the app are disabled, and Zettlr instead must be updated via the
+  package manager. Please **note** that the build script will only check for the
+  *presence* of the variable, not its contents. To ensure you are building with
+  updates enabled, you need to ensure the variable is not set, for example by
+  running `unset ZETTLR_DISABLE_UPDATE_CHECK` before commencing the build. For more information, please see issue #6075. When
+  this environment variable is present during build, the resulting binary will
+  exhibit the following behavior:
+  - The "Check for updates" menu item will not be present.
+  - The "Updates" and "Beta releases" preferences will not be present. Instead,
+    the updates-setting will be replaced by an informative message informing
+    that updates have been disabled for the app.
+  - The update check itself in the update provider will never run.
+  - Zettlr will include an environment variable indicating whether updates are
+    disabled (`1`) or enabled (`0`) that is visible within the debug panel.
 
 # 4.0.0
 

@@ -36,6 +36,16 @@ export default function getMenu (
   _setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
   const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
+  const updateMenuItem: MenuItemConstructorOptions = {
+    id: 'menu.update',
+    label: trans('Check for updates'),
+    click: function (_menuitem, _focusedWindow) {
+      // Immediately open the window instead of first checking
+      commands.run('open-update-window', undefined)
+        .catch(e => logger.error(String(e.message), e))
+    }
+  }
+
   // While on macOS we can just drop the following menuItem into the menu, the
   // win32-menu is also being used on Linux. Therefore, we use as fallback the
   // default, but ...
@@ -606,15 +616,7 @@ export default function getMenu (
             windows.showAboutWindow()
           }
         },
-        {
-          id: 'menu.update',
-          label: trans('Check for updates'),
-          click: function (_menuitem, _focusedWindow) {
-            // Immediately open the window instead of first checking
-            commands.run('open-update-window', undefined)
-              .catch(e => logger.error(String(e.message), e))
-          }
-        },
+        ...(__UPDATES_DISABLED__ === '0' ? [updateMenuItem] : []),
         {
           type: 'separator'
         },

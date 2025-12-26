@@ -84,6 +84,11 @@ function generateRendererEntrypoint (name, folder) {
 
 module.exports = {
   hooks: {
+    preStart: async (forgeConfig) => {
+      if (process.env.ZETTLR_DISABLE_UPDATE_CHECK !== undefined) {
+        console.warn('Detected the environment variable ZETTLR_DISABLE_UPDATE_CHECK. This build of Zettlr WILL NOT HAVE UPDATES ENABLED. Please ensure this was intended!')
+      }
+    },
     generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
       // Two steps need to be done here. First, we need to set an environment
       // variable that is then accessible by the webpack process so that we can

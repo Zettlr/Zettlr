@@ -242,7 +242,7 @@ Creates a `.desktop`-file into your applications which enables you to quickly st
 > [!WARNING]
 > We provide this command as a convenience. Unless you know what you are doing, you should not run code directly compiled from the HEAD commit of the develop branch. This command *can* be useful, however, in a few instances where you know what may go wrong and can take appropriate precautions.
 
-### `shortcut:uninstall`
+#### `shortcut:uninstall`
 
 Removes the `.desktop`-file created by `shortcut:install`.
 
@@ -259,6 +259,21 @@ See `start`.
 
 > [!IMPORTANT]
 > This command is deprecated and only an alias for `start`. Use `start` instead.
+
+### Build Flags
+
+The build process of Zettlr supports build flags that you can use to hardwire
+certain behaviors into the final binary. These usually come as environment
+variables. If they are present, Zettlr will produce a different binary.
+
+#### `ZETTLR_DISABLE_UPDATE_CHECK`
+
+If this environment variable is present during build, this will cause the resulting binary to have its built-in update-checking mechanism disabled. This is useful if you are repackaging the app for distribution through a package manager. The build script will emit a warning that the binary will not have update checks enabled.
+
+To disable the update check at build time, simply make sure that this environment variable is present. The build script only checks for its presence, not the actual value. To ensure you are including the update check mechanism, make sure this environment variable is *not* set, e.g., by running `unset ZETTLR_DISABLE_UPDATE_CHECK` before running the build script.
+
+> [!CAUTION]
+> By creating and distributing a version of Zettlr with update checks disabled, you are responsible for ensuring that users will receive updates for Zettlr through a different mechanism. You acknowledge that you are responsible for ensuring that your update mechanism works reliably at all times. If – for any reasons – your update mechanism is disrupted – even temporarily – and Zettlr users cannot receive new updates, you are **required** to immediately notify us of this by opening a GitHub Issue, via Discord, or via Email. **Failure to comply with these added requirements will result in our immediate termination of the implicit consent for you to distribute modified Zettlr versions. If we receive notice of a version of Zettlr being publicly distributed without a working update mechanism and you fail to communicate this directly to us, we will immediately warn users publicly about your Zettlr package and withdraw our implicit consent for you to distribute Zettlr. Thus, you will forfeit your allowance to distribute Zettlr indefinitely.** In short: Only use this build flag if you know *exactly* what you're doing, and, if something goes wrong, communicate proactively. Then, all is good.
 
 ### Directory Structure
 

@@ -197,5 +197,17 @@ export default async function environmentCheck (): Promise<void> {
     console.warn(err.message)
   }
 
+  // Finally, remember whether the updates have been disabled at build time.
+  // This makes this decision of the packager transparent to users and can help
+  // troubleshoot issues. Since `__UPDATES_DISABLED__` is not an actual variable
+  // but will be replaced with a string by Webpack, this ensures this
+  // information is retained in the final app, even though update code will be
+  // removed for good.
+  process.env.UPDATES_DISABLED = __UPDATES_DISABLED__
+
+  if (__UPDATES_DISABLED__ === '1') {
+    console.warn('This Zettlr binary has been compiled with update checks completely disabled.')
+  }
+
   console.log('[Application] Environment check complete.')
 }
