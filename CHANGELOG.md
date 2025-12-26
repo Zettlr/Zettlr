@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.0.0
+
 ## Full TableEditor Rewrite
 
 This release contains a full rewrite of the TableEditor. The old implementation
