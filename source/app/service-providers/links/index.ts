@@ -22,6 +22,7 @@ import type LogProvider from '@providers/log'
 import path from 'path'
 import type FSAL from '../fsal'
 import type ConfigProvider from '../config'
+import type { MDFileDescriptor } from 'source/types/common/fsal'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -93,6 +94,34 @@ export default class LinkProvider extends ProviderContract {
   }
 
   /**
+   * Finds the descriptor for a file query based on a ZKN id, file name, or file
+   * base path. This logic is copied from the FSAL `findExact` method to avoid
+   * the performance impacts of calling `getAllLoadedDescriptors` on every
+   * execution.
+   */
+  private async findExact (query: string, descriptors: MDFileDescriptor[]): Promise<MDFileDescriptor|undefined> {
+    const { zkn } = this._config.get()
+    const idRe = getIDRE(zkn.idRE, true)
+
+    const isQueryID = idRe.test(query)
+    const hasMdExt = hasMarkdownExt(query)
+
+    for (const descriptor of descriptors) {
+      if (isQueryID && descriptor.id === query) {
+        return descriptor
+      }
+
+      if (hasMdExt && descriptor.name === query) {
+        return descriptor
+      }
+
+      if (descriptor.name === query + descriptor.ext) {
+        return descriptor
+      }
+    }
+  }
+
+  /**
    * Retrieves a set of links to the file given as argument
    *
    * @param   {string}    sourceFilePath  The source file's path
@@ -134,35 +163,12 @@ export default class LinkProvider extends ProviderContract {
       return []
     }
 
-    const outboundLinks: string[] = []
-
-    const { zkn } = this._config.get()
-    const idRe = getIDRE(zkn.idRE, true)
-
     const loadedDescriptors = (await this._fsal.getAllLoadedDescriptors())
       .filter(descriptor => descriptor.type === 'file')
 
-    const findExact = async (query: string) => {
-      const isQueryID = idRe.test(query)
-      const hasMdExt = hasMarkdownExt(query)
-
-      for (const descriptor of loadedDescriptors) {
-        if (isQueryID && descriptor.id === query) {
-          return descriptor
-        }
-
-        if (hasMdExt && descriptor.name === query) {
-          return descriptor
-        }
-
-        if (descriptor.name === query + descriptor.ext) {
-          return descriptor
-        }
-      }
-    }
-
+    const outboundLinks: string[] = []
     for (const link of dbLinks) {
-      const descriptor = await findExact(link)
+      const descriptor = await this.findExact(link, loadedDescriptors)
 
       if (descriptor !== undefined) {
         outboundLinks.push(descriptor.path)
