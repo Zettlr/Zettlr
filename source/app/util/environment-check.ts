@@ -19,6 +19,7 @@ import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
 import { getProgramVersion } from './get-program-version'
 import fixPath from 'fix-path'
+import { runCommand } from './run-command'
 
 export default async function environmentCheck (): Promise<void> {
   console.log('[Application] Performing environment check ...')
@@ -126,13 +127,31 @@ export default async function environmentCheck (): Promise<void> {
     process.env.QUARTO_SUPPORT = '0'
   }
 
-  // Finally, determine if git is installed on this machine
+  // Finally, determine if git is installed on this machine.
+  process.env.GIT_SUPPORT = '0'
   try {
-    const version = await getProgramVersion('git')
-    process.env.GIT_SUPPORT = '1'
-    process.env.GIT_VERSION = version
+    // On macOS, the `git` command always exists. If the user has installed the
+    // XCode command line tools, it will resolve to the actual git binary.
+    // However, on Macs without XCode command line tools, it will instead
+    // trigger an annoying popup asking to install the command line tools. To
+    // figure out if git is installed on macOS, we have to go another route and
+    // check the return code of `xcode-select -p`. If it's 0, we are good to go
+    // to check for git availability (because the command line tools are
+    // intalled). NOTE that we cannot use the recommended tool by apple, `xcrun`
+    // because that will *also* trigger the setup dialog.
+    let XCodeCLIToolsInstalled = false
+    if (process.platform === 'darwin') {
+      const xcodeResult = await runCommand('xcode-select', ['-p'])
+      XCodeCLIToolsInstalled = xcodeResult.code === 0
+    }
+
+    if (process.platform !== 'darwin' || XCodeCLIToolsInstalled) {
+      const version = await getProgramVersion('git')
+      process.env.GIT_SUPPORT = '1'
+      process.env.GIT_VERSION = version
+    }
   } catch (err) {
-    process.env.GIT_SUPPORT = '0'
+    // No action needed
   }
 
   // Make sure the PATH property exists

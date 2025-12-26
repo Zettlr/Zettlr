@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed XCode Command Line Tools setup dialog on macOS (#5428).
 
 ## Under the Hood
 
