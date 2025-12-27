@@ -14,9 +14,9 @@
   package manager. Please **note** that the build script will only check for the
   *presence* of the variable, not its contents. To ensure you are building with
   updates enabled, you need to ensure the variable is not set, for example by
-  running `unset ZETTLR_DISABLE_UPDATE_CHECK` before commencing the build. For more information, please see issue #6075. When
-  this environment variable is present during build, the resulting binary will
-  exhibit the following behavior:
+  running `unset ZETTLR_DISABLE_UPDATE_CHECK` before commencing the build. For
+  more information, please see issue #6075. When this environment variable is
+  present during build, the resulting binary will exhibit this behavior:
   - The "Check for updates" menu item will not be present.
   - The "Updates" and "Beta releases" preferences will not be present. Instead,
     the updates-setting will be replaced by an informative message informing
@@ -24,6 +24,13 @@
   - The update check itself in the update provider will never run.
   - Zettlr will include an environment variable indicating whether updates are
     disabled (`1`) or enabled (`0`) that is visible within the debug panel.
+- Added a new environment variable, `BUNDLE_PANDOC`. If this variable is set to
+  a value of `0`, this will prevent the build script from downloading and
+  bundling Pandoc during the build stage. This can be used by package
+  maintainers to reduce the package size when there is a better way to provide
+  Pandoc (e.g., by listing it as a dependency for Zettlr). This also means that
+  the build environment does not require the dependencies that are specifically
+  for the download script.
 
 # 4.0.0
 
