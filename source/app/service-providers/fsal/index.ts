@@ -34,7 +34,7 @@ import type { SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
-import { hasMarkdownExt, hasCodeExt, MD_EXT } from '@common/util/file-extention-checks'
+import { hasMarkdownExt, hasCodeExt } from '@common/util/file-extention-checks'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
@@ -335,10 +335,8 @@ export default class FSAL extends ProviderContract {
         return descriptor
       }
 
-      for (const type of MD_EXT) {
-        if (descriptor.name === query + type) {
-          return descriptor
-        }
+      if (descriptor.name === query + descriptor.ext) {
+        return descriptor
       }
     }
   }
@@ -459,12 +457,12 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<boolean>}           Returns true, if absPath is a dir
    */
   public async isDir (absPath: string): Promise<boolean> {
-    if (!await this.pathExists(absPath)) {
+    try {
+      const stat = await fs.lstat(absPath)
+      return stat.isDirectory()
+    } catch (err: any) {
       return false
     }
-
-    const metadata = await getFilesystemMetadata(absPath)
-    return metadata.isDirectory
   }
 
   /**
@@ -475,12 +473,12 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<boolean>}           Returns true, if absPath is a file
    */
   public async isFile (absPath: string): Promise<boolean> {
-    if (!await this.pathExists(absPath)) {
+    try {
+      const stat = await fs.lstat(absPath)
+      return stat.isFile()
+    } catch (err: any) {
       return false
     }
-
-    const metadata = await getFilesystemMetadata(absPath)
-    return metadata.isFile
   }
 
   /**
@@ -670,14 +668,6 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string>}           Resolves with a string
    */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
-    if (await this.isDir(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
-    }
-
-    if (!await this.isFile(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
-    }
-
     const descriptor = await this.getDescriptorForAnySupportedFile(absPath)
 
     if (descriptor.type === 'file') {
@@ -703,25 +693,22 @@ export default class FSAL extends ProviderContract {
    * @throws if the path is not a file
    */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    if (await this.isFile(absPath)) {
+      if (hasMarkdownExt(absPath)) {
+        return await FSALFile.parse(absPath, this._cache, this.getMarkdownFileParser())
+      } else if (hasCodeExt(absPath)) {
+        return await FSALCodeFile.parse(absPath, this._cache)
+      } else {
+        return await FSALAttachment.parse(absPath, this._cache)
+      }
+    }
+
     if (await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }
 
-    if (!await this.isFile(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
-    }
+    throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
 
-    if (hasMarkdownExt(absPath)) {
-      const parser = this.getMarkdownFileParser()
-      const descriptor = await FSALFile.parse(absPath, this._cache, parser)
-      return descriptor
-    } else if (hasCodeExt(absPath)) {
-      const descriptor = await FSALCodeFile.parse(absPath, this._cache)
-      return descriptor
-    } else {
-      const descriptor = await FSALAttachment.parse(absPath, this._cache)
-      return descriptor
-    }
   }
 
   /**
@@ -741,7 +728,7 @@ export default class FSAL extends ProviderContract {
    *
    * @throws if the path does not exist
    */
-  public async getDescriptorFor (absPath: string, avoidDiskAccess = true): Promise<AnyDescriptor> {
+  public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor> {
     if (avoidDiskAccess) {
       const cacheHit = this._cache.get(absPath)
       if (cacheHit !== undefined) {
@@ -749,9 +736,9 @@ export default class FSAL extends ProviderContract {
       }
     }
 
-    if (await this.isDir(absPath)) {
+    try {
       return await this.getAnyDirectoryDescriptor(absPath)
-    } else {
+    } catch (err: any) {
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
   }
@@ -815,7 +802,7 @@ export default class FSAL extends ProviderContract {
    * whether a root path is a file or folder. If it is a directory, it will read
    * in the directory and any children recursively to construct a list of every
    * file and folder within `absPath` and return it.
-   * 
+   *
    * NOTE: This function will already exclude dotfiles and ignored directories,
    * so this function is safe to consume in terms of what Zettlr should display.
    *
