@@ -24,6 +24,7 @@ import {
   extractTextnodes
 } from '@common/modules/markdown-utils'
 import type {
+  CitationNode,
   Heading,
   YAMLFrontmatter,
   ZettelkastenLink,
@@ -49,8 +50,6 @@ const FRONTMATTER_VARS = [
 /**
  * Parses some Markdown `content` into the properties of the `file` descriptor.
  *
- * @param  {string}  linkStart    The link start as indicated by the user
- * @param  {string}  linkEnd      The link end as indicated by the user
  * @param  {string}  idREPattern  The ID RegExp pattern as indicated by the user
  *
  * @returns {Function}            A parser that can then be used to parse files
@@ -76,6 +75,9 @@ export default function getMarkdownFileParser (
 
     const links = extractASTNodes(ast, 'ZettelkastenLink') as ZettelkastenLink[]
     file.links = links.map(link => link.target)
+
+    const citations = extractASTNodes(ast, 'Citation') as CitationNode[]
+    file.citekeys = citations.flatMap(node => node.parsedCitation.items.map(item => item.id))
 
     file.firstHeading = null
     const headings = extractASTNodes(ast, 'Heading') as Heading[]

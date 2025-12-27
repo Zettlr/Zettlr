@@ -399,11 +399,10 @@ export async function md2html (markdown: string, options: MD2HTMLOptions): Promi
     return html + fnHTML // No bibliography wanted
   }
 
-  // Prepare and include a bibliography at the end. We here essentially
-  // replicate what the references tab does.
-  const keys = extractASTNodes(ast, 'Citation')
-    .map((node: ASTNode) => (node as CitationNode).parsedCitation)
-    .flatMap(c => c.items.map(item => item.id))
+  // Prepare and include a bibliography at the end.
+  // We replicate what the fsal file parser does.
+  const keys = (extractASTNodes(ast, 'Citation') as CitationNode[])
+    .flatMap(node => node.parsedCitation.items.map(item => item.id))
 
   const bibHTML = await options.onBibliography([...new Set(keys)])
   if (bibHTML !== undefined) {
