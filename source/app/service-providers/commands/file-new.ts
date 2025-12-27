@@ -42,7 +42,7 @@ export default class FileNew extends ZettlrCommand {
     // generated and the user is asked to confirm the name.
     const { newFileDontPrompt, newFileNamePattern } = this._app.config.get()
     const type = arg.type ?? 'md'
-    const generatedName = generateFilename(newFileNamePattern, this._app.config.get().zkn.idGen)
+    const generatedName = generateFilename(newFileNamePattern, this._app.config.get().zkn.idGen, type)
     const leafId = arg.leafId
 
     if (arg.windowId === undefined) {
