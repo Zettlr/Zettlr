@@ -72,7 +72,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   type: 'file'
   tags: string[]
   links: string[] // Any outlinks declared in the file
-  citations: string[] // Any citations declared in the file
+  citekeys: string[] // Any citation keys declared in the file
   bom: string // An optional BOM
   wordCount: number
   charCount: number

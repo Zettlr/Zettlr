@@ -123,7 +123,7 @@ async function updateBibliography (): Promise<void> {
     return
   }
 
-  const keys = descriptor.citations
+  const keys = descriptor.citekeys
 
   // Now also include potential nocite citations (see https://pandoc.org/MANUAL.html#including-uncited-items-in-the-bibliography)
   if (descriptor.frontmatter != null && 'nocite' in descriptor.frontmatter) {

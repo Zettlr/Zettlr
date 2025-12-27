@@ -77,7 +77,7 @@ export default function getMarkdownFileParser (
     file.links = links.map(link => link.target)
 
     const citations = extractASTNodes(ast, 'Citation') as CitationNode[]
-    file.citations = citations.flatMap(node => node.parsedCitation.items.map(item => item.id))
+    file.citekeys = citations.flatMap(node => node.parsedCitation.items.map(item => item.id))
 
     file.firstHeading = null
     const headings = extractASTNodes(ast, 'Heading') as Heading[]
