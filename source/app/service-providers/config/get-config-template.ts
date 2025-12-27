@@ -64,7 +64,6 @@ export interface ConfigOptions {
   autoDarkModeStart: string
   autoDarkModeEnd: string
 
-  openPaths: string[]
   openDirectory: string|null
   attachmentExtensions: string[]
   alwaysReloadFiles: boolean
@@ -85,6 +84,11 @@ export interface ConfigOptions {
 
   debug: boolean
   checkForBeta: boolean
+
+  fileManager: {
+    openFiles: string[]
+    openWorkspaces: string[]
+  }
 
   dialogPaths: {
     askFileDialog: string
@@ -251,7 +255,10 @@ export function getConfigTemplate (): ConfigOptions {
   return {
     version: app.getVersion(), // Useful for migrating
     buildDate: __BUILD_DATE__,
-    openPaths: [], // Array to include all opened root paths
+    fileManager: {
+      openFiles: [],
+      openWorkspaces: []
+    },
     openDirectory: null, // Save last opened dir path here
     dialogPaths: {
       askFileDialog: '',
