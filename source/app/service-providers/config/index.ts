@@ -199,6 +199,11 @@ export default class ConfigProvider extends ProviderContract {
         this._newVersion = newDate >= oldDate
       }
 
+      // Run potential migrations on the (old) read configuration from disk
+      // before merging with the correct config template. This allows the
+      // migrations to modify certain properties if necessary.
+      this.runMigrations(readConfig)
+
       // NOTE: We cannot use "update" here because we cannot yet broadcast any
       // events, so we have to use safeAssign directly.
       this.config = safeAssign(readConfig, this.config)
@@ -210,9 +215,6 @@ export default class ConfigProvider extends ProviderContract {
         this.config.buildDate = __BUILD_DATE__
       }
     }
-
-    // Run potential migrations if applicable.
-    this.runMigrations()
 
     // Remove potential dead links to non-existent files and dirs
     this.checkPaths()
@@ -248,47 +250,65 @@ export default class ConfigProvider extends ProviderContract {
   }
 
   /**
-    * This function runs a general check and runs any potential migrations.
-    * @return {ZettlrConfig} This for chainability.
+    * This function is used to run migrations on the read config when the user
+    * updates to a new version. It modifies the read configuration object in
+    * place so that it can then be merged into the correct config template.
+    *
+    * @param  {any}  readConfig  The read config from disk.
     */
-  runMigrations (): this {
-    const replacements = this.config.editor.autoCorrect.replacements as any
-    if (isIterable(replacements) && replacements != null) {
-      // In 1.8.7 the replacements were provided as key-val pairs, but we've since
-      // moved to key-value since it's more verbose. So we need to make sure these
-      // conform to the new rules.
-      for (const entry of replacements) {
-        if ('val' in entry && !('value' in entry)) {
-          this._logger.info(`[Config Provider] Migrating Autocorrect replacement ${entry.key as string} from 'val' to 'value' ...`)
-          entry.value = entry.val
-          delete entry.val
-        }
-      }
-      this._container.set(this.config)
-    } else if (replacements != null) {
-      // Previous versions stored the replacements as objects of the form
-      // { "-->": "→", ... }
-      const newReplacements: Array<{ key: string, value: string }> = []
-      for (const [ key, value ] of Object.entries(replacements as { key: string, value: string }[])) {
-        if (typeof value === 'string') {
-          newReplacements.push({ key, value })
-        }
-      }
-      this.config.editor.autoCorrect.replacements = newReplacements
-      this._container.set(this.config)
-    }
+  private runMigrations (readConfig: any): void {
+    // After version 4.0.0, we have split up `openPaths` into separate file and
+    // workspaces arrays.
+    if (('openPaths' in readConfig)) {
+      const openPaths: string[] = readConfig.openPaths
 
-    return this
+      if (!('fileManager' in readConfig)) {
+        readConfig.fileManager = {
+          openFiles: [],
+          openWorkspaces: []
+        }
+      }
+
+      if (!('openFiles' in readConfig.fileManager)) {
+        readConfig.fileManager.openFiles = []
+      }
+
+      if (!('openWorkspaces' in readConfig.fileManager)) {
+        readConfig.fileManager.openWorkspaces = []
+      }
+
+      for (const absPath of openPaths) {
+        if (isFile(absPath)) {
+          readConfig.fileManager.openFiles.push(absPath)
+        } else if (isDir(absPath)) {
+          readConfig.fileManager.openWorkspaces.push(absPath)
+        }
+      }
+    } // END: openPaths migration
   }
 
   /**
     * Checks the validity of each path that should be opened and removes all
-    * those that are invalid
-    * @return {void} Nothing to return.
+    * those that are invalid.
     */
   checkPaths (): void {
     // Remove duplicates
-    this.config.openPaths = [...new Set(this.config.openPaths)]
+    this.config.fileManager.openFiles = [...new Set(this.config.fileManager.openFiles)]
+    this.config.fileManager.openWorkspaces = [...new Set(this.config.fileManager.openWorkspaces)]
+
+    for (const file of this.config.fileManager.openFiles) {
+      if (!isFile(file)) {
+        const idx = this.config.fileManager.openFiles.indexOf(file)
+        this.config.fileManager.openFiles.splice(idx, 1)
+      }
+    }
+
+    for (const workspace of this.config.fileManager.openWorkspaces) {
+      if (!isDir(workspace)) {
+        const idx = this.config.fileManager.openWorkspaces.indexOf(workspace)
+        this.config.fileManager.openWorkspaces.splice(idx, 1)
+      }
+    }
 
     // Now sort the paths.
     this.sortPaths()
@@ -313,15 +333,34 @@ export default class ConfigProvider extends ProviderContract {
    * workspace is loaded as part of another workspace.
    */
   private consolidateRootPaths (): void {
-    // First, retrieve all root files
-    for (const thisRoot of this.config.openPaths) {
-      for (const otherRoot of this.config.openPaths) {
-        if (otherRoot.startsWith(thisRoot) && otherRoot !== thisRoot) {
-          this.config.openPaths.splice(this.config.openPaths.indexOf(thisRoot), 1)
-          break
+    const { openFiles, openWorkspaces } = this.config.fileManager
+
+    // First, check if any of the open files are part of any of the workspaces.
+    for (const openFile of openFiles) {
+      for (const workspace of openWorkspaces) {
+        if (openFile.startsWith(workspace)) {
+          openFiles.splice(openFiles.indexOf(openFile), 1)
         }
       }
     }
+
+    // Second, check if any open workspaces are subdirectories of any other
+    // workspace.
+    for (const workspace of openWorkspaces) {
+      for (const otherWorkspace of openWorkspaces) {
+        if (workspace === otherWorkspace) {
+          continue
+        }
+
+        if (workspace.startsWith(otherWorkspace)) {
+          openWorkspaces.slice(openWorkspaces.indexOf(workspace), 1)
+        }
+      }
+    }
+
+    this.config.fileManager.openFiles = openFiles
+    this.config.fileManager.openWorkspaces = openWorkspaces
+    this._container.set(this.config) // Persist changes
   }
 
   /**
@@ -329,26 +368,19 @@ export default class ConfigProvider extends ProviderContract {
     * @return {ZettlrConfig} Chainability.
     */
   private sortPaths (): void {
-    const f = []
-    const d = []
-    for (const p of this.config.openPaths) {
-      if (isDir(p)) {
-        d.push(p)
-      } else {
-        f.push(p)
-      }
-    }
+    const { openFiles, openWorkspaces } = this.config.fileManager
 
     // We only want to sort the paths based on rudimentary, natural order.
     const coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
-    f.sort((a, b) => {
+    openFiles.sort((a, b) => {
       return coll.compare(path.basename(a), path.basename(b))
     })
-    d.sort((a, b) => {
+    openWorkspaces.sort((a, b) => {
       return coll.compare(path.basename(a), path.basename(b))
     })
 
-    this.config.openPaths = f.concat(d)
+    this.config.fileManager.openFiles = openFiles
+    this.config.fileManager.openWorkspaces = openWorkspaces
     this._container.set(this.config)
   }
 
@@ -358,18 +390,28 @@ export default class ConfigProvider extends ProviderContract {
     * @return {Boolean} True, if the path was successfully added, else false.
     */
   addPath (p: string): boolean {
+    const { openFiles, openWorkspaces } = this.config.fileManager
     // Only add valid and unique paths
-    if (this.config.openPaths.includes(p)) {
+    if (openFiles.includes(p) || openWorkspaces.includes(p)) {
       return false
     }
 
-    if ((isFile(p) && hasMdOrCodeExt(p)) || (isDir(p) && !ignoreDir(p))) {
-      this.config.openPaths.push(p)
+    const validFile = isFile(p) && hasMdOrCodeExt(p)
+    const validDir = isDir(p) && !ignoreDir(p)
+
+    if (validFile || validDir) {
+
+      if (validFile) {
+        this.config.fileManager.openFiles.push(p)
+      } else {
+        this.config.fileManager.openWorkspaces.push(p)
+      }
+
       this.consolidateRootPaths()
       this.sortPaths()
       this._container.set(this.config)
-      this._emitter.emit('update', 'openPaths')
-      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' })
+      this._emitter.emit('update', 'openPaths') // TODO
+      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' }) // TODO
       return true
     }
 
@@ -382,13 +424,24 @@ export default class ConfigProvider extends ProviderContract {
     * @return {Boolean} Whether or not the call succeeded.
     */
   removePath (p: string): boolean {
-    if (this.config.openPaths.includes(p)) {
-      this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
+    const { openFiles, openWorkspaces } = this.config.fileManager
+    const fileIdx = openFiles.indexOf(p)
+    const wsIdx = openWorkspaces.indexOf(p)
+    const rootFile = fileIdx > -1
+    const workspace = wsIdx > -1
+
+    if (rootFile || workspace) {
+      if (rootFile) {
+        this.config.fileManager.openFiles.splice(fileIdx, 1)
+      } else {
+        this.config.fileManager.openWorkspaces.splice(wsIdx, 1)
+      }
       this._container.set(this.config)
-      this._emitter.emit('update', 'openPaths')
-      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' })
+      this._emitter.emit('update', 'openPaths') // TODO
+      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' }) // TODO
       return true
     }
+
     return false
   }
 
@@ -579,8 +632,4 @@ export default class ConfigProvider extends ProviderContract {
     // There are some options for which there is no validation.
     return true
   }
-}
-
-function isIterable (value: any): boolean {
-  return Symbol.iterator in Object(value)
 }
