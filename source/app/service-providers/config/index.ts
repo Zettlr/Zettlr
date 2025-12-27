@@ -28,7 +28,7 @@ import type LogProvider from '../log'
 import { loadData, trans } from '@common/i18n-main'
 import isFile from '@common/util/is-file'
 import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
-import ignoreDir from '@common/util/ignore-dir'
+import { ignorePath } from '@common/util/ignore-path'
 import { showOnboardingWindow } from './onboarding-window'
 import { DateTime } from 'luxon'
 
@@ -363,7 +363,7 @@ export default class ConfigProvider extends ProviderContract {
       return false
     }
 
-    if ((isFile(p) && hasMdOrCodeExt(p)) || (isDir(p) && !ignoreDir(p))) {
+    if ((isFile(p) && hasMdOrCodeExt(p)) || (isDir(p) && !ignorePath(p))) {
       this.config.openPaths.push(p)
       this.consolidateRootPaths()
       this.sortPaths()

@@ -40,7 +40,7 @@ import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
-import ignoreDir from 'source/common/util/ignore-dir'
+import { ignorePath, isDotFile } from 'source/common/util/ignore-path'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
@@ -87,7 +87,7 @@ export default class FSAL extends ProviderContract {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
         if (await this.isFile(payload)) {
           return [payload]
-        } else if (await this.isDir(payload) && !ignoreDir(payload)) {
+        } else if (await this.isDir(payload)) {
           return await this.readDirectoryRecursively(payload)
         } else {
           return []
@@ -124,7 +124,7 @@ export default class FSAL extends ProviderContract {
     await this.syncRoots()
 
     this._config.on('update', (which: string) => {
-      if (which === 'openPaths') {
+      if (which === 'openPaths' || which === 'files.dotFiles.showInFilemanager' || which === 'files.dotFiles.showInSidebar') {
         this.syncRoots()
           .then(() => {
             // Always reindex all files after config updates later on.
@@ -234,6 +234,21 @@ export default class FSAL extends ProviderContract {
     }
   }
 
+  private handlePath (absPath: string): boolean {
+    const { files } = this._config.get()
+    const showDotfiles = files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar
+
+    if (ignorePath(absPath)) {
+      return false
+    }
+
+    if (isDotFile(absPath) && !showDotfiles) {
+      return false
+    }
+
+    return true
+  }
+
   /**
    * This function ensures that all files anywhere within the loaded paths are
    * properly indexed in the cache for fast access.
@@ -245,11 +260,16 @@ export default class FSAL extends ProviderContract {
     let start = performance.now()
 
     const { openPaths } = this._config.get()
+
     const pathsToIndex: string[] = []
     for (const rootPath of openPaths) {
-      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
+      if (!this.handlePath(rootPath)) {
+        continue
+      }
+
+      if (await this.isFile(rootPath)) {
         pathsToIndex.push(rootPath)
-      } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
+      } else if (await this.isDir(rootPath)) {
         const allPaths = await this.readDirectoryRecursively(rootPath)
         pathsToIndex.push(...allPaths)
       }
@@ -298,9 +318,13 @@ export default class FSAL extends ProviderContract {
     const allDescriptors: AnyDescriptor[] = []
 
     for (const rootPath of openPaths) {
-      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
+      if (!this.handlePath(rootPath)) {
+        continue
+      }
+
+      if (await this.isFile(rootPath)) {
         allDescriptors.push(await this.getDescriptorFor(rootPath))
-      } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
+      } else if (await this.isDir(rootPath)) {
         const allPaths = await this.readDirectoryRecursively(rootPath)
         for (const child of allPaths) {
           const descriptor = await this.getDescriptorFor(child)
@@ -811,13 +835,17 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
   public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
+    if (!await this.isDir(directoryPath)) {
+      throw new Error(`[FSAL] Cannot read path ${directoryPath}: Not a directory!`)
+    }
+
     const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
       .filter(dirent => {
-        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
-          (dirent.isDirectory() && !ignoreDir(dirent.name))
+        return ((dirent.isFile() || dirent.isDirectory()) && this.handlePath(dirent.name))
       })
       .map(dirent => {
         const childPath = path.join(directoryPath, dirent.name)
+
         if (dirent.isFile()) {
           return Promise.resolve([childPath])
         } else if (dirent.isDirectory()) {
@@ -843,12 +871,16 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
-    const children = await fs.readdir(absPath)
-
+    const children = await fs.readdir(absPath, { withFileTypes: true })
     return await Promise.all(
       children
-        .map(p => path.join(absPath, p))
-        .map(p => this.getDescriptorFor(p))
+        .filter(dirent => {
+          return ((dirent.isFile() || dirent.isDirectory()) && this.handlePath(dirent.name))
+        })
+        .map(dirent => {
+          const childPath = path.join(absPath, dirent.name)
+          return this.getDescriptorFor(childPath)
+        })
     )
   }
 }

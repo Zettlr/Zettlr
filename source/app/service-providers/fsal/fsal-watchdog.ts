@@ -16,29 +16,11 @@
 
 import { FSWatcher, type ChokidarOptions } from 'chokidar'
 
-import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
-
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
 import path from 'path'
 import type { EventName } from 'chokidar/handler'
-
-// chokidar's ignored-setting is compatible to anymatch, so we can
-// pass an array containing the standard dotted directory-indicators,
-// directories that should be ignored and a function that returns true
-// for all files that are _not_ in the filetypes list (whitelisting)
-// Further reading: https://github.com/micromatch/anymatch
-const ignoreDirs = [
-  // Ignore dot-dirs/files, except .git (to detect changes to possible
-  // git-repos) and .ztr-files (which contain, e.g., directory settings)
-  // /(?:^|[/\\])\.(?!git|ztr-.+).+/ // /(^|[/\\])\../
-  /(?:^|[/\\])\.(?!git$|ztr-[^\\/]+$).+/
-]
-
-// Create new regexps from the strings
-for (let x of IGNORE_DIR_REGEXP) {
-  ignoreDirs.push(new RegExp(x, 'i'))
-}
+import { WATCHDOG_IGNORE_RE } from '@common/util/ignore-path'
 
 /**
 * Represents an event the watchdog can work with
@@ -61,10 +43,10 @@ export default class FSALWatchdog {
     this._config = config
 
     const options: ChokidarOptions = {
-      ignored: ignoreDirs,
+      ignored: WATCHDOG_IGNORE_RE,
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
-      followSymlinks: true, // Follow symlinks
+      followSymlinks: false, // Zettlr does not support symlinks
       ignorePermissionErrors: true, // In the worst case one has to reboot the software, but so it looks nicer.
 
       // Chokidar should always be using fsevents, but we will be leaving this
@@ -104,24 +86,15 @@ export default class FSALWatchdog {
       const basename = path.basename(p)
       const dirname = path.dirname(p)
 
-      if (basename !== '.git' && dirname.includes('.git')) {
-        this._logger.verbose(`Ignoring changes within a .git directory: ${p}`)
-        return
-      }
-
-      // Specials: .git and .ztr-directory
-      if (basename === '.git') {
-        // We basically treat .git as a file, not a directory (see above).
-        this._logger.info(`[WATCHDOG] Emitting event (.git): change:${dirname}`)
-        report('change', dirname)
-      } else if (basename === '.ztr-directory') {
+      // Specials: .ztr-directory
+      if (basename === '.ztr-directory') {
         // Even on add or unlink, it's strictly speaking a change for the dir
         this._logger.info(`[WATCHDOG] Emitting event (.ztr-directory): change:${dirname}`)
         report('change', dirname)
-      } else {
-        this._logger.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
-        report(event, p)
       }
+
+      this._logger.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
+      report(event, p)
     })
   }
 
