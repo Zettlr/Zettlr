@@ -14,36 +14,47 @@
 
 import { type InlineParser } from '@lezer/markdown'
 
-// Any character allowed before a tag (the first are space and nbsp)
-const allowedCharsBefore = '  \t\n({['.split('')
-const tagRE = /^##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?/u
+// Any character allowed before a tag
+const allowedCharsBefore = /^[ \t\n\(\{\[]$/
+
+const tagRE = /^(?<tag>##?[\w_-]+)#?(?:\/[\w_-]+)*/du
+
+const subTagRe = /(?<sub>\/[\w_-]+)/gdu
 
 export const zknTagParser: InlineParser = {
   name: 'zkn-tags',
   parse: (ctx, next, pos) => {
-    if (next !== 35) { // #
+    if (next !== 35) { // 35 === '#'
       return -1
     }
 
     // Check the character before
-    if (pos > ctx.offset && !allowedCharsBefore.includes(ctx.slice(pos - 1, pos))) {
+    if (pos > ctx.offset && !allowedCharsBefore.test(ctx.slice(pos - 1, pos))) {
       return -1
     }
 
-    const currentOffset = pos - ctx.offset
-    const restOfLine = ctx.text.slice(currentOffset)
+    const tagText = ctx.text.slice(pos - ctx.offset)
+    const match = tagRE.exec(tagText)
+    if (!match?.indices?.groups) { return -1 }
 
-    const match = tagRE.exec(restOfLine)
-    if (match === null) {
-      return -1
+    // Tags are allowed to be namespaced using `/` to delimit tag levels.
+    // A namespaced tag is as follows: `#org/group/member`, and will be parsed
+    // into the following tags: `#org`, `#org/group`, and `#org/group/member`
+    const children = []
+
+    let sub = null
+    while ((sub = subTagRe.exec(tagText)) !== null) {
+      if (!sub.indices?.groups) { continue }
+
+      const subMark = ctx.elt('ZknTagMark', pos, pos + 1)
+      children.push(ctx.elt('ZknTag', pos, pos + sub.indices.groups.sub[1], [subMark]))
     }
 
-    const end = pos + match[0].length
-    // NOTE: Apparently syntax themes only style leaf nodes, not containers, so
-    // we'll wrap the whole tag into a single ZknTagContent.
-    // const markElem = ctx.elt('CodeMark', pos, pos + 1)
-    const content = ctx.elt('ZknTagContent', pos, end)
-    const tag = ctx.elt('ZknTag', pos, end, [content])
-    return ctx.addElement(tag)
+    // Add the top-level tag as a child
+    const subMark = ctx.elt('ZknTagMark', pos, pos + 1)
+    children.unshift(ctx.elt('ZknTag', pos, pos + match.indices.groups.tag[1], [subMark]))
+
+    const tagMark = ctx.elt('ZknTagMark', pos, pos + 1)
+    return ctx.addElement(ctx.elt('ZknTag', pos, pos + match[0].length, [ tagMark, ...children ]))
   }
 }

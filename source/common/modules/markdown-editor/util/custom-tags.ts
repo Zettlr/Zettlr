@@ -39,12 +39,13 @@ export const customTags = {
   FootnoteRefLabel: Tag.define(),
   // Zettelkasten links
   ZknLink: Tag.define(),
+  ZknLinkMark: Tag.define(),
   ZknLinkContent: Tag.define(),
   ZknLinkTitle: Tag.define(),
   ZknLinkPipe: Tag.define(tags.processingInstruction),
   // Zettelkasten tags
   ZknTag: Tag.define(),
-  ZknTagContent: Tag.define(),
+  ZknTagMark: Tag.define(),
   // Pandoc attributes, like: `# Heading or Title {.unnumbered}`
   PandocAttribute: Tag.define(),
   PandocAttributeMark: Tag.define(),

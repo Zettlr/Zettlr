@@ -32,7 +32,7 @@ const ipcRenderer = window.ipc
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
   const nodeAt = syntaxTree(view.state).resolve(pos, side)
 
-  if (![ 'ZknLinkContent', 'ZknLinkPipe', 'ZknLink', 'ZknLinkTitle' ].includes(nodeAt.type.name)) {
+  if (![ 'ZknLink', 'ZknLinkContent', 'ZknLinkTitle', 'ZknLinkPipe', 'ZknLinkMark',  ].includes(nodeAt.type.name)) {
     return null
   }
 
