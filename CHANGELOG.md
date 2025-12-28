@@ -2,14 +2,29 @@
 
 ## GUI and Functionality
 
+- **Change**: Due to a configuration change, downgrading Zettlr (which we
+  generally discourage) after updating to this version will lead to your
+  workspaces being closed.
 - Fixed XCode Command Line Tools setup dialog on macOS (#5428).
 - Performance improvements when following links (#6072).
 - Improved performance on generating the preview-bibliography in the sidebar by
-  collecting citation keya from the document only in the main process.
+  collecting citation keys from the document only in the main process.
 - Improved math parsing to fix certain cases (#6030).
 
 ## Under the Hood
 
+- Moved the `openPaths` property. The `openPaths` property was a simple array
+  holding all currently loaded root files and workspaces intermingled. This
+  setting stems from the time when Zettlr could not load arbitrary files, and
+  mixing files and folders is generally a bad practice. This property has now
+  been moved into the new namespace `app` in the settings, and divided into
+  `openFiles` and `openWorkspaces`. This will make a few future checks and
+  features easier to implement, as the separation into files and folders is made
+  explicit and not left to the OS. This will allow us to better clean up the
+  property (personal note: I've seen a colleague's config file which was full of
+  non-existing file paths, and I didn't like that). In rare situations, this
+  change may close all your workspaces, in which case you would have to re-open
+  them.
 - Added a new environment variable, `ZETTLR_DISABLE_UPDATE_CHECK`. If that
   variable is detected during build, this will hard-disable update checks in the
   application. This can be used by package maintainers to ensure update checks
