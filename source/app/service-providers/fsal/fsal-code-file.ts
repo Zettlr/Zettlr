@@ -38,9 +38,8 @@ function applyCache (cachedFile: CodeFileDescriptor, origFile: CodeFileDescripto
  * Caches a file, but removes circular structures beforehand.
  * @param {CodeFileDescriptor} origFile The file to cache
  */
-function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void {
-  cacheAdapter.set(origFile.path, structuredClone(origFile))
-    .catch(() => { throw new Error(`Could not cache file ${origFile.name}!`) })
+async function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): Promise<void> {
+  await cacheAdapter.set(origFile.path, structuredClone(origFile))
 }
 
 /**
@@ -114,7 +113,7 @@ export async function parse (
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parseFileContents(file, content)
     if (cache !== null) {
-      cacheFile(file, cache)
+      await cacheFile(file, cache)
     }
   }
 
@@ -170,7 +169,7 @@ export async function save (fileObject: CodeFileDescriptor, content: string, cac
   parseFileContents(fileObject, safeContent)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
-    cacheFile(fileObject, cache)
+    await cacheFile(fileObject, cache)
   }
 }
 
@@ -184,7 +183,7 @@ export async function rename (fileObject: CodeFileDescriptor, cache: FSALCache|n
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   if (cache !== null) {
-    cacheFile(fileObject, cache)
+    await cacheFile(fileObject, cache)
   }
 }
 
@@ -219,6 +218,6 @@ export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache:
   parseFileContents(fileObject, contents)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
-    cacheFile(fileObject, cache)
+    await cacheFile(fileObject, cache)
   }
 }

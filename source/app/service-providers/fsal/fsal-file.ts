@@ -36,9 +36,8 @@ function applyCache (cachedFile: MDFileDescriptor, origFile: MDFileDescriptor): 
  * Caches a file, but removes circular structures beforehand.
  * @param {Object} origFile The file to cache
  */
-function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): void {
-  cacheAdapter.set(origFile.path, structuredClone(origFile))
-    .catch(() => { throw new Error(`Could not cache file ${origFile.name}!`) })
+async function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): Promise<void> {
+  await cacheAdapter.set(origFile.path, structuredClone(origFile))
 }
 
 /**
@@ -133,7 +132,7 @@ export async function parse (
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parser(file, content)
     if (cache !== null) {
-      cacheFile(file, cache)
+      await cacheFile(file, cache)
     }
   }
 
@@ -212,7 +211,7 @@ export async function save (
   parser(fileObject, safeContent)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
-    cacheFile(fileObject, cache)
+    await cacheFile(fileObject, cache)
   }
 }
 
@@ -254,6 +253,6 @@ export async function reparseChangedFile (
   parser(fileObject, contents)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
-    cacheFile(fileObject, cache)
+    await cacheFile(fileObject, cache)
   }
 }
