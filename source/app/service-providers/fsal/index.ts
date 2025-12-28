@@ -244,7 +244,7 @@ export default class FSAL extends ProviderContract {
       return false
     }
 
-    if (isDotFile(absPath) && !showDotfiles) {
+    if (!showDotfiles && isDotFile(absPath)) {
       return false
     }
 
