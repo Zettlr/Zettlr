@@ -4,6 +4,9 @@
 
 - Fixed XCode Command Line Tools setup dialog on macOS (#5428).
 - Performance improvements when following links (#6072).
+- Improved performance on generating the preview-bibliography in the sidebar by
+  collecting citation keya from the document only in the main process.
+- Improved math parsing to fix certain cases (#6030).
 
 ## Under the Hood
 
