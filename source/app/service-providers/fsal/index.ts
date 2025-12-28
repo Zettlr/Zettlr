@@ -157,7 +157,7 @@ export default class FSAL extends ProviderContract {
    * @param   {EventName}  event    The event name
    * @param   {string}     absPath  The absolute path for this event
    */
-  private emitChokidarEvent (event: EventName, absPath: string): void {
+  private async emitChokidarEvent (event: EventName, absPath: string): Promise<void> {
     if (event === 'all' || event === 'raw') {
       return this._logger.error('[FSAL] Cannot emit events "all" or "raw" -- wrong chokidar setup!')
     }
@@ -171,7 +171,7 @@ export default class FSAL extends ProviderContract {
     }
 
     // Regardless of the event, it will invalidate that particular cache entry.
-    this._cache.del(absPath).catch(err => console.error(err))
+    await this._cache.del(absPath)
 
     // In unlink-events, there won't be a descriptor.
     if (event === 'unlink' || event === 'unlinkDir') {
@@ -214,8 +214,8 @@ export default class FSAL extends ProviderContract {
         } else {
           // Start watching the root path.
           const watcher = new FSALWatchdog(this._logger, this._config)
-          watcher.on('change', (event, absPath) => {
-            this.emitChokidarEvent(event, absPath)
+          watcher.on('change', async (event, absPath) => {
+            await this.emitChokidarEvent(event, absPath)
           })
           watcher.watchPath(rootPath)
           this.watchers.set(rootPath, watcher)
