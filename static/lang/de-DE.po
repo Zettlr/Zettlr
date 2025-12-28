@@ -4280,7 +4280,7 @@ msgstr "Zeile leeren"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:122
 msgid "Delete row"
-msgstr "Zeile entfernen"
+msgstr "Zeile löschen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:129
 msgid "Column"
@@ -4296,31 +4296,31 @@ msgstr "Neue Spalte rechts"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:146
 msgid "Move column left"
-msgstr "Zeile nach links"
+msgstr "Spalte nach links"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:152
 msgid "Move column right"
-msgstr "Zeile nach rechts"
+msgstr "Spalte nach rechts"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:159
 msgid "Align column text left"
-msgstr "Zeile linksbündig"
+msgstr "Spalte linksbündig"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:164
 msgid "Align column text center"
-msgstr "Zeile zentriert ausrichten"
+msgstr "Spalte zentriert ausrichten"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:169
 msgid "Align column text right"
-msgstr "Zeile rechtsbündig"
+msgstr "Spalte rechtsbündig"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:188
 msgid "Clear column"
-msgstr "Zeile leeren"
+msgstr "Spalte leeren"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:193
 msgid "Delete column"
-msgstr "Zeile löschen"
+msgstr "Spalte löschen"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:200
 msgid "Table"
