@@ -383,7 +383,7 @@ export default class FSAL extends ProviderContract {
    */
   public async shutdown (): Promise<void> {
     this._logger.verbose('FSAL shutting down ...')
-    this._cache.persist()
+    await this._cache.persist()
   }
 
   /**
