@@ -95,7 +95,7 @@ async function prepareEnvironment (argv) {
 
   info('Creating new configuration file from test-config.yml ...')
   const cfg = await makeConfig()
-  cfg.fileManager = {
+  cfg.app = {
     openFiles: files,
     openWorkspaces: workspaces
   }

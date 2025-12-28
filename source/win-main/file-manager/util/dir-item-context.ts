@@ -102,7 +102,7 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
   }
 
   // Finally, check for it being root
-  if (configStore.config.fileManager.openWorkspaces.includes(dirObject.path)) {
+  if (configStore.config.app.openWorkspaces.includes(dirObject.path)) {
     template.push({ type: 'separator' })
     template.push({
       id: 'menu.close_workspace',

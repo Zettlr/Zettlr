@@ -124,7 +124,7 @@ export default class FSAL extends ProviderContract {
     await this.syncRoots()
 
     this._config.on('update', (which: string) => {
-      if (which === 'openPaths') { // TODO
+      if (which === 'openPaths') {
         this.syncRoots()
           .then(() => {
             // Always reindex all files after config updates later on.
@@ -197,7 +197,7 @@ export default class FSAL extends ProviderContract {
    * emitted.
    */
   private async syncRoots (): Promise<void> {
-    const { openFiles, openWorkspaces } = this._config.get().fileManager
+    const { openFiles, openWorkspaces } = this._config.get().app
     const allRoots = openFiles.concat(openWorkspaces)
 
     for (const rootPath of allRoots) {
@@ -245,7 +245,7 @@ export default class FSAL extends ProviderContract {
     // Start a timer to measure how long the roots take to load.
     let start = performance.now()
 
-    const { openFiles, openWorkspaces } = this._config.get().fileManager
+    const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
       if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
@@ -299,7 +299,7 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<AnyDescriptor>[]}  The descriptors
    */
   public async getAllLoadedDescriptors (): Promise<AnyDescriptor[]> {
-    const { openFiles, openWorkspaces } = this._config.get().fileManager
+    const { openFiles, openWorkspaces } = this._config.get().app
     const allDescriptors: AnyDescriptor[] = []
 
     for (const file of openFiles) {

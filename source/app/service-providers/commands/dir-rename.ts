@@ -43,7 +43,7 @@ export default class DirRename extends ZettlrCommand {
     try {
       // Before renaming the dir, let's see if it is a workspace. Because if it
       // is, we have to close it first.
-      const { openWorkspaces } = this._app.config.getConfig().fileManager
+      const { openWorkspaces } = this._app.config.getConfig().app
       const isRoot = openWorkspaces.includes(sourceDir.path)
 
       if (isRoot) {

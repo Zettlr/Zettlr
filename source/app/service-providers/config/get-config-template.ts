@@ -85,7 +85,7 @@ export interface ConfigOptions {
   debug: boolean
   checkForBeta: boolean
 
-  fileManager: {
+  app: {
     openFiles: string[]
     openWorkspaces: string[]
   }
@@ -255,7 +255,7 @@ export function getConfigTemplate (): ConfigOptions {
   return {
     version: app.getVersion(), // Useful for migrating
     buildDate: __BUILD_DATE__,
-    fileManager: {
+    app: {
       openFiles: [],
       openWorkspaces: []
     },

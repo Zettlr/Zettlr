@@ -96,8 +96,8 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const { lastLeafActiveFile } = storeToRefs(documentTreeStore)
 
   // SECTION 1: WORKSPACES AND FILE DESCRIPTORS
-  const openFiles = configStore.config.fileManager.openFiles
-  const openWorkspaces = configStore.config.fileManager.openWorkspaces
+  const openFiles = configStore.config.app.openFiles
+  const openWorkspaces = configStore.config.app.openWorkspaces
   const openPaths = ref(openFiles.concat(openWorkspaces))
 
   const workspaceMap = ref<Map<string, string[]>>(new Map())
@@ -140,8 +140,8 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
   // Update the loaded workspaces as soon as the openPaths property changes.
   configStore.$subscribe((_mutation, state) => {
-    const openFiles = state.config.fileManager.openFiles
-    const openWorkspaces = state.config.fileManager.openWorkspaces
+    const openFiles = state.config.app.openFiles
+    const openWorkspaces = state.config.app.openWorkspaces
     openPaths.value = openFiles.concat(openWorkspaces)
   })
 

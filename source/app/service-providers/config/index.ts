@@ -262,26 +262,26 @@ export default class ConfigProvider extends ProviderContract {
     if (('openPaths' in readConfig)) {
       const openPaths: string[] = readConfig.openPaths
 
-      if (!('fileManager' in readConfig)) {
-        readConfig.fileManager = {
+      if (!('app' in readConfig)) {
+        readConfig.app = {
           openFiles: [],
           openWorkspaces: []
         }
       }
 
-      if (!('openFiles' in readConfig.fileManager)) {
-        readConfig.fileManager.openFiles = []
+      if (!('openFiles' in readConfig.app)) {
+        readConfig.app.openFiles = []
       }
 
-      if (!('openWorkspaces' in readConfig.fileManager)) {
-        readConfig.fileManager.openWorkspaces = []
+      if (!('openWorkspaces' in readConfig.app)) {
+        readConfig.app.openWorkspaces = []
       }
 
       for (const absPath of openPaths) {
         if (isFile(absPath)) {
-          readConfig.fileManager.openFiles.push(absPath)
+          readConfig.app.openFiles.push(absPath)
         } else if (isDir(absPath)) {
-          readConfig.fileManager.openWorkspaces.push(absPath)
+          readConfig.app.openWorkspaces.push(absPath)
         }
       }
     } // END: openPaths migration
@@ -293,20 +293,21 @@ export default class ConfigProvider extends ProviderContract {
     */
   checkPaths (): void {
     // Remove duplicates
-    this.config.fileManager.openFiles = [...new Set(this.config.fileManager.openFiles)]
-    this.config.fileManager.openWorkspaces = [...new Set(this.config.fileManager.openWorkspaces)]
+    this.config.app.openFiles = [...new Set(this.config.app.openFiles)]
+    this.config.app.openWorkspaces = [...new Set(this.config.app.openWorkspaces)]
 
-    for (const file of this.config.fileManager.openFiles) {
+    // Check for the existence of the files and folders
+    for (const file of this.config.app.openFiles) {
       if (!isFile(file)) {
-        const idx = this.config.fileManager.openFiles.indexOf(file)
-        this.config.fileManager.openFiles.splice(idx, 1)
+        const idx = this.config.app.openFiles.indexOf(file)
+        this.config.app.openFiles.splice(idx, 1)
       }
     }
 
-    for (const workspace of this.config.fileManager.openWorkspaces) {
+    for (const workspace of this.config.app.openWorkspaces) {
       if (!isDir(workspace)) {
-        const idx = this.config.fileManager.openWorkspaces.indexOf(workspace)
-        this.config.fileManager.openWorkspaces.splice(idx, 1)
+        const idx = this.config.app.openWorkspaces.indexOf(workspace)
+        this.config.app.openWorkspaces.splice(idx, 1)
       }
     }
 
@@ -333,7 +334,7 @@ export default class ConfigProvider extends ProviderContract {
    * workspace is loaded as part of another workspace.
    */
   private consolidateRootPaths (): void {
-    const { openFiles, openWorkspaces } = this.config.fileManager
+    const { openFiles, openWorkspaces } = this.config.app
 
     // First, check if any of the open files are part of any of the workspaces.
     for (const openFile of openFiles) {
@@ -358,8 +359,8 @@ export default class ConfigProvider extends ProviderContract {
       }
     }
 
-    this.config.fileManager.openFiles = openFiles
-    this.config.fileManager.openWorkspaces = openWorkspaces
+    this.config.app.openFiles = openFiles
+    this.config.app.openWorkspaces = openWorkspaces
     this._container.set(this.config) // Persist changes
   }
 
@@ -368,7 +369,7 @@ export default class ConfigProvider extends ProviderContract {
     * @return {ZettlrConfig} Chainability.
     */
   private sortPaths (): void {
-    const { openFiles, openWorkspaces } = this.config.fileManager
+    const { openFiles, openWorkspaces } = this.config.app
 
     // We only want to sort the paths based on rudimentary, natural order.
     const coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
@@ -379,8 +380,8 @@ export default class ConfigProvider extends ProviderContract {
       return coll.compare(path.basename(a), path.basename(b))
     })
 
-    this.config.fileManager.openFiles = openFiles
-    this.config.fileManager.openWorkspaces = openWorkspaces
+    this.config.app.openFiles = openFiles
+    this.config.app.openWorkspaces = openWorkspaces
     this._container.set(this.config)
   }
 
@@ -390,7 +391,7 @@ export default class ConfigProvider extends ProviderContract {
     * @return {Boolean} True, if the path was successfully added, else false.
     */
   addPath (p: string): boolean {
-    const { openFiles, openWorkspaces } = this.config.fileManager
+    const { openFiles, openWorkspaces } = this.config.app
     // Only add valid and unique paths
     if (openFiles.includes(p) || openWorkspaces.includes(p)) {
       return false
@@ -402,16 +403,16 @@ export default class ConfigProvider extends ProviderContract {
     if (validFile || validDir) {
 
       if (validFile) {
-        this.config.fileManager.openFiles.push(p)
+        this.config.app.openFiles.push(p)
       } else {
-        this.config.fileManager.openWorkspaces.push(p)
+        this.config.app.openWorkspaces.push(p)
       }
 
       this.consolidateRootPaths()
       this.sortPaths()
       this._container.set(this.config)
-      this._emitter.emit('update', 'openPaths') // TODO
-      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' }) // TODO
+      this._emitter.emit('update', 'openPaths')
+      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' })
       return true
     }
 
@@ -424,7 +425,7 @@ export default class ConfigProvider extends ProviderContract {
     * @return {Boolean} Whether or not the call succeeded.
     */
   removePath (p: string): boolean {
-    const { openFiles, openWorkspaces } = this.config.fileManager
+    const { openFiles, openWorkspaces } = this.config.app
     const fileIdx = openFiles.indexOf(p)
     const wsIdx = openWorkspaces.indexOf(p)
     const rootFile = fileIdx > -1
@@ -432,13 +433,13 @@ export default class ConfigProvider extends ProviderContract {
 
     if (rootFile || workspace) {
       if (rootFile) {
-        this.config.fileManager.openFiles.splice(fileIdx, 1)
+        this.config.app.openFiles.splice(fileIdx, 1)
       } else {
-        this.config.fileManager.openWorkspaces.splice(wsIdx, 1)
+        this.config.app.openWorkspaces.splice(wsIdx, 1)
       }
       this._container.set(this.config)
-      this._emitter.emit('update', 'openPaths') // TODO
-      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' }) // TODO
+      this._emitter.emit('update', 'openPaths')
+      broadcastIpcMessage('config-provider', { command: 'update', payload: 'openPaths' })
       return true
     }
 

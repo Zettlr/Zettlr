@@ -108,7 +108,7 @@ export default class FileRename extends ZettlrCommand {
 
       // Before renaming the file, let's see if it is a root file. Because if it
       // is, we have to close it first.
-      const { openFiles } = this._app.config.getConfig().fileManager
+      const { openFiles } = this._app.config.getConfig().app
       const isRoot = openFiles.includes(file.path)
 
       if (isRoot) {
