@@ -1,11 +1,10 @@
-# This is a test configuration file that will be read and parsed
-# to JSON during the preparation of the GUI-test environment.
-# It is a stub, because Zettlr will correctly fill in all missing
-# values. Copy this to the file test-config.yml and adapt to your
-# likings. The test-config.yml will not be committed to git, so it
-# will stay persistent between pulls.
+# This is a test configuration file that will be read and parsed to JSON during
+# the preparation of the GUI-test environment. It is a stub, because Zettlr will
+# correctly fill in all missing values. Copy this to the file test-config.yml
+# and adapt to your likings. The test-config.yml will not be committed to git,
+# so it will stay persistent between pulls.
 
 # For all possible values, please see the file
-# ./source/app/service/providers/config/get/config/template.ts
+# source/app/service-providers/config/get-config-template.ts
 debug: true
 checkForBeta: true

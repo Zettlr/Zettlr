@@ -80,7 +80,7 @@ async function prepareEnvironment (argv) {
 
   // Fill in the file structure
   info('Copying over testing directory into the resources folder ...')
-  const roots = await copyFolder(TEST_DIRECTORY)
+  const { files, workspaces } = await copyFolder(TEST_DIRECTORY)
   success('Done copying the testing files!')
   await fs.mkdir(CONF_DIRECTORY, { recursive: true })
   success('Created app data directory!')
@@ -94,8 +94,11 @@ async function prepareEnvironment (argv) {
   }
 
   info('Creating new configuration file from test-config.yml ...')
-  let cfg = await makeConfig()
-  cfg.openPaths = roots
+  const cfg = await makeConfig()
+  cfg.app = {
+    openFiles: files,
+    openWorkspaces: workspaces
+  }
 
   // We also want the dialogs to start at the test directory for easier navigation
   cfg.dialogPaths = {

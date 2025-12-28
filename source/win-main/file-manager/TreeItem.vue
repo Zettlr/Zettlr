@@ -170,7 +170,7 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
 import type { AnyDescriptor } from '@dts/common/fsal'
-import { useConfigStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathBasename, relativePath } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
 import { hasCodeExt, hasDataExt, hasImageExt, hasMarkdownExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
@@ -203,6 +203,7 @@ const children = ref<AnyDescriptor[]>([])
 
 const configStore = useConfigStore()
 const windowStateStore = useWindowStateStore()
+const workspaceStore = useWorkspaceStore()
 
 const {
   nameEditing,
@@ -318,7 +319,7 @@ const writingTargetPercent = computed(() => {
 /**
  * Returns true if this item is a root item
  */
-const isRoot = computed(() => configStore.config.openPaths.includes(props.item.path))
+const isRoot = computed(() => workspaceStore.rootDescriptors.find(rd => rd.path === props.item.path) !== undefined)
 
 /**
  * Returns true if the file manager mode is set to "combined"

@@ -85,7 +85,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
     }
   ]
 
-  if (configStore.config.openPaths.includes(fileObject.path)) {
+  if (configStore.config.app.openFiles.includes(fileObject.path)) {
     template.push(
       { type: 'separator' },
       {

@@ -197,9 +197,10 @@ export default class FSAL extends ProviderContract {
    * emitted.
    */
   private async syncRoots (): Promise<void> {
-    const { openPaths } = this._config.get()
+    const { openFiles, openWorkspaces } = this._config.get().app
+    const allRoots = openFiles.concat(openWorkspaces)
 
-    for (const rootPath of openPaths) {
+    for (const rootPath of allRoots) {
       if (this.watchers.has(rootPath)) {
         continue // This path has already been loaded
       }
@@ -227,7 +228,7 @@ export default class FSAL extends ProviderContract {
     // Before finishing up, unwatch all roots that are no longer part of the
     // config
     for (const [ rootPath, watcher ] of this.watchers) {
-      if (!openPaths.includes(rootPath)) {
+      if (!allRoots.includes(rootPath)) {
         await watcher.shutdown()
         this.watchers.delete(rootPath)
       }
@@ -244,13 +245,17 @@ export default class FSAL extends ProviderContract {
     // Start a timer to measure how long the roots take to load.
     let start = performance.now()
 
-    const { openPaths } = this._config.get()
+    const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
-    for (const rootPath of openPaths) {
-      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
-        pathsToIndex.push(rootPath)
-      } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
-        const allPaths = await this.readDirectoryRecursively(rootPath)
+    for (const file of openFiles) {
+      if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
+        pathsToIndex.push(file)
+      }
+    }
+
+    for (const workspace of openWorkspaces) {
+      if (await this.isDir(workspace) && !ignoreDir(workspace)) {
+        const allPaths = await this.readDirectoryRecursively(workspace)
         pathsToIndex.push(...allPaths)
       }
     }
@@ -294,14 +299,18 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<AnyDescriptor>[]}  The descriptors
    */
   public async getAllLoadedDescriptors (): Promise<AnyDescriptor[]> {
-    const { openPaths } = this._config.get()
+    const { openFiles, openWorkspaces } = this._config.get().app
     const allDescriptors: AnyDescriptor[] = []
 
-    for (const rootPath of openPaths) {
-      if (await this.isFile(rootPath) && !path.basename(rootPath).startsWith('.')) {
-        allDescriptors.push(await this.getDescriptorFor(rootPath))
-      } else if (await this.isDir(rootPath) && !ignoreDir(rootPath)) {
-        const allPaths = await this.readDirectoryRecursively(rootPath)
+    for (const file of openFiles) {
+      if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
+        allDescriptors.push(await this.getDescriptorFor(file))
+      }
+    }
+
+    for (const workspace of openWorkspaces) {
+      if (await this.isDir(workspace) && !ignoreDir(workspace)) {
+        const allPaths = await this.readDirectoryRecursively(workspace)
         for (const child of allPaths) {
           const descriptor = await this.getDescriptorFor(child)
           allDescriptors.push(descriptor)
