@@ -398,9 +398,9 @@ export default class ConfigProvider extends ProviderContract {
     }
 
     const validFile = isFile(p) && hasMdOrCodeExt(p)
-    const validDir = isDir(p) && !ignorePath(p)
+    const validDir = isDir(p)
 
-    if (validFile || validDir) {
+    if (!ignorePath(p) && (validFile || validDir)) {
 
       if (validFile) {
         this.config.app.openFiles.push(p)

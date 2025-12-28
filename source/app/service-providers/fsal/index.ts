@@ -264,13 +264,13 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
-      if (await this.isFile(file)) {
+      if (this.handlePath(file)) {
         pathsToIndex.push(file)
       }
     }
 
     for (const workspace of openWorkspaces) {
-      if (await this.isDir(workspace)) {
+      if (this.handlePath(workspace)) {
         const allPaths = await this.readDirectoryRecursively(workspace)
         pathsToIndex.push(...allPaths)
       }
@@ -319,13 +319,13 @@ export default class FSAL extends ProviderContract {
     const allDescriptors: AnyDescriptor[] = []
 
     for (const file of openFiles) {
-      if (await this.isFile(file)) {
+      if (this.handlePath(file)) {
         allDescriptors.push(await this.getDescriptorFor(file))
       }
     }
 
     for (const workspace of openWorkspaces) {
-      if (await this.isDir(workspace)) {
+      if (this.handlePath(workspace)) {
         const allPaths = await this.readDirectoryRecursively(workspace)
         for (const child of allPaths) {
           const descriptor = await this.getDescriptorFor(child)
