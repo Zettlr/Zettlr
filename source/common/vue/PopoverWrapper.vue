@@ -156,8 +156,6 @@ function place (): void {
 
   arrow.style.borderWidth = `${arrowSize}px`
 
-  console.log({ wantedArrowSize, shortSide, arrowSize })
-
   // Safety checks: Here we adjust the popover dimensions if necessary
   // Ensure the popover is not higher or wider than the window itself
   if (wrapper.offsetHeight > windowHeight - 2 * DOCUMENT_MARGIN - 2 * arrowSize) {
