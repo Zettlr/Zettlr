@@ -116,6 +116,11 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
+  <PopoverLRT
+    v-if="showTasksPopover && tasksButton !== null"
+    v-bind:target="tasksButton"
+    v-on:close="showTasksPopover = false"
+  ></PopoverLRT>
 </template>
 
 <script setup lang="ts">
@@ -166,16 +171,19 @@ import { type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useLRTStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { TaskStatus } from 'source/pinia/lrt-store'
+import PopoverLRT from './PopoverLRT.vue'
 
 const ipcRenderer = window.ipc
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()
+const LRTStore = useLRTStore()
 
 const SOUND_EFFECTS = [
   {
@@ -223,6 +231,8 @@ const docInfoButton = ref<HTMLElement|null>(null)
 const showDocInfoPopover = ref<boolean>(false)
 const pomodoroButton = ref<HTMLElement|null>(null)
 const showPomodoroPopover = ref<boolean>(false)
+const tasksButton = ref<HTMLElement|null>(null)
+const showTasksPopover = ref(false)
 
 export interface PomodoroConfig {
   currentEffectFile: string
@@ -400,6 +410,9 @@ const parsedDocumentInfo = computed<string>(() => {
 })
 
 const toolbarControls = computed<ToolbarControl[]>(() => {
+  const hasTasks = LRTStore.tasks.length > 0
+  const hasRunningTasks = LRTStore.tasks.some(t => t.status !== TaskStatus.finished)
+
   return [
     {
       type: 'three-way-toggle',
@@ -544,6 +557,14 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       visible: getToolbarButtonDisplay('showPomodoroButton')
     },
     {
+      type: 'button',
+      id: 'long-running-tasks',
+      title: trans('Show tasks'),
+      icon: 'tasks',
+      badge: hasRunningTasks,
+      visible: hasTasks
+    },
+    {
       type: 'toggle',
       id: 'toggle-sidebar',
       title: trans('Toggle Sidebar'),
@@ -629,6 +650,7 @@ onMounted(() => {
   tableButton.value = document.querySelector('#toolbar-insert-table')
   docInfoButton.value = document.querySelector('#toolbar-document-info')
   pomodoroButton.value = document.querySelector('#toolbar-pomodoro')
+  tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
     if (shortcut === 'toggle-sidebar') {
@@ -862,6 +884,10 @@ function handleClick (clickedID?: string): void {
   } else if (clickedID === 'insert-table') {
     // Display the insertion popover
     showTablePopover.value = !showTablePopover.value
+  } else if (clickedID === 'long-running-tasks') {
+    // The tasks button is only mounted conditionally
+    tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
+    showTasksPopover.value = !showTasksPopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
   } else if (clickedID !== undefined && clickedID.startsWith('markdown') && clickedID.length > 8) {
