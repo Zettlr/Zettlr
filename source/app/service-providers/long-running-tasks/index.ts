@@ -270,44 +270,16 @@ export class LongRunningTask extends EventEmitter<LRT_EventMap> {
   }
 
   /**
-   * Change the title of the task.
+   * Updates the task with new information. Will broadcast an update event to
+   * all listeners.
    *
-   * @param   {string}  newTitle  The new title
+   * @param  {any}  data  The data to update.
    */
-  public setTitle (newTitle: string) {
-    this.title = newTitle
-    this.broadcastChange()
-  }
-
-  /**
-   * Change the info-string of the task.
-   *
-   * @param   {string}  newInfo  The new info string
-   */
-  public setInfo (newInfo?: string) {
-    this.info = newInfo
-    this.broadcastChange()
-  }
-
-  /**
-   * Changes (or sets initially) the percentage of this task.
-   *
-   * @param   {number}  perc  The current percentage of completion. Must be a
-   *                          number between 0 and 1. If the number is larger,
-   *                          it will be divided by 100.
-   */
-  public setPercentage (perc: number) {
-    this.currentTaskPercentage = perc > 1 ? perc /= 100 : perc
-    this.broadcastChange()
-  }
-
-  /**
-   * Set the user-abortable status of this task.
-   *
-   * @param   {boolean}  abortable  Whether the task is abortable.
-   */
-  public setAbortable (abortable: boolean) {
-    this.abortable = abortable
+  public update (data: Partial<{ title: string, info: string, percentage: number, abortable: boolean }>) {
+    this.title = data.title ?? this.title
+    this.info = data.info ?? this.info
+    this.currentTaskPercentage = data.percentage ?? this.currentTaskPercentage
+    this.abortable = data.abortable ?? this.abortable
     this.broadcastChange()
   }
 
