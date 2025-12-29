@@ -10,6 +10,7 @@
 - Improved performance on generating the preview-bibliography in the sidebar by
   collecting citation keys from the document only in the main process.
 - Improved math parsing to fix certain cases (#6030).
+- Update `de-DE` translation (#6081).
 
 ## Under the Hood
 
