@@ -438,33 +438,33 @@ export default class MarkdownEditor extends EventEmitter {
 
     this._instance.setState(state)
 
-    let selection
-    const effects: StateEffect<any>[] = []
-
     if (persistentState !== undefined) {
       // Now that the correct document has been loaded, there will be content
       // and we can restore the persisted information.
-      const { scrollSnapshot, selection: editorSelection, foldedRanges } = persistentState
-      selection = editorSelection
+      const { scrollSnapshot, selection, foldedRanges } = persistentState
 
-      effects.push(scrollSnapshot)
+      const effects: StateEffect<any>[] = [scrollSnapshot]
 
       const cursor = foldedRanges.iter()
       while (cursor.value) {
         effects.push(foldEffect.of({ from: cursor.from, to: cursor.to }))
         cursor.next()
       }
+
+      this._instance.dispatch({ selection, effects })
     }
 
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
-    effects.push(configUpdateEffect.of(this.config))
-    effects.push(tagsUpdate.of(this.databaseCache.tags))
-    effects.push(citekeyUpdate.of(this.databaseCache.citations))
-    effects.push(snippetsUpdate.of(this.databaseCache.snippets))
-    effects.push(filesUpdate.of(this.databaseCache.files) )
+    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
 
-    this._instance.dispatch({ selection, effects })
+    // Provide the cached databases to the state (can be overridden by the
+    // caller afterwards by calling setCompletionDatabase)
+    this._instance.dispatch({ effects: tagsUpdate.of(this.databaseCache.tags) })
+    this._instance.dispatch({ effects: citekeyUpdate.of(this.databaseCache.citations) })
+    this._instance.dispatch({ effects: snippetsUpdate.of(this.databaseCache.snippets) })
+    this._instance.dispatch({ effects: filesUpdate.of(this.databaseCache.files) })
+
     // Determine if this is a code doc and add the corresponding class to the
     // outer content DOM so that we can style it.
     if (type !== DocumentType.Markdown) {
