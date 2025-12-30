@@ -40,7 +40,7 @@ import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
-import { ignorePath, isDotFile } from 'source/common/util/ignore-path'
+import { ignorePath } from 'source/common/util/ignore-path'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
@@ -236,21 +236,6 @@ export default class FSAL extends ProviderContract {
     }
   }
 
-  private handlePath (absPath: string): boolean {
-    const { files } = this._config.get()
-    const showDotfiles = files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar
-
-    if (ignorePath(absPath)) {
-      return false
-    }
-
-    if (!showDotfiles && isDotFile(absPath)) {
-      return false
-    }
-
-    return true
-  }
-
   /**
    * This function ensures that all files anywhere within the loaded paths are
    * properly indexed in the cache for fast access.
@@ -264,16 +249,12 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
-      if (this.handlePath(file)) {
-        pathsToIndex.push(file)
-      }
+      pathsToIndex.push(file)
     }
 
     for (const workspace of openWorkspaces) {
-      if (this.handlePath(workspace)) {
-        const allPaths = await this.readDirectoryRecursively(workspace)
-        pathsToIndex.push(...allPaths)
-      }
+      const allPaths = await this.readDirectoryRecursively(workspace)
+      pathsToIndex.push(...allPaths)
     }
 
     const pathDiscoveryDuration = performance.now() - start
@@ -319,18 +300,14 @@ export default class FSAL extends ProviderContract {
     const allDescriptors: AnyDescriptor[] = []
 
     for (const file of openFiles) {
-      if (this.handlePath(file)) {
-        allDescriptors.push(await this.getDescriptorFor(file))
-      }
+      allDescriptors.push(await this.getDescriptorFor(file))
     }
 
     for (const workspace of openWorkspaces) {
-      if (this.handlePath(workspace)) {
-        const allPaths = await this.readDirectoryRecursively(workspace)
-        for (const child of allPaths) {
-          const descriptor = await this.getDescriptorFor(child)
-          allDescriptors.push(descriptor)
-        }
+      const allPaths = await this.readDirectoryRecursively(workspace)
+      for (const child of allPaths) {
+        const descriptor = await this.getDescriptorFor(child)
+        allDescriptors.push(descriptor)
       }
     }
 
@@ -842,9 +819,12 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot read path ${directoryPath}: Not a directory!`)
     }
 
+    const { files } = this._config.get()
+    const ignoreDotFiles = !(files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar)
+
     const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
       .filter(dirent => {
-        return ((dirent.isFile() || dirent.isDirectory()) && this.handlePath(dirent.name))
+        return (!ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
       })
       .map(dirent => {
         const childPath = path.join(directoryPath, dirent.name)
@@ -874,11 +854,14 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
+    const { files } = this._config.get()
+    const ignoreDotFiles = !(files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar)
+
     const children = await fs.readdir(absPath, { withFileTypes: true })
     return await Promise.all(
       children
         .filter(dirent => {
-          return ((dirent.isFile() || dirent.isDirectory()) && this.handlePath(dirent.name))
+          return (!ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
         })
         .map(dirent => {
           const childPath = path.join(absPath, dirent.name)

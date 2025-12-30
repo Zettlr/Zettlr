@@ -75,6 +75,14 @@ export function isDotFile (filePath: string): boolean {
 *
 * @return   {boolean}              Whether the path should be ignored
 */
-export function ignorePath (filePath: string): boolean {
-  return IGNORE_PATH_RE.some(re => re.test(filePath))
+export function ignorePath (filePath: string, ignoreDotFiles: boolean = true): boolean {
+  if (ignoreDotFiles && isDotFile(filePath)) {
+    return true
+  }
+
+  if (IGNORE_PATH_RE.some(re => re.test(filePath))) {
+    return true
+  }
+
+  return false
 }
