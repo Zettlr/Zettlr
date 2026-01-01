@@ -55,29 +55,29 @@ const TEST_SNIPPETS = [
   },
   // Test 3
   {
-    template: 'Test ${1:nested placeholder ${2:$CURRENT_YEAR_SHORT} variable} replacement',
+    template: 'Test ${1:nested placeholder ${2:$CURRENT_YEAR} variable} replacement',
     expected: {
-      string: `Test nested placeholder 25 variable replacement`,
+      string: `Test nested placeholder ${YEAR} variable replacement`,
       selections: [
         {
           main: 0,
           ranges: [{
             anchor: 5,
-            head: 35
+            head: 37
           }]
         },
         {
           main: 0,
           ranges: [{
             anchor: 24,
-            head: 26
+            head: 28
           }]
         },
         {
           main: 0,
           ranges: [{
-            anchor: 47,
-            head: 47
+            anchor: 49,
+            head: 49
           }]
         },
       ]
