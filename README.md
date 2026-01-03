@@ -202,6 +202,7 @@ Packages the application, but not bundle it into an installer. Without any suffi
 - `package:mac-x64` (Intel-based Macs)
 - `package:mac-arm` (Apple Silicon-based Macs)
 - `package:win-x64` (Intel-based Windows)
+- `package:win-arm` (ARM-based Windows)
 - `package:linux-x64` (Intel-based Linux)
 - `package:linux-arm` (ARM-based Linux)
 
@@ -217,6 +218,7 @@ Packages the application and then bundles it into an installer for the correspon
 - `release:mac-x64` (Intel-based Macs)
 - `release:mac-arm` (Apple Silicon-based Macs)
 - `release:win-x64` (Intel-based Windows)
+- `release:win-arm` (ARM-based Windows)
 - `release:linux-x64` (Intel-based Linux)
 - `release:linux-arm` (ARM-based Linux)
 
