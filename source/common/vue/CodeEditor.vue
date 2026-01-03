@@ -41,7 +41,7 @@ import { history } from '@codemirror/commands'
 import { snippetSyntaxExtension } from '@common/modules/markdown-utils/snippets-syntax-extension'
 import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-highlighter'
 import { useConfigStore } from 'source/pinia'
-import { darkMode, darkModeEffect, useDarkModeEditor } from '../modules/markdown-editor/theme/dark-mode'
+import { darkMode, darkModeEffect } from '../modules/markdown-editor/theme/dark-mode'
 import { highlightWhitespace, highlightWhitespaceEffect } from '../modules/markdown-editor/plugins/highlight-whitespace'
 import { defaultKeymap } from '../modules/markdown-editor/keymaps/default'
 
@@ -94,7 +94,7 @@ function getExtensions (mode: SupportedLanguage): Extension[] {
     bracketMatching(),
     indentOnInput(),
     codeSyntaxHighlighter(), // This comes from the main editor component
-    darkMode({ darkMode: useDarkModeEditor(configStore.config.darkMode, configStore.config.darkModeEditor) }),
+    darkMode({ darkMode: configStore.config.darkMode }),
     plainLinkHighlighter,
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
@@ -163,7 +163,7 @@ const emit = defineEmits<(e: 'update:modelValue', newContents: string) => void>(
 configStore.$subscribe((_mutation, state) => {
   cmInstance.dispatch({
     effects: [
-      darkModeEffect.of({ darkMode: useDarkModeEditor(state.config.darkMode, state.config.darkModeEditor) }),
+      darkModeEffect.of({ darkMode: state.config.darkMode }),
       highlightWhitespaceEffect.of(state.config.editor.showWhitespace)
     ]
   })
