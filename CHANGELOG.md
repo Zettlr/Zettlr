@@ -8,9 +8,10 @@
 - Fixed XCode Command Line Tools setup dialog on macOS (#5428).
 - Performance improvements when following links (#6072).
 - Improved performance on generating the preview-bibliography in the sidebar by
-  collecting citation keys from the document only in the main process.
+  collecting citation keys from the document only in the main process (#6068).
 - Improved math parsing to fix certain cases (#6030).
 - Update `de-DE` translation (#6081).
+- Update `ja-JP` translation (#6086).
 
 ## Under the Hood
 
