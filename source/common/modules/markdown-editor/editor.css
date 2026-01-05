@@ -171,11 +171,8 @@
 
   /* Style the statusbar and formatting-bar so they adopt
   the main ui theme, not the editor theme */
-  .cm-panels {
-    color: black;
-  }
-
   .cm-search.cm-panel {
+    color: black;
     background-color: #f5f5f5;
   }
 
@@ -239,11 +236,8 @@
 body.dark {
   /* Style the statusbar and formatting-bar
   so they adopt the main ui theme, not the editor theme */
-  .cm-panels {
-    color: white;
-  }
-
   .cm-search.cm-panel {
+    color: white;
     background-color: #333333;
   }
 

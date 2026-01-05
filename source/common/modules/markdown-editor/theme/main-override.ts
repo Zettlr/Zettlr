@@ -39,6 +39,12 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-panel.cm-search': {
     userSelect: 'none' // prevent search panel text elements from being selected
   },
+  '&light .cm-panel.cm-panel-lint button': {
+    color: '#000000',
+  },
+  '&dark .cm-panel.cm-panel-lint button': {
+    color: '#d7d7d7',
+  },
   '&dark .cm-panel.cm-panel-lint ul [aria-selected]': {
     // Fixes highlighting of unfocused selected lint panel items in dark mode.
     backgroundColor: '#787878'
