@@ -33,16 +33,6 @@ export const mainOverride = EditorView.baseTheme({
   // Hide overflowing text in autocompletion info panels
   '.cm-completionInfo': { overflow: 'hidden' },
   // PANELS
-  '.cm-panels .cm-button': {
-    backgroundImage: 'none',
-    backgroundColor: 'inherit',
-    borderRadius: '6px',
-    fontSize: '13px'
-  },
-  '&light .cm-panels .cm-button': {
-    backgroundColor: 'white',
-    borderColor: '#aaa'
-  },
   '.cm-panel.cm-search label input[type=checkbox]': {
     marginRight: '10px'
   },

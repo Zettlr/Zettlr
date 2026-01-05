@@ -171,6 +171,22 @@
 
   /* Style the statusbar and formatting-bar so they adopt
   the main ui theme, not the editor theme */
+  .cm-panels {
+    color: black;
+  }
+
+  .cm-search.cm-panel {
+    background-color: #f5f5f5;
+  }
+
+  .cm-panel .cm-button {
+    background-image: none;
+    background-color: inherit;
+    border-color: #aaa;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
   .cm-statusbar.cm-panel, .cm-tooltip {
     color: black;
     background-color: #f5f5f5;
@@ -223,6 +239,18 @@
 body.dark {
   /* Style the statusbar and formatting-bar
   so they adopt the main ui theme, not the editor theme */
+  .cm-panels {
+    color: white;
+  }
+
+  .cm-search.cm-panel {
+    background-color: #333333;
+  }
+
+  .cm-panels .cm-button {
+    border-color: #646464;
+  }
+
   .cm-statusbar.cm-panel, .cm-tooltip {
     color: #ddd;
     background-color: #333333;
