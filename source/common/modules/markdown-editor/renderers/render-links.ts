@@ -48,12 +48,13 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
         } else {
           // It's a regular Markdown Link
           const marks = node.node.getChildren('LinkMark')
+          const label = node.node.getChild('LinkLabel')
 
           // We need at least three LinkMarks for regular links: [, ], and (
           // since the parser will also parse ellipses as Links (a.k.a.
           // reference style links). Alternatively, it needs to have a LinkLabel
           // child node
-          if (marks.length < 3) {
+          if (marks.length < 3 && !label ) {
             return false
           }
 
@@ -73,6 +74,9 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
             )
           }
 
+          if (label) {
+            ranges.push(hiddenDeco.range(label.from, label.to))
+          }
         }
       }
     })
