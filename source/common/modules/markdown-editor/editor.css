@@ -171,9 +171,13 @@
 
   /* Style the statusbar and formatting-bar so they adopt
   the main ui theme, not the editor theme */
-  .cm-search.cm-panel {
+  .cm-panels, .cm-tooltip, .cm-statusbar {
     color: black;
     background-color: #f5f5f5;
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: #000000;
   }
 
   .cm-panel .cm-button {
@@ -182,11 +186,6 @@
     border-color: #aaa;
     border-radius: 6px;
     font-size: 13px;
-  }
-
-  .cm-statusbar.cm-panel, .cm-tooltip {
-    color: black;
-    background-color: #f5f5f5;
   }
 
   .cm-formatting-bar {
@@ -236,18 +235,21 @@
 body.dark {
   /* Style the statusbar and formatting-bar
   so they adopt the main ui theme, not the editor theme */
-  .cm-search.cm-panel {
+  .cm-panels, .cm-tooltip, .cm-statusbar {
     color: white;
     background-color: #333333;
   }
 
-  .cm-panels .cm-button {
-    border-color: #646464;
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: #d7d7d7;
   }
 
-  .cm-statusbar.cm-panel, .cm-tooltip {
-    color: #ddd;
-    background-color: #333333;
+  .cm-panel.cm-panel-lint ul [aria-selected] {
+    background-color: #787878;
+  }
+
+  .cm-panel .cm-button {
+    border-color: #646464;
   }
 
   .cm-formatting-bar {
