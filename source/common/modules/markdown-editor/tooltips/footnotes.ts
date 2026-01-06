@@ -72,7 +72,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
 
   const fn = view.state.sliceDoc(nodeAt.from, nodeAt.to)
 
-  if (fn.endsWith('^]')) {
+  if (fn.startsWith('^[')) {
     return null // It's an inline footnote
   }
 
