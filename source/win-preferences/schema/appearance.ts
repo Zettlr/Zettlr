@@ -34,17 +34,6 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         { type: 'separator' },
         {
           type: 'radio',
-          label: trans('Editor'),
-          model: 'darkModeEditor',
-          inline: true,
-          options: {
-            light: trans('Light'),
-            match: trans('Match'),
-            dark: trans('Dark')
-          }
-        },
-        {
-          type: 'radio',
           label: trans('Schedule dark mode automatically'),
           model: 'autoDarkMode',
           inline: true,
@@ -82,6 +71,16 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
       group: PreferencesGroups.Appearance,
       help: undefined, // TODO
       fields: [
+        {
+          type: 'radio',
+          model: 'darkModeEditor',
+          inline: true,
+          options: {
+            light: trans('Light Theme'),
+            match: trans('Match Application'),
+            dark: trans('Dark Theme')
+          }
+        },
         { type: 'separator' },
         {
           type: 'theme',
