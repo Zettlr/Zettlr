@@ -50,9 +50,9 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
       }
 
       text = {
-        from: label.to,
+        from: node.from,
         to: node.to,
-        text: state.sliceDoc(label.to, node.to)
+        text: state.sliceDoc(node.from, node.to)
       }
     }
   })
