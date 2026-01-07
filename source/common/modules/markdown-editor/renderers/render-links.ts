@@ -62,21 +62,10 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
             return false // Empty link title -> would hide the entire link
           }
 
-          if (marks.length === 2) {
-            ranges.push(
-              hiddenDeco.range(marks[0].from, marks[0].to),
-              hiddenDeco.range(marks[1].from, marks[1].to)
-            )
-          } else {
-            ranges.push(
-              hiddenDeco.range(marks[0].from, marks[0].to),
-              hiddenDeco.range(marks[1].from, marks[marks.length - 1].to)
-            )
-          }
-
-          if (label) {
-            ranges.push(hiddenDeco.range(label.from, label.to))
-          }
+          ranges.push(
+            hiddenDeco.range(marks[0].from, marks[0].to),
+            hiddenDeco.range(marks[1].from, label ? label.to : marks[marks.length - 1].to)
+          )
         }
       }
     })
