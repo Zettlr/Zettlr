@@ -9,6 +9,7 @@
 - Fixed an issue that prevented opening Markdown files with tables that include
   Pandoc attribute strings when the TableEditor was enabled (#6110).
 - Fixed footnote tooltip rendering (#6107).
+- Improved link target extraction logic when following links (#6098).
 - Performance improvements when following links (#6072).
 - Improved performance on generating the preview-bibliography in the sidebar by
   collecting citation keys from the document only in the main process (#6068).
