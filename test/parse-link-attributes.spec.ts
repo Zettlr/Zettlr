@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-import { deepStrictEqual, throws } from 'assert'
+import { deepStrictEqual } from 'assert'
 import { ParsedPandocLinkAttributes, parseLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 
-const tests: Array<{ input: string, output: ParsedPandocLinkAttributes|'throws' }> = [
-  { input: 'width=50%', output: {} }, // Missing braces. See NOTE below.
+const tests: Array<{ input: string, output: ParsedPandocLinkAttributes|'logs-error' }> = [
+  { input: 'width=50%', output: 'logs-error' }, // Missing braces. See NOTE below.
   { input: '{width=50%}', output: { width: '50%' } }, // Simple parsing
   { input: '{ width = 50% }', output: {} }, // Spaces between = not supported
   { input: '{ width= 50% }', output: {} }, // Spaces between = not supported
@@ -48,20 +48,27 @@ const tests: Array<{ input: string, output: ParsedPandocLinkAttributes|'throws' 
 
 describe('Utility#parseLinkAttributes()', function () {
   for (const test of tests) {
-    it(`should parse the attribute string "${test.input}"`, function () {
-      deepStrictEqual(parseLinkAttributes(test.input), test.output)
-    })
-
-    // NOTE: Disabled on January 10, 2026 by Hendrik Erz. Reason: Parsing link
+    // NOTE: Changed on January 10, 2026 by Hendrik Erz. Reason: Parsing link
     // attributes should not throw errors, since this function is also called in
     // parsing contexts, and throwing errors would completely abort the parsing,
     // rendering entirely white documents that cannot be edited. Instead, the
-    // function has been changed to simply return an empty record.
-    // if (test.output === 'throws') {
-    //   it(`should throw an error for string "${test.input}"`, function () {
-    //     throws(() => parseLinkAttributes(test.input))
-    //   })
-    // } else {
-    // }
+    // function has been changed to simply return an empty record and log the
+    // error to the console.
+    if (test.output === 'logs-error') {
+      it(`should log an error for string "${test.input}"`, function () {
+        const oldError = console.error
+        let hasLoggedError = false
+        console.error = (...args) => {
+          if (args[0] instanceof Error) hasLoggedError = true
+        }
+        parseLinkAttributes(test.input)
+        deepStrictEqual(hasLoggedError, true)
+        console.error = oldError
+      })
+    } else {
+      it(`should parse the attribute string "${test.input}"`, function () {
+        deepStrictEqual(parseLinkAttributes(test.input), test.output)
+      })
+    }
   }
 })
