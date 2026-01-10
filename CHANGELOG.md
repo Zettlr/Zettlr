@@ -2,6 +2,9 @@
 
 ## GUI and Functionality
 
+- **Feature**: You can now collapse YAML frontmatters and Pandoc divs (#6115).
+- **Feature**: Zettlr now remembers folded regions as long as the window remains
+  open, even when you close a document (#6115).
 - **Change**: Due to a configuration change, downgrading Zettlr (which we
   generally discourage) after updating to this version will lead to your
   workspaces being closed.
