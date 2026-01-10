@@ -11,6 +11,7 @@
 - Fixed footnote tooltip rendering (#6107).
 - Improved link target extraction logic when following links (#6098).
 - Performance improvements when following links (#6072).
+- Hide reference link labels when previewing Markdown links (#6097).
 - Improved performance on generating the preview-bibliography in the sidebar by
   collecting citation keys from the document only in the main process (#6068).
 - Improved math parsing to fix certain cases (#6030).
