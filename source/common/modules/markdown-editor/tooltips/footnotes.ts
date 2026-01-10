@@ -50,9 +50,9 @@ function findRefForFootnote (state: EditorState, fn: string): { from: number, to
       }
 
       text = {
-        from: label.to,
+        from: node.from,
         to: node.to,
-        text: state.sliceDoc(label.to, node.to)
+        text: state.sliceDoc(node.from, node.to)
       }
     }
   })
@@ -72,7 +72,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
 
   const fn = view.state.sliceDoc(nodeAt.from, nodeAt.to)
 
-  if (fn.endsWith('^]')) {
+  if (fn.startsWith('^[')) {
     return null // It's an inline footnote
   }
 
