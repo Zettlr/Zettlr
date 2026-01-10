@@ -129,10 +129,7 @@ function showDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
         const fromLine = view.state.doc.lineAt(node.from)
         const toLine = view.state.doc.lineAt(node.to)
 
-        const from = fromLine.to + 1
-        const to = toLine.from - 1
-
-        ranges.push(wrapper.range(from, to))
+        ranges.push(wrapper.range(fromLine.from, toLine.to))
         ranges.push(overrideWrapper.range(fromLine.from, fromLine.to))
         ranges.push(overrideWrapper.range(toLine.from, toLine.to))
       }
