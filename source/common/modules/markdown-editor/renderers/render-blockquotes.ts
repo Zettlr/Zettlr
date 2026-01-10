@@ -2,14 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        renderPandoc
+ * Contains:        renderBlockquotes
  * CVM-Role:        View
  * Maintainer:      Bennie Milburn
  * License:         GNU GPL v3
  *
- * Description:     This renderer displays Pandoc divs and spans using
- *                  Decorations, rendering the attributes defined for
- *                  the node as they would be displayed by pandoc
+ * Description:     This renderer adds a vertical bar
+ *                  to the left edge of blockquotes
  *
  * END HEADER
  */
