@@ -178,6 +178,7 @@ export const renderPandoc = [
       fontSize: '18px',
       fontWeight: 'initial',
       fontVariant: 'initial',
+      color: 'initial',
       backgroundColor: '#ffffff',
     },
     '&dark pandoc-div-info-wrapper': {
