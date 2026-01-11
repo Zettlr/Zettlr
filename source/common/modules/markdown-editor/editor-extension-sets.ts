@@ -39,7 +39,9 @@ import { defaultContextMenu } from './plugins/default-context-menu'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
 import { lintGutter, linter } from '@codemirror/lint'
-import { spellcheck } from './linters/spellcheck'
+import { linterConfig } from './linters/utils'
+import { hunspell } from './linters/hunspell'
+import { languageTool } from './linters/language-tool'
 import { mdLint } from './linters/md-lint'
 import { countField, countPlugin } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
@@ -53,7 +55,6 @@ import { softwrapVisualIndent } from './plugins/visual-indent'
 import { backgroundLayers } from './plugins/code-background'
 import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
-import { languageTool } from './linters/language-tool'
 import { statusbar } from './statusbar'
 import { renderers } from './renderers'
 import { mdPasteDropHandlers } from './plugins/md-paste-drop-handlers'
@@ -284,7 +285,8 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
   // turned on and off with the dictionary settings, and the yamlFrontmatterNode
   // because if that thing has an error, that thing has an error.
   const mdLinterExtensions = [
-    spellcheck,
+    linterConfig,
+    hunspell,
     yamlFrontmatterLint
   ]
 
