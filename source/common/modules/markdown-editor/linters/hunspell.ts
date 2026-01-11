@@ -179,7 +179,7 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
   }
 }
 
-const { effect: hunspellChangesEffect, field: hunspellChangesField } = changesFieldEffectFactory()
+export const { effect: hunspellChangesEffect, field: hunspellChangesField } = changesFieldEffectFactory()
 
 /**
  * Defines a spellchecker that runs over the text content of the document and
