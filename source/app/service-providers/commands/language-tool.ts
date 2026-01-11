@@ -186,6 +186,54 @@ export interface LanguageToolAPIResponse {
 
 const supportedLanguages: Record<string, string[]> = {}
 
+// Simple token bucket rate limiter
+class LTRateLimiter {
+  capacity: number
+
+  private tokens: number
+  private lastRefill: number
+
+  private readonly refillRate: number
+  private readonly rateName: string|undefined
+
+  constructor (capacity: number, refillRate: number, rateName?: string) {
+    this.capacity = capacity
+    this.refillRate = refillRate
+    this.rateName = rateName
+
+    this.tokens = capacity
+    this.lastRefill = Date.now()
+  }
+
+  private refill () {
+    const now = Date.now()
+    const rate = (now - this.lastRefill) / this.refillRate
+
+    this.tokens = Math.min(this.capacity, this.tokens + Math.floor(rate * this.capacity))
+    this.lastRefill = now
+  }
+
+  empty () {
+    this.tokens = 0
+    this.refill()
+  }
+
+  async ratelimit (cost: number) {
+    this.refill()
+
+    if (this.tokens >= cost) {
+      this.tokens -= cost
+      return
+    }
+
+    const missing = cost - this.tokens
+    const delay = missing / (this.capacity / this.refillRate)
+
+    console.log(`[LanguageTool] Hit rate limit (${this.capacity} ${this.rateName ?? ''}). Waiting ${Math.floor(delay)/1000}s` )
+    await new Promise(r => setTimeout(r, delay))
+  }
+}
+
 /**
  * Returns a list of all language codes that the given server supports. Returns
  * this list either from cache, or fetch the list from the server.
@@ -214,8 +262,19 @@ export type LanguageToolLinterRequest = { data: AnnotationData, language: string
 export type LanguageToolLinterResponse = [LanguageToolAPIResponse, supportedLanguages: string[]]|string|undefined
 
 export default class LanguageTool extends ZettlrCommand {
+  // The public LanguageTool API has a:
+  // characters-per-minute limit (75_000 - free / 300_000 - premium)
+  // and a requests-per-minute limit (20 - free / 80 - premium)
+  // Likewise, custom servers can set these values, as well
+  // https://languagetool.org/http-api/swagger-ui/#/default
+  private charLimiter: LTRateLimiter
+  private requestLimiter: LTRateLimiter
+
   constructor (app: AppServiceContainer) {
     super(app, [ 'run-language-tool', 'add-language-tool-ignore-rule' ])
+
+    this.charLimiter = new LTRateLimiter(0, 60_000, 'Chars Per Minute')
+    this.requestLimiter = new LTRateLimiter(0, 60_000, 'Request Per Minute')
   }
 
   /**
@@ -250,7 +309,9 @@ export default class LanguageTool extends ZettlrCommand {
       apiKey,
       customServer,
       provider,
-      ignoredRules
+      ignoredRules,
+      charsPerMinute,
+      requestsPerMinute,
     } = this._app.config.getConfig().editor.lint.languageTool
     const { data, language } = arg
 
@@ -272,26 +333,40 @@ export default class LanguageTool extends ZettlrCommand {
       searchParams.append('preferredVariants', Object.values(variants).join(','))
     }
 
-    const useCredentials = username.trim() !== '' && apiKey.trim() !== ''
-
     let server = 'https://api.languagetool.org'
-    if (provider === 'custom' && customServer.trim() !== '') {
-      // The user has provided a custom server
-      server = customServer.trim()
-    }
+    let characterCapacity = 75_000
+    let requestCapacity = 20
 
     // If users have Premium, they can do so by providing their username and API
     // key. NOTE: In that case, we must use the premium API at
     // languagetoolplus.com, since both custom servers and the basic API are not
     // equipped to handle authentication.
+    const useCredentials = provider !== 'custom' && username.trim() !== '' && apiKey.trim() !== ''
     if (useCredentials) {
       searchParams.set('username', username.trim())
       searchParams.set('apiKey', apiKey.trim())
       server = 'https://api.languagetoolplus.com'
+      characterCapacity = 300_000
+      requestCapacity = 80
+    }
+
+    if (provider === 'custom' && customServer.trim() !== '') {
+      // The user has provided a custom server
+      server = customServer.trim()
+      characterCapacity = charsPerMinute
+      requestCapacity = requestsPerMinute
     }
 
     if (server.endsWith('/')) {
       server = server.substring(0, server.length - 1)
+    }
+
+    // Update the limits if the config changed
+    if (characterCapacity !== this.charLimiter.capacity) {
+      this.charLimiter.capacity = characterCapacity
+    }
+    if (requestCapacity !== this.requestLimiter.capacity) {
+      this.requestLimiter.capacity = requestCapacity
     }
 
     const numCharacters = data.annotation.reduce((a, b) => a + (b.text?.length ?? b.markup?.length ?? 0), 0)
@@ -304,6 +379,15 @@ export default class LanguageTool extends ZettlrCommand {
     }
 
     try {
+      // The rate limiter can be disabled by setting the limit to `0`
+      if (requestsPerMinute > 0) {
+        await this.requestLimiter.ratelimit(1)
+      }
+
+      if (charsPerMinute > 0) {
+        await this.charLimiter.ratelimit(numCharacters)
+      }
+
       this._app.log.verbose(`[Application] Contacting LanguageTool at ${server} (using credentials: ${String(useCredentials)}); payload: ${numCharacters} characters`)
       const languages = await fetchSupportedLanguages(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
