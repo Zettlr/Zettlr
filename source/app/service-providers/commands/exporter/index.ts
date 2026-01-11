@@ -275,7 +275,7 @@ async function writeDefaults (
       defaults[key] = properties[key]
     } else {
       logger.info(`Default property \`${key}\` is already set: \`${defaults[key]}\``)
-      logger.info(`Ignoring plugin property \`${key}: ${properties[key]}\``)
+      logger.info(`Ignoring plugin property \`${key}\`: \`${properties[key]}\``)
     }
   }
 
