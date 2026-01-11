@@ -152,7 +152,7 @@ const visibleItems = computed(() => {
       // Retrieve which one we need to check
       const readerWriter = (props.which === 'import') ? e.writer : e.reader
       const parsedReaderWriter = parseReaderWriter(readerWriter)
-      return SUPPORTED_READERS.includes(parsedReaderWriter.name)
+      return parsedReaderWriter.name.endsWith('.lua') || SUPPORTED_READERS.includes(parsedReaderWriter.name)
     })
 })
 
