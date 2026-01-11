@@ -232,6 +232,9 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
   const { editor, display, zkn, darkMode, darkModeEditor } = configStore.config
+
+  const ltCharsPerRequest = editor.lint.languageTool.provider === 'custom' ? editor.lint.languageTool.charsPerRequest : editor.lint.languageTool.apiKey ? 60_000 : 20_000
+
   return {
     indentUnit: editor.indentUnit,
     indentWithTabs: editor.indentWithTabs,
@@ -278,6 +281,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintMarkdown: editor.lint.markdown,
     // The editor only needs to know if it should use languageTool
     lintLanguageTool: editor.lint.languageTool.active,
+    languageToolCharsPerRequest: ltCharsPerRequest,
     distractionFree: props.distractionFree.valueOf(),
     showStatusbar: editor.showStatusbar,
     showFormattingToolbar: editor.showFormattingToolbar,

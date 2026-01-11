@@ -74,6 +74,7 @@ export interface EditorConfiguration {
   distractionFree: boolean
   lintMarkdown: boolean
   lintLanguageTool: boolean
+  languageToolCharsPerRequest: number
   showStatusbar: boolean
   showFormattingToolbar: boolean
   darkMode: boolean
@@ -140,6 +141,7 @@ export function getDefaultConfig (): EditorConfiguration {
     distractionFree: false,
     lintMarkdown: false,
     lintLanguageTool: false,
+    languageToolCharsPerRequest: 0,
     showStatusbar: false,
     showFormattingToolbar: true,
     darkMode: false,

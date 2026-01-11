@@ -191,6 +191,27 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
           model: 'editor.lint.languageTool.customServer',
           disabled: config.editor.lint.languageTool.provider !== 'custom'
         },
+        {
+          type: 'number',
+          label: trans('Custom server characters per request'),
+          placeholder: '75_000',
+          model: 'editor.lint.languageTool.charsPerRequest',
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
+        },
+        {
+          type: 'number',
+          label: trans('Custom server characters per minute'),
+          placeholder: '300_000',
+          model: 'editor.lint.languageTool.charsPerMinute',
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
+        },
+        {
+          type: 'number',
+          label: trans('Custom server requests per minute'),
+          placeholder: '80',
+          model: 'editor.lint.languageTool.requestsPerMinute',
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
+        },
         { type: 'separator' },
         {
           type: 'form-text',
