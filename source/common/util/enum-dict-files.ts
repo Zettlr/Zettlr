@@ -17,7 +17,6 @@
 
 import { type Candidate } from './find-lang-candidates'
 import path from 'path'
-import * as bcp47 from 'bcp-47/index.js'
 import fs from 'fs'
 import { app } from 'electron'
 import isDir from './is-dir'
@@ -42,25 +41,23 @@ export default function enumDictFiles (paths = [ path.join(app.getPath('userData
       if (!isDir(path.join(p, dir))) {
         continue
       }
-      let schema = bcp47.parse(dir)
-      if (schema.language !== undefined) {
-        // Additional check to make sure the dictionaries are complete.
-        let aff = path.join(p, dir, dir + '.aff')
-        let dic = path.join(p, dir, dir + '.dic')
+      // Additional check to make sure the dictionaries are complete.
+      let aff = path.join(p, dir, dir + '.aff')
+      let dic = path.join(p, dir, dir + '.dic')
+      if (!isFile(aff) || !isFile(dic)) {
+        // Second try: index-based names
+        aff = path.join(p, dir, 'index.aff')
+        dic = path.join(p, dir, 'index.dic')
         if (!isFile(aff) || !isFile(dic)) {
-          // Second try: index-based names
-          aff = path.join(p, dir, 'index.aff')
-          dic = path.join(p, dir, 'index.dic')
-          if (!isFile(aff) || !isFile(dic)) {
-            continue
-          }
-        }
-        // Only add the found dictionary if it is not already present. Useful
-        // to override the shipped dictionaries.
-        if (candidates.find(elem => elem.tag === dir) === undefined) {
-          candidates.push({ tag: dir, aff, dic })
+          continue
         }
       }
+      // Only add the found dictionary if it is not already present. Useful
+      // to override the shipped dictionaries.
+      if (candidates.find(elem => elem.tag === dir) === undefined) {
+        candidates.push({ tag: dir, aff, dic })
+      }
+
     }
   }
   return candidates
