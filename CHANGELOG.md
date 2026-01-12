@@ -18,6 +18,7 @@
 - Improved performance on generating the preview-bibliography in the sidebar by
   collecting citation keys from the document only in the main process (#6068).
 - Improved math parsing to fix certain cases (#6030).
+- Improved Pandoc div parsing (#6120).
 - Update `de-DE` translation (#6081).
 - Update `ja-JP` translation (#6086).
 
