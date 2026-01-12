@@ -712,7 +712,6 @@ function maybeHighlightSearchResults (): void {
 
 body.dark .main-editor-wrapper {
   background-color: #2b2b2c;
-  .CodeMirror .CodeMirror-gutters { background-color: #2b2b2c; }
 }
 
 // CodeMirror fullscreen

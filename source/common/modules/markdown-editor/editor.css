@@ -169,8 +169,8 @@
     margin: 0 auto; /* (Re-)center */
   }
 
-  /* Style the statusbar and formatting-bar so they adopt
-  the main ui theme, not the editor theme */
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
   .cm-panels, .cm-tooltip, .cm-statusbar {
     color: black;
     background-color: #f5f5f5;
@@ -196,6 +196,7 @@
       border-bottom-color: #f5f5f5;
     }
   }
+  /* END */
 
   /* The underlying gfm mode is funny. For top level task items, it applies the
   class cm-variable-2 for the full text. For second-level task items, it
@@ -233,8 +234,8 @@
 }
 
 body.dark {
-  /* Style the statusbar and formatting-bar
-  so they adopt the main ui theme, not the editor theme */
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
   .cm-panels, .cm-tooltip, .cm-statusbar {
     color: white;
     background-color: #333333;
@@ -264,6 +265,7 @@ body.dark {
       border-bottom-color: #333333;
     }
   }
+  /* END */
 
   .tippy-content .editor-fn-textarea {
     background-color: transparent;
