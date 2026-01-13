@@ -2,6 +2,29 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.1.0
+
+## Read Before Updating
+
+In this version, we perform a long-planned configuration change that affects
+your loaded workspaces and files. Before installing this update, please take
+note of which workspaces and files you have open, in case they are being closed
+through this update. (No data will be actually deleted, but this helps you avoid
+having to search for the folders.)
+
+In addition, it is crucial to remember that once you update to this version,
+**there is no turning back**. If you decide to downgrade to a previous version,
+your files and workspaces *will* be closed, and you will have to re-open them
+afterwards.
+
+## GUI and Functionality
+
 - **Feature**: You can now collapse YAML frontmatters and Pandoc divs (#6115).
 - **Feature**: Zettlr now remembers folded regions as long as the window remains
   open, even when you close a document (#6115).
