@@ -2,51 +2,11 @@
 
 ## GUI and Functionality
 
-- Fix a bug where the preferences window would allow arbitrary tab sizes. Now,
-  tab sizes are bound between 2 and 10 (see #6131).
-- Fixed links not registering clicks when they are pre-rendered within table
-  cells of the TableEditor (#4557).
-- Fix application of custom tag classes.
-- Fixed a bug that would not correctly apply the `code` class to segments of
-  code in some circumstances (primarily when adding YAML front matters or
-  comments).
-- Fix syntax highlighting in code blocks, frontmatters, etc. Now, Zettlr assigns
-  more default-colors of the solarized code syntax theme. In addition, regular
-  text is now more readable, especially in light mode.
-- Fixes and improvements to the toolbar styling; simplify CSS rules.
-- Made toolbar icons slightly larger.
-- Update `ja-JP` translation (#6132).
-- Fixed a bug that would not accept custom height constraints via Pandoc
-  attributes for images if the maximum image height was set to 100% in the
-  settings.
-- Fixed "Learn more" link on the citation page in the onboarding window (#6138).
-- Fixed an issue that would make the file search crash on Windows, if a
-  workspace was located at a volume root (#6142).
-- Fixed an issue that would cause Mermaid graphs to still be pre-rendered in
-  "raw" mode (#6141).
-- Fixed a bug that would cause code files (JSON/YAML/TeX) to be formatted
-  weirdly if Zettlr opens with one of these files on startup, due to relevant
-  CSS never being loaded in this case.
-- Improved PDF viewer interaction (#6153).
+(nothing here)
 
 ## Under the Hood
 
-- Update dependencies:
-  - Electron: `v40.0`
-  - Forge: `7.11.1`
-  - Builder: `26.5.0`
-- The FSAL Cache now consistently utilizes asynchronous filesystem operations
-  (#5994).
-- Refactor Zettelkasten link and tag parsing (#5997).
-- Number controls in forms now allow for providing `min` and `max` values.
-- Increased strictness of the `@typescript-eslint/no-explicit-any` rule from
-  "off" (no checking) to "warn" to slowly start migrating away from any
-  remaining `any` uses in the wild.
-- FSAL Improvements:
-  - Removed a lot of dead code in the FSAL.
-  - Moved the save functionality away from the `FSAL*`-submodules, and divided
-    the responsibility between the `DocumentsProvider` and the `FSAL` module.
-
+(nothing here)
 
 # 4.1.0
 
