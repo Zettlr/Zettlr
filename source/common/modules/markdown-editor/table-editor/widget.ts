@@ -74,7 +74,7 @@ export class TableWidget extends WidgetType {
   // For more background, see issue #5940.
   private readonly meanRowHeight = 100
 
-  constructor (readonly table: string, readonly node: SyntaxNode) {
+  constructor (readonly ast: Table, readonly node: SyntaxNode) {
     super()
   }
 
@@ -101,13 +101,8 @@ export class TableWidget extends WidgetType {
       return height
     }
 
-    const tableAST = parseTableNode(this.node, this.table)
-    if (tableAST.type !== 'Table') {
-      return -1
-    }
-
     // We base our height estimate off the mean row height.
-    return tableAST.rows.length * this.meanRowHeight
+    return this.ast.rows.length * this.meanRowHeight
   }
 
   // By setting the cache key to the node's `from` position,
@@ -261,8 +256,10 @@ export class TableWidget extends WidgetType {
     const newDecos: Array<Range<Decoration>> = tree
       // Get all Table nodes in the document
       .topNode.getChildren('Table')
-      .filter(table => {
-        const ast = parseTableNode(table, markdown)
+      .map(node => {
+        return { node, ast: parseTableNode(node, markdown) }
+      })
+      .filter(({ ast }) => {
         // The TableEditor cannot support grid tables, since they can have
         // (a) colspans and rowspans, and (b) multiple lines, which is just
         // too difficult to represent using our approach here. (Also, grids
@@ -276,9 +273,9 @@ export class TableWidget extends WidgetType {
         return false
       })
       // Turn the nodes into Decorations
-      .map(node => {
+      .map(({ node, ast }) => {
         return Decoration.replace({
-          widget: new TableWidget(state.sliceDoc(node.from, node.to), node.node),
+          widget: new TableWidget(ast as Table, node.node),
           // inclusive: false,
           block: true
         }).range(node.from, node.to)

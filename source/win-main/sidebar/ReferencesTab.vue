@@ -24,8 +24,6 @@ import { type DocumentsUpdateContext } from 'source/app/service-providers/docume
 import { useDocumentTreeStore } from 'source/pinia'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import localiseNumber from 'source/common/util/localise-number'
-import { extractASTNodes, markdownToAST } from 'source/common/modules/markdown-utils'
-import type { ASTNode, CitationNode } from 'source/common/modules/markdown-utils/markdown-ast'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
 
 const ipcRenderer = window.ipc
@@ -125,14 +123,7 @@ async function updateBibliography (): Promise<void> {
     return
   }
 
-  const fileContents: string = await ipcRenderer.invoke('application', {
-    command: 'get-file-contents',
-    payload: activeFile.value.path
-  })
-
-  const keys = extractASTNodes(markdownToAST(fileContents), 'Citation')
-    .map((node: ASTNode) => (node as CitationNode).parsedCitation)
-    .flatMap(c => c.items.map(item => item.id))
+  const keys = descriptor.citekeys
 
   // Now also include potential nocite citations (see https://pandoc.org/MANUAL.html#including-uncited-items-in-the-bibliography)
   if (descriptor.frontmatter != null && 'nocite' in descriptor.frontmatter) {

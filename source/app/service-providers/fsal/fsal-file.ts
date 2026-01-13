@@ -83,6 +83,7 @@ export async function parse (
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
     links: [], // Any outlinks
+    citekeys: [],
     bom: '', // Default: No BOM
     type: 'file',
     wordCount: 0,

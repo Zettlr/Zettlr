@@ -25,6 +25,21 @@ import type { ConfigOptions } from 'source/app/service-providers/config/get-conf
  * @return  {Fieldset[]}  The fields
  */
 export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[] {
+  const betaReleaseItem: PreferencesFieldset = {
+    title: trans('Beta releases'),
+    group: PreferencesGroups.Advanced,
+    infoString: trans('Requires that check for updates is also active.'),
+    help: undefined, // TODO
+    fields: [
+      {
+        type: 'checkbox',
+        label: trans('Notify me about beta releases'),
+        model: 'checkForBeta',
+        disabled: !config.system.checkForUpdates
+      }
+    ]
+  }
+
   return [
     {
       title: trans('Pattern for new file names'),
@@ -315,19 +330,6 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
         }
       ]
     },
-    {
-      title: trans('Beta releases'),
-      group: PreferencesGroups.Advanced,
-      infoString: trans('Requires that check for updates is also active.'),
-      help: undefined, // TODO
-      fields: [
-        {
-          type: 'checkbox',
-          label: trans('Notify me about beta releases'),
-          model: 'checkForBeta',
-          disabled: !config.system.checkForUpdates
-        }
-      ]
-    }
+    ...(__UPDATES_DISABLED__ === '0'? [betaReleaseItem] : [])
   ]
 }

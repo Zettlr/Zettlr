@@ -17,6 +17,27 @@ import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 
 export function getGeneralFields (appLangOptions: Record<string, string>): PreferencesFieldset[] {
+  const updateSetting: PreferencesFieldset = {
+    title: trans('Updates'),
+    infoString: trans('If you installed Zettlr via a package manager, you should disable this.'),
+    group: PreferencesGroups.General,
+    help: undefined, // TODO
+    fields: [
+      {
+        type: 'checkbox',
+        label: trans('Automatically check for updates'),
+        model: 'system.checkForUpdates'
+      }
+    ]
+  }
+
+  const updatesDisabledSetting: PreferencesFieldset = {
+    title: trans('Updates'),
+    group: PreferencesGroups.General,
+    infoString: trans('Updates for this binary of Zettlr have been disabled at build time. This is a choice made by the packager and is common when Zettlr is being distributed via package managers. In these cases, Zettlr will be updated through your package manager.'),
+    fields: []
+  }
+
   return [
     {
       title: trans('Application language'),
@@ -83,18 +104,6 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
         }
       ]
     },
-    {
-      title: trans('Updates'),
-      infoString: trans('If you installed Zettlr via a package manager, you should disable this.'),
-      group: PreferencesGroups.General,
-      help: undefined, // TODO
-      fields: [
-        {
-          type: 'checkbox',
-          label: trans('Automatically check for updates'),
-          model: 'system.checkForUpdates'
-        }
-      ]
-    }
+    ...(__UPDATES_DISABLED__ === '0' ? [updateSetting] : [updatesDisabledSetting])
   ]
 }

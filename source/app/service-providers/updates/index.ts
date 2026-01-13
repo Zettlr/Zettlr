@@ -294,9 +294,10 @@ export default class UpdateProvider extends ProviderContract {
    * @return {Promise} Resolves only when there is an update available.
    */
   async check (): Promise<void> {
-    if (!net.online) {
+    if (!net.online || __UPDATES_DISABLED__ === '1') {
       // Don't check if we don't have an internet connection; preserve the last
-      // state so that the user sees what the most recent result was.
+      // state so that the user sees what the most recent result was. We also
+      // never check if updates have been disabled at build time.
       return
     }
 

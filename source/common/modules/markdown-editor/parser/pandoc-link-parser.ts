@@ -66,8 +66,9 @@ export const pandocLinkParser: InlineParser = {
 
     // Remove nested links, which are invalid
     if (isLink) {
-      const nodeType = ctx.parser.nodeSet.types.find(node => node.is('Link'))?.id
-      linkContents = linkContents.filter(el => el.type !== nodeType)
+      const linkType = ctx.parser.nodeSet.types.find(node => node.is('Link'))?.id
+      const urlType = ctx.parser.nodeSet.types.find(node => node.is('URL'))?.id
+      linkContents = linkContents.filter(el => el.type !== linkType && el.type !== urlType)
     }
 
     // The url may contain additional parenthesis, so we need

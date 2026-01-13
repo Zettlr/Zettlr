@@ -869,8 +869,8 @@ current contents from the editor somewhere else, and restart the application.`
     // After here, the document will in some way be opened.
     this._app.recentDocs.add(filePath)
 
-    const { openPaths } = this._app.config.get()
-    if (openPaths.every(p => !filePath.startsWith(p))) {
+    const { openFiles, openWorkspaces } = this._app.config.get().app
+    if (!openFiles.includes(filePath) && openWorkspaces.every(p => !filePath.startsWith(p))) {
       // The file just opened is outside the current opened roots -> add as a
       // standalone root file.
       this._app.config.addPath(filePath)

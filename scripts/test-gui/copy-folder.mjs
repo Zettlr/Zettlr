@@ -30,9 +30,11 @@ export default async (destinationPath) => {
 
   // Finally, retrieve the roots so that they can be added to the config
   const roots = await fs.readdir(destinationPath)
-
-  // Return the absolute paths
-  return roots.map(root => { return path.join(destinationPath, root) })
+  const absPaths = roots.map(root => path.join(destinationPath, root))
+  return {
+    files: absPaths.filter(p => !isDir(p)),
+    workspaces: absPaths.filter(p => isDir(p))
+  }
 }
 
 /**

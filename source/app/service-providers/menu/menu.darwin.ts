@@ -35,6 +35,16 @@ export default function getMenu (
 ): MenuItemConstructorOptions[] {
   const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
 
+  const updateMenuItem: MenuItemConstructorOptions = {
+    id: 'menu.update',
+    label: trans('Check for updates'),
+    click: function (_menuitem, _focusedWindow) {
+      // Immediately open the window instead of first checking
+      commands.run('open-update-window', undefined)
+        .catch(e => logger.error(String(e.message), e))
+    }
+  }
+
   const menu: MenuItemConstructorOptions[] = [
     // APP MENU
     {
@@ -634,15 +644,7 @@ export default function getMenu (
             windows.showAboutWindow()
           }
         },
-        {
-          id: 'menu.update',
-          label: trans('Check for updates'),
-          click: function (_menuitem, _focusedWindow) {
-            // Immediately open the window instead of first checking
-            commands.run('open-update-window', undefined)
-              .catch(e => logger.error(String(e.message), e))
-          }
-        },
+        ...(__UPDATES_DISABLED__ === '0' ? [updateMenuItem] : []),
         {
           type: 'separator'
         },

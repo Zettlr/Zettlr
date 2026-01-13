@@ -17,9 +17,9 @@ import type { InlineParser, BlockParser, BlockContext, Line, DelimiterType } fro
 
 const PandocSpanDelimiter: DelimiterType = {}
 
-const pandocSpanClosingRe = /^\](?<attr>\{[ \w\t\-.#:=;"')(]*\})/d
+const pandocSpanClosingRe = /^\](?<attr>\{[^\}]*\})/d
 
-const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]*(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[ \w\t\-.%#:=;"')(]*\}))\s*$/d
+const pandocDivOpeningRe = /^(?<mark>:{3,})[ \t]*(?:(?<name>[\w\-.]+)|(?:(?<class>[\w\-.]+)[ \t]+)?(?<attr>\{[^\}]*\}))\s*$/d
 
 const pandocDivClosingRe = /^(?<mark>:{3,})\s*$/d
 
@@ -76,6 +76,20 @@ export const pandocSpanParser: InlineParser = {
   }
 }
 
+/**
+ * Helper function to determine the number of parent PandocDivs
+ */
+function getNestingLevel (ctx: BlockContext): number {
+  let depth = 1
+  for (let n = ctx.depth - 1; n >= 0; n--) {
+    if (ctx.parentType(n).is('PandocDiv')) {
+      depth++
+    }
+  }
+
+  return depth
+}
+
 export const pandocDivParser: BlockParser = {
   name: 'pandoc-div',
   parse: (ctx, line) => {
@@ -102,11 +116,11 @@ export const pandocDivParser: BlockParser = {
 
     // Start a composite block, similar to blockquotes.
     // This enables the node to contain other blocks as children.
-    // By setting `value` to the current depth + 1, we can track
+    // By setting `value` to the nesting depth, we can track
     // nesting level. This comes in handy in the node `composite` method
     // when we need to decide whether a block is closed by a closing
     // mark.
-    ctx.startComposite('PandocDiv', 0, ctx.depth + 1)
+    ctx.startComposite('PandocDiv', 0, getNestingLevel(ctx) + 1)
 
     // We need to move the line position after parsing,
     // so we track the offset as we calculate markers
@@ -179,9 +193,11 @@ export const pandocDivParser: BlockParser = {
 // optionally adjusts the line's base position and registers nodes
 // for any markers involved in the block's syntax.
 export function pandocDivComposite (ctx: BlockContext, line: Line, value: number): boolean {
-  // If the block nesting level (`value`) is not the same as the current
-  // context depth, then we continue the block.
-  if (ctx.parentType().name !== 'PandocDiv' || ctx.depth !== value) {
+
+  // We only want to end the block if the nesting level, `value`,
+  // matches the number of parent PandocDivs so that other parent
+  // blocks are not ended early.
+  if (value !== getNestingLevel(ctx)) {
     return true
   }
 

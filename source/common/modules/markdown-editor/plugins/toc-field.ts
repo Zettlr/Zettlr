@@ -127,7 +127,7 @@ function generateToc (state: EditorState): ToCEntry[] {
 
   tree.iterate({
     enter (node) {
-      if (node.type.name === 'Document') {
+      if (node.type.is('Document') || node.type.is('PandocDiv')) {
         return
       }
 

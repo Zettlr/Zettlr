@@ -38,7 +38,8 @@ module.exports = {
     }),
     new DefinePlugin({
       __GIT_COMMIT_HASH__: JSON.stringify(process.env.GIT_COMMIT_HASH),
-      __BUILD_DATE__: JSON.stringify((new Date()).toISOString())
+      __BUILD_DATE__: JSON.stringify((new Date()).toISOString()),
+      __UPDATES_DISABLED__: JSON.stringify(process.env.ZETTLR_DISABLE_UPDATE_CHECK !== undefined ? '1' : '0')
     })
   ],
   resolve: {

@@ -44,6 +44,27 @@ Focus on what matters to you.
 
 > [Learn more on our website](https://zettlr.com/).
 
+***
+
+**Table of Contents**
+
+- [Features](#features)
+- [Setup](#setup)
+- [Getting Started](#getting-started)
+- [Building from Source](#building-from-source)
+- [Contributing](#contributing)
+  - [Translating](#translating)
+  - [Contributing Code](#contributing-code)
+  - [What Should I Know To Contribute Code?](#what-should-i-know-to-contribute-code)
+  - [Development Commands](#development-commands)
+  - [Build Flags](#build-flags)
+  - [Directory Structure](#directory-structure)
+  - [On the Distinction between Modules and Service Providers](#on-the-distinction-between-modules-and-service-providers)
+  - [The Application Lifecycle](#the-application-lifecycle)
+- [Command-Line Switches](#command-line-switches)
+- [VSCode Extension Recommendations](#vscode-extension-recommendations)
+- [License](#license)
+
 ## Features
 
 - Your Notes are your notes: Zettlr is **privacy-first**
@@ -59,9 +80,9 @@ Focus on what matters to you.
 
 … and the best is: **Zettlr is [Free and Open Source Software (FOSS)](https://en.wikipedia.org/wiki/Free_and_open-source_software)!**
 
-## Installation
+## Setup
 
-To install Zettlr, just [download the latest release](https://www.zettlr.com/download/) for your operating system. Currently supported are macOS, Windows, and most Linux distributions (via Debian- and Fedora-packages as well as AppImages).
+To install Zettlr, just [download the latest release](https://www.zettlr.com/download/) for your operating system. Currently supported are macOS, Windows, and most Linux distributions.
 
 On our website and here on GitHub, we provide a set of installers for the most common use-cases. We provide both 64-bit installers as well as installers for ARM systems (called "Apple Silicon" in the macOS ecosystem). 32-bit is not supported. We offer the following binaries directly:
 
@@ -71,7 +92,7 @@ On our website and here on GitHub, we provide a set of installers for the most c
 * Fedora/Red Hat (x64 and ARM)
 * AppImage (x64 and ARM)
 
-Thanks to our community, we can also offer you a variety of other installation opportunities:
+Thanks to our community, we can also offer you a variety of other setup opportunities via package managers:
 
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
 * [Aptitude (Ubuntu/Debian)](https://apt.zettlr.com)
@@ -81,13 +102,17 @@ Thanks to our community, we can also offer you a variety of other installation o
 
 All other [platforms that Electron supports](https://www.electronjs.org/docs/latest/development/build-instructions-gn#platform-prerequisites) are supported as well, but you will need to build the app yourself for this to work.
 
-**Please also consider [becoming a patron](https://www.patreon.com/zettlr) or making a [one-time donation](https://paypal.me/hendrikerz)!**
+**Please also consider supporting the development with a donation. You can donate once, or monthly. [Learn more on our website](https://www.zettlr.com/supporters). Thank you!**
 
 ## Getting Started
 
 After you have installed Zettlr, [head over to our documentation](https://docs.zettlr.com/) to get to know Zettlr. Refer to the [Quick Start Guide](https://docs.zettlr.com/en/5-minutes/), if you prefer to use software heads-on.
 
 ![The central window of Zettlr using the dark theme](/resources/screenshots/zettlr_view_dark.png)
+
+## Building from Source
+
+You can compile the app for yourself, if you prefer. To do so, refer to our development guide below to ensure you have all required dependencies installed. Then, you can build the app for your computer using the command `yarn package`.
 
 ## Contributing
 
@@ -242,7 +267,7 @@ Creates a `.desktop`-file into your applications which enables you to quickly st
 > [!WARNING]
 > We provide this command as a convenience. Unless you know what you are doing, you should not run code directly compiled from the HEAD commit of the develop branch. This command *can* be useful, however, in a few instances where you know what may go wrong and can take appropriate precautions.
 
-### `shortcut:uninstall`
+#### `shortcut:uninstall`
 
 Removes the `.desktop`-file created by `shortcut:install`.
 
@@ -259,6 +284,30 @@ See `start`.
 
 > [!IMPORTANT]
 > This command is deprecated and only an alias for `start`. Use `start` instead.
+
+### Build Flags
+
+The build process of Zettlr supports build flags that you can use to hardwire
+certain behaviors into the final binary. These usually come as environment
+variables. If they are present, Zettlr will produce a different binary.
+
+#### `ZETTLR_DISABLE_UPDATE_CHECK`
+
+If this environment variable is present during build, this will cause the resulting binary to have its built-in update-checking mechanism disabled. This is useful if you are repackaging the app for distribution through a package manager. The build script will emit a warning that the binary will not have update checks enabled.
+
+To disable the update check at build time, simply make sure that this environment variable is present. The build script only checks for its presence, not the actual value. To ensure you are including the update check mechanism, make sure this environment variable is *not* set, e.g., by running `unset ZETTLR_DISABLE_UPDATE_CHECK` before running the build script.
+
+> [!CAUTION]
+> By creating and distributing a version of Zettlr with update checks disabled, you are responsible for ensuring that users will receive updates for Zettlr through a different mechanism. You acknowledge that you are responsible for ensuring that your update mechanism works reliably at all times. If – for any reasons – your update mechanism is disrupted – even temporarily – and Zettlr users cannot receive new updates, you are **required** to immediately notify us of this by opening a GitHub Issue, via Discord, or via Email. **Failure to comply with these added requirements will result in our immediate termination of the implicit consent for you to distribute modified Zettlr versions. If we receive notice of a version of Zettlr being publicly distributed without a working update mechanism and you fail to communicate this directly to us, we will immediately warn users publicly about your Zettlr package and withdraw our implicit consent for you to distribute Zettlr. Thus, you will forfeit your allowance to distribute Zettlr indefinitely.** In short: Only use this build flag if you know *exactly* what you're doing, and, if something goes wrong, communicate proactively. Then, all is good.
+
+#### `BUNDLE_PANDOC`
+
+If this environment variable is present during build, this will cause the build script to **not** bundle the correct Pandoc binary into the final application bundle. This is useful if you are repackaging the app for distribution through a package manager and ensure that Pandoc gets installed as a dependency of Zettlr. The build script will emit a warning that the binary will not be bundled with Pandoc.
+
+To disable bundling of Pandoc, you need to set the environment variable to `0`, e.g.: `export BUNDLE_PANDOC=0`. This will cause the build script to neither download nor bundle Pandoc. (This also absolves your build environment from the specific requirements for the Pandoc download script identified above.)
+
+> [!CAUTION]
+> Zettlr users expect Pandoc to be present, since otherwise they will not be able to import or export files. Every version of Zettlr that is publicly distributed must therefore either come bundled with Pandoc, or ensure through another mechanism that Pandoc is installed on the computer. If you use this build flag while repackaging the app and distribute it via some package manager, you are **required** to ensure that Pandoc will be installed alongside Zettlr via some other means (e.g., by marking Pandoc as a dependency of Zettlr). We do not want users to start complaining that some Zettlr version has non-functioning exports or imports. **Failure to comply with these added requirements will result in our immediate termination of the implicit consent for you to distribute modified Zettlr versions. Thus, you will forfeit your allowance to distribute Zettlr indefinitely.** In short: Only use this build flag if you know *exactly* what you're doing. Then, all is good.
 
 ### Directory Structure
 
@@ -340,7 +389,7 @@ And when you shut down the app, the following steps will run:
 4. Shutdown the service providers (`source/app/lifecycle.ts::shutdownApplication`)
 5. Exit the application
 
-During development of the app (`yarn start` and `yarn test-gui`), the following steps will run:
+During development of the app (`yarn start`), the following steps will run:
 
 1. Electron forge will compile the code for the main process and each renderer process separately (since these are separate processes), using TypeScript and webpack to compile and transpile.
 2. Electron forge will put that code into the directory `.webpack`, replacing the constants you can find in the "create"-methods of the window manager with the appropriate entry points.
@@ -348,8 +397,8 @@ During development of the app (`yarn start` and `yarn test-gui`), the following 
 
 Whenever the app is built, the following steps will run:
 
-1. Electron forge will perform steps 1 and 2 above, but instead of running the app, it will package the resulting code into a functional app package.
-2. Electron builder will then take these pre-built packages and wrap them in a platform-specific installer (DMG-files, Windows installer, or Linux packages).
+1. Electron forge will perform steps 1 and 2 above, but instead of running the app, it will package the resulting code into a functional app package. It will also take care of producing the Linux installers.
+2. Electron builder is used to package the files into correct installers for macOS and Windows.
 
 Electron forge will put the packaged applications into the directory `./out` while Electron builder will put the installers into the directory `./release`.
 

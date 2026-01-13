@@ -19,7 +19,8 @@ import {
   StreamLanguage,
   type LanguageSupport,
   type Language,
-  type LanguageDescription
+  type LanguageDescription,
+  foldNodeProp
 } from '@codemirror/language'
 
 // Import all the languages, first the "new" ones
@@ -146,6 +147,15 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: javascript({ typescript: true }).language, selectors: [ 'typescript', 'ts' ] }
 ]
 
+// Add code folding to custom nodes
+const customFoldNodeProp = foldNodeProp.add(type => {
+  if (type.is('PandocDiv') || type.is('YAMLFrontmatter')) {
+    return (node, state) => ({ from: state.doc.lineAt(node.from).to, to: node.to })
+  }
+
+  return undefined
+})
+
 export interface MarkdownParserConfig {
   zknLinkParserConfig?: ZknLinkParserConfig
 }
@@ -184,6 +194,9 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
     },
     addKeymap: false,
     extensions: {
+      props: [
+        customFoldNodeProp
+      ],
       // yamlCodeParse is a wrapper that scans the document for the existence of
       // a YAML frontmatter and then parses its contents. NOTE: Since a single
       // MarkdownConfig only accepts one parse, I could either add additional

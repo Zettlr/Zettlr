@@ -84,6 +84,11 @@ function generateRendererEntrypoint (name, folder) {
 
 module.exports = {
   hooks: {
+    preStart: async (forgeConfig) => {
+      if (process.env.ZETTLR_DISABLE_UPDATE_CHECK !== undefined) {
+        console.warn('Detected the environment variable ZETTLR_DISABLE_UPDATE_CHECK. This build of Zettlr WILL NOT HAVE UPDATES ENABLED. Please ensure this was intended!')
+      }
+    },
     generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
       // Two steps need to be done here. First, we need to set an environment
       // variable that is then accessible by the webpack process so that we can
@@ -95,6 +100,11 @@ module.exports = {
       process.env.GIT_COMMIT_HASH = await getGitHash()
 
       // Second, we need to make sure we can bundle Pandoc.
+      if (process.env.BUNDLE_PANDOC === '0') {
+        console.warn('Detected environment variable BUNDLE_PANDOC -- this build will not be bundled with Pandoc!')
+        return
+      }
+
       const isMacOS = targetPlatform === 'darwin'
       const isLinux = targetPlatform === 'linux'
       const isWin32 = targetPlatform === 'win32'
@@ -228,11 +238,14 @@ module.exports = {
           teamId: process.env.APPLE_TEAM_ID
         }
       : false,
-    // We only need the extra resources on macOS
+    // On macOS, we need to provide the app icon so that it gets copied into the
+    // resources directory. After the `generateAssets` step, this will also
+    // include the Pandoc binary (this is why we cannot leave `extraResource`
+    // undefined).
     extraResource: process.platform === 'darwin' ? [
       'resources/icons/icon.code.icns',
       'resources/icons/Assets.car' // Contains the new Liquid Glass app icon
-    ] : [] // NOTE: Must be an array because the generateAssets hook uses it
+    ] : []
   },
   plugins: [
     {
