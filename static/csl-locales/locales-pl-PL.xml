@@ -17,7 +17,7 @@
       <name>Kacper Kłosowski</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2025-12-22T12:57:08+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -39,7 +39,7 @@
     <term name="and others">i inni</term>
     <term name="anonymous">anonim</term>
     <term name="at">na</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">nagranie dźwiękowe</term>
     <term name="available at">dostępne na</term>
     <term name="by">przez</term>
     <term name="circa">około</term>
@@ -48,7 +48,7 @@
     <term name="film">film</term>
     <term name="forthcoming">w przygotowaniu</term>
     <term name="from">z</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">odtąd</term>
     <term name="ibid">ibid.</term>
     <term name="in">w</term>
     <term name="in press">w druku</term>
@@ -58,18 +58,18 @@
     <term name="no date">brak daty</term>
     <term name="no-place">brak miejsca wydania</term>
     <term name="no-publisher">brak wydawcy</term> <!-- sine nomine -->
-    <term name="on">on</term>
+    <term name="on">na</term>
     <term name="online">online</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">wydanie oryginalne</term>
     <term name="personal-communication">korespondencja prywatna</term>
     <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast-episode">odcinek podcastu</term>
     <term name="preprint">preprint</term>
     <term name="presented at">zaprezentowano na</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
+    <term name="radio-broadcast">audycja radiowa</term>
+    <term name="radio-series">serial radiowy</term>
+    <term name="radio-series-episode">odcinek serialu radiowego</term>
     <term name="reference">
       <single>referencja</single>
       <multiple>referencje</multiple>
@@ -77,12 +77,12 @@
     <term name="retrieved">pobrano</term>
     <term name="review-of">recenzja</term>
     <term name="scale">skala</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
+    <term name="special-issue">wydanie specjalne</term>
+    <term name="special-section">sekcja specjalna</term>
+    <term name="television-broadcast">transmisja telewizyjna</term>
+    <term name="television-series">serial telewizyjny</term>
+    <term name="television-series-episode">odcinek serialu telewizyjnego</term>
+    <term name="video">wideo</term>
     <term name="working-paper">working paper</term>
 
     <!-- SHORT GENERAL TERMS -->
@@ -112,9 +112,9 @@
     <term name="collection">collection</term>
     <term name="dataset">dataset</term>
     <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
+    <term name="entry">hasło</term>
+    <term name="entry-dictionary">hasło w słowniku</term>
+    <term name="entry-encyclopedia">hasło w encyklopedii</term>
     <term name="event">event</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic">graphic</term>
