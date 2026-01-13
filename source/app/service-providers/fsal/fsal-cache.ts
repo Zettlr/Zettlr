@@ -22,7 +22,7 @@
 
 import hash from '@common/util/hash'
 import type LogProvider from '@providers/log'
-import fs, { promises as fsPromises } from 'fs'
+import { promises as fs } from 'fs'
 import path from 'path'
 import type { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from 'source/types/common/fsal'
 
@@ -51,14 +51,6 @@ export default class FSALCache {
     // Everything not in this Set will be cleaned out to keep the disk
     // space as small as possible.
     this._accessed = new Set()
-
-    try {
-      fs.lstatSync(this._datadir)
-    } catch (err) {
-      this._logger.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
-      // Make sure the path exists
-      fs.mkdirSync(this._datadir, { recursive: true })
-    }
   }
 
   /**
@@ -68,8 +60,8 @@ export default class FSALCache {
    *
    * @returns {undefined|MDFileDescriptor|CodeFileDescriptor}     The key's value or undefined
    */
-  get (key: string): undefined|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor {
-    const shard = this._loadShard(key)
+  async get (key: string): Promise<undefined|MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    const shard = await this._loadShard(key)
 
     if (shard.has(key)) {
       this._accessed.add(key)
@@ -91,7 +83,7 @@ export default class FSALCache {
    *
    * @return {boolean}        True on success, false otherwise.
    */
-  set (key: string, value: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor): boolean {
+  async set (key: string, value: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor): Promise<boolean> {
     try {
       JSON.stringify(value)
     } catch (err) {
@@ -99,7 +91,7 @@ export default class FSALCache {
       return false
     }
 
-    const shard = this._loadShard(key)
+    const shard = await this._loadShard(key)
     this._accessed.add(key) // Obviously, a set key has been accessed
     shard.set(key, value)
     return true
@@ -112,9 +104,9 @@ export default class FSALCache {
    *
    * @returns {boolean}      Whether the adapter has removed the key
    */
-  del (key: string): boolean {
-    if (this.has(key)) {
-      const shard = this._loadShard(key)
+  async del (key: string): Promise<boolean> {
+    if (await this.has(key)) {
+      const shard = await this._loadShard(key)
       shard.delete(key)
       this._accessed.delete(key)
       return true
@@ -129,8 +121,8 @@ export default class FSALCache {
    *
    * @return {boolean}      True if the key exists
    */
-  has (key: string): boolean {
-    const shard = this._loadShard(key)
+  async has (key: string): Promise<boolean> {
+    const shard = await this._loadShard(key)
     return shard.has(key)
   }
 
@@ -141,16 +133,16 @@ export default class FSALCache {
    *
    * @return {any}        The value for the given key
    */
-  pluck (key: string): any {
+  async pluck (key: string): Promise<any> {
     let val = JSON.parse(JSON.stringify(this.get(key)))
-    this.del(key)
+    await this.del(key)
     return val
   }
 
   /**
    * Persist all cache data on disk.
    */
-  persist (): void {
+  async persist (): Promise<void> {
     let deleted = 0
     // Saves all currently loaded shards to disk
     for (const [ shardKey, shard ] of this._data.entries()) {
@@ -163,10 +155,18 @@ export default class FSALCache {
       }
 
       try {
+        await fs.lstat(this._datadir)
+      } catch (err) {
+        this._logger.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
+        // Make sure the path exists
+        await fs.mkdir(this._datadir, { recursive: true })
+      }
+
+      try {
         // A map cannot be saved to disk directly, so we need to create an array
         // which is JSONable. This will then be correctly read into a new map
         // whenever we load this shard.
-        fs.writeFileSync(path.join(this._datadir, shardKey), JSON.stringify(Array.from(shard.entries())))
+        await fs.writeFile(path.join(this._datadir, shardKey), JSON.stringify(Array.from(shard.entries())))
       } catch (err) {
         this._logger.error(`[FSAL Cache] Could not persist shard ${shardKey}!`, err)
       }
@@ -186,10 +186,10 @@ export default class FSALCache {
     this._accessed.clear()
 
     // We'll collect the cache clearing actions to resolve them all
-    const directoryContents = await fsPromises.readdir(this._datadir)
+    const directoryContents = await fs.readdir(this._datadir)
     for (const file of directoryContents) {
       const realPath = path.join(this._datadir, file)
-      await fsPromises.unlink(realPath)
+      await fs.unlink(realPath)
     }
   }
 
@@ -200,7 +200,7 @@ export default class FSALCache {
    *
    * @return {Map<string, any>} The loaded shard
    */
-  _loadShard (key: string): Map<string, MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+  async _loadShard (key: string): Promise<Map<string, MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor>> {
     // load a shard
     const shard = this._determineShard(key)
 
@@ -213,8 +213,8 @@ export default class FSALCache {
     // If the shard has not yet been loaded, do so.
     try {
       // Either return a persisted shard ...
-      fs.lstatSync(path.join(this._datadir, shard))
-      const content = fs.readFileSync(path.join(this._datadir, shard), { encoding: 'utf8' })
+      await fs.lstat(path.join(this._datadir, shard))
+      const content = await fs.readFile(path.join(this._datadir, shard), { encoding: 'utf8' })
       const parsedData = JSON.parse(content)
 
       // Guard the parsed data to ensure it is the data we expect. Otherwise, we
