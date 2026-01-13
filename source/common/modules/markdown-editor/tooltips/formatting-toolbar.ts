@@ -14,7 +14,7 @@
 
 import { EditorView, showTooltip, type Tooltip } from '@codemirror/view'
 import { type EditorState, StateField } from '@codemirror/state'
-import { applyBold, applyCode, applyComment, applyItalic, applyFenceOrBracket, insertImage, insertLink, applyHighlight, applyStrikethrough } from '../commands/markdown'
+import { applyBold, applyCode, applyComment, applyItalic, applyPandocDivOrSpan, insertImage, insertLink, applyHighlight, applyStrikethrough } from '../commands/markdown'
 import { trans } from '@common/i18n-renderer'
 import { configField } from '../util/configuration'
 
@@ -92,7 +92,7 @@ function getToolbar (state: EditorState): Tooltip[] {
       // a transaction cycle that has re-rendered the tooltip.
       bold.onmousedown = function (event) { applyBold(view) }
       italic.onmousedown = function (event) { applyItalic(view) }
-      underline.onmousedown = function (event) { applyFenceOrBracket(view, 'bracket', '.underline') }
+      underline.onmousedown = function (event) { applyPandocDivOrSpan(view, 'span', '.underline') }
       highlight.onmousedown = function (event) { applyHighlight(view) }
       strikethrough.onmousedown = function (event) { applyStrikethrough(view) }
       link.onmousedown = function (event) { insertLink(view) }

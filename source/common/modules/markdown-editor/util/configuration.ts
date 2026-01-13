@@ -123,7 +123,7 @@ export function getDefaultConfig (): EditorConfiguration {
     },
     boldFormatting: '**',
     italicFormatting: '_',
-    highlightFormatting: 'span',
+    highlightFormatting: '==',
     citeStyle: 'regular',
     muteLines: true,
     readabilityAlgorithm: 'dale-chall',

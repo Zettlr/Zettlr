@@ -78,7 +78,7 @@ function insertLinkOrImage (target: EditorView, type: 'link'|'image'): void {
  * @param   {EditorView}      target        The target view
  * @param   {'link'|'image'}  attributes    Attributes to assign to the fenced div
  */
-function insertPandocFence (target: EditorView, attributes: string): void {
+function insertPandocDiv (target: EditorView, attributes: string): void {
   const transaction = target.state.changeByRange(range => {
     let opening: string = `::: {${attributes}}`
     let closing: string = ':::'
@@ -91,12 +91,12 @@ function insertPandocFence (target: EditorView, attributes: string): void {
     // If the startLine is not empty, insert a newline after the opening mark
     if (!/^\s*$/.test(startLine.text)) { opening = opening + '\n' }
 
+    // If the endLine is not empty, insert a newline before the closing mark
+    if (!/^\s*$/.test(endLine.text)) { closing = '\n' + closing }
+
     // If the previous line is not empty, insert a newline before the opening mark
     const prevLine = target.state.doc.line(startLine.number - 1)
     if (!/^\s*$/.test(prevLine.text)) { opening = '\n' + opening }
-
-    // If the endLine is not empty, insert a newline before the closing mark
-    if (!/^\s*$/.test(endLine.text)) { closing = '\n' + closing }
 
     // If the next line is not empty, insert a newline after the closing mark
     const nextLine = target.state.doc.line(endLine.number + 1)
@@ -363,7 +363,7 @@ export function applyHighlight (target: EditorView): boolean {
   const markup: string = target.state.field(configField, false)?.highlightFormatting ?? '=='
 
   if (markup === 'span') {
-    applyFenceOrBracket(target, 'bracket', '.mark')
+    applyPandocDivOrSpan(target, 'span', '.mark')
   } else {
     applyInlineMarkup(target, markup, markup)
   }
@@ -602,18 +602,18 @@ export function formatPandocAttributes (identifier: string, classes: string, att
  *
  * @return  {boolean}                 Whether the command was applicable
 */
-export function applyFenceOrBracket (target: EditorView, type: 'fence'|'bracket', attributes: string): boolean {
+export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', attributes: string): boolean {
   if (!viewContainsMarkdown(target)) {
     return false
   }
 
   switch (type) {
-    case 'fence': {
-      insertPandocFence(target, attributes)
+    case 'div': {
+      insertPandocDiv(target, attributes)
       break
     }
 
-    case 'bracket': {
+    case 'span': {
       applyInlineMarkup(target, '[', `]{${attributes}}`)
       break
     }

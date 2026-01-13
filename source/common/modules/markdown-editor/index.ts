@@ -76,7 +76,7 @@ import {
   insertImage,
   insertLink,
   formatPandocAttributes,
-  applyFenceOrBracket
+  applyPandocDivOrSpan
 } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
 
@@ -682,8 +682,8 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {string}  classes     Class attributes. Words are prepended with `.`
    * @param   {string}  attributes  Key=Value attributes.
    */
-  insertFence (type: 'fence'|'bracket', identifier: string, classes: string, attributes: string): void {
-    applyFenceOrBracket(this._instance, type, formatPandocAttributes(identifier, classes, attributes))
+  insertPandocDivOrSpan (type: 'div'|'span', identifier: string, classes: string, attributes: string): void {
+    applyPandocDivOrSpan(this._instance, type, formatPandocAttributes(identifier, classes, attributes))
   }
 
   /**

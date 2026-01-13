@@ -409,8 +409,8 @@ watch(toRef(props.editorCommands, 'insertFence'), () => {
   }
 
   const { type, identifiers, classes, attributes } = props.editorCommands.data
-  if ((type === 'fence' || type === 'bracket') && typeof identifiers === 'string' && typeof classes === 'string' && typeof attributes === 'string') {
-    currentEditor?.insertFence(type as 'fence'|'bracket', identifiers, classes, attributes)
+  if ((type === 'div' || type === 'span') && typeof identifiers === 'string' && typeof classes === 'string' && typeof attributes === 'string') {
+    currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', identifiers, classes, attributes)
   }
 })
 

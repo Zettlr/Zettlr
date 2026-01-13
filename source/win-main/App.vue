@@ -497,7 +497,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       id: 'markdownFence',
       title: trans('Insert Fence'),
       icon: 'drag-handle',
-      visible: getToolbarButtonDisplay('showMarkdownFenceButton')
+      visible: getToolbarButtonDisplay('showPandocDivSpanButton')
     },
     {
       type: 'button',

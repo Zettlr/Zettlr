@@ -227,7 +227,7 @@ export interface ConfigOptions {
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean
-    showMarkdownFenceButton: boolean
+    showPandocDivSpanButton: boolean
     showMarkdownCommentButton: boolean
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean
@@ -343,7 +343,7 @@ export function getConfigTemplate (): ConfigOptions {
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
-      highlightFormatting: 'span', // Can be 'span' or ==
+      highlightFormatting: '==', // Can be 'span' or ==
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
       showStatusbar: true,
       showFormattingToolbar: true,
@@ -484,7 +484,7 @@ export function getConfigTemplate (): ConfigOptions {
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,
-      showMarkdownFenceButton: true,
+      showPandocDivSpanButton: true,
       showMarkdownCommentButton: true,
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,
