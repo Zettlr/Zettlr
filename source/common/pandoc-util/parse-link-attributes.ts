@@ -89,7 +89,7 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
  *  "(?<quoted>[^"]*)"     => quoted values
  *  (?<unquoted>[^\s"]+)   => unquoted values
  */
-const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)(?:=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))?)/g
+const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
 
 /**
  * Parses a Pandoc link attribute string, as defined in

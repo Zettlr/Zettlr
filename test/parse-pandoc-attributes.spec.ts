@@ -46,7 +46,7 @@ const tests: Array<{ input: string, output: ParsedPandocAttributes|'logs-error' 
   }
 ]
 
-describe('Utility#parseLinkAttributes()', function () {
+describe('Utility#parsePandocAttributes()', function () {
   for (const test of tests) {
     // NOTE: Changed on January 10, 2026 by Hendrik Erz. Reason: Parsing link
     // attributes should not throw errors, since this function is also called in
