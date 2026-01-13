@@ -2,12 +2,14 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fix a bug where the preferences window would allow arbitrary tab sizes. Now,
+  tab sizes are bound between 2 and 10 (see #6131).
 
 ## Under the Hood
 
 - The FSAL Cache now consistently utilizes asynchronous filesystem operations
   (#5994).
+- Number controls in forms now allow for providing `min` and `max` values.
 
 # 4.1.0
 

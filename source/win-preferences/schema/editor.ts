@@ -295,6 +295,7 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           type: 'number',
           label: trans('Tab size (in number of spaces)'),
           inline: true,
+          min: 2, max: 10,
           model: 'editor.indentUnit'
         },
         {
