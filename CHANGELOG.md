@@ -6,7 +6,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- The FSAL Cache now consistently utilizes asynchronous filesystem operations
+  (#5994).
 
 # 4.1.0
 
