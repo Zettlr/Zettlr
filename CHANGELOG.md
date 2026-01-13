@@ -12,6 +12,8 @@
 - Fixed an issue that prevented opening Markdown files with tables that include
   Pandoc attribute strings when the TableEditor was enabled (#6110).
 - Fixed footnote tooltip rendering (#6107).
+- Fixed an issue preventing Zettlr from starting if the stats file contained
+  errors (#6127).
 - Improved link target extraction logic when following links (#6098).
 - Performance improvements when following links (#6072).
 - Hide reference link labels when previewing Markdown links (#6097).
@@ -37,6 +39,8 @@
   non-existing file paths, and I didn't like that). In rare situations, this
   change may close all your workspaces, in which case you would have to re-open
   them.
+- New utility function `disambiguateFile` that can be used to retrieve a
+  time-based non-existing path that can be used for backup purposes.
 - Added a new environment variable, `ZETTLR_DISABLE_UPDATE_CHECK`. If that
   variable is detected during build, this will hard-disable update checks in the
   application. This can be used by package maintainers to ensure update checks
