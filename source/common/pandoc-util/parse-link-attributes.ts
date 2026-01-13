@@ -1,7 +1,7 @@
 /**
  * Represents a parsed Pandoc LinkAttributes string (e.g., `{width=50%}`).
  */
-export interface ParsedPandocLinkAttributes {
+export interface ParsedPandocAttributes {
   /**
    * The ID, if present (`#id`)
    */
@@ -25,6 +25,62 @@ export interface ParsedPandocLinkAttributes {
   properties?: Record<string, string>
 }
 
+/**
+ * Formats a `PandocAttributes` object into a useable HTML string.
+ *
+ * @param attributes
+ */
+export function formatPandocAttributes (attributes: ParsedPandocAttributes): string {
+  const idString = attributes.id !== undefined ? '#' + attributes.id : ''
+  const classesString = attributes.classes !== undefined ? '.' + attributes.classes.join(' .') : ''
+
+  let propString = ''
+  if (attributes.width !== undefined) {
+    propString += ` width="${attributes.width}"`
+  }
+
+  if (attributes.height !== undefined) {
+    propString += ` height="${attributes.height}"`
+  }
+
+  if (attributes.properties) {
+    for (const key in attributes.properties) {
+      let val = attributes.properties[key]
+
+      if (key === 'style') {
+        if (attributes.width !== undefined) {
+          val += ` width: ${attributes.width};`
+        }
+        if (attributes.height !== undefined) {
+          val += ` height: ${attributes.height};`
+        }
+      }
+
+      if (val) {
+        val = `="${val}"`
+      }
+
+      propString += ` ${key}${val}`
+    }
+
+    if (!attributes.properties['style']) {
+      let style = ''
+      if (attributes.width !== undefined) {
+        style += ` width: ${attributes.width};`
+      }
+      if (attributes.height !== undefined) {
+        style += ` height: ${attributes.height};`
+      }
+
+      if (style) {
+        propString += ` style="${style}"`
+      }
+    }
+  }
+
+  return `${idString}${idString ? ' ' : '' + classesString}${propString}`
+}
+
 /** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
  *
  *  #(?<id>[\w\-_]+)       => id
@@ -33,7 +89,7 @@ export interface ParsedPandocLinkAttributes {
  *  "(?<quoted>[^"]*)"     => quoted values
  *  (?<unquoted>[^\s"]+)   => unquoted values
  */
-const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
+const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)(?:=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))?)/g
 
 /**
  * Parses a Pandoc link attribute string, as defined in
@@ -41,9 +97,9 @@ const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>
  *
  * @param   {string}  attrString  The attribute string (e.g., `{width=50%}`)
  *
- * @return  {ParsedPandocLinkAttributes}  The parsed string
+ * @return  {ParsedPandocAttributes}  The parsed string
  */
-export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttributes {
+export function parsePandocAttributes (attrString: string): ParsedPandocAttributes {
   attrString = attrString.trim()
   if (!attrString.startsWith('{') || !attrString.endsWith('}')) {
     // NOTE: In response to issue #6110, I realized that we really should not
@@ -57,7 +113,7 @@ export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttrib
 
   attrString = attrString.substring(1, attrString.length - 1)
 
-  const parsed: ParsedPandocLinkAttributes = {}
+  const parsed: ParsedPandocAttributes = {}
 
   let match
   while ((match = pandocAttributeRe.exec(attrString)) !== null) {
@@ -77,7 +133,7 @@ export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttrib
 
     if (match.groups.attr) {
       const key = match.groups.key
-      const value = match.groups.unquoted ?? match.groups.quoted
+      const value = match.groups.unquoted ?? match.groups.quoted ?? ''
 
       if (key.toLowerCase() === 'width') {
         parsed.width = value

@@ -92,7 +92,7 @@ function getToolbar (state: EditorState): Tooltip[] {
       // a transaction cycle that has re-rendered the tooltip.
       bold.onmousedown = function (event) { applyBold(view) }
       italic.onmousedown = function (event) { applyItalic(view) }
-      underline.onmousedown = function (event) { applyPandocDivOrSpan(view, 'span', '.underline') }
+      underline.onmousedown = function (event) { applyPandocDivOrSpan(view, 'span', { classes: ['underline'] }) }
       highlight.onmousedown = function (event) { applyHighlight(view) }
       strikethrough.onmousedown = function (event) { applyStrikethrough(view) }
       link.onmousedown = function (event) { insertLink(view) }

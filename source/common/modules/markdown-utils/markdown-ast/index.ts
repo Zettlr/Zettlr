@@ -38,7 +38,7 @@ import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'
 import { parseChildren } from './parse-children'
 import { nodeToCiteItem, type Citation } from '../../markdown-editor/parser/citation-parser'
-import { parseLinkAttributes } from '@common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes } from '@common/pandoc-util/parse-link-attributes'
 
 /**
  * Basic info every ASTNode needs to provide
@@ -864,7 +864,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const content = marks.length === 2 ? markdown.substring(marks[0].to, marks[1].from) : ''
 
       const attr = node.getChild('PandocAttribute')
-      const attributes = attr ? parseLinkAttributes(markdown.substring(attr.from, attr.to)) : {}
+      const attributes = attr ? parsePandocAttributes(markdown.substring(attr.from, attr.to)) : {}
 
       const info = node.getChild('PandocDivInfo')
       const divName = info ? markdown.substring(info.from, info.to) : ''
@@ -896,7 +896,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const content = marks.length === 2 ? markdown.substring(marks[0].to, marks[1].from) : ''
 
       const attr = node.getChild('PandocAttribute')
-      const attributes = attr ? parseLinkAttributes(markdown.substring(attr.from, attr.to)) : {}
+      const attributes = attr ? parsePandocAttributes(markdown.substring(attr.from, attr.to)) : {}
 
       const id = attributes.id ?? ''
       const classes = attributes.classes ?? ''

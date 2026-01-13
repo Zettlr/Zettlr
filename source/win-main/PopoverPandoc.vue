@@ -1,10 +1,10 @@
 <template>
   <PopoverWrapper v-bind:target="props.target" v-on:close="emit('close')">
-    <div class="fenced-div">
+    <div class="pandoc-div-span">
       <TabBar
         v-bind:tabs="tabs"
-        v-bind:current-tab="divType"
-        v-on:tab="divType = $event as 'fence'|'bracket'"
+        v-bind:current-tab="pandocType"
+        v-on:tab="pandocType = $event as 'div'|'span'"
       ></TabBar>
       <hr>
       <TextControl
@@ -26,7 +26,7 @@
       ></TextControl>
       <hr>
       <button v-on:click="handleClick">
-        {{ insertFenceButtonLabel }}
+        {{ insertPandocButtonLabel }}
       </button>
     </div>
   </PopoverWrapper>
@@ -60,10 +60,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'close'): void
-  (e: 'insert-fence', value: { type: string, identifiers: string, classes: string, attributes: string }): void
+  (e: 'insert-pandoc', value: { type: string, attributes: string }): void
 }>()
 
-const divType = ref<'fence'|'bracket'>('fence')
+const pandocType = ref<'div'|'span'>('div')
 
 const identifierQuery = ref('')
 const identifierPlaceholder: string = trans('#identifier')
@@ -74,22 +74,32 @@ const classesPlaceholder: string = trans('.classes')
 const attributesQuery = ref('')
 const attributesPlaceholder: string = trans('key=value')
 
-const insertFenceButtonLabel = computed(() => trans(`Insert ${divType.value === 'fence' ? 'Fenced Div' : 'Bracketed Span'}`))
+const insertPandocButtonLabel = computed(() => trans(`Insert ${pandocType.value === 'div' ? 'Fenced Div' : 'Bracketed Span'}`))
 
 const tabs: TabbarControl[] = [
-  { id: 'fence', label: trans('Fence'), target: 'fence' },
-  { id: 'bracket', label: trans('Bracket'), target: 'bracket' },
+  { id: 'div', label: trans('Div'), target: 'div' },
+  { id: 'span', label: trans('Span'), target: 'span' },
 ]
 
 function handleClick (): void {
-  emit('insert-fence', { type: divType.value, identifiers: identifierQuery.value, classes: classesQuery.value, attributes: attributesQuery.value })
+  const formatAttributes = (input: string, prefix: string, join: string = ' '): string =>
+    input
+      .trim()
+      .split(/\s+/)
+      .filter(word => word.trim() !== '')
+      .map(word => word.startsWith(prefix) ? word : prefix + word)
+      .join(join)
+
+  const pandocAttributesString: string = formatAttributes(`${formatAttributes(formatAttributes(identifierQuery.value, '', '-'), '#')} ${formatAttributes(classesQuery.value, '.')} ${attributesQuery.value}`, '')
+
+  emit('insert-pandoc', { type: pandocType.value, attributes: pandocAttributesString })
   emit('close')
 }
 </script>
 
 <style lang="less">
 body {
-  .fenced-div {
+  .pandoc-div-span {
     margin: 5px;
 
     .system-tablist {

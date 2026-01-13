@@ -75,7 +75,6 @@ import {
   applyTaskList,
   insertImage,
   insertLink,
-  formatPandocAttributes,
   applyPandocDivOrSpan
 } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
@@ -101,6 +100,7 @@ import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 import { moveSection } from './commands/move-section'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 
 export interface DocumentWrapper {
   path: string
@@ -682,8 +682,8 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {string}  classes     Class attributes. Words are prepended with `.`
    * @param   {string}  attributes  Key=Value attributes.
    */
-  insertPandocDivOrSpan (type: 'div'|'span', identifier: string, classes: string, attributes: string): void {
-    applyPandocDivOrSpan(this._instance, type, formatPandocAttributes(identifier, classes, attributes))
+  insertPandocDivOrSpan (type: 'div'|'span', attributes: string): void {
+    applyPandocDivOrSpan(this._instance, type, parsePandocAttributes(`{${attributes}}`))
   }
 
   /**

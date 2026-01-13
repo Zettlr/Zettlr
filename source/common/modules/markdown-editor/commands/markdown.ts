@@ -16,6 +16,7 @@ import { type ChangeSpec, EditorSelection } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { language } from '@codemirror/language'
+import { formatPandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 
 /**
  * Helper function that checks whether the provided target EditorView uses a
@@ -363,7 +364,7 @@ export function applyHighlight (target: EditorView): boolean {
   const markup: string = target.state.field(configField, false)?.highlightFormatting ?? '=='
 
   if (markup === 'span') {
-    applyPandocDivOrSpan(target, 'span', '.mark')
+    applyPandocDivOrSpan(target, 'span', { classes: ['mark'] })
   } else {
     applyInlineMarkup(target, markup, markup)
   }
@@ -567,33 +568,6 @@ export function applyTaskList (target: EditorView): boolean {
 }
 
 /**
- * Format the inputs into a string to be inserted into a
- * Pandoc attributes marker, `{#id .classes key=value}`.
- *
- * @param     {string}    identifier    The identifier to assign. Whitespace will
-*                                       be replaced by '-', and '#' will be prepended if
-*                                       it is not already
- * @param     {string}    classes       The classes to include. A '.' will be prepended to
- *                                      each word, split on whitespace, if it is not already
- * @param     {string}    attributes    Key=Value attributes to include.
- *
- * @returns   {string}                  The formatted string
- */
-export function formatPandocAttributes (identifier: string, classes: string, attributes: string): string {
-  const formatAttributes = (input: string, prefix: string, join: string = ' '): string =>
-    input
-      .trim()
-      .split(/\s+/)
-      .filter(word => word.trim() !== '')
-      .map(word => word.startsWith(prefix) ? word : prefix + word)
-      .join(join)
-
-  const pandocAttributes: string = formatAttributes(`${formatAttributes(formatAttributes(identifier, '', '-'), '#')} ${formatAttributes(classes, '.')} ${attributes}`, '')
-
-  return pandocAttributes
-}
-
-/**
  * Insert a fenced div or bracketed span
  *
  * @param   {EditorView}  target      The target view
@@ -602,19 +576,21 @@ export function formatPandocAttributes (identifier: string, classes: string, att
  *
  * @return  {boolean}                 Whether the command was applicable
 */
-export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', attributes: string): boolean {
+export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', attributes: ParsedPandocAttributes): boolean {
   if (!viewContainsMarkdown(target)) {
     return false
   }
 
+  const attributeString = formatPandocAttributes(attributes)
+
   switch (type) {
     case 'div': {
-      insertPandocDiv(target, attributes)
+      insertPandocDiv(target, attributeString)
       break
     }
 
     case 'span': {
-      applyInlineMarkup(target, '[', `]{${attributes}}`)
+      applyInlineMarkup(target, '[', `]{${attributeString}}`)
       break
     }
   }

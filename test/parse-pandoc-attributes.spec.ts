@@ -13,9 +13,9 @@
  */
 
 import { deepStrictEqual } from 'assert'
-import { ParsedPandocLinkAttributes, parseLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { ParsedPandocAttributes, parsePandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 
-const tests: Array<{ input: string, output: ParsedPandocLinkAttributes|'logs-error' }> = [
+const tests: Array<{ input: string, output: ParsedPandocAttributes|'logs-error' }> = [
   { input: 'width=50%', output: 'logs-error' }, // Missing braces. See NOTE below.
   { input: '{width=50%}', output: { width: '50%' } }, // Simple parsing
   { input: '{ width = 50% }', output: {} }, // Spaces between = not supported
@@ -61,13 +61,13 @@ describe('Utility#parseLinkAttributes()', function () {
         console.error = (...args) => {
           if (args[0] instanceof Error) hasLoggedError = true
         }
-        parseLinkAttributes(test.input)
+        parsePandocAttributes(test.input)
         deepStrictEqual(hasLoggedError, true)
         console.error = oldError
       })
     } else {
       it(`should parse the attribute string "${test.input}"`, function () {
-        deepStrictEqual(parseLinkAttributes(test.input), test.output)
+        deepStrictEqual(parsePandocAttributes(test.input), test.output)
       })
     }
   }

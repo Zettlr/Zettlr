@@ -397,7 +397,7 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
-watch(toRef(props.editorCommands, 'insertFence'), () => {
+watch(toRef(props.editorCommands, 'insertPandoc'), () => {
   if (props.activeFile?.path !== props.file.path || currentEditor === null) {
     return
   }
@@ -408,9 +408,9 @@ watch(toRef(props.editorCommands, 'insertFence'), () => {
     return
   }
 
-  const { type, identifiers, classes, attributes } = props.editorCommands.data
-  if ((type === 'div' || type === 'span') && typeof identifiers === 'string' && typeof classes === 'string' && typeof attributes === 'string') {
-    currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', identifiers, classes, attributes)
+  const { type, attributes } = props.editorCommands.data
+  if ((type === 'div' || type === 'span') && typeof attributes === 'string') {
+    currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', attributes)
   }
 })
 

@@ -23,7 +23,7 @@ import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
 import { syntaxTree } from '@codemirror/language'
-import { parseLinkAttributes, type ParsedPandocLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
 
 const ipcRenderer = window.ipc
 
@@ -82,7 +82,7 @@ class ImageWidget extends WidgetType {
     readonly imageUrl: string,
     readonly resolvedImageUrl: string,
     readonly altText: string,
-    readonly data: ParsedPandocLinkAttributes
+    readonly data: ParsedPandocAttributes
   ) {
     super()
   }
@@ -319,12 +319,12 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
   const url = state.sliceDoc(urlNode.from, urlNode.to)
 
-  let data: ParsedPandocLinkAttributes = {}
+  let data: ParsedPandocAttributes = {}
   const nextSibling = node.node.nextSibling
   if (nextSibling !== null && nextSibling.name === 'PandocAttribute') {
     try {
       const text = state.sliceDoc(nextSibling.from, nextSibling.to)
-      data = parseLinkAttributes(text)
+      data = parsePandocAttributes(text)
     } catch (err) {
       // Silently ignore error
     }
