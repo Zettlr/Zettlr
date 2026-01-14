@@ -102,6 +102,17 @@ function applySnippet (view: EditorView, completion: Completion, from: number, t
 }
 
 /**
+ * Helper function to calculate the cursor association
+ * based on whether any ranges are directly before `pos`
+ */
+function getAssociation (selections: EditorSelection[], pos: number|undefined): -1|1 {
+  const isAdjacent = selections
+    .some(sel => sel.ranges.some(r => r.to === pos))
+
+  return isAdjacent ? -1 : 1
+}
+
+/**
  * Used internally to add ranges for the snippets to the state
  */
 const snippetTabsEffect = StateEffect.define<EditorSelection[]>()
@@ -121,13 +132,15 @@ export const snippetsUpdate = StateEffect.define<Array<{ name: string, content: 
 interface SnippetStateField {
   availableSnippets: Completion[]
   activeSelections: EditorSelection[]
+  association: number
 }
 
 export const snippetsUpdateField = StateField.define<SnippetStateField>({
   create (_state) {
     return {
       availableSnippets: [],
-      activeSelections: []
+      activeSelections: [],
+      association: 1,
     }
   },
   update (val, transaction) {
@@ -144,6 +157,12 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         return { ...val }
       } else if (effect.is(snippetTabsEffect)) {
         val.activeSelections = effect.value
+
+        // Calculate the association when the effects come in
+        // because we need access to the current tab stop
+        // range, which is the `transaction.selection` value.
+        val.association = getAssociation(val.activeSelections, transaction.selection?.main.from)
+
         return { ...val }
       } else if (effect.is(shiftNextTabEffect)) {
         // NOTE: We cannot shift the range in the nextTab() command, as this
@@ -153,6 +172,8 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         // starts typing, which re-evaluates the length of the activeRanges
         // array.)
         val.activeSelections.shift()
+        val.association = getAssociation(val.activeSelections, transaction.selection?.main.from)
+
         return { ...val }
       }
     }
@@ -164,10 +185,23 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
     // This monstrosity ensures that our ranges stay in sync while the user types
     val.activeSelections = val.activeSelections
       .filter(selection => {
-        return selection.ranges.some(r => transaction.changes.mapPos(r.from, 1, r.empty ? MapMode.TrackAfter : MapMode.TrackDel) !== null)
+        return selection.ranges
+          .some(r => transaction.changes.mapPos(r.from, 1, r.empty ? MapMode.TrackAfter : MapMode.TrackDel) !== null)
       })
       .map(selection => {
-        return selection.map(transaction.changes, 1)
+        // Unforturnately, `selection.map` only applies the provided `assoc`
+        // value to empty ranges, so we have to reimplement the logic here
+        // for the association to apply correctly.
+        return EditorSelection.create(selection.ranges.map(range => {
+          const from = transaction.changes.mapPos(range.from, 1)
+          // The reason to change the association for the `range.to` position is
+          // so that the selection range of the tabstop expands when text is added
+          // to the end of the range. We do not need to do this for empty tabstops,
+          // as they should remain empty.
+          const to = transaction.changes.mapPos(range.to, range.empty ? 1 : val.association)
+
+          return EditorSelection.range(from, to)
+        }))
       })
 
     return { ...val }
