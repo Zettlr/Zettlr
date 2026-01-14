@@ -31,54 +31,39 @@ export interface ParsedPandocAttributes {
  * @param attributes
  */
 export function formatPandocAttributes (attributes: ParsedPandocAttributes): string {
-  const idString = attributes.id !== undefined ? '#' + attributes.id : ''
-  const classesString = attributes.classes !== undefined ? '.' + attributes.classes.join(' .') : ''
+  const parts: string[] = []
 
-  let propString = ''
+  if (attributes.id !== undefined) {
+    parts.push('#' + attributes.id)
+  }
+
+  if (attributes.classes !== undefined) {
+    parts.push(attributes.classes.map(v => '.' + v).join(' '))
+  }
+
   if (attributes.width !== undefined) {
-    propString += ` width="${attributes.width}"`
+    parts.push(`width="${attributes.width}"`)
   }
 
   if (attributes.height !== undefined) {
-    propString += ` height="${attributes.height}"`
+    parts.push(`height="${attributes.height}"`)
   }
 
-  if (attributes.properties) {
-    for (const key in attributes.properties) {
-      let val = attributes.properties[key]
-
-      if (key === 'style') {
-        if (attributes.width !== undefined) {
-          val += ` width: ${attributes.width};`
+  if (attributes.properties !== undefined) {
+    const properties = Object.entries(attributes.properties)
+      .map(([ key, value ]) => {
+        if (value !== undefined) {
+          return (`${key}="${value}"`)
         }
-        if (attributes.height !== undefined) {
-          val += ` height: ${attributes.height};`
-        }
-      }
 
-      if (val) {
-        val = `="${val}"`
-      }
+        return key
+      })
+      .join(' ')
 
-      propString += ` ${key}${val}`
-    }
-
-    if (!attributes.properties['style']) {
-      let style = ''
-      if (attributes.width !== undefined) {
-        style += ` width: ${attributes.width};`
-      }
-      if (attributes.height !== undefined) {
-        style += ` height: ${attributes.height};`
-      }
-
-      if (style) {
-        propString += ` style="${style}"`
-      }
-    }
+    parts.push(properties)
   }
 
-  return `${idString}${idString ? ' ' : '' + classesString}${propString}`
+  return parts.join(' ')
 }
 
 /** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
