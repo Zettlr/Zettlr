@@ -583,17 +583,15 @@ export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', at
 
   const attributeString = formatPandocAttributes(attributes)
 
-  switch (type) {
-    case 'div': {
-      insertPandocDiv(target, attributeString)
-      break
-    }
-
-    case 'span': {
-      applyInlineMarkup(target, '[', `]{${attributeString}}`)
-      break
-    }
+  if (type === 'div') {
+    insertPandocDiv(target, attributeString)
+    return true
   }
 
-  return true
+  if (type === 'span') {
+    applyInlineMarkup(target, '[', `]{${attributeString}}`)
+    return true
+  }
+
+  return false
 }
