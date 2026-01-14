@@ -135,12 +135,12 @@ export enum TaskStatus {
 export interface LRT_JSON {
   id: string
   status: TaskStatus
-  error: { name: string, message: string }|undefined
+  error?: { name: string, message: string }
   startTime: string
-  endTime: string|undefined
+  endTime?: string
   title: string
-  info: string|undefined
-  currentTaskPercentage: number|undefined
+  info?: string
+  currentTaskPercentage?: number
   abortable: boolean
 }
 
