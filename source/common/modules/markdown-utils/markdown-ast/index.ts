@@ -38,7 +38,7 @@ import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'
 import { parseChildren } from './parse-children'
 import { nodeToCiteItem, type Citation } from '../../markdown-editor/parser/citation-parser'
-import { parsePandocAttributes } from '@common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 /**
  * Basic info every ASTNode needs to provide

@@ -100,7 +100,7 @@ import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 import { moveSection } from './commands/move-section'
-import { parsePandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 export interface DocumentWrapper {
   path: string

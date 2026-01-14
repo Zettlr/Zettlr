@@ -14,7 +14,7 @@
  */
 
 import type { SyntaxNode } from '@lezer/common'
-import { parsePandocAttributes } from '@common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { type ASTNode, parseNode, type MDNode } from '../markdown-ast'
 import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'

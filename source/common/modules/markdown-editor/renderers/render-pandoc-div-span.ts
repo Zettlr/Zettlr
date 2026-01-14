@@ -17,7 +17,7 @@
 import { syntaxTree } from '@codemirror/language'
 import type { Range, RangeSet } from '@codemirror/state'
 import { Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
-import { parsePandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
 

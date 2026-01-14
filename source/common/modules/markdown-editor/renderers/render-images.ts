@@ -23,7 +23,7 @@ import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
 import { syntaxTree } from '@codemirror/language'
-import { parsePandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 const ipcRenderer = window.ipc
 

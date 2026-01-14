@@ -16,7 +16,7 @@ import { type ChangeSpec, EditorSelection } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { language } from '@codemirror/language'
-import { formatPandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { formatPandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 /**
  * Helper function that checks whether the provided target EditorView uses a

@@ -13,7 +13,7 @@
  */
 
 import { deepStrictEqual } from 'assert'
-import { ParsedPandocAttributes, parsePandocAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { ParsedPandocAttributes, parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 const tests: Array<{ input: string, output: ParsedPandocAttributes|'logs-error' }> = [
   { input: 'width=50%', output: 'logs-error' }, // Missing braces. See NOTE below.
