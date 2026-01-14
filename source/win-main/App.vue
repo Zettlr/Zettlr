@@ -116,12 +116,12 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
-  <PopoverFence
+  <PopoverPandoc
     v-if="showPandocPopover && pandocButton !== null"
     v-bind:target="pandocButton"
     v-on:close="showPandocPopover = false"
     v-on:insert-pandoc="insertPandoc($event)"
-  ></PopoverFence>
+  ></PopoverPandoc>
 </template>
 
 <script setup lang="ts">
@@ -152,7 +152,7 @@ import PopoverTags from './PopoverTags.vue'
 import PopoverPomodoro from './PopoverPomodoro.vue'
 import PopoverTable from './PopoverTable.vue'
 import PopoverDocInfo from './PopoverDocInfo.vue'
-import PopoverFence from './PopoverPandoc.vue'
+import PopoverPandoc from './PopoverPandoc.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
