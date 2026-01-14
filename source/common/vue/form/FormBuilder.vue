@@ -202,6 +202,8 @@ interface TextField extends BasicInfo {
 
 interface NumberField extends BasicInfo {
   type: 'number'
+  min?: number
+  max?: number
   reset?: number
 }
 

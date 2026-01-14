@@ -175,6 +175,7 @@ export default class FSAL extends ProviderContract {
 
     // Regardless of the event, it will invalidate that particular cache entry.
     this._cache.del(absPath)
+      .catch(err => this._logger.error(`[FSAL Cache] Failed to delete key: ${absPath}`, err))
 
     // In unlink-events, there won't be a descriptor.
     if (event === 'unlink' || event === 'unlinkDir') {
@@ -396,7 +397,7 @@ export default class FSAL extends ProviderContract {
    */
   public async shutdown (): Promise<void> {
     this._logger.verbose('FSAL shutting down ...')
-    this._cache.persist()
+    await this._cache.persist()
   }
 
   /**
@@ -752,7 +753,7 @@ export default class FSAL extends ProviderContract {
    */
   public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor> {
     if (avoidDiskAccess) {
-      const cacheHit = this._cache.get(absPath)
+      const cacheHit = await this._cache.get(absPath)
       if (cacheHit !== undefined) {
         return cacheHit
       }

@@ -2,15 +2,55 @@
 
 ## GUI and Functionality
 
+- Fix a bug where the preferences window would allow arbitrary tab sizes. Now,
+  tab sizes are bound between 2 and 10 (see #6131).
+- Update `ja-JP` translation (#6132).
+
+## Under the Hood
+
+- The FSAL Cache now consistently utilizes asynchronous filesystem operations
+  (#5994).
+- Number controls in forms now allow for providing `min` and `max` values.
+
+# 4.1.0
+
+## Read Before Updating
+
+In this version, we perform a long-planned configuration change that affects
+your loaded workspaces and files. Before installing this update, please take
+note of which workspaces and files you have open, in case they are being closed
+through this update. (No data will be actually deleted, but this helps you avoid
+having to search for the folders.)
+
+In addition, it is crucial to remember that once you update to this version,
+**there is no turning back**. If you decide to downgrade to a previous version,
+your files and workspaces *will* be closed, and you will have to re-open them
+afterwards.
+
+## GUI and Functionality
+
+- **Feature**: You can now collapse YAML frontmatters and Pandoc divs (#6115).
+- **Feature**: Zettlr now remembers folded regions as long as the window remains
+  open, even when you close a document (#6115).
 - **Change**: Due to a configuration change, downgrading Zettlr (which we
   generally discourage) after updating to this version will lead to your
   workspaces being closed.
 - Fixed XCode Command Line Tools setup dialog on macOS (#5428).
+- Fixed an issue that prevented opening Markdown files with tables that include
+  Pandoc attribute strings when the TableEditor was enabled (#6110).
+- Fixed footnote tooltip rendering (#6107).
+- Fixed an issue preventing Zettlr from starting if the stats file contained
+  errors (#6127).
+- Improved link target extraction logic when following links (#6098).
 - Performance improvements when following links (#6072).
+- Hide reference link labels when previewing Markdown links (#6097).
 - Improved performance on generating the preview-bibliography in the sidebar by
-  collecting citation keys from the document only in the main process.
+  collecting citation keys from the document only in the main process (#6068).
 - Improved math parsing to fix certain cases (#6030).
+- Relaxed filename restrictions for loading custom dictionaries (#6126).
+- Improved Pandoc div parsing (#6120).
 - Update `de-DE` translation (#6081).
+- Update `ja-JP` translation (#6086).
 
 ## Under the Hood
 
@@ -26,6 +66,8 @@
   non-existing file paths, and I didn't like that). In rare situations, this
   change may close all your workspaces, in which case you would have to re-open
   them.
+- New utility function `disambiguateFile` that can be used to retrieve a
+  time-based non-existing path that can be used for backup purposes.
 - Added a new environment variable, `ZETTLR_DISABLE_UPDATE_CHECK`. If that
   variable is detected during build, this will hard-disable update checks in the
   application. This can be used by package maintainers to ensure update checks
@@ -50,6 +92,8 @@
   Pandoc (e.g., by listing it as a dependency for Zettlr). This also means that
   the build environment does not require the dependencies that are specifically
   for the download script.
+- fix: The Pandoc Attribute parser does not throw an error on malformed
+  attribute strings anymore, and instead just returns an empty record (#6110).
 
 # 4.0.0
 

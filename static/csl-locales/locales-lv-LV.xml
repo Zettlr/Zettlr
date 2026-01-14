@@ -726,18 +726,18 @@
     <term name="translator" form="verb-short">tulk.</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">janvārī</term>
-    <term name="month-02">februārī</term>
-    <term name="month-03">martā</term>
-    <term name="month-04">aprīlī</term>
-    <term name="month-05">maijā</term>
-    <term name="month-06">jūnijā</term>
-    <term name="month-07">jūlijā</term>
-    <term name="month-08">augustā</term>
-    <term name="month-09">septembrī</term>
-    <term name="month-10">oktobrī</term>
-    <term name="month-11">novembrī</term>
-    <term name="month-12">decembrī</term>
+    <term name="month-01">janvāris</term>
+    <term name="month-02">februāris</term>
+    <term name="month-03">marts</term>
+    <term name="month-04">aprīlis</term>
+    <term name="month-05">maijs</term>
+    <term name="month-06">jūnijs</term>
+    <term name="month-07">jūlijs</term>
+    <term name="month-08">augusts</term>
+    <term name="month-09">septembris</term>
+    <term name="month-10">oktobris</term>
+    <term name="month-11">novembris</term>
+    <term name="month-12">decembris</term>
 
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">janv.</term>
