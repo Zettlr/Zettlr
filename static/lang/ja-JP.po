@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 4.0.0-beta.5\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2025-12-26 10:38+0000\n"
-"PO-Revision-Date: 2026-01-02 17:30+0900\n"
+"PO-Revision-Date: 2026-01-14 13:28+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -3402,7 +3402,7 @@ msgstr "ファイルを開く…"
 #: source/app/service-providers/menu/menu.win32.ts:195
 #: source/app/service-providers/menu/menu.darwin.ts:232
 msgid "Import files…"
-msgstr "ンポート…"
+msgstr "インポート…"
 
 #: source/app/service-providers/menu/menu.win32.ts:203
 #: source/app/service-providers/menu/menu.darwin.ts:240
