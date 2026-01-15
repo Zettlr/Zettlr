@@ -4,8 +4,11 @@
     <translator>
       <name>Guttorm Flatabø</name>
     </translator>
+    <translator>
+      <name>Stian Øby Johansen</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-01-14T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -57,19 +60,19 @@
     <term name="presented at">presentert på</term>
     <term name="radio-broadcast">radiosending</term>
     <term name="radio-series">radioserie</term>
-    <term name="radio-series-episode">radioserie-episode</term>
+    <term name="radio-series-episode">radioserieepisode</term>
     <term name="reference">
       <single>referanse</single>
-      <multiple>referanse</multiple>
+      <multiple>referanser</multiple>
     </term>
     <term name="retrieved">hentet</term>
-    <term name="review-of">review of</term>
+    <term name="review-of">anmeldelse av</term>
     <term name="scale">målestokk</term>
     <term name="special-issue">spesialutgave</term>
     <term name="special-section">spesialseksjon</term>
     <term name="television-broadcast">fjernsynssending</term>
     <term name="television-series">fjernsynsserie</term>
-    <term name="television-series-episode">fjernsynsserie-episode</term>
+    <term name="television-series-episode">fjernsynsserieepisode</term>
     <term name="video">video</term>
     <term name="working-paper">notat</term>
 
@@ -144,9 +147,9 @@
 
     <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">høring av</term>
+    <term name="review" form="verb">anmeldelse av</term>
+    <term name="review-book" form="verb">anmeldelse av boken</term>
 
     <!-- SHORT VERB ITEM TYPE FORMS -->
 
@@ -349,12 +352,12 @@
 
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>kapittel</single>
+      <multiple>kapitler</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>note</single>
+      <multiple>noter</multiple>
     </term>
     <term name="collection-number">
       <single>nummer</single>
@@ -365,39 +368,39 @@
       <multiple>utgave</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>referanse</single>
+      <multiple>referanser</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>nummer</single>
+      <multiple>nummer</multiple>
     </term>
     <term name="number-of-pages">
       <single>side</single>
       <multiple>sider</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>bind</single>
+      <multiple>bind</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>side</single>
+      <multiple>sider</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>opplag</single>
+      <multiple>opplag</multiple>
     </term>
     <term name="version">versjon</term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>kap.</single>
+      <multiple>kap.</multiple>
     </term>
     <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
+      <single>note</single>
+      <multiple>note</multiple>
     </term>
     <term name="collection-number" form="short">nr.</term>
     <term name="edition" form="short">utg.</term>
@@ -406,24 +409,24 @@
       <multiple>refs.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>nr.</single>
+      <multiple>nr.</multiple>
     </term>
     <term name="number-of-pages" form="short">
       <single>s.</single>
       <multiple>s.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
+      <single>bind</single>
+      <multiple>bind</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>s.</single>
+      <multiple>s.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <single>oppl.</single>
+      <multiple>oppl.</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
@@ -433,8 +436,8 @@
       <multiple>ledere</multiple>
     </term>
     <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>red.</single>
+      <multiple>red.</multiple>
     </term>
     <term name="compiler">
       <single>kompilator</single>
@@ -459,12 +462,12 @@
       <multiple>redaktører</multiple>
     </term>
     <term name="editor-translator">
-      <single>redaktør &amp; oversetter</single>
-      <multiple>redaktører &amp; oversettere</multiple>
+      <single>redaktør og oversetter</single>
+      <multiple>redaktører og oversettere</multiple>
     </term>
     <term name="editortranslator">
-      <single>redaktør &amp; oversetter</single>
-      <multiple>redaktører &amp; oversettere</multiple>
+      <single>redaktør og oversetter</single>
+      <multiple>redaktører og oversettere</multiple>
     </term>
     <term name="editorial-director">
       <single>redaktør</single>
@@ -529,12 +532,12 @@
       <multiple>red.</multiple>
     </term>
     <term name="editor-translator" form="short">
-      <single>red. &amp; overs.</single>
-      <multiple>red. &amp; overs.</multiple>
+      <single>red. og overs.</single>
+      <multiple>red. og overs.</multiple>
     </term>
     <term name="editortranslator" form="short">
-      <single>red. &amp; overs.</single>
-      <multiple>red. &amp; overs.</multiple>
+      <single>red. og overs.</single>
+      <multiple>red. og overs.</multiple>
     </term>
     <term name="editorial-director" form="short">
       <single>red.</single>
@@ -570,8 +573,8 @@
     <term name="curator" form="verb">kuratert av</term>
     <term name="director" form="verb">regissert av</term>
     <term name="editor" form="verb">redigert av</term>
-    <term name="editor-translator" form="verb">redigert &amp; oversatt av</term>
-    <term name="editortranslator" form="verb">redigert &amp; oversatt av</term>
+    <term name="editor-translator" form="verb">redigert og oversatt av</term>
+    <term name="editortranslator" form="verb">redigert og oversatt av</term>
     <term name="editorial-director" form="verb">redigert av</term>
     <term name="executive-producer" form="verb">utøvende produsert av</term>
     <term name="guest" form="verb">med gjest</term>
@@ -589,11 +592,11 @@
     <term name="translator" form="verb">oversatt av</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="collection-editor" form="verb-short">red. av</term>
     <term name="director" form="verb-short">regi</term>
     <term name="editor" form="verb-short">red.</term>
-    <term name="editor-translator" form="verb-short">red. &amp; overs. av</term>
-    <term name="editortranslator" form="verb-short">red. &amp; overs. av</term>
+    <term name="editor-translator" form="verb-short">red. og overs. av</term>
+    <term name="editortranslator" form="verb-short">red. og overs. av</term>
     <term name="editorial-director" form="verb-short">red.</term>
     <term name="executive-producer" form="verb-short">utøv. prod. av</term>
     <term name="illustrator" form="verb-short">illus.</term>
