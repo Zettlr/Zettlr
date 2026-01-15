@@ -6,6 +6,7 @@
   tab sizes are bound between 2 and 10 (see #6131).
 - Fixed links not registering clicks when they are pre-rendered within table
   cells of the TableEditor (#4557).
+- Fix application of custom tag classes.
 - Update `ja-JP` translation (#6132).
 
 ## Under the Hood
