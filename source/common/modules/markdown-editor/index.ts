@@ -362,7 +362,7 @@ export default class MarkdownEditor extends EventEmitter {
             }
             event.preventDefault()
             return true
-          } else if ([ 'ZknLinkContent', 'ZknLinkTitle', 'ZknLinkPipe' ].includes(nodeAt.type.name)) {
+          } else if ([ 'ZknLinkContent', 'ZknLinkTitle', 'ZknLinkPipe', 'ZknLinkMark' ].includes(nodeAt.type.name)) {
             // We found a Zettelkasten link!
             event.preventDefault()
             // In these cases, nodeAt.parent is always a ZettelkastenLink
@@ -372,9 +372,10 @@ export default class MarkdownEditor extends EventEmitter {
               editorInstance.emit('zettelkasten-link', linkContents)
             }
             return true
-          } else if (nodeAt.type.name === 'ZknTagContent') {
+          } else if (nodeAt.type.name === 'ZknTag') {
             // A tag!
-            const tagContents = view.state.sliceDoc(nodeAt.from, nodeAt.to)
+            const mark = nodeAt.getChild('ZknTagMark')
+            const tagContents = view.state.sliceDoc(mark ? mark.to : nodeAt.from, nodeAt.to)
             editorInstance.emit('zettelkasten-tag', tagContents)
             event.preventDefault()
             return true
