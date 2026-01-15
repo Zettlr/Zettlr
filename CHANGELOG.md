@@ -13,6 +13,7 @@
 - Fix syntax highlighting in code blocks, frontmatters, etc. Now, Zettlr assigns
   more default-colors of the solarized code syntax theme. In addition, regular
   text is now more readable, especially in light mode.
+- Fixes and improvements to the toolbar styling; simplify CSS rules.
 - Update `ja-JP` translation (#6132).
 
 ## Under the Hood

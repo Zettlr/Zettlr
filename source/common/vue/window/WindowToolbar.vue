@@ -10,7 +10,7 @@
     v-on:mousedown="$event.preventDefault()"
   >
     <button
-      v-if="canScrollLeft"
+      v-if="canScroll"
       class="toolbar-overflow left"
       v-on:click="scrollLeft"
     >
@@ -74,7 +74,7 @@
       </template>
     </div>
     <button
-      v-if="canScrollRight"
+      v-if="canScroll"
       class="toolbar-overflow right"
       v-on:click="scrollRight"
     >
@@ -127,14 +127,12 @@ const emit = defineEmits<{
 const hasRTLTrafficLights = ref<boolean>(false)
 
 const scrollArea = ref<HTMLDivElement|null>(null)
-const canScrollLeft = ref(false)
-const canScrollRight = ref(false)
+const canScroll = ref(false)
 
 function checkOverflow () {
   if (scrollArea.value) {
     const sa = scrollArea.value
-    canScrollLeft.value = sa.scrollLeft > 0
-    canScrollRight.value = Math.ceil(sa.scrollLeft + sa.clientWidth) < sa.scrollWidth
+    canScroll.value = sa.scrollWidth > sa.clientWidth
   }
 }
 
@@ -179,15 +177,14 @@ function handleDoubleClick (event: MouseEvent): void {
 <style lang="less">
 body div#toolbar {
   height: 40px;
-  padding: 0px 10px;
+  padding: 5px 10px;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: 10px;
+  justify-content: space-between;
   position: relative;
 
   .toolbar-scroll {
     display: flex;
+    gap: 5px;
     flex: 1;
     overflow-x: auto;
     scrollbar-width: none;
@@ -198,26 +195,16 @@ body div#toolbar {
     }
   }
 
+  button cds-icon {
+    width: 16px;
+    height: 16px;
+  }
+
   .toolbar-overflow {
-    position: absolute;
-    top: 0;
-    bottom: 0;
     width: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
-
-    &.left {
-      left: 0;
-      height: auto;
-      background-color: inherit;
-    }
-    &.right {
-      right: 0;
-      height: auto;
-      background-color: inherit;
-    }
   }
 
   div.spacer {
@@ -238,7 +225,6 @@ body div#toolbar {
   }
 
   button {
-    flex-grow: 1;
     cursor: pointer;
   }
 }
@@ -259,15 +245,9 @@ body.darwin {
     // Make space for the traffic lights, either on the left side or the right.
     &:not(.has-rtl-traffic-lights) {
       padding-left: 80px;
-      .toolbar-overflow.left {
-        left: 80px;
-      }
     }
     &.has-rtl-traffic-lights {
       padding-right: 80px;
-      .toolbar-overflow.right {
-        right: 80px;
-      }
     }
 
     color: rgb(100, 100, 100);
@@ -278,7 +258,7 @@ body.darwin {
       border: none;
       padding: 4px 8px;
 
-      &:hover {
+      &:hover, &.toolbar-overflow {
         background-color: rgb(230, 230, 230);
       }
     }
@@ -290,8 +270,8 @@ body.darwin {
       background-color: rgb(51, 51, 51);
       color: rgb(172, 172, 172);
 
-      button:hover {
-        background-color: rgb(60, 60, 60,);
+      button:hover, button.toolbar-overflow {
+        background-color: rgb(60, 60, 60);
       }
 
       &:window-inactive {
@@ -317,7 +297,7 @@ body.win32 {
       border: none;
       padding: 4px 8px;
 
-      &:hover {
+      &:hover, &.toolbar-overflow {
         background-color: rgb(230, 230, 230);
       }
     }
@@ -329,10 +309,10 @@ body.win32 {
       background-color: rgb(51, 51, 51);
       color: rgb(172, 172, 172);
 
-      button{
+      button {
         color: white;
 
-        &:hover {
+        &:hover, &.toolbar-overflow {
           background-color: rgb(60, 60, 60,);
         }
       }
@@ -365,7 +345,7 @@ body.linux {
       height: 25px;
       margin: 0 4px;
 
-      &:hover {
+      &:hover, &.toolbar-overflow {
         background-color: rgb(230, 230, 230);
       }
     }
@@ -380,7 +360,7 @@ body.linux {
       button{
         color: white;
 
-        &:hover {
+        &:hover, &.toolbar-overflow {
           background-color: rgb(60, 60, 60,);
         }
       }
