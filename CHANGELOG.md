@@ -13,6 +13,7 @@
 
 - The FSAL Cache now consistently utilizes asynchronous filesystem operations
   (#5994).
+- Refactor Zettelkasten link and tag parsing (#5997).
 - Number controls in forms now allow for providing `min` and `max` values.
 
 # 4.1.0

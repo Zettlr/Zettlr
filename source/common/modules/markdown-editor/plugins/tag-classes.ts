@@ -54,7 +54,7 @@ function retrieveTagClasses (view: EditorView, tagCache: Map<string, Decoration>
 
         const tagName = view.state.sliceDoc(mark.to, node.to)
         const cssSafeTagName = cssSafeString(tagName)
-        const cssClass = `cm-tkn-tag-${cssSafeTagName}`
+        const cssClass = `cm-zkn-tag-${cssSafeTagName}`
 
         const deco = tagCache.get(cssClass) ?? Decoration.mark({ class: cssClass })
         if (!tagCache.has(cssClass)) {
