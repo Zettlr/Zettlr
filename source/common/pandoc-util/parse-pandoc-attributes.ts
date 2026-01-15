@@ -70,17 +70,13 @@ const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>
  */
 export function parsePandocAttributes (attrString: string): ParsedPandocAttributes {
   attrString = attrString.trim()
-  if (!attrString.startsWith('{') || !attrString.endsWith('}')) {
-    // NOTE: In response to issue #6110, I realized that we really should not
-    // throw the error here, because this function is also called in certain
-    // contexts (here: With the TableEditor active) where throwing this error
-    // would completely abort parsing of an entire file. So we only log it and
-    // return an empty Record.
-    console.error(new Error('Invalid Pandoc link attributes string: Not surrounded by curly braces'))
-    return {}
+  if (attrString.startsWith('{')) {
+    attrString = attrString.slice(1)
   }
 
-  attrString = attrString.substring(1, attrString.length - 1)
+  if (attrString.endsWith('}')) {
+    attrString = attrString.slice(0, -1)
+  }
 
   const parsed: ParsedPandocAttributes = {}
 

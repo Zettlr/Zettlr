@@ -683,7 +683,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {string}  attributes  Key=Value attributes.
    */
   insertPandocDivOrSpan (type: 'div'|'span', attributes: string): void {
-    applyPandocDivOrSpan(this._instance, type, parsePandocAttributes(`{${attributes}}`))
+    applyPandocDivOrSpan(this._instance, type, parsePandocAttributes(attributes))
   }
 
   /**
