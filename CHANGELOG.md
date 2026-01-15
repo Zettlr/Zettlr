@@ -10,6 +10,9 @@
 - Fixed a bug that would not correctly apply the `code` class to segments of
   code in some circumstances (primarily when adding YAML front matters or
   comments).
+- Fix syntax highlighting in code blocks, frontmatters, etc. Now, Zettlr assigns
+  more default-colors of the solarized code syntax theme. In addition, regular
+  text is now more readable, especially in light mode.
 - Update `ja-JP` translation (#6132).
 
 ## Under the Hood

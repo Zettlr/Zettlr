@@ -64,9 +64,9 @@ const renderCodePlugin = ViewPlugin.fromClass(class {
 const BASE_1 = '#93a1a1'
 // const BASE_2 = '#eee8d5'
 // const BASE_3 = '#fdf6e3'
-// const BASE_00 = '#657b83'
+const BASE_00 = '#657b83'
 // const BASE_01 = '#586e75'
-// const BASE_02 = '#073642'
+const BASE_02 = '#073642'
 // const BASE_03 = '#002b36'
 
 const YELLOW = '#b58900'
@@ -79,34 +79,62 @@ const CYAN = '#2aa198'
 const GREEN = '#859900'
 
 const codeTheme = EditorView.baseTheme({
-
   '.code': {
-    color: BASE_1,
+    color: BASE_02,
     fontFamily: 'Inconsolata, monospace'
   },
+
+  // Sort based on color; roughly sort based on function of the class.
   '.code .cm-string': { color: GREEN },
   '.code .cm-keyword': { color: GREEN },
   '.code .cm-inserted': { color: GREEN },
   '.code .cm-positive': { color: GREEN },
+
+  '.code .cm-control-keyword': { color: VIOLET },
   '.code .cm-atom': { color: VIOLET },
+  '.code .cm-color': { color: VIOLET },
   '.code .cm-number': { color: VIOLET },
-  '.code .cm-meta': { color: VIOLET },
+  '.code .cm-integer': { color: VIOLET },
+  '.code .cm-bool': { color: VIOLET },
+  
+  '.code .cm-property': { color: MAGENTA },
+  '.code .cm-operator': { color: MAGENTA },
+  '.code .cm-compare-operator': { color: MAGENTA },
+  '.code .cm-arithmetic-operator': { color: MAGENTA },
+  '.code .cm-self': { color: MAGENTA },
+  
+  '.code .cm-operator-keyword': { color: BLUE },
+  '.code .cm-definition-keyword': { color: BLUE },
+  '.code .cm-module-keyword': { color: BLUE },
+  '.code .cm-null': { color: BLUE },
+  '.code .cm-meta': { color: BLUE },
+  '.code .cm-unit': { color: BLUE },
+  '.code .cm-qualifier': { color: BLUE },
+  '.code .cm-builtin': { color: BLUE },
+  '.code .cm-property-name': { color: BLUE },
+
   '.code .cm-tag-name': { color: CYAN },
   '.code .cm-modifier': { color: CYAN },
   '.code .cm-variable-name': { color: CYAN },
   '.code .cm-variable': { color: CYAN },
-  '.code .cm-qualifier': { color: BLUE },
-  '.code .cm-builtin': { color: BLUE },
-  '.code .cm-property-name': { color: BLUE },
+
   '.code .cm-attribute-name': { color: ORANGE },
-  '.code .cm-deleted': { color: ORANGE },
+  '.code .cm-regexp': { color: ORANGE },
+  
   '.code .cm-name': { color: YELLOW },
+  '.code .cm-class-name': { color: YELLOW },
   '.code .cm-type-name': { color: YELLOW },
   '.code .cm-changed': { color: YELLOW },
-  '.code .cm-property': { color: MAGENTA },
-  '.code .cm-comment': { color: BASE_1 },
-  '.code .cm-block-comment': { color: BASE_1 },
+  
+  '.code .cm-comment': { color: BASE_00 },
+  '.code .cm-line-comment': { color: BASE_00 },
+  '.code .cm-block-comment': { color: BASE_00 },
+  
+  '.code .cm-deleted': { color: RED },
   '.code .cm-negative': { color: RED },
+  '.code .cm-invalid': { color: RED },
+
+  '&dark .code': { color: BASE_1 },
 })
 
 export const renderCode = [
