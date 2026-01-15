@@ -104,8 +104,8 @@ class ImageWidget extends WidgetType {
     const defaultHeight = (!Number.isNaN(imagePreviewHeight) && imagePreviewHeight < 100) ? `${imagePreviewHeight}vh` : ''
 
     // Normalize the local width/height arguments
-    const normWidth = normalizeSize(this.data.width)
-    const normHeight = normalizeSize(this.data.height)
+    const normWidth = normalizeSize(this.data.properties?.width)
+    const normHeight = normalizeSize(this.data.properties?.height)
     // Generate maxWidth/height properties
     const maxWidth = normWidth !== undefined ? `min(${normWidth}, ${defaultWidth})` : defaultWidth
     const maxHeight = normHeight !== undefined ? `min(${normHeight}, ${defaultHeight})` : defaultHeight

@@ -11,14 +11,6 @@ export interface ParsedPandocAttributes {
    */
   classes?: string[]
   /**
-   * The `width`-property, if present
-   */
-  width?: string
-  /**
-   * The `height`-property, if present
-   */
-  height?: string
-  /**
    * Any additional properties. NOTE: This parser does not, unlike Pandoc's
    * parser, distinguish between HTML5 properties and custom-properties.
    */
@@ -39,14 +31,6 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
 
   if (attributes.classes !== undefined) {
     parts.push(attributes.classes.map(v => '.' + v).join(' '))
-  }
-
-  if (attributes.width !== undefined) {
-    parts.push(`width="${attributes.width}"`)
-  }
-
-  if (attributes.height !== undefined) {
-    parts.push(`height="${attributes.height}"`)
   }
 
   if (attributes.properties !== undefined) {
@@ -118,22 +102,18 @@ export function parsePandocAttributes (attrString: string): ParsedPandocAttribut
 
     if (match.groups.attr) {
       const key = match.groups.key
-      const value = match.groups.unquoted ?? match.groups.quoted ?? ''
+      let value = match.groups.unquoted ?? match.groups.quoted ?? ''
 
       if (key.toLowerCase() === 'width') {
-        parsed.width = value
         if (/^\d+$/.test(value)) {
-          parsed.width += 'px'
+          value += 'px'
         }
-        continue
       }
 
       if (key.toLowerCase() === 'height') {
-        parsed.height = value
         if (/^\d+$/.test(value)) {
-          parsed.height += 'px'
+          value += 'px'
         }
-        continue
       }
 
       if (parsed.properties === undefined) {

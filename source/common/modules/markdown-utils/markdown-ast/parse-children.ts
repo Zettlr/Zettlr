@@ -79,14 +79,6 @@ function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}
     oldAttributes.class = attributes.classes
   }
 
-  if (attributes.width !== undefined) {
-    oldAttributes.width = attributes.width
-  }
-
-  if (attributes.height !== undefined) {
-    oldAttributes.height = attributes.height
-  }
-
   return {
     ...oldAttributes,
     ...attributes.properties,
