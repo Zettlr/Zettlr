@@ -27,7 +27,7 @@ function getCodeHighlighter (view: EditorView): RangeSet<Decoration> {
       to,
       enter: (node) => {
         // CodeText contains a single node that has all the code's contents
-        if (node.name === 'CodeText' || node.name === 'InlineCode') {
+        if ([ 'CodeText', 'InlineCode' ].includes(node.name) && node.from < node.to) {
           ranges.push(codeDecorator.range(node.from, node.to))
           return false
         }

@@ -7,6 +7,9 @@
 - Fixed links not registering clicks when they are pre-rendered within table
   cells of the TableEditor (#4557).
 - Fix application of custom tag classes.
+- Fixed a bug that would not correctly apply the `code` class to segments of
+  code in some circumstances (primarily when adding YAML front matters or
+  comments).
 - Update `ja-JP` translation (#6132).
 
 ## Under the Hood
