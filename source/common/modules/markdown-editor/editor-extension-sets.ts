@@ -47,7 +47,6 @@ import { typewriter } from './plugins/typewriter'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
 import { type EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
-import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'
 import { json, jsonParseLinter } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
@@ -352,7 +351,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
-    jsonFolding,
     json(),
     linter(jsonParseLinter())
   ]
