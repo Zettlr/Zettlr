@@ -153,12 +153,29 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
   }
 
   actions.push({
-    name: trans('Add Word'),
+    name: trans('Add'),
     markClass: 'cm-hunspellAddWordAction',
     apply (view) {
       ipcRenderer.invoke(
         'dictionary-provider',
         { command: 'add', terms: [saneTerm] }
+      ).catch(err => console.error(err))
+
+      view.dispatch({ effects: [
+        hunspellChangesEffect.of({ from: 0, to: view.state.doc.length }),
+        hideLinterToolTipEffect.of(true),
+        refreshLinterEffect.of(true)
+      ] })
+    }
+  })
+
+  actions.push({
+    name: trans('Ignore'),
+    markClass: 'cm-hunspellIgnoreWordAction',
+    apply (view) {
+      ipcRenderer.invoke(
+        'dictionary-provider',
+        { command: 'ignore', terms: [saneTerm] }
       ).catch(err => console.error(err))
 
       view.dispatch({ effects: [
