@@ -62,7 +62,7 @@
                 >
                 </NumberControl>
                 <TextControl
-                  v-else
+                  v-else-if="typeof column === 'string'"
                   v-bind:model-value="column"
                   v-bind:inline="true"
                   v-on:escape="finishEditing()"
@@ -105,7 +105,7 @@
           </tr>
         </template>
         <!-- If users may add something, allow them to do so here -->
-        <tr v-if="addable">
+        <tr v-if="addable" v-bind:key="rowCount">
           <td v-for="(colLabel, colIdx) in columnLabels" v-bind:key="colIdx">
             <Checkbox
               v-if="columnType(colIdx) === 'boolean'"
@@ -171,7 +171,7 @@ import { computed, onBeforeUpdate, ref } from 'vue'
 /**
  * What types of values can our cells have?
  */
-export type SupportedValues = boolean|string|number
+export type SupportedValues = boolean|string|number|undefined
 
 /**
  * If the user passes a record, we need a Record of our SupportedValues
@@ -218,6 +218,11 @@ const props = defineProps<{
    * indices indicating which are editable.
    */
   editable?: boolean | number[]
+  /**
+   * Controls whether a field is optional.
+   * Similar to `editable`
+   */
+  optional?: boolean | number[]
   /**
    * Whether rows are deletable (default: false)
    */
@@ -275,6 +280,8 @@ const columnCount = computed<number>(() => {
   }
 })
 
+const rowCount = computed<number>(() => props.modelValue.length)
+
 /**
  * Returns modelValue coerced to a simpleArray, or undefined if it is not.
  *
@@ -326,7 +333,7 @@ const objectKeys = computed<string[]|undefined>(() => {
 
   if (props.keyNames.length > 0) {
     return props.keyNames
-  } else if (props.modelValue.length > 0) {
+  } else if (props.modelValue[0] !== undefined) {
     return Object.keys(props.modelValue[0])
   } else {
     return undefined
@@ -401,7 +408,11 @@ function columnValues (element: SupportedRecord|SupportedValues[]|SupportedValue
     return element // It's already an array
   } else {
     // Return all object values
-    return Object.values(element)
+    if (!objectKeys.value) {
+      return Object.values(element)
+    }
+
+    return objectKeys.value.map(key => element[key])
   }
 }
 
@@ -419,6 +430,23 @@ function isColumnEditable (columnIndex: number): boolean {
     return props.editable // All or nothing
   } else {
     return props.editable.includes(columnIndex)
+  }
+}
+
+/**
+ * Determines if the given column is required
+ *
+ * @param   {number}   columnIndex  The column to check
+ *
+ * @return  {boolean}               Whether the column is required
+ */
+function isColumnOptional (columnIndex: number): boolean {
+  if (props.optional === undefined) {
+    return false
+  } else if (typeof props.optional === 'boolean') {
+    return props.optional // All or nothing
+  } else {
+    return props.optional.includes(columnIndex)
   }
 }
 
@@ -577,16 +605,18 @@ function handleAddition (): void {
     newValue.push(newValues.map(x => x))
     emit('update:modelValue', newValue)
   } else if (record !== undefined && objectKeys.value !== undefined) {
-    if (objectKeys.value.length !== newValues.length) {
-      console.error('Cannot add new record: Didn\'t receive the right amount of values to add.')
-      return
-    }
-
     const newValue = record.map(elem => Object.assign({}, elem))
     const keys = objectKeys.value
     const newObject: SupportedRecord = {}
     for (let i = 0; i < keys.length; i++) {
-      newObject[keys[i]] = newValues[i]
+      const newVal = newValues[i]
+
+      if (isColumnOptional(i) && newVal === undefined) {
+        console.error('Cannot add new record: Didn\'t receive the right amount of values to add.')
+        return
+      }
+
+      newObject[keys[i]] = newVal
     }
 
     newValue.push(newObject)
