@@ -23,6 +23,7 @@ import { EditorView, type ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
 import { ensureSyntaxTree } from '@codemirror/language'
+import type { DictionaryRecord } from 'source/app/service-providers/dictionary'
 
 const ipcRenderer = window.ipc
 
@@ -35,9 +36,9 @@ function refreshUserDictionary (): void {
   ipcRenderer.invoke(
     'dictionary-provider',
     { command: 'get-user-dictionary' }
-  ).then((dictionary: string[]) => {
-    for (const word of dictionary) {
-      userDictionary.add(word)
+  ).then((dictionary: DictionaryRecord[]) => {
+    for (const rec of dictionary) {
+      userDictionary.add(rec.word)
     }
   }).catch(console.error)
 }
