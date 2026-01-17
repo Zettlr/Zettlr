@@ -14,6 +14,7 @@
 
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
+import type { DictionaryRecord } from '../dictionary'
 
 export default class UpdateUserDictionary extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -26,7 +27,7 @@ export default class UpdateUserDictionary extends ZettlrCommand {
     * @param  {Object} arg An array containing a new user dictionary.
     * @return {Boolean} Whether or not the call succeeded
     */
-  async run (evt: string, arg: string[]): Promise<boolean> {
+  async run (evt: string, arg: DictionaryRecord[]): Promise<boolean> {
     return this._app.dictionary.setUserDictionary(arg)
   }
 }

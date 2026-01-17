@@ -67,13 +67,17 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
       fields: [
         {
           type: 'list',
-          valueType: 'simpleArray',
+          valueType: 'record',
+          keyNames: [ 'word', 'affix' ],
+          columnLabels: [ trans('Word'), trans('Affixes') ],
           model: 'userDictionaryContents',
-          columnLabels: [trans('Dictionary entry')],
           deletable: true,
+          addable: true,
+          optional: [1],
+          editable: false,
           searchable: true,
           searchLabel: trans('Search for entries …'),
-          striped: true
+          striped: true,
         }
       ]
     },

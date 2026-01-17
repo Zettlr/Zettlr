@@ -243,6 +243,7 @@ interface ListField extends BasicInfo {
   columnLabels: string[]
   striped?: boolean
   addable?: boolean
+  optional?: boolean | number[]
   editable?: boolean | number[]
   deletable?: boolean
   deleteLabel?: string
