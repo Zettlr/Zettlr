@@ -164,12 +164,15 @@ const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
 
 export const renderPandoc = [
   pandocDivSpanPlugin,
-  // The classes `.mark`, `.underline`, and `.smallcaps` are used by pandoc
   EditorView.baseTheme({
     // This must be set to `display: block` so that the
     // attributes are applied correctly.
     'pandoc-div-wrapper': {
-      display: 'block'
+      display: 'block !important',
+      // Prevent user-provided styling from altering the dom-layout
+      flex: 'initial !important',
+      height: 'initial !important',
+      width: 'initial !important',
     },
     'pandoc-div-info-wrapper': {
       display: 'block',
@@ -182,6 +185,7 @@ export const renderPandoc = [
     '&dark pandoc-div-info-wrapper': {
       backgroundColor: '#2b2b2c',
     },
+    // The classes `.mark`, `.underline`, and `.smallcaps` are used by pandoc spans
     '.mark .cm-pandoc-span': {
       backgroundColor: '#ffff0080',
     },
