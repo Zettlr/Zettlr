@@ -55,16 +55,30 @@ class PilcrowWidget extends WidgetType {
 // The widget should appear last, so we set it to the highest side
 const pilcrowDeco = Decoration.widget({ widget: new PilcrowWidget(), side: 10000 })
 
+const EXCLUDED_NODES = [
+  'CodeText',
+  'CodeBlock',
+  'FencedCode',
+  'YAMLFrontmatter',
+  'PandocDivMark',
+  'PandocDivInfo',
+  'PandocAttribute'
+]
+
 function showLineEndings (view: EditorView): DecorationSet {
   const builder = new RangeSetBuilder<Decoration>()
   for (const { from, to } of view.visibleRanges) {
     for (let pos = from; pos <= to;) {
       const line = view.state.doc.lineAt(pos)
-      const node = syntaxTree(view.state).resolve(line.to, -1)
-      if (![ 'CodeText', 'CodeBlock', 'FencedCode' ].includes(node.name)) {
-        builder.add(line.to, line.to, pilcrowDeco)
-      }
       pos = line.to + 1
+
+      const node = syntaxTree(view.state).resolve(line.to, -1)
+
+      if (EXCLUDED_NODES.includes(node.name) || (node.parent && EXCLUDED_NODES.includes(node.parent.name))) {
+        continue
+      }
+
+      builder.add(line.to, line.to, pilcrowDeco)
     }
   }
   return builder.finish()
