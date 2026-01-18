@@ -688,7 +688,7 @@ function maybeHighlightSearchResults (): void {
   }
 
   .cm-content {
-    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
+    overflow-x: visible !important; // Necessary to hide the horizontal scrollbar
   }
 }
 

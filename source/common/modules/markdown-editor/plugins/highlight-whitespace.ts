@@ -91,8 +91,16 @@ const pilcrowPlugin = ViewPlugin.fromClass(class {
 
 const pilcrowTheme = EditorView.baseTheme({
   '.cm-pilcrow': {
+    // By setting `display: inline-block` and
+    // `width: 0px`, we exclude the pilcrow
+    // from wrapping to the next line
+    display: 'inline-block',
+    width: '0px',
+    // Overrides styling from the `visual-indent` plugin
+    textIndent: 'initial',
+    // Styling
     color: '#aaa',
-    opacity: '0.5'
+    opacity: '0.5',
   }
 })
 
