@@ -16,6 +16,7 @@
 - Fixes and improvements to the toolbar styling; simplify CSS rules.
 - Made toolbar icons slightly larger.
 - Update `ja-JP` translation (#6132).
+- Fixed "Learn more" link on the citation page in the onboarding window (#6138).
 
 ## Under the Hood
 
