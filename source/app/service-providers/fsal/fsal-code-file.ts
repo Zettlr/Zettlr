@@ -41,23 +41,6 @@ async function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache)
   await cacheAdapter.set(origFile.path, structuredClone(origFile))
 }
 
-/**
- * Updates the file metadata (such as modification time) from lstat.
- *
- * @param   {Object}  fileObject  The object to be updated
- * @return  {void}              Does not return
- */
-async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void> {
-  try {
-    const metadata = await getFilesystemMetadata(fileObject.path)
-    fileObject.modtime = metadata.modtime
-    fileObject.size = metadata.size
-  } catch (err: any) {
-    err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message)}`
-    throw err
-  }
-}
-
 function parseFileContents (file: CodeFileDescriptor, content: string): void {
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
@@ -143,24 +126,4 @@ export async function load (fileObject: CodeFileDescriptor): Promise<string> {
     // standardized to whatever the linefeed extractor detected.
     .split(/\r\n|\n\r|\n|\r/g)
     .join('\n')
-}
-
-/**
- * Saves the provided file content. NOTE: The file content should only use
- * newlines, since the file will be de-normalized only here.
- *
- * @param   {CodeFileDescriptor}  fileObject  The file descriptor
- * @param   {string}              content     The new content
- * @param   {FSALCache|null}      cache       The cache object
- */
-export async function save (fileObject: CodeFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
-  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
-  await fs.writeFile(fileObject.path, safeContent)
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  // Make sure to keep the file object itself as well as the tags updated
-  parseFileContents(fileObject, safeContent)
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
 }

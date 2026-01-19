@@ -41,23 +41,6 @@ async function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): 
 }
 
 /**
- * Updates the file metadata (such as modification time) from lstat.
- *
- * @param   {Object}  fileObject  The object to be updated
- * @return  {void}              Does not return
- */
-async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> {
-  try {
-    const metadata = await getFilesystemMetadata(fileObject.path)
-    fileObject.modtime = metadata.modtime
-    fileObject.size = metadata.size
-  } catch (err: any) {
-    err.message = `Could not update the metadata for file ${fileObject.name}: ${err.message as string}`
-    throw err
-  }
-}
-
-/**
  * Parses an absolute file path into a file descriptor, applying cache if appropriate
  *
  * @param   {string}                     filePath  The absolute file path
@@ -172,31 +155,4 @@ export async function load (fileObject: MDFileDescriptor): Promise<string> {
     // standardized to whatever the linefeed extractor detected.
     .split(/\r\n|\n\r|\n|\r/g)
     .join('\n')
-}
-
-/**
- * Saves the content into the given file descriptor. NOTE: The file contents
- * must be using exclusively newlines.
- *
- * @param   {MDFileDescriptor}  fileObject  The file descriptor
- * @param   {string}            content     The content to be written to file
- * @param   {FSALCache}         cache       The cache descriptor
- *
- * @return  {Promise<void>}                 Resolves upon save.
- */
-export async function save (
-  fileObject: MDFileDescriptor,
-  content: string,
-  parser: (file: MDFileDescriptor, content: string) => void,
-  cache: FSALCache|null
-): Promise<void> {
-  // Make sure to retain the BOM if applicable, and use the correct linefeed.
-  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
-  await fs.writeFile(fileObject.path, safeContent)
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  parser(fileObject, safeContent)
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
 }
