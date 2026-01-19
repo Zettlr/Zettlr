@@ -80,11 +80,6 @@ export interface MDFileDescriptor extends FSMetaInfo {
   yamlTitle: string|undefined
   frontmatter: any|null
   linefeed: string
-  /**
-   * Whether the file has been modified by Zettlr.
-   * @deprecated Because this should be computed based on the documents provider.
-   */
-  modified: boolean
 }
 
 /**
@@ -95,11 +90,6 @@ export interface CodeFileDescriptor extends FSMetaInfo {
   type: 'code'
   bom: string // An optional BOM
   linefeed: string
-  /**
-   * Whether the file has been modified by Zettlr.
-   * @deprecated Because this should be computed based on the documents provider.
-   */
-  modified: boolean
 }
 
 /**

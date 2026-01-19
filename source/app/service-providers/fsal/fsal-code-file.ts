@@ -15,7 +15,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import searchFile from './util/search-file'
-import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import type { CodeFileDescriptor } from '@dts/common/fsal'
@@ -81,8 +80,7 @@ export async function parse (
     type: 'code',
     modtime: 0, // Modification time
     creationtime: 0, // Creation time
-    linefeed: '\n',
-    modified: false // If true, it has been modified in the renderer
+    linefeed: '\n'
   }
 
   // In any case, we need the most recent times.
@@ -147,11 +145,6 @@ export async function load (fileObject: CodeFileDescriptor): Promise<string> {
     .join('\n')
 }
 
-export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise<boolean> {
-  let stat = await fs.lstat(fileObject.path)
-  return stat.mtime.getTime() !== fileObject.modtime
-}
-
 /**
  * Saves the provided file content. NOTE: The file content should only use
  * newlines, since the file will be de-normalized only here.
@@ -167,56 +160,6 @@ export async function save (fileObject: CodeFileDescriptor, content: string, cac
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   parseFileContents(fileObject, safeContent)
-  fileObject.modified = false // Always reset the modification flag.
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
-}
-
-export async function rename (fileObject: CodeFileDescriptor, cache: FSALCache|null, newName: string): Promise<void> {
-  let oldPath = fileObject.path
-  let newPath = path.join(fileObject.dir, newName)
-  await fs.rename(oldPath, newPath)
-  // Now update the object
-  fileObject.path = newPath
-  fileObject.name = newName
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
-}
-
-export async function remove (fileObject: CodeFileDescriptor, deleteOnFail: boolean): Promise<void> {
-  try {
-    await shell.trashItem(fileObject.path)
-  } catch (err: any) {
-    if (deleteOnFail) {
-      // If this function throws, there's really something off and we shouldn't recover.
-      await fs.unlink(fileObject.path)
-    } else {
-      err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
-      throw err
-    }
-  }
-}
-
-export function markDirty (fileObject: CodeFileDescriptor): void {
-  fileObject.modified = true
-}
-
-export function markClean (fileObject: CodeFileDescriptor): void {
-  fileObject.modified = false
-}
-
-export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache: FSALCache|null): Promise<void> {
-  // Almost the same, except we don't write anything
-  const contents = await load(fileObject)
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  // Make sure to keep the file object itself as well as the tags updated
-  parseFileContents(fileObject, contents)
-  fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     await cacheFile(fileObject, cache)
   }

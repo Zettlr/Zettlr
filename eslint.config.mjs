@@ -99,6 +99,7 @@ export default [
       // Disallow unused variables, except for when they are named "event",
       // start with an underscore, are errors in try-catch blocks, or
       // destructured arrays.
+      '@typescript-eslint/no-unused-expressions': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

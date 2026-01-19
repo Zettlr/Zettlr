@@ -15,7 +15,6 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import type { OtherFileDescriptor } from '@dts/common/fsal'
-import { shell } from 'electron'
 import type FSALCache from './fsal-cache'
 
 export async function parse (absPath: string, cache: FSALCache): Promise<OtherFileDescriptor> {
@@ -46,25 +45,4 @@ export async function parse (absPath: string, cache: FSALCache): Promise<OtherFi
   }
 
   return attachment
-}
-
-export async function reparseChangedFile (attachment: OtherFileDescriptor): Promise<void> {
-  let stat = await fs.lstat(attachment.path)
-  attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
-  attachment.creationtime = stat.birthtime.getTime()
-  attachment.size = stat.size
-}
-
-export async function remove (fileObject: OtherFileDescriptor, deleteOnFail: boolean): Promise<void> {
-  try {
-    await shell.trashItem(fileObject.path)
-  } catch (err: any) {
-    if (deleteOnFail) {
-      // If this function throws, there's really something off and we shouldn't recover.
-      await fs.unlink(fileObject.path)
-    } else {
-      err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
-      throw err
-    }
-  }
 }

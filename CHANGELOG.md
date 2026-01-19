@@ -30,6 +30,8 @@
 - Increased strictness of the `@typescript-eslint/no-explicit-any` rule from
   "off" (no checking) to "warn" to slowly start migrating away from any
   remaining `any` uses in the wild.
+- Removed a lot of dead code in the FSAL in preparation for another
+  optimization.
 
 # 4.1.0
 
