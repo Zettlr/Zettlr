@@ -16,6 +16,9 @@
 - Fixes and improvements to the toolbar styling; simplify CSS rules.
 - Made toolbar icons slightly larger.
 - Update `ja-JP` translation (#6132).
+- Fixed a bug that would not accept custom height constraints via Pandoc
+  attributes for images if the maximum image height was set to 100% in the
+  settings.
 - Fixed "Learn more" link on the citation page in the onboarding window (#6138).
 
 ## Under the Hood
