@@ -27,6 +27,9 @@
   (#5994).
 - Refactor Zettelkasten link and tag parsing (#5997).
 - Number controls in forms now allow for providing `min` and `max` values.
+- Increased strictness of the `@typescript-eslint/no-explicit-any` rule from
+  "off" (no checking) to "warn" to slowly start migrating away from any
+  remaining `any` uses in the wild.
 
 # 4.1.0
 

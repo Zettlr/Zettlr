@@ -91,8 +91,9 @@ export default [
         prefer: 'type-imports', fixStyle: 'separate-type-imports'
       } ],
 
-      // We do use explicit anys at certain points
-      '@typescript-eslint/no-explicit-any': 'off',
+      // Currently, there are about 260 uses of `any`. NOTE January 19, 2026:
+      // Moved from "off" to "warn" to start making the type system more strict.
+      '@typescript-eslint/no-explicit-any': 'warn',
       // Avoid the use of `delete`
       '@typescript-eslint/no-dynamic-delete': 'error',
       // Disallow unused variables, except for when they are named "event",
