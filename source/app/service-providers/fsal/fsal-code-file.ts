@@ -22,7 +22,7 @@ import type FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 import { extractLinefeed } from './util/extract-linefeed'
-import { type SearchTerm } from 'source/types/common/search'
+import type { SearchResult, SearchTerm } from 'source/types/common/search'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -101,7 +101,7 @@ export async function parse (
   return file
 }
 
-export async function search (fileObject: CodeFileDescriptor, terms: SearchTerm[]): Promise<any> {
+export async function search (fileObject: CodeFileDescriptor, terms: SearchTerm[]): Promise<SearchResult[]> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
