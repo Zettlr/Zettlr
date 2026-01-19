@@ -13,9 +13,9 @@
  */
 
 import path from 'path'
-import { promises as fs } from 'fs'
 import type { OtherFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
+import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 export async function parse (absPath: string, cache: FSALCache): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
@@ -30,11 +30,10 @@ export async function parse (absPath: string, cache: FSALCache): Promise<OtherFi
   }
 
   try {
-    // Get lstat
-    let stat = await fs.lstat(absPath)
-    attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
-    attachment.creationtime = stat.birthtime.getTime()
-    attachment.size = stat.size
+    const metadata = await getFilesystemMetadata(absPath)
+    attachment.modtime = metadata.modtime
+    attachment.creationtime = metadata.birthtime
+    attachment.size = metadata.size
   } catch (err: any) {
     err.message = `Error reading file ${absPath};: ${err.message as string}`
     throw err // Rethrow
