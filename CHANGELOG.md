@@ -20,6 +20,8 @@
   attributes for images if the maximum image height was set to 100% in the
   settings.
 - Fixed "Learn more" link on the citation page in the onboarding window (#6138).
+- Fixed an issue that would make the file search crash on Windows, if a
+  workspace was located at a volume root (#6142).
 
 ## Under the Hood
 
