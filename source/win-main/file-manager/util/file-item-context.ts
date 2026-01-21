@@ -14,13 +14,13 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
-import type { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
+import type { AnyFileDescriptor, IncompleteFileDescriptor } from '@dts/common/fsal'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-export function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
+export function displayFileContext (event: MouseEvent, fileObject: AnyFileDescriptor|IncompleteFileDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
   const configStore = useConfigStore()
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
@@ -73,7 +73,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
       label: trans('Copy ID'),
       id: 'menu.copy_id',
       type: 'normal',
-      enabled: fileObject.type === 'file' && fileObject.id !== ''
+      enabled: fileObject.type === 'file' && fileObject.complete && fileObject.id !== ''
     },
     {
       type: 'separator'
@@ -106,7 +106,7 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
         navigator.clipboard.writeText(fileObject.path).catch(err => console.error(err))
         break
       case 'menu.copy_id':
-        if (fileObject.type === 'file') {
+        if (fileObject.type === 'file' && fileObject.complete) {
           navigator.clipboard.writeText(fileObject.id).catch(err => console.error(err))
         }
         break

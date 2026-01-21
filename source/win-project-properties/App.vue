@@ -162,7 +162,7 @@ import FileControl from '@common/vue/form/elements/FileControl.vue'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
 import { ref, computed, watch, onMounted } from 'vue'
-import type { ProjectSettings, DirDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import type { ProjectSettings, DirDescriptor, MDFileDescriptor, CodeFileDescriptor, IncompleteFileDescriptor } from '@dts/common/fsal'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
@@ -233,7 +233,7 @@ const projectSettings = ref<ProjectSettings>({
 const descriptor = computed(() => workspaceStore.descriptorMap.get(dirPath))
 
 // Holds all available files inside the directory
-const availableFiles = computed<Array<MDFileDescriptor|CodeFileDescriptor>>(() => {
+const availableFiles = computed(() => {
   if (descriptor.value === undefined || descriptor.value.type !== 'directory') {
     return []
   }
@@ -243,7 +243,7 @@ const availableFiles = computed<Array<MDFileDescriptor|CodeFileDescriptor>>(() =
   return workspaceStore.pathList
     .filter(p => p.startsWith(absPath))
     .map(f => workspaceStore.descriptorMap.get(f))
-    .filter(d => d !== undefined && (d.type === 'code' || d.type === 'file'))
+    .filter((d): d is MDFileDescriptor|CodeFileDescriptor|(IncompleteFileDescriptor & { type: 'code'|'file' }) => d !== undefined && (d.type === 'code' || d.type === 'file'))
 })
 
 // Returns a list of all files, prepared for enabling the user to add/remove
@@ -254,7 +254,7 @@ const exportFileList = computed(() => {
 
   for (const file of availableFiles.value) {
     let basename = pathBasename(file.path)
-    if (file.type === 'file') {
+    if (file.type === 'file' && file.complete) {
       if (useTitle.value && file.yamlTitle !== undefined) {
         basename = file.yamlTitle
       } else if (useH1.value && file.firstHeading !== null) {

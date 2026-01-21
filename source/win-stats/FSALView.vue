@@ -220,7 +220,7 @@ const boxPlotData = computed(() => {
 })
 
 const stats = computed(() => {
-  const allDescriptors = [...workspaceStore.descriptorMap.values()]
+  const allDescriptors = [...workspaceStore.descriptorMap.values()].filter(d => d.complete)
   return generateStats(allDescriptors)
 })
 

@@ -16,7 +16,7 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { type Ref, ref, watch, computed } from 'vue'
 import { useConfigStore } from './config'
-import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsal'
+import type { OtherFileDescriptor, AnyDescriptor, IncompleteDescriptor } from 'source/types/common/fsal'
 import { useDocumentTreeStore } from '.'
 import { isAbsolutePath, pathDirname, pathExtname, resolvePath } from 'source/common/util/renderer-path-polyfill'
 import { trans } from 'source/common/i18n-renderer'
@@ -68,7 +68,7 @@ async function readDirectory (absPath: string): Promise<AnyDescriptor[]> {
 
 // In order to avoid frequent updates of the workspaceMap on initial load, we
 // retrieve the bulk immediately on load, and then only patch where necessary.
-async function retrieveInitialUpdate (rootPaths: string[], workspaceMap: Ref<Map<string, string[]>>, descriptorMap: Ref<Map<string, AnyDescriptor>>) {
+async function retrieveInitialUpdate (rootPaths: string[], workspaceMap: Ref<Map<string, string[]>>, descriptorMap: Ref<Map<string, AnyDescriptor|IncompleteDescriptor>>) {
   let start = Date.now()
   const entries: Array<[string, string[]]> = []
   const flatMap: string[] = []
@@ -102,8 +102,8 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
   const workspaceMap = ref<Map<string, string[]>>(new Map())
   const pathList = computed(() => ([...workspaceMap.value.values()].flat()))
-  const descriptorMap = ref<Map<string, AnyDescriptor>>(new Map())
-  const rootDescriptors = ref<AnyDescriptor[]>([])
+  const descriptorMap = ref<Map<string, AnyDescriptor|IncompleteDescriptor>>(new Map())
+  const rootDescriptors = ref<Array<AnyDescriptor|IncompleteDescriptor>>([])
 
   const isLoading = ref(true)
 

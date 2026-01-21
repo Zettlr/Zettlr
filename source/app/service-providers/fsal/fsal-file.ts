@@ -56,6 +56,7 @@ export async function parse (
 ): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
+    complete: true,
     dir: path.dirname(filePath), // Containing dir
     path: filePath,
     name: path.basename(filePath),

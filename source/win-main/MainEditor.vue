@@ -41,7 +41,7 @@ import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import type { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { CodeFileDescriptor, DirDescriptor, IncompleteDirDescriptor, IncompleteFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
@@ -287,13 +287,13 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
 function updateProjectInfo (): ProjectInfo|null {
   // If this file is part of a project, the project must be defined in any
   // containing folder -> traverse up the file tree until we have found one.
-  let dir = workspaceStore.descriptorMap.get(pathDirname(props.file.path)) as DirDescriptor|undefined
+  let dir = workspaceStore.descriptorMap.get(pathDirname(props.file.path)) as DirDescriptor|IncompleteDirDescriptor|undefined
 
-  while (dir !== undefined && dir.settings.project === null) {
+  while (dir !== undefined && dir.complete && dir.settings.project === null) {
     dir = workspaceStore.descriptorMap.get(dir.dir) as DirDescriptor|undefined
   }
 
-  if (dir === undefined || dir.settings.project === null) {
+  if (dir === undefined || !dir.complete || dir.settings.project === null) {
     return null // No project found in the tree
   }
 
@@ -304,10 +304,8 @@ function updateProjectInfo (): ProjectInfo|null {
   }
 
   const extractedMetadata = absPaths
-    .map(p => {
-      return workspaceStore.descriptorMap.get(p)
-    })
-    .filter (d => d !== undefined && d.type === 'file')
+    .map(p => workspaceStore.descriptorMap.get(p))
+    .filter (d => d !== undefined && d.type === 'file' && d.complete)
     .map(d => {
       return {
         wordCount: d.wordCount,
@@ -396,8 +394,11 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
-const fsalFiles = computed<MDFileDescriptor[]>(() => {
-  return [...workspaceStore.descriptorMap.values()].filter(d => d.type === 'file')
+const fsalFiles = computed<Array<(IncompleteFileDescriptor & { type: 'file' })|MDFileDescriptor>>(() => {
+  return [...workspaceStore.descriptorMap.values()]
+  // We need an explicit type guard here. I suspect the type composition between
+  // Vue and our descriptors is a bit too much for TS.
+    .filter((d): d is (IncompleteFileDescriptor & { type: 'file' })|MDFileDescriptor => d.type === 'file')
 })
 
 // WATCHERS
@@ -605,15 +606,17 @@ async function updateFileDatabase (): Promise<void> {
   // First, add all existing files to the database ...
   for (const file of fsalFiles.value) {
     let displayName = pathBasename(file.name, file.ext)
-    if (useTitle.value && file.yamlTitle !== undefined) {
-      displayName = file.yamlTitle
-    } else if (useH1.value && file.firstHeading !== null) {
-      displayName = file.firstHeading
+    if (file.complete) {
+      if (useTitle.value && file.yamlTitle !== undefined) {
+        displayName = file.yamlTitle
+      } else if (useH1.value && file.firstHeading !== null) {
+        displayName = file.firstHeading
+      }
     }
     fileDatabase.push({
       filename: pathBasename(file.name, file.ext),
       displayName,
-      id: file.id
+      id: file.complete ? file.id : ''
     })
   }
 

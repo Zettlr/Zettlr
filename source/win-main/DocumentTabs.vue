@@ -356,9 +356,9 @@ function getTabText (doc: OpenDocument): string {
 
   if (file.type !== 'file') {
     return file.name
-  } else if (useTitle.value && file.yamlTitle !== undefined) {
+  } else if (useTitle.value && file.complete && file.yamlTitle !== undefined) {
     return file.yamlTitle
-  } else if (useH1.value && file.firstHeading != null) {
+  } else if (useH1.value && file.complete && file.firstHeading != null) {
     return file.firstHeading
   } else if (displayMdExtensions.value) {
     return file.name
@@ -527,7 +527,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
         command: 'show-item-in-folder',
         payload: { itemPath: descriptor.path }
       } as WindowControlsIPCAPI)
-    } else if (clickedID === 'copy-id' && descriptor.type === 'file') {
+    } else if (clickedID === 'copy-id' && descriptor.type === 'file' && descriptor.complete) {
       // Copy the ID to the clipboard
       navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
     } else if (clickedID === 'pin-tab') {

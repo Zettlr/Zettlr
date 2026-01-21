@@ -54,6 +54,7 @@ export async function parse (
 ): Promise<CodeFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: CodeFileDescriptor = {
+    complete: true,
     dir: path.dirname(filePath), // Containing dir
     path: filePath,
     name: path.basename(filePath),

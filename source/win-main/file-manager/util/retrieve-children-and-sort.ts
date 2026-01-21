@@ -1,5 +1,5 @@
 import type { GenericSorter } from 'source/common/util/directory-sorter'
-import type { AnyDescriptor } from 'source/types/common/fsal'
+import type { AnyDescriptor, IncompleteDescriptor } from 'source/types/common/fsal'
 
 /**
  * Utility function that recursively sorts the various contained directories
@@ -11,13 +11,13 @@ import type { AnyDescriptor } from 'source/types/common/fsal'
  *
  * @return  {AnyDescriptor[]}                    The sorted list of descriptors.
  */
-export function retrieveChildrenAndSort (descriptor: AnyDescriptor, allDescriptors: AnyDescriptor[], sorter: GenericSorter): AnyDescriptor[] {
+export function retrieveChildrenAndSort (descriptor: AnyDescriptor|IncompleteDescriptor, allDescriptors: Array<AnyDescriptor|IncompleteDescriptor>, sorter: GenericSorter): Array<AnyDescriptor|IncompleteDescriptor> {
   if (descriptor.type !== 'directory') {
     return [descriptor]
   }
 
   const directDescendants = allDescriptors.filter(d => d.dir === descriptor.path)
-  const sortedDescendants = sorter(directDescendants, descriptor.settings.sorting)
+  const sortedDescendants = descriptor.complete ? sorter(directDescendants, descriptor.settings.sorting) : []
   return [
     descriptor,
     ...sortedDescendants.flatMap(d => retrieveChildrenAndSort(d, allDescriptors, sorter))

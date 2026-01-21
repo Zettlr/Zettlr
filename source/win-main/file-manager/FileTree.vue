@@ -118,7 +118,6 @@ import { ref, computed } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
-import type { AnyDescriptor } from 'source/types/common/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
@@ -224,9 +223,7 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
 
   // Fourth, sort them recursively so that the list is the same as what the file
   // tree will see
-  const retValue: AnyDescriptor[] = [
-    ...getFiles.value
-  ]
+  const retValue = [...getFiles.value]
 
   const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
   const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)

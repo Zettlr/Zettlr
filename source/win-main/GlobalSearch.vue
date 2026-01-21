@@ -329,7 +329,7 @@ function startSearch (overrideQuery?: string): void {
     .map(d => {
       const root = rootPaths.value.find(p => d.path.startsWith(p))
       let displayName = d.name
-      if (d.type === 'file') {
+      if (d.type === 'file' && d.complete) {
         if (useTitle.value && d.frontmatter != null && typeof d.frontmatter.title === 'string') {
           displayName = d.frontmatter.title
         } else if (useH1.value && d.firstHeading !== null) {

@@ -18,7 +18,7 @@
             We display the outer div always as a placeholder to have the word
             count flush right, even if we don't have a git repository
           -->
-          <span v-if="props.directory.isGitRepository">
+          <span v-if="props.directory.complete && props.directory.isGitRepository">
             <cds-icon shape="git"></cds-icon> Git Repository
           </span>
         </div>
@@ -29,6 +29,7 @@
         <!-- Sorting options -->
         <SelectControl
           v-model="sortingType"
+          v-bind:disabled="!props.directory.complete"
           v-bind:inline="true"
           v-bind:options="{
             name: sortByNameLabel,
@@ -37,6 +38,7 @@
         ></SelectControl>
         <SelectControl
           v-model="sortingDirection"
+          v-bind:disabled="!props.directory.complete"
           v-bind:inline="true"
           v-bind:options="{
             up: ascendingLabel,
@@ -49,10 +51,12 @@
         <!-- Project options -->
         <SwitchControl
           v-model="isProject"
+          v-bind:disabled="!props.directory.complete"
           v-bind:label="projectToggleLabel"
         ></SwitchControl>
         <ButtonControl
           v-if="isProject"
+          v-bind:disabled="!props.directory.complete"
           v-bind:label="projectPropertiesLabel"
           v-on:click="openProjectPreferences"
         ></ButtonControl>
@@ -64,7 +68,7 @@
           v-for="iconElement, idx in icons"
           v-bind:key="idx"
           v-bind:class="{
-            active: iconElement.shape === props.directory.settings.icon
+            active: props.directory.complete && iconElement.shape === props.directory.settings.icon
           }"
           v-bind:title="iconElement.title"
           v-on:click="updateIcon(iconElement.shape)"
@@ -101,7 +105,7 @@ import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import SwitchControl from '@common/vue/form/elements/SwitchControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import { trans } from '@common/i18n-renderer'
-import type { AnyDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, DirDescriptor, IncompleteDescriptor, IncompleteDirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
 import { useConfigStore } from 'source/pinia'
 
@@ -193,13 +197,16 @@ const icons = [
 
 const configStore = useConfigStore()
 
-const props = defineProps<{ target: HTMLElement, directory: DirDescriptor, children: AnyDescriptor[] }>()
+const props = defineProps<{
+  target: HTMLElement,
+  directory: DirDescriptor|IncompleteDirDescriptor,
+  children: Array<AnyDescriptor|IncompleteDescriptor> }>()
 
 const emit = defineEmits<(e: 'close') => void>()
 
 const sortingType = ref<'name'|'time'>('name')
 const sortingDirection = ref<'up'|'down'>('up')
-const isProject = ref<boolean>(props.directory.settings.project !== null)
+const isProject = ref<boolean>(props.directory.complete && props.directory.settings.project !== null)
 
 const creationTime = computed(() => {
   return formatDate(new Date(props.directory.creationtime), configStore.config.appLang, true)
@@ -231,7 +238,7 @@ watch(sortingDirection, updateSorting)
 watch(isProject, updateProject)
 watch(toRef(props, 'directory'), () => {
   setSorting()
-  isProject.value = props.directory.settings.project !== null
+  isProject.value = props.directory.complete && props.directory.settings.project !== null
 })
 
 onBeforeMount(setSorting)
@@ -240,6 +247,10 @@ onBeforeMount(setSorting)
  * Presets the sorting value with the sorting of the directory descriptor prop.
  */
 function setSorting (): void {
+  if (!props.directory.complete) {
+    return
+  }
+
   const [ type, direction ] = props.directory.settings.sorting.split('-') as ['name'|'time', 'up'|'down']
   sortingType.value = type
   sortingDirection.value = direction
@@ -277,6 +288,10 @@ function updateSorting (): void {
 }
 
 function updateProject (): void {
+  if (!props.directory.complete) {
+    return
+  }
+
   const hasProject = props.directory.settings.project !== null
   if (isProject.value === hasProject) {
     return

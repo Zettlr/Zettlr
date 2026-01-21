@@ -6,10 +6,10 @@
         [item.type]: true,
         'selected': isSelected,
         'active': activeItem === item.path,
-        'project': item.type === 'directory' && item.settings.project != null,
+        'project': item.type === 'directory' && item.complete && item.settings.project != null,
         'root': isRoot
       }"
-      v-bind:data-id="item.type === 'file' ? item.id : ''"
+      v-bind:data-id="item.type === 'file' && item.complete ? item.id : ''"
       v-bind:data-path="item.path"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
@@ -169,7 +169,7 @@ import PopoverFileProps from './util/PopoverFileProps.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
-import type { AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, IncompleteDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathBasename, relativePath } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
@@ -185,7 +185,7 @@ const props = defineProps<{
   // How deep is this tree item nested?
   depth: number
   hasDuplicateName: boolean
-  item: AnyDescriptor
+  item: AnyDescriptor|IncompleteDescriptor
   filterResults: string[]
   activeItem?: string
   windowId: string
@@ -274,12 +274,12 @@ const primaryIcon = computed(() => {
       console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
       return ''
     }
-  } else if (props.item.type === 'directory' && props.item.dirNotFoundFlag === true) {
+  } else if (props.item.type === 'directory' && props.item.complete && props.item.dirNotFoundFlag === true) {
     return 'disconnect'
-  } else if (props.item.type === 'directory' && props.item.settings.project !== null) {
+  } else if (props.item.type === 'directory' && props.item.complete && props.item.settings.project !== null) {
     // Indicate that this directory has a project.
     return 'blocks-group'
-  } else if (props.item.type === 'directory' && props.item.settings.icon != null) {
+  } else if (props.item.type === 'directory' && props.item.complete && props.item.settings.icon != null) {
     // Display the custom icon
     return props.item.settings.icon
   } else {
@@ -304,7 +304,7 @@ const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', 
 })
 
 const writingTargetPercent = computed(() => {
-  if (writingTarget.value !== undefined && props.item.type === 'file') {
+  if (writingTarget.value !== undefined && props.item.type === 'file' && props.item.complete) {
     const count = writingTarget.value.mode === 'words'
       ? props.item.wordCount
       : props.item.charCount
@@ -391,7 +391,8 @@ const sortedChildren = computed(() => {
     fileMetaTime
   )
 
-  return sorter(filteredChildren.value, props.item.settings.sorting)
+  // As long as the directory hasn't been parsed, we only sort by name asc.
+  return sorter(filteredChildren.value, props.item.complete ? props.item.settings.sorting : 'name-up')
 })
 
 /**
@@ -399,7 +400,7 @@ const sortedChildren = computed(() => {
  * by project inclusion status.
  */
 const projectSortedFilteredChildren = computed(() => {
-  if (props.item.type !== 'directory' || props.item.settings.project === null) {
+  if (props.item.type !== 'directory' || !props.item.complete || props.item.settings.project === null) {
     return sortedChildren.value
   }
 
@@ -429,9 +430,9 @@ const basename = computed(() => {
     return props.item.name
   }
 
-  if (useTitle.value && props.item.yamlTitle !== undefined) {
+  if (useTitle.value && props.item.complete && props.item.yamlTitle !== undefined) {
     return props.item.yamlTitle
-  } else if (useH1.value && props.item.firstHeading !== null) {
+  } else if (useH1.value && props.item.complete && props.item.firstHeading !== null) {
     return props.item.firstHeading
   } else if (displayMdExtensions.value) {
     return props.item.name
@@ -562,7 +563,7 @@ function beginDragging (event: DragEvent): void {
   event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
     type: props.item.type,
     path: props.item.path,
-    id: (props.item.type === 'file') ? props.item.id : ''
+    id: props.item.type === 'file' && props.item.complete ? props.item.id : ''
   }))
 }
 
