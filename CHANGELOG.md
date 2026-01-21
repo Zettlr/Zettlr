@@ -22,9 +22,15 @@
 - Fixed "Learn more" link on the citation page in the onboarding window (#6138).
 - Fixed an issue that would make the file search crash on Windows, if a
   workspace was located at a volume root (#6142).
+- Fixed an issue that would cause Mermaid graphs to still be pre-rendered in
+  "raw" mode (#6141).
 
 ## Under the Hood
 
+- Update dependencies:
+  - Electron: `v40.0`
+  - Forge: `7.11.1`
+  - Builder: `26.5.0`
 - The FSAL Cache now consistently utilizes asynchronous filesystem operations
   (#5994).
 - Refactor Zettelkasten link and tag parsing (#5997).
