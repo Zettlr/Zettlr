@@ -22,6 +22,8 @@
 - Fixed "Learn more" link on the citation page in the onboarding window (#6138).
 - Fixed an issue that would make the file search crash on Windows, if a
   workspace was located at a volume root (#6142).
+- Fixed an issue that would cause Mermaid graphs to still be pre-rendered in
+  "raw" mode (#6141).
 
 ## Under the Hood
 
