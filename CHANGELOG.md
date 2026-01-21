@@ -27,6 +27,10 @@
 
 ## Under the Hood
 
+- Update dependencies:
+  - Electron: `v40.0`
+  - Forge: `7.11.1`
+  - Builder: `26.5.0`
 - The FSAL Cache now consistently utilizes asynchronous filesystem operations
   (#5994).
 - Refactor Zettelkasten link and tag parsing (#5997).
