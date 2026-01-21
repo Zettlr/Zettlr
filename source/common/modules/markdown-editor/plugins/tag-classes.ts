@@ -23,6 +23,7 @@ import {
   type EditorView,
   type ViewUpdate
 } from '@codemirror/view'
+import cssSafeString from 'source/common/util/css-safe-string'
 
 /**
  * This function returns a decoration set that wraps any found ZknTag with a
@@ -45,18 +46,19 @@ function retrieveTagClasses (view: EditorView, tagCache: Map<string, Decoration>
           return
         }
 
-        const content = node.node.getChild('ZknTagContent')
+        const mark = node.node.getChild('ZknTagMark')
 
-        if (content === null) {
-          return
+        if (mark === null) {
+          return false
         }
 
-        // NOTE: Tag content contains the # in the main text
-        const tagName = view.state.sliceDoc(content.from + 1, content.to)
+        const tagName = view.state.sliceDoc(mark.to, node.to)
+        const cssSafeTagName = cssSafeString(tagName)
+        const cssClass = `cm-zkn-tag-${cssSafeTagName}`
 
-        const deco = tagCache.get(tagName) ?? Decoration.mark({ class: `cm-zkn-tag-${tagName}` })
-        if (!tagCache.has(tagName)) {
-          tagCache.set(tagName, deco)
+        const deco = tagCache.get(cssClass) ?? Decoration.mark({ class: cssClass })
+        if (!tagCache.has(cssClass)) {
+          tagCache.set(cssClass, deco)
         }
 
         decoRanges.push(deco.range(node.from, node.to))

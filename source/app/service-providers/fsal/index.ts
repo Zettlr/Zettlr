@@ -453,6 +453,8 @@ export default class FSAL extends ProviderContract {
    * @param  {string}  contents  The file contents to put in the file.
    */
   public async writeTextFile (filePath: string, contents: string): Promise<void> {
+    // In case this file was cached, remove the cached data again.
+    await this._cache.del(filePath)
     await fs.writeFile(filePath, contents, 'utf-8')
   }
 
@@ -542,7 +544,7 @@ export default class FSAL extends ProviderContract {
    * @param   {MDFileDescriptor}  src   The source file
    */
   public async removeFile (filePath: string): Promise<void> {
-    const deleteOnFail = this._config.get('system.deleteOnFail') as boolean
+    const { deleteOnFail } = this._config.get().system
     // NOTE: This function may be called after a file or folder has been deleted. In that
     // case the function only needs to remove the file or folder from the list of children
     // to avoid safeDelete throwing an error as the file or folder does no longer exist.

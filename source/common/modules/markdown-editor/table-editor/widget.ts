@@ -27,6 +27,8 @@ import { generateColumnControls, generateEmptyTableWidgetElement, generateRowCon
 import { displayTableContextMenu } from './context-menu'
 import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import { configField } from '../util/configuration'
+import { interceptAnchorClicks } from './util/anchor-callbacks'
+import openMarkdownLink from '../util/open-markdown-link'
 
 /**
  * This holds the last measured height of each rendered table to provide
@@ -371,6 +373,7 @@ function updateRow (
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, { onCitation, zknLinkFormat }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+      interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
 
       // NOTE: This handle gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,
@@ -445,6 +448,7 @@ function updateRow (
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, { onCitation, zknLinkFormat }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+      interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
     } else if (subview === null && selectionInCell) {
       // Before we mount a subview, we need to normalize the selection if
       // necessary. The table commands are allowed to place the new selection
@@ -487,6 +491,7 @@ function updateRow (
       const html = nodeToHTML(cell.children, { onCitation, zknLinkFormat }, 0).trim()
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+        interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
       }
     } else if ((subviewFrom !== cell.from || subviewTo !== cell.to) && (columnsChanged || rowsChanged)) {
       // Here, there is a subview in the cell and the selection is in this cell,

@@ -49,7 +49,6 @@ function findMatchingHeading (headingId: string, state: EditorState): Line|undef
  * @param   {CodeMirror.Editor}  cm   The instance to use if it's a heading link
  */
 export default function (url: string, view: EditorView): void {
-  console.log('Opening markdown link:', url)
   if (url.startsWith('#')) {
     // We should open an internal link, i.e. "jump to line".
     const targetLine = findMatchingHeading(url.substring(1), view.state)
@@ -63,10 +62,7 @@ export default function (url: string, view: EditorView): void {
     const searchParams = new URLSearchParams(window.location.search)
     const windowId = searchParams.get('window_id')
     const base = pathDirname(view.state.field(configField).metadata.path)
-    console.log('base:', base)
-    console.log('Metadata path:', view.state.field(configField).metadata.path)
     const validURI = makeValidUri(url, base)
-    console.log('validURI:', validURI)
 
     // Create a path from the URL by stripping the protocol and decoding any
     // potential encoded characters.

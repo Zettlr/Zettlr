@@ -3,6 +3,7 @@
     <button
       v-bind:id="`toolbar-${props.control.id ?? ''}`"
       role="button"
+      class="ring-progress"
       v-on:click="emit('click')"
     >
       <RingProgress
@@ -52,13 +53,15 @@ const props = defineProps<{
 const emit = defineEmits<(e: 'click') => void>()
 </script>
 
-<style lang="less">
-body button svg.progress-ring {
+<style lang="css" scoped>
+button svg.progress-ring {
   margin: 0;
   padding: 0;
 }
 
-body.linux button svg.progress-ring {
-  margin: 1px; // Center the SVG on the middle of the button, see also Toolbar.vue
+button.ring-progress {
+  padding: 0;
+  margin: 0;
+  display: block;
 }
 </style>

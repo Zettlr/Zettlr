@@ -19,7 +19,7 @@ import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import type { MDFileDescriptor } from '@dts/common/fsal'
 import type FSALCache from './fsal-cache'
-import type { SearchTerm } from '@dts/common/search'
+import type { SearchResult, SearchTerm } from '@dts/common/search'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 import { getAppServiceContainer, isAppServiceContainerReady } from '../../app-service-container'
 
@@ -38,23 +38,6 @@ function applyCache (cachedFile: MDFileDescriptor, origFile: MDFileDescriptor): 
  */
 async function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): Promise<void> {
   await cacheAdapter.set(origFile.path, structuredClone(origFile))
-}
-
-/**
- * Updates the file metadata (such as modification time) from lstat.
- *
- * @param   {Object}  fileObject  The object to be updated
- * @return  {void}              Does not return
- */
-async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> {
-  try {
-    const metadata = await getFilesystemMetadata(fileObject.path)
-    fileObject.modtime = metadata.modtime
-    fileObject.size = metadata.size
-  } catch (err: any) {
-    err.message = `Could not update the metadata for file ${fileObject.name}: ${err.message as string}`
-    throw err
-  }
 }
 
 /**
@@ -91,8 +74,7 @@ export async function parse (
     linefeed: '\n',
     firstHeading: null, // May contain the first heading level 1
     yamlTitle: undefined,
-    frontmatter: null, // May contain frontmatter variables
-    modified: false // If true, it has been modified in the renderer
+    frontmatter: null // May contain frontmatter variables
   }
 
   // In any case, we need the most recent times.
@@ -147,7 +129,7 @@ export async function parse (
  *
  * @return  {Promise<any>}                  Resolves with search results
  */
-export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[]): Promise<any> {
+export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[]): Promise<SearchResult[]> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
@@ -173,86 +155,4 @@ export async function load (fileObject: MDFileDescriptor): Promise<string> {
     // standardized to whatever the linefeed extractor detected.
     .split(/\r\n|\n\r|\n|\r/g)
     .join('\n')
-}
-
-/**
- * Determines if the file described has changed on disk.
- *
- * @param   {MDFileDescriptor}  fileObject  The file descriptor in question
- *
- * @return  {Promise<boolean>}              Resolves to true if the file differs from the file descriptor.
- */
-export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<boolean> {
-  let stat = await fs.lstat(fileObject.path)
-  return stat.mtime.getTime() !== fileObject.modtime
-}
-
-/**
- * Saves the content into the given file descriptor. NOTE: The file contents
- * must be using exclusively newlines.
- *
- * @param   {MDFileDescriptor}  fileObject  The file descriptor
- * @param   {string}            content     The content to be written to file
- * @param   {FSALCache}         cache       The cache descriptor
- *
- * @return  {Promise<void>}                 Resolves upon save.
- */
-export async function save (
-  fileObject: MDFileDescriptor,
-  content: string,
-  parser: (file: MDFileDescriptor, content: string) => void,
-  cache: FSALCache|null
-): Promise<void> {
-  // Make sure to retain the BOM if applicable, and use the correct linefeed.
-  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
-  await fs.writeFile(fileObject.path, safeContent)
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  parser(fileObject, safeContent)
-  fileObject.modified = false // Always reset the modification flag.
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
-}
-
-/**
- * Renames the file represented by the descriptor
- *
- * @param   {MDFileDescriptor}  fileObject  The file descriptor
- * @param   {FSALCache}         cache       The cache connector for updates
- * @param   {string}            newName     The new filename
- *
- * @return  {Promise<void>}                 Resolves upon success
- */
-export async function rename (
-  fileObject: MDFileDescriptor,
-  newName: string,
-  parser: (file: MDFileDescriptor, content: string) => void,
-  cache: FSALCache|null
-): Promise<void> {
-  let oldPath = fileObject.path
-  let newPath = path.join(fileObject.dir, newName)
-  await fs.rename(oldPath, newPath)
-  // Now update the object
-  fileObject.path = newPath
-  fileObject.name = newName
-  // Afterwards, reparse the file (this is important if the user switches from
-  // an ID in the filename to an ID in the file, or vice versa)
-  await reparseChangedFile(fileObject, parser, cache)
-}
-
-export async function reparseChangedFile (
-  fileObject: MDFileDescriptor,
-  parser: (file: MDFileDescriptor, content: string) => void,
-  cache: FSALCache|null
-): Promise<void> {
-  // Literally the same as the save() function only without prior writing of contents
-  const contents = await load(fileObject)
-  await updateFileMetadata(fileObject)
-  // Make sure to keep the file object itself as well as the tags updated
-  parser(fileObject, contents)
-  fileObject.modified = false // Always reset the modification flag.
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
 }

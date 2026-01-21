@@ -35,6 +35,8 @@ const pathDirnameTesters = [
   '..\\test',
   '.\\test',
   'C:\\',
+  'C:\\Notes',
+  '/notes',
   '/',
   '\\\\'
 ]

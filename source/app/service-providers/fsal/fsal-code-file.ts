@@ -15,7 +15,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import searchFile from './util/search-file'
-import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import type { CodeFileDescriptor } from '@dts/common/fsal'
@@ -23,7 +22,7 @@ import type FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 import { extractLinefeed } from './util/extract-linefeed'
-import { type SearchTerm } from 'source/types/common/search'
+import type { SearchResult, SearchTerm } from 'source/types/common/search'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -40,23 +39,6 @@ function applyCache (cachedFile: CodeFileDescriptor, origFile: CodeFileDescripto
  */
 async function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): Promise<void> {
   await cacheAdapter.set(origFile.path, structuredClone(origFile))
-}
-
-/**
- * Updates the file metadata (such as modification time) from lstat.
- *
- * @param   {Object}  fileObject  The object to be updated
- * @return  {void}              Does not return
- */
-async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void> {
-  try {
-    const metadata = await getFilesystemMetadata(fileObject.path)
-    fileObject.modtime = metadata.modtime
-    fileObject.size = metadata.size
-  } catch (err: any) {
-    err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message)}`
-    throw err
-  }
 }
 
 function parseFileContents (file: CodeFileDescriptor, content: string): void {
@@ -81,8 +63,7 @@ export async function parse (
     type: 'code',
     modtime: 0, // Modification time
     creationtime: 0, // Creation time
-    linefeed: '\n',
-    modified: false // If true, it has been modified in the renderer
+    linefeed: '\n'
   }
 
   // In any case, we need the most recent times.
@@ -120,7 +101,7 @@ export async function parse (
   return file
 }
 
-export async function search (fileObject: CodeFileDescriptor, terms: SearchTerm[]): Promise<any> {
+export async function search (fileObject: CodeFileDescriptor, terms: SearchTerm[]): Promise<SearchResult[]> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
@@ -145,79 +126,4 @@ export async function load (fileObject: CodeFileDescriptor): Promise<string> {
     // standardized to whatever the linefeed extractor detected.
     .split(/\r\n|\n\r|\n|\r/g)
     .join('\n')
-}
-
-export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise<boolean> {
-  let stat = await fs.lstat(fileObject.path)
-  return stat.mtime.getTime() !== fileObject.modtime
-}
-
-/**
- * Saves the provided file content. NOTE: The file content should only use
- * newlines, since the file will be de-normalized only here.
- *
- * @param   {CodeFileDescriptor}  fileObject  The file descriptor
- * @param   {string}              content     The new content
- * @param   {FSALCache|null}      cache       The cache object
- */
-export async function save (fileObject: CodeFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
-  const safeContent = fileObject.bom + content.split('\n').join(fileObject.linefeed)
-  await fs.writeFile(fileObject.path, safeContent)
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  // Make sure to keep the file object itself as well as the tags updated
-  parseFileContents(fileObject, safeContent)
-  fileObject.modified = false // Always reset the modification flag.
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
-}
-
-export async function rename (fileObject: CodeFileDescriptor, cache: FSALCache|null, newName: string): Promise<void> {
-  let oldPath = fileObject.path
-  let newPath = path.join(fileObject.dir, newName)
-  await fs.rename(oldPath, newPath)
-  // Now update the object
-  fileObject.path = newPath
-  fileObject.name = newName
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
-}
-
-export async function remove (fileObject: CodeFileDescriptor, deleteOnFail: boolean): Promise<void> {
-  try {
-    await shell.trashItem(fileObject.path)
-  } catch (err: any) {
-    if (deleteOnFail) {
-      // If this function throws, there's really something off and we shouldn't recover.
-      await fs.unlink(fileObject.path)
-    } else {
-      err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
-      throw err
-    }
-  }
-}
-
-export function markDirty (fileObject: CodeFileDescriptor): void {
-  fileObject.modified = true
-}
-
-export function markClean (fileObject: CodeFileDescriptor): void {
-  fileObject.modified = false
-}
-
-export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache: FSALCache|null): Promise<void> {
-  // Almost the same, except we don't write anything
-  const contents = await load(fileObject)
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  // Make sure to keep the file object itself as well as the tags updated
-  parseFileContents(fileObject, contents)
-  fileObject.modified = false // Always reset the modification flag.
-  if (cache !== null) {
-    await cacheFile(fileObject, cache)
-  }
 }

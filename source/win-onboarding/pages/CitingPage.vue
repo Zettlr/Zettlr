@@ -3,7 +3,7 @@
 
   <p>
     {{ libraryLabel }}
-    <a href="https://docs.zettlr.com/en/core/citations/">{{ learnMoreLabel }}</a>.
+    <a href="https://docs.zettlr.com/en/editor/citations/">{{ learnMoreLabel }}</a>.
   </p>
 
   <p>
