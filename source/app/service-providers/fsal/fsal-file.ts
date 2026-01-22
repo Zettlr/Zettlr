@@ -135,25 +135,3 @@ export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[])
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
 }
-
-/**
- * Loads the file contents for the given descriptor. NOTE: This always returns
- * a document with newline feeds, normalizing the file contents, regardless of
- * the actual linefeed the file uses.
- *
- * @param   {MDFileDescriptor}  fileObject  The file descriptor
- *
- * @return  {Promise<string>}               Resolves with the file contents
- */
-export async function load (fileObject: MDFileDescriptor): Promise<string> {
-  // Loads the content of a file from disk
-  const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  return content
-    // Account for an optional BOM, if present
-    .substring(fileObject.bom.length)
-    // Always split with a regular expression to ensure that mixed linefeeds
-    // don't break reading in a file. Then, on save, the linefeeds will be
-    // standardized to whatever the linefeed extractor detected.
-    .split(/\r\n|\n\r|\n|\r/g)
-    .join('\n')
-}

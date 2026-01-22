@@ -121,6 +121,7 @@ import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
 import { getSorter } from 'source/common/util/directory-sorter'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import type { AnyDescriptor, IncompleteDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -223,7 +224,7 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
 
   // Fourth, sort them recursively so that the list is the same as what the file
   // tree will see
-  const retValue = [...getFiles.value]
+  const retValue: Array<AnyDescriptor|IncompleteDescriptor> = [...getFiles.value]
 
   const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
   const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
@@ -231,6 +232,7 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
   for (const descriptor of getDirectories.value) {
     retValue.push(...retrieveChildrenAndSort(descriptor, visibleDescriptors, sorter))
   }
+
   return retValue.map(descriptor => ([ descriptor.path, descriptor.type ]))
 })
 

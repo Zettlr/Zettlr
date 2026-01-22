@@ -615,8 +615,9 @@ export default class DocumentManager extends ProviderContract {
 
     let type = DocumentType.Markdown
 
-    // TODO: We also need to be able to load files not present in the file tree!
-    const descriptor = await this._app.fsal.getDescriptorForAnySupportedFile(filePath)
+    // Retrieve the file's descriptor. Pass in `true` to force the FSAL to parse
+    // the file contents, since we need to retain BOM and linefeed.
+    const descriptor = await this._app.fsal.getDescriptorForAnySupportedFile(filePath, true)
     if (descriptor === undefined || descriptor.type === 'other') {
       throw new Error(`Cannot load file ${filePath}`) // TODO: Proper error handling & state recovery!
     }
@@ -764,7 +765,7 @@ current contents from the editor somewhere else, and restart the application.`
     const libraries: string[] = []
 
     for (const doc of this.documents) {
-      if (doc.descriptor.type !== 'file') {
+      if (doc.descriptor.type !== 'file' || !doc.descriptor.complete) {
         continue
       }
 

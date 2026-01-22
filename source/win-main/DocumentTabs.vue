@@ -97,6 +97,7 @@ import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import type { AnyFileDescriptor, IncompleteFileDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -477,7 +478,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
     return
   }
 
-  displayTabsContextMenu(event, descriptor, doc, (clickedID: string) => {
+  displayTabsContextMenu(event, descriptor as AnyFileDescriptor|IncompleteFileDescriptor, doc, (clickedID: string) => {
     if (clickedID === 'close-this') {
       // Close only this
       ipcRenderer.invoke('documents-provider', {

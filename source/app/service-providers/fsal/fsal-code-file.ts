@@ -107,24 +107,3 @@ export async function search (fileObject: CodeFileDescriptor, terms: SearchTerm[
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
 }
-
-/**
- * Loads the given Code file from disk and returns its content in normalized
- * form (uses always newlines).
- *
- * @param   {CodeFileDescriptor}  fileObject  The descriptor to load
- *
- * @return  {Promise<string>}                 The file contents
- */
-export async function load (fileObject: CodeFileDescriptor): Promise<string> {
-  // Loads the content of a file from disk
-  const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  return content
-    // Account for an optional BOM, if present
-    .substring(fileObject.bom.length)
-    // Always split with a regular expression to ensure that mixed linefeeds
-    // don't break reading in a file. Then, on save, the linefeeds will be
-    // standardized to whatever the linefeed extractor detected.
-    .split(/\r\n|\n\r|\n|\r/g)
-    .join('\n')
-}

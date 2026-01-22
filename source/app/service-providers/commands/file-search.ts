@@ -14,7 +14,7 @@
 
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
-import type { SearchTerm } from 'source/types/common/search'
+import type { SearchResult, SearchTerm } from 'source/types/common/search'
 
 export default class FileSearch extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -27,7 +27,7 @@ export default class FileSearch extends ZettlrCommand {
    * @param  {Object} arg An object containing a hash of a file to be searched
    * @return {Boolean}     Whether the call succeeded.
    */
-  async run (evt: string, arg: { path: string, terms: SearchTerm[] }): Promise<boolean> {
+  async run (evt: string, arg: { path: string, terms: SearchTerm[] }): Promise<SearchResult[]|false> {
     // arg.content contains a hash of the file to be searched
     // and the prepared terms.
     try {

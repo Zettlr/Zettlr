@@ -172,7 +172,7 @@ export default class TagProvider extends ProviderContract {
    */
   async getAllTags (): Promise<TagRecord[]> {
     const allDescriptors = (await this._fsal.getAllLoadedDescriptors())
-      .filter(descriptor => descriptor.type === 'file')
+      .filter(descriptor => descriptor.type === 'file' && descriptor.complete)
 
     const tagDb = new Map(extractFromFileDescriptors(allDescriptors, 'tags'))
 

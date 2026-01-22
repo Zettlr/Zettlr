@@ -41,7 +41,7 @@ import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
-import type { CodeFileDescriptor, DirDescriptor, IncompleteDirDescriptor, IncompleteFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import type { CodeFileDescriptor, DirDescriptor, IncompleteDirDescriptor, IncompleteMDFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { EditorSelection } from '@codemirror/state'
 import { documentAuthorityIPCAPI } from '@common/modules/markdown-editor/util/ipc-api'
@@ -394,11 +394,8 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
-const fsalFiles = computed<Array<(IncompleteFileDescriptor & { type: 'file' })|MDFileDescriptor>>(() => {
-  return [...workspaceStore.descriptorMap.values()]
-  // We need an explicit type guard here. I suspect the type composition between
-  // Vue and our descriptors is a bit too much for TS.
-    .filter((d): d is (IncompleteFileDescriptor & { type: 'file' })|MDFileDescriptor => d.type === 'file')
+const fsalFiles = computed<Array<IncompleteMDFileDescriptor|MDFileDescriptor>>(() => {
+  return [...workspaceStore.descriptorMap.values()].filter(d => d.type === 'file')
 })
 
 // WATCHERS

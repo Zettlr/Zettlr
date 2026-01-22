@@ -22,7 +22,7 @@ import type LogProvider from '@providers/log'
 import path from 'path'
 import type FSAL from '../fsal'
 import type ConfigProvider from '../config'
-import type { MDFileDescriptor } from 'source/types/common/fsal'
+import type { IncompleteMDFileDescriptor, MDFileDescriptor } from 'source/types/common/fsal'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -79,7 +79,7 @@ export default class LinkProvider extends ProviderContract {
    */
   private async reindex () {
     const allDescriptors = (await this._fsal.getAllLoadedDescriptors())
-      .filter(descriptor => descriptor.type === 'file')
+      .filter(descriptor => descriptor.type === 'file' && descriptor.complete)
 
     this._fileLinkDatabase = new Map(extractFromFileDescriptors(allDescriptors, 'links'))
     this._idDatabase = new Map(extractFromFileDescriptors(allDescriptors, 'id'))
@@ -99,7 +99,7 @@ export default class LinkProvider extends ProviderContract {
    * the performance impacts of calling `getAllLoadedDescriptors` on every
    * execution.
    */
-  private async findExact (query: string, descriptors: MDFileDescriptor[]): Promise<MDFileDescriptor|undefined> {
+  private async findExact (query: string, descriptors: Array<MDFileDescriptor|IncompleteMDFileDescriptor>): Promise<MDFileDescriptor|IncompleteMDFileDescriptor|undefined> {
     const { zkn } = this._config.get()
     const idRe = getIDRE(zkn.idRE, true)
 
@@ -107,7 +107,7 @@ export default class LinkProvider extends ProviderContract {
     const hasMdExt = hasMarkdownExt(query)
 
     for (const descriptor of descriptors) {
-      if (isQueryID && descriptor.id === query) {
+      if (isQueryID && descriptor.complete && descriptor.id === query) {
         return descriptor
       }
 

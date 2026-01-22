@@ -39,10 +39,6 @@ export interface ProjectSettings {
  */
 interface SharedDescriptorData {
   /**
-   * The type of the node described by this descriptor.
-   */
-  type: 'file' | 'directory' | 'code' | 'other'
-  /**
    * The absolute path to the node described by this descriptor.
    */
   path: string
@@ -77,20 +73,27 @@ interface SharedDescriptorData {
 }
 
 /**
- * Describes an incomplete file descriptor, where "incomplete" means that the
- * file has not been completely parsed. This means this descriptor contains all
- * required data that is stored by the filesystem, but not yet any data derived
- * from the actual file contents.
+ * Describes an incomplete "file" descriptor
  */
-export interface IncompleteFileDescriptor extends SharedDescriptorData {
-  /**
-   * This descriptor is not complete as in: Not completely parsed.
-   */
+export interface IncompleteMDFileDescriptor extends SharedDescriptorData {
+  type: 'file'
   complete: false
-  /**
-   * This descriptor describes a file.
-   */
-  type: 'file'|'code'|'other'
+}
+
+/**
+ * Describes an incomplete "code" descriptor
+ */
+export interface IncompleteCodeFileDescriptor extends SharedDescriptorData {
+  type: 'code'
+  complete: false
+}
+
+/**
+ * Describes an incomplete "other" file descriptor
+ */
+export interface IncompleteOtherFileDescriptor extends SharedDescriptorData {
+  type: 'other'
+  complete: false
 }
 
 /**
@@ -100,26 +103,22 @@ export interface IncompleteFileDescriptor extends SharedDescriptorData {
  * data derived from the actual directory contents.
  */
 export interface IncompleteDirDescriptor extends SharedDescriptorData {
-  /**
-   * This descriptor is not complete as in: Not completely parsed.
-   */
-  complete: false
-  /**
-   * This descriptor describes a directory.
-   */
   type: 'directory'
+  complete: false
 }
 
 /**
- * This interface describes an incomplete filesystem node. This means it
- * contains filesystem metadata about the descriptor, but no data that needs to
- * be derived from actually parsing the node (i.e., extracting directory
- * information, or various nodes from Markdown content).
- *
- * If you need more specific `IncompleteDescriptor` variants, consider using
- * `IncompleteFileDescriptor` or `IncompleteDirDescriptor`.
+ * Describes an incomplete file descriptor (file, code, other)
  */
-export type IncompleteDescriptor = IncompleteFileDescriptor|IncompleteDirDescriptor
+export type IncompleteFileDescriptor = IncompleteMDFileDescriptor|IncompleteCodeFileDescriptor|IncompleteOtherFileDescriptor
+
+/**
+ * Describes an incomplete descriptor, where "incomplete" means that the file or
+ * folder has not been completely parsed. This means this descriptor contains
+ * all required data that is stored by the filesystem, but not yet any data
+ * derived from the actual file or folder contents.
+ */
+export type IncompleteDescriptor = IncompleteMDFileDescriptor|IncompleteCodeFileDescriptor|IncompleteOtherFileDescriptor|IncompleteDirDescriptor
 
 /**
  * A recognized method to sort a directory.
