@@ -30,7 +30,7 @@ import {
   WidgetType
 } from '@codemirror/view'
 import { configUpdateEffect } from '../util/configuration'
-import { syntaxTree } from '@codemirror/language'
+import { foldedRanges, syntaxTree } from '@codemirror/language'
 
 const extensionCompartment = new Compartment()
 
@@ -71,6 +71,16 @@ function showLineEndings (view: EditorView): DecorationSet {
     for (let pos = from; pos <= to;) {
       const line = view.state.doc.lineAt(pos)
       pos = line.to + 1
+
+      let isFolded = false
+      foldedRanges(view.state).between(line.from, line.to, (from, to) => {
+        if (pos >= from && pos <= to) {
+          isFolded = true
+          return false
+        }
+      })
+
+      if (isFolded) { continue }
 
       const node = syntaxTree(view.state).resolve(line.to, -1)
 
