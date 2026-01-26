@@ -72,6 +72,8 @@ function showLineEndings (view: EditorView): DecorationSet {
       const line = view.state.doc.lineAt(pos)
       pos = line.to + 1
 
+      // Do not draw pilcrows on folded lines so that, when folded,
+      // two pilcrows do not appear on the same line.
       let isFolded = false
       foldedRanges(view.state).between(line.from, line.to, (from, to) => {
         if (pos >= from && pos <= to) {
@@ -116,11 +118,13 @@ const pilcrowPlugin = ViewPlugin.fromClass(class {
 const pilcrowTheme = EditorView.baseTheme({
   '.cm-pilcrow': {
     // By setting `display: inline-block` and
-    // `width: 0px`, we exclude the pilcrow
-    // from wrapping to the next line
+    // `width: 0px`, we prevent the pilcrow
+    // from triggering line wrapping
     display: 'inline-block',
     width: '0px',
     // Overrides styling from the `visual-indent` plugin
+    // which otherwise causes the pilcrow to be offset into
+    // the text.
     textIndent: 'initial',
     // Styling
     color: '#aaa',
