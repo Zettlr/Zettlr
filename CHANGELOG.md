@@ -24,6 +24,9 @@
   workspace was located at a volume root (#6142).
 - Fixed an issue that would cause Mermaid graphs to still be pre-rendered in
   "raw" mode (#6141).
+- Fixed a bug that would cause code files (JSON/YAML/TeX) to be formatted
+  weirdly if Zettlr opens with one of these files on startup, due to relevant
+  CSS never being loaded in this case.
 
 ## Under the Hood
 
