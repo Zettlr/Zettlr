@@ -172,6 +172,7 @@ export default class FSAL extends ProviderContract {
 
     // Regardless of the event, it will invalidate that particular cache entry.
     this._cache.del(absPath)
+      .catch(err => this._logger.error(`[FSAL Cache] Failed to delete key: ${absPath}`, err))
 
     // In unlink-events, there won't be a descriptor.
     if (event === 'unlink' || event === 'unlinkDir') {
@@ -383,7 +384,7 @@ export default class FSAL extends ProviderContract {
    */
   public async shutdown (): Promise<void> {
     this._logger.verbose('FSAL shutting down ...')
-    this._cache.persist()
+    await this._cache.persist()
   }
 
   /**
@@ -439,6 +440,8 @@ export default class FSAL extends ProviderContract {
    * @param  {string}  contents  The file contents to put in the file.
    */
   public async writeTextFile (filePath: string, contents: string): Promise<void> {
+    // In case this file was cached, remove the cached data again.
+    await this._cache.del(filePath)
     await fs.writeFile(filePath, contents, 'utf-8')
   }
 
@@ -528,7 +531,7 @@ export default class FSAL extends ProviderContract {
    * @param   {MDFileDescriptor}  src   The source file
    */
   public async removeFile (filePath: string): Promise<void> {
-    const deleteOnFail = this._config.get('system.deleteOnFail') as boolean
+    const { deleteOnFail } = this._config.get().system
     // NOTE: This function may be called after a file or folder has been deleted. In that
     // case the function only needs to remove the file or folder from the list of children
     // to avoid safeDelete throwing an error as the file or folder does no longer exist.
@@ -739,7 +742,7 @@ export default class FSAL extends ProviderContract {
    */
   public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor> {
     if (avoidDiskAccess) {
-      const cacheHit = this._cache.get(absPath)
+      const cacheHit = await this._cache.get(absPath)
       if (cacheHit !== undefined) {
         return cacheHit
       }

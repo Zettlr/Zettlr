@@ -101,7 +101,7 @@ class ImageWidget extends WidgetType {
     // Retrieve and apply the size constraints
     const { imagePreviewHeight, imagePreviewWidth } = view.state.field(configField)
     const defaultWidth = (!Number.isNaN(imagePreviewWidth)) ? `${imagePreviewWidth}%` : '100%'
-    const defaultHeight = (!Number.isNaN(imagePreviewHeight) && imagePreviewHeight < 100) ? `${imagePreviewHeight}vh` : ''
+    const defaultHeight = (!Number.isNaN(imagePreviewHeight)) ? `${imagePreviewHeight}vh` : '100vh'
 
     // Normalize the local width/height arguments
     const normWidth = normalizeSize(this.data.width)

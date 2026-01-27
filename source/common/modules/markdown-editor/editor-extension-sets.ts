@@ -47,7 +47,6 @@ import { typewriter } from './plugins/typewriter'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
 import { type EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
-import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'
 import { json, jsonParseLinter } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
@@ -75,6 +74,7 @@ import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
+import { codeTheme } from './renderers/render-code'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -237,7 +237,20 @@ function getGenericCodeExtensions (options: CoreExtensionOptions): Extension[] {
     lineNumbers(),
     bracketMatching(),
     indentOnInput(),
-    codeSyntaxHighlighter()
+    codeSyntaxHighlighter(),
+    // NOTE January 26, 2026: We have to include the `codeTheme` plugin, because
+    // it defines the colors (and fonts) for the code editors. Somehow I forgot
+    // to include it here for MONTHS, and it never appeared problematic because
+    // once a Markdown file was loaded, the corresponding styles were also
+    // applied, rendering code files correctly. This only breaks when the last
+    // file open before closing Zettlr is a code file (and, by implication, that
+    // the very first file Zettlr loads when you open the app is a code file).
+    // In that case, the code file would look wrong, because the styles were
+    // never loaded. Because, obviously, the "code syntax highlighter" above
+    // only defines class names, but not the theme… To see where the confusion
+    // came from, head into the theme/syntax.ts and tell me you wouldn't have
+    // made the mistake given how the *Highlighter* was called :roll_eyes:
+    codeTheme
   ]
 }
 
@@ -352,7 +365,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
-    jsonFolding,
     json(),
     linter(jsonParseLinter())
   ]

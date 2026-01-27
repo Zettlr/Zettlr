@@ -18,7 +18,6 @@
 import EventEmitter from 'events'
 import path from 'path'
 import { constants as FSConstants } from 'fs'
-import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract, { type IPCAPI } from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { type AppServiceContainer } from '../../app-service-container'
@@ -1548,15 +1547,13 @@ current contents from the editor somewhere else, and restart the application.`
 
     try {
       if (doc.descriptor.type === 'file') {
-        await FSALFile.save(
-          doc.descriptor,
-          content,
-          this._app.fsal.getMarkdownFileParser(),
-          null
-        )
+        const fileContents = doc.descriptor.bom + content.split('\n').join(doc.descriptor.linefeed)
+        await this._app.fsal.writeTextFile(doc.descriptor.path, fileContents)
+        doc.descriptor = await this._app.fsal.getDescriptorFor(doc.descriptor.path, false) as MDFileDescriptor
         await this.synchronizeDatabases() // The file may have gotten a library
       } else {
-        await FSALCodeFile.save(doc.descriptor, content, null)
+        await this._app.fsal.writeTextFile(doc.descriptor.path, content)
+        doc.descriptor = await this._app.fsal.getDescriptorFor(doc.descriptor.path, false) as CodeFileDescriptor
       }
     } catch (err: any) {
       dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))

@@ -208,5 +208,11 @@ export function pathDirname (path: string): string {
     return path
   }
   const s = sep(path)
-  return path.includes(s) ? path.substring(0, path.lastIndexOf(s)) : '.'
+  const lastIndex = path.lastIndexOf(s)
+
+  // This is to handle direct children under the root directory,
+  // so that the final path separator is not removed, such as
+  // `C:\Notes`, `/notes`, etc.
+  const isRoot = isAbsolutePath(path) && path.indexOf(s) === lastIndex
+  return lastIndex > -1 ? path.substring(0, isRoot ? lastIndex + 1 : lastIndex) : '.'
 }

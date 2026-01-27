@@ -163,8 +163,6 @@ body.win32 {
 
 body.linux {
   div#toolbar div.three-way-toggle {
-    margin: 0 10px;
-    border: 2px solid transparent;
     display: flex;
 
     button {

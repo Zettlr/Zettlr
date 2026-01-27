@@ -52,7 +52,6 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
   if (ext === undefined || config.renderingMode === 'raw') {
     // Default extensions to always include
     ext = [
-      renderMermaid,
       renderCode,
     ]
   }
