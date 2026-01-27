@@ -8,6 +8,41 @@
 
 (nothing here)
 
+# 4.1.1
+
+## GUI and Functionality
+
+- Fix a bug where the preferences window would allow arbitrary tab sizes. Now,
+  tab sizes are bound between 2 and 10 (see #6131).
+- Fixed links not registering clicks when they are pre-rendered within table
+  cells of the TableEditor (#4557).
+- Fix application of custom tag classes.
+- Fixed a bug that would not correctly apply the `code` class to segments of
+  code in some circumstances (primarily when adding YAML front matters or
+  comments).
+- Fix syntax highlighting in code blocks, frontmatters, etc. Now, Zettlr assigns
+  more default-colors of the solarized code syntax theme. In addition, regular
+  text is now more readable, especially in light mode.
+- Fixes and improvements to the toolbar styling; simplify CSS rules.
+- Made toolbar icons slightly larger.
+- Update `ja-JP` translation (#6132).
+- Fixed a bug that would not accept custom height constraints via Pandoc
+  attributes for images if the maximum image height was set to 100% in the
+  settings.
+- Fixed "Learn more" link on the citation page in the onboarding window (#6138).
+- Fixed an issue that would make the file search crash on Windows, if a
+  workspace was located at a volume root (#6142).
+- Fixed an issue that would cause Mermaid graphs to still be pre-rendered in
+  "raw" mode (#6141).
+- Fixed a bug that would cause code files (JSON/YAML/TeX) to be formatted
+  weirdly if Zettlr opens with one of these files on startup, due to relevant
+  CSS never being loaded in this case.
+- Improved PDF viewer interaction (#6153).
+
+## Under the Hood
+
+(nothing here)
+
 # 4.1.0
 
 ## Read Before Updating
