@@ -686,10 +686,6 @@ function maybeHighlightSearchResults (): void {
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
   }
-
-  .cm-content {
-    overflow-x: visible !important; // Necessary to hide the horizontal scrollbar
-  }
 }
 
 body.dark .main-editor-wrapper {
