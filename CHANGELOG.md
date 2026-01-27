@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.1.1
+
+## GUI and Functionality
+
 - Fix a bug where the preferences window would allow arbitrary tab sizes. Now,
   tab sizes are bound between 2 and 10 (see #6131).
 - Fixed links not registering clicks when they are pre-rendered within table
