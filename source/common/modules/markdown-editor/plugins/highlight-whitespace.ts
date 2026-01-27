@@ -42,6 +42,8 @@ class PilcrowWidget extends WidgetType {
     const span = document.createElement('span')
     span.className = 'cm-pilcrow'
     span.textContent = '¶'
+    span.style.userSelect = 'none'
+    span.style.pointerEvents = 'none'
     span.setAttribute('aria-hidden', 'true')
 
     return span
