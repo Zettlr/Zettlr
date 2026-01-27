@@ -4,7 +4,8 @@
     class="pdf-viewer-container"
     role="region"
     v-bind:aria-label="`PDFViewer: Currently viewing file ${pathBasename(props.file.path)}`"
-    v-on:click="acceptsClicks = true"
+    v-on:pointerenter="acceptsClicks = true"
+    v-on:pointerleave="acceptsClicks = false"
   >
     <iframe
       ref="iframe"
@@ -40,7 +41,7 @@
 import type { OpenDocument } from 'source/types/common/documents'
 import type { EditorCommands } from '../App.vue'
 import makeValidUri from 'source/common/util/make-valid-uri'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { pathBasename } from 'source/common/util/renderer-path-polyfill'
 
 const props = defineProps<{
@@ -55,17 +56,6 @@ const iframe = ref<HTMLIFrameElement|null>(null)
 const pdfViewerContainer = ref<HTMLDivElement|null>(null)
 const acceptsClicks = ref(false)
 
-function toggleAcceptClicksOff () {
-  acceptsClicks.value = false
-}
-
-onMounted(() => {
-  document.addEventListener('focusin', toggleAcceptClicksOff)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('focusin', toggleAcceptClicksOff)
-})
 </script>
 
 <style lang="css" scoped>
@@ -73,6 +63,7 @@ div.pdf-viewer-container {
   width: 100%;
   height: 100%;
   user-select: auto;
+  overflow: hidden;
 
   iframe {
     width: 100%;
@@ -82,7 +73,6 @@ div.pdf-viewer-container {
 
     &.pointer-events {
       pointer-events: auto;
-      border-color: var(--system-accent-color);
     }
   }
 }
