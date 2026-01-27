@@ -6,6 +6,8 @@
     v-bind:class="{ 'hidden': !isVisible }"
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
+    v-on:pointerenter="hover = true"
+    v-on:pointerleave="hover = false"
   >
     <template v-if="rootDescriptors.length > 0">
       <div v-if="filterQuery.trim() !== '' && filterResults.length === 0" class="empty-tree">
@@ -17,12 +19,15 @@
       <template v-if="getFiles.length > 0">
         <div
           id="directories-files-header"
+          v-bind:title="showClose ? 'Close all files' : showFilesSection ? 'Hide files' : 'Show files'"
           v-on:click="configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
         >
           <cds-icon
-            shape="angle"
-            v-bind:direction="showFilesSection ? 'down' : 'right'"
             role="presentation"
+            v-bind:shape="showClose ? 'times' : 'angle'"
+            v-bind:direction="showClose ? undefined : showFilesSection ? 'down' : 'right'"
+            v-bind:status="showClose ? 'danger' : undefined"
+            v-on:click.stop="showClose ? closeAllFiles() : undefined"
           ></cds-icon>
 
           <cds-icon
@@ -30,7 +35,7 @@
             shape="file"
             role="presentation"
           ></cds-icon>
-          
+
           {{ fileSectionHeading }}
         </div>
 
@@ -53,12 +58,15 @@
       <template v-if="getDirectories.length > 0">
         <div
           id="directories-dirs-header"
+          v-bind:title="showClose ? 'Close all workspaces' : showWorkspacesSection ? 'Hide workspaces' : 'Show workspaces'"
           v-on:click="configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
         >
           <cds-icon
-            shape="angle"
-            v-bind:direction="showWorkspacesSection ? 'down' : 'right'"
             role="presentation"
+            v-bind:shape="showClose ? 'times' : 'angle'"
+            v-bind:direction="showClose ? undefined : showWorkspacesSection ? 'down' : 'right'"
+            v-bind:status="showClose ? 'danger' : undefined"
+            v-on:click="showClose ? closeAllWorkspaces() : undefined"
           ></cds-icon>
 
           <cds-icon
@@ -66,7 +74,7 @@
             shape="tree-view"
             role="presentation"
           ></cds-icon>
-          
+
           {{ workspaceSectionHeading }}
         </div>
 
@@ -114,7 +122,7 @@
 import { trans } from '@common/i18n-renderer'
 import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
@@ -122,6 +130,7 @@ import type { AnyDescriptor } from 'source/types/common/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import { closeFile, closeWorkspace } from './util/item-composable'
 
 const ipcRenderer = window.ipc
 
@@ -135,6 +144,32 @@ const emit = defineEmits<{
   (e: 'selection', event: MouseEvent): void
   (e: 'toggle-file-list'): void
 }>()
+
+const shiftHeld = ref(false)
+const hover = ref(false)
+const showClose = computed(() => shiftHeld.value && hover.value)
+
+function onKeyDown (e: KeyboardEvent) {
+  if (e.key === 'Shift') {
+    shiftHeld.value = true
+  }
+}
+
+function onKeyUp (e: KeyboardEvent) {
+  if (e.key === 'Shift') {
+    shiftHeld.value = false
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('keyup', onKeyUp)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+  window.removeEventListener('keyup', onKeyUp)
+})
 
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
@@ -209,7 +244,7 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
     .filter(descriptor => {
       return query.value === '' ? true : filterResults.value.some(res => res.startsWith(descriptor.path))
     })
-  
+
   const uncollapsed = windowStateStore.uncollapsedDirectories
   const collapsed = allDescriptors
     .filter(d => d.type === 'directory')
@@ -246,6 +281,18 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
 function requestOpenRoot (_event: MouseEvent): void {
   ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
     .catch(err => console.error(err))
+}
+
+function closeAllFiles (): void {
+  for (const rootFile of getFiles.value) {
+    closeFile(rootFile.path, documentTreeStore.paneData, props.windowId)
+  }
+}
+
+function closeAllWorkspaces (): void {
+  for (const dir of getDirectories.value) {
+    closeWorkspace(dir.path, documentTreeStore.paneData, props.windowId)
+  }
 }
 
 function clickHandler (event: MouseEvent): void {
