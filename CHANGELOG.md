@@ -41,7 +41,21 @@
 
 ## Under the Hood
 
-(nothing here)
+- Update dependencies:
+  - Electron: `v40.0`
+  - Forge: `7.11.1`
+  - Builder: `26.5.0`
+- The FSAL Cache now consistently utilizes asynchronous filesystem operations
+  (#5994).
+- Refactor Zettelkasten link and tag parsing (#5997).
+- Number controls in forms now allow for providing `min` and `max` values.
+- Increased strictness of the `@typescript-eslint/no-explicit-any` rule from
+  "off" (no checking) to "warn" to slowly start migrating away from any
+  remaining `any` uses in the wild.
+- FSAL Improvements:
+  - Removed a lot of dead code in the FSAL.
+  - Moved the save functionality away from the `FSAL*`-submodules, and divided
+    the responsibility between the `DocumentsProvider` and the `FSAL` module.
 
 # 4.1.0
 
