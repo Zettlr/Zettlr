@@ -31,6 +31,7 @@ const WATCHDOG_IGNORE_PATHS: string[] = [
   '\\.dropbox.*', // Dropbox config
   '\\.~lock.*', // LibreOffice lockfiles
   '~\\$.*\\.(?:doc|dot|xls|ppt)x?', // MS Office temporary files
+  '.*\\.~.*', // Nextcloud temporary files
 ]
 
 // A list of path names that should be ignored
