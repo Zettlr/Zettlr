@@ -940,7 +940,8 @@ current contents from the editor somewhere else, and restart the application.`
     // don't have to do anything.
     const openFile = this.documents.find(doc => doc.filePath === filePath)
     if (openFile !== undefined && this.isModified(filePath) && numOpenInstances === 1) {
-      const result = await this._app.windows.askSaveChanges()
+      const detail = trans('File: %s', openFile.descriptor.name)
+      const result = await this._app.windows.askSaveChanges(detail)
       // 0 = Save, 1 = Don't save, 2 = Cancel
       if (result.response === 1) {
         // Clear the modification flag

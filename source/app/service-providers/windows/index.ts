@@ -982,12 +982,12 @@ export default class WindowProvider extends ProviderContract {
    *
    * @return  {Promise<any>}  Returns the message box results
    */
-  async askSaveChanges (): Promise<Electron.MessageBoxReturnValue> {
+  async askSaveChanges (detail?: string): Promise<Electron.MessageBoxReturnValue> {
     const firstMainWin = this.getFirstMainWindow()
     if (firstMainWin === undefined) {
       throw new Error('Could not ask to save changes: No main window was open!')
     }
-    return await askSaveChanges(firstMainWin)
+    return await askSaveChanges(firstMainWin, detail)
   }
 
   /**
