@@ -27,6 +27,7 @@
             v-bind:shape="showClose ? 'times' : 'angle'"
             v-bind:direction="showClose ? undefined : showFilesSection ? 'down' : 'right'"
             v-bind:status="showClose ? 'danger' : undefined"
+            v-bind:class="{ 'close-all': showClose }"
             v-on:click.stop="showClose ? closeAllFiles() : undefined"
           ></cds-icon>
 
@@ -66,6 +67,7 @@
             v-bind:shape="showClose ? 'times' : 'angle'"
             v-bind:direction="showClose ? undefined : showWorkspacesSection ? 'down' : 'right'"
             v-bind:status="showClose ? 'danger' : undefined"
+            v-bind:class="{ 'close-all': showClose }"
             v-on:click="showClose ? closeAllWorkspaces() : undefined"
           ></cds-icon>
 
@@ -428,6 +430,18 @@ body {
         margin-right: 3px;
         vertical-align: bottom;
       }
+    }
+
+    .close-all {
+      border-radius: 20%;
+    }
+
+    .close-all:hover {
+      background-color: rgb(200, 200, 200);
+    }
+
+    &.dark .close-all:hover {
+      background-color: rgb(80, 80, 80);
     }
 
     .list-item {
