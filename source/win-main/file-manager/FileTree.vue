@@ -432,16 +432,9 @@ body {
       }
     }
 
-    .close-all {
-      border-radius: 20%;
-    }
-
     .close-all:hover {
+      border-radius: 20%;
       background-color: rgb(200, 200, 200);
-    }
-
-    &.dark .close-all:hover {
-      background-color: rgb(80, 80, 80);
     }
 
     .list-item {
@@ -464,6 +457,14 @@ body {
             font-weight: bold;
             font-size: 200%;
         }
+    }
+  }
+
+  &.dark {
+    #file-tree {
+      .close-all:hover {
+        background-color: rgb(80, 80, 80);
+      }
     }
   }
 }
