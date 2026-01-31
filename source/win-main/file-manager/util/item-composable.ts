@@ -156,6 +156,13 @@ export function useItemComposable (
           newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
         }
       } as DocumentManagerIPCAPI)
+        .then(() => {
+          configStore.setConfigValue('openDirectory', obj.value.dir)
+          // Finally, since it's a directory, uncollapse it.
+          if (!windowStateStore.uncollapsedDirectories.includes(obj.value.dir)) {
+            windowStateStore.uncollapsedDirectories.push(obj.value.dir)
+          }
+        })
         .catch(e => console.error(e))
     } else if (type === 'other') {
       const { files } = configStore.config
@@ -169,6 +176,13 @@ export function useItemComposable (
           // We leave leafId undefined
           payload: { path: obj.value.path, windowId }
         })
+          .then(() => {
+            configStore.setConfigValue('openDirectory', obj.value.dir)
+            // Finally, since it's a directory, uncollapse it.
+            if (!windowStateStore.uncollapsedDirectories.includes(obj.value.dir)) {
+              windowStateStore.uncollapsedDirectories.push(obj.value.dir)
+            }
+          })
           .catch(e => console.error(e))
       } else {
         // Open the file externally (again, NOTE, this only works because main
@@ -186,6 +200,7 @@ export function useItemComposable (
       }
     }
   }
+
   /**
    * Handles a context menu on a file or directory item.
    *
