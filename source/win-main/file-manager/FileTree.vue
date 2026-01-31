@@ -249,9 +249,8 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
 
   const uncollapsed = windowStateStore.uncollapsedDirectories
   const collapsed = allDescriptors
-    .filter(d => d.type === 'directory')
+    .filter(d => d.type === 'directory' && !uncollapsed.includes(d.path))
     .map(d => d.path)
-    .filter(absPath => !uncollapsed.includes(absPath))
 
   const visibleDescriptors = allDescriptors
     // Third, remove any file that is within a collapsed directory
@@ -280,8 +279,13 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
  * @param  {MouseEvent} evt The click event.
  * @return {void}     Does not return.
  */
-function requestOpenRoot (_event: MouseEvent): void {
-  ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
+function requestOpenRoot (event: MouseEvent): void {
+  let command = 'root-open-workspaces'
+  if (event.shiftKey) {
+    command = 'root-open-files'
+  }
+
+  ipcRenderer.invoke('application', { command })
     .catch(err => console.error(err))
 }
 
@@ -323,7 +327,7 @@ function navigate (event: KeyboardEvent): void {
 
   if (event.key === 'Enter' && activeTreeItem.value !== undefined) {
     // Open the currently active item
-    if (activeTreeItem.value[1] === 'directory') {
+    if (activeTreeItem.value[0] === 'directory') {
       configStore.setConfigValue('openDirectory', activeTreeItem.value[0])
     } else {
       // Select the active file (if there is one)
