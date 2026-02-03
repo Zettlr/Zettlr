@@ -15,7 +15,6 @@
 import path from 'path'
 import isFile from '@common/util/is-file'
 
-import { import_files as FILES } from '@common/data.json'
 import { EXT2READER } from '@common/pandoc-util/pandoc-maps'
 
 /**
@@ -39,15 +38,7 @@ export default async function checkImportIntegrity (fileList: string[]): Promise
     let ext = path.extname(file).substring(1).toLowerCase()
     const detectedFile = {
       path: file,
-      availableReaders: [] as string[]
-    }
-
-    for (const format of FILES) {
-      if (format.slice(1).includes(ext)) {
-        // Known extension, we can go further
-        detectedFile.availableReaders = EXT2READER[ext]
-        break
-      }
+      availableReaders: (ext in EXT2READER) ? EXT2READER[ext] : []
     }
 
     resList.push(detectedFile)

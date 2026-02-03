@@ -24,7 +24,6 @@ import type { DirDescriptor } from '@dts/common/fsal'
 import { app, dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import type AssetsProvider from '@providers/assets'
-import { type PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import { hasMarkdownExt } from '@common/util/file-extention-checks'
 
@@ -35,8 +34,8 @@ export default async function makeImport (
   errorCallback: null|((filePath: string, errorMessage: string) => void) = null,
   successCallback: null|((filePath: string) => void) = null
 ): Promise<string[]> {
-  let files = await checkImportIntegrity(fileList)
-  let failedFiles = []
+  const files = await checkImportIntegrity(fileList)
+  const failedFiles: string[] = []
 
   // This for loop will initiate all pandoc instances at once. The return of
   // these processes will come in asynchronously, so we can let chokidar handle
@@ -75,17 +74,23 @@ export default async function makeImport (
 
       // Retrieve the corresponding defaults file ...
       const allDefaults = (await assetsProvider.listDefaults()).filter(e => SUPPORTED_READERS.includes(e.writer))
-      const potentialProfiles: PandocProfileMetadata[] = []
-      for (const profile of allDefaults) {
-        if (profile.isInvalid) {
-          continue // There's an error with this profile
+      const potentialProfiles = allDefaults
+        .filter(profile => !profile.isInvalid)
+        .filter(profile => file.availableReaders.includes(profile.reader))
+
+      // Case 1: Not a single defaults file found. We require one so that users
+      // can properly import them.
+      if (potentialProfiles.length === 0) {
+        failedFiles.push(file.path)
+        if (errorCallback !== null) {
+          errorCallback(file.path, trans('Zettlr can import this file, but it requires an import profile. Please create one first.'))
         }
-        if (file.availableReaders.includes(profile.reader)) {
-          potentialProfiles.push(profile)
-        }
+        continue
       }
 
       let profileToUse = potentialProfiles[0]
+
+      // Case 2: More than one suitable profile found -> let the user decide.
       if (potentialProfiles.length > 1) {
         const fileName = path.basename(file.path)
         const response = await dialog.showMessageBox({
