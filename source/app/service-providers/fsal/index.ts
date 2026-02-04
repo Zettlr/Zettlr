@@ -30,7 +30,7 @@ import type {
   ProjectSettings,
   AnyDescriptor
 } from '@dts/common/fsal'
-import type { SearchTerm } from '@dts/common/search'
+import type { SearchResult, SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
@@ -114,8 +114,10 @@ export default class FSAL extends ProviderContract {
       try {
         await this._cache.clearCache()
         this._logger.info('FSAL cache cleared.')
-      } catch (err: any) {
-        this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
+        }
       }
     }
 
@@ -221,7 +223,7 @@ export default class FSAL extends ProviderContract {
           watcher.watchPath(rootPath)
           this.watchers.set(rootPath, watcher)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         this._logger.error(`Could not load root ${rootPath}.`)
       }
     }
@@ -464,7 +466,7 @@ export default class FSAL extends ProviderContract {
     try {
       const stat = await fs.lstat(absPath)
       return stat.isDirectory()
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
@@ -480,7 +482,7 @@ export default class FSAL extends ProviderContract {
     try {
       const stat = await fs.lstat(absPath)
       return stat.isFile()
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
@@ -540,7 +542,7 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise<any>}                   Returns the results
    */
-  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<SearchResult[]> { // TODO: Implement search results type
     // Searches a file and returns the result
     if (src.type === 'file') {
       return await FSALFile.search(src, searchTerms)
@@ -742,7 +744,7 @@ export default class FSAL extends ProviderContract {
 
     try {
       return await this.getAnyDirectoryDescriptor(absPath)
-    } catch (err: any) {
+    } catch (err: unknown) {
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
   }
@@ -780,7 +782,7 @@ export default class FSAL extends ProviderContract {
     try {
       await fs.access(absPath, flags)
       return true
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
