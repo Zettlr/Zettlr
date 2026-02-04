@@ -822,23 +822,22 @@ export default class FSAL extends ProviderContract {
     const { files } = this._config.get()
     const ignoreDotFiles = !(files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar)
 
-    const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
-      .filter(dirent => {
-        return (!ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
-      })
-      .map(dirent => {
-        const childPath = path.join(directoryPath, dirent.name)
+    try {
+      const contents = (await fs.readdir(directoryPath, { withFileTypes: true, recursive: true }))
+        .filter(dirent => {
+          return (!ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
+        })
+        .map(dirent => {
+          return path.join(dirent.parentPath, dirent.name)
+        })
 
-        if (dirent.isFile()) {
-          return Promise.resolve([childPath])
-        } else if (dirent.isDirectory()) {
-          return this.readDirectoryRecursively(childPath)
-        } else {
-          return Promise.resolve([])
-        }
-      })
-
-    return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+      return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._logger.error(`[FSAL] Could not read directory: ${directoryPath}`, err)
+      }
+      return []
+    }
   }
 
   /**
@@ -857,16 +856,24 @@ export default class FSAL extends ProviderContract {
     const { files } = this._config.get()
     const ignoreDotFiles = !(files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar)
 
-    const children = await fs.readdir(absPath, { withFileTypes: true })
-    return await Promise.all(
-      children
-        .filter(dirent => {
-          return (!ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
-        })
-        .map(dirent => {
-          const childPath = path.join(absPath, dirent.name)
-          return this.getDescriptorFor(childPath)
-        })
-    )
+    try {
+      const children = await fs.readdir(absPath, { withFileTypes: true })
+      return await Promise.all(
+        children
+          .filter(dirent => {
+            return (!ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
+          })
+          .map(dirent => {
+            const childPath = path.join(absPath, dirent.name)
+            return this.getDescriptorFor(childPath)
+          })
+      )
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._logger.error(`[FSAL] Could not read directory: ${absPath}`, err)
+      }
+
+      return []
+    }
   }
 }
