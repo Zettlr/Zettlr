@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Add gemtext extension support for gemini protocol (a markdown derivative)
 
 ## Under the Hood
 
