@@ -15,7 +15,7 @@
  * END HEADER
  */
 
-export const MD_EXT = [ '.md', '.rmd', '.qmd', '.markdown', '.txt', '.mdx', '.mkd' ]
+export const MD_EXT = [ '.md', '.rmd', '.qmd', '.markdown', '.txt', '.mdx', '.mkd', '.gmi', '.gmni', '.gemini' ]
 export const CODE_EXT = [ '.tex', '.json', '.yaml', '.yml' ]
 export const IMG_EXT = [ '.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.bmp', '.tiff' ]
 export const PDF_EXT = ['.pdf']
