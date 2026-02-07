@@ -2,6 +2,13 @@
 
 ## GUI and Functionality
 
+- **Feature**: New utilities for working with native Pandoc Divs and spans
+  (#6032):
+  - Added a new setting to switch between native highlights (`==mark==`) and
+    using spans for this (`[mark]{.highlight}`).
+  - Added a new toolbar button to insert divs and spans.
+  - Added new buttons to the formatting toolbar to insert underlined,
+    strikethrough, and highlighted spans.
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
 
