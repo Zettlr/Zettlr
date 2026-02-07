@@ -11,6 +11,7 @@
     strikethrough, and highlighted spans.
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
+- Updated `pt-BR` translation (#6154).
 
 ## Under the Hood
 
