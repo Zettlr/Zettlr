@@ -283,6 +283,11 @@ body {
       background-color: @base2;
       color: @base1;
     }
+
+    // Hide pilcrows
+    .cm-pilcrow {
+      opacity: 0;
+    }
   }
 
   &.dark {

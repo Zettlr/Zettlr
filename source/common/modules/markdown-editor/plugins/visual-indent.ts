@@ -33,7 +33,7 @@ const BASE_PADDING = 6
 
 // These regexes are used to determine indentation level
 // Leading whitespace characters
-const WHITESPACE_RE = /^([ \t]*)/
+const WHITESPACE_RE = /^([ \t]+)/
 
 // List and task marker formatting characters
 const LISTMARK_RE = /^(\s*(?:[+*-](?:\s\[[x\s]\])?|\d+\.)\s)/

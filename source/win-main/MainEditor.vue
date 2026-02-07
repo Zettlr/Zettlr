@@ -695,6 +695,7 @@ function maybeHighlightSearchResults (): void {
 
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }
+    .cm-content { min-width: 0; }
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
@@ -703,10 +704,6 @@ function maybeHighlightSearchResults (): void {
 
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
-  }
-
-  .cm-content {
-    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
   }
 }
 
