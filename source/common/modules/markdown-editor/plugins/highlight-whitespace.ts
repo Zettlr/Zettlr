@@ -42,8 +42,7 @@ class PilcrowWidget extends WidgetType {
     const span = document.createElement('span')
     span.className = 'cm-pilcrow'
     span.textContent = '¶'
-    span.style.userSelect = 'none'
-    span.style.pointerEvents = 'none'
+
     span.setAttribute('aria-hidden', 'true')
 
     return span
@@ -128,6 +127,10 @@ const pilcrowTheme = EditorView.baseTheme({
     // which otherwise causes the pilcrow to be offset into
     // the text.
     textIndent: 'initial',
+    // These help prevent issues related to
+    // pilcrows inserting literal text content
+    userSelect: 'none',
+    pointerEvents: 'none',
     // Styling
     color: '#aaa',
     opacity: '0.5',
