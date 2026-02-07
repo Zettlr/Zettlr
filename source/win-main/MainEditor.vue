@@ -248,6 +248,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     imagePreviewHeight: display.imageHeight,
     boldFormatting: editor.boldFormatting,
     italicFormatting: editor.italicFormatting,
+    highlightFormatting: editor.highlightFormatting,
     muteLines: configStore.config.muteLines,
     citeStyle: editor.citeStyle,
     readabilityAlgorithm: editor.readabilityAlgorithm,
@@ -394,6 +395,23 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
 
   const textToInsert: string = props.editorCommands.data
   currentEditor?.replaceSelection(textToInsert)
+})
+
+watch(toRef(props.editorCommands, 'insertPandoc'), () => {
+  if (props.activeFile?.path !== props.file.path || currentEditor === null) {
+    return
+  }
+
+  if (documentTreeStore.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
+    return
+  }
+
+  const { type, attributes } = props.editorCommands.data
+  if ((type === 'div' || type === 'span') && typeof attributes === 'string') {
+    currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', attributes)
+  }
 })
 
 const fsalFiles = computed<MDFileDescriptor[]>(() => {

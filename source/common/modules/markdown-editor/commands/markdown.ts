@@ -16,6 +16,7 @@ import { type ChangeSpec, EditorSelection } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { language } from '@codemirror/language'
+import { formatPandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 /**
  * Helper function that checks whether the provided target EditorView uses a
@@ -70,6 +71,45 @@ function insertLinkOrImage (target: EditorView, type: 'link'|'image'): void {
       target.dispatch(transaction)
     })
     .catch(err => console.error(err))
+}
+
+/**
+ * Helper to insert pandoc fenced divs
+ *
+ * @param   {EditorView}      target        The target view
+ * @param   {'link'|'image'}  attributes    Attributes to assign to the fenced div
+ */
+function insertPandocDiv (target: EditorView, attributes: string): void {
+  const transaction = target.state.changeByRange(range => {
+    let opening: string = `::: {${attributes}}`
+    let closing: string = ':::'
+
+    const startLine = target.state.doc.lineAt(range.from)
+    const endLine = target.state.doc.lineAt(range.to)
+
+    const changes: ChangeSpec[] = []
+
+    // If the startLine is not empty, insert a newline after the opening mark
+    if (!/^\s*$/.test(startLine.text)) { opening = opening + '\n' }
+
+    // If the endLine is not empty, insert a newline before the closing mark
+    if (!/^\s*$/.test(endLine.text)) { closing = '\n' + closing }
+
+    // If the previous line is not empty, insert a newline before the opening mark
+    const prevLine = target.state.doc.line(startLine.number - 1)
+    if (!/^\s*$/.test(prevLine.text)) { opening = '\n' + opening }
+
+    // If the next line is not empty, insert a newline after the closing mark
+    const nextLine = target.state.doc.line(endLine.number + 1)
+    if (!/^\s*$/.test(nextLine.text)) { closing = closing + '\n' }
+
+    changes.push({ from: startLine.from, insert: opening })
+    changes.push({ from: endLine.to, insert: closing })
+
+    return { changes, range: EditorSelection.range(range.from, range.to) }
+  })
+
+  target.dispatch(transaction)
 }
 
 /**
@@ -310,18 +350,42 @@ export function applyComment (target: EditorView): boolean {
 }
 
 /**
- * Toggles highlighting for the selections.
+ * Applies highlighting for the selections.
  *
  * @param   {EditorView}  target  The target view
  *
  * @return  {boolean}             Whether the command was applicable
  */
-export function toggleHighlight (target: EditorView): boolean {
+export function applyHighlight (target: EditorView): boolean {
   if (!viewContainsMarkdown(target)) {
     return false
   }
 
-  applyInlineMarkup(target, '==', '==')
+  const markup: string = target.state.field(configField, false)?.highlightFormatting ?? '=='
+
+  if (markup === 'span') {
+    applyPandocDivOrSpan(target, 'span', { classes: ['mark'] })
+  } else {
+    applyInlineMarkup(target, markup, markup)
+  }
+
+  return true
+}
+
+/**
+ * Replaces the existing selection ranges with strikethrough formatting.
+ *
+ * @param   {EditorView}  target  The target view
+ *
+ * @return  {boolean}             Whether the command was applicable
+ */
+export function applyStrikethrough (target: EditorView): boolean {
+  if (!viewContainsMarkdown(target)) {
+    return false
+  }
+
+  applyInlineMarkup(target, '~~', '~~')
+
   return true
 }
 
@@ -501,4 +565,33 @@ export function applyTaskList (target: EditorView): boolean {
 
   applyList(target, 'task')
   return true
+}
+
+/**
+ * Insert a fenced div or bracketed span
+ *
+ * @param   {EditorView}  target      The target view
+ * @param   {string}      type        Whether to insert a fenced div or bracketed span
+ * @param   {string}      attributes  Attributes to assign to the div
+ *
+ * @return  {boolean}                 Whether the command was applicable
+*/
+export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', attributes: ParsedPandocAttributes): boolean {
+  if (!viewContainsMarkdown(target)) {
+    return false
+  }
+
+  const attributeString = formatPandocAttributes(attributes)
+
+  if (type === 'div') {
+    insertPandocDiv(target, attributeString)
+    return true
+  }
+
+  if (type === 'span') {
+    applyInlineMarkup(target, '[', `]{${attributeString}}`)
+    return true
+  }
+
+  return false
 }
