@@ -17,7 +17,9 @@ import { type InlineParser } from '@lezer/markdown'
 // Any character allowed before a tag
 const allowedCharsBefore = /^[ \t\n\(\{\[]$/
 
-const tagRE = /^##?[\w_-]+#?/u
+// Tags start with one or two '#' followed by letters, numbers, emojis,
+// underscores, or hyphens
+const tagRE = /^##?[\p{L}\p{N}\p{Emoji_Presentation}_-]+#?/u
 
 export const zknTagParser: InlineParser = {
   name: 'zkn-tags',
