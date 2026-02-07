@@ -56,7 +56,7 @@ import TextElement from '@common/vue/form/elements/TextControl.vue'
 import tippy from 'tippy.js'
 import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph, { type GraphArc, type GraphVertex, type LinkGraph } from './directed-graph'
-import { type MDFileDescriptor } from '@dts/common/fsal'
+import type { IncompleteMDFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 
 const ipcRenderer = window.ipc
@@ -542,7 +542,7 @@ async function buildGraph (): Promise<void> {
       // return the full absolute path to the file identified by `target` or
       // the unaltered `target`.
       if (!resolvedLinks.has(target)) {
-        const found: MDFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'find-exact', payload: target })
+        const found: MDFileDescriptor|IncompleteMDFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'find-exact', payload: target })
         if (found === undefined) {
           // This will create a vertex representing a latent (i.e. not yet
           // existing) file.
@@ -550,9 +550,9 @@ async function buildGraph (): Promise<void> {
           DG.addVertex(target, target)
         } else {
           resolvedLinks.set(target, found.path)
-          if (useTitle && found.yamlTitle !== undefined) {
+          if (useTitle && found.complete && found.yamlTitle !== undefined) {
             DG.addVertex(found.path, found.yamlTitle)
-          } else if (useH1 && found.firstHeading != null) {
+          } else if (useH1 && found.complete && found.firstHeading != null) {
             DG.addVertex(found.path, found.firstHeading)
           } else if (displayMdExtensions) {
             DG.addVertex(found.path, found.name)

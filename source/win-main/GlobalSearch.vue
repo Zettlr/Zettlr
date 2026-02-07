@@ -241,12 +241,13 @@ const directorySuggestions = computed<string[]>(() => {
       // Map paths to descriptors
       .map(p => workspaceStore.descriptorMap.get(p))
       // Only retain directories
-      .filter(d => d !== undefined && d.type === 'directory')
+      .filter(d => d !== undefined)
+      .filter(d => d.type === 'directory')
       // Map from absolute to workspace-relative paths
       .map(d => d.path.slice(rootDir.length + 1))
       // Filter empty ones
       .filter(p => p.length > 0)
-    
+
     suggestedDirectories.push(...wsRelativePaths)
   }
   return suggestedDirectories
@@ -329,7 +330,7 @@ function startSearch (overrideQuery?: string): void {
     .map(d => {
       const root = rootPaths.value.find(p => d.path.startsWith(p))
       let displayName = d.name
-      if (d.type === 'file') {
+      if (d.type === 'file' && d.complete) {
         if (useTitle.value && d.frontmatter != null && typeof d.frontmatter.title === 'string') {
           displayName = d.frontmatter.title
         } else if (useH1.value && d.firstHeading !== null) {
@@ -383,7 +384,7 @@ async function singleSearchRun (): Promise<void> {
   let fileToSearch: FileSearchDescriptor|undefined
   while ((fileToSearch = filesToSearch.value.shift()) !== undefined) {
     // Now start the search
-    const result: SearchResult[] = await ipcRenderer.invoke('application', {
+    const result: SearchResult[]|false = await ipcRenderer.invoke('application', {
       command: 'file-search',
       payload: {
         path: fileToSearch.path,
@@ -391,7 +392,7 @@ async function singleSearchRun (): Promise<void> {
       }
     })
 
-    if (result.length > 0) {
+    if (result !== false && result.length > 0) {
       const newResult: SearchResultWrapper = {
         file: fileToSearch,
         result,

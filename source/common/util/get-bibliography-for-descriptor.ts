@@ -14,7 +14,7 @@
  */
 
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import type { MDFileDescriptor } from '@dts/common/fsal'
+import type { IncompleteMDFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Takes a descriptor and returns the appropriate citation library for it. NOTE:
@@ -25,8 +25,12 @@ import type { MDFileDescriptor } from '@dts/common/fsal'
  *
  * @return  {string}                        The appropriate library
  */
-export function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+export function getBibliographyForDescriptor (descriptor: MDFileDescriptor|IncompleteMDFileDescriptor): string {
   let library = CITEPROC_MAIN_DB
+
+  if (!descriptor.complete) {
+    return library
+  }
 
   if (descriptor.frontmatter != null && 'bibliography' in descriptor.frontmatter) {
     library = descriptor.frontmatter.bibliography

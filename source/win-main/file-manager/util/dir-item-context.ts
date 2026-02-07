@@ -14,13 +14,13 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
-import type { DirDescriptor } from '@dts/common/fsal'
+import type { DirDescriptor, IncompleteDirDescriptor } from '@dts/common/fsal'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { useConfigStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
-export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
+export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor|IncompleteDirDescriptor, el: HTMLElement, callback: (clickedID: string) => void): void {
   const configStore = useConfigStore()
   const isMac = process.platform === 'darwin'
   const isWin = process.platform === 'win32'
@@ -85,12 +85,12 @@ export function displayDirContext (event: MouseEvent, dirObject: DirDescriptor, 
 
   // Determine the template to use
   let template = TEMPLATE
-  if (dirObject.dirNotFoundFlag === true) {
+  if (dirObject.complete && dirObject.dirNotFoundFlag === true) {
     template = NOT_FOUND_TEMPLATE
   }
 
   // Now check for a project
-  if (dirObject.settings.project !== null && dirObject.dirNotFoundFlag !== true) {
+  if (dirObject.complete && dirObject.settings.project !== null && dirObject.dirNotFoundFlag !== true) {
     template.push({ type: 'separator' })
     template.push({
       id: 'menu.project_build',

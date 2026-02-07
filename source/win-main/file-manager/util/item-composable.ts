@@ -17,7 +17,7 @@
 import { displayFileContext } from './file-item-context'
 import { displayDirContext } from './dir-item-context'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
-import type { AnyDescriptor } from 'source/types/common/fsal'
+import type { AnyDescriptor, IncompleteDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
 import { hasImageExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import makeValidUri from 'source/common/util/make-valid-uri'
@@ -26,7 +26,7 @@ import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documen
 const ipcRenderer = window.ipc
 
 export function useItemComposable (
-  object: AnyDescriptor,
+  object: AnyDescriptor|IncompleteDescriptor,
   rootElement: Ref<HTMLElement|null>,
   windowId: string,
   nameEditingInput: Ref<HTMLInputElement|null>
@@ -69,7 +69,7 @@ export function useItemComposable (
   function requestSelection (event: MouseEvent): void {
     // Dead directories can't be opened, so stop the propagation to
     // the file manager and don't do a thing.
-    if (obj.value.type === 'directory' && obj.value.dirNotFoundFlag === true) {
+    if (obj.value.type === 'directory' && obj.value.complete && obj.value.dirNotFoundFlag === true) {
       return event.stopPropagation()
     }
 
@@ -268,7 +268,7 @@ export function useItemComposable (
       .finally(() => { nameEditing.value = false })
   }
 
-  function updateObject (newObject: AnyDescriptor): void {
+  function updateObject (newObject: AnyDescriptor|IncompleteDescriptor): void {
     obj.value = newObject
   }
 

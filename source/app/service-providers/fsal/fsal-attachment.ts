@@ -18,7 +18,8 @@ import type FSALCache from './fsal-cache'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 export async function parse (absPath: string, cache: FSALCache): Promise<OtherFileDescriptor> {
-  let attachment: OtherFileDescriptor = {
+  const attachment: OtherFileDescriptor = {
+    complete: true,
     path: absPath,
     name: path.basename(absPath),
     ext: path.extname(absPath),
@@ -35,7 +36,7 @@ export async function parse (absPath: string, cache: FSALCache): Promise<OtherFi
     attachment.creationtime = metadata.birthtime
     attachment.size = metadata.size
   } catch (err: any) {
-    err.message = `Error reading file ${absPath};: ${err.message as string}`
+    err.message = `Error reading file ${absPath}: ${err.message as string}`
     throw err // Rethrow
   }
 

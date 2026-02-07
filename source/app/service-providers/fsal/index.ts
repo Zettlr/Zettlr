@@ -25,12 +25,16 @@ import type {
   DirDescriptor,
   MDFileDescriptor,
   CodeFileDescriptor,
-  OtherFileDescriptor,
   SortMethod,
   ProjectSettings,
-  AnyDescriptor
+  AnyDescriptor,
+  AnyFileDescriptor,
+  IncompleteDescriptor,
+  IncompleteMDFileDescriptor,
+  IncompleteCodeFileDescriptor,
+  IncompleteFileDescriptor
 } from '@dts/common/fsal'
-import type { SearchTerm } from '@dts/common/search'
+import type { SearchResult, SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
@@ -44,6 +48,7 @@ import ignoreDir from 'source/common/util/ignore-dir'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
+import searchFile from './util/search-file'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -299,9 +304,9 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise<AnyDescriptor>[]}  The descriptors
    */
-  public async getAllLoadedDescriptors (): Promise<AnyDescriptor[]> {
+  public async getAllLoadedDescriptors (): Promise<Array<AnyDescriptor|IncompleteDescriptor>> {
     const { openFiles, openWorkspaces } = this._config.get().app
-    const allDescriptors: AnyDescriptor[] = []
+    const allDescriptors: Array<AnyDescriptor|IncompleteDescriptor> = []
 
     for (const file of openFiles) {
       if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
@@ -328,7 +333,7 @@ export default class FSAL extends ProviderContract {
    *
    * @param  {string}  query  What to search for
    */
-  public async findExact (query: string): Promise<MDFileDescriptor|undefined> {
+  public async findExact (query: string): Promise<MDFileDescriptor|IncompleteMDFileDescriptor|undefined> {
     const allFileDescriptors = (await this.getAllLoadedDescriptors())
       .filter(descriptor => descriptor.type === 'file')
 
@@ -337,7 +342,7 @@ export default class FSAL extends ProviderContract {
     const hasMdExt = hasMarkdownExt(query)
 
     for (const descriptor of allFileDescriptors) {
-      if (isQueryID && descriptor.id === query) {
+      if (isQueryID && descriptor.complete && descriptor.id === query) {
         return descriptor
       }
 
@@ -548,13 +553,10 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise<any>}                   Returns the results
    */
-  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor|IncompleteMDFileDescriptor|IncompleteCodeFileDescriptor, searchTerms: SearchTerm[]): Promise<SearchResult[]> {
     // Searches a file and returns the result
-    if (src.type === 'file') {
-      return await FSALFile.search(src, searchTerms)
-    } else {
-      return await FSALCodeFile.search(src, searchTerms)
-    }
+    const content = await this.loadAnySupportedFile(src.path)
+    return searchFile(src, searchTerms, content)
   }
 
   /**
@@ -675,17 +677,24 @@ export default class FSAL extends ProviderContract {
    * @throws When the path was a directory or an unsupported file (unsupported
    *         includes attachments)
    *
-   * @param   {string<string>}   absPath  The path to the file
+   * @param   {string}           absPath    The path to the file
    *
-   * @return  {Promise<string>}           Resolves with a string
+   * @return  {Promise<string>}             Resolves with a string
    */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
-    const descriptor = await this.getDescriptorForAnySupportedFile(absPath)
+    const descriptor = await this.getDescriptorForAnySupportedFile(absPath, true)
 
-    if (descriptor.type === 'file') {
-      return await FSALFile.load(descriptor)
-    } else if (descriptor.type === 'code') {
-      return await FSALCodeFile.load(descriptor)
+    if (descriptor.type === 'file' || descriptor.type === 'code') {
+      // Loads the content of a file from disk
+      const content = await fs.readFile(descriptor.path, { encoding: 'utf8' })
+      return content
+        // Account for an optional BOM, if present
+        .substring(descriptor.bom.length)
+        // Always split with a regular expression to ensure that mixed linefeeds
+        // don't break reading in a file. Then, on save, the linefeeds will be
+        // standardized to whatever the linefeed extractor detected.
+        .split(/\r\n|\n\r|\n|\r/g)
+        .join('\n')
     } else {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
     }
@@ -698,13 +707,39 @@ export default class FSAL extends ProviderContract {
    *
    * @throws If the path points to a directory or an otherwise unsupported file.
    *
-   * @param   {string}   absPath  The path to the file
+   * @param   {string}   absPath          The path to the file
+   * @param   {boolean}  enforceComplete  Whether to enforce returning a
+   *                                      complete descriptor (may require
+   *                                      parsing, which is a time-intensive
+   *                                      operation). If this is false (the
+   *                                      default), can return incomplete
+   *                                      descriptors to skip parsing.
    *
-   * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
+   * @return  {Promise<AnyFileDescriptor|IncompleteFileDescriptor>} Resolves with the descriptor
    *
    * @throws if the path is not a file
    */
-  public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+  public async getDescriptorForAnySupportedFile (absPath: string): Promise<AnyFileDescriptor|IncompleteFileDescriptor>
+  public async getDescriptorForAnySupportedFile (absPath: string, enforceComplete: true): Promise<AnyFileDescriptor>
+  public async getDescriptorForAnySupportedFile (absPath: string, enforceComplete: boolean = false): Promise<AnyFileDescriptor|IncompleteFileDescriptor> {
+    const cachedDescriptor = await this._cache.get(absPath)
+    if (cachedDescriptor !== undefined) {
+      // If we have a cached descriptor, we can return it in any case.
+      return cachedDescriptor
+    }
+
+    if (await this.isDir(absPath)) {
+      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
+    }
+
+    if (!enforceComplete) {
+      // But if we don't have to force-parse it, we can return a simple
+      // incomplete descriptor that only contains filesystem metadata.
+      return await this.getIncompleteDescriptorFor(absPath) as IncompleteFileDescriptor
+    }
+
+    // If we're here, the caller requested a complete descriptor, so we have to
+    // parse it.
     if (await this.isFile(absPath)) {
       if (hasMarkdownExt(absPath)) {
         return await FSALFile.parse(absPath, this._cache, this.getMarkdownFileParser())
@@ -715,12 +750,50 @@ export default class FSAL extends ProviderContract {
       }
     }
 
+    throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
+  }
+
+  /**
+   * Returns an incomplete descriptor for the provided path that only comes with
+   * basic filesystem metadata.
+   *
+   * @param   {string}                         absPath  The absolute path to the FS node
+   *
+   * @return  {Promise<IncompleteDescriptor>}           The incomplete descriptor
+   */
+  private async getIncompleteDescriptorFor (absPath: string): Promise<IncompleteDescriptor> {
+    const metaInfo = await getFilesystemMetadata(absPath)
+
+    const descriptor = {
+      complete: false,
+      type: 'file',
+      path: absPath,
+      dir: path.dirname(absPath),
+      name: path.basename(absPath),
+      ext: path.extname(absPath),
+      size: metaInfo.size,
+      modtime: metaInfo.modtime,
+      creationtime: metaInfo.birthtime
+      // NOTE: We don't want to repeat the above information four times in this
+      // function. However, TypeScript is not smart enough to decipher that the
+      // type of this descriptor may change below, so instead of typing the
+      // `const descriptor` above, we have to directly type the object we're
+      // creating via an `as` assertion. Otherwise, TypeScript will immediately
+      // infer this as an `IncompleteMDFileDescriptor` due to the `type` field.
+    } as IncompleteDescriptor
+
+    // Determine type
     if (await this.isDir(absPath)) {
-      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
+      descriptor.type = 'directory'
+    } else if (hasCodeExt(absPath)) {
+      descriptor.type = 'code'
+    } else if (hasMarkdownExt(absPath)) {
+      descriptor.type = 'file'
+    } else {
+      descriptor.type = 'other'
     }
 
-    throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
-
+    return descriptor
   }
 
   /**
@@ -740,7 +813,7 @@ export default class FSAL extends ProviderContract {
    *
    * @throws if the path does not exist
    */
-  public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor> {
+  public async getDescriptorFor (absPath: string, avoidDiskAccess: boolean = true): Promise<AnyDescriptor|IncompleteDescriptor> {
     if (avoidDiskAccess) {
       const cacheHit = await this._cache.get(absPath)
       if (cacheHit !== undefined) {
@@ -850,7 +923,7 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise<AnyDescriptor>[]}           The children.
    */
-  public async readDirectory (absPath: string): Promise<AnyDescriptor[]> {
+  public async readDirectory (absPath: string): Promise<Array<AnyDescriptor|IncompleteDescriptor>> {
     if (!await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }

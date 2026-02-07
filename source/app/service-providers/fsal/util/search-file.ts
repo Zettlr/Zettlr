@@ -18,7 +18,7 @@
  */
 
 import type { SearchResult, SearchTerm } from '@dts/common/search'
-import type { MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import type { MDFileDescriptor, CodeFileDescriptor, IncompleteMDFileDescriptor, IncompleteCodeFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Performs a full text search on the given fileObject, using terms. Returns a
@@ -27,7 +27,7 @@ import type { MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
  *
  * @return  {SearchResult[]}  The result set
  */
-export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescriptor, terms: SearchTerm[], cnt: string): SearchResult[] {
+export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescriptor|IncompleteMDFileDescriptor|IncompleteCodeFileDescriptor, terms: SearchTerm[], cnt: string): SearchResult[] {
   let termsMatched = 0
   let cntLower = cnt.toLowerCase()
   const finalResults: SearchResult[] = []
@@ -66,13 +66,13 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
   for (const t of termsToSearch) {
     const matchedWords = new Set<string>()
     for (const wd of t.words) {
-      if (fileObject.name.toLowerCase().includes(wd.toLowerCase()) || (fileObject.type === 'file' && fileObject.tags.includes(wd.toLowerCase()))) {
+      if (fileObject.name.toLowerCase().includes(wd.toLowerCase()) || (fileObject.type === 'file' && fileObject.complete && fileObject.tags.includes(wd.toLowerCase()))) {
         matchedWords.add(wd)
         if (t.operator === 'OR') {
           // Break because only one match necessary
           break
         }
-      } else if (wd[0] === '#' && fileObject.type === 'file' && fileObject.tags.includes(wd.toLowerCase().substring(1))) {
+      } else if (wd[0] === '#' && fileObject.type === 'file' && fileObject.complete && fileObject.tags.includes(wd.toLowerCase().substring(1))) {
         // Account for a potential # in front of the tag
         matchedWords.add(wd)
         if (t.operator === 'OR') {

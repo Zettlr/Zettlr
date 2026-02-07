@@ -24,7 +24,7 @@ import pdfSorter from '@common/util/sort-by-pdf'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import path from 'path'
-import type { MDFileDescriptor } from '@dts/common/fsal'
+import type { IncompleteMDFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { showNativeNotification } from '@common/util/show-notification'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 
@@ -32,7 +32,7 @@ import type { AppServiceContainer } from 'source/app/app-service-container'
 // the library is always absolute. We have to do it this ridiculously since the
 // function is called in both main and renderer processes, and we still have the
 // issue that path-browserify is entirely unusable.
-function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
+function getBibliographyForDescriptor (descriptor: MDFileDescriptor|IncompleteMDFileDescriptor): string {
   const library = getBibliography(descriptor)
 
   if (library !== CITEPROC_MAIN_DB && !path.isAbsolute(library)) {

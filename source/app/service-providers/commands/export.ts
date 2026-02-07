@@ -104,9 +104,11 @@ export default class Export extends ZettlrCommand {
 
       // A user can override this default by providing in a frontmatter the
       // key zettlr.pandoc_working_dir: /path/to/directory
-      if (fileDescriptor.type === 'file' &&
-      typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' &&
-      await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir as string)) {
+      if (
+        fileDescriptor.type === 'file' && fileDescriptor.complete &&
+        typeof fileDescriptor.frontmatter?.zettlr?.pandoc_working_dir === 'string' &&
+        await this._app.fsal.isDir(fileDescriptor.frontmatter.zettlr.pandoc_working_dir as string)
+      ) {
         exporterOptions.cwd = fileDescriptor.frontmatter.zettlr.pandoc_working_dir
       }
 

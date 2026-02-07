@@ -15,7 +15,7 @@
         <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
         <div><span>{{ formattedSize }}</span></div>
       </div>
-      <template v-if="props.file.type === 'file' && props.file.tags.length > 0">
+      <template v-if="props.file.type === 'file' && props.file.complete && props.file.tags.length > 0">
         <hr>
         <div>
           <div v-for="(item, idx) in props.file.tags" v-bind:key="idx" class="badge">
@@ -38,17 +38,19 @@
         <div style="display: flex; align-items: center;">
           <NumberControl
             v-model="internalTargetValue"
+            v-bind:disabled="!props.file.complete"
             v-bind:inline="true"
           ></NumberControl>
           <SelectControl
             v-model="internalTargetMode"
+            v-bind:disabled="!props.file.complete"
             v-bind:inline="true"
             v-bind:options="{
               words: wordsLabel,
               chars: charactersLabel
             }"
           ></SelectControl>
-          <button v-on:click="reset">
+          <button v-bind:disabled="!props.file.complete" v-on:click="reset">
             {{ resetLabel }}
           </button>
         </div>
@@ -80,14 +82,14 @@ import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
 import { ref, computed, watch } from 'vue'
-import type { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from 'source/types/common/fsal'
+import type { AnyFileDescriptor, IncompleteFileDescriptor } from 'source/types/common/fsal'
 import { useConfigStore, useWritingTargetsStore, useTagsStore } from 'source/pinia'
 
 const ipcRenderer = window.ipc
 
 const props = defineProps<{
   target: HTMLElement
-  file: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor
+  file: AnyFileDescriptor|IncompleteFileDescriptor
 }>()
 
 const wordsLabel = trans('Words')
@@ -111,7 +113,7 @@ const modificationTime = computed(() => {
 })
 const formattedSize = computed(() => formatSize(props.file.size))
 const formattedWords = computed(() => {
-  if (props.file.type === 'file') {
+  if (props.file.type === 'file' && props.file.complete) {
     return trans('%s words', localiseNumber(props.file.wordCount))
   } else {
     return ''

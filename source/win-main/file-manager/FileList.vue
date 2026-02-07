@@ -33,7 +33,7 @@
         >
           <FileItem
             v-bind:item="item.props"
-            v-bind:active-file="activeDescriptor"
+            v-bind:active-descriptor="activeDescriptor"
             v-bind:index="0"
             v-bind:window-id="windowId"
             v-on:create-file="handleOperation('file-new', item.id)"
@@ -54,7 +54,7 @@
         v-bind:index="0"
         v-bind:item="item.props"
         v-bind:window-id="windowId"
-        v-bind:active-file="activeDescriptor"
+        v-bind:active-descriptor="activeDescriptor"
         v-on:create-file="handleOperation('file-new', item.id)"
         v-on:create-dir="handleOperation('dir-new', item.id)"
       >
@@ -99,7 +99,7 @@ import matchQuery from './util/match-query'
 
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
 import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
-import type { AnyDescriptor } from '@dts/common/fsal'
+import type { AnyDescriptor, IncompleteDescriptor } from '@dts/common/fsal'
 import { hasDataExt, hasImageExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
@@ -108,7 +108,7 @@ import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
 
 interface RecycleScrollerData {
   id: number
-  props: AnyDescriptor
+  props: AnyDescriptor|IncompleteDescriptor
 }
 
 const ipcRenderer = window.ipc
@@ -121,7 +121,7 @@ const props = defineProps<{
 
 const emit = defineEmits<(e: 'lock-file-tree') => void>()
 
-const activeDescriptor = ref<AnyDescriptor|undefined>(undefined) // Can contain the active ("focused") item
+const activeDescriptor = ref<AnyDescriptor|IncompleteDescriptor|undefined>(undefined) // Can contain the active ("focused") item
 
 const documentTreeStore = useDocumentTreeStore()
 const workspaceStore = useWorkspaceStore()
@@ -207,7 +207,7 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
 // the `TreeItem.vue` component.
 const getProjectOrderedDirectoryContents = computed(() => {
   const dir = selectedDirDescriptor.value
-  if (dir === undefined || dir.type !== 'directory' || dir.settings.project === null) {
+  if (dir === undefined || dir.type !== 'directory' || !dir.complete || dir.settings.project === null) {
     return getDirectoryContents.value
   }
 

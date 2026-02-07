@@ -251,7 +251,7 @@ function beginDragRelatedFile (event: DragEvent, filePath: string): void {
   event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify({
     type: descriptor.type, // Can be file, code, or directory
     path: descriptor.path,
-    id: descriptor.type === 'file' ? descriptor.id : '' // Convenience
+    id: descriptor.type === 'file' && descriptor.complete ? descriptor.id : '' // Convenience
   }))
 }
 
@@ -274,9 +274,9 @@ function getRelatedFileName (filePath: string): string {
     return filePath
   }
 
-  if (useTitle.value && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
+  if (useTitle.value && descriptor.complete && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
     return descriptor.frontmatter.title
-  } else if (useH1.value && descriptor.firstHeading !== null) {
+  } else if (useH1.value && descriptor.complete && descriptor.firstHeading !== null) {
     return descriptor.firstHeading
   } else if (displayMdExtensions.value) {
     return descriptor.name
@@ -289,5 +289,3 @@ function getTagsLabel (tagList: string[]): string {
   return trans('This relation is based on %s shared tags: %s', tagList.length, tagList.join(', '))
 }
 </script>
-@common/util/renderer-path-polyfill
-../../pinia

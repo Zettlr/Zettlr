@@ -97,6 +97,7 @@ import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import type { AnyFileDescriptor, IncompleteFileDescriptor } from 'source/types/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -356,9 +357,9 @@ function getTabText (doc: OpenDocument): string {
 
   if (file.type !== 'file') {
     return file.name
-  } else if (useTitle.value && file.yamlTitle !== undefined) {
+  } else if (useTitle.value && file.complete && file.yamlTitle !== undefined) {
     return file.yamlTitle
-  } else if (useH1.value && file.firstHeading != null) {
+  } else if (useH1.value && file.complete && file.firstHeading != null) {
     return file.firstHeading
   } else if (displayMdExtensions.value) {
     return file.name
@@ -477,7 +478,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
     return
   }
 
-  displayTabsContextMenu(event, descriptor, doc, (clickedID: string) => {
+  displayTabsContextMenu(event, descriptor as AnyFileDescriptor|IncompleteFileDescriptor, doc, (clickedID: string) => {
     if (clickedID === 'close-this') {
       // Close only this
       ipcRenderer.invoke('documents-provider', {
@@ -527,7 +528,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
         command: 'show-item-in-folder',
         payload: { itemPath: descriptor.path }
       } as WindowControlsIPCAPI)
-    } else if (clickedID === 'copy-id' && descriptor.type === 'file') {
+    } else if (clickedID === 'copy-id' && descriptor.type === 'file' && descriptor.complete) {
       // Copy the ID to the clipboard
       navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
     } else if (clickedID === 'pin-tab') {

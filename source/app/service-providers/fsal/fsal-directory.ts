@@ -117,9 +117,11 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 export async function parse (currentPath: string): Promise<DirDescriptor> {
   // Prepopulate
   const dir: DirDescriptor = {
+    complete: true,
     path: currentPath,
     name: path.basename(currentPath),
     dir: path.dirname(currentPath),
+    ext: path.extname(currentPath),
     size: 0,
     type: 'directory',
     isGitRepository: false,
@@ -169,9 +171,11 @@ export async function parse (currentPath: string): Promise<DirDescriptor> {
  */
 export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
   return {
+    complete: true,
     path: dirPath,
     name: path.basename(dirPath),
     dir: path.dirname(dirPath),
+    ext: path.extname(dirPath),
     size: 0,
     type: 'directory',
     isGitRepository: false,
