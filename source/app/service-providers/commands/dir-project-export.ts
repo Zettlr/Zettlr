@@ -95,6 +95,10 @@ export default class DirProjectExport extends ZettlrCommand {
 
     const allDefaults = await this._app.assets.listDefaults()
 
+    const task = this._app.lrt.registerTask(trans('Exporting project "%s"', config.title), trans('Starting export…'))
+
+    let nErrors = 0
+
     for (const profilePathOrCommand of config.profiles) {
       // Spin up one exporter per format.
       const profile = allDefaults.find(e => e.name === profilePathOrCommand)
@@ -108,6 +112,7 @@ export default class DirProjectExport extends ZettlrCommand {
       // Now check if it's actually a custom export because that will be pretty
       // much easier than the regular exports.
       if (command !== undefined) {
+        task.update({ info: trans('Exporting using custom command %s', command.displayName) })
         this._app.log.info(`[Project] Exporting ${dir.name} using custom command ${command.displayName}.`)
         const output = await runShellCommand(command.command, [`"${dir.path}"`], dir.path)
         if (output.code !== 0) {
@@ -145,6 +150,7 @@ export default class DirProjectExport extends ZettlrCommand {
           }
         }
 
+        task.update({ info: trans('Exporting using profile %s…', opt.profile.name) })
         this._app.log.verbose(`[Project Export] Exporting ${opt.sourceFiles.length} files to ${opt.targetDirectory}`)
 
         const result = await makeExport(opt, this._app.log, this._app.config, this._app.assets)
@@ -154,6 +160,7 @@ export default class DirProjectExport extends ZettlrCommand {
         }
         this._app.log.info(`[Project] Exported ${dir.name} as ${result.targetFile}`)
       } catch (err: any) {
+        nErrors++
         this._app.log.error(String(err.message), err)
         this._app.windows.showErrorMessage(
           ('title' in err) ? String(err.title) : String(err.message),
@@ -161,6 +168,17 @@ export default class DirProjectExport extends ZettlrCommand {
           ('additionalInfo' in err) ? String(err.additionalInfo) : ''
         )
       }
+    }
+
+    task.update({
+      title: trans('Project "%s" has been exported.', config.title),
+      info: trans('Exported project into %s formats.', config.profiles.length)
+    })
+
+    if (nErrors > 0) {
+      task.endTask('error', new Error(trans('Project export failed: %s of %s exports were unsuccessful.', nErrors, config.profiles.length)))
+    } else {
+      task.endTask('success')
     }
 
     const notificationShown = showNativeNotification(

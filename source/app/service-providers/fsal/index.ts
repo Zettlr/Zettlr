@@ -44,6 +44,8 @@ import ignoreDir from 'source/common/util/ignore-dir'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
+import type LongRunningTaskProvider from '../long-running-tasks'
+import { trans } from 'source/common/i18n-main'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -74,7 +76,8 @@ export default class FSAL extends ProviderContract {
 
   constructor (
     private readonly _logger: LogProvider,
-    private readonly _config: ConfigProvider
+    private readonly _config: ConfigProvider,
+    private readonly _lrt: LongRunningTaskProvider
   ) {
     super()
 
@@ -246,6 +249,11 @@ export default class FSAL extends ProviderContract {
     // Start a timer to measure how long the roots take to load.
     let start = performance.now()
 
+    // Register a LRT. NOTE: We only do that if "onFile" is not defined, because
+    // this function is called also from within the lifecycle when the FSAL
+    // cache is cleared on startup.
+    const task = onFile === undefined ? this._lrt.registerTask(trans('Indexing files'), trans('Discovering paths to index…')) : undefined
+
     const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
@@ -268,6 +276,7 @@ export default class FSAL extends ProviderContract {
       this._logger.info(`[FSAL] Discovered paths in ${Math.floor(pathDiscoveryDuration / 1000 * 100) / 100}s`)
     }
     start = performance.now()
+    task?.update({ info: trans('Indexing %s paths…', pathsToIndex.length), percentage: 0 })
 
     // Round the increment to 4 digits after the period.
     const roundToDigits = 4
@@ -276,6 +285,7 @@ export default class FSAL extends ProviderContract {
 
     for (const absPath of pathsToIndex) {
       currentPercent += increment
+      task?.update({ percentage: currentPercent / 100 })
       if (onFile !== undefined) {
         onFile(absPath, currentPercent)
       }
@@ -284,6 +294,9 @@ export default class FSAL extends ProviderContract {
       // and automatically recache if necessary.
       await this.getDescriptorFor(absPath)
     }
+
+    task?.update({ info: trans('Indexing complete.') })
+    task?.endTask('success')
 
     const reindexDuration = performance.now() - start
     if (reindexDuration < 1000) {

@@ -9,6 +9,7 @@
         v-if="control.icon"
         v-bind:shape="control.icon"
         v-bind:direction="control.direction"
+        v-bind:badge="control.badge"
       ></cds-icon>
       <template v-if="buttonText !== undefined">
         {{ buttonText }}
@@ -41,6 +42,7 @@ export interface ToolbarButtonControl {
   title?: string
   label?: string
   icon: string
+  badge?: boolean
   direction?: 'up'|'down'|'left'|'right'
   // Allow arbitrary properties that we ignore
   [key: string]: any
