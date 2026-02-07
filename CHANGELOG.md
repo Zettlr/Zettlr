@@ -12,6 +12,8 @@
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
 - Updated `pt-BR` translation (#6154).
+- Improved the tag recognition to allow for more varied Unicode characters in
+  tags than previously, including umlauts, accents, or emojis (#6155).
 
 ## Under the Hood
 
