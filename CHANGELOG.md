@@ -14,6 +14,7 @@
 - Updated `pt-BR` translation (#6154).
 - Improved the tag recognition to allow for more varied Unicode characters in
   tags than previously, including umlauts, accents, or emojis (#6155).
+- Improved pilcrow styling when whitespace rendering is on (#6152).
 
 ## Under the Hood
 
