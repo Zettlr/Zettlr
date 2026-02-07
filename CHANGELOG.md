@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Added an error message that explains to users that an import profile is needed
+  if they attempt to import a supported file with no profile.
 
 ## Under the Hood
 
