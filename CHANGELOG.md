@@ -7,7 +7,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- Increased config retrieval speed in the renderers (#6140). This can speed up
+  some UI interactions.
 
 # 4.1.1
 
