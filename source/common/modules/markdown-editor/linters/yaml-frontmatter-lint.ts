@@ -38,7 +38,7 @@ function findYamlFrontmatterNode (state: EditorState): SyntaxNodeRef|undefined {
         return false // Quickly end the iteration
       }
 
-      if (node.name === 'FencedCode') {
+      if (node.name === 'YAMLFrontmatter') {
         // The startNode identifies a YAML Frontmatter block ...
         const startNode = node.node.getChild('YAMLFrontmatterStart')
         // ... and the CodeText node contains the actual YAML frontmatter code.
