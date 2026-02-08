@@ -24,6 +24,7 @@ import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { configField } from '../util/configuration'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { findReferenceForLinkLabel, removeMarkdownLink } from '../util/links'
+import { getTransformSubmenu } from './transform-items'
 
 const ipcRenderer = window.ipc
 
@@ -153,7 +154,11 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
           payload: { itemPath: validAbsoluteURI }
         } as WindowControlsIPCAPI)
       }
-    }
+    },
+    {
+      type: 'separator'
+    },
+    getTransformSubmenu(view)
   ]
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl)
