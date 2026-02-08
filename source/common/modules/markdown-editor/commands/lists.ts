@@ -17,10 +17,11 @@
 import { type ChangeSpec, type EditorState, type Transaction } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { indentLess, indentMore, insertTab, moveLineDown, moveLineUp } from '@codemirror/commands'
+import { indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { type SyntaxNode } from '@lezer/common'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import type { BulletList, OrderedList } from '@common/modules/markdown-utils/markdown-ast'
+import { configField } from '../util/configuration'
 
 /**
  * Tests if there is any list affected by the current editor selection
@@ -64,6 +65,31 @@ function isListTouchedBySelection (state: EditorState): boolean {
   }
 
   return containsList
+}
+
+/**
+ * Tests if any selection range is inside a YAML frontmatter block.
+ * YAML requires spaces for indentation, so we need to detect this to ensure
+ * we always use spaces in frontmatter regardless of user's tab settings.
+ *
+ * @param   {EditorState}  state  The state in question
+ *
+ * @return  {boolean}             Returns true if any selection is in YAML frontmatter
+ */
+function isInYamlFrontmatter (state: EditorState): boolean {
+  const tree = syntaxTree(state)
+  for (const range of state.selection.ranges) {
+    // Use resolve() to directly find the node at the cursor position
+    // and walk up the tree to check for YAML frontmatter ancestry
+    let node: SyntaxNode | null = tree.resolve(range.from)
+    while (node) {
+      if (node.name === 'YAMLFrontmatter' || node.name === 'YAMLFrontmatterStart' || node.name === 'YAMLFrontmatterEnd') {
+        return true
+      }
+      node = node.parent
+    }
+  }
+  return false
 }
 
 /**
@@ -252,8 +278,16 @@ export function maybeIndentList (target: EditorView): boolean {
     indentMore(cmd)
     target.dispatch(correctListMarkers(target.state))
     return true
+  } else if (isInYamlFrontmatter(target.state)) {
+    // YAML requires spaces for indentation, so always insert spaces here
+    // regardless of the user's indentWithTabs setting
+    const config = target.state.field(configField)
+    const spaces = ' '.repeat(config.indentUnit)
+    target.dispatch(target.state.replaceSelection(spaces))
+    return true
   } else {
-    return insertTab(cmd)
+    // Indent using the user's indentation settings (spaces vs tabs)
+    return indentMore(cmd)
   }
 }
 
