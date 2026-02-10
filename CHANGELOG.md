@@ -17,6 +17,8 @@
   tags than previously, including umlauts, accents, or emojis (#6155).
 - Improved pilcrow styling when whitespace rendering is on (#6152).
 - Fixed the frontmatter linter never reporting any errors with the YAML (#6167).
+- Fixed an issue where images that spanned multiple lines could cause the editor
+  to crash when image rendering was active.
 
 ## Under the Hood
 

@@ -315,6 +315,13 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
     return undefined
   }
 
+  // Images (particularly captions) can include newlines and still be valid.
+  // However, the current implementation as an inline-plugin does not allow for
+  // that, and attempting to render such an image would crash the editor.
+  if (state.sliceDoc(node.from, node.to).includes('\n')) {
+    return undefined
+  }
+
   const alt = state.sliceDoc(marks[0].to, marks[1].from)
   const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
   const url = state.sliceDoc(urlNode.from, urlNode.to)
