@@ -822,24 +822,39 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
-  public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
-    const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
-      .filter(dirent => {
-        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
-          (dirent.isDirectory() && !ignoreDir(dirent.name))
-      })
-      .map(dirent => {
-        const childPath = path.join(directoryPath, dirent.name)
-        if (dirent.isFile()) {
-          return Promise.resolve([childPath])
-        } else if (dirent.isDirectory()) {
-          return this.readDirectoryRecursively(childPath)
-        } else {
-          return Promise.resolve([])
-        }
-      })
+  public async readDirectoryRecursively (directoryPath: string, maxDepth: number = 15, currentDepth: number = 0): Promise<string[]> {
+    // Prevent infinite recursion on deeply nested directories
+    if (currentDepth >= maxDepth) {
+      this._logger.warning(`[FSAL] Reached max depth (${maxDepth}) at ${directoryPath}`)
+      return [directoryPath]
+    }
 
-    return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+    try {
+      const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
+        .filter(dirent => {
+          return (dirent.isFile() && !dirent.name.startsWith('.')) ||
+            (dirent.isDirectory() && !ignoreDir(dirent.name))
+        })
+        .map(dirent => {
+          const childPath = path.join(directoryPath, dirent.name)
+          if (dirent.isFile()) {
+            return Promise.resolve([childPath])
+          } else if (dirent.isDirectory()) {
+            return this.readDirectoryRecursively(childPath, maxDepth, currentDepth + 1)
+          } else {
+            return Promise.resolve([])
+          }
+        })
+
+      return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+    } catch (err: any) {
+      // Handle EBUSY, EPERM, EACCES errors gracefully (common on network drives)
+      if (err.code === 'EBUSY' || err.code === 'EPERM' || err.code === 'EACCES') {
+        this._logger.warning(`[FSAL] Could not read directory ${directoryPath}: ${err.message}`)
+        return [directoryPath]
+      }
+      throw err
+    }
   }
 
   /**
