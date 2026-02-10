@@ -16,11 +16,10 @@
 - Improved the tag recognition to allow for more varied Unicode characters in
   tags than previously, including umlauts, accents, or emojis (#6155).
 - Improved pilcrow styling when whitespace rendering is on (#6152).
+- Fixed the frontmatter linter never reporting any errors with the YAML (#6167).
 
 ## Under the Hood
 
-- Fixed YAML frontmatter linter not detecting any errors due to incorrect syntax
-  tree node name lookup.
 - Increased config retrieval speed in the renderers (#6140). This can speed up
   some UI interactions.
 
