@@ -88,6 +88,7 @@ export const renderBlockquotes = [
       display: 'block',
       borderLeft: 'solid 0.25em',
       paddingLeft: '0.5em',
+      marginLeft: '0.25em'
     },
     '.blockquote-wrapper .cm-line': {
       opacity: '0.7',
