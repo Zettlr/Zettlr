@@ -142,6 +142,6 @@ export function hasDataExt (filePath: string): boolean {
  *
  * @return  {boolean}            Whether the filePath has any recognized ext.
  */
-export function hasAnyRecognizedFileExtension (filePath: string, extensions: string[] = []): boolean {
-  return hasExt(filePath, [ ...ALL_EXT, ...extensions ])
+export function hasAnyRecognizedFileExtension (filePath: string, customExtensions: string[] = []): boolean {
+  return hasExt(filePath, [ ...ALL_EXT, ...customExtensions ])
 }
