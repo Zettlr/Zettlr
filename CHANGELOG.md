@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+- **Feature**: The editor now allows scrolling past the end of documents for a
+  more comfortable writing experience.
 - **Feature**: New utilities for working with native Pandoc Divs and spans
   (#6032):
   - Added a new setting to switch between native highlights (`==mark==`) and
