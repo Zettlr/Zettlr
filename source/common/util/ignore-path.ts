@@ -61,7 +61,7 @@ export const IGNORE_PATH_RE: RegExp[] = IGNORE_PATHS
 /**
  * Check if the given filename is a dot file or folder.
  *
- * @param   {string}   filePath  The path to check
+ * @param   {string}   filePath  The path to check (can be absolute or relative)
  *
  * @return  {boolean}            Whether the file is a dot file or folder
  */
