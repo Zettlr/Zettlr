@@ -53,7 +53,7 @@ const prefixRE = '(?:^|[\\\/\\\\])'
 const suffixRE = '(?:$|[\\\/\\\\])'
 
 export const WATCHDOG_IGNORE_RE: RegExp[] = WATCHDOG_IGNORE_PATHS
-  .map(re => new RegExp(`${re_prefix}${re}${re_suffix}`, 'i'))
+  .map(re => new RegExp(`${prefixRE}${re}${suffixRE}`, 'i'))
 
 export const IGNORE_PATH_RE: RegExp[] = IGNORE_PATHS
   .map(re => new RegExp(`${re_prefix}${re}${re_suffix}`, 'i'))
