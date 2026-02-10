@@ -41,7 +41,7 @@ export class SpaceWidget extends WidgetType {
     super()
   }
 
-  eq (other: BulletWidget): boolean {
+  eq (other: SpaceWidget): boolean {
     if (this.node === undefined || other.node === undefined) {
       return false
     }
@@ -52,6 +52,7 @@ export class SpaceWidget extends WidgetType {
   toDOM (_view: EditorView): HTMLElement {
     const elem = document.createElement('span')
     elem.innerHTML = '&nbsp;'.repeat(this.numChars)
+    elem.classList.add('rendered-space')
     return elem
   }
 }
@@ -147,7 +148,11 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
 
             // Only render QuoteMark if the parent does not contain a cursor.
             if (parentNode && !rangeInSelection(view.state.selection, parentNode.from, parentNode.to, true)) {
-              ranges.push(Decoration.replace({ widget: new SpaceWidget(node.to - node.from, node.node) }).range(node.from, node.to))
+              // We want to also hide any trailing whitespace. Since quotemarks
+              // can be followed by a max of 3 spaces, we grab three more characters
+              // and test the resulting string
+              const match = /^(\>[ ]{0,3})/.exec(view.state.sliceDoc(node.from, node.from + 3))
+              ranges.push(hiddenDeco.range(node.from, match ? node.from + match[1].length : node.to ))
             }
 
             break
