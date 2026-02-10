@@ -46,7 +46,7 @@ const IGNORE_PATHS: string[] = [
 
 // Matches either the start of the line or
 // the first letter after a path separator.
-const re_prefix = '(?:^|[\\\/\\\\])'
+const prefixRE = '(?:^|[\\\/\\\\])'
 
 // Matches either the end of the line
 // or an internal segment of the path.
