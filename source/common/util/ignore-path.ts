@@ -81,9 +81,5 @@ export function ignorePath (filePath: string, ignoreDotFiles: boolean = true): b
     return true
   }
 
-  if (IGNORE_PATH_RE.some(re => re.test(filePath))) {
-    return true
-  }
-
-  return false
+  return IGNORE_PATH_RE.some(re => re.test(filePath))
 }
