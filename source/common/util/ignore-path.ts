@@ -50,7 +50,7 @@ const prefixRE = '(?:^|[\\\/\\\\])'
 
 // Matches either the end of the line
 // or an internal segment of the path.
-const re_suffix = '(?:$|[\\\/\\\\])'
+const suffixRE = '(?:$|[\\\/\\\\])'
 
 export const WATCHDOG_IGNORE_RE: RegExp[] = WATCHDOG_IGNORE_PATHS
   .map(re => new RegExp(`${re_prefix}${re}${re_suffix}`, 'i'))
