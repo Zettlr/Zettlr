@@ -19,6 +19,8 @@
 
 ## Under the Hood
 
+- Fixed YAML frontmatter linter not detecting any errors due to incorrect syntax
+  tree node name lookup.
 - Increased config retrieval speed in the renderers (#6140). This can speed up
   some UI interactions.
 
