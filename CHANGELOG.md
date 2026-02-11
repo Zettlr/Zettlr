@@ -10,6 +10,8 @@
   - Added new buttons to the formatting toolbar to insert underlined,
     strikethrough, and highlighted spans.
 - **Feature**: Blockquotes are now rendered with a vertical bar (#6122).
+- **Feature**: Users can now opt to display hidden files and folders
+  ("dot-files") in the sidebar and/or filemanager in the settings (#6041).
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
 - Updated `pt-BR` translation (#6154).
