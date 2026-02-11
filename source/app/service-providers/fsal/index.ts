@@ -845,7 +845,7 @@ export default class FSAL extends ProviderContract {
 
       return [ directoryPath, ...(await Promise.all(contents)).flat() ]
     } catch (err: any) {
-      if (err.code === 'EACCES' || err.code === 'EPERM') return []
+      if (err.code === 'EACCES' || err.code === 'EPERM') {return []}
       throw err
     }
   }
@@ -867,7 +867,7 @@ export default class FSAL extends ProviderContract {
     try {
       children = await fs.readdir(absPath)
     } catch (err: any) {
-      if (err.code === 'EACCES' || err.code === 'EPERM') return []
+      if (err.code === 'EACCES' || err.code === 'EPERM') {return []}
       throw err
     }
 
