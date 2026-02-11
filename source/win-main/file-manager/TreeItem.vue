@@ -507,7 +507,6 @@ watch(toRef(props, 'item'), function (value) {
 
 watch(showDotFiles, async function () {
   if (props.item.type === 'directory') {
-    uncollapseIfApplicable()
     await fetchChildren()
   }
 })
