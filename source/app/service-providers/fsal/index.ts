@@ -751,6 +751,9 @@ export default class FSAL extends ProviderContract {
     try {
       return await this.getAnyDirectoryDescriptor(absPath)
     } catch (err: any) {
+      if (err.code === 'EACCES' || err.code === 'EPERM') {
+        return FSALDir.getDirNotFoundDescriptor(absPath)
+      }
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
   }
@@ -823,23 +826,28 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
   public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
-    const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
-      .filter(dirent => {
-        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
-          (dirent.isDirectory() && !ignoreDir(dirent.name))
-      })
-      .map(dirent => {
-        const childPath = path.join(directoryPath, dirent.name)
-        if (dirent.isFile()) {
-          return Promise.resolve([childPath])
-        } else if (dirent.isDirectory()) {
-          return this.readDirectoryRecursively(childPath)
-        } else {
-          return Promise.resolve([])
-        }
-      })
+    try {
+      const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
+        .filter(dirent => {
+          return (dirent.isFile() && !dirent.name.startsWith('.')) ||
+            (dirent.isDirectory() && !ignoreDir(dirent.name))
+        })
+        .map(dirent => {
+          const childPath = path.join(directoryPath, dirent.name)
+          if (dirent.isFile()) {
+            return Promise.resolve([childPath])
+          } else if (dirent.isDirectory()) {
+            return this.readDirectoryRecursively(childPath)
+          } else {
+            return Promise.resolve([])
+          }
+        })
 
-    return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+      return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+    } catch (err: any) {
+      if (err.code === 'EACCES' || err.code === 'EPERM') return []
+      throw err
+    }
   }
 
   /**
@@ -855,12 +863,18 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
-    const children = await fs.readdir(absPath)
+    let children: string[]
+    try {
+      children = await fs.readdir(absPath)
+    } catch (err: any) {
+      if (err.code === 'EACCES' || err.code === 'EPERM') return []
+      throw err
+    }
 
-    return await Promise.all(
-      children
-        .map(p => path.join(absPath, p))
-        .map(p => this.getDescriptorFor(p))
-    )
+    const paths = children.map(p => path.join(absPath, p))
+    const results = await Promise.allSettled(paths.map(p => this.getDescriptorFor(p)))
+    return results
+      .filter((r): r is PromiseFulfilledResult<AnyDescriptor> => r.status === 'fulfilled')
+      .map(r => r.value)
   }
 }
