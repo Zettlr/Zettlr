@@ -24,6 +24,7 @@
 - Fixed the tab key not respecting the "Indent using tabs instead of spaces"
   setting. Additionally, pressing tab now always inserts spaces in YAML
   frontmatter blocks to maintain valid YAML syntax (#6168).
+- fix: The formatting toolbar no longer grabs focus from the editor.
 
 ## Under the Hood
 
