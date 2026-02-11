@@ -141,7 +141,7 @@ function renderWidgets (
 export function renderInlineWidgets (
   shouldHandleNode: (node: SyntaxNodeRef) => boolean,
   createWidget: (state: EditorState, node: SyntaxNodeRef) => WidgetType|undefined
-): ViewPlugin<any> {
+) {
   const plugin = ViewPlugin.fromClass(class {
     decorations: DecorationSet
 
