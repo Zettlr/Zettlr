@@ -16,7 +16,7 @@
 
 import type { EditorView } from '@codemirror/view'
 import { findColumnIndexByRange, getDelimiterLineCellOffsets, mapSelectionsWithTables } from './util'
-import type { ChangeSpec, TransactionSpec } from '@codemirror/state'
+import { EditorSelection, type ChangeSpec, type TransactionSpec } from '@codemirror/state'
 import type { SyntaxNode } from '@lezer/common'
 
 /**
@@ -92,6 +92,28 @@ export function clearTable (target: EditorView): boolean {
 
   if (changes.length > 0) {
     target.dispatch({ changes })
+    return true
+  } else {
+    return false
+  }
+}
+
+/**
+ * Deletes all tables with selections inside them.
+ *
+ * @param   {EditorView}  target  The target EditorView
+ *
+ * @return  {boolean}             Whether the command has applied any changes.
+ */
+export function deleteTable (target: EditorView): boolean {
+  const changes = mapSelectionsWithTables<ChangeSpec>(target, ({ tableAST }) => {
+    const { from, to } = tableAST
+    return { from, to, insert: '', selection: EditorSelection.cursor(from) }
+  })
+
+  if (changes.length > 0) {
+    target.dispatch({ changes })
+    target.focus()
     return true
   } else {
     return false
