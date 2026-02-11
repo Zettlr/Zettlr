@@ -85,11 +85,13 @@ const pandocDivMarkWrapper = BlockWrapper.create({ tagName: 'pandoc-div-mark-wra
 function createDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
   const ranges: Range<BlockWrapper>[] = []
 
+  const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
+
   for (const { from, to } of view.visibleRanges) {
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (rangeInSelection(view.state.selection, node.from, node.to, true)) {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
           return
         }
 
