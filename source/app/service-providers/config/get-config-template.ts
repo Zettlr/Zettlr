@@ -172,6 +172,7 @@ export interface ConfigOptions {
     theme: MarkdownTheme
     hideToolbarInDistractionFree: boolean
     markdownFileExtensions: boolean
+    previewModeShowSyntaxWhenCursorIsAdjacent: boolean
     imageWidth: number
     imageHeight: number
     renderingMode: 'preview'|'raw'
@@ -441,6 +442,7 @@ export function getConfigTemplate (): ConfigOptions {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
+      previewModeShowSyntaxWhenCursorIsAdjacent: true,
       imageWidth: 100, // Maximum preview image width
       imageHeight: 50, // Maximum preview image height
       renderingMode: 'preview',

@@ -25,6 +25,12 @@
   setting. Additionally, pressing tab now always inserts spaces in YAML
   frontmatter blocks to maintain valid YAML syntax (#6168).
 - fix: The formatting toolbar no longer grabs focus from the editor.
+- fix: Added a configuration setting to allow restoring the pre-4.0 behavior of
+  not showing the underlying Markdown syntax of pre-rendered elements when the
+  cursor merely touches the element. If the setting "Show Markdown syntax when
+  the cursor is adjacent or inside an element" is enabled (the default), the
+  editor will show the Markdown syntax both when the cursor is within the
+  element or if it is adjacent to it.
 
 ## Under the Hood
 

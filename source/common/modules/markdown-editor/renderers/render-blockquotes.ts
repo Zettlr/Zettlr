@@ -18,15 +18,17 @@ import type { Range, RangeSet } from '@codemirror/state'
 import { BlockWrapper, EditorView, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
+import { configField } from '../util/configuration'
 
 function showBlockquoteWrappers (view: EditorView): RangeSet<BlockWrapper> {
   const ranges: Range<BlockWrapper>[] = []
+  const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
 
   for (const { from, to } of view.visibleRanges) {
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (rangeInSelection(view.state.selection, node.from, node.to, true)) {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
           return
         }
 
@@ -44,7 +46,7 @@ function showBlockquoteWrappers (view: EditorView): RangeSet<BlockWrapper> {
           parent = parent.parent
         }
 
-        if (parentNode && rangeInSelection(view.state.selection, parentNode.from, parentNode.to, true)) {
+        if (parentNode && rangeInSelection(view.state.selection, parentNode.from, parentNode.to, includeAdjacent)) {
           return
         }
 

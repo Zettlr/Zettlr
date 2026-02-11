@@ -26,6 +26,7 @@ import { syntaxTree } from '@codemirror/language'
 import { type SyntaxNodeRef } from '@lezer/common'
 import { StateField, type Range, type EditorState } from '@codemirror/state'
 import { rangeInSelection } from '../util/range-in-selection'
+import { configField } from '../util/configuration'
 
 /**
  * Renders all widgets for the provided `visibleRanges`. The function traverses
@@ -75,6 +76,8 @@ function renderWidgets (
     visibleRanges = [{ from: 0, to: state.doc.length }]
   }
 
+  const includeAdjacent = state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
+
   for (const { from, to } of visibleRanges) {
     syntaxTree(state).iterate({
       from,
@@ -82,7 +85,7 @@ function renderWidgets (
       enter: (node) => {
         // Determine the number of overlapping selections. If these are non-
         // null, we must not render this widget
-        if (rangeInSelection(state.selection, node.from, node.to)) {
+        if (rangeInSelection(state.selection, node.from, node.to, includeAdjacent)) {
           return
         }
 

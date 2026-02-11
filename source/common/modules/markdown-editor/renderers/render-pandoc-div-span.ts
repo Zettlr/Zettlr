@@ -20,15 +20,18 @@ import { Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate
 import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
+import { configField } from '../util/configuration'
 
 function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
   const ranges: Range<Decoration>[] = []
+
+  const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
 
   for (const { from, to } of view.visibleRanges) {
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (rangeInSelection(view.state.selection, node.from, node.to, true)) {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
           return
         }
 

@@ -254,6 +254,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     readabilityAlgorithm: editor.readabilityAlgorithm,
     idRE: zkn.idRE,
     idGen: zkn.idGen,
+    previewModeShowSyntaxWhenCursorIsAdjacent: display.previewModeShowSyntaxWhenCursorIsAdjacent,
     renderCitations: display.renderCitations,
     renderingMode: display.renderingMode,
     renderIframes: display.renderIframes,

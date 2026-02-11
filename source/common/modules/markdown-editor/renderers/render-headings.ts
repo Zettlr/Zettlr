@@ -29,6 +29,10 @@ function hideHeadingMarks (view: EditorView): RangeSet<Decoration> {
     syntaxTree(view.state).iterate({
       from, to,
       enter (node) {
+        // Headings must always show their syntax even if the cursor is only
+        // adjacent for a proper UX. If we didn't do that, users would have to
+        // click within this element to show the heading characters, which is
+        // undesirable.
         if(rangeInSelection(view.state.selection, node.from, node.to, true)) {
           return
         }
