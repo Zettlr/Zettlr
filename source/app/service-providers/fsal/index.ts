@@ -822,7 +822,7 @@ export default class FSAL extends ProviderContract {
     }
 
     const { files } = this._config.get()
-    const ignoreDotFiles = !(files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar)
+    const ignoreDotFiles = !files.dotFiles.showInFilemanager && !files.dotFiles.showInSidebar
 
     try {
       const contents = (await fs.readdir(directoryPath, { withFileTypes: true, recursive: true }))
@@ -856,7 +856,7 @@ export default class FSAL extends ProviderContract {
     }
 
     const { files } = this._config.get()
-    const ignoreDotFiles = !(files.dotFiles.showInFilemanager || files.dotFiles.showInSidebar)
+    const ignoreDotFiles = !files.dotFiles.showInFilemanager && !files.dotFiles.showInSidebar
 
     try {
       const children = await fs.readdir(absPath, { withFileTypes: true })
