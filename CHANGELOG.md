@@ -2,9 +2,6 @@
 
 ## GUI and Functionality
 
-- Fixed Tab key not respecting the "Indent using tabs instead of spaces"
-  setting. Additionally, Tab now always inserts spaces in YAML frontmatter
-  blocks to maintain valid YAML syntax.
 - **Feature**: New utilities for working with native Pandoc Divs and spans
   (#6032):
   - Added a new setting to switch between native highlights (`==mark==`) and
@@ -24,6 +21,9 @@
 - Fixed the frontmatter linter never reporting any errors with the YAML (#6167).
 - Fixed an issue where images that spanned multiple lines could cause the editor
   to crash when image rendering was active.
+- Fixed the tab key not respecting the "Indent using tabs instead of spaces"
+  setting. Additionally, pressing tab now always inserts spaces in YAML
+  frontmatter blocks to maintain valid YAML syntax (#6168).
 
 ## Under the Hood
 
