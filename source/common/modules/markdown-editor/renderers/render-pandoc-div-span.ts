@@ -22,7 +22,7 @@ import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-at
 import { rangeInSelection } from '../util/range-in-selection'
 import { configField } from '../util/configuration'
 
-function showSpanDecorations (view: EditorView): RangeSet<Decoration> {
+function createSpanDecorations (view: EditorView): RangeSet<Decoration> {
   const ranges: Range<Decoration>[] = []
 
   const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
@@ -77,9 +77,12 @@ function showSpanDecorations (view: EditorView): RangeSet<Decoration> {
   return Decoration.set(ranges, true)
 }
 
-const overrideWrapper = BlockWrapper.create({ tagName: 'pandoc-div-info-wrapper' })
+// This is used to override the styling of parent divs
+// so that the marks remain legible, and it is easier
+// to distinguish between nested divs.
+const pandocDivMarkWrapper = BlockWrapper.create({ tagName: 'pandoc-div-mark-wrapper' })
 
-function showDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
+function createDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
   const ranges: Range<BlockWrapper>[] = []
 
   for (const { from, to } of view.visibleRanges) {
@@ -125,13 +128,17 @@ function showDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
           },
         })
 
-        // Only style the content within the marks
+        // Only style the content within the
+        // marks for better styling preview
         const fromLine = view.state.doc.lineAt(node.from)
         const toLine = view.state.doc.lineAt(node.to)
 
+        // Wrap the opening div mark line
+        ranges.push(pandocDivMarkWrapper.range(fromLine.from, fromLine.to))
+        // Wrap the div content
         ranges.push(wrapper.range(fromLine.to + 1, toLine.from - 1))
-        ranges.push(overrideWrapper.range(fromLine.from, fromLine.to))
-        ranges.push(overrideWrapper.range(toLine.from, toLine.to))
+        // Wrap the closing div mark line
+        ranges.push(pandocDivMarkWrapper.range(toLine.from, toLine.to))
       }
     })
   }
@@ -144,14 +151,14 @@ const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
   divWrappers: RangeSet<BlockWrapper>
 
   constructor (view: EditorView) {
-    this.spanDecorations = showSpanDecorations(view)
-    this.divWrappers = showDivDecorations(view)
+    this.spanDecorations = createSpanDecorations(view)
+    this.divWrappers = createDivDecorations(view)
   }
 
   update (update: ViewUpdate) {
     if (update.docChanged || update.viewportChanged || update.selectionSet) {
-      this.spanDecorations = showSpanDecorations(update.view)
-      this.divWrappers = showDivDecorations(update.view)
+      this.spanDecorations = createSpanDecorations(update.view)
+      this.divWrappers = createDivDecorations(update.view)
     }
   }
 
@@ -166,15 +173,19 @@ export const renderPandoc = [
   pandocDivSpanPlugin,
   EditorView.baseTheme({
     // This must be set to `display: block` so that the
-    // attributes are applied correctly.
+    // attributes are applied correctly. We use `!important`
+    // here so that any styling defined by the div does not
+    // apply.
     'pandoc-div-wrapper': {
       display: 'block !important',
-      // Prevent user-provided styling from altering the dom-layout
+      // Prevent div styling from altering the dom-layout
       flex: 'initial !important',
       height: 'initial !important',
       width: 'initial !important',
     },
-    'pandoc-div-info-wrapper': {
+    // Override the styling of parent divs so that
+    // the div marks (`:::`) are easier to see.
+    'pandoc-div-mark-wrapper': {
       display: 'block',
       fontSize: '18px',
       fontWeight: 'initial',
@@ -182,10 +193,11 @@ export const renderPandoc = [
       color: 'initial',
       backgroundColor: '#ffffff',
     },
-    '&dark pandoc-div-info-wrapper': {
+    '&dark pandoc-div-mark-wrapper': {
       backgroundColor: '#2b2b2c',
     },
-    // The classes `.mark`, `.underline`, and `.smallcaps` are used by pandoc spans
+    // The classes `.mark`, `.underline`, and
+    // `.smallcaps` are used by pandoc spans
     '.mark .cm-pandoc-span': {
       backgroundColor: '#ffff0080',
     },
