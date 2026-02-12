@@ -412,6 +412,7 @@ watch(toRef(props.editorCommands, 'insertPandoc'), () => {
   const { type, attributes } = props.editorCommands.data
   if ((type === 'div' || type === 'span') && typeof attributes === 'string') {
     currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', attributes)
+    currentEditor?.focus()
   }
 })
 
