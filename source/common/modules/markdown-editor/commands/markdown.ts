@@ -108,7 +108,7 @@ function insertPandocDiv (target: EditorView, attributes: string): void {
     // If the previous line is not empty, not the first line, and does not
     // match an opening or closing mark, insert a newline before the opening
     const prevLine = target.state.doc.line(Math.max(startLine.number - 1, 1))
-    if (prevLine.number > 1 && !markRe.test(prevLine.text)) {
+    if (prevLine.number > 1 && !/^\s*$/.test(prevLine.text) && !markRe.test(prevLine.text)) {
       opening = '\n' + opening
     }
 
