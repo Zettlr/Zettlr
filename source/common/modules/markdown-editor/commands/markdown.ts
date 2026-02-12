@@ -96,11 +96,11 @@ function insertPandocDiv (target: EditorView, attributes: string): void {
     if (!/^\s*$/.test(endLine.text)) { closing = '\n' + closing }
 
     // If the previous line is not empty, insert a newline before the opening mark
-    const prevLine = target.state.doc.line(startLine.number - 1)
+    const prevLine = target.state.doc.line(Math.max(startLine.number - 1, 0))
     if (!/^\s*$/.test(prevLine.text)) { opening = '\n' + opening }
 
     // If the next line is not empty, insert a newline after the closing mark
-    const nextLine = target.state.doc.line(endLine.number + 1)
+    const nextLine = target.state.doc.line(Math.min(endLine.number + 1, target.state.doc.lines))
     if (!/^\s*$/.test(nextLine.text)) { closing = closing + '\n' }
 
     changes.push({ from: startLine.from, insert: opening })
