@@ -7,7 +7,7 @@ import { copyAsHTML, copyAsPlain, cut, paste, pasteAsPlain } from '../util/copy-
 import { selectAllCommand } from '../keymaps/table-editor'
 import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
-import { clearTable, setAlignment } from './commands/tables'
+import { clearTable, deleteTable, setAlignment } from './commands/tables'
 
 export function displayTableContextMenu (event: MouseEvent, mainView: EditorView, subviewOrView: EditorView): void {
   const template: AnyMenuItem[] = [
@@ -207,7 +207,8 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
         {
           type: 'normal',
           label: trans('Delete table'),
-          id: 'delete.table'
+          id: 'delete.table',
+          action () { deleteTable(mainView) }
         }
       ]
     }

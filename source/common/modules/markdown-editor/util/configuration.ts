@@ -33,6 +33,7 @@ export interface EditorConfiguration {
   autocorrect: AutocorrectOptions
   autoCloseBrackets: boolean
   renderingMode: 'preview'|'raw'
+  previewModeShowSyntaxWhenCursorIsAdjacent: boolean
   renderCitations: boolean
   renderIframes: boolean
   renderImages: boolean
@@ -95,6 +96,7 @@ export function getDefaultConfig (): EditorConfiguration {
     autocompleteSuggestEmojis: false,
     autoCloseBrackets: true,
     renderingMode: 'preview',
+    previewModeShowSyntaxWhenCursorIsAdjacent: true,
     renderCitations: true,
     renderIframes: true,
     renderImages: true,

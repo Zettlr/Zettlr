@@ -90,15 +90,42 @@ function getToolbar (state: EditorState): Tooltip[] {
       // NOTE: We need to use the onmousedown event here, since the click only
       // triggers after onmouseup, and by that time the editor has gone through
       // a transaction cycle that has re-rendered the tooltip.
-      bold.onmousedown = function (event) { applyBold(view) }
-      italic.onmousedown = function (event) { applyItalic(view) }
-      underline.onmousedown = function (event) { applyPandocDivOrSpan(view, 'span', { classes: ['underline'] }) }
-      highlight.onmousedown = function (event) { applyHighlight(view) }
-      strikethrough.onmousedown = function (event) { applyStrikethrough(view) }
-      link.onmousedown = function (event) { insertLink(view) }
-      image.onmousedown = function (event) { insertImage(view) }
-      comment.onmousedown = function (event) { applyComment(view) }
-      code.onmousedown = function (event) { applyCode(view) }
+      bold.onmousedown = function (event) {
+        event.preventDefault()
+        applyBold(view)
+      }
+      italic.onmousedown = function (event) {
+        event.preventDefault()
+        applyItalic(view)
+      }
+      underline.onmousedown = function (event) {
+        event.preventDefault()
+        applyPandocDivOrSpan(view, 'span', { classes: ['underline'] })
+      }
+      highlight.onmousedown = function (event) {
+        event.preventDefault()
+        applyHighlight(view)
+      }
+      strikethrough.onmousedown = function (event) {
+        event.preventDefault()
+        applyStrikethrough(view)
+      }
+      link.onmousedown = function (event) {
+        event.preventDefault()
+        insertLink(view)
+      }
+      image.onmousedown = function (event) {
+        event.preventDefault()
+        insertImage(view)
+      }
+      comment.onmousedown = function (event) {
+        event.preventDefault()
+        applyComment(view)
+      }
+      code.onmousedown = function (event) {
+        event.preventDefault()
+        applyCode(view)
+      }
 
       return { dom }
     }

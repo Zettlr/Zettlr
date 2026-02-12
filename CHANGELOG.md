@@ -10,6 +10,8 @@
   - Added new buttons to the formatting toolbar to insert underlined,
     strikethrough, and highlighted spans.
 - **Feature**: Blockquotes are now rendered with a vertical bar (#6122).
+- **Feature**: Users can now opt to display hidden files and folders
+  ("dot-files") in the sidebar and/or filemanager in the settings (#6041).
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
 - Updated `pt-BR` translation (#6154).
@@ -19,6 +21,18 @@
 - Fixed the frontmatter linter never reporting any errors with the YAML (#6167).
 - Fixed an issue where images that spanned multiple lines could cause the editor
   to crash when image rendering was active.
+- Fixed the tab key not respecting the "Indent using tabs instead of spaces"
+  setting. Additionally, pressing tab now always inserts spaces in YAML
+  frontmatter blocks to maintain valid YAML syntax (#6168).
+- Fix: The formatting toolbar no longer grabs focus from the editor.
+- Fix: Added a configuration setting to allow restoring the pre-4.0 behavior of
+  not showing the underlying Markdown syntax of pre-rendered elements when the
+  cursor merely touches the element. If the setting "Show Markdown syntax when
+  the cursor is adjacent or inside an element" is enabled (the default), the
+  editor will show the Markdown syntax both when the cursor is within the
+  element or if it is adjacent to it.
+- Fixed the table editor "Delete table" context menu item not working as
+  intended (#6088).
 
 ## Under the Hood
 

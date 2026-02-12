@@ -172,6 +172,7 @@ export interface ConfigOptions {
     theme: MarkdownTheme
     hideToolbarInDistractionFree: boolean
     markdownFileExtensions: boolean
+    previewModeShowSyntaxWhenCursorIsAdjacent: boolean
     imageWidth: number
     imageHeight: number
     renderingMode: 'preview'|'raw'
@@ -198,6 +199,7 @@ export interface ConfigOptions {
     msoffice: FileTypeSettings<boolean, boolean, 'system'>
     openOffice: FileTypeSettings<boolean, boolean, 'system'>
     dataFiles: FileTypeSettings<boolean, boolean, 'system'>
+    dotFiles: FileTypeSettings<boolean, boolean>
   }
   watchdog: {
     activatePolling: boolean
@@ -440,6 +442,7 @@ export function getConfigTemplate (): ConfigOptions {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
+      previewModeShowSyntaxWhenCursorIsAdjacent: true,
       imageWidth: 100, // Maximum preview image width
       imageHeight: 50, // Maximum preview image height
       renderingMode: 'preview',
@@ -460,7 +463,8 @@ export function getConfigTemplate (): ConfigOptions {
       pdf: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       msoffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       openOffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
-      dataFiles: { showInFilemanager: false, showInSidebar: true, openWith: 'system' }
+      dataFiles: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
+      dotFiles: { showInFilemanager: false, showInSidebar: false, openWith: 'system' }
     },
     // Language
     selectedDicts: [], // By default no spell checking is active to speed up first start.
