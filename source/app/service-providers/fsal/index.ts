@@ -747,7 +747,7 @@ export default class FSAL extends ProviderContract {
     } catch (err: unknown) {
       const code = err instanceof Error ? (err as NodeJS.ErrnoException).code : undefined
       if (code === 'EACCES' || code === 'EPERM') {
-        return FSALDir.getDirNotFoundDescriptor(absPath)
+        return this.loadDummyDirectoryDescriptor(absPath)
       }
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
