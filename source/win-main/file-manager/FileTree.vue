@@ -20,7 +20,7 @@
         <div
           id="directories-files-header"
           v-bind:title="showClose ? 'Close all files' : showFilesSection ? 'Hide files' : 'Show files'"
-          v-on:click="configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
+          v-on:click="showClose ? undefined : configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
         >
           <cds-icon
             role="presentation"
@@ -28,7 +28,7 @@
             v-bind:direction="showClose ? undefined : showFilesSection ? 'down' : 'right'"
             v-bind:status="showClose ? 'danger' : undefined"
             v-bind:class="{ 'close-all': showClose }"
-            v-on:click.stop="showClose ? closeAllFiles() : undefined"
+            v-on:dblclick="showClose ? closeAllFiles() : undefined"
           ></cds-icon>
 
           <cds-icon
@@ -60,7 +60,7 @@
         <div
           id="directories-dirs-header"
           v-bind:title="showClose ? 'Close all workspaces' : showWorkspacesSection ? 'Hide workspaces' : 'Show workspaces'"
-          v-on:click="configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
+          v-on:click="showClose ? undefined : configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
         >
           <cds-icon
             role="presentation"
@@ -68,7 +68,7 @@
             v-bind:direction="showClose ? undefined : showWorkspacesSection ? 'down' : 'right'"
             v-bind:status="showClose ? 'danger' : undefined"
             v-bind:class="{ 'close-all': showClose }"
-            v-on:click="showClose ? closeAllWorkspaces() : undefined"
+            v-on:dblclick="showClose ? closeAllWorkspaces() : undefined"
           ></cds-icon>
 
           <cds-icon
