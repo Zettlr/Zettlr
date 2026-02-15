@@ -33,7 +33,9 @@
   element or if it is adjacent to it.
 - Fixed the table editor "Delete table" context menu item not working as
   intended (#6088).
-- Updated mathjax url in templates to v4 (#6148).
+- Updated MathJax URL in various HTML-based templates to v4 (#6148). Note that
+  Zettlr will not overwrite existing templates, so to benefit from this, you
+  will have to factory-reset the affected templates.
 
 ## Under the Hood
 
