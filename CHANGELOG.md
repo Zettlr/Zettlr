@@ -33,6 +33,7 @@
   element or if it is adjacent to it.
 - Fixed the table editor "Delete table" context menu item not working as
   intended (#6088).
+- Updated mathjax url in templates to v4 (#6148).
 
 ## Under the Hood
 
