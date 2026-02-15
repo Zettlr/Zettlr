@@ -80,6 +80,8 @@ function insertLinkOrImage (target: EditorView, type: 'link'|'image'): void {
  * @param   {'link'|'image'}  attributes    Attributes to assign to the fenced div
  */
 function insertPandocDiv (target: EditorView, attributes: string): void {
+  const markRe = /(^\s*$)|(^:{3,}[ \t]*(?:\{[^\}]*\})?)/
+
   const transaction = target.state.changeByRange(range => {
     let opening: string = `::: {${attributes}}`
     let closing: string = ':::'
@@ -89,24 +91,39 @@ function insertPandocDiv (target: EditorView, attributes: string): void {
 
     const changes: ChangeSpec[] = []
 
-    // If the startLine is not empty, insert a newline after the opening mark
-    if (!/^\s*$/.test(startLine.text)) { opening = opening + '\n' }
+    // If the startLine is not empty, insert a newline after the opening mark.
+    if (!/^\s*$/.test(startLine.text)) {
+      opening = opening + '\n'
+    }
 
     // If the endLine is not empty, insert a newline before the closing mark
-    if (!/^\s*$/.test(endLine.text)) { closing = '\n' + closing }
+    // Or, if the start and endline are the same (and therefore empty), add a
+    // newline before the closing mark so that the opening and closing marks
+    // do not end up on the same line. This is done specifically for the closing
+    // mark to provide better cursor placement when inserting empty divs.
+    if (!/^\s*$/.test(endLine.text) || startLine.number === endLine.number) {
+      closing = '\n' + closing
+    }
 
-    // If the previous line is not empty, insert a newline before the opening mark
-    const prevLine = target.state.doc.line(startLine.number - 1)
-    if (!/^\s*$/.test(prevLine.text)) { opening = '\n' + opening }
+    // If the previous line is not empty, not the first line, and does not
+    // match an opening or closing mark, insert a newline before the opening
+    const prevLine = target.state.doc.line(Math.max(startLine.number - 1, 1))
+    if (prevLine.number > 1 && !/^\s*$/.test(prevLine.text) && !markRe.test(prevLine.text)) {
+      opening = '\n' + opening
+    }
 
-    // If the next line is not empty, insert a newline after the closing mark
-    const nextLine = target.state.doc.line(endLine.number + 1)
-    if (!/^\s*$/.test(nextLine.text)) { closing = closing + '\n' }
+    // If the next line is not empty, and does not match an opening or closing
+    // mark, insert a newline after the closing mark
+    const nextLine = target.state.doc.line(Math.min(endLine.number + 1, target.state.doc.lines))
+    if (!/^\s*$/.test(nextLine.text) && !markRe.test(nextLine.text)) {
+      closing = closing + '\n'
+    }
 
     changes.push({ from: startLine.from, insert: opening })
     changes.push({ from: endLine.to, insert: closing })
 
-    return { changes, range: EditorSelection.range(range.from, range.to) }
+    // Adjust the selection range to account for the inserted content
+    return { changes, range: EditorSelection.range(range.from + opening.length, range.to + opening.length) }
   })
 
   target.dispatch(transaction)
