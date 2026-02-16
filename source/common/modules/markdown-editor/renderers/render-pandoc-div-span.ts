@@ -113,12 +113,13 @@ function createDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
           return
         }
 
+        const classes = info ? [view.state.sliceDoc(info.from, info.to)] : []
+
         const attributes = attrs ? parsePandocAttributes(view.state.sliceDoc(attrs.from, attrs.to)) : {}
-        const classes = attributes.classes ?? []
         const id = attributes.id ?? ''
 
-        if (info) {
-          classes.unshift(view.state.sliceDoc(info.from, info.to))
+        if (attributes.classes) {
+          classes.push(...attributes.classes)
         }
 
         const wrapper = BlockWrapper.create({
