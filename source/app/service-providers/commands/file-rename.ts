@@ -52,7 +52,7 @@ export default class FileRename extends ZettlrCommand {
     // and the new name does not have a recognized extension, add the old
     // extension, or if one was not found, default to `.md`
     if (oldExt !== newExt && invalidExt) {
-      newName += (oldExt || '.md')
+      newName += (oldExt !== '' ? oldExt : '.md')
     }
 
     const file = await this._app.fsal.getDescriptorForAnySupportedFile(arg.path)
