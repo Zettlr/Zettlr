@@ -14,6 +14,7 @@
  *
  * END HEADER
  */
+import { DocumentType } from '@dts/common/documents'
 
 export const MD_EXT = [ '.md', '.rmd', '.qmd', '.markdown', '.txt', '.mdx', '.mkd' ]
 export const CODE_EXT = [ '.tex', '.json', '.yaml', '.yml' ]
@@ -144,4 +145,23 @@ export function hasDataExt (filePath: string): boolean {
  */
 export function hasAnyRecognizedFileExtension (filePath: string, customExtensions: string[] = []): boolean {
   return hasExt(filePath, [ ...ALL_EXT, ...customExtensions ])
+}
+
+/**
+ * Utility to convert a document type to its standard file extension.
+ * @param {DocumentType} type   The document type
+ *
+ * @returns {string}  An appropriate file extension for the document type
+ */
+export function getDocumentTypeExtension (type: DocumentType): string {
+  switch (type) {
+    case DocumentType.Markdown:
+      return '.md'
+    case DocumentType.LaTeX:
+      return '.tex'
+    case DocumentType.YAML:
+      return '.yaml'
+    case DocumentType.JSON:
+      return '.json'
+  }
 }
