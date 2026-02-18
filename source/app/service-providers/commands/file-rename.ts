@@ -18,7 +18,7 @@ import sanitize from 'sanitize-filename'
 import { dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
-import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import { hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import pathExists from 'source/common/util/path-exists'
 
@@ -44,9 +44,15 @@ export default class FileRename extends ZettlrCommand {
       return
     }
 
-    // If no valid filename extension is provided, assume .md
-    if (!hasMdOrCodeExt(newName)) {
-      newName += '.md'
+    const oldExt = path.extname(arg.path)
+    const newExt = path.extname(newName)
+    const invalidExt = !hasAnyRecognizedFileExtension(newName, this._app.config.get().attachmentExtensions)
+
+    // If the old and new file extensions do not match (they were changed),
+    // and the new name does not have a recognized extension, add the old
+    // extension, or if one was not found, default to `.md`
+    if (oldExt !== newExt && invalidExt) {
+      newName += (oldExt || '.md')
     }
 
     const file = await this._app.fsal.getDescriptorForAnySupportedFile(arg.path)
@@ -150,8 +156,10 @@ export default class FileRename extends ZettlrCommand {
           }
         }
       }
-    } catch (e: any) {
-      this._app.log.error(`Error during renaming file: ${e.message as string}`, e)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._app.log.error(`Error during renaming file: ${err.message as string}`, err)
+      }
     }
   }
 }

@@ -318,7 +318,7 @@ const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', 
   if (props.item.type !== 'file') {
     return undefined
   } else {
-    return windowStateStore.writingTargets.find((x: any) => x.path === props.item.path)
+    return windowStateStore.writingTargets.find((target) => target.path === props.item.path)
   }
 })
 
