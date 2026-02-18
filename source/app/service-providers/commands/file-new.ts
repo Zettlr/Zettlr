@@ -18,7 +18,7 @@ import path from 'path'
 import sanitize from 'sanitize-filename'
 import generateFilename from '@common/util/generate-filename'
 import { app } from 'electron'
-import { getDocumentTypeExtension, hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
+import { getExtensionForDocumentType, hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import type { DocumentType } from '@dts/common/documents'
 
@@ -116,7 +116,7 @@ export default class FileNew extends ZettlrCommand {
       }
 
       const ext = path.extname(filename)
-      const extType = arg.type !== undefined ? getDocumentTypeExtension(arg.type) : '.md'
+      const extType = arg.type !== undefined ? getExtensionForDocumentType(arg.type) : '.md'
       const invalidExt = !hasAnyRecognizedFileExtension(filename, attachmentExtensions)
 
       // If a type was provided, but the actual and expected extensions do not
