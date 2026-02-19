@@ -627,7 +627,7 @@ export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', at
  * @returns {boolean}
  */
 export function insertTabOrSpace (target: EditorView): boolean {
-  const { indentWithTabs } = target.state.field(configField)
+  const { indentWithTabs, indentLine } = target.state.field(configField)
 
   const tree = syntaxTree(target.state)
   // Short circuit on the boolean before checking the syntax tree
@@ -640,7 +640,7 @@ export function insertTabOrSpace (target: EditorView): boolean {
 
   let result = false
   // If any range is not empty, indent the line
-  if (target.state.selection.ranges.some(r => !r.empty)) {
+  if (indentLine || target.state.selection.ranges.some(r => !r.empty)) {
     // Store the return value of `indentMore` because
     // we need to reset the `indentWithTabs` config value
     result = indentMore(target)

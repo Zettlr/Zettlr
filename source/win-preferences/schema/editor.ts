@@ -319,6 +319,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           label: trans('Indent using tabs instead of spaces'),
           model: 'editor.indentWithTabs'
         },
+        {
+          type: 'checkbox',
+          label: trans('`Tab` always indents the line'),
+          model: 'editor.indentLine'
+        },
         { type: 'separator' },
         {
           type: 'checkbox',

@@ -51,6 +51,7 @@ export interface EditorConfiguration {
   idGen: string
   indentUnit: number
   indentWithTabs: boolean
+  indentLine: boolean
   linkPreference: 'always'|'never'|'withID'
   zknLinkFormat: 'link|title'|'title|link'
   zknAddFileTitle: boolean
@@ -114,6 +115,7 @@ export function getDefaultConfig (): EditorConfiguration {
     idGen: '',
     indentUnit: 4,
     indentWithTabs: false,
+    indentLine: false,
     linkPreference: 'always',
     zknLinkFormat: 'link|title',
     linkWithIDIfPossible: false,
