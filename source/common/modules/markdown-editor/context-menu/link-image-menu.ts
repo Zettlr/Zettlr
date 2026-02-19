@@ -25,6 +25,8 @@ import { configField } from '../util/configuration'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { findReferenceForLinkLabel, removeMarkdownLink } from '../util/links'
 import { getTransformSubmenu } from './transform-items'
+import { applyBold, applyItalic } from '../commands/markdown'
+import { copyAsHTML, copyAsPlain, cut, paste, pasteAsPlain } from '../util/copy-paste-cut'
 
 const ipcRenderer = window.ipc
 
@@ -83,8 +85,70 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
   const basePath = pathDirname(view.state.field(configField).metadata.path)
   const url = getURLForNode(node, view.state)
 
+  const defaultTpl: AnyMenuItem[] = [
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Bold'),
+      accelerator: 'CmdOrCtrl+B',
+      type: 'normal',
+      action () { applyBold(view) }
+    },
+    {
+      label: trans('Italic'),
+      accelerator: 'CmdOrCtrl+I',
+      type: 'normal',
+      action () { applyItalic(view) }
+    },
+    {
+      label: trans('Cut'),
+      accelerator: 'CmdOrCtrl+X',
+      type: 'normal',
+      action () { cut(view) }
+    },
+    {
+      label: trans('Copy'),
+      accelerator: 'CmdOrCtrl+C',
+      type: 'normal',
+      action () { copyAsPlain(view) }
+    },
+    {
+      label: trans('Copy as HTML'),
+      accelerator: 'CmdOrCtrl+Alt+C',
+      type: 'normal',
+      action () { copyAsHTML(view) }
+    },
+    {
+      label: trans('Paste'),
+      accelerator: 'CmdOrCtrl+V',
+      type: 'normal',
+      action () { paste(view) }
+    },
+    {
+      label: trans('Paste without style'),
+      accelerator: 'CmdOrCtrl+Shift+V',
+      type: 'normal',
+      action () { pasteAsPlain(view) }
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Select all'),
+      accelerator: 'CmdOrCtrl+A',
+      type: 'normal',
+      action () { view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } }) }
+    },
+    {
+      type: 'separator'
+    },
+    getTransformSubmenu(view)
+  ]
+
   if (url === undefined) {
     console.error('Could not show Link/Image context menu: No URL found!')
+    showPopupMenu(coords, defaultTpl)
     return
   }
 
@@ -124,7 +188,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
           removeMarkdownLink(node, view)
         }
       }
-    }
+    },
+    ...defaultTpl
   ]
 
   const validAbsoluteURI = makeValidUri(url, basePath)
@@ -155,10 +220,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
         } as WindowControlsIPCAPI)
       }
     },
-    {
-      type: 'separator'
-    },
-    getTransformSubmenu(view)
+    ...defaultTpl
   ]
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl)
