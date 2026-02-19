@@ -296,7 +296,7 @@ function requestOpenRoot (event: MouseEvent): void {
     .catch(err => console.error(err))
 }
 
-function collapseAll(): void {
+function collapseAll (): void {
   windowStateStore.uncollapsedDirectories.splice(0)
 }
 
