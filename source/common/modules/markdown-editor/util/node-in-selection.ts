@@ -34,7 +34,7 @@ export function nodeInSelection (
   side: -1 | 0 | 1 = 0
 ): boolean {
   for (const range of selection.ranges) {
-    if (posInNode(range.from, tree, nodes, side)) {
+    if (posInNode(range.from, tree, nodes, side) !== null) {
       return true
     }
   }
@@ -57,18 +57,18 @@ export function posInNode (
   pos: number,
   tree: Tree,
   nodes: string[],
-  side: -1|0|1
-): boolean {
+  side: -1|0|1 = 0
+): SyntaxNode | null {
   let node: SyntaxNode | null = tree.resolveInner(pos, side)
 
+  // Walk up the parent tree
   while (node) {
     if (nodes.includes(node.name)) {
-      return true
+      break
     }
 
     node = node.parent
   }
 
-  // Neither the node itself, nor any of its parents, are protected.
-  return false
+  return node
 }
