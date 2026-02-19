@@ -593,7 +593,7 @@ function enterDragging (_event: DragEvent): void {
   uncollapseTimeout.value = setTimeout(() => {
     windowStateStore.uncollapsedDirectories.push(props.item.path)
     uncollapseTimeout.value = undefined
-  }, 500)
+  }, 1000)
 }
 
 /**
