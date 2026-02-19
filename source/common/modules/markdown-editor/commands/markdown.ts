@@ -15,10 +15,10 @@
 import { type ChangeSpec, EditorSelection } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { configField, configUpdateEffect } from '../util/configuration'
-import { indentUnit, language } from '@codemirror/language'
+import { indentUnit, language, syntaxTree } from '@codemirror/language'
 import { formatPandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { indentMore } from '@codemirror/commands'
-import { yamlInSelection } from '../util/yaml-in-selection'
+import { nodeInSelection } from '../util/node-in-selection'
 
 /**
  * Helper function that checks whether the provided target EditorView uses a
@@ -628,8 +628,10 @@ export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', at
  */
 export function insertTabOrSpace (target: EditorView): boolean {
   const { indentWithTabs } = target.state.field(configField)
+
+  const tree = syntaxTree(target.state)
   // Short circuit on the boolean before checking the syntax tree
-  if (indentWithTabs && yamlInSelection(target.state)) {
+  if (indentWithTabs && nodeInSelection(target.state.selection, tree, [ 'YAMLFrontmatter', 'YAMLFrontmatterStart', 'YAMLFrontmatterEnd' ], -1)) {
     // We need to temporarily override the `indentWithTabs` setting
     // so that the `indentUnit` facet updates to insert spaces.
     // This is necessary for `indentMore` to insert the correct indent.

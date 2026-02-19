@@ -21,32 +21,7 @@ import { indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/co
 import { type SyntaxNode } from '@lezer/common'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import type { BulletList, OrderedList } from '@common/modules/markdown-utils/markdown-ast'
-
-/**
- * Tests if there is any list affected by the current editor selection
- *
- * @param   {EditorState}  state  The state in question
- *
- * @return  {boolean}             Returns true if there is any type of list in
- *                                the current editor selection
- */
-function listInSelection (state: EditorState): boolean {
-  // Then make sure there's anything listy in there.
-  const tree = syntaxTree(state)
-  for (const range of state.selection.ranges) {
-    // NOTE: The Markdown mode nests lists under the parent nodes OrderedList
-    // and BulletList, so basically I just have to move up the syntaxtree until
-    // I either find such a node
-    let node: SyntaxNode | null = tree.resolve(range.from, -1)
-    while (node) {
-      if ([ 'OrderedList', 'BulletList' ].includes(node.name)) {
-        return true
-      }
-      node = node.parent
-    }
-  }
-  return false
-}
+import { nodeInSelection } from '../util/node-in-selection'
 
 /**
  * Returns a set of changes required in order to sanitize the given list node.
@@ -225,7 +200,8 @@ function correctListMarkers (state: EditorState): Transaction {
  * @return  {boolean}             Whether the command has handled the keypress
  */
 export function maybeIndentList (target: EditorView): boolean {
-  if (listInSelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     // `indentMore` may return false, in which case we do not want to continue
     if (indentMore(target)) {
       target.dispatch(correctListMarkers(target.state))
@@ -250,7 +226,8 @@ export function maybeUnindentList (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
-  if (listInSelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
   }
@@ -272,7 +249,8 @@ export function customMoveLineDown (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
-  if (listInSelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
   }
@@ -294,7 +272,8 @@ export function customMoveLineUp (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
-  if (listInSelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
   }
