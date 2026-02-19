@@ -12,6 +12,9 @@
 - **Feature**: Blockquotes are now rendered with a vertical bar (#6122).
 - **Feature**: Users can now opt to display hidden files and folders
   ("dot-files") in the sidebar and/or filemanager in the settings (#6041).
+- **Feature**: Custom Pandoc `div`s are now pre-rendered depending on the
+  corresponding setting (#6121). This allows you to preview any custom styling
+  you have applied to them within the editor.
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
 - Updated `pt-BR` translation (#6154).
