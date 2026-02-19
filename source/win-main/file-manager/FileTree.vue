@@ -78,6 +78,13 @@
           ></cds-icon>
 
           {{ workspaceSectionHeading }}
+
+          <cds-icon
+            role="presentation"
+            shape="minus-circle"
+            class="collapse-all"
+            v-on:click.prevent="collapseAll()"
+          ></cds-icon>
         </div>
 
         <template v-if="showWorkspacesSection">
@@ -287,6 +294,10 @@ function requestOpenRoot (event: MouseEvent): void {
 
   ipcRenderer.invoke('application', { command })
     .catch(err => console.error(err))
+}
+
+function collapseAll(): void {
+  windowStateStore.uncollapsedDirectories.splice(0)
 }
 
 function closeAllFiles (): void {
