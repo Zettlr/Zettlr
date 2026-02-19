@@ -34,6 +34,9 @@ export const themeBielefeldLight = EditorView.theme({
     color: 'var(--grey-5)',
     fontFamily: '"Liberation Mono", monospace'
   },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: 'var(--beige-0)',
+  },
   '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
   '.cm-tag-name': { color: 'var(--orange-2)' },
   '.cm-attribute-name': { color: 'var(--blue-0)' },

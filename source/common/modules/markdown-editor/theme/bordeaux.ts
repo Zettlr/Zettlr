@@ -34,6 +34,9 @@ export const themeBordeauxLight = EditorView.theme({
     color: 'var(--grey-5)',
     fontFamily: 'Inconsolata, monospace'
   },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: '#fffff8',
+  },
   '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
   '.cm-tag-name': { color: 'var(--orange-2)' },
   '.cm-attribute-name': { color: 'var(--blue-0)' },
@@ -71,6 +74,9 @@ export const themeBordeauxDark = EditorView.theme({
     color: '#839496',
     // color: 'var(--grey-0)',
     fontFamily: 'Inconsolata, monospace'
+  },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: '#002b36',
   },
   '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-0)' },
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
