@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 4.0.0-beta.5\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-02-16 14:58+0000\n"
-"PO-Revision-Date: 2026-01-14 13:28+0900\n"
+"PO-Revision-Date: 2026-02-20 15:02+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -531,17 +531,17 @@ msgstr "斜体"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
 msgid "Underline"
-msgstr ""
+msgstr "下線"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
 #: source/win-preferences/schema/editor.ts:174
 #: source/win-preferences/schema/editor.ts:175
 msgid "Highlight"
-msgstr ""
+msgstr "強調表示"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
 msgid "Strikethrough"
-msgstr ""
+msgstr "取り消し線"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
 msgid "Link"
@@ -2346,27 +2346,27 @@ msgstr "コマンド"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:35
 msgid "#identifier"
-msgstr ""
+msgstr "#identifier"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:38
 msgid ".classes"
-msgstr ""
+msgstr ".classes"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:41
 msgid "key=value"
-msgstr ""
+msgstr "key=value"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:43
 msgid "div"
-msgstr ""
+msgstr "div"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:46
 msgid "Div"
-msgstr ""
+msgstr "Div"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:47
 msgid "Span"
-msgstr ""
+msgstr "Span"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:29
 msgid "words last month"
@@ -2461,7 +2461,7 @@ msgstr "現在のファイルをエクスポート"
 
 #: source/tmp/win-main/App.vue.ts:372
 msgid "Insert Pandoc Div or Span"
-msgstr ""
+msgstr "Pandoc の div または span を挿入"
 
 #: source/tmp/win-main/App.vue.ts:379
 msgid "Insert comment"
@@ -2829,7 +2829,7 @@ msgstr "%s は正常にインポートされました。"
 #: source/app/service-providers/commands/import.ts:79
 #, javascript-format
 msgid "The following %s files could not be imported: %s"
-msgstr ""
+msgstr "次の %s ファイルをインポートできませんでした : %s"
 
 #: source/app/service-providers/commands/import.ts:85
 msgid "Import failed"
@@ -2873,6 +2873,8 @@ msgid ""
 "Zettlr can import this file, but it requires an import profile. Please "
 "create one first."
 msgstr ""
+"Zettlrはこのファイルをインポートできますが、インポートプロファイルが必要で"
+"す。まずはインポートプロファイルを作成してください。"
 
 #: source/app/service-providers/commands/importer/index.ts:97
 #: source/app/service-providers/commands/importer/index.ts:98
@@ -3556,12 +3558,15 @@ msgstr "水平線をレンダリングする"
 #: source/win-preferences/schema/editor.ts:139
 msgid "Show Markdown syntax when the cursor is adjacent or inside an element"
 msgstr ""
+"カーソルが要素に隣接しているか要素内にあるときに Markdown 構文を表示する"
 
 #: source/win-preferences/schema/editor.ts:140
 msgid ""
 "If disabled, the editor will not show the Markdown syntax if the cursor is "
 "adjacent to the element."
 msgstr ""
+"無効にすると、カーソルが要素に隣接している場合、エディターは Markdown 構文を"
+"表示しません。"
 
 #: source/win-preferences/schema/editor.ts:146
 msgid "Default Formatting Characters"
@@ -3935,13 +3940,15 @@ msgstr "データファイル (tsv, csv, など)"
 
 #: source/win-preferences/schema/advanced.ts:263
 msgid "Dot Files and Folders"
-msgstr ""
+msgstr "ドットファイルとフォルダー"
 
 #: source/win-preferences/schema/advanced.ts:286
 msgid ""
 "Add additional file extensions you wish to see in the file manager and "
 "sidebar below. Include the leading period, e.g., \".xml\"."
 msgstr ""
+"ファイルマネージャーとサイドバーに表示したいファイル拡張子を下記に追加してく"
+"ださい。先頭のピリオドを含めてください (例：.xml)。"
 
 #: source/win-preferences/schema/advanced.ts:287
 msgid "Enter an extension and press enter"
@@ -4486,6 +4493,10 @@ msgid ""
 "via package managers. In these cases, Zettlr will be updated through your "
 "package manager."
 msgstr ""
+"このZettlrバイナリのアップデートはビルド時に無効化されています。これはパッ"
+"ケージ作成者による選択であり、Zettlrがパッケージマネージャー経由で配布される"
+"場合によく見られます。この場合、Zettlrはパッケージマネージャー経由でアップ"
+"デートされます。"
 
 #: source/win-preferences/schema/general.ts:43
 msgid "Application language"
