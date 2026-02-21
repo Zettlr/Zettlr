@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.2.0
+
+## GUI and Functionality
+
 - **Feature**: New utilities for working with native Pandoc Divs and spans
   (#6032):
   - Added a new setting to switch between native highlights (`==mark==`) and
