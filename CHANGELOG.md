@@ -15,6 +15,8 @@
 - **Feature**: Custom Pandoc `div`s are now pre-rendered depending on the
   corresponding setting (#6121). This allows you to preview any custom styling
   you have applied to them within the editor.
+- **Feature**: You can now move document tabs to the start or end of the
+  tablist from the context menu (#6130).
 - Added an error message that explains to users that an import profile is needed
   if they attempt to import a supported file with no profile.
 - Updated `pt-BR` translation (#6154).
