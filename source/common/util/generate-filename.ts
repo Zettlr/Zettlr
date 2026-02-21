@@ -14,19 +14,25 @@
 
 import replaceStringVariables from './replace-string-variables'
 import generateId from './generate-id'
-import { v4 as uuid } from 'uuid'
 
 /**
  * Generates a new filename based on the configured filename pattern.
+ * @param {string} filenamePattern - The pattern for generating filenames.
+ * @param {string} idGenPattern - The pattern for generating unique IDs.
+ * @param {string} ext - The file extension to be used (default: 'md').
  * @return {string} The new filename.
  */
-export default function generateFilename (filenamePattern: string, idGenPattern: string): string {
+export default function generateFilename (filenamePattern: string, idGenPattern: string, ext: string ): string {
+  
   let pattern = replaceStringVariables(filenamePattern)
+  
+
   pattern = pattern.replace(/%id/g, generateId(idGenPattern))
-  // In case a funny guy has removed the pattern from config.
-  if (pattern.trim().length === 0) {
-    pattern = uuid()
-  }
+  
+  ext = ext || 'md'
+  pattern = pattern.replace(/%ext/g, ext)
+  
 
   return pattern
 }
+

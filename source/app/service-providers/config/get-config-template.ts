@@ -301,7 +301,7 @@ export function getConfigTemplate (): ConfigOptions {
     fileManagerShowFiles: true, // Allow users to persistently collapse or uncollapse the files and workspaces sections.
     fileManagerShowWorkspaces: true,
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
-    newFileNamePattern: '%id.md',
+    newFileNamePattern: '%id.%ext',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
