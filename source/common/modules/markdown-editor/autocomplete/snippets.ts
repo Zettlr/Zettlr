@@ -24,11 +24,12 @@ import {
   StateField,
   EditorSelection,
   Facet,
+  MapMode,
   type SelectionRange,
   type EditorState,
-  MapMode,
+  type Range,
 } from '@codemirror/state'
-import { Decoration, EditorView, WidgetType } from '@codemirror/view'
+import { type Command, Decoration, EditorView, WidgetType } from '@codemirror/view'
 import { type AutocompletePlugin } from '.'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
@@ -213,7 +214,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         return Decoration.none
       }
 
-      const decorations: any[] = []
+      const decorations: Range<Decoration>[] = []
       let position = 0
       for (const selection of fieldValue.activeSelections) {
         position++
@@ -501,16 +502,35 @@ export function nextSnippet (target: EditorView): boolean {
   return true
 }
 
-export function abortSnippet (target: EditorView): boolean {
+export const abortSnippet: Command = (target: EditorView): boolean => {
   // Removes all tabstops, if there are any
   const field = target.state.field(snippetsUpdateField, false)
   if (field === undefined) {
     return false
   }
 
-  const ranges = field.activeSelections.length
-  if (ranges > 0) {
+  if (field.activeSelections.length > 0) {
     target.dispatch({ effects: snippetTabsEffect.of([]) })
+    return true
+  }
+
+  return false
+}
+
+// Like `abortSnippet` above, but this also removes the placeholder content
+// of any pending tabstop.
+export const abortSnippetRemoveContent: Command = (target: EditorView): boolean => {
+  const field = target.state.field(snippetsUpdateField, false)
+  if (field === undefined) {
+    return false
+  }
+
+  if (field.activeSelections.length > 0) {
+    target.dispatch({
+      // Cuts all of the pending placeholder insertions
+      changes: field.activeSelections.flatMap(sel => sel.ranges.map(r => ({ from: r.from, to: r.to }))),
+      effects: snippetTabsEffect.of([])
+    })
     return true
   }
 
