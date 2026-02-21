@@ -132,6 +132,13 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
               disabled: config.display.renderingMode === 'raw'
             }
           ]
+        },
+        { type: 'separator' },
+        {
+          type: 'checkbox',
+          label: trans('Show Markdown syntax when the cursor is adjacent or inside an element'),
+          info: trans('If disabled, the editor will not show the Markdown syntax if the cursor is adjacent to the element.'),
+          model: 'display.previewModeShowSyntaxWhenCursorIsAdjacent'
         }
       ]
     },
@@ -158,6 +165,14 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
               options: {
                 '*': '*' + trans('Italics') + '*',
                 _: '_' + trans('Italics') + '_'
+              }
+            },
+            {
+              type: 'radio',
+              model: 'editor.highlightFormatting',
+              options: {
+                'span': '[' + trans('Highlight') + ']{.mark}',
+                '==': '==' + trans('Highlight') + '=='
               }
             }
           ]

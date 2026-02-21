@@ -77,8 +77,31 @@ async function loadJSON (databasePath: string, logger: LogProvider): Promise<Dat
     throw new Error(`Cannot parse CSL JSON database ${databasePath}: JSON was not an array.`)
   }
 
-  for (const item of parsedData as CSLItem[]) {
-    record.cslData[item.id] = item
+  // NOTE February 19, 2026: After receiving reports of users not being able to
+  // get citekeys to autocomplete, I found out by looking at a problematic CSL
+  // JSON file that due to the 8.0.3 update of Zotero, one item was missing its
+  // citekey. For the past almost decade, Zettlr could assume that the CSL JSON
+  // produced by Zotero was sane, because we always cast the parsed JSON data as
+  // citekey and be done with it. To improve app stability, we're going to treat
+  // each item as unknown before loading it now. This also guards against future
+  // issues.
+  // NOTE for the tinfoil hatters among you: I am strongly convinced that this
+  // is a mere aleatoric event that could've happened eight years ago, but
+  // didn't. It's in my opinion not a sign of software rot (unless it becomes
+  // part of a pattern), but just a silly coincidence. No references were harmed
+  // in producing this fix.
+  for (const item of parsedData as unknown[]) {
+    if (!(item instanceof Object)) {
+      logger.error('[Citeproc] Refusing to load CSL item: Not an object.', item)
+      continue
+    }
+
+    if (!('id' in item) || !('type' in item) || (typeof item.id !== 'string') || (typeof item.type !== 'string')) {
+      logger.error('[Citeproc] Refusing to load CSL item: Required properties id or type were either not present, or the wrong type.', item)
+      continue
+    }
+
+    record.cslData[item.id] = item as CSLItem
   }
 
   logger.info(`CSL JSON database loaded, ${Object.keys(record.cslData).length} items.`)

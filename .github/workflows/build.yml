@@ -97,12 +97,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Clone repository (${{ github.ref_name }} branch)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0 # Required for the tag verification step.
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -130,11 +130,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -165,7 +165,7 @@ jobs:
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: mv ./release/Zettlr-${{ env.old_version }}-x64.exe ./release/Zettlr-${{ env.version }}-x64.exe
       - name: Cache installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: win32_x64
           path: |
@@ -185,11 +185,11 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -222,7 +222,7 @@ jobs:
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: mv ./release/Zettlr-${{ env.old_version }}-x64.dmg ./release/Zettlr-${{ env.version }}-x64.dmg
       - name: Cache image file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: darwin_x64
           path: |
@@ -236,11 +236,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -273,7 +273,7 @@ jobs:
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
         run: mv ./release/Zettlr-${{ env.old_version }}-arm64.dmg ./release/Zettlr-${{ env.version }}-arm64.dmg
       - name: Cache image file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: darwin_arm64
           path: |
@@ -295,11 +295,11 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -328,7 +328,7 @@ jobs:
         run: |
           mv ./release/Zettlr-${{ env.old_version }}-x86_64.AppImage ./release/Zettlr-${{ env.version }}-x86_64.AppImage
       - name: Cache installers
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux_x64
           path: |
@@ -346,11 +346,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -375,7 +375,7 @@ jobs:
         run: |
           mv ./release/Zettlr-${{ env.old_version }}-arm64.AppImage ./release/Zettlr-${{ env.version }}-arm64.AppImage
       - name: Cache installers
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux_arm64
           path: |
@@ -406,9 +406,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
@@ -424,27 +424,27 @@ jobs:
         run: mkdir ./release
       # Download all resulting assets from the previous steps.
       - name: Retrieve installers (Windows x86_64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: win32_x64
           path: ./release
       - name: Retrieve installers (macOS x86_64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: darwin_x64
           path: ./release
       - name: Retrieve installers (macOS arm64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: darwin_arm64
           path: ./release
       - name: Retrieve installers (Linux x86_64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: linux_x64
           path: ./release
       - name: Retrieve installers (Linux arm64)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: linux_arm64
           path: ./release
@@ -479,7 +479,7 @@ jobs:
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
         if: ${{ github.ref_name == env.NIGHTLY_BRANCH }}
-        uses: easingthemes/ssh-deploy@v3.0.1
+        uses: easingthemes/ssh-deploy@v5.1.0
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
           # --delete so that no old releases remain on the server. Each iteration is approx. 1GB in size.

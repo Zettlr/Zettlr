@@ -2,11 +2,56 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: New utilities for working with native Pandoc Divs and spans
+  (#6032):
+  - Added a new setting to switch between native highlights (`==mark==`) and
+    using spans for this (`[mark]{.highlight}`).
+  - Added a new toolbar button to insert divs and spans.
+  - Added new buttons to the formatting toolbar to insert underlined,
+    strikethrough, and highlighted spans.
+- **Feature**: Blockquotes are now rendered with a vertical bar (#6122).
+- **Feature**: Users can now opt to display hidden files and folders
+  ("dot-files") in the sidebar and/or filemanager in the settings (#6041).
+- **Feature**: Custom Pandoc `div`s are now pre-rendered depending on the
+  corresponding setting (#6121). This allows you to preview any custom styling
+  you have applied to them within the editor.
+- **Feature**: You can now move document tabs to the start or end of the
+  tablist from the context menu (#6130).
+- Added an error message that explains to users that an import profile is needed
+  if they attempt to import a supported file with no profile.
+- Updated `pt-BR` translation (#6154).
+- Updated `ja-JP` translation (#6198).
+- Updated `de-DE` translation.
+- Improved the tag recognition to allow for more varied Unicode characters in
+  tags than previously, including umlauts, accents, or emojis (#6155).
+- Improved pilcrow styling when whitespace rendering is on (#6152).
+- Fixed the frontmatter linter never reporting any errors with the YAML (#6167).
+- Fixed an issue where images that spanned multiple lines could cause the editor
+  to crash when image rendering was active.
+- Fixed the tab key not respecting the "Indent using tabs instead of spaces"
+  setting. Additionally, pressing tab now always inserts spaces in YAML
+  frontmatter blocks to maintain valid YAML syntax (#6168).
+- Fix: The formatting toolbar no longer grabs focus from the editor.
+- Fix: Added a configuration setting to allow restoring the pre-4.0 behavior of
+  not showing the underlying Markdown syntax of pre-rendered elements when the
+  cursor merely touches the element. If the setting "Show Markdown syntax when
+  the cursor is adjacent or inside an element" is enabled (the default), the
+  editor will show the Markdown syntax both when the cursor is within the
+  element or if it is adjacent to it.
+- Fixed the table editor "Delete table" context menu item not working as
+  intended (#6088).
+- Updated MathJax URL in various HTML-based templates to v4 (#6148). Note that
+  Zettlr will not overwrite existing templates, so to benefit from this, you
+  will have to factory-reset the affected templates.
+- Fixed a bug starting with the Zotero 8 update in Zettlr would no longer
+  provide autocomplete for some users. The reason is that some of the items in
+  the exported CSL JSON files would lack an ID property (that is, the citekey),
+  while Zettlr assumed each item would have an ID.
 
 ## Under the Hood
 
-(nothing here)
+- Increased config retrieval speed in the renderers (#6140). This can speed up
+  some UI interactions.
 
 # 4.1.1
 
@@ -56,7 +101,6 @@
   - Removed a lot of dead code in the FSAL.
   - Moved the save functionality away from the `FSAL*`-submodules, and divided
     the responsibility between the `DocumentsProvider` and the `FSAL` module.
-
 
 # 4.1.0
 

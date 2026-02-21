@@ -23,7 +23,8 @@ const commonRules: Record<string, any> = {
   },
   // For more diversity, don't color the link marks
   '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' },
-  '.cm-citation-locator': { textDecoration: 'underline' }
+  '.cm-citation-locator': { textDecoration: 'underline' },
+  '.blockquote-wrapper': { borderLeftColor: primaryColor },
 }
 
 export const themeBordeauxLight = EditorView.theme({
@@ -32,6 +33,9 @@ export const themeBordeauxLight = EditorView.theme({
     backgroundColor: '#fffff8',
     color: 'var(--grey-5)',
     fontFamily: 'Inconsolata, monospace'
+  },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: '#fffff8',
   },
   '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
   '.cm-tag-name': { color: 'var(--orange-2)' },
@@ -61,7 +65,6 @@ export const themeBordeauxLight = EditorView.theme({
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: selectionLight
   },
-  '.cm-quote': { color: '#555' }
 }, { dark: false })
 
 export const themeBordeauxDark = EditorView.theme({
@@ -71,6 +74,9 @@ export const themeBordeauxDark = EditorView.theme({
     color: '#839496',
     // color: 'var(--grey-0)',
     fontFamily: 'Inconsolata, monospace'
+  },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: '#002b36',
   },
   '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-0)' },
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
@@ -102,5 +108,5 @@ export const themeBordeauxDark = EditorView.theme({
   '.cm-highlight': {
     color: 'black !important',
   },
-  '.cm-quote, .cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
+  '.cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' }
 }, { dark: true })

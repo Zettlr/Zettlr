@@ -21,12 +21,12 @@ jobs:
     name: Unit Tests / Lint
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         # Always fetch the branch that triggered the event (develop or master)
         ref: ${{ github.ref }}
     - name: Setup NodeJS ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'yarn'

@@ -67,7 +67,7 @@ export default class ImportFiles extends ZettlrCommand {
       const ret = await makeImport(fileList, directory, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
-        showNativeNotification(trans('Couldn\'t import %s.', path.basename(file)))
+        showNativeNotification(error, trans('Couldn\'t import %s.', path.basename(file)))
       }, (file: string) => {
         // And this on each success!
         this._app.log.info(`[Importer] File ${file} imported successfully.`)
@@ -76,7 +76,7 @@ export default class ImportFiles extends ZettlrCommand {
 
       if (ret.length > 0) {
         // Some files failed to import.
-        showNativeNotification(trans('The following %s files could not be imported, because their filetype is unknown: %s', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
+        showNativeNotification(trans('The following %s files could not be imported: %s', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
     } catch (err: any) {
       // There has been an error on importing (e.g. Pandoc was not found)

@@ -23,7 +23,8 @@ const commonRules: Record<string, any> = {
   },
   // For more diversity, don't color the link marks
   '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' },
-  '.cm-citation-locator': { textDecoration: 'underline' }
+  '.cm-citation-locator': { textDecoration: 'underline' },
+  '.blockquote-wrapper': { borderLeftColor: primaryColor },
 }
 
 export const themeBielefeldLight = EditorView.theme({
@@ -32,6 +33,9 @@ export const themeBielefeldLight = EditorView.theme({
     backgroundColor: 'var(--beige-0)',
     color: 'var(--grey-5)',
     fontFamily: '"Liberation Mono", monospace'
+  },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: 'var(--beige-0)',
   },
   '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
   '.cm-tag-name': { color: 'var(--orange-2)' },

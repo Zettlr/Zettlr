@@ -7,91 +7,55 @@
  * Maintainer:      Bennie Milburn
  * License:         GNU GPL v3
  *
- * Description:     This renderer displays Pandoc divs and spans using
- *                  Decorations, rendering the attributes defined for
- *                  the node as they would be displayed by pandoc
+ * Description:     This renderer displays Pandoc spans using
+ *                  Decorations and Pandoc Divs using BlockWrappers,
+ *                  rendering the attributes defined for the node as
+ *                  they would be displayed by pandoc
  *
  * END HEADER
  */
 
 import { syntaxTree } from '@codemirror/language'
 import type { Range, RangeSet } from '@codemirror/state'
-import { Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
-import { parseLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { BlockWrapper, Decoration, EditorView, ViewPlugin, type DecorationSet, type ViewUpdate } from '@codemirror/view'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { rangeInSelection } from '../util/range-in-selection'
-import type { SyntaxNode } from '@lezer/common'
+import { configField } from '../util/configuration'
 
-function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
+function createSpanDecorations (view: EditorView): RangeSet<Decoration> {
   const ranges: Range<Decoration>[] = []
+
+  const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
 
   for (const { from, to } of view.visibleRanges) {
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (rangeInSelection(view.state.selection, node.from, node.to, true)) {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
           return
         }
 
-        let marks
-        let attrs: SyntaxNode|null = null
-        // let info
+        if (node.name !== 'PandocSpan') {
+          return
+        }
 
-        let from
-        let to
+        const marks = node.node.getChildren('PandocSpanMark')
+        const attrs = node.node.getChild('PandocAttribute')
 
-        switch (node.name) {
-          case 'PandocSpan': {
-            marks = node.node.getChildren('PandocSpanMark')
-            attrs = node.node.getChild('PandocAttribute')
+        // Pandoc spans must have an attribute node
+        if (!attrs) {
+          return
+        }
 
-            // Pandoc spans must have an attribute node
-            if (!attrs) {
-              return
-            }
-
-            // Something went wrong
-            if (marks.length !== 2) {
-              return
-            }
-
-            // Only style the text within the marks
-            from = marks[0].to
-            to = marks[1].from
-            break
-          }
-
-          // case 'PandocDiv': {
-          //   marks = node.node.getChildren('PandocDivMark')
-          //   attrs = node.node.getChild('PandocAttribute')
-          //   info = node.node.getChild('PandocDivInfo')
-
-          //   // Pandoc divs must have at least an info or an attribute node
-          //   if (!attrs && !info) {
-          //     return
-          //   }
-
-          //   // Something went wrong
-          //   if (marks.length !== 2) {
-          //     return
-          //   }
-
-          //   // Only style the lines within the marks
-          //   from = view.state.doc.line(view.state.doc.lineAt(node.from).number).to
-          //   to = view.state.doc.line(view.state.doc.lineAt(node.to).number).from
-          //   break
-          // }
-
-          default: return
+        // Something went wrong
+        if (marks.length !== 2) {
+          return
         }
 
         // Parse the classes and other attributes to render in the decoration.
-        const attributes = parseLinkAttributes(view.state.sliceDoc(attrs.from, attrs.to))
+        const attributes = parsePandocAttributes(view.state.sliceDoc(attrs.from, attrs.to))
         const classes = attributes.classes ?? []
         const id = attributes.id ?? ''
-
-        // if (info) {
-        //   classes.unshift(view.state.sliceDoc(info.from, info.to))
-        // }
 
         const deco = Decoration.mark({
           attributes: {
@@ -101,35 +65,142 @@ function showDivSpanDecorations (view: EditorView): RangeSet<Decoration> {
           },
         })
 
+        // Only style the text within the marks
+        const from = marks[0].to
+        const to = marks[1].from
+
         ranges.push(deco.range(from, to))
-      },
+      }
     })
   }
 
   return Decoration.set(ranges, true)
 }
 
+// This is used to override the styling of parent divs
+// so that the marks remain legible, and it is easier
+// to distinguish between nested divs.
+const pandocDivMarkWrapper = BlockWrapper.create({ tagName: 'pandoc-div-mark-wrapper' })
+
+function createDivDecorations (view: EditorView): RangeSet<BlockWrapper> {
+  const ranges: Range<BlockWrapper>[] = []
+
+  const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
+
+  for (const { from, to } of view.visibleRanges) {
+    syntaxTree(view.state).iterate({
+      from, to,
+      enter: (node) => {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
+          return
+        }
+
+        if (node.name !== 'PandocDiv') {
+          return
+        }
+
+        const marks = node.node.getChildren('PandocDivMark')
+        const attrs = node.node.getChild('PandocAttribute')
+        const info = node.node.getChild('PandocDivInfo')
+
+        // Pandoc divs must have at least an info or an attribute node
+        if (!attrs && !info) {
+          return
+        }
+
+        // Something went wrong
+        if (marks.length !== 2) {
+          return
+        }
+
+        const classes = info ? [view.state.sliceDoc(info.from, info.to)] : []
+
+        const attributes = attrs ? parsePandocAttributes(view.state.sliceDoc(attrs.from, attrs.to)) : {}
+        const id = attributes.id ?? ''
+
+        if (attributes.classes) {
+          classes.push(...attributes.classes)
+        }
+
+        const wrapper = BlockWrapper.create({
+          tagName: 'pandoc-div-wrapper',
+          attributes: {
+            id,
+            class: classes.join(' '),
+            ...attributes.properties,
+          },
+        })
+
+        // Only style the content within the
+        // marks for better styling preview
+        const fromLine = view.state.doc.lineAt(node.from)
+        const toLine = view.state.doc.lineAt(node.to)
+
+        // Wrap the opening div mark line
+        ranges.push(pandocDivMarkWrapper.range(fromLine.from, fromLine.to))
+        // Wrap the div content
+        ranges.push(wrapper.range(fromLine.to + 1, toLine.from - 1))
+        // Wrap the closing div mark line
+        ranges.push(pandocDivMarkWrapper.range(toLine.from, toLine.to))
+      }
+    })
+  }
+
+  return BlockWrapper.set(ranges, true)
+}
+
 const pandocDivSpanPlugin = ViewPlugin.fromClass(class {
-  decorations: DecorationSet
+  spanDecorations: DecorationSet
+  divWrappers: RangeSet<BlockWrapper>
 
   constructor (view: EditorView) {
-    this.decorations = showDivSpanDecorations(view)
+    this.spanDecorations = createSpanDecorations(view)
+    this.divWrappers = createDivDecorations(view)
   }
 
   update (update: ViewUpdate) {
     if (update.docChanged || update.viewportChanged || update.selectionSet) {
-      this.decorations = showDivSpanDecorations(update.view)
+      this.spanDecorations = createSpanDecorations(update.view)
+      this.divWrappers = createDivDecorations(update.view)
     }
   }
 
 }, {
-  decorations: v => v.decorations
+  decorations: v => v.spanDecorations,
+  provide: plugin => EditorView.blockWrappers.of((view) => {
+    return view.plugin(plugin)?.divWrappers ?? BlockWrapper.set([])
+  })
 })
 
 export const renderPandoc = [
   pandocDivSpanPlugin,
-  // The classes `.mark`, `.underline`, and `.smallcaps` are used by pandoc
   EditorView.baseTheme({
+    // This must be set to `display: block` so that the
+    // attributes are applied correctly. We use `!important`
+    // here so that any styling defined by the div does not
+    // apply.
+    'pandoc-div-wrapper': {
+      display: 'block !important',
+      // Prevent div styling from altering the dom-layout
+      flex: 'initial !important',
+      height: 'initial !important',
+      width: 'initial !important',
+    },
+    // Override the styling of parent divs so that
+    // the div marks (`:::`) are easier to see.
+    'pandoc-div-mark-wrapper': {
+      display: 'block',
+      fontSize: '18px',
+      fontWeight: 'initial',
+      fontVariant: 'initial',
+      color: 'initial',
+      backgroundColor: '#ffffff',
+    },
+    '&dark pandoc-div-mark-wrapper': {
+      backgroundColor: '#2b2b2c',
+    },
+    // The classes `.mark`, `.underline`, and
+    // `.smallcaps` are used by pandoc spans
     '.mark .cm-pandoc-span': {
       backgroundColor: '#ffff0080',
     },

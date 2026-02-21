@@ -74,7 +74,8 @@ import {
   applyComment,
   applyTaskList,
   insertImage,
-  insertLink
+  insertLink,
+  applyPandocDivOrSpan
 } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
 
@@ -99,6 +100,7 @@ import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 import { moveSection } from './commands/move-section'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 export interface DocumentWrapper {
   path: string
@@ -669,6 +671,20 @@ export default class MarkdownEditor extends EventEmitter {
     const transaction = this._instance.state.replaceSelection(text)
     this._instance.dispatch(transaction)
     this._instance.focus()
+  }
+
+  /**
+   * Insert a fenced div, `::: {#id}`,
+   * or bracketed span, `[my text]{#id}`
+   * around the main selection.
+   *
+   * @param   {string}  type        The type of div to insert
+   * @param   {string}  identifier  Identifier attribute. Spaces are replaced with a hyphen `-`
+   * @param   {string}  classes     Class attributes. Words are prepended with `.`
+   * @param   {string}  attributes  Key=Value attributes.
+   */
+  insertPandocDivOrSpan (type: 'div'|'span', attributes: string): void {
+    applyPandocDivOrSpan(this._instance, type, parsePandocAttributes(attributes))
   }
 
   /**

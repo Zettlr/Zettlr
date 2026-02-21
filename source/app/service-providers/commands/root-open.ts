@@ -13,7 +13,7 @@
  */
 
 import { trans } from '@common/i18n-main'
-import ignoreDir from '@common/util/ignore-dir'
+import { ignorePath } from '@common/util/ignore-path'
 import { app } from 'electron'
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
@@ -77,7 +77,7 @@ export default class RootOpen extends ZettlrCommand {
 
     for (const workspace of ret) {
       const isDir = await this._app.fsal.isDir(workspace)
-      if (!isDir || ignoreDir(workspace) || workspace === app.getPath('home')) {
+      if (!isDir || ignorePath(workspace) || workspace === app.getPath('home')) {
         // We cannot add this dir, because it is in the list of ignored directories.
         this._app.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
         this._app.windows.prompt({

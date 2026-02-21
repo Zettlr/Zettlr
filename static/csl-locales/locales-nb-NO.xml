@@ -8,7 +8,7 @@
       <name>Stian Øby Johansen</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-01-14T00:00:00+00:00</updated>
+    <updated>2026-01-20T10:24:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -566,7 +566,7 @@
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">leda av</term>
-    <term name="collection-editor" form="verb">edited by</term>
+    <term name="collection-editor" form="verb">redigert av</term>
     <term name="compiler" form="verb">kompilert av</term>
     <term name="container-author" form="verb">av</term>
     <term name="contributor" form="verb">med</term>

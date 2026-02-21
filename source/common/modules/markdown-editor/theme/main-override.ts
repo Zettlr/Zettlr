@@ -89,12 +89,12 @@ export const mainOverride = EditorView.baseTheme({
   },
   '.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6': { fontWeight: 'bold' },
   // Don't increase font-size within blockquotes
-  ':not(.cm-quote).cm-header-1': { fontSize: '2em' },
-  ':not(.cm-quote).cm-header-2': { fontSize: '1.8em' },
-  ':not(.cm-quote).cm-header-3': { fontSize: '1.5em' },
-  ':not(.cm-quote).cm-header-4': { fontSize: '1.3em' },
-  ':not(.cm-quote).cm-header-5': { fontSize: '1em' },
-  ':not(.cm-quote).cm-header-6': { fontSize: '1em' },
+  '.cm-line:has(:not(.cm-quote).cm-header-1)': { fontSize: '2em' },
+  '.cm-line:has(:not(.cm-quote).cm-header-2)': { fontSize: '1.8em' },
+  '.cm-line:has(:not(.cm-quote).cm-header-3)': { fontSize: '1.5em' },
+  '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: '1.3em' },
+  '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: '1em' },
+  '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: '1em' },
 
   /**
    * Cursor blink animation.

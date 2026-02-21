@@ -31,12 +31,12 @@ function retrieveConfig (): ConfigOptions {
 export const useConfigStore = defineStore('config', () => {
   const config = ref<ConfigOptions>(retrieveConfig())
 
-  // Throttle the retrieve function to once a second. We want the config to
+  // Throttle the retrieve function to once per 50ms. We want the config to
   // update some values extremely frequently, and with the throttle in place, we
   // ensure that the (sometimes heavy) config updaters don't cause lag.
   const throttledRetrieve = _.throttle(() => {
     config.value = retrieveConfig()
-  }, 1000)
+  }, 50)
 
   // Listen to subsequent changes
   ipcRenderer.on('config-provider', (event, { command }) => {

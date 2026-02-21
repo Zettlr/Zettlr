@@ -33,6 +33,7 @@ export interface EditorConfiguration {
   autocorrect: AutocorrectOptions
   autoCloseBrackets: boolean
   renderingMode: 'preview'|'raw'
+  previewModeShowSyntaxWhenCursorIsAdjacent: boolean
   renderCitations: boolean
   renderIframes: boolean
   renderImages: boolean
@@ -61,6 +62,7 @@ export interface EditorConfiguration {
   }
   boldFormatting: '**'|'__'
   italicFormatting: '*'|'_'
+  highlightFormatting: 'span'|'=='
   citeStyle: 'in-text'|'in-text-suffix'|'regular'
   inputMode: 'default'|'vim'|'emacs'
   muteLines: boolean
@@ -94,6 +96,7 @@ export function getDefaultConfig (): EditorConfiguration {
     autocompleteSuggestEmojis: false,
     autoCloseBrackets: true,
     renderingMode: 'preview',
+    previewModeShowSyntaxWhenCursorIsAdjacent: true,
     renderCitations: true,
     renderIframes: true,
     renderImages: true,
@@ -122,6 +125,7 @@ export function getDefaultConfig (): EditorConfiguration {
     },
     boldFormatting: '**',
     italicFormatting: '_',
+    highlightFormatting: '==',
     citeStyle: 'regular',
     muteLines: true,
     readabilityAlgorithm: 'dale-chall',

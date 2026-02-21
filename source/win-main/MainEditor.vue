@@ -248,11 +248,13 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     imagePreviewHeight: display.imageHeight,
     boldFormatting: editor.boldFormatting,
     italicFormatting: editor.italicFormatting,
+    highlightFormatting: editor.highlightFormatting,
     muteLines: configStore.config.muteLines,
     citeStyle: editor.citeStyle,
     readabilityAlgorithm: editor.readabilityAlgorithm,
     idRE: zkn.idRE,
     idGen: zkn.idGen,
+    previewModeShowSyntaxWhenCursorIsAdjacent: display.previewModeShowSyntaxWhenCursorIsAdjacent,
     renderCitations: display.renderCitations,
     renderingMode: display.renderingMode,
     renderIframes: display.renderIframes,
@@ -394,6 +396,24 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
 
   const textToInsert: string = props.editorCommands.data
   currentEditor?.replaceSelection(textToInsert)
+})
+
+watch(toRef(props.editorCommands, 'insertPandoc'), () => {
+  if (props.activeFile?.path !== props.file.path || currentEditor === null) {
+    return
+  }
+
+  if (documentTreeStore.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
+    return
+  }
+
+  const { type, attributes } = props.editorCommands.data
+  if ((type === 'div' || type === 'span') && typeof attributes === 'string') {
+    currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', attributes)
+    currentEditor?.focus()
+  }
 })
 
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
@@ -677,6 +697,7 @@ function maybeHighlightSearchResults (): void {
 
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }
+    .cm-content { min-width: 0; }
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
@@ -685,10 +706,6 @@ function maybeHighlightSearchResults (): void {
 
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
-  }
-
-  .cm-content {
-    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
   }
 }
 
