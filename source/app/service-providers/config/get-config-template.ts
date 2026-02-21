@@ -238,6 +238,7 @@ export interface ConfigOptions {
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean
     showMarkdownMakeTaskListButton: boolean
+    showMarkdownLintButton: boolean
     showInsertTableButton: boolean
     showInsertFootnoteButton: boolean
     showDocumentInfoText: boolean
@@ -501,6 +502,7 @@ export function getConfigTemplate (): ConfigOptions {
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,
       showMarkdownMakeTaskListButton: true,
+      showMarkdownLintButton: true,
       showInsertTableButton: true,
       showInsertFootnoteButton: true,
       showDocumentInfoText: true,

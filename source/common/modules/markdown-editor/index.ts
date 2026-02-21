@@ -106,6 +106,7 @@ import { hunspellChangesEffect, hunspellChangesField } from './linters/hunspell'
 import { ltChangesEffect, ltChangesField } from './linters/language-tool'
 import { forEachDiagnostic, setDiagnosticsEffect, type Diagnostic } from '@codemirror/lint'
 import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
+import { refreshLinterEffect } from './linters/utils'
 
 export interface DocumentWrapper {
   path: string
@@ -696,6 +697,28 @@ export default class MarkdownEditor extends EventEmitter {
         break
       case 'markdownMakeTaskList':
         applyTaskList(this._instance)
+        break
+      case 'markdownLint':
+        // When forcing a lint, reset the stored changes to run over
+        // the entire document.
+        const range = { from: 0, to: this._instance.state.doc.length }
+
+        this._instance.dispatch({
+          effects: [
+            ltChangesEffect.of(range),
+            hunspellChangesEffect.of(range)
+          ]
+        })
+
+        // `forceLint` does not seem to do what we need here, possibly because
+        // we override `needsRefresh`. So instead, we dispatch the effect which
+        // triggers `needsRefresh`
+        this._instance.dispatch({
+          effects: [
+            refreshLinterEffect.of(true),
+          ]
+        })
+
         break
       default:
         console.warn('Unimplemented command:', cmd)
