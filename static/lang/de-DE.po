@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-02-16 14:58+0000\n"
-"PO-Revision-Date: 2025-10-10 08:41+0200\n"
+"PO-Revision-Date: 2026-02-21 10:04+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
@@ -530,17 +530,17 @@ msgstr "Kursiv"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
 msgid "Underline"
-msgstr ""
+msgstr "Unterstrichen"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
 #: source/win-preferences/schema/editor.ts:174
 #: source/win-preferences/schema/editor.ts:175
 msgid "Highlight"
-msgstr ""
+msgstr "Hervorheben"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
 msgid "Strikethrough"
-msgstr ""
+msgstr "Durchgestrichen"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
 msgid "Link"
@@ -577,7 +577,7 @@ msgstr "Datei %s existiert nicht."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:97
 msgid "Generating preview…"
-msgstr ""
+msgstr "Erzeuge Vorschau…"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:134
 msgid "Word count"
@@ -900,11 +900,11 @@ msgstr "Aktueller Ordner"
 
 #: source/tmp/common/vue/form/elements/SelectableList.vue.ts:50
 msgid "New item"
-msgstr ""
+msgstr "Neuer Eintrag"
 
 #: source/tmp/common/vue/form/elements/SelectableList.vue.ts:53
 msgid "No items"
-msgstr ""
+msgstr "Keine Einträge"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:115
 msgid "Add"
@@ -1329,10 +1329,10 @@ msgid ""
 msgstr ""
 "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-"
 "Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-"
-"Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, Node."
-"js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die Entwicklung "
-"von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, die Zettlr "
-"ermöglichen."
+"Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, "
+"Node.js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die "
+"Entwicklung von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, "
+"die Zettlr ermöglichen."
 
 #: source/tmp/win-about/General-Tab.vue.ts:22
 msgid ""
@@ -1547,12 +1547,17 @@ msgstr "Einstellungen"
 msgid ""
 "Here you can override the styles of Zettlr to customise it even further."
 msgstr ""
+"Hier kannst du CSS nutzen, um Zettlr noch weiter an deine Bedürfnisse "
+"anzupassen."
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:25
 msgid ""
 "Attention: This file overrides all CSS directives! Never alter the geometry "
 "of elements, otherwise the app may expose unwanted behaviour!"
 msgstr ""
+"Achtung: Diese Datei überschreibt sämtliche CSS-Direktiven! Ändere niemals "
+"die Geometrie von Elementen. Anderenfalls kann die Software unerwünschtes "
+"oder undefiniertes Verhalten zeigen!"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/tmp/win-assets/CustomCSS.vue.ts:36
@@ -1584,7 +1589,7 @@ msgstr "Gespeichert!"
 #: source/tmp/win-assets/FilterTab.vue.ts:149
 #: source/tmp/win-assets/SnippetsTab.vue.ts:122
 msgid "Could not save changes"
-msgstr ""
+msgstr "Konnte Änderungen nicht speichern"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
@@ -1619,25 +1624,27 @@ msgstr "Bearbeite die Standardeinstellungen für Importe oder Exporte hier."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:28
 msgid "No filter selected."
-msgstr ""
+msgstr "Kein Filter ausgewählt."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:29
 msgid ""
 "This filter is protected. It will be restored if you rename or remove this "
 "file."
 msgstr ""
+"Dieser Filter ist geschützt. Wenn du ihn umbenennst oder löschst, wird er "
+"wiederhergestellt."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:31
 msgid "Rename filter"
-msgstr ""
+msgstr "Filter umbenennen"
 
 #: source/tmp/win-assets/FilterTab.vue.ts:32
 msgid "Lua filters allow customization of your Pandoc exports."
-msgstr ""
+msgstr "Lua-Filter erlauben die Konfiguration von Pandoc-Exporten."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:33
 msgid "Open filters folder"
-msgstr ""
+msgstr "Öffne Filter-Ordner"
 
 #: source/tmp/win-assets/App.vue.ts:17
 #: source/app/service-providers/menu/menu.win32.ts:241
@@ -1655,7 +1662,7 @@ msgstr "Importieren"
 
 #: source/tmp/win-assets/App.vue.ts:38
 msgid "Lua Filter"
-msgstr ""
+msgstr "Lua Filter"
 
 #: source/tmp/win-assets/App.vue.ts:50
 #: source/win-preferences/schema/appearance.ts:205
@@ -1664,7 +1671,7 @@ msgstr "Benutzerdefiniertes CSS"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "No snippet selected."
-msgstr ""
+msgstr "Kein Snippet ausgewählt."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:31
 msgid "Rename snippet"
@@ -2001,11 +2008,11 @@ msgstr "Personen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Home"
-msgstr ""
+msgstr "Haus"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Ban"
-msgstr ""
+msgstr "Verboten"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
 msgid "Eye"
@@ -2312,7 +2319,7 @@ msgstr "Lautstärke"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:31
 msgid "Open after export"
-msgstr ""
+msgstr "Öffne nach Export"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:32
 msgid "Temporary directory"
@@ -2340,27 +2347,27 @@ msgstr "Befehl"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:35
 msgid "#identifier"
-msgstr ""
+msgstr "#ID"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:38
 msgid ".classes"
-msgstr ""
+msgstr ".css-klasse"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:41
 msgid "key=value"
-msgstr ""
+msgstr "attribut=wert"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:43
 msgid "div"
-msgstr ""
+msgstr "div"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:46
 msgid "Div"
-msgstr ""
+msgstr "Div"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:47
 msgid "Span"
-msgstr ""
+msgstr "Span"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:29
 msgid "words last month"
@@ -2455,7 +2462,7 @@ msgstr "Aktuelle Datei exportieren"
 
 #: source/tmp/win-main/App.vue.ts:372
 msgid "Insert Pandoc Div or Span"
-msgstr ""
+msgstr "Pandoc-Div oder Span einfügen"
 
 #: source/tmp/win-main/App.vue.ts:379
 msgid "Insert comment"
@@ -2630,12 +2637,12 @@ msgstr "Schließen"
 #: source/app/app-service-container.ts:174
 #, javascript-format
 msgid "Indexing %s…"
-msgstr ""
+msgstr "Indiziere %s…"
 
 #: source/app/app-service-container.ts:364
 #, javascript-format
 msgid "Booting %s…"
-msgstr ""
+msgstr "Starte %s…"
 
 #: source/app/service-providers/tray/index.ts:166
 msgid "Show Zettlr"
@@ -2825,7 +2832,7 @@ msgstr "%s wurde erfolgreich importiert."
 #: source/app/service-providers/commands/import.ts:79
 #, javascript-format
 msgid "The following %s files could not be imported: %s"
-msgstr ""
+msgstr "Die folgenden %s konnten nicht importiert werden: %s"
 
 #: source/app/service-providers/commands/import.ts:85
 msgid "Import failed"
@@ -2869,6 +2876,8 @@ msgid ""
 "Zettlr can import this file, but it requires an import profile. Please "
 "create one first."
 msgstr ""
+"Zettlr kann diese Datei importieren, benötigt dafür aber ein Import-Profil. "
+"Bitte erstelle zunächst eines."
 
 #: source/app/service-providers/commands/importer/index.ts:97
 #: source/app/service-providers/commands/importer/index.ts:98
@@ -3085,7 +3094,7 @@ msgstr ""
 #. hour or so. See #5944 for context.
 #: source/app/service-providers/updates/index.ts:398
 msgid "Could not check for updates: The connection attempt timed out."
-msgstr ""
+msgstr "Konnte nicht nach Updates suchen: Verbindungsversuch fehlgeschlagen."
 
 #. Something else has occurred. GotError objects have a name property.
 #: source/app/service-providers/updates/index.ts:402
@@ -3472,6 +3481,8 @@ msgid ""
 "We are currently planning on re-introducing bidirectional writing support, "
 "which will then be configurable here."
 msgstr ""
+"Wir planen derzeit die Wiedereinführung der Unterstützung für "
+"bidirektionalem Sprachsupport, der dann hier konfiguriert werden kann."
 
 #: source/win-preferences/schema/editor.ts:48
 msgid "Markdown rendering"
@@ -3501,7 +3512,7 @@ msgstr "Codemodus"
 
 #: source/win-preferences/schema/editor.ts:68
 msgid "Enable the following renderers in preview mode:"
-msgstr ""
+msgstr "Aktiviere die folgenden Darsteller im Vorschaumodus:"
 
 #: source/win-preferences/schema/editor.ts:76
 msgid "Render citations"
@@ -3537,42 +3548,45 @@ msgstr "Hervorhebungen darstellen"
 
 #: source/win-preferences/schema/editor.ts:124
 msgid "Render pandoc divs and spans"
-msgstr ""
+msgstr "Stelle Pandoc Divs und Spans dar"
 
 #: source/win-preferences/schema/editor.ts:130
 msgid "Render horizontal rules"
-msgstr ""
+msgstr "Horizontale Trenner"
 
 #: source/win-preferences/schema/editor.ts:139
 msgid "Show Markdown syntax when the cursor is adjacent or inside an element"
 msgstr ""
+"Zeige die Markdown-Syntax, wenn der Cursor im oder neben dem Element ist"
 
 #: source/win-preferences/schema/editor.ts:140
 msgid ""
 "If disabled, the editor will not show the Markdown syntax if the cursor is "
 "adjacent to the element."
 msgstr ""
+"Wenn diese Einstellung nicht aktiv ist, zeigt Zettlr die Markdown-Syntax "
+"nur, wenn der Cursor sich innerhalb des Elementes befindet."
 
 #: source/win-preferences/schema/editor.ts:146
 msgid "Default Formatting Characters"
-msgstr ""
+msgstr "Standard-Syntax für Formatierungen"
 
 #: source/win-preferences/schema/editor.ts:147
 msgid ""
 "Select the characters Zettlr should use when marking text as bold or italic."
-msgstr ""
+msgstr "Wähle die Syntax aus, die Zettlr für fett und kursiv verwenden soll."
 
 #: source/win-preferences/schema/editor.ts:183
 msgid "Markdown Style"
-msgstr ""
+msgstr "Markdown-Stil"
 
 #: source/win-preferences/schema/editor.ts:184
 msgid "Check your Markdown documents for style issues"
-msgstr ""
+msgstr "Überprüfe deine Markdown-Dokumente für stilistische Probleme"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Enable Markdown Linter"
-msgstr ""
+msgstr "Aktiviere Markdown-Linter"
 
 #: source/win-preferences/schema/editor.ts:195
 msgid "Table Editor"
@@ -3597,6 +3611,9 @@ msgid ""
 "The status bar is a section for various quick controls and shows information "
 "about the current document. It is shown for both Markdown and code editors."
 msgstr ""
+"Die Statusleiste beinhaltet Schnelleinstellungen für und Informationen über "
+"das aktuelle Dokument. Sie wird sowohl für Markdown- als auch Code-Dateien "
+"angezeigt."
 
 #: source/win-preferences/schema/editor.ts:219
 msgid "Show status bar"
@@ -3606,7 +3623,7 @@ msgstr "Statusleiste einblenden"
 msgid ""
 "Customize the appearance of the editor when the distraction-free mode is "
 "active."
-msgstr ""
+msgstr "Konfiguriere den Editor im ablenkungsfreien Modus."
 
 #: source/win-preferences/schema/editor.ts:232
 msgid "Mute non-focused lines in distraction-free mode"
@@ -3622,7 +3639,7 @@ msgstr "Wortzähler"
 
 #: source/win-preferences/schema/editor.ts:249
 msgid "Show character count instead of word count"
-msgstr ""
+msgstr "Zeige Zeichenanzahl statt Wortanzahl"
 
 #: source/win-preferences/schema/editor.ts:255
 msgid "Readability mode"
@@ -3630,24 +3647,24 @@ msgstr "Lesbarkeitsmodus"
 
 #: source/win-preferences/schema/editor.ts:256
 msgid "Choose the algorithm to calculate readability scores."
-msgstr ""
+msgstr "Wähle den Algorithmus für den Lesbarkeitsmodus aus."
 
 #: source/win-preferences/schema/editor.ts:263
 msgid "Readability Algorithm:"
-msgstr ""
+msgstr "Algorithmus für Lesbarkeitsmodus:"
 
 #: source/win-preferences/schema/editor.ts:276
 msgid ""
 "Restrict images to a percentage of the available editor width and height."
-msgstr ""
+msgstr "Beschränke Bilder auf eine bestimmte Breite und Höhe."
 
 #: source/win-preferences/schema/editor.ts:282
 msgid "Restrict width to %s %"
-msgstr ""
+msgstr "Beschränke die Breite auf %s %"
 
 #: source/win-preferences/schema/editor.ts:289
 msgid "Restrict height to %s %"
-msgstr ""
+msgstr "Beschränke die Höhe auf %s %"
 
 #: source/win-preferences/schema/editor.ts:297
 msgid "Other settings"
@@ -3655,11 +3672,11 @@ msgstr "Andere Einstellungen"
 
 #: source/win-preferences/schema/editor.ts:304
 msgid "Editor font size"
-msgstr ""
+msgstr "Editor-Schriftgröße"
 
 #: source/win-preferences/schema/editor.ts:311
 msgid "Tab size (in number of spaces)"
-msgstr ""
+msgstr "Tabgröße (in Anzahl von Leerzeichen)"
 
 #: source/win-preferences/schema/editor.ts:319
 msgid "Indent using tabs instead of spaces"
@@ -3782,6 +3799,8 @@ msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
 "its first argument the file or project folder to be exported."
 msgstr ""
+"Konfiguriere benutzerdefinierte Export-Befehle. Jeder Befehl erhält den zu "
+"exportierenden Datei- oder Projektpfad als erstes Argument."
 
 #: source/win-preferences/schema/import-export.ts:125
 msgid "Display name"
@@ -3797,7 +3816,7 @@ msgstr "Beta-Versionen"
 
 #: source/win-preferences/schema/advanced.ts:31
 msgid "Requires that check for updates is also active."
-msgstr ""
+msgstr "Der Update-Check muss ebenso aktiv sein."
 
 #: source/win-preferences/schema/advanced.ts:36
 msgid "Notify me about beta releases"
@@ -3812,6 +3831,8 @@ msgid ""
 "Zettlr uses this pattern to generate new filenames. By default, it just uses "
 "a new Zettelkasten ID."
 msgstr ""
+"Zettlr nutzt dieses Muster, um neue Dateinamen zu generieren. Standardmäßig "
+"nutzt Zettlr nur eine Zettelkasten ID."
 
 #: source/win-preferences/schema/advanced.ts:53
 #, javascript-format
@@ -3820,7 +3841,7 @@ msgstr "Verfügbare Variablen: %s"
 
 #: source/win-preferences/schema/advanced.ts:60
 msgid "Automatically create new files without asking for confirmation."
-msgstr ""
+msgstr "Erstelle neue Dateien automatisch ohne Abfrage."
 
 #: source/win-preferences/schema/advanced.ts:73
 msgid "Use native window appearance"
@@ -3917,13 +3938,15 @@ msgstr "Datendateien (TSV, CSV, usw.)"
 
 #: source/win-preferences/schema/advanced.ts:263
 msgid "Dot Files and Folders"
-msgstr ""
+msgstr "Versteckte Dateien und Ordner (“dot-files”)"
 
 #: source/win-preferences/schema/advanced.ts:286
 msgid ""
 "Add additional file extensions you wish to see in the file manager and "
 "sidebar below. Include the leading period, e.g., \".xml\"."
 msgstr ""
+"Bestimme zusätzliche Dateinamenerweiterungen, die der Dateibrowser und die "
+"Seitenleiste anzeigen sollen. Muss mit einem Punkt beginnen, z.B.: “.xml”."
 
 #: source/win-preferences/schema/advanced.ts:287
 msgid "Enter an extension and press enter"
@@ -3939,6 +3962,9 @@ msgid ""
 "listed here is automatically trusted. Iframes from these hosts will be "
 "automatically loaded."
 msgstr ""
+"Iframes können ein Angriffsvektor für gefährlichen Code sein. Jeder Host in "
+"dieser Liste gilt als vertrauenswürdig. Iframes von diesen Hosts werden "
+"automatisch geladen."
 
 #: source/win-preferences/schema/advanced.ts:303
 msgid "Hostname"
@@ -3961,6 +3987,11 @@ msgid ""
 "In that case, you can try activating watchdog polling. Do not use this "
 "option unless necessary: Polling is very slow and resource-heavy."
 msgstr ""
+"In seltenen Fällen kann es sein, dass Zettlr externe Änderungen an deinen "
+"Dateien nicht registriert. In diesem Fall kannst du den Zettlr-Watchdog "
+"instruieren, Dateien periodisch nach Änderungen zu prüfen. Aktiviere diese "
+"Option nur, wenn absolut nötig: Sie erfordert viele Ressourcen und kann das "
+"Programm langsamer machen."
 
 #: source/win-preferences/schema/advanced.ts:317
 msgid "Activate watchdog polling"
@@ -3995,14 +4026,16 @@ msgid ""
 "Autocorrect can automatically replace certain sequences of characters with "
 "others, and use typographical quotes."
 msgstr ""
+"Autocorrect kann bestimmte Zeichenfolgen automatisch ersetzen und "
+"typografische Anführungszeichen einfügen."
 
 #: source/win-preferences/schema/autocorrect.ts:33
 msgid "Autocorrect: Replacement Table"
-msgstr ""
+msgstr "Autocorrect: Ersetzungs-Tabelle"
 
 #: source/win-preferences/schema/autocorrect.ts:34
 msgid "Configure which sequences of characters get replaced by which symbols."
-msgstr ""
+msgstr "Bestimme Zeichenfolgen, die mit anderen ersetzt werden sollen."
 
 #: source/win-preferences/schema/autocorrect.ts:39
 msgid "Match whole words"
@@ -4023,17 +4056,20 @@ msgstr "Mit"
 
 #: source/win-preferences/schema/autocorrect.ts:59
 msgid "Magic Quotes"
-msgstr ""
+msgstr "Magic Quotes"
 
 #: source/win-preferences/schema/autocorrect.ts:60
 msgid ""
 "This setting allows you to pick which typographical quotes Zettlr will "
 "insert when you insert a quotation mark. Requires Autocorrect to be enabled."
 msgstr ""
+"Diese Einstellung erlaubt Zettlr, Anführungszeichen mit korrekten, "
+"typografischen Anführungszeichen zu ersetzen. Ist nur zusammen mit "
+"Autocorrect aktiv."
 
 #: source/win-preferences/schema/autocorrect.ts:73
 msgid "Double/Primary Quotes"
-msgstr ""
+msgstr "Anführungszeichen"
 
 #: source/win-preferences/schema/autocorrect.ts:76
 #: source/win-preferences/schema/autocorrect.ts:98
@@ -4042,19 +4078,19 @@ msgstr "Magic Quotes ausschalten"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Single/Secondary Quotes"
-msgstr ""
+msgstr "Halbe Anführungszeichen"
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule dark mode automatically"
-msgstr ""
+msgstr "Automatischer Themawechsel zwischen hell und dunkel"
 
 #: source/win-preferences/schema/appearance.ts:41
 msgid "Do not automatically switch"
-msgstr ""
+msgstr "Kein automatischer Wechsel"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "Follow custom schedule"
-msgstr ""
+msgstr "Benutzerdefinierter Plan"
 
 #: source/win-preferences/schema/appearance.ts:52
 msgid "Start dark mode at"
@@ -4066,21 +4102,23 @@ msgstr "Wechsel ins helle Thema"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Editor Theme"
-msgstr ""
+msgstr "Editor-Thema"
 
 #: source/win-preferences/schema/appearance.ts:70
 msgid "Select a color and font theme for the editor."
-msgstr ""
+msgstr "Wähle ein Farb- und Schriftarten-Thema für den Editor."
 
 #: source/win-preferences/schema/appearance.ts:119
 msgid "Toolbar buttons"
-msgstr ""
+msgstr "Werkzeugleiste"
 
 #: source/win-preferences/schema/appearance.ts:120
 msgid ""
 "Select which buttons should be shown on the toolbar. Some buttons cannot be "
 "hidden."
 msgstr ""
+"Wähle die Buttons aus, die in der Werkzeugleiste angezeigt werden sollen. "
+"Einige Buttons können nicht ausgeblendet werden."
 
 #: source/win-preferences/schema/appearance.ts:128
 msgid "Left section"
@@ -4190,7 +4228,7 @@ msgstr "Anzeige von Dokumentnamen"
 msgid ""
 "Determines how Zettlr will display files in various places such as the file "
 "manager."
-msgstr ""
+msgstr "Bestimme, wie und wo Zettlr bestimmte Dateitypen anzeigt."
 
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Filename only"
@@ -4214,17 +4252,19 @@ msgstr "Zeige Markdown Dateierweiterungen an"
 
 #: source/win-preferences/schema/file-manager.ts:75
 msgid "Only available if name display is set to \"Filename only\""
-msgstr ""
+msgstr "Nur verfügbar für die Einstellung “Nur Dateiname”"
 
 #: source/win-preferences/schema/file-manager.ts:82
 msgid "Time display and sorting"
-msgstr ""
+msgstr "Zeitdarstellung und -sortierung"
 
 #: source/win-preferences/schema/file-manager.ts:83
 msgid ""
 "Determine which timestamp Zettlr shows for files. This also affects sorting "
 "by time."
 msgstr ""
+"Bestimme den Zeitstempel, den Zettlr nutzen soll. Betrifft sowohl die "
+"Anzeige als auch die Sortierung."
 
 #: source/win-preferences/schema/file-manager.ts:91
 msgid "Last modification time"
@@ -4236,11 +4276,11 @@ msgstr "Dateierstellungszeitpunkt"
 
 #: source/win-preferences/schema/file-manager.ts:98
 msgid "Filename sorting"
-msgstr ""
+msgstr "Sortierung nach Dateinamen"
 
 #: source/win-preferences/schema/file-manager.ts:99
 msgid "Determines how Zettlr sorts files and folders when sorting by name."
-msgstr ""
+msgstr "Bestimmt, wie Zettlr Dateien und Ordner nach Dateinamen sortiert."
 
 #: source/win-preferences/schema/file-manager.ts:105
 msgid "When sorting documents…"
@@ -4258,7 +4298,7 @@ msgstr "Nutze die ASCII-Reihenfolge (2 kommt nach 10)"
 msgid ""
 "The spellchecker checks your words for misspellings. It uses Hunspell-"
 "compatible dictionaries."
-msgstr ""
+msgstr "Die Rechtschreibprüfung nutzt “Hunspell”-kompatible Wörterbücher."
 
 #: source/win-preferences/schema/spellchecking.ts:36
 msgid "Active"
@@ -4277,7 +4317,7 @@ msgstr ""
 
 #: source/win-preferences/schema/spellchecking.ts:48
 msgid "Install Dictionaries"
-msgstr ""
+msgstr "Installiere Wörterbücher"
 
 #: source/win-preferences/schema/spellchecking.ts:49
 msgid ""
@@ -4285,18 +4325,22 @@ msgid ""
 "dictionary folder. Click the button below to open the dictionary folder. For "
 "more information, please see the manual."
 msgstr ""
+"Installiere neue Wörterbücher, indem du sie in den entsprechenden Ordner "
+"verschiebst. Klicke den Knopf, um den Ordner zu öffnen. Die Wörterbücher "
+"müssen Hunspell-kompatibel sein. Weitere Informationen befinden sich im "
+"Handbuch."
 
 #: source/win-preferences/schema/spellchecking.ts:54
 msgid "Open dictionary folder"
-msgstr ""
+msgstr "Öffne Wörterbuch-Ordner"
 
 #: source/win-preferences/schema/spellchecking.ts:64
 msgid "User Dictionary"
-msgstr ""
+msgstr "Benutzerdefiniertes Wörterbuch"
 
 #: source/win-preferences/schema/spellchecking.ts:65
 msgid "Manage your user dictionary here."
-msgstr ""
+msgstr "Verwalte dein benutzerdefiniertes Wörterbuch hier."
 
 #: source/win-preferences/schema/spellchecking.ts:72
 msgid "Dictionary entry"
@@ -4316,6 +4360,11 @@ msgid ""
 "issues. By default, LanguageTool sends your texts to the official servers. "
 "You can also self-host the software."
 msgstr ""
+"LanguageTool kann deine Texte nach Rechtschreibfehlern, Grammatikfehlern "
+"sowie stilistischen Problemen durchsuchen. Standardmäßig verwendet "
+"LanguageTool die offiziellen Server und übermittelt deine Texte über das "
+"Internet. Die Software kann auch lokal auf deinem Computer installiert "
+"werden."
 
 #: source/win-preferences/schema/spellchecking.ts:93
 msgid "Strictness"
@@ -4331,7 +4380,7 @@ msgstr "Akribisch"
 
 #: source/win-preferences/schema/spellchecking.ts:106
 msgid "Select your native language"
-msgstr ""
+msgstr "Wähle deine Muttersprache aus"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 msgid "Not set"
@@ -4339,7 +4388,7 @@ msgstr "Nicht eingestellt"
 
 #: source/win-preferences/schema/spellchecking.ts:121
 msgid "Preferred Language Variants"
-msgstr ""
+msgstr "Bevorzugte Sprachvarianten"
 
 #: source/win-preferences/schema/spellchecking.ts:126
 msgid ""
@@ -4400,7 +4449,7 @@ msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:218
 msgid "LanguageTool: Disabled rules"
-msgstr ""
+msgstr "LanguageTool: Deaktivierte Regeln"
 
 #: source/win-preferences/schema/spellchecking.ts:219
 msgid ""
@@ -4438,6 +4487,8 @@ msgstr "Updates"
 #: source/win-preferences/schema/general.ts:22
 msgid "If you installed Zettlr via a package manager, you should disable this."
 msgstr ""
+"Wenn du Zettlr über einen Paketmanager installiert hast solltest du diese "
+"Einstellung deaktivieren."
 
 #: source/win-preferences/schema/general.ts:28
 msgid "Automatically check for updates"
@@ -4450,6 +4501,10 @@ msgid ""
 "via package managers. In these cases, Zettlr will be updated through your "
 "package manager."
 msgstr ""
+"Diese Version von Zettlr sucht nicht nach Aktualisierungen. Diese "
+"Entscheidung wurde vom Erzeuger dieser Version getroffen. Das ist normal, "
+"wenn du Zettlr über einen Paketmanager beziehst, da in diesen Fällen der "
+"Paketmanager nach Aktualisierungen sucht."
 
 #: source/win-preferences/schema/general.ts:43
 msgid "Application language"
@@ -4461,7 +4516,7 @@ msgstr "Automatisches Speichern"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Should Zettlr automatically save changes to your documents?"
-msgstr ""
+msgstr "Soll Zettlr Änderungen an deinen Dokumenten automatisch speichern?"
 
 #: source/win-preferences/schema/general.ts:65
 msgid "Never"
@@ -4484,6 +4539,8 @@ msgid ""
 "Automatically suggests this folder to save images to, and searches this "
 "folder to propose \"other files\"."
 msgstr ""
+"Schlägt diesen Ordner automatisch zum Speichern von Bildern vor und bietet "
+"Bilder aus diesem Ordner in einigen Orten der App automatisch an."
 
 #: source/win-preferences/schema/general.ts:86
 msgid ""
@@ -4509,11 +4566,11 @@ msgstr "Zettelkasten-IDs"
 msgid ""
 "Specify how Zettlr generates new file IDs for your Zettelkasten, and enable "
 "Zettlr to detect them."
-msgstr ""
+msgstr "Bestimmt, wie Zettlr neue Zettelkasten IDs erstellt und auffindet."
 
 #: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern for generating new IDs"
-msgstr ""
+msgstr "Muster für die Erstellung neuer IDs."
 
 #: source/win-preferences/schema/zettelkasten.ts:33
 #, javascript-format
@@ -4522,7 +4579,7 @@ msgstr "Verfügbare Variablen: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:38
 msgid "Pattern to detect Zettelkasten IDs"
-msgstr ""
+msgstr "Muster, um Zettelkasten-IDs zu finden"
 
 #: source/win-preferences/schema/zettelkasten.ts:39
 msgid "Uses ECMAScript regular expressions"
@@ -4567,7 +4624,7 @@ msgstr "Die Suche entspricht dem Inhalt zwischen den Klammern: [[ ]]."
 
 #: source/win-preferences/schema/zettelkasten.ts:91
 msgid "Zettelkasten folder"
-msgstr ""
+msgstr "Zettelkasten-Ordner"
 
 #: source/win-preferences/schema/zettelkasten.ts:92
 msgid ""
@@ -4575,6 +4632,9 @@ msgid ""
 "when following links to not-yet-existing files. This folder must be open as "
 "a Workspace in Zettlr."
 msgstr ""
+"Wenn du einen dezidierten Zettelkasten-Ordner bestimmst, kann Zettlr neue "
+"Dateien automatisch erstellen, wenn du auf links klickst. Dieser Ordner muss "
+"in einem Arbeitsverzeichnis geöffnet sein."
 
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
@@ -5255,8 +5315,8 @@ msgstr "Tab anheften"
 #~ "Target directory for exported files. <em>Attention:</em> Selecting the "
 #~ "current working directory will overwrite files without warning!"
 #~ msgstr ""
-#~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl &quot;"
-#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
+#~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl "
+#~ "&quot;Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
 #~ "vorhandene Dateien!"
 
 #~ msgid "Temporary directory: is regularly expunged"

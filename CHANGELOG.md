@@ -21,6 +21,7 @@
   if they attempt to import a supported file with no profile.
 - Updated `pt-BR` translation (#6154).
 - Updated `ja-JP` translation (#6198).
+- Updated `de-DE` translation.
 - Improved the tag recognition to allow for more varied Unicode characters in
   tags than previously, including umlauts, accents, or emojis (#6155).
 - Improved pilcrow styling when whitespace rendering is on (#6152).
