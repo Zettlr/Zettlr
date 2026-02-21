@@ -551,7 +551,12 @@ onMounted(async () => {
     // Now we can be sure that the event pertains to a direct child of this item
     // and we need to handle it. We'll make it easy and simply re-fetch the list
     // of children.
-    fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
+    //
+    // Note: only fetch the children if the event is `addDir` or `change`, otherwise,
+    // it only pertains to a file or a dir which is no longer in the tree.
+    if (payload.event === 'addDir' || payload.event === 'change') {
+      fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
+    }
   })
 })
 
@@ -751,7 +756,6 @@ body {
         overflow: hidden;
         text-overflow: ellipsis;
         margin-right: 8px;
-
       }
 
       &.project {
