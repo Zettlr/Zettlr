@@ -83,6 +83,7 @@ import { addNewFootnote } from './commands/footnotes'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import openMarkdownLink from './util/open-markdown-link'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
+import { isThisNodeAnyLiteralNodeInAYamlKeywordsOrTagsPair } from './util/yaml-tag-detection'
 
 import safeAssign from '@common/util/safe-assign'
 import { countAll } from '@common/util/counter'
@@ -381,6 +382,21 @@ export default class MarkdownEditor extends EventEmitter {
             editorInstance.emit('zettelkasten-tag', tagContents)
             event.preventDefault()
             return true
+          } else if ((nodeAt.name === 'CodeText' && nodeAt.prevSibling?.name === 'YAMLFrontmatterStart') ||
+              (nodeAt.name === 'string' && nodeAt.matchContext(['CodeText']) && nodeAt.parent?.prevSibling?.name === 'YAMLFrontmatterStart')) {
+
+            const innerNodeAt = syntaxTree(view.state).resolveInner(pos, 0)
+
+            if (isThisNodeAnyLiteralNodeInAYamlKeywordsOrTagsPair(innerNodeAt, view.state)) {
+              let tag = view.state.sliceDoc(innerNodeAt.from, innerNodeAt.to)
+              if (innerNodeAt.type.name === 'QuotedLiteral') {
+                tag = tag.substring(1, tag.length-1)
+              }
+              editorInstance.emit('zettelkasten-tag', `#${tag}`)
+              event.preventDefault()
+              return true
+            }
+
           }
 
           // Lastly, the user may have clicked somewhere in a link. However,
