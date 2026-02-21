@@ -69,18 +69,18 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
       title: trans('Editor Theme'),
       infoString: trans('Select a color and font theme for the editor.'),
       group: PreferencesGroups.Appearance,
+      titleField: {
+        type: 'select',
+        model: 'darkModeEditor',
+        inline: true,
+        options: {
+          match: trans('Automatic'),
+          light: trans('Light Theme'),
+          dark: trans('Dark Theme')
+        }
+      },
       help: undefined, // TODO
       fields: [
-        {
-          type: 'radio',
-          model: 'darkModeEditor',
-          inline: true,
-          options: {
-            light: trans('Light Theme'),
-            match: trans('Match Application'),
-            dark: trans('Dark Theme')
-          }
-        },
         { type: 'separator' },
         {
           type: 'theme',
