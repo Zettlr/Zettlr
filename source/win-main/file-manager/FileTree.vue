@@ -7,7 +7,7 @@
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
     v-on:pointerenter="hover = true"
-    v-on:pointerleave="hover = false"
+    v-on:pointerleave="hover = false; shiftHeld = false"
   >
     <template v-if="rootDescriptors.length > 0">
       <div v-if="filterQuery.trim() !== '' && filterResults.length === 0" class="empty-tree">
@@ -37,7 +37,7 @@
             role="presentation"
           ></cds-icon>
 
-          {{ fileSectionHeading }}
+          {{ fileSectionHeading.toUpperCase() }}
         </div>
 
         <template v-if="showFilesSection">
@@ -68,7 +68,7 @@
             v-bind:direction="showClose ? undefined : showWorkspacesSection ? 'down' : 'right'"
             v-bind:status="showClose ? 'danger' : undefined"
             v-bind:class="{ 'close-all': showClose }"
-            v-on:dblclick="showClose ? closeAllWorkspaces() : undefined"
+            v-on:dblclick.stop="showClose ? closeAllWorkspaces() : undefined"
           ></cds-icon>
 
           <cds-icon
@@ -77,13 +77,16 @@
             role="presentation"
           ></cds-icon>
 
-          {{ workspaceSectionHeading }}
+          {{ workspaceSectionHeading.toUpperCase() }}
 
           <cds-icon
+            class="collapse-all"
             role="presentation"
             shape="minus-circle"
-            class="collapse-all"
-            v-on:click.prevent="collapseAll()"
+            v-bind:solid="collapseHover"
+            v-on:click.stop="collapseAll()"
+            v-on:pointerenter="collapseHover = true"
+            v-on:pointerleave="collapseHover = false"
           ></cds-icon>
         </div>
 
@@ -156,6 +159,7 @@ const emit = defineEmits<{
 
 const shiftHeld = ref(false)
 const hover = ref(false)
+const collapseHover = ref(false)
 const showClose = computed(() => shiftHeld.value && hover.value)
 
 function onKeyDown (e: KeyboardEvent) {
@@ -431,6 +435,8 @@ body {
     cds-icon {
       width: 18px;
       height: 18px;
+      min-height: 18px;
+      min-width: 18px;
     }
 
     &.hidden { left:-100%; }
@@ -445,11 +451,16 @@ body {
         margin-right: 3px;
         vertical-align: bottom;
       }
-    }
 
-    .close-all:hover {
-      border-radius: 20%;
-      background-color: rgb(200, 200, 200);
+      .close-all:hover {
+        border-radius: 20%;
+        background-color: rgb(200, 200, 200);
+      }
+
+      .collapse-all {
+        margin-inline-start: auto;
+        margin-inline-end: 5px;
+      }
     }
 
     .list-item {
@@ -477,8 +488,10 @@ body {
 
   &.dark {
     #file-tree {
-      .close-all:hover {
-        background-color: rgb(80, 80, 80);
+      #directories-dirs-header, #directories-files-header {
+        .close-all:hover {
+          background-color: rgb(80, 80, 80);
+        }
       }
     }
   }
