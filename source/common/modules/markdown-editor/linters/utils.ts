@@ -239,7 +239,6 @@ export function prepareDiagnostics (
   const changes = state.field(field)
   changes.iterChangedRanges((_, __, fromB, toB) => {
     // we expand the context to ensure a better lint
-    console.log("PROCESSING CHANGE: ", fromB, toB)
     const { from, to } = getNodePosition(state, fromB, toB, context, filter)
     ranges.push({ from, to })
   })
