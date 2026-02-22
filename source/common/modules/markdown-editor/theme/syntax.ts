@@ -20,7 +20,7 @@ import { type Extension } from '@codemirror/state'
 
 // Instead of utilizing JS styling, we simply apply class names, in order to
 // retain our users' ability to apply custom CSS.
-const customTagHighligh = HighlightStyle.define([
+const customTagHighlight = HighlightStyle.define([
   { tag: customTags.YAMLFrontmatter, class: 'cm-yaml-frontmatter' },
   { tag: customTags.YAMLFrontmatterStart, class: 'cm-yaml-frontmatter-start' },
   { tag: customTags.YAMLFrontmatterEnd, class: 'cm-yaml-frontmatter-end' },
@@ -141,7 +141,7 @@ const tagHighlight = HighlightStyle.define([
 ])
 
 export function markdownSyntaxHighlighter (): Extension {
-  return [ syntaxHighlighting(customTagHighligh), syntaxHighlighting(tagHighlight) ]
+  return [ syntaxHighlighting(customTagHighlight), syntaxHighlighting(tagHighlight) ]
 }
 
 export function codeSyntaxHighlighter (): Extension {
