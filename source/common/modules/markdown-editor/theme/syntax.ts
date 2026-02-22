@@ -49,7 +49,7 @@ const customTagHighligh = HighlightStyle.define([
   { tag: customTags.PandocDivInfo, class: 'cm-pandoc-div-info cm-code-mark cm-monospace' },
   { tag: customTags.PandocDivMark, class: 'cm-pandoc-div-mark cm-code-mark cm-monospace' },
   { tag: customTags.PandocSpan, class: 'cm-pandoc-span' },
-  { tag: customTags.PandocSpanMark, class: 'cm-pandoc-span-mark cm-code-mark' },
+  { tag: customTags.PandocSpanMark, class: 'cm-pandoc-span-mark' },
   { tag: customTags.Table, class: 'cm-pipe-table ' },
   { tag: customTags.TableHeader, class: 'cm-pipe-table-header ' },
   { tag: customTags.TableDelimiter, class: 'cm-pipe-table-delimiter ' },
@@ -112,7 +112,7 @@ const tagHighlight = HighlightStyle.define([
   { tag: tags.meta, class: 'cm-meta' },
   { tag: tags.modifier, class: 'cm-modifier' },
   { tag: tags.moduleKeyword, class: 'cm-module-keyword' },
-  { tag: tags.monospace, class: 'cm-monospace cm-fenced-code' }, // CodeText (i.e. code block content)
+  { tag: tags.monospace, class: 'cm-monospace' }, // CodeText (i.e. code block content)
   { tag: tags.name, class: 'cm-name' },
   { tag: tags.namespace, class: 'cm-namespace' },
   { tag: tags.null, class: 'cm-null' },
