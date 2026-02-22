@@ -11,98 +11,55 @@
  *
  * END HEADER
  */
+
 import { EditorView } from '@codemirror/view'
+import { defaultVarsDark, defaultVarsLight, type ColorVars } from './main-override'
+
+const scrollerColor = 'var(--grey-5)'
+const scrollerColorDark = 'var(--grey-0)'
+
+const scrollerBackground = 'transparent'
 
 const primaryColor = '#1cb27e'
-const selectionLight = 'rgba(180, 240, 170, 0.8)'
-const selectionDark = 'rgba(90, 170, 80, 0.8)'
 
-const commonRules: Record<string, any> = {
-  // Monospaced elements (quite a lot)
-  '.cm-comment, .cm-block-comment, .cm-inline-math, .cm-code-mark, .cm-monospace, .cm-hr': {
-    fontFamily: 'Inconsolata, monospace'
-  },
-  '.cm-gutters': {
-    fontFamily: 'Inconsolata, monospace'
-  },
-  '.cm-tag-name, .cm-attribute-name, .cm-attribute-value, .cm-angle-bracket, .cm-definition-operator': {
-    fontFamily: 'Inconsolata, monospace'
-  },
-  '.cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end, .mermaid-chart.error': {
-    fontFamily: 'Inconsolata, monospace'
-  }, // END: Monospace elements
-  '.blockquote-wrapper': { borderLeftColor: primaryColor },
-  '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
-    fontWeight: 'bold'
-  },
-  '.cm-citation-locator': { fontStyle: 'italic' },
-  // For more diversity, don't color the link marks
-  '.cm-link.cm-code-mark': { color: 'inherit' }
+const selectionLight = '#b4f0aacc'
+const selectionDark = '#5aaa50cc'
+
+const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
+const codeFont = 'Inconsolata, monospace'
+
+const citationColor = 'var(--grey-1)'
+const citationBackground = 'var(--grey-0)'
+
+const codeColor = 'var(--grey-5)'
+const codeBackground = 'var(--grey-0)'
+
+const berlinVarsLight: ColorVars = {
+  ...defaultVarsLight,
+  '--cm-scroller-color': scrollerColor,
+  '--cm-scroller-bg': scrollerBackground,
+  '--cm-primary-color': primaryColor,
+  '--cm-secondary-color': primaryColor,
+  '--cm-selection-color': selectionLight,
+  '--cm-font': fontFamily,
+  '--cm-code-font': codeFont,
+  '--cm-citation-color': citationColor,
+  '--cm-citation-bg': citationBackground,
+  '--cm-code-color': codeColor,
+  '--cm-code-bg': codeBackground,
+}
+
+const berlinVarsDark: ColorVars = {
+  ...defaultVarsDark,
+  ...berlinVarsLight,
+  '--cm-scroller-color': scrollerColorDark,
+  '--cm-selection-color': selectionDark,
 }
 
 export const themeBerlinLight = EditorView.theme({
-  ...commonRules,
-  '.cm-scroller': {
-    color: 'var(--grey-5)',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
-  },
-  '.cm-comment, .cm-block-comment, .cm-monospace, .cm-inline-math': { color: 'var(--grey-5)' },
-  '.cm-tag-name': { color: 'var(--orange-2)' },
-  '.cm-attribute-name': { color: 'var(--blue-0)' },
-  '.cm-attribute-value': { color: 'var(--green-0)' },
-  '.cm-angle-bracket, .cm-definition-operator': { color: 'var(--grey-5)' },
-  // Primary color
-  '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag': { color: primaryColor },
-  '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-0)' },
-  '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
-  // Citation syntax
-  '.cm-citation-mark': { fontFamily: 'monospace', color: 'var(--grey-1)' },
-  '.cm-citation-suppress-author-flag': { color: 'var(--red-2)' },
-  '.cm-citation-at-sign': { fontFamily: 'monospace', color: 'var(--grey-1)' },
-  '.cm-citation-citekey': { color: primaryColor },
-  '.cm-escape': { color: 'var(--grey-2)' },
-  '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
-    color: primaryColor
-  },
-  '.cm-cursor-primary': { background: primaryColor },
-  '.cm-cursor-secondary': { background: 'var(--red-2)' },
-  '.cm-dropCursor': { borderLeftColor: primaryColor },
-  // Copied with my blood from the DOM; the example on the website is wrong.
-  '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
-    background: selectionLight
-  }
+  '&': berlinVarsLight
 }, { dark: false })
 
 export const themeBerlinDark = EditorView.theme({
-  ...commonRules,
-  '.cm-scroller': {
-    color: 'var(--grey-0)',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
-  },
-  '.cm-comment, .cm-block-comment, .cm-monospace, .cm-inline-math': { color: 'var(--grey-0)' },
-  '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
-    color: primaryColor
-  },
-  '.citeproc-citation, .code-block-line-background, .inline-code-background': { backgroundColor: 'var(--grey-7)' },
-  '.citeproc-citation.error, .mermaid-chart.error': { color: 'var(--red-2)' },
-  // Citation syntax
-  '.cm-citation-mark': { fontFamily: 'monospace', color: 'var(--grey-4)' },
-  '.cm-citation-suppress-author-flag': { color: 'var(--red-2)' },
-  '.cm-citation-at-sign': { fontFamily: 'monospace', color: 'var(--grey-4)' },
-  '.cm-citation-citekey': { color: primaryColor },
-  '.cm-cursor-primary': { background: primaryColor },
-  '.cm-cursor-secondary': { background: 'var(--red-2)' },
-  '.cm-dropCursor': { borderLeftColor: primaryColor },
-  '.cm-tag-name': { color: 'var(--orange-2)' },
-  '.cm-bracket': { color: 'var(--grey-1)' },
-  '.cm-string': { color: 'var(--green-0)' },
-  '.cm-attribute-name': { color: 'var(--blue-0)' },
-  '.cm-attribute-value': { color: 'var(--green-0)' },
-  '.cm-angle-bracket, .cm-definition-operator': { color: 'var(--grey-5)' },
-  '.cm-escape': { color: 'var(--grey-4)' },
-  '.cm-url, .cm-link, .cm-code-mark, .cm-zkn-tag': { color: primaryColor },
-  // Copied with my blood from the DOM; the example on the website is wrong.
-  '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
-    background: selectionDark
-  }
+  '&': berlinVarsDark
 }, { dark: true })
