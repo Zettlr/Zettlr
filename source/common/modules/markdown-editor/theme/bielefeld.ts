@@ -22,7 +22,7 @@ const commonRules: Record<string, any> = {
     fontWeight: 'bold'
   },
   // For more diversity, don't color the link marks
-  '.cm-link.cm-code-mark.cm-meta': { color: 'inherit' },
+  '.cm-link.cm-code-mark': { color: 'inherit' },
   '.cm-citation-locator': { textDecoration: 'underline' },
   '.blockquote-wrapper': { borderLeftColor: primaryColor },
 }
@@ -37,7 +37,7 @@ export const themeBielefeldLight = EditorView.theme({
   'pandoc-div-info-wrapper': {
     backgroundColor: 'var(--beige-0)',
   },
-  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-5)' },
+  '.cm-comment, .cm-block-comment, .cm-monospace, .cm-inline-math': { color: 'var(--grey-5)' },
   '.cm-tag-name': { color: 'var(--orange-2)' },
   '.cm-attribute-name': { color: 'var(--blue-0)' },
   '.cm-attribute-value': { color: 'var(--green-0)' },
@@ -69,7 +69,7 @@ export const themeBielefeldDark = EditorView.theme({
     color: 'var(--grey-0)',
     fontFamily: '"Liberation Mono", monospace'
   },
-  '.cm-comment, .cm-block-comment, .cm-fenced-code, .cm-inline-math': { color: 'var(--grey-0)' },
+  '.cm-comment, .cm-block-comment, .cm-monospace, .cm-inline-math': { color: 'var(--grey-0)' },
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
     color: primaryColor
   },
