@@ -13,50 +13,345 @@
  *
  * END HEADER
  */
+
 import { EditorView } from '@codemirror/view'
 
-export const mainOverride = EditorView.baseTheme({
+export interface ColorVars {
+  [selector: string]: string|number
+  '--cm-scroller-color': string
+  '--cm-scroller-bg': string
+  '--cm-primary-color': string
+  '--cm-secondary-color': string
+  '--cm-selection-color': string
+  '--cm-highlight-color': string
+  '--cm-error-color': string
+  '--cm-opacity': string|number
+  '--cm-font': string
+  '--cm-code-font': string
+  '--cm-emphasis-font': string
+  '--cm-strong-font': string
+  '--cm-header-font': string
+  '--cm-citation-color': string,
+  '--cm-citation-bg': string
+  '--cm-code-color': string
+  '--cm-code-bg': string
+  '--cm-escape-color': string
+  '--cm-link-decoration': string
+  '--cm-header-1-size': string
+  '--cm-header-2-size': string
+  '--cm-header-3-size': string
+  '--cm-header-4-size': string
+  '--cm-header-5-size': string
+  '--cm-header-6-size': string
+}
+
+const scrollerColor = 'var(--grey-5)'
+const scrollerColorDark = 'var(--grey-0)'
+
+const scrollerBackground = 'transparent'
+
+const primaryColor = '#1cb27e'
+
+const selectionLight = '#b0c6accc'
+const selectionDark = '#5aaa50cc'
+
+const highlightLight = '#ffff0080'
+const highlightDark = '#ffff0060'
+
+const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
+const codeFont = 'Inconsolata, monospace'
+
+const citationColor = 'var(--grey-1)'
+const citationBackground = 'var(--grey-0)'
+
+const codeColor = 'var(--grey-5)'
+const codeBackground = 'var(--grey-0)'
+
+const escapeColor = 'var(--grey-2)'
+const escapeColorDark = 'var(--grey-4)'
+
+const errorColor = 'var(--red-2)'
+
+const opacity = 0.65
+
+const linkDecoration = 'none'
+
+const emphasisFont = 'italic'
+const strongFont = 'bold'
+const headerFont = 'bold'
+
+const headerSize1 = '2em'
+const headerSize2 = '1.8em'
+const headerSize3 = '1.5em'
+const headerSize4 = '1.3em'
+const headerSize5 = '1em'
+const headerSize6 = '1em'
+
+export const defaultVarsLight: ColorVars = {
+  '--cm-scroller-color': scrollerColor,
+  '--cm-scroller-bg': scrollerBackground,
+  '--cm-primary-color': primaryColor,
+  '--cm-secondary-color': primaryColor,
+  '--cm-selection-color': selectionLight,
+  '--cm-highlight-color': highlightLight,
+  '--cm-font': fontFamily,
+  '--cm-code-font': codeFont,
+  '--cm-emphasis-font': emphasisFont,
+  '--cm-strong-font': strongFont,
+  '--cm-header-font': headerFont,
+  '--cm-citation-color': citationColor,
+  '--cm-citation-bg': citationBackground,
+  '--cm-code-color': codeColor,
+  '--cm-code-bg': codeBackground,
+  '--cm-escape-color': escapeColor,
+  '--cm-error-color': errorColor,
+  '--cm-opacity': opacity,
+  '--cm-link-decoration': linkDecoration,
+  '--cm-header-1-size': headerSize1,
+  '--cm-header-2-size': headerSize2,
+  '--cm-header-3-size': headerSize3,
+  '--cm-header-4-size': headerSize4,
+  '--cm-header-5-size': headerSize5,
+  '--cm-header-6-size': headerSize6,
+}
+
+export const defaultVarsDark: ColorVars = {
+  ...defaultVarsLight,
+  '--cm-scroller-color': scrollerColorDark,
+  '--cm-selection-color': selectionDark,
+  '--cm-highlight-color': highlightDark,
+  '--cm-escape-color': escapeColorDark,
+}
+
+export const defaultLight = EditorView.theme({
+  '&': defaultVarsLight
+}, { dark: false })
+
+export const defaultDark = EditorView.theme({
+  '&': defaultVarsDark
+}, { dark: true })
+
+const mainColorTheme = EditorView.baseTheme({
+  '.cm-scroller': {
+    fontFamily: 'var(--cm-font)',
+    color: 'var(--cm-scroller-color)',
+    backgroundColor: 'var(--cm-scroller-bg)',
+  },
+  // Copied with my blood from the DOM; the example on the website is wrong.
+  '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
+    background: 'var(--cm-selection-color)',
+  },
+  '.cm-comment': {
+    color: 'var(--code-color)',
+  },
+  '.cm-block-comment': {
+    color: 'var(--code-color)',
+  },
+  '.cm-monospace': {
+    color: 'var(--code-color)',
+  },
+  '.cm-inline-math': {
+    color: 'var(--code-color)',
+  },
+  '.citeproc-citation': {
+    backgroundColor: 'var(--citation-bg)',
+  },
+  '.code-block-line-background': {
+    backgroundColor: 'var(--code-bg)',
+  },
+  '.inline-code-background': {
+    backgroundColor: 'var(--code-bg)',
+  },
+  '.cm-citation-mark': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--citation-color)',
+  },
+  '.cm-citation-at-sign': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--citation-color)',
+  },
+  '.cm-escape': {
+    color: 'var(--cm-escape-color)',
+  },
+  '.blockquote-wrapper': {
+    borderLeftColor: 'var(--cm-primary-color)',
+  },
+  '.citeproc-citation.error': {
+    color: 'var(--cm-error-color)',
+  },
+  '.cm-citation-citekey': {
+    color: 'var(--cm-primary-color)',
+  },
+  '.cm-citation-locator': {
+    fontStyle: 'var(--cm-emphasis-font)',
+  },
+  '.cm-citation-suppress-author-flag': {
+    color: 'var(--cm-error-color)',
+  },
+  '.cm-citation': {
+    color: 'var(--cm-citation-color)',
+  },
+  '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list)': {
+    color: 'var(--cm-primary-color)',
+  },
+  '.cm-code-mark': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--cm-primary-color)',
+  },
+  '.cm-cursor-primary': {
+    background: 'var(--cm-primary-color)',
+  },
+  '.cm-cursor-secondary': {
+    background: 'var(--cm-error-color)',
+  },
+  '.cm-dropCursor': {
+    borderLeftColor: 'var(--cm-primary-color)',
+  },
+  '.cm-emphasis': {
+    fontStyle: 'var(--cm-emphasis-font)',
+  },
+  '.cm-gutters': {
+    fontFamily: 'var(--cm-code-font)',
+  },
+  '.cm-highlight': {
+    backgroundColor: 'var(--cm-highlight-color)',
+  },
+  '.cm-hr':  {
+    fontFamily: 'var(--cm-code-font)',
+    fontWeight: 'var(--cm-strong-font)',
+    color: 'var(--cm-primary-color)',
+  },
+  '.cm-link': {
+    color: 'var(--cm-primary-color)',
+    textDecoration: 'var(--cm-link-decoration)',
+  },
+  '.cm-strong': {
+    fontWeight: 'var(--cm-strong-font)',
+  },
+  '.cm-url': {
+    color: 'var(--cm-primary-color)',
+    textDecoration: 'var(--cm-link-decoration)',
+  },
+  '.cm-yaml-frontmatter-end': {
+    fontFamily: 'var(--cm-code-font)',
+    fontWeight: 'var(--cm-strong-font)',
+    color: 'var(--cm-primary-color)',
+  },
+  '.cm-yaml-frontmatter-start': {
+    fontFamily: 'var(--cm-code-font)',
+    fontWeight: 'var(--cm-strong-font)',
+    color: 'var(--cm-primary-color)',
+  },
+  '.cm-zkn-link': {
+    textDecoration: 'var(--cm-link-decoration)',
+  },
+  '.cm-zkn-tag':  {
+    color: 'var(--cm-primary-color)',
+  },
+  '.mermaid-chart.error': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--cm-error-color)',
+  },
+  'pandoc-div-info-wrapper': {
+    backgroundColor: 'var(--cm-scroller-bg)',
+  },
+  '.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6': {
+    fontWeight: 'var(--cm-header-font)'
+  },
+  // Don't increase font-size within blockquotes
+  '.cm-line:has(:not(.cm-quote).cm-header-1)': { fontSize: 'var(--cm-header-1-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-2)': { fontSize: 'var(--cm-header-2-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-3)': { fontSize: 'var(--cm-header-3-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: 'var(--cm-header-4-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: 'var(--cm-header-5-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: 'var(--cm-header-6-size)' },
+
+  // These styles use system-wide variables
+  // TODO: migrate them to theme variables
+  '.cm-bracket': {
+    color: 'var(--grey-1)',
+  },
+  // Shown when a region is folded
+  '.cm-foldPlaceholder': {
+    backgroundColor: 'transparent',
+  },
+  '&dark .cm-foldPlaceholder': {
+    borderColor: 'var(--grey-3)',
+  },
+  '.cm-definition-operator': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--grey-5)',
+  },
+  '.cm-angle-bracket': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--grey-5)',
+  },
+  '.cm-attribute-name': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--blue-0)',
+  },
+  '.cm-attribute-value': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--green-0)',
+  },
+  '.cm-string': {
+    color: 'var(--green-0)',
+  },
+  '.cm-tag-name': {
+    fontFamily: 'var(--cm-code-font)',
+    color: 'var(--orange-2)',
+  },
+  '.cm-heading': {
+    textDecoration: 'none',
+  },
+
+  // For more diversity, don't color the link marks
+  '.cm-link.cm-code-mark': {
+    color: 'inherit',
+  },
+})
+
+const mainStyleTheme = EditorView.baseTheme({
   // General overrides
   '&.cm-editor': {
     height: '100%',
     fontFamily: 'inherit',
     backgroundColor: 'transparent',
-    cursor: 'auto'
-  },
-  '&dark .cm-dropCursor': {
-    borderLeftColor: '#ddd'
+    cursor: 'auto',
   },
   '.cm-scroller': {
     flexGrow: '1', // Ensure the content pushes possible panels towards the edge
-    outline: '0' // Remove the outline
+    outline: '0', // Remove the outline
   },
   // Hide overflowing text in autocompletion info panels
-  '.cm-completionInfo': { overflow: 'hidden' },
+  '.cm-completionInfo': {
+    overflow: 'hidden',
+  },
   // PANELS
   '.cm-panels .cm-button': {
     backgroundImage: 'none',
     backgroundColor: 'inherit',
     borderRadius: '6px',
-    fontSize: '13px'
+    fontSize: '13px',
   },
   '&light .cm-panels .cm-button': {
     backgroundColor: 'white',
-    borderColor: '#aaa'
+    borderColor: '#aaa',
   },
   '.cm-panel.cm-search label input[type=checkbox]': {
-    marginRight: '10px'
+    marginRight: '10px',
   },
   '.cm-panel.cm-search': {
-    userSelect: 'none' // prevent search panel text elements from being selected
+    userSelect: 'none', // prevent search panel text elements from being selected
   },
   '&dark .cm-panel.cm-panel-lint ul [aria-selected]': {
     // Fixes highlighting of unfocused selected lint panel items in dark mode.
-    backgroundColor: '#787878'
+    backgroundColor: 'var(--grey-3)',
   },
   // TOOLTIPS
   '.cm-tooltip': {
     padding: '4px',
-    maxWidth: '800px'
+    maxWidth: '800px',
   },
   // Footnotes
   '.footnote, .footnote-ref-label': {
@@ -67,7 +362,6 @@ export const mainOverride = EditorView.baseTheme({
   // '.footnote-ref': {
   //   fontSize: '0.8rem',
   // },
-  '.cm-emphasis': { fontStyle: 'italic' },
   // Provide the default YAML frontmatter indicator
   '.cm-yaml-frontmatter-start::after': {
     content: '"YAML Frontmatter"',
@@ -78,24 +372,12 @@ export const mainOverride = EditorView.baseTheme({
     fontWeight: 'normal',
     verticalAlign: 'middle',
     color: 'var(--grey-2)',
-    backgroundColor: 'var(--grey-0)'
+    backgroundColor: 'var(--grey-0)',
   },
   '&dark .cm-yaml-frontmatter-start::after': {
     color: 'var(--grey-0)',
-    backgroundColor: 'var(--grey-4)'
+    backgroundColor: 'var(--grey-4)',
   },
-  '.cm-heading': {
-    textDecoration: 'none'
-  },
-  '.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6': { fontWeight: 'bold' },
-  // Don't increase font-size within blockquotes
-  '.cm-line:has(:not(.cm-quote).cm-header-1)': { fontSize: '2em' },
-  '.cm-line:has(:not(.cm-quote).cm-header-2)': { fontSize: '1.8em' },
-  '.cm-line:has(:not(.cm-quote).cm-header-3)': { fontSize: '1.5em' },
-  '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: '1.3em' },
-  '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: '1em' },
-  '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: '1em' },
-
   /**
    * Cursor blink animation.
    *
@@ -113,26 +395,28 @@ export const mainOverride = EditorView.baseTheme({
    * * Remove the steps(1)-function to remove the harsh transitions.
    * * Make the transition more smooth with a 15% opacity transition period.
    */
-  '@keyframes cm-blink': { '0%': { opacity: 1 }, '10%': { opacity: 1 }, '25%': { opacity: 0 }, '60%': { opacity: 0 }, '75%': { opacity: 1 }, '100%': { opacity: 1 } },
-  '@keyframes cm-blink2': { '0%': { opacity: 1 }, '10%': { opacity: 1 }, '25%': { opacity: 0 }, '60%': { opacity: 0 }, '75%': { opacity: 1 }, '100%': { opacity: 1 } },
+  '@keyframes cm-blink': {
+    '0%': { opacity: 1 },
+    '10%': { opacity: 1 },
+    '25%': { opacity: 0 },
+    '60%': { opacity: 0 },
+    '75%': { opacity: 1 },
+    '100%': { opacity: 1 },
+  },
+  '@keyframes cm-blink2': {
+    '0%': { opacity: 1 },
+    '10%': { opacity: 1 },
+    '25%': { opacity: 0 },
+    '60%': { opacity: 0 },
+    '75%': { opacity: 1 },
+    '100%': { opacity: 1 },
+  },
   '&.cm-focused > .cm-scroller > .cm-cursorLayer': {
-    animation: 'cm-blink 1.2s infinite'
+    animation: 'cm-blink 1.2s infinite',
   },
-  // Highlight/mark elements
-  '.cm-highlight': {
-    backgroundColor: '#ffff0080',
-  },
-  '&dark .cm-highlight': {
-    backgroundColor: '#ffff0060',
-  },
-  // Shown when a region is folded
-  '.cm-foldPlaceholder': {
-    backgroundColor: 'transparent',
-  },
-  '&dark .cm-foldPlaceholder': {
-    borderColor: '#888'
-  }
 })
 
-export const defaultLight = EditorView.theme({}, { dark: false })
-export const defaultDark = EditorView.theme({}, { dark: true })
+export const mainOverride = [
+  mainColorTheme,
+  mainStyleTheme,
+]
