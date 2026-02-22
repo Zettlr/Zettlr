@@ -65,9 +65,6 @@
     border-radius: 3px;
   }
 
-  /* Search results */
-  .cm-selectionMatch { background-color: #99ff7780; }
-
   /* SYNTAX-HIGHLIGHTING CLASSES */
   /* ======================================================================== */
 
@@ -78,39 +75,6 @@
     margin: 0.2em;
     min-width: auto; /* Reset the min-width property that applies to other checkboxes */
     vertical-align: middle;
-  }
-
-  .cm-table,
-  .cm-zkn-tag,
-  .cm-strong {
-    font-weight: bold;
-  }
-
-  .cm-strikethrough {
-    text-decoration: line-through;
-  }
-
-  /* Make the formatting characters and escape sequences nearly invisible */
-  .cm-formatting-code,
-  .cm-formatting-code-block,
-  .cm-formatting-quote,
-  .cm-formatting-strong,
-  .cm-formatting-em,
-  .cm-zkn-link-formatting,
-  .cm-escape-char {
-    opacity: 0.65;
-  }
-
-  /* A few elements always need to be displayed monospaced */
-  .cm-comment,
-  .cm-block-comment,
-  .cm-fenced-code,
-  .cm-table
-  .cm-formatting-task,
-  .cm-formatting-quote,
-  .cm-formatting-list-ul,
-  .cm-formatting-list-ol {
-    font-family: Inconsolata, monospace;
   }
 
   /* ZETTLR-SPECIFIC CLASSES */
