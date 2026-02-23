@@ -67,7 +67,7 @@
         }"
         role="button"
         v-bind:aria-label="`Select ${item.name}`"
-        v-bind:draggable="!isRoot"
+        v-bind:draggable="!isRoot && !nameEditing"
         v-bind:title="item.path"
         v-on:dragstart="beginDragging"
         v-on:drag="onDragHandler"
@@ -747,13 +747,12 @@ body {
     // These inputs should be more or less "invisible"
     input.filename-input {
       border: none;
-      color: inherit;
+      border-radius: 0;
       font-family: inherit;
       font-size: inherit;
-      background-color: transparent;
       width: auto;
       field-sizing: content;
-      padding: 0;
+      padding: 1px 3px;
     }
 
     .tree-item {
@@ -774,7 +773,13 @@ body {
         overflow: hidden;
         text-overflow: ellipsis;
         margin-right: 8px;
+      }
 
+      // Here, the padding has to be reset in order for
+      // the padding around the input element to not change
+      // the overall size of the display element.
+      .display-text:has(input.filename-input) {
+        padding: 2px 2px;
       }
 
       &.project {
@@ -813,6 +818,10 @@ body.darwin {
 
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
+
+    input.filename-input {
+      border-radius: 4px;
+    }
 
     .display-text {
       border-radius: 4px;
