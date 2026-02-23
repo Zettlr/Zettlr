@@ -123,16 +123,31 @@ export const defaultVarsLight: ColorVars = {
 }
 
 export const defaultVarsDark: ColorVars = {
-  ...defaultVarsLight,
+  '--cm-primary-color': primaryColor,
+  '--cm-secondary-color': primaryColor,
   '--cm-scroller-color': scrollerColorDark,
   '--cm-scroller-bg': scrollerBackgroundDark,
   '--cm-selection-color': selectionDark,
   '--cm-highlight-color': highlightDark,
+  '--cm-font': fontFamily,
+  '--cm-code-font': codeFont,
+  '--cm-emphasis-font': emphasisFont,
+  '--cm-strong-font': strongFont,
+  '--cm-header-font': headerFont,
   '--cm-citation-color': citationColorDark,
   '--cm-citation-bg': citationBackgroundDark,
   '--cm-code-color': codeColorDark,
   '--cm-code-bg': codeBackgroundDark,
   '--cm-escape-color': escapeColorDark,
+  '--cm-error-color': errorColor,
+  '--cm-opacity': opacity,
+  '--cm-link-decoration': linkDecoration,
+  '--cm-header-1-size': headerSize1,
+  '--cm-header-2-size': headerSize2,
+  '--cm-header-3-size': headerSize3,
+  '--cm-header-4-size': headerSize4,
+  '--cm-header-5-size': headerSize5,
+  '--cm-header-6-size': headerSize6,
 }
 
 export const defaultLight = EditorView.theme({
