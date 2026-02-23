@@ -44,24 +44,31 @@ export default class FileRename extends ZettlrCommand {
       return
     }
 
-    const oldExt = path.extname(arg.path)
-    const newExt = path.extname(newName)
+    let oldExt = path.extname(arg.path)
+    let newExt = path.extname(newName)
 
-    // If no new extension was provided, assume it
-    // was a rename targeting the old extension
+    // If no new extension was provided, assume it was a rename targeting the
+    // old extension. If the extensions are not the same, show a dialogue asking
+    // the user to confirm  if they would like to change the file extension.
+    // If they respond with `Keep`, the file is still renamed, but the new
+    // extension is replaced with the old one.
     if (newExt !== '' && oldExt !== newExt) {
       const response = await dialog.showMessageBox({
         title: trans('Confirm'),
         message: trans('Change file extension from %s to %s?', oldExt, newExt),
         buttons: [
-          trans('Yes'),
-          trans('No')
+          trans('Use %s', newExt),
+          trans('Keep %s', oldExt),
         ],
         defaultId: 1
       })
 
+      // If `Keep`, replace the new extension with the old one.
       if (response.response === 1) {
-        return // Do not rename file
+=        let newExtPos = newName.lastIndexOf(newExt)
+
+        newName = newName.slice(0, newExtPos) + oldExt
+        newExt = oldExt
       }
     }
 
