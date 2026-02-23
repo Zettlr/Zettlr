@@ -12,7 +12,7 @@ keywords:
 
 In dieser letzten Einführung wollen wir dir zeigen, wie du deine Literatur mit Zettlr verwalten kannst. Wenn du bereits Erfahrung mit dem Zotero- oder Citavi-Plugin für Word gemacht hast: Zettlr funktioniert sehr ähnlich, aber wesentlich effizienter.
 
-Um mit Zettlr zu zitieren, sind einige wenige Vorarbeiten nötig, wie das Aufsetzen einer Literaturdatenbank. Das haben wir aber [im Zettlr-Handbuch ausführlich beschrieben](https://docs.zettlr.com/en/core/citations/). Für dieses Tutorial haben wir dir bereits eine kleine Literaturdatenbank erstellt, sodass du das jetzt noch nicht machen musst. Lass uns diese nun erst laden!
+Um mit Zettlr zu zitieren, sind einige wenige Vorarbeiten nötig, wie das Aufsetzen einer Literaturdatenbank. Das haben wir aber [im Zettlr-Handbuch ausführlich beschrieben](https://docs.zettlr.com/de/academic/citations/). Für dieses Tutorial haben wir dir bereits eine kleine Literaturdatenbank erstellt, sodass du das jetzt noch nicht machen musst. Lass uns diese nun erst laden!
 
 Öffne die Einstellungen und wechsle zum „Zitieren“-Reiter. Dort kannst du eine „CSL-Datenbank“ auswählen. Die Datenbank ist im Tutorial-Ordner. Wenn du sie gefunden hast, speichere die Einstellungen. Zettlr wird die Datenbank nun automatisch laden.
 

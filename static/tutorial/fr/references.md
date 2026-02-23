@@ -58,9 +58,9 @@ Dès lors que vous écrivez des articles longs ou même des livres, vous risquez
 > Si vous exportez un fichier à l'aide de Zettlr, celui-ci ajoutera
 > automatiquement une liste de références sous le contenu du fichier.
 > Vous pouvez l'en empêcher en utilisant
-> l'[en-tête YAML](https://docs.zettlr.com/en/core/yaml-frontmatter/).
+> l'[en-tête YAML](https://docs.zettlr.com/fr/core/yaml-frontmatter/).
 > Il suffit d'ajouter la propriété `suppress-bibliography : true`. Vous
-> pouvez également [personnaliser cette liste de références](https://docs.zettlr.com/en/academic/citations/#customizing-the-list-of-references).
+> pouvez également [personnaliser cette liste de références](https://docs.zettlr.com/fr/academic/citations/#formatage-de-la-liste-des-references).
 
 
 

@@ -35,7 +35,7 @@ There’s also a tag cloud that you can access by clicking the “tag” icon in
 
 We won’t go over methods for how to actually work with a Zettelkasten here, because there are a lot of tutorials out there that will get you started. Here’s a handy list of good tutorials:
 
-- [A first introduction can be found in our docs](https://docs.zettlr.com/en/academic/zkn-method/)
+- [A first introduction can be found in our docs](https://docs.zettlr.com/en/pkms/zkn-method/)
 - [On the concept of the Zettelkasten, read our blogpost](https://zettlr.com/post/what-is-a-zettelkasten)
 - [The page zettelkasten.de (in English) contains many articles on Zettelkästen](https://zettelkasten.de/)
 - [Reddit has a subreddit dedicated solely to the art of Zettelkasten](https://www.reddit.com/r/Zettelkasten)
