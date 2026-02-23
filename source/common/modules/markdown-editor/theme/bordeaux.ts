@@ -15,13 +15,14 @@
 import { EditorView } from '@codemirror/view'
 import { defaultVarsDark, defaultVarsLight, type ColorVars } from './main-override'
 
+const primaryColor = '#1bd4e9'
+const secondaryColor = '#d02325'
+
 const scrollerColor = 'var(--grey-5)'
 const scrollerColorDark = '#839496'
 
 const scrollerBackground = '#fffff8'
 const scrollerBackgroundDark = '#002b36'
-
-const primaryColor = '#1bd4e9'
 
 const selectionLight = '#b8f0f6cc'
 const selectionDark = '#0c616acc'
@@ -31,50 +32,41 @@ const highlightDark = 'black'
 const font = 'Inconsolata, monospace'
 const codeFont = 'Inconsolata, monospace'
 
-const citationColor =  'var(--grey-1)'
-const citationColorDark = 'var(--grey-4)'
-
-const citationBackground = 'var(--grey-0)'
 const citationBackgroundDark = '#002024'
 
-const codeColor = 'var(--grey-5)'
-const codeColorDark = 'var(--grey-0)'
+const codeBackgroundDark = '#002024'
 
 const errorColor = '#d02325'
-
-const codeBackground = 'var(--grey-0)'
-const codeBackgroundDark = '#002024'
 
 const linkDecoration = 'underline'
 
 export const bordeauxVarsLight: ColorVars = {
   ...defaultVarsLight,
+  '--cm-primary-color': primaryColor,
+  '--cm-secondary-color': secondaryColor,
   '--cm-scroller-color': scrollerColor,
   '--cm-scroller-bg': scrollerBackground,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
   '--cm-selection-color': selectionLight,
   '--cm-font': font,
   '--cm-code-font': codeFont,
-  '--cm-citation-color': citationColor,
-  '--cm-citation-bg': citationBackground,
-  '--cm-code-color': codeColor,
-  '--cm-code-bg': codeBackground,
   '--cm-error-color': errorColor,
   '--cm-link-decoration': linkDecoration,
 }
 
 export const bordeauxVarsDark: ColorVars = {
   ...defaultVarsDark,
-  ...bordeauxVarsLight,
+  '--cm-primary-color': primaryColor,
+  '--cm-secondary-color': secondaryColor,
   '--cm-scroller-color': scrollerColorDark,
   '--cm-scroller-bg': scrollerBackgroundDark,
   '--cm-selection-color': selectionDark,
   '--cm-highlight-color': highlightDark,
-  '--cm-citation-color': citationColorDark,
+  '--cm-font': font,
+  '--cm-code-font': codeFont,
   '--cm-citation-bg': citationBackgroundDark,
-  '--cm-code-color': codeColorDark,
   '--cm-code-bg': codeBackgroundDark,
+  '--cm-error-color': errorColor,
+  '--cm-link-decoration': linkDecoration,
 }
 
 export const themeBordeauxLight = EditorView.theme({
