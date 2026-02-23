@@ -165,9 +165,77 @@
     height: 270px;
     margin: 0 auto;
   }
+
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
+  .cm-panels, .cm-tooltip, .cm-statusbar {
+    color: black;
+    background-color: var(--grey-0);
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: var(--grey-7);
+  }
+
+  .cm-panel .cm-button {
+    background-image: none;
+    background-color: inherit;
+    border-color: var(--grey-2);
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .cm-formatting-bar {
+    background-color: var(--grey-0);
+    border-color: var(--grey-0);
+
+    .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+      border-top-color: var(--grey-0);
+      border-bottom-color: var(--grey-0);
+    }
+  }
+  /* END */
 }
 
 body.dark .tippy-content .editor-fn-textarea {
-  background-color: transparent;
-  border: none;
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
+  .cm-panels, .cm-tooltip, .cm-statusbar {
+    color: white;
+    background-color: var(--grey-7);
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: var(--grey-0);
+  }
+
+  /* Fixes highlighting of unfocused selected lint panel
+   * item in dark mode. */
+  .cm-panel.cm-panel-lint ul [aria-selected] {
+    background-color: var(--grey-3);
+  }
+
+  .cm-panel .cm-button {
+    border-color: rgb(100, 100, 100);
+  }
+
+  .cm-formatting-bar {
+    background-color: var(--grey-7);
+    border-color: var(--grey-7);
+
+    button.formatting-toolbar-button {
+      color: var(--grey-2);
+    }
+
+    .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+      border-top-color: var(--grey-7);
+      border-bottom-color: var(--grey-7);
+    }
+  }
+  /* END */
+
+  .tippy-content .editor-fn-textarea {
+    background-color: transparent;
+    border: none;
+  }
 }
