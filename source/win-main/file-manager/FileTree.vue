@@ -301,7 +301,25 @@ function requestOpenRoot (event: MouseEvent): void {
 }
 
 function collapseAll (): void {
-  windowStateStore.uncollapsedDirectories.splice(0)
+  const uncollapsed = [...windowStateStore.uncollapsedDirectories]
+  const roots = rootDescriptors.value.map(r => r.path)
+
+  // Only collapse child folders, not roots, if any children are uncollapsed.
+  let onlyRoots = true
+  for (const filePath of uncollapsed) {
+    if (!roots.includes(filePath)) {
+      let idx = windowStateStore.uncollapsedDirectories.indexOf(filePath)
+      if (idx > -1) {
+        windowStateStore.uncollapsedDirectories.splice(idx, 1)
+        onlyRoots = false
+      }
+    }
+  }
+  
+  // If all of the children are collapsed, then collapse the roots.
+  if (onlyRoots) {
+    windowStateStore.uncollapsedDirectories.splice(0)
+  }
 }
 
 function closeAllFiles (): void {
