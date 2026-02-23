@@ -169,34 +169,34 @@ const mainColorTheme = EditorView.baseTheme({
     background: 'var(--cm-selection-color)',
   },
   '.cm-comment': {
-    color: 'var(--code-color)',
+    color: 'var(--cm-code-color)',
   },
   '.cm-block-comment': {
-    color: 'var(--code-color)',
+    color: 'var(--cm-code-color)',
   },
   '.cm-monospace': {
-    color: 'var(--code-color)',
-    backgroundColor: 'var(--code-bg)',
+    color: 'var(--cm-code-color)',
+    backgroundColor: 'var(--cm-code-bg)',
   },
   '.cm-inline-math': {
-    color: 'var(--code-color)',
+    color: 'var(--cm-code-color)',
   },
   '.citeproc-citation': {
-    backgroundColor: 'var(--citation-bg)',
+    backgroundColor: 'var(--cm-citation-bg)',
   },
   '.code-block-line-background': {
-    backgroundColor: 'var(--code-bg)',
+    backgroundColor: 'var(--cm-code-bg)',
   },
   '.inline-code-background': {
-    backgroundColor: 'var(--code-bg)',
+    backgroundColor: 'var(--cm-code-bg)',
   },
   '.cm-citation-mark': {
     fontFamily: 'var(--cm-code-font)',
-    color: 'var(--citation-color)',
+    color: 'var(--cm-citation-color)',
   },
   '.cm-citation-at-sign': {
     fontFamily: 'var(--cm-code-font)',
-    color: 'var(--citation-color)',
+    color: 'var(--cm-citation-color)',
   },
   '.cm-escape': {
     color: 'var(--cm-escape-color)',
