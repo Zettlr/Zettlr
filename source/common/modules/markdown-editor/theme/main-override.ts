@@ -176,6 +176,7 @@ const mainColorTheme = EditorView.baseTheme({
   },
   '.cm-monospace': {
     color: 'var(--code-color)',
+    backgroundColor: 'var(--code-bg)',
   },
   '.cm-inline-math': {
     color: 'var(--code-color)',
