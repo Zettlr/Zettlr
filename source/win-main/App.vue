@@ -691,8 +691,15 @@ onMounted(() => {
       showExportPopover.value = true
     } else if (shortcut === 'print') {
       if (activeFile.value !== undefined) {
-        ipcRenderer.invoke('application', { command: 'print', payload: activeFile.value.path })
-          .catch(err => console.error(err))
+        ipcRenderer.invoke('documents-provider', {
+          command: 'save-file',
+          payload: { path: activeFile.value.path }
+        } as DocumentManagerIPCAPI).then(() => {
+          return ipcRenderer.invoke('application', {
+            command: 'print',
+            payload: activeFile.value!.path 
+          })
+        }).catch(err => console.error(err))
       }
     } else if (shortcut === 'navigate-back') {
       ipcRenderer.invoke('documents-provider', {
