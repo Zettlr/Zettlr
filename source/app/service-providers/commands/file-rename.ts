@@ -65,7 +65,7 @@ export default class FileRename extends ZettlrCommand {
 
       // If `Keep`, replace the new extension with the old one.
       if (response.response === 1) {
-=        let newExtPos = newName.lastIndexOf(newExt)
+        let newExtPos = newName.lastIndexOf(newExt)
 
         newName = newName.slice(0, newExtPos) + oldExt
         newExt = oldExt
