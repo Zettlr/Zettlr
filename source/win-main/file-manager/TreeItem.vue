@@ -477,6 +477,15 @@ const isSelected = computed(() => {
 watch(selectedFile, uncollapseIfApplicable)
 watch(selectedDir, uncollapseIfApplicable)
 
+// We need to reset the scroll position when exiting editing mode
+// so that the filename is displayed within the element correctly.
+// It would otherwise be offset to the left edge of the container.
+watch(nameEditing, (isEditing) => {
+  if (!isEditing && displayText.value !== null) {
+    displayText.value.scrollLeft = 0
+  }
+})
+
 watch(operationType, (newVal) => {
   if (newVal !== undefined) {
     nextTick().then(() => {
@@ -780,6 +789,15 @@ body {
       // the overall size of the display element.
       .display-text:has(input.filename-input) {
         padding: 2px 2px;
+
+        // This enables selecting and dragging to scroll
+        overflow: auto;
+        text-overflow: unset;
+
+        // Disable scrollbars
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       &.project {
