@@ -26,7 +26,7 @@ The folder “Zettlr Tutorial” is called a “Workspace” and it contains all
 
 You can right-click the directory, and either “close” or “delete” it. When you _close_ a workspace or top-level (a.k.a. standalone) file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you _delete_ it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn! ✍🏼
 
-> Note: On some Linux distributions, moving files into the trash may not work out of the box, as Zettlr depends upon a certain package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which has got you covered!
+> Note: On some Linux distributions, moving files into the trash may not work out of the box, as Zettlr depends upon a certain package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/reference/faq/), which has got you covered!
 
 Zettlr is built around the concept of workspaces. So you will have the best experience having open at least one workspace directory at all times, and do all your work in that. The workspaces are loaded automatically everytime you open the app, and are always displayed in the directory tree that’s visible right now.
 
@@ -55,7 +55,7 @@ But Zettlr doesn’t only support common weblinks. If you link to a file that is
 
 ## The Sidebar 📎
 
-Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the sidebar, which contains four tabs.
+Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the [sidebar](https://docs.zettlr.com/en/sidebar/), which contains four tabs.
 
 The first tab displays a dynamically-generated table of contents. You can click the headings to jump to them in the text. The second tab contains a list of references (if you have any in your current document). This is meant as a powerful way for you to check what you have cited in the document.
 
@@ -85,7 +85,7 @@ You can align columns as well as add and remove both rows and columns in the tab
 
 ## Further Resources 📚
 
-You made it! The first part of the introduction is over. We did not cover a lot here, but you can learn about anything on our [documentation](https://docs.zettlr.com/)! What you might be interested in, is [the powerful tag manager](https://docs.zettlr.com/en/reference/settings/#manage-tags), or the [versatile search options](https://docs.zettlr.com/en/core/search/).
+You made it! The first part of the introduction is over. We did not cover a lot here, but you can learn about anything on our [documentation](https://docs.zettlr.com/)! What you might be interested in, is [the powerful tag manager](https://docs.zettlr.com/en/pkms/tag-manager/), or the [versatile search options](https://docs.zettlr.com/en/file-manager/search/).
 
 But now enough basics, we are ready to take the full dive! Let’s head over to the Zettelkasten tutorial! To go there, simply `Cmd/Ctrl`-click the following wiki-link: [[zettelkasten]]
 
