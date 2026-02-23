@@ -140,7 +140,6 @@ export default class DictionaryProvider extends ProviderContract {
    * @returns
    */
   sanitizeDictionary (words: string[]): DictionaryRecord[] {
-    this._logger.info(`WORDS: ${words}`)
     return words
       // Strip flags and optional data fields
       .map(word => {
