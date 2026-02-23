@@ -18,10 +18,10 @@ import { EditorView } from '@codemirror/view'
 
 export interface ColorVars {
   [selector: string]: string|number
-  '--cm-scroller-color': string
-  '--cm-scroller-bg': string
   '--cm-primary-color': string
   '--cm-secondary-color': string
+  '--cm-scroller-color': string
+  '--cm-scroller-bg': string
   '--cm-selection-color': string
   '--cm-highlight-color': string
   '--cm-error-color': string
@@ -45,12 +45,13 @@ export interface ColorVars {
   '--cm-header-6-size': string
 }
 
+const primaryColor = '#1cb27e'
+
 const scrollerColor = 'var(--grey-5)'
 const scrollerColorDark = 'var(--grey-0)'
 
-const scrollerBackground = 'transparent'
-
-const primaryColor = '#1cb27e'
+const scrollerBackground = '#ffffff'
+const scrollerBackgroundDark = '#2b2b2c'
 
 const selectionLight = '#b0c6accc'
 const selectionDark = '#5aaa50cc'
@@ -62,10 +63,16 @@ const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "H
 const codeFont = 'Inconsolata, monospace'
 
 const citationColor = 'var(--grey-1)'
+const citationColorDark = 'var(--grey-4)'
+
 const citationBackground = 'var(--grey-0)'
+const citationBackgroundDark = 'var(--grey-7)'
 
 const codeColor = 'var(--grey-5)'
+const codeColorDark = 'var(--grey-0)'
+
 const codeBackground = 'var(--grey-0)'
+const codeBackgroundDark = 'var(--grey-7)'
 
 const escapeColor = 'var(--grey-2)'
 const escapeColorDark = 'var(--grey-4)'
@@ -88,10 +95,10 @@ const headerSize5 = '1em'
 const headerSize6 = '1em'
 
 export const defaultVarsLight: ColorVars = {
-  '--cm-scroller-color': scrollerColor,
-  '--cm-scroller-bg': scrollerBackground,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,
+  '--cm-scroller-color': scrollerColor,
+  '--cm-scroller-bg': scrollerBackground,
   '--cm-selection-color': selectionLight,
   '--cm-highlight-color': highlightLight,
   '--cm-font': fontFamily,
@@ -118,8 +125,13 @@ export const defaultVarsLight: ColorVars = {
 export const defaultVarsDark: ColorVars = {
   ...defaultVarsLight,
   '--cm-scroller-color': scrollerColorDark,
+  '--cm-scroller-bg': scrollerBackgroundDark,
   '--cm-selection-color': selectionDark,
   '--cm-highlight-color': highlightDark,
+  '--cm-citation-color': citationColorDark,
+  '--cm-citation-bg': citationBackgroundDark,
+  '--cm-code-color': codeColorDark,
+  '--cm-code-bg': codeBackgroundDark,
   '--cm-escape-color': escapeColorDark,
 }
 
@@ -180,7 +192,7 @@ const mainColorTheme = EditorView.baseTheme({
     color: 'var(--cm-error-color)',
   },
   '.cm-citation-citekey': {
-    color: 'var(--cm-primary-color)',
+    color: 'var(--cm-secondary-color)',
   },
   '.cm-citation-locator': {
     fontStyle: 'var(--cm-emphasis-font)',
