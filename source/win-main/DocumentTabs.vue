@@ -100,6 +100,7 @@ import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import type { AnyMenuItem } from 'source/common/modules/window-register/application-menu-helper'
 import { trans } from 'source/common/i18n-renderer'
 import showPopupMenu from 'source/common/modules/window-register/application-menu-helper'
+import { closeFile } from './file-manager/util/item-composable'
 
 const ipcRenderer = window.ipc
 
@@ -594,7 +595,17 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
           navigator.clipboard.writeText(descriptor.id).catch(err => console.error(err))
         }
       }
-    }
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Close file'),
+      type: 'normal',
+      action () {
+        closeFile(descriptor.path)
+      }
+    },
   ]
 
   const point = { x: event.clientX, y: event.clientY }
