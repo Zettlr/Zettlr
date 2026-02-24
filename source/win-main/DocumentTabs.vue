@@ -602,6 +602,7 @@ function handleContextMenu (event: MouseEvent, doc: OpenDocument): void {
     {
       label: trans('Close file'),
       type: 'normal',
+      enabled: workspaceStore.rootDescriptors.includes(descriptor),
       action () {
         closeFile(descriptor.path)
       }
