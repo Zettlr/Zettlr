@@ -24,8 +24,6 @@ export interface ThemeVars {
   '--zettlr-editor-scroller-bg': string
   '--zettlr-editor-selection-color': string
   '--zettlr-editor-highlight-color': string
-  '--zettlr-editor-error-color': string
-  '--zettlr-editor-opacity': string|number
   '--zettlr-editor-font': string
   '--zettlr-editor-code-font': string
   '--zettlr-editor-emphasis-font': string
@@ -36,13 +34,17 @@ export interface ThemeVars {
   '--zettlr-editor-code-color': string
   '--zettlr-editor-code-bg': string
   '--zettlr-editor-escape-color': string
-  '--zettlr-editor-link-decoration': string
+  '--zettlr-editor-accent-color': string
+  '--zettlr-editor-accent-bg': string
   '--zettlr-editor-header-1-size': string
   '--zettlr-editor-header-2-size': string
   '--zettlr-editor-header-3-size': string
   '--zettlr-editor-header-4-size': string
   '--zettlr-editor-header-5-size': string
   '--zettlr-editor-header-6-size': string
+  '--zettlr-editor-error-color': string
+  '--zettlr-editor-opacity': string|number
+  '--zettlr-editor-line-decoration': string
 }
 
 export interface CodeThemeVars {
@@ -66,6 +68,7 @@ export interface CodeThemeVars {
 }
 
 const primaryColor = '#1cb27e'
+const secondaryColor = primaryColor
 
 const scrollerColor = 'var(--grey-5)'
 const scrollerColorDark = 'var(--grey-0)'
@@ -101,11 +104,11 @@ const codeBackgroundDark = 'var(--grey-7)'
 const escapeColor = 'var(--grey-2)'
 const escapeColorDark = 'var(--grey-4)'
 
-const errorColor = 'var(--red-2)'
+const accentColor = 'var(--grey-0)'
+const accentColorDark = 'var(--grey-2)'
 
-const opacity = 0.65
-
-const linkDecoration = 'none'
+const accentBackground = 'var(--grey-2)'
+const accentBackgroundDark = 'var(--grey-4)'
 
 const headerSize1 = '2em'
 const headerSize2 = '1.8em'
@@ -114,9 +117,15 @@ const headerSize4 = '1.3em'
 const headerSize5 = '1em'
 const headerSize6 = '1em'
 
+const errorColor = 'var(--red-2)'
+
+const opacity = 0.65
+
+const linkDecoration = 'none'
+
 export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-primary-color': primaryColor,
-  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-secondary-color': secondaryColor,
   '--zettlr-editor-scroller-color': scrollerColor,
   '--zettlr-editor-scroller-bg': scrollerBackground,
   '--zettlr-editor-selection-color': selectionLight,
@@ -131,20 +140,22 @@ export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-code-color': codeColor,
   '--zettlr-editor-code-bg': codeBackground,
   '--zettlr-editor-escape-color': escapeColor,
-  '--zettlr-editor-error-color': errorColor,
-  '--zettlr-editor-opacity': opacity,
-  '--zettlr-editor-link-decoration': linkDecoration,
+  '--zettlr-editor-accent-color': accentColor,
+  '--zettlr-editor-accent-bg': accentBackground,
   '--zettlr-editor-header-1-size': headerSize1,
   '--zettlr-editor-header-2-size': headerSize2,
   '--zettlr-editor-header-3-size': headerSize3,
   '--zettlr-editor-header-4-size': headerSize4,
   '--zettlr-editor-header-5-size': headerSize5,
   '--zettlr-editor-header-6-size': headerSize6,
+  '--zettlr-editor-error-color': errorColor,
+  '--zettlr-editor-opacity': opacity,
+  '--zettlr-editor-line-decoration': linkDecoration,
 }
 
 export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-primary-color': primaryColor,
-  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-secondary-color': secondaryColor,
   '--zettlr-editor-scroller-color': scrollerColorDark,
   '--zettlr-editor-scroller-bg': scrollerBackgroundDark,
   '--zettlr-editor-selection-color': selectionDark,
@@ -159,15 +170,17 @@ export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-code-color': codeColorDark,
   '--zettlr-editor-code-bg': codeBackgroundDark,
   '--zettlr-editor-escape-color': escapeColorDark,
-  '--zettlr-editor-error-color': errorColor,
-  '--zettlr-editor-opacity': opacity,
-  '--zettlr-editor-link-decoration': linkDecoration,
+  '--zettlr-editor-accent-color': accentColorDark,
+  '--zettlr-editor-accent-bg': accentBackgroundDark,
   '--zettlr-editor-header-1-size': headerSize1,
   '--zettlr-editor-header-2-size': headerSize2,
   '--zettlr-editor-header-3-size': headerSize3,
   '--zettlr-editor-header-4-size': headerSize4,
   '--zettlr-editor-header-5-size': headerSize5,
   '--zettlr-editor-header-6-size': headerSize6,
+  '--zettlr-editor-error-color': errorColor,
+  '--zettlr-editor-opacity': opacity,
+  '--zettlr-editor-line-decoration': linkDecoration,
 }
 
 export const defaultLight = EditorView.theme({
@@ -239,11 +252,11 @@ const mainTheme = EditorView.baseTheme({
   '.cm-citation': {
     color: 'var(--zettlr-editor-citation-color)',
   },
+  // Don't change the font for `*`, `-`, and `_`, etc. formatting characters
   '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list)': {
-    color: 'var(--zettlr-editor-primary-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
   },
   '.cm-code-mark': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
     color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-cursor-primary': {
@@ -269,9 +282,15 @@ const mainTheme = EditorView.baseTheme({
     fontWeight: 'var(--zettlr-editor-strong-font)',
     color: 'var(--zettlr-editor-primary-color)',
   },
+  '.cm-info-string': {
+    opacity: 'var(--zettlr-editor-opactiy)',
+  },
   '.cm-link': {
     color: 'var(--zettlr-editor-primary-color)',
     textDecoration: 'var(--zettlr-editor-link-decoration)',
+  },
+  '.cm-string': {
+    color: 'var(--zettlr-editor-secondary-color)',
   },
   '.cm-strong': {
     fontWeight: 'var(--zettlr-editor-strong-font)',
@@ -290,6 +309,11 @@ const mainTheme = EditorView.baseTheme({
     fontWeight: 'var(--zettlr-editor-strong-font)',
     color: 'var(--zettlr-editor-primary-color)',
   },
+  // Provide the default YAML frontmatter indicator
+  '.cm-yaml-frontmatter-start::after': {
+    color: 'var(--zettlr-editor-accent-color)',
+    backgroundColor: 'var(--zettlr-editor-accent-bg)',
+  },
   '.cm-zkn-link': {
     textDecoration: 'var(--zettlr-editor-link-decoration)',
   },
@@ -303,6 +327,9 @@ const mainTheme = EditorView.baseTheme({
   'pandoc-div-info-wrapper': {
     backgroundColor: 'var(--zettlr-editor-scroller-bg)',
   },
+  '.cm-heading': {
+    textDecoration: 'var(--zettlr-editor-line-decoration)',
+  },
   '.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6': {
     fontWeight: 'var(--zettlr-editor-header-font)'
   },
@@ -314,55 +341,11 @@ const mainTheme = EditorView.baseTheme({
   '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: 'var(--zettlr-editor-header-5-size)' },
   '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: 'var(--zettlr-editor-header-6-size)' },
 
-  // These styles use system-wide variables
-  // TODO: migrate them to theme variables
-  '.cm-bracket': {
-    color: 'var(--grey-1)',
-  },
   // Shown when a region is folded
   '.cm-foldPlaceholder': {
     backgroundColor: 'transparent',
+    borderColor: 'var(--zettlr-editor-accent-bg)',
   },
-  '&dark .cm-foldPlaceholder': {
-    borderColor: 'var(--grey-3)',
-  },
-  '.cm-definition-operator': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--grey-5)',
-  },
-  '.cm-angle-bracket': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--grey-5)',
-  },
-  '.cm-attribute-name': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--blue-0)',
-  },
-  '.cm-attribute-value': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--green-0)',
-  },
-  '.cm-string': {
-    color: 'var(--green-0)',
-  },
-  '.cm-tag-name': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--orange-2)',
-  },
-  '.cm-heading': {
-    textDecoration: 'none',
-  },
-
-  // Provide the default YAML frontmatter indicator
-  '.cm-yaml-frontmatter-start::after': {
-    color: 'var(--grey-2)',
-    backgroundColor: 'var(--grey-0)',
-  },
-  '&dark .cm-yaml-frontmatter-start::after': {
-    color: 'var(--grey-0)',
-    backgroundColor: 'var(--grey-4)',
-  },
-
   // For more diversity, don't color the link marks
   '.cm-link.cm-code-mark': {
     color: 'inherit',
