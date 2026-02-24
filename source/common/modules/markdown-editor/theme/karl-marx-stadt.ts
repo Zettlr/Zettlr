@@ -12,7 +12,7 @@
  * END HEADER
  */
 import { EditorView } from '@codemirror/view'
-import { type ColorVars, defaultVarsDark, defaultVarsLight } from './main-override'
+import { type ThemeVars, defaultVarsDark, defaultVarsLight } from './main-override'
 
 const primaryColor = '#dc2d2d'
 
@@ -22,7 +22,7 @@ const selectionDark = '#a32323b3'
 const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
 const codeFont = 'Inconsolata, monospace'
 
-export const karlMarxStadtVarsLight: ColorVars = {
+export const karlMarxStadtVarsLight: ThemeVars = {
   ...defaultVarsLight,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,
@@ -31,7 +31,7 @@ export const karlMarxStadtVarsLight: ColorVars = {
   '--cm-code-font': codeFont,
 }
 
-export const karlMarxStadtVarsDark: ColorVars = {
+export const karlMarxStadtVarsDark: ThemeVars = {
   ...defaultVarsDark,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,

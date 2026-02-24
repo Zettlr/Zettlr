@@ -13,7 +13,7 @@
  */
 
 import { EditorView } from '@codemirror/view'
-import { defaultVarsDark, defaultVarsLight, type ColorVars } from './main-override'
+import { defaultVarsDark, defaultVarsLight, type ThemeVars } from './main-override'
 
 const primaryColor = '#1bd4e9'
 const secondaryColor = '#d02325'
@@ -40,7 +40,7 @@ const errorColor = '#d02325'
 
 const linkDecoration = 'underline'
 
-export const bordeauxVarsLight: ColorVars = {
+export const bordeauxVarsLight: ThemeVars = {
   ...defaultVarsLight,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': secondaryColor,
@@ -53,7 +53,7 @@ export const bordeauxVarsLight: ColorVars = {
   '--cm-link-decoration': linkDecoration,
 }
 
-export const bordeauxVarsDark: ColorVars = {
+export const bordeauxVarsDark: ThemeVars = {
   ...defaultVarsDark,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': secondaryColor,
