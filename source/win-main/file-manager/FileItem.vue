@@ -271,7 +271,7 @@ const basename = computed(() => {
 
 const getFilename = computed(() => props.item.name)
 const isProject = computed(() => props.item.type === 'directory' && props.item.settings.project !== null)
-const isDraggable = computed(() => !isDirectory.value)
+const isDraggable = computed(() => !isDirectory.value && !nameEditing.value)
 const fileMeta = computed(() => configStore.config.fileMeta)
 const getDate = computed(() => {
   if (configStore.config.fileMetaTime === 'modtime') {
@@ -482,7 +482,6 @@ body {
         margin: 5px 0px 0px 0px;
 
         span {
-          display: block;
           overflow: hidden;
           text-overflow: ellipsis;
         }
@@ -490,12 +489,14 @@ body {
         // These inputs should be more or less "invisible"
         input {
           border: none;
-          max-width: 100%;
-          color: inherit;
+          border-radius: 0;
+          // This is set so that the filename does not push the date out of the box
+          // when editing the name.
+          min-width: 0;
           font-family: inherit;
           font-size: inherit;
+          background-color: inherit;
           field-sizing: content;
-          background-color: transparent;
           padding: 0;
         }
 
@@ -504,7 +505,7 @@ body {
           font-size: 11px;
           color: rgb(130, 130, 130);
           background-color: inherit;
-          padding: 2px 0px;
+          padding: 2px 2px;
         }
       }
 

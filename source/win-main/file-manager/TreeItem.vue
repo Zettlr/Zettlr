@@ -753,17 +753,6 @@ body {
   div.tree-item-container {
     font-size: 13px;
 
-    // These inputs should be more or less "invisible"
-    input.filename-input {
-      border: none;
-      border-radius: 0;
-      font-family: inherit;
-      font-size: inherit;
-      width: auto;
-      field-sizing: content;
-      padding: 1px 3px;
-    }
-
     .tree-item {
       white-space: nowrap;
       display: flex;
@@ -775,6 +764,18 @@ body {
         justify-content: center;
         width: 20px;
         flex-shrink: 0; // Prevent shrinking; only the display text should
+      }
+
+      // These inputs should be more or less "invisible"
+      input.filename-input {
+        border: none;
+        border-radius: 0;
+        font-family: inherit;
+        font-size: inherit;
+        background-color: inherit;
+        width: auto;
+        field-sizing: content;
+        padding: 1px 3px;
       }
 
       .display-text {
