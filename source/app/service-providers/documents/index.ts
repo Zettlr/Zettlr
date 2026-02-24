@@ -140,6 +140,8 @@ export type DocumentManagerIPCAPI = IPCAPI<{
   'save-file': { path: string }
   'open-file': LeafLoc & { path: string, newTab: boolean }
   'close-file': LeafLoc & { path: string }
+  'close-file-everywhere': { path: string }
+  'get-open-workspace-files': { path: string }
   'sort-open-files': LeafLoc & { newOrder: string[] }
   'get-file-modification-status': unknown
   'move-file': {
@@ -254,7 +256,7 @@ export default class DocumentManager extends ProviderContract {
 
       if (event === 'unlink') {
         // Close the file everywhere
-        this.closeFileEverywhere(filePath)
+        this.closeFileEverywhere(filePath).catch(err => console.error(err))
       } else if (event === 'change') {
         this.handleRemoteChange(filePath).catch(err => console.error(err))
       } else {
@@ -302,6 +304,13 @@ export default class DocumentManager extends ProviderContract {
           const { windowId, leafId, path } = payload
           return await this.closeFile(windowId, leafId, path)
         }
+        case 'close-file-everywhere': {
+          const { path } = payload
+          return this.closeFileEverywhere(path)
+        }
+        case 'get-open-workspace-files':
+          const { path } = payload
+          return this.getWorkspaceOpenFiles(path)
         case 'sort-open-files': {
           const { windowId, leafId, newOrder } = payload
           this.sortOpenFiles(windowId, leafId, newOrder)
@@ -502,8 +511,10 @@ export default class DocumentManager extends ProviderContract {
         }
         this._windows[key] = tree
         this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
-      } catch (err: any) {
-        this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
+        }
       }
     }
 
@@ -703,7 +714,7 @@ export default class DocumentManager extends ProviderContract {
       doc.updates.push(update)
       try {
         doc.document = changes.apply(doc.document)
-      } catch (err: any) {
+      } catch (err: unknown) {
         dialog.showErrorBox(
           'Document out of sync',
           `Your modifications could not be applied to the document in memory.
@@ -989,25 +1000,25 @@ current contents from the editor somewhere else, and restart the application.`
    *
    * @param   {string}  filePath  The file path in question
    */
-  public closeFileEverywhere (filePath: string): void {
-    for (const key in this._windows) {
-      const allLeafs = this._windows[key].getAllLeafs()
-      for (const leaf of allLeafs) {
-        if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
-          leaf.tabMan.setPinnedStatus(filePath, false)
-          const success = leaf.tabMan.closeFile(filePath)
-          if (!success) {
-            continue
-          }
+  public async closeFileEverywhere (filePath: string): Promise<void> {
+    await this.forEachLeaf(async (tabMan, windowId, leafId) => {
+      if (tabMan.openFiles.map(x => x.path).includes(filePath)) {
+        tabMan.setPinnedStatus(filePath, false)
+        const success = tabMan.closeFile(filePath)
 
-          this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId: key, leafId: leaf.id, filePath })
+        if (!success) {
+          return false
+        }
 
-          if (leaf.tabMan.openFiles.length === 0) {
-            this.closeLeaf(key, leaf.id)
-          }
+        this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
+
+        if (tabMan.openFiles.length === 0) {
+          this.closeLeaf(windowId, leafId)
         }
       }
-    }
+
+      return true
+    })
 
     // We also must splice the document out of our provider
     const idx = this.documents.findIndex(doc => doc.filePath === filePath)
@@ -1016,6 +1027,22 @@ current contents from the editor somewhere else, and restart the application.`
     }
 
     this.syncWatchedFilePaths()
+  }
+
+  public async getWorkspaceOpenFiles (filePath: string): Promise<string[]> {
+    const openFiles: string[] = []
+
+    await this.forEachLeaf(async (tabMan) => {
+      openFiles.push(
+        ...tabMan.openFiles
+          .filter(doc => doc.path.startsWith(filePath))
+          .map(doc => doc.path)
+      )
+
+      return false
+    })
+
+    return openFiles
   }
 
   /**
@@ -1556,8 +1583,11 @@ current contents from the editor somewhere else, and restart the application.`
         await this._app.fsal.writeTextFile(doc.descriptor.path, content)
         doc.descriptor = await this._app.fsal.getDescriptorFor(doc.descriptor.path, false) as CodeFileDescriptor
       }
-    } catch (err: any) {
-      dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+      }
+
       throw err
     }
 

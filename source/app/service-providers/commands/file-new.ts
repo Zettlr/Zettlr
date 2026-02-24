@@ -143,7 +143,7 @@ export default class FileNew extends ZettlrCommand {
         } else {
           // Remove the file before creating it anew. We'll use the
           // corresponding command for that.
-          this._app.documents.closeFileEverywhere(absPath)
+          await this._app.documents.closeFileEverywhere(absPath)
           await this._app.fsal.removeFile(absPath)
         }
       }
@@ -161,13 +161,15 @@ export default class FileNew extends ZettlrCommand {
       if ((await this._app.fsal.getAnyDirectoryDescriptor(path.dirname(absPath))) === undefined) {
         this._app.config.addPath(absPath)
       }
-    } catch (err: any) {
-      this._app.log.error(`Could not create file: ${err.message as string}`)
-      this._app.windows.prompt({
-        type: 'error',
-        title: trans('Could not create file'),
-        message: err.message
-      })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._app.log.error(`Could not create file: ${err.message as string}`)
+        this._app.windows.prompt({
+          type: 'error',
+          title: trans('Could not create file'),
+          message: err.message
+        })
+      }
     }
   }
 }

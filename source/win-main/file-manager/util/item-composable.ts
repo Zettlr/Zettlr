@@ -22,57 +22,40 @@ import { ref, computed, type Ref, watch, nextTick } from 'vue'
 import { hasImageExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
-import type { LeafNodeJSON } from 'source/types/common/documents'
 
 const ipcRenderer = window.ipc
 
-export function closeFile (path: string, paneData: LeafNodeJSON[], windowId: string): void {
-  const openFiles = paneData
-    .flatMap(pane => {
-      return pane.openFiles
-        .filter(f => f.path === path)
-        .map(f => ({ leafId: pane.id, ...f }))
-    })
-
-  for (const file of openFiles) {
-    ipcRenderer.invoke('documents-provider', {
-      command: 'close-file',
-      payload: {
-        path: file.path,
-        leafId: file.leafId,
-        windowId: windowId,
-      }
-    } as DocumentManagerIPCAPI)
-      .catch(e => console.error(e))
-  }
+export function closeFile (path: string): void {
+  ipcRenderer.invoke('documents-provider', {
+    command: 'close-file-everywhere',
+    payload: { path }
+  } as DocumentManagerIPCAPI)
+    .catch(e => console.error(e))
 
   ipcRenderer.invoke('application', {
     command: 'root-close',
     payload: path
   })
     .catch(err => console.error(err))
-
 }
 
-export function closeWorkspace (path: string, paneData: LeafNodeJSON[], windowId: string): void {
-  const openFiles = paneData
-    .flatMap(pane => {
-      return pane.openFiles
-        .filter(f => f.path.startsWith(path))
-        .map(f => ({ leafId: pane.id, ...f }))
-    })
-
-  for (const file of openFiles) {
-    ipcRenderer.invoke('documents-provider', {
-      command: 'close-file',
-      payload: {
-        path: file.path,
-        leafId: file.leafId,
-        windowId: windowId,
+export function closeWorkspace (path: string): void {
+  ipcRenderer.invoke('documents-provider', {
+    command: 'get-open-workspace-files',
+    payload: {
+      path: path,
+    }
+  } as DocumentManagerIPCAPI)
+    .then(openFiles => {
+      for (const file of openFiles) {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'close-file-everywhere',
+          payload: { path: file }
+        } as DocumentManagerIPCAPI)
+          .catch(e => console.error(e))
       }
-    } as DocumentManagerIPCAPI)
-      .catch(e => console.error(e))
-  }
+    })
+    .catch(e => console.error(e))
 
   ipcRenderer.invoke('application', {
     command: 'root-close',
@@ -226,7 +209,7 @@ export function useItemComposable (
           })
             .catch(err => console.error(err))
         } else if (clickedID === 'menu.close_workspace') {
-          closeWorkspace(obj.value.path, documentTreeStore.paneData, windowId)
+          closeWorkspace(obj.value.path)
         } else if (clickedID === 'menu.project_build') {
           // We should trigger an export of this project.
           ipcRenderer.invoke('application', {
@@ -272,7 +255,7 @@ export function useItemComposable (
         } else if (clickedID === 'properties') {
           showPopover.value = true
         } else if (clickedID === 'menu.close_file') {
-          closeFile(obj.value.path, documentTreeStore.paneData, windowId)
+          closeFile(obj.value.path)
         }
       })
     }
