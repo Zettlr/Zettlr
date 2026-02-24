@@ -13,7 +13,7 @@
  */
 
 import { EditorView } from '@codemirror/view'
-import { type ColorVars, defaultVarsDark, defaultVarsLight } from './main-override'
+import { type ThemeVars, defaultVarsDark, defaultVarsLight } from './main-override'
 
 const primaryColor = '#1d75b3'
 
@@ -23,7 +23,7 @@ const selectionDark = '#1d3786cc'
 const fontFamily = 'Crimson, serif'
 const codeFont = 'Inconsolata, monospace'
 
-export const frankfurtVarsLight: ColorVars = {
+export const frankfurtVarsLight: ThemeVars = {
   ...defaultVarsLight,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,
@@ -32,7 +32,7 @@ export const frankfurtVarsLight: ColorVars = {
   '--cm-code-font': codeFont,
 }
 
-export const frankfurtVarsDark: ColorVars = {
+export const frankfurtVarsDark: ThemeVars = {
   ...defaultVarsDark,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,

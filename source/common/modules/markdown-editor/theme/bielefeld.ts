@@ -13,7 +13,7 @@
  */
 
 import { EditorView } from '@codemirror/view'
-import { defaultVarsDark, defaultVarsLight, type ColorVars } from './main-override'
+import { defaultVarsDark, defaultVarsLight, type ThemeVars } from './main-override'
 
 const primaryColor = '#ffb46c'
 
@@ -26,7 +26,7 @@ const selectionDark = 'var(--grey-6)'
 const fontFamily = '"Liberation Mono", monospace'
 const codeFont = '"Liberation Mono", monospace'
 
-const bielefeldVarsLight: ColorVars = {
+const bielefeldVarsLight: ThemeVars = {
   ...defaultVarsLight,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,
@@ -36,7 +36,7 @@ const bielefeldVarsLight: ColorVars = {
   '--cm-code-font': codeFont,
 }
 
-const bielefeldVarsDark: ColorVars = {
+const bielefeldVarsDark: ThemeVars = {
   ...defaultVarsDark,
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,

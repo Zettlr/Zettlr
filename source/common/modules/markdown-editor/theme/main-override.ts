@@ -16,8 +16,8 @@
 
 import { EditorView } from '@codemirror/view'
 
-export interface ColorVars {
-  [selector: string]: string|number
+export interface ThemeVars {
+  [selector: string]: string|number // necessary to match the type of StyleSpec
   '--cm-primary-color': string
   '--cm-secondary-color': string
   '--cm-scroller-color': string
@@ -45,6 +45,26 @@ export interface ColorVars {
   '--cm-header-6-size': string
 }
 
+export interface CodeThemeVars {
+  [selector: string]: string|number // necessary to match the type of StyleSpec
+  '--cm-code-base-0': string
+  '--cm-code-base-1': string
+  '--cm-code-base-2': string
+  '--cm-code-base-3': string
+  '--cm-code-base-00': string
+  '--cm-code-base-01': string
+  '--cm-code-base-02': string
+  '--cm-code-base-03': string
+  '--cm-code-yellow': string
+  '--cm-code-orange': string
+  '--cm-code-red': string
+  '--cm-code-magenta': string
+  '--cm-code-violet': string
+  '--cm-code-blue': string
+  '--cm-code-cyan': string
+  '--cm-code-green': string
+}
+
 const primaryColor = '#1cb27e'
 
 const scrollerColor = 'var(--grey-5)'
@@ -61,6 +81,10 @@ const highlightDark = '#ffff0060'
 
 const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
 const codeFont = 'Inconsolata, monospace'
+
+const emphasisFont = 'italic'
+const strongFont = 'bold'
+const headerFont = 'bold'
 
 const citationColor = 'var(--grey-1)'
 const citationColorDark = 'var(--grey-4)'
@@ -83,10 +107,6 @@ const opacity = 0.65
 
 const linkDecoration = 'none'
 
-const emphasisFont = 'italic'
-const strongFont = 'bold'
-const headerFont = 'bold'
-
 const headerSize1 = '2em'
 const headerSize2 = '1.8em'
 const headerSize3 = '1.5em'
@@ -94,7 +114,7 @@ const headerSize4 = '1.3em'
 const headerSize5 = '1em'
 const headerSize6 = '1em'
 
-export const defaultVarsLight: ColorVars = {
+export const defaultVarsLight: ThemeVars = {
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,
   '--cm-scroller-color': scrollerColor,
@@ -122,7 +142,7 @@ export const defaultVarsLight: ColorVars = {
   '--cm-header-6-size': headerSize6,
 }
 
-export const defaultVarsDark: ColorVars = {
+export const defaultVarsDark: ThemeVars = {
   '--cm-primary-color': primaryColor,
   '--cm-secondary-color': primaryColor,
   '--cm-scroller-color': scrollerColorDark,
@@ -158,7 +178,7 @@ export const defaultDark = EditorView.theme({
   '&': defaultVarsDark
 }, { dark: true })
 
-const mainColorTheme = EditorView.baseTheme({
+const mainTheme = EditorView.baseTheme({
   '.cm-scroller': {
     fontFamily: 'var(--cm-font)',
     color: 'var(--cm-scroller-color)',
@@ -260,12 +280,12 @@ const mainColorTheme = EditorView.baseTheme({
     color: 'var(--cm-primary-color)',
     textDecoration: 'var(--cm-link-decoration)',
   },
-  '.cm-yaml-frontmatter-end': {
+  '.cm-yaml-frontmatter-start': {
     fontFamily: 'var(--cm-code-font)',
     fontWeight: 'var(--cm-strong-font)',
     color: 'var(--cm-primary-color)',
   },
-  '.cm-yaml-frontmatter-start': {
+  '.cm-yaml-frontmatter-end': {
     fontFamily: 'var(--cm-code-font)',
     fontWeight: 'var(--cm-strong-font)',
     color: 'var(--cm-primary-color)',
@@ -349,6 +369,109 @@ const mainColorTheme = EditorView.baseTheme({
   },
 })
 
+/* Code Theme
+ *
+ * We're using this solarized theme here: https://ethanschoonover.com/solarized/
+ * See also the CodeEditor.vue component, which uses the same colours
+*/
+
+const BASE_0 = '#839496'
+const BASE_1 = '#93a1a1'
+const BASE_2 = '#eee8d5'
+const BASE_3 = '#fdf6e3'
+const BASE_00 = '#657b83'
+const BASE_01 = '#586e75'
+const BASE_02 = '#073642'
+const BASE_03 = '#002b36'
+
+const YELLOW = '#b58900'
+const ORANGE = '#cb4b16'
+const RED = '#dc322f'
+const MAGENTA = '#d33682'
+const VIOLET = '#6c71c4'
+const BLUE = '#268bd2'
+const CYAN = '#2aa198'
+const GREEN = '#859900'
+
+export const defaultCodeVars: CodeThemeVars = {
+  '--cm-code-base-0': BASE_0,
+  '--cm-code-base-1': BASE_1,
+  '--cm-code-base-2': BASE_2,
+  '--cm-code-base-3': BASE_3,
+  '--cm-code-base-00': BASE_00,
+  '--cm-code-base-01': BASE_01,
+  '--cm-code-base-02': BASE_02,
+  '--cm-code-base-03': BASE_03,
+  '--cm-code-yellow': YELLOW,
+  '--cm-code-orange': ORANGE,
+  '--cm-code-red': RED,
+  '--cm-code-magenta': MAGENTA,
+  '--cm-code-violet': VIOLET,
+  '--cm-code-blue': BLUE,
+  '--cm-code-cyan': CYAN,
+  '--cm-code-green': GREEN,
+}
+
+export const codeTheme = EditorView.baseTheme({
+  '&': defaultCodeVars,
+  '.code': {
+    color: 'var(--cm-code-base-02)',
+    fontFamily: 'var(--cm-code-font)'
+  },
+  '&dark .code': { color: 'var(--cm-code-base-1)' },
+
+  '.code .cm-comment': { color: 'var(--cm-code-base-00)' },
+  '.code .cm-line-comment': { color: 'var(--cm-code-base-00)' },
+  '.code .cm-block-comment': { color: 'var(--cm-code-base-00)' },
+
+  // Sort based on color; roughly sort based on function of the class.
+  '.code .cm-string': { color: 'var(--cm-code-green)' },
+  '.code .cm-keyword': { color: 'var(--cm-code-green)' },
+  '.code .cm-inserted': { color: 'var(--cm-code-green)' },
+  '.code .cm-positive': { color: 'var(--cm-code-green)' },
+
+  '.code .cm-control-keyword': { color: 'var(--cm-code-violet)' },
+  '.code .cm-atom': { color: 'var(--cm-code-violet)' },
+  '.code .cm-color': { color: 'var(--cm-code-violet)' },
+  '.code .cm-number': { color: 'var(--cm-code-violet)' },
+  '.code .cm-integer': { color: 'var(--cm-code-violet)' },
+  '.code .cm-bool': { color: 'var(--cm-code-violet)' },
+
+  '.code .cm-property': { color: 'var(--cm-code-magenta)' },
+  '.code .cm-operator': { color: 'var(--cm-code-magenta)' },
+  '.code .cm-compare-operator': { color: 'var(--cm-code-magenta)' },
+  '.code .cm-arithmetic-operator': { color: 'var(--cm-code-magenta)' },
+  '.code .cm-self': { color: 'var(--cm-code-magenta)' },
+
+  '.code .cm-operator-keyword': { color: 'var(--cm-code-blue)' },
+  '.code .cm-definition-keyword': { color: 'var(--cm-code-blue)' },
+  '.code .cm-module-keyword': { color: 'var(--cm-code-blue)' },
+  '.code .cm-null': { color: 'var(--cm-code-blue)' },
+  '.code .cm-meta': { color: 'var(--cm-code-blue)' },
+  '.code .cm-unit': { color: 'var(--cm-code-blue)' },
+  '.code .cm-qualifier': { color: 'var(--cm-code-blue)' },
+  '.code .cm-builtin': { color: 'var(--cm-code-blue)' },
+  '.code .cm-property-name': { color: 'var(--cm-code-blue)' },
+
+  '.code .cm-tag-name': { color: 'var(--cm-code-cyan)' },
+  '.code .cm-modifier': { color: 'var(--cm-code-cyan)' },
+  '.code .cm-variable-name': { color: 'var(--cm-code-cyan)' },
+  '.code .cm-variable': { color: 'var(--cm-code-cyan)' },
+
+  '.code .cm-attribute-name': { color: 'var(--cm-code-orange)' },
+  '.code .cm-regexp': { color: 'var(--cm-code-orange)' },
+
+  '.code .cm-name': { color: 'var(--cm-code-yellow)' },
+  '.code .cm-class-name': { color: 'var(--cm-code-yellow)' },
+  '.code .cm-type-name': { color: 'var(--cm-code-yellow)' },
+  '.code .cm-changed': { color: 'var(--cm-code-yellow)' },
+
+  '.code .cm-deleted': { color: 'var(--cm-code-red)' },
+  '.code .cm-negative': { color: 'var(--cm-code-red)' },
+  '.code .cm-invalid': { color: 'var(--cm-code-red)' },
+})
+
 export const mainOverride = [
-  mainColorTheme,
+  mainTheme,
+  codeTheme
 ]
