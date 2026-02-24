@@ -223,14 +223,6 @@ const mainTheme = EditorView.baseTheme({
   '.inline-code-background': {
     backgroundColor: 'var(--zettlr-editor-code-bg)',
   },
-  '.cm-citation-mark': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--zettlr-editor-citation-color)',
-  },
-  '.cm-citation-at-sign': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--zettlr-editor-citation-color)',
-  },
   '.cm-escape': {
     color: 'var(--zettlr-editor-escape-color)',
   },
@@ -239,6 +231,14 @@ const mainTheme = EditorView.baseTheme({
   },
   '.citeproc-citation.error': {
     color: 'var(--zettlr-editor-error-color)',
+  },
+  '.cm-citation-mark': {
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    color: 'var(--zettlr-editor-citation-color)',
+  },
+  '.cm-citation-at-sign': {
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    color: 'var(--zettlr-editor-citation-color)',
   },
   '.cm-citation-citekey': {
     color: 'var(--zettlr-editor-secondary-color)',
@@ -249,9 +249,6 @@ const mainTheme = EditorView.baseTheme({
   },
   '.cm-citation-suppress-author-flag': {
     color: 'var(--zettlr-editor-error-color)',
-  },
-  '.cm-citation': {
-    color: 'var(--zettlr-editor-citation-color)',
   },
   // For more diversity, don't color the link marks
   '.cm-link.cm-code-mark': {
