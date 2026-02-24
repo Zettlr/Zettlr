@@ -27,13 +27,85 @@
   }
 }
 
+.cm-scroller {
+  flex-grow: 1; /* Ensure the content pushes possible panels towards the edge */
+  outline: 0;
+}
+
 .cm-editor {
   outline: 0 !important;
+  height: 100%;
   font-size: 1em;
   line-height: 1.4375;
   user-select: text;
   background-color: inherit;
-  cursor: text;
+  cursor: auto;
+
+  /* Hide overflowing text in autocompletion info panels */
+  .cm-completionInfo {
+    overflow: hidden;
+  }
+
+  .cm-panel.cm-search label input[type=checkbox] {
+    margin-right: 10px
+  }
+
+  .cm-panel.cm-search {
+    user-select: none; /* prevent search panel text elements from being selected */
+  }
+
+  /* TOOLTIPS */
+  .cm-tooltip {
+    padding: 4px;
+    max-width: 800px;
+  }
+
+  /* Footnotes */
+  .footnote, .footnote-ref-label {
+    vertical-align: super;
+    font-size: 0.8rem;
+  }
+
+  /* NOTE: Disabling because pre-rendered elements will not inherit this font size (see #5999) */
+  /* footnote-ref {
+    font-size: 0.8rem;
+  } */
+  /**
+   * Cursor blink animation.
+   *
+   * NOTE: We need to precisely override the way CodeMirror implements its
+   * blink-animation.
+   *
+   * 1.) CodeMirror switches between "cm-blink" and "cm-blink2" classes:
+   *     https://discuss.codemirror.net/t/custom-cursor-like-in-monaco-editor/5705/5
+   * 2.) It uses two identical animations for that.
+   * 3.) It uses a "step" animation to make the transition "harsh"
+   * 4.) For the animation source code, see:
+   *     https://github.com/codemirror/view/blob/main/src/theme.ts
+   *
+   * Our changes:
+   * * Remove the steps(1)-function to remove the harsh transitions.
+   * * Make the transition more smooth with a 15% opacity transition period.
+   */
+  @keyframes cm-blink {
+    0% { opacity: 1; }
+    10% { opacity: 1; }
+    25% { opacity: 0; }
+    60% { opacity: 0; }
+    75% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  @keyframes cm-blink2 {
+    0% { opacity: 1; }
+    10% { opacity: 1; }
+    25% { opacity: 0; }
+    60% { opacity: 0; }
+    75% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  &.cm-focused > .cm-scroller > .cm-cursorLayer {
+    animation: cm-blink 1.2s infinite;
+  }
 
   /* STYLING FOR THE COMMON WRAPPER ELEMENTS
    * ======================================================================== */

@@ -333,57 +333,8 @@ const mainColorTheme = EditorView.baseTheme({
     textDecoration: 'none',
   },
 
-  // For more diversity, don't color the link marks
-  '.cm-link.cm-code-mark': {
-    color: 'inherit',
-  },
-})
-
-const mainStyleTheme = EditorView.baseTheme({
-  // General overrides
-  '&.cm-editor': {
-    height: '100%',
-    fontFamily: 'inherit',
-    backgroundColor: 'transparent',
-    cursor: 'auto',
-  },
-  '.cm-scroller': {
-    flexGrow: '1', // Ensure the content pushes possible panels towards the edge
-    outline: '0', // Remove the outline
-  },
-  // Hide overflowing text in autocompletion info panels
-  '.cm-completionInfo': {
-    overflow: 'hidden',
-  },
-  '.cm-panel.cm-search label input[type=checkbox]': {
-    marginRight: '10px',
-  },
-  '.cm-panel.cm-search': {
-    userSelect: 'none', // prevent search panel text elements from being selected
-  },
-  // TOOLTIPS
-  '.cm-tooltip': {
-    padding: '4px',
-    maxWidth: '800px',
-  },
-  // Footnotes
-  '.footnote, .footnote-ref-label': {
-    verticalAlign: 'super',
-    fontSize: '0.8rem',
-  },
-  // NOTE: Disabling because pre-rendered elements will not inherit this font size (see #5999)
-  // '.footnote-ref': {
-  //   fontSize: '0.8rem',
-  // },
   // Provide the default YAML frontmatter indicator
   '.cm-yaml-frontmatter-start::after': {
-    content: '"YAML Frontmatter"',
-    display: 'inline-block',
-    marginLeft: '10px',
-    padding: '0px 5px',
-    fontSize: '60%',
-    fontWeight: 'normal',
-    verticalAlign: 'middle',
     color: 'var(--grey-2)',
     backgroundColor: 'var(--grey-0)',
   },
@@ -391,45 +342,13 @@ const mainStyleTheme = EditorView.baseTheme({
     color: 'var(--grey-0)',
     backgroundColor: 'var(--grey-4)',
   },
-  /**
-   * Cursor blink animation.
-   *
-   * NOTE: We need to precisely override the way CodeMirror implements its
-   * blink-animation.
-   *
-   * 1.) CodeMirror switches between "cm-blink" and "cm-blink2" classes:
-   *     https://discuss.codemirror.net/t/custom-cursor-like-in-monaco-editor/5705/5
-   * 2.) It uses two identical animations for that.
-   * 3.) It uses a "step" animation to make the transition "harsh"
-   * 4.) For the animation source code, see:
-   *     https://github.com/codemirror/view/blob/main/src/theme.ts
-   *
-   * Our changes:
-   * * Remove the steps(1)-function to remove the harsh transitions.
-   * * Make the transition more smooth with a 15% opacity transition period.
-   */
-  '@keyframes cm-blink': {
-    '0%': { opacity: 1 },
-    '10%': { opacity: 1 },
-    '25%': { opacity: 0 },
-    '60%': { opacity: 0 },
-    '75%': { opacity: 1 },
-    '100%': { opacity: 1 },
-  },
-  '@keyframes cm-blink2': {
-    '0%': { opacity: 1 },
-    '10%': { opacity: 1 },
-    '25%': { opacity: 0 },
-    '60%': { opacity: 0 },
-    '75%': { opacity: 1 },
-    '100%': { opacity: 1 },
-  },
-  '&.cm-focused > .cm-scroller > .cm-cursorLayer': {
-    animation: 'cm-blink 1.2s infinite',
+
+  // For more diversity, don't color the link marks
+  '.cm-link.cm-code-mark': {
+    color: 'inherit',
   },
 })
 
 export const mainOverride = [
   mainColorTheme,
-  mainStyleTheme,
 ]
