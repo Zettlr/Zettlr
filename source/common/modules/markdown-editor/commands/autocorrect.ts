@@ -18,6 +18,7 @@ import { syntaxTree } from '@codemirror/language'
 import { EditorSelection, type ChangeSpec, type EditorState } from '@codemirror/state'
 import { type Command, type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
+import { insertNewlineAndIndent, isolateHistory } from '@codemirror/commands'
 
 // These characters can be directly followed by a starting magic quote
 const startChars = ' ([{-–—\n\r\t\v\f/\\'
@@ -57,18 +58,11 @@ function posInProtectedNode (state: EditorState, pos: number): boolean {
   return false
 }
 
-/**
- * If AutoCorrect is active, this handles a (potential) replacement on Space or
- * Enter.
- *
- * @param   {EditorView}  view  The editor's view
- *
- * @return  {boolean}           Always returns false to make Codemirror add the Space/Enter
- */
-export function handleReplacement (view: EditorView): boolean {
+// If Autocorrect is active, handles the potential text replacement
+export const handleReplacement: Command = (target: EditorView): boolean => {
   // The config field is only present in the main editor, not in the assets
   // manager code editors or elsewhere.
-  const config = view.state.field(configField, false)
+  const config = target.state.field(configField, false)
   if (config === undefined) {
     return false
   }
@@ -86,37 +80,42 @@ export function handleReplacement (view: EditorView): boolean {
   const maxKeyLength = replacements[0].key.length
   const changes: ChangeSpec[] = []
 
-  for (const range of view.state.selection.ranges) {
+  for (const range of target.state.selection.ranges) {
     // Ignore selections (only cursors)
     if (!range.empty) {
       continue
     }
 
+    // Offset by 1 since this occurs after the transaction to insert
+    // the newline or space
+    let pos = range.from - 1
+
     // Ignore those cursors that are inside protected nodes
-    if (posInProtectedNode(view.state, range.from)) {
+    if (posInProtectedNode(target.state, pos)) {
       continue
     }
 
     // Leave --- and ... lines (YAML frontmatter as well as horizontal rules)
     // We have investigated finding these as protected nodes. However, '---' in
     // the first line is not parsed as any type.
-    const line = view.state.doc.lineAt(range.from)
+    const line = target.state.doc.lineAt(pos)
     if ([ '---', '...' ].includes(line.text)) {
       continue
     }
 
-    const from = Math.max(range.from - maxKeyLength, 0)
-    const slice = view.state.sliceDoc(from, range.from)
+    const from = Math.max(pos - maxKeyLength, 0)
+    const slice = target.state.sliceDoc(from, pos)
+
     for (const { key, value } of replacements) {
       if (slice.endsWith(key)) {
-        const startOfReplacement = range.from - key.length
-        if (posInProtectedNode(view.state, startOfReplacement)) {
+        const startOfReplacement = pos - key.length
+        if (posInProtectedNode(target.state, startOfReplacement)) {
           break // `range.from` is not in a protected area, but start is.
         }
 
         const charBefore = startOfReplacement === 0
           ? ' ' // Assume a space which makes below's code simpler
-          : view.state.sliceDoc(startOfReplacement - 1, startOfReplacement)
+          : target.state.sliceDoc(startOfReplacement - 1, startOfReplacement)
 
         if (autocorrect.matchWholeWords && !/\W/.test(charBefore)) {
           // We should match whole words, but the replacement is
@@ -124,15 +123,49 @@ export function handleReplacement (view: EditorView): boolean {
           break
         }
 
-        changes.push({ from: startOfReplacement, to: range.from, insert: value })
+        changes.push({ from: startOfReplacement, to: pos, insert: value })
         break // Do not check the other possible replacements
       }
     }
   }
 
-  view.dispatch({ changes })
+  if (changes.length > 0) {
+    // Isolate the transaction in the undo-history so that a user
+    // can override the replacement without removed the space/newline
+    target.dispatch({ changes, annotations: isolateHistory.of('full') })
 
-  // Indicate that we did not handle the key, making Codemirror add the key
+    // Indicate a replacement happened
+    return true
+  }
+
+  return false
+}
+
+// Space key handling for autocorrect
+export const handleAutocorrectSpace: Command = (target: EditorView) => {
+  // By dispatching the Space transaction first, the replacement
+  // appears after it in the undo history, providing better undo UX.
+  target.dispatch(target.state.replaceSelection(' '))
+
+  handleReplacement(target)
+
+  // Always return `true` due to dispatching `replaceSelection`
+  // even if `handleReplacement` fails.
+  return true
+}
+
+// Enter key handling for autocorrect
+export const handleAutocorrectEnter: Command = (target: EditorView) => {
+  // By dispatching the Enter transaction first, the replacement
+  // appears after it in the undo history, providing better undo UX.
+  if (insertNewlineAndIndent(target)) {
+    handleReplacement(target)
+
+    // Always return `true` due to dispatching `insertNewlineAndIndent`,
+    // even if `handleReplacement` fails.
+    return true
+  }
+
   return false
 }
 
