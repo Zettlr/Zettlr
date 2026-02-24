@@ -180,139 +180,139 @@ export const defaultDark = EditorView.theme({
 
 const mainTheme = EditorView.baseTheme({
   '.cm-scroller': {
-    fontFamily: 'var(--cm-font)',
-    color: 'var(--cm-scroller-color)',
-    backgroundColor: 'var(--cm-scroller-bg)',
+    fontFamily: 'var(--zettlr-editor-font)',
+    color: 'var(--zettlr-editor-scroller-color)',
+    backgroundColor: 'var(--zettlr-editor-scroller-bg)',
   },
   // Copied with my blood from the DOM; the example on the website is wrong.
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
-    background: 'var(--cm-selection-color)',
+    background: 'var(--zettlr-editor-selection-color)',
   },
   '.cm-comment': {
-    color: 'var(--cm-code-color)',
+    color: 'var(--zettlr-editor-code-color)',
   },
   '.cm-block-comment': {
-    color: 'var(--cm-code-color)',
+    color: 'var(--zettlr-editor-code-color)',
   },
   '.cm-monospace': {
-    color: 'var(--cm-code-color)',
-    backgroundColor: 'var(--cm-code-bg)',
+    color: 'var(--zettlr-editor-code-color)',
+    backgroundColor: 'var(--zettlr-editor-code-bg)',
   },
   '.cm-inline-math': {
-    color: 'var(--cm-code-color)',
+    color: 'var(--zettlr-editor-code-color)',
   },
   '.citeproc-citation': {
-    backgroundColor: 'var(--cm-citation-bg)',
+    backgroundColor: 'var(--zettlr-editor-citation-bg)',
   },
   '.code-block-line-background': {
-    backgroundColor: 'var(--cm-code-bg)',
+    backgroundColor: 'var(--zettlr-editor-code-bg)',
   },
   '.inline-code-background': {
-    backgroundColor: 'var(--cm-code-bg)',
+    backgroundColor: 'var(--zettlr-editor-code-bg)',
   },
   '.cm-citation-mark': {
-    fontFamily: 'var(--cm-code-font)',
-    color: 'var(--cm-citation-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    color: 'var(--zettlr-editor-citation-color)',
   },
   '.cm-citation-at-sign': {
-    fontFamily: 'var(--cm-code-font)',
-    color: 'var(--cm-citation-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    color: 'var(--zettlr-editor-citation-color)',
   },
   '.cm-escape': {
-    color: 'var(--cm-escape-color)',
+    color: 'var(--zettlr-editor-escape-color)',
   },
   '.blockquote-wrapper': {
-    borderLeftColor: 'var(--cm-primary-color)',
+    borderLeftColor: 'var(--zettlr-editor-primary-color)',
   },
   '.citeproc-citation.error': {
-    color: 'var(--cm-error-color)',
+    color: 'var(--zettlr-editor-error-color)',
   },
   '.cm-citation-citekey': {
-    color: 'var(--cm-secondary-color)',
+    color: 'var(--zettlr-editor-secondary-color)',
   },
   '.cm-citation-locator': {
-    fontStyle: 'var(--cm-emphasis-font)',
+    fontStyle: 'var(--zettlr-editor-emphasis-font)',
   },
   '.cm-citation-suppress-author-flag': {
-    color: 'var(--cm-error-color)',
+    color: 'var(--zettlr-editor-error-color)',
   },
   '.cm-citation': {
-    color: 'var(--cm-citation-color)',
+    color: 'var(--zettlr-editor-citation-color)',
   },
   '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list)': {
-    color: 'var(--cm-primary-color)',
+    color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-code-mark': {
-    fontFamily: 'var(--cm-code-font)',
-    color: 'var(--cm-primary-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-cursor-primary': {
-    background: 'var(--cm-primary-color)',
+    background: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-cursor-secondary': {
-    background: 'var(--cm-error-color)',
+    background: 'var(--zettlr-editor-error-color)',
   },
   '.cm-dropCursor': {
-    borderLeftColor: 'var(--cm-primary-color)',
+    borderLeftColor: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-emphasis': {
-    fontStyle: 'var(--cm-emphasis-font)',
+    fontStyle: 'var(--zettlr-editor-emphasis-font)',
   },
   '.cm-gutters': {
-    fontFamily: 'var(--cm-code-font)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
   },
   '.cm-highlight': {
-    backgroundColor: 'var(--cm-highlight-color)',
+    backgroundColor: 'var(--zettlr-editor-highlight-color)',
   },
   '.cm-hr':  {
-    fontFamily: 'var(--cm-code-font)',
-    fontWeight: 'var(--cm-strong-font)',
-    color: 'var(--cm-primary-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    fontWeight: 'var(--zettlr-editor-strong-font)',
+    color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-link': {
-    color: 'var(--cm-primary-color)',
-    textDecoration: 'var(--cm-link-decoration)',
+    color: 'var(--zettlr-editor-primary-color)',
+    textDecoration: 'var(--zettlr-editor-link-decoration)',
   },
   '.cm-strong': {
-    fontWeight: 'var(--cm-strong-font)',
+    fontWeight: 'var(--zettlr-editor-strong-font)',
   },
   '.cm-url': {
-    color: 'var(--cm-primary-color)',
-    textDecoration: 'var(--cm-link-decoration)',
+    color: 'var(--zettlr-editor-primary-color)',
+    textDecoration: 'var(--zettlr-editor-link-decoration)',
   },
   '.cm-yaml-frontmatter-start': {
-    fontFamily: 'var(--cm-code-font)',
-    fontWeight: 'var(--cm-strong-font)',
-    color: 'var(--cm-primary-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    fontWeight: 'var(--zettlr-editor-strong-font)',
+    color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-yaml-frontmatter-end': {
-    fontFamily: 'var(--cm-code-font)',
-    fontWeight: 'var(--cm-strong-font)',
-    color: 'var(--cm-primary-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    fontWeight: 'var(--zettlr-editor-strong-font)',
+    color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-zkn-link': {
-    textDecoration: 'var(--cm-link-decoration)',
+    textDecoration: 'var(--zettlr-editor-link-decoration)',
   },
   '.cm-zkn-tag':  {
-    color: 'var(--cm-primary-color)',
+    color: 'var(--zettlr-editor-primary-color)',
   },
   '.mermaid-chart.error': {
-    fontFamily: 'var(--cm-code-font)',
-    color: 'var(--cm-error-color)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
+    color: 'var(--zettlr-editor-error-color)',
   },
   'pandoc-div-info-wrapper': {
-    backgroundColor: 'var(--cm-scroller-bg)',
+    backgroundColor: 'var(--zettlr-editor-scroller-bg)',
   },
   '.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6': {
-    fontWeight: 'var(--cm-header-font)'
+    fontWeight: 'var(--zettlr-editor-header-font)'
   },
   // Don't increase font-size within blockquotes
-  '.cm-line:has(:not(.cm-quote).cm-header-1)': { fontSize: 'var(--cm-header-1-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-2)': { fontSize: 'var(--cm-header-2-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-3)': { fontSize: 'var(--cm-header-3-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: 'var(--cm-header-4-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: 'var(--cm-header-5-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: 'var(--cm-header-6-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-1)': { fontSize: 'var(--zettlr-editor-header-1-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-2)': { fontSize: 'var(--zettlr-editor-header-2-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-3)': { fontSize: 'var(--zettlr-editor-header-3-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: 'var(--zettlr-editor-header-4-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: 'var(--zettlr-editor-header-5-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: 'var(--zettlr-editor-header-6-size)' },
 
   // These styles use system-wide variables
   // TODO: migrate them to theme variables
@@ -327,26 +327,26 @@ const mainTheme = EditorView.baseTheme({
     borderColor: 'var(--grey-3)',
   },
   '.cm-definition-operator': {
-    fontFamily: 'var(--cm-code-font)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
     color: 'var(--grey-5)',
   },
   '.cm-angle-bracket': {
-    fontFamily: 'var(--cm-code-font)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
     color: 'var(--grey-5)',
   },
   '.cm-attribute-name': {
-    fontFamily: 'var(--cm-code-font)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
     color: 'var(--blue-0)',
   },
   '.cm-attribute-value': {
-    fontFamily: 'var(--cm-code-font)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
     color: 'var(--green-0)',
   },
   '.cm-string': {
     color: 'var(--green-0)',
   },
   '.cm-tag-name': {
-    fontFamily: 'var(--cm-code-font)',
+    fontFamily: 'var(--zettlr-editor-code-font)',
     color: 'var(--orange-2)',
   },
   '.cm-heading': {
@@ -415,60 +415,60 @@ export const defaultCodeVars: CodeThemeVars = {
 export const codeTheme = EditorView.baseTheme({
   '&': defaultCodeVars,
   '.code': {
-    color: 'var(--cm-code-base-02)',
-    fontFamily: 'var(--cm-code-font)'
+    color: 'var(--zettlr-editor-code-base-02)',
+    fontFamily: 'var(--zettlr-editor-code-font)'
   },
-  '&dark .code': { color: 'var(--cm-code-base-1)' },
+  '&dark .code': { color: 'var(--zettlr-editor-code-base-1)' },
 
-  '.code .cm-comment': { color: 'var(--cm-code-base-00)' },
-  '.code .cm-line-comment': { color: 'var(--cm-code-base-00)' },
-  '.code .cm-block-comment': { color: 'var(--cm-code-base-00)' },
+  '.code .cm-comment': { color: 'var(--zettlr-editor-code-base-00)' },
+  '.code .cm-line-comment': { color: 'var(--zettlr-editor-code-base-00)' },
+  '.code .cm-block-comment': { color: 'var(--zettlr-editor-code-base-00)' },
 
   // Sort based on color; roughly sort based on function of the class.
-  '.code .cm-string': { color: 'var(--cm-code-green)' },
-  '.code .cm-keyword': { color: 'var(--cm-code-green)' },
-  '.code .cm-inserted': { color: 'var(--cm-code-green)' },
-  '.code .cm-positive': { color: 'var(--cm-code-green)' },
+  '.code .cm-string': { color: 'var(--zettlr-editor-code-green)' },
+  '.code .cm-keyword': { color: 'var(--zettlr-editor-code-green)' },
+  '.code .cm-inserted': { color: 'var(--zettlr-editor-code-green)' },
+  '.code .cm-positive': { color: 'var(--zettlr-editor-code-green)' },
 
-  '.code .cm-control-keyword': { color: 'var(--cm-code-violet)' },
-  '.code .cm-atom': { color: 'var(--cm-code-violet)' },
-  '.code .cm-color': { color: 'var(--cm-code-violet)' },
-  '.code .cm-number': { color: 'var(--cm-code-violet)' },
-  '.code .cm-integer': { color: 'var(--cm-code-violet)' },
-  '.code .cm-bool': { color: 'var(--cm-code-violet)' },
+  '.code .cm-control-keyword': { color: 'var(--zettlr-editor-code-violet)' },
+  '.code .cm-atom': { color: 'var(--zettlr-editor-code-violet)' },
+  '.code .cm-color': { color: 'var(--zettlr-editor-code-violet)' },
+  '.code .cm-number': { color: 'var(--zettlr-editor-code-violet)' },
+  '.code .cm-integer': { color: 'var(--zettlr-editor-code-violet)' },
+  '.code .cm-bool': { color: 'var(--zettlr-editor-code-violet)' },
 
-  '.code .cm-property': { color: 'var(--cm-code-magenta)' },
-  '.code .cm-operator': { color: 'var(--cm-code-magenta)' },
-  '.code .cm-compare-operator': { color: 'var(--cm-code-magenta)' },
-  '.code .cm-arithmetic-operator': { color: 'var(--cm-code-magenta)' },
-  '.code .cm-self': { color: 'var(--cm-code-magenta)' },
+  '.code .cm-property': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.code .cm-operator': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.code .cm-compare-operator': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.code .cm-arithmetic-operator': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.code .cm-self': { color: 'var(--zettlr-editor-code-magenta)' },
 
-  '.code .cm-operator-keyword': { color: 'var(--cm-code-blue)' },
-  '.code .cm-definition-keyword': { color: 'var(--cm-code-blue)' },
-  '.code .cm-module-keyword': { color: 'var(--cm-code-blue)' },
-  '.code .cm-null': { color: 'var(--cm-code-blue)' },
-  '.code .cm-meta': { color: 'var(--cm-code-blue)' },
-  '.code .cm-unit': { color: 'var(--cm-code-blue)' },
-  '.code .cm-qualifier': { color: 'var(--cm-code-blue)' },
-  '.code .cm-builtin': { color: 'var(--cm-code-blue)' },
-  '.code .cm-property-name': { color: 'var(--cm-code-blue)' },
+  '.code .cm-operator-keyword': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-definition-keyword': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-module-keyword': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-null': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-meta': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-unit': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-qualifier': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-builtin': { color: 'var(--zettlr-editor-code-blue)' },
+  '.code .cm-property-name': { color: 'var(--zettlr-editor-code-blue)' },
 
-  '.code .cm-tag-name': { color: 'var(--cm-code-cyan)' },
-  '.code .cm-modifier': { color: 'var(--cm-code-cyan)' },
-  '.code .cm-variable-name': { color: 'var(--cm-code-cyan)' },
-  '.code .cm-variable': { color: 'var(--cm-code-cyan)' },
+  '.code .cm-tag-name': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.code .cm-modifier': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.code .cm-variable-name': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.code .cm-variable': { color: 'var(--zettlr-editor-code-cyan)' },
 
-  '.code .cm-attribute-name': { color: 'var(--cm-code-orange)' },
-  '.code .cm-regexp': { color: 'var(--cm-code-orange)' },
+  '.code .cm-attribute-name': { color: 'var(--zettlr-editor-code-orange)' },
+  '.code .cm-regexp': { color: 'var(--zettlr-editor-code-orange)' },
 
-  '.code .cm-name': { color: 'var(--cm-code-yellow)' },
-  '.code .cm-class-name': { color: 'var(--cm-code-yellow)' },
-  '.code .cm-type-name': { color: 'var(--cm-code-yellow)' },
-  '.code .cm-changed': { color: 'var(--cm-code-yellow)' },
+  '.code .cm-name': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.code .cm-class-name': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.code .cm-type-name': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.code .cm-changed': { color: 'var(--zettlr-editor-code-yellow)' },
 
-  '.code .cm-deleted': { color: 'var(--cm-code-red)' },
-  '.code .cm-negative': { color: 'var(--cm-code-red)' },
-  '.code .cm-invalid': { color: 'var(--cm-code-red)' },
+  '.code .cm-deleted': { color: 'var(--zettlr-editor-code-red)' },
+  '.code .cm-negative': { color: 'var(--zettlr-editor-code-red)' },
+  '.code .cm-invalid': { color: 'var(--zettlr-editor-code-red)' },
 })
 
 export const mainOverride = [
