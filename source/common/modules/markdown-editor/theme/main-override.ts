@@ -283,7 +283,7 @@ const mainTheme = EditorView.baseTheme({
     color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-info-string': {
-    opacity: 'var(--zettlr-editor-opactiy)',
+    opacity: 'var(--zettlr-editor-opacity)',
   },
   '.cm-link': {
     color: 'var(--zettlr-editor-primary-color)',
