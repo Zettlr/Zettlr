@@ -245,6 +245,7 @@ const mainTheme = EditorView.baseTheme({
   },
   '.cm-citation-locator': {
     fontStyle: 'var(--zettlr-editor-emphasis-font)',
+    textDecoration: 'var(--zettlr-editor-line-decoration)'
   },
   '.cm-citation-suppress-author-flag': {
     color: 'var(--zettlr-editor-error-color)',
@@ -296,7 +297,7 @@ const mainTheme = EditorView.baseTheme({
   },
   '.cm-link': {
     color: 'var(--zettlr-editor-primary-color)',
-    textDecoration: 'var(--zettlr-editor-link-decoration)',
+    textDecoration: 'var(--zettlr-editor-line-decoration)',
   },
   '.cm-string': {
     color: 'var(--zettlr-editor-secondary-color)',
@@ -306,7 +307,7 @@ const mainTheme = EditorView.baseTheme({
   },
   '.cm-url': {
     color: 'var(--zettlr-editor-primary-color)',
-    textDecoration: 'var(--zettlr-editor-link-decoration)',
+    textDecoration: 'var(--zettlr-editor-line-decoration)',
   },
   '.cm-yaml-frontmatter-start': {
     fontFamily: 'var(--zettlr-editor-code-font)',
@@ -324,7 +325,7 @@ const mainTheme = EditorView.baseTheme({
     backgroundColor: 'var(--zettlr-editor-accent-bg)',
   },
   '.cm-zkn-link': {
-    textDecoration: 'var(--zettlr-editor-link-decoration)',
+    textDecoration: 'var(--zettlr-editor-line-decoration)',
   },
   '.cm-zkn-tag':  {
     color: 'var(--zettlr-editor-primary-color)',
