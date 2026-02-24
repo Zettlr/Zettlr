@@ -52,7 +52,7 @@ const toolbarControls: ToolbarControl[] = [
   },
   {
     type: 'spacer',
-    size: '3x'
+    size: '5x'
   },
   {
     type: 'toggle',
