@@ -143,7 +143,7 @@ export default class FileNew extends ZettlrCommand {
         } else {
           // Remove the file before creating it anew. We'll use the
           // corresponding command for that.
-          this._app.documents.closeFileEverywhere(absPath)
+          await this._app.documents.closeFileEverywhere(absPath)
           await this._app.fsal.removeFile(absPath)
         }
       }
