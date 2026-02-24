@@ -315,7 +315,7 @@ function collapseAll (): void {
       }
     }
   }
-  
+
   // If all of the children are collapsed, then collapse the roots.
   if (onlyRoots) {
     windowStateStore.uncollapsedDirectories.splice(0)
@@ -324,13 +324,13 @@ function collapseAll (): void {
 
 function closeAllFiles (): void {
   for (const rootFile of getFiles.value) {
-    closeFile(rootFile.path, documentTreeStore.paneData, props.windowId)
+    closeFile(rootFile.path)
   }
 }
 
 function closeAllWorkspaces (): void {
   for (const dir of getDirectories.value) {
-    closeWorkspace(dir.path, documentTreeStore.paneData, props.windowId)
+    closeWorkspace(dir.path)
   }
 }
 
