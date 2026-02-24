@@ -38,7 +38,7 @@ const codeBackgroundDark = '#002024'
 
 const errorColor = '#d02325'
 
-const linkDecoration = 'underline'
+const lineDecoration = 'underline'
 
 export const bordeauxVarsLight: ThemeVars = {
   ...defaultVarsLight,
@@ -50,7 +50,7 @@ export const bordeauxVarsLight: ThemeVars = {
   '--zettlr-editor-font': font,
   '--zettlr-editor-code-font': codeFont,
   '--zettlr-editor-error-color': errorColor,
-  '--zettlr-editor-link-decoration': linkDecoration,
+  '--zettlr-editor-line-decoration': lineDecoration,
 }
 
 export const bordeauxVarsDark: ThemeVars = {
@@ -66,7 +66,7 @@ export const bordeauxVarsDark: ThemeVars = {
   '--zettlr-editor-citation-bg': citationBackgroundDark,
   '--zettlr-editor-code-bg': codeBackgroundDark,
   '--zettlr-editor-error-color': errorColor,
-  '--zettlr-editor-link-decoration': linkDecoration,
+  '--zettlr-editor-line-decoration': lineDecoration,
 }
 
 export const themeBordeauxLight = EditorView.theme({
