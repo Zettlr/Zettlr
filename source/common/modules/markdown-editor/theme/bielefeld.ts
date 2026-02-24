@@ -28,22 +28,22 @@ const codeFont = '"Liberation Mono", monospace'
 
 const bielefeldVarsLight: ThemeVars = {
   ...defaultVarsLight,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-scroller-bg': scrollerBackground,
-  '--cm-selection-color': selectionLight,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-scroller-bg': scrollerBackground,
+  '--zettlr-editor-selection-color': selectionLight,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
 }
 
 const bielefeldVarsDark: ThemeVars = {
   ...defaultVarsDark,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-scroller-bg': scrollerBackgroundDark,
-  '--cm-selection-color': selectionDark,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-scroller-bg': scrollerBackgroundDark,
+  '--zettlr-editor-selection-color': selectionDark,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
 }
 
 export const themeBielefeldLight = EditorView.theme({

@@ -24,20 +24,20 @@ const codeFont = 'Inconsolata, monospace'
 
 export const karlMarxStadtVarsLight: ThemeVars = {
   ...defaultVarsLight,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-selection-color': selectionLight,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-selection-color': selectionLight,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
 }
 
 export const karlMarxStadtVarsDark: ThemeVars = {
   ...defaultVarsDark,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-selection-color': selectionDark,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-selection-color': selectionDark,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
 }
 
 export const themeKarlMarxStadtLight = EditorView.theme({
