@@ -252,6 +252,10 @@ const mainTheme = EditorView.baseTheme({
   '.cm-citation': {
     color: 'var(--zettlr-editor-citation-color)',
   },
+  // For more diversity, don't color the link marks
+  '.cm-link.cm-code-mark': {
+    color: 'inherit',
+  },
   // Don't change the font for `*`, `-`, and `_`, etc. formatting characters
   '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list)': {
     fontFamily: 'var(--zettlr-editor-code-font)',
@@ -270,6 +274,11 @@ const mainTheme = EditorView.baseTheme({
   },
   '.cm-emphasis': {
     fontStyle: 'var(--zettlr-editor-emphasis-font)',
+  },
+  // Shown when a region is folded
+  '.cm-foldPlaceholder': {
+    backgroundColor: 'transparent',
+    borderColor: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-gutters': {
     fontFamily: 'var(--zettlr-editor-code-font)',
@@ -340,16 +349,6 @@ const mainTheme = EditorView.baseTheme({
   '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: 'var(--zettlr-editor-header-4-size)' },
   '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: 'var(--zettlr-editor-header-5-size)' },
   '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: 'var(--zettlr-editor-header-6-size)' },
-
-  // Shown when a region is folded
-  '.cm-foldPlaceholder': {
-    backgroundColor: 'transparent',
-    borderColor: 'var(--zettlr-editor-accent-bg)',
-  },
-  // For more diversity, don't color the link marks
-  '.cm-link.cm-code-mark': {
-    color: 'inherit',
-  },
 })
 
 /* Code Theme
