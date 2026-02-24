@@ -18,51 +18,51 @@ import { EditorView } from '@codemirror/view'
 
 export interface ThemeVars {
   [selector: string]: string|number // necessary to match the type of StyleSpec
-  '--cm-primary-color': string
-  '--cm-secondary-color': string
-  '--cm-scroller-color': string
-  '--cm-scroller-bg': string
-  '--cm-selection-color': string
-  '--cm-highlight-color': string
-  '--cm-error-color': string
-  '--cm-opacity': string|number
-  '--cm-font': string
-  '--cm-code-font': string
-  '--cm-emphasis-font': string
-  '--cm-strong-font': string
-  '--cm-header-font': string
-  '--cm-citation-color': string,
-  '--cm-citation-bg': string
-  '--cm-code-color': string
-  '--cm-code-bg': string
-  '--cm-escape-color': string
-  '--cm-link-decoration': string
-  '--cm-header-1-size': string
-  '--cm-header-2-size': string
-  '--cm-header-3-size': string
-  '--cm-header-4-size': string
-  '--cm-header-5-size': string
-  '--cm-header-6-size': string
+  '--zettlr-editor-primary-color': string
+  '--zettlr-editor-secondary-color': string
+  '--zettlr-editor-scroller-color': string
+  '--zettlr-editor-scroller-bg': string
+  '--zettlr-editor-selection-color': string
+  '--zettlr-editor-highlight-color': string
+  '--zettlr-editor-error-color': string
+  '--zettlr-editor-opacity': string|number
+  '--zettlr-editor-font': string
+  '--zettlr-editor-code-font': string
+  '--zettlr-editor-emphasis-font': string
+  '--zettlr-editor-strong-font': string
+  '--zettlr-editor-header-font': string
+  '--zettlr-editor-citation-color': string,
+  '--zettlr-editor-citation-bg': string
+  '--zettlr-editor-code-color': string
+  '--zettlr-editor-code-bg': string
+  '--zettlr-editor-escape-color': string
+  '--zettlr-editor-link-decoration': string
+  '--zettlr-editor-header-1-size': string
+  '--zettlr-editor-header-2-size': string
+  '--zettlr-editor-header-3-size': string
+  '--zettlr-editor-header-4-size': string
+  '--zettlr-editor-header-5-size': string
+  '--zettlr-editor-header-6-size': string
 }
 
 export interface CodeThemeVars {
   [selector: string]: string|number // necessary to match the type of StyleSpec
-  '--cm-code-base-0': string
-  '--cm-code-base-1': string
-  '--cm-code-base-2': string
-  '--cm-code-base-3': string
-  '--cm-code-base-00': string
-  '--cm-code-base-01': string
-  '--cm-code-base-02': string
-  '--cm-code-base-03': string
-  '--cm-code-yellow': string
-  '--cm-code-orange': string
-  '--cm-code-red': string
-  '--cm-code-magenta': string
-  '--cm-code-violet': string
-  '--cm-code-blue': string
-  '--cm-code-cyan': string
-  '--cm-code-green': string
+  '--zettlr-editor-code-base-0': string
+  '--zettlr-editor-code-base-1': string
+  '--zettlr-editor-code-base-2': string
+  '--zettlr-editor-code-base-3': string
+  '--zettlr-editor-code-base-00': string
+  '--zettlr-editor-code-base-01': string
+  '--zettlr-editor-code-base-02': string
+  '--zettlr-editor-code-base-03': string
+  '--zettlr-editor-code-yellow': string
+  '--zettlr-editor-code-orange': string
+  '--zettlr-editor-code-red': string
+  '--zettlr-editor-code-magenta': string
+  '--zettlr-editor-code-violet': string
+  '--zettlr-editor-code-blue': string
+  '--zettlr-editor-code-cyan': string
+  '--zettlr-editor-code-green': string
 }
 
 const primaryColor = '#1cb27e'
@@ -115,59 +115,59 @@ const headerSize5 = '1em'
 const headerSize6 = '1em'
 
 export const defaultVarsLight: ThemeVars = {
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-scroller-color': scrollerColor,
-  '--cm-scroller-bg': scrollerBackground,
-  '--cm-selection-color': selectionLight,
-  '--cm-highlight-color': highlightLight,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
-  '--cm-emphasis-font': emphasisFont,
-  '--cm-strong-font': strongFont,
-  '--cm-header-font': headerFont,
-  '--cm-citation-color': citationColor,
-  '--cm-citation-bg': citationBackground,
-  '--cm-code-color': codeColor,
-  '--cm-code-bg': codeBackground,
-  '--cm-escape-color': escapeColor,
-  '--cm-error-color': errorColor,
-  '--cm-opacity': opacity,
-  '--cm-link-decoration': linkDecoration,
-  '--cm-header-1-size': headerSize1,
-  '--cm-header-2-size': headerSize2,
-  '--cm-header-3-size': headerSize3,
-  '--cm-header-4-size': headerSize4,
-  '--cm-header-5-size': headerSize5,
-  '--cm-header-6-size': headerSize6,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-scroller-color': scrollerColor,
+  '--zettlr-editor-scroller-bg': scrollerBackground,
+  '--zettlr-editor-selection-color': selectionLight,
+  '--zettlr-editor-highlight-color': highlightLight,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
+  '--zettlr-editor-emphasis-font': emphasisFont,
+  '--zettlr-editor-strong-font': strongFont,
+  '--zettlr-editor-header-font': headerFont,
+  '--zettlr-editor-citation-color': citationColor,
+  '--zettlr-editor-citation-bg': citationBackground,
+  '--zettlr-editor-code-color': codeColor,
+  '--zettlr-editor-code-bg': codeBackground,
+  '--zettlr-editor-escape-color': escapeColor,
+  '--zettlr-editor-error-color': errorColor,
+  '--zettlr-editor-opacity': opacity,
+  '--zettlr-editor-link-decoration': linkDecoration,
+  '--zettlr-editor-header-1-size': headerSize1,
+  '--zettlr-editor-header-2-size': headerSize2,
+  '--zettlr-editor-header-3-size': headerSize3,
+  '--zettlr-editor-header-4-size': headerSize4,
+  '--zettlr-editor-header-5-size': headerSize5,
+  '--zettlr-editor-header-6-size': headerSize6,
 }
 
 export const defaultVarsDark: ThemeVars = {
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-scroller-color': scrollerColorDark,
-  '--cm-scroller-bg': scrollerBackgroundDark,
-  '--cm-selection-color': selectionDark,
-  '--cm-highlight-color': highlightDark,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
-  '--cm-emphasis-font': emphasisFont,
-  '--cm-strong-font': strongFont,
-  '--cm-header-font': headerFont,
-  '--cm-citation-color': citationColorDark,
-  '--cm-citation-bg': citationBackgroundDark,
-  '--cm-code-color': codeColorDark,
-  '--cm-code-bg': codeBackgroundDark,
-  '--cm-escape-color': escapeColorDark,
-  '--cm-error-color': errorColor,
-  '--cm-opacity': opacity,
-  '--cm-link-decoration': linkDecoration,
-  '--cm-header-1-size': headerSize1,
-  '--cm-header-2-size': headerSize2,
-  '--cm-header-3-size': headerSize3,
-  '--cm-header-4-size': headerSize4,
-  '--cm-header-5-size': headerSize5,
-  '--cm-header-6-size': headerSize6,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-scroller-color': scrollerColorDark,
+  '--zettlr-editor-scroller-bg': scrollerBackgroundDark,
+  '--zettlr-editor-selection-color': selectionDark,
+  '--zettlr-editor-highlight-color': highlightDark,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
+  '--zettlr-editor-emphasis-font': emphasisFont,
+  '--zettlr-editor-strong-font': strongFont,
+  '--zettlr-editor-header-font': headerFont,
+  '--zettlr-editor-citation-color': citationColorDark,
+  '--zettlr-editor-citation-bg': citationBackgroundDark,
+  '--zettlr-editor-code-color': codeColorDark,
+  '--zettlr-editor-code-bg': codeBackgroundDark,
+  '--zettlr-editor-escape-color': escapeColorDark,
+  '--zettlr-editor-error-color': errorColor,
+  '--zettlr-editor-opacity': opacity,
+  '--zettlr-editor-link-decoration': linkDecoration,
+  '--zettlr-editor-header-1-size': headerSize1,
+  '--zettlr-editor-header-2-size': headerSize2,
+  '--zettlr-editor-header-3-size': headerSize3,
+  '--zettlr-editor-header-4-size': headerSize4,
+  '--zettlr-editor-header-5-size': headerSize5,
+  '--zettlr-editor-header-6-size': headerSize6,
 }
 
 export const defaultLight = EditorView.theme({
@@ -394,22 +394,22 @@ const CYAN = '#2aa198'
 const GREEN = '#859900'
 
 export const defaultCodeVars: CodeThemeVars = {
-  '--cm-code-base-0': BASE_0,
-  '--cm-code-base-1': BASE_1,
-  '--cm-code-base-2': BASE_2,
-  '--cm-code-base-3': BASE_3,
-  '--cm-code-base-00': BASE_00,
-  '--cm-code-base-01': BASE_01,
-  '--cm-code-base-02': BASE_02,
-  '--cm-code-base-03': BASE_03,
-  '--cm-code-yellow': YELLOW,
-  '--cm-code-orange': ORANGE,
-  '--cm-code-red': RED,
-  '--cm-code-magenta': MAGENTA,
-  '--cm-code-violet': VIOLET,
-  '--cm-code-blue': BLUE,
-  '--cm-code-cyan': CYAN,
-  '--cm-code-green': GREEN,
+  '--zettlr-editor-code-base-0': BASE_0,
+  '--zettlr-editor-code-base-1': BASE_1,
+  '--zettlr-editor-code-base-2': BASE_2,
+  '--zettlr-editor-code-base-3': BASE_3,
+  '--zettlr-editor-code-base-00': BASE_00,
+  '--zettlr-editor-code-base-01': BASE_01,
+  '--zettlr-editor-code-base-02': BASE_02,
+  '--zettlr-editor-code-base-03': BASE_03,
+  '--zettlr-editor-code-yellow': YELLOW,
+  '--zettlr-editor-code-orange': ORANGE,
+  '--zettlr-editor-code-red': RED,
+  '--zettlr-editor-code-magenta': MAGENTA,
+  '--zettlr-editor-code-violet': VIOLET,
+  '--zettlr-editor-code-blue': BLUE,
+  '--zettlr-editor-code-cyan': CYAN,
+  '--zettlr-editor-code-green': GREEN,
 }
 
 export const codeTheme = EditorView.baseTheme({

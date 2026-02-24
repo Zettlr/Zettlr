@@ -25,20 +25,20 @@ const codeFont = 'Inconsolata, monospace'
 
 const berlinVarsLight: ThemeVars = {
   ...defaultVarsLight,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-selection-color': selectionLight,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-selection-color': selectionLight,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
 }
 
 const berlinVarsDark: ThemeVars = {
   ...defaultVarsDark,
-  '--cm-primary-color': primaryColor,
-  '--cm-secondary-color': primaryColor,
-  '--cm-selection-color': selectionDark,
-  '--cm-font': fontFamily,
-  '--cm-code-font': codeFont,
+  '--zettlr-editor-primary-color': primaryColor,
+  '--zettlr-editor-secondary-color': primaryColor,
+  '--zettlr-editor-selection-color': selectionDark,
+  '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-code-font': codeFont,
 }
 
 export const themeBerlinLight = EditorView.theme({
