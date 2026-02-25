@@ -19,7 +19,7 @@ const primaryColor = '#1bd4e9'
 const secondaryColor = '#d02325'
 
 const scrollerColor = 'var(--grey-5)'
-const scrollerColorDark = '#839496'
+const scrollerColorDark = 'var(--grey-2)'
 
 const scrollerBackground = '#fffff8'
 const scrollerBackgroundDark = '#002b36'
@@ -34,6 +34,7 @@ const codeFont = 'Inconsolata, monospace'
 
 const citationBackgroundDark = '#002024'
 
+const codeColorDark = 'var(--grey-2)'
 const codeBackgroundDark = '#002024'
 
 const errorColor = '#d02325'
@@ -64,6 +65,7 @@ export const bordeauxVarsDark: ThemeVars = {
   '--zettlr-editor-font': font,
   '--zettlr-editor-code-font': codeFont,
   '--zettlr-editor-citation-bg': citationBackgroundDark,
+  '--zettlr-editor-code-color': codeColorDark,
   '--zettlr-editor-code-bg': codeBackgroundDark,
   '--zettlr-editor-error-color': errorColor,
   '--zettlr-editor-line-decoration': lineDecoration,
@@ -72,11 +74,9 @@ export const bordeauxVarsDark: ThemeVars = {
 export const themeBordeauxLight = EditorView.theme({
   '&': bordeauxVarsLight,
   '.cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' },
-  // '.cm-citation-citekey': { color: '#d02325' },
 }, { dark: false })
 
 export const themeBordeauxDark = EditorView.theme({
   '&': bordeauxVarsDark,
   '.cm-link, .cm-strong, .cm-emphasis': { color: '#93a1a1' },
-  // '.cm-citation-citekey': { color: '#d02325' },
 }, { dark: true })
