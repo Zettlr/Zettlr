@@ -27,8 +27,8 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // explicitly set.
   const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
-  const pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
-  const htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
+  let pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
+  let htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
 
   // Get the corresponding defaults file
   const defaultKeys = {
@@ -45,10 +45,24 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   }
 
   // Write to an intermediary HTML file which we will convert to PDF below.
-  const defaultsFile = await ctx.writeDefaults(allDefaults[0].name, defaultKeys)
+  const defaults = await ctx.writeDefaults(allDefaults[0].name, defaultKeys)
+
+  // Check that the defaults profile did not change
+  // `output-file`, and if it did, update the target.
+  if (defaults['output-file'] !== pdfFilePath) {
+    const parsed = path.parse(defaults['output-file'] as string)
+    pdfFilePath = path.join(parsed.dir, parsed.name + '.pdf')
+    htmlFilePath = path.join(parsed.dir, parsed.name + '.html')
+
+    if (!path.isAbsolute(pdfFilePath)) {
+      pdfFilePath = path.join(options.targetDirectory, pdfFilePath)
+      htmlFilePath = path.join(options.targetDirectory, htmlFilePath)
+      defaults['output-file'] = htmlFilePath
+    }
+  }
 
   // Run Pandoc
-  const pandocOutput = await ctx.runPandoc(defaultsFile)
+  const pandocOutput = await ctx.runPandoc(defaults)
 
   // Without XeLaTeX, people can still export to PDF using Chromium's print
   // API. Chromium's PDF abilities are actually quite good.
