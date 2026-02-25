@@ -39,7 +39,6 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   }
   const defaults = await ctx.writeDefaults(options.profile.name, defaultKeys)
 
-  console.log('OG TARGET: ', target)
   // Check that the defaults profile did not change
   // `output-file`, and if it did, update the target.
   if (defaults['output-file'] !== target) {
@@ -52,7 +51,6 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
     }
   }
 
-  console.log('TARGET: ', target)
   // Run Pandoc
   const pandocOutput = await ctx.runPandoc(defaults)
 
