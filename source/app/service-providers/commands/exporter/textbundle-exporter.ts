@@ -48,9 +48,12 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
       options.profile.writer === 'textpack',
       path.basename(sourceFiles[0])
     )
-  } catch (err: any) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      output.stderr.push(err.message as string)
+    }
+
     output.code = 1
-    output.stderr.push(err.message as string)
   }
 
   return output

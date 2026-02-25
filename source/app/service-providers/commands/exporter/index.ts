@@ -23,7 +23,7 @@ import { promises as fs } from 'fs'
 import isFile from '@common/util/is-file'
 
 // Exporters
-import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
+import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocDefaults, PandocRunnerOutput } from './types'
 import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
@@ -90,10 +90,10 @@ export async function makeExport (
 
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
-    runPandoc: async (defaults: string) => {
+    runPandoc: async (defaults: PandocDefaults) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
-    writeDefaults: async (filename: string, overrides: any = {}) => {
+    writeDefaults: async (filename: string, overrides: PandocDefaults = {}) => {
       return await writeDefaults(filename, overrides, logger, config, assets, options.defaultsOverride)
     },
     listDefaults: async () => {
@@ -112,7 +112,10 @@ export async function makeExport (
   }
 }
 
-async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: string): Promise<PandocRunnerOutput> {
+async function runPandoc (logger: LogProvider, defaults: PandocDefaults, cwd?: string): Promise<PandocRunnerOutput> {
+  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
+  await fs.writeFile(defaultsFile, YAML.stringify(defaults), { encoding: 'utf8' })
+
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
@@ -153,7 +156,11 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
   output.stdout = output.stdout.join('').split('\n').filter(line => line.trim() !== '')
 
   if (output.stdout.length > 0) {
-    logger.info('This Pandoc run produced additional output.', output.stdout)
+    logger.info('This Pandoc run produced additional output.', output.stdout.join('\n'))
+  }
+
+  if (output.stderr.length > 0) {
+    logger.warning('This Pandoc run produced additional output.', output.stderr.join('\n'))
   }
 
   return output
@@ -163,14 +170,13 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
 
 async function writeDefaults (
   filename: string, // The profile to use
-  properties: any, // Contains properties that will be written to the defaults
+  properties: PandocDefaults, // Contains properties that will be written to the defaults
   logger: LogProvider,
   config: ConfigProvider,
   assets: AssetsProvider,
   defaultsOverride?: DefaultsOverride
-): Promise<string> {
-  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
-  const defaults: any = await assets.getDefaultsFile(filename)
+): Promise<PandocDefaults> {
+  const defaults: PandocDefaults = await assets.getDefaultsFile(filename)
 
   const cfg = config.get()
   const { cslLibrary, cslStyle, stripTags, stripLinks, enforceMarkSupport } = cfg.export
@@ -203,7 +209,7 @@ async function writeDefaults (
   // respects a file-defined bibliography, this is our best shot.
   // const bibliography = global.citeproc.getSelectedDatabase()
   if (isFile(cslLibrary)) {
-    if ('bibliography' in defaults) {
+    if (defaults.bibliography !== undefined) {
       // Ensure the bibliography is an array, not a single string.
       if (!Array.isArray(defaults.bibliography)) {
         defaults.bibliography = [defaults.bibliography]
@@ -224,11 +230,11 @@ async function writeDefaults (
   // users can also add these manually to their files if they prefer. This way
   // any file's metadata will overwrite anything defined programmatically here
   // in the defaults.
-  if (!('metadata' in defaults)) {
+  if (defaults.metadata === undefined) {
     defaults.metadata = {}
   }
 
-  if (!('zettlr' in defaults.metadata)) {
+  if (defaults.metadata.zettlr === undefined) {
     defaults.metadata.zettlr = {}
   }
 
@@ -245,7 +251,7 @@ async function writeDefaults (
   }
 
   // Add all filters which are within the userData/lua-filter directory.
-  if (!('filters' in defaults)) {
+  if (defaults.filters === undefined) {
     defaults.filters = []
   }
 
@@ -258,17 +264,11 @@ async function writeDefaults (
     if (defaults[key] === undefined) {
       defaults[key] = properties[key]
     } else {
-      logger.info(`Default property \`${key}\` is already set: \`${defaults[key]}\``)
+      logger.info(`Default property \`${key}\` is already set: \`${YAML.stringify(defaults[key], { indent: 4, simpleKeys: false })}\``)
       logger.info(`Ignoring plugin property \`${key}\`: \`${properties[key]}\``)
     }
   }
 
-  const YAMLOptions = {
-    indent: 4,
-    simpleKeys: false
-  }
-  await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
-
   // Return the path to the defaults file
-  return defaultsFile
+  return defaults
 }
