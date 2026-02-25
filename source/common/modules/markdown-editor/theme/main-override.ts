@@ -95,8 +95,8 @@ const citationColorDark = 'var(--grey-4)'
 const citationBackground = 'var(--grey-0)'
 const citationBackgroundDark = 'var(--grey-7)'
 
-const codeColor = 'var(--grey-5)'
-const codeColorDark = 'var(--grey-0)'
+const codeColor = 'var(--grey-4)'
+const codeColorDark = 'var(--grey-2)'
 
 const codeBackground = 'var(--grey-0)'
 const codeBackgroundDark = 'var(--grey-7)'
@@ -200,12 +200,6 @@ const mainTheme = EditorView.baseTheme({
   // Copied with my blood from the DOM; the example on the website is wrong.
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: 'var(--zettlr-editor-selection-color)',
-  },
-  '.cm-comment': {
-    color: 'var(--zettlr-editor-code-color)',
-  },
-  '.cm-block-comment': {
-    color: 'var(--zettlr-editor-code-color)',
   },
   '.cm-monospace': {
     color: 'var(--zettlr-editor-code-color)',
@@ -400,55 +394,55 @@ export const codeTheme = EditorView.baseTheme({
   },
   '&dark .code': { color: 'var(--zettlr-editor-code-base-1)' },
 
-  '.code .cm-comment': { color: 'var(--zettlr-editor-code-base-00)' },
-  '.code .cm-line-comment': { color: 'var(--zettlr-editor-code-base-00)' },
-  '.code .cm-block-comment': { color: 'var(--zettlr-editor-code-base-00)' },
+  '.cm-comment': { color: 'var(--zettlr-editor-code-base-00)' },
+  '.cm-line-comment': { color: 'var(--zettlr-editor-code-base-00)' },
+  '.cm-block-comment': { color: 'var(--zettlr-editor-code-base-00)' },
 
   // Sort based on color; roughly sort based on function of the class.
-  '.code .cm-string': { color: 'var(--zettlr-editor-code-green)' },
-  '.code .cm-keyword': { color: 'var(--zettlr-editor-code-green)' },
-  '.code .cm-inserted': { color: 'var(--zettlr-editor-code-green)' },
-  '.code .cm-positive': { color: 'var(--zettlr-editor-code-green)' },
+  '.cm-string': { color: 'var(--zettlr-editor-code-green)' },
+  '.cm-keyword': { color: 'var(--zettlr-editor-code-green)' },
+  '.cm-inserted': { color: 'var(--zettlr-editor-code-green)' },
+  '.cm-positive': { color: 'var(--zettlr-editor-code-green)' },
 
-  '.code .cm-control-keyword': { color: 'var(--zettlr-editor-code-violet)' },
-  '.code .cm-atom': { color: 'var(--zettlr-editor-code-violet)' },
-  '.code .cm-color': { color: 'var(--zettlr-editor-code-violet)' },
-  '.code .cm-number': { color: 'var(--zettlr-editor-code-violet)' },
-  '.code .cm-integer': { color: 'var(--zettlr-editor-code-violet)' },
-  '.code .cm-bool': { color: 'var(--zettlr-editor-code-violet)' },
+  '.cm-control-keyword': { color: 'var(--zettlr-editor-code-violet)' },
+  '.cm-atom': { color: 'var(--zettlr-editor-code-violet)' },
+  '.cm-color': { color: 'var(--zettlr-editor-code-violet)' },
+  '.cm-number': { color: 'var(--zettlr-editor-code-violet)' },
+  '.cm-integer': { color: 'var(--zettlr-editor-code-violet)' },
+  '.cm-bool': { color: 'var(--zettlr-editor-code-violet)' },
 
-  '.code .cm-property': { color: 'var(--zettlr-editor-code-magenta)' },
-  '.code .cm-operator': { color: 'var(--zettlr-editor-code-magenta)' },
-  '.code .cm-compare-operator': { color: 'var(--zettlr-editor-code-magenta)' },
-  '.code .cm-arithmetic-operator': { color: 'var(--zettlr-editor-code-magenta)' },
-  '.code .cm-self': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.cm-property': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.cm-operator': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.cm-compare-operator': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.cm-arithmetic-operator': { color: 'var(--zettlr-editor-code-magenta)' },
+  '.cm-self': { color: 'var(--zettlr-editor-code-magenta)' },
 
-  '.code .cm-operator-keyword': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-definition-keyword': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-module-keyword': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-null': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-meta': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-unit': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-qualifier': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-builtin': { color: 'var(--zettlr-editor-code-blue)' },
-  '.code .cm-property-name': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-operator-keyword': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-definition-keyword': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-module-keyword': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-null': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-meta': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-unit': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-qualifier': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-builtin': { color: 'var(--zettlr-editor-code-blue)' },
+  '.cm-property-name': { color: 'var(--zettlr-editor-code-blue)' },
 
-  '.code .cm-tag-name': { color: 'var(--zettlr-editor-code-cyan)' },
-  '.code .cm-modifier': { color: 'var(--zettlr-editor-code-cyan)' },
-  '.code .cm-variable-name': { color: 'var(--zettlr-editor-code-cyan)' },
-  '.code .cm-variable': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.cm-tag-name': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.cm-modifier': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.cm-variable-name': { color: 'var(--zettlr-editor-code-cyan)' },
+  '.cm-variable': { color: 'var(--zettlr-editor-code-cyan)' },
 
-  '.code .cm-attribute-name': { color: 'var(--zettlr-editor-code-orange)' },
-  '.code .cm-regexp': { color: 'var(--zettlr-editor-code-orange)' },
+  '.cm-attribute-name': { color: 'var(--zettlr-editor-code-orange)' },
+  '.cm-regexp': { color: 'var(--zettlr-editor-code-orange)' },
 
-  '.code .cm-name': { color: 'var(--zettlr-editor-code-yellow)' },
-  '.code .cm-class-name': { color: 'var(--zettlr-editor-code-yellow)' },
-  '.code .cm-type-name': { color: 'var(--zettlr-editor-code-yellow)' },
-  '.code .cm-changed': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.cm-name': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.cm-class-name': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.cm-type-name': { color: 'var(--zettlr-editor-code-yellow)' },
+  '.cm-changed': { color: 'var(--zettlr-editor-code-yellow)' },
 
-  '.code .cm-deleted': { color: 'var(--zettlr-editor-code-red)' },
-  '.code .cm-negative': { color: 'var(--zettlr-editor-code-red)' },
-  '.code .cm-invalid': { color: 'var(--zettlr-editor-code-red)' },
+  '.cm-deleted': { color: 'var(--zettlr-editor-code-red)' },
+  '.cm-negative': { color: 'var(--zettlr-editor-code-red)' },
+  '.cm-invalid': { color: 'var(--zettlr-editor-code-red)' },
 })
 
 export const mainOverride = [
