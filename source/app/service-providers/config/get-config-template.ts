@@ -132,7 +132,7 @@ export interface ConfigOptions {
     enableTableHelper: boolean
     indentUnit: number
     indentWithTabs: boolean
-    indentLine: boolean
+    alwaysIndentLineOnTab: boolean
     fontSize: number
     countChars: boolean
     inputMode: 'default'|'vim'|'emacs'
