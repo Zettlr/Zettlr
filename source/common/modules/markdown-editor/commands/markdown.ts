@@ -640,7 +640,7 @@ export function insertTabOrSpace (target: EditorView): boolean {
 
   let result = false
   // If any range is not empty, indent the line
-  if (indentLine || target.state.selection.ranges.some(r => !r.empty)) {
+  if (alwaysIndentLineOnTab || target.state.selection.ranges.some(r => !r.empty)) {
     // Store the return value of `indentMore` because
     // we need to reset the `indentWithTabs` config value
     result = indentMore(target)
