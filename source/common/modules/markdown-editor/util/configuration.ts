@@ -115,7 +115,7 @@ export function getDefaultConfig (): EditorConfiguration {
     idGen: '',
     indentUnit: 4,
     indentWithTabs: false,
-    indentLine: false,
+    alwaysIndentLineOnTab: false,
     linkPreference: 'always',
     zknLinkFormat: 'link|title',
     linkWithIDIfPossible: false,
