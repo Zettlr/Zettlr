@@ -627,7 +627,7 @@ export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', at
  * @returns {boolean}
  */
 export function insertTabOrSpace (target: EditorView): boolean {
-  const { indentWithTabs, indentLine } = target.state.field(configField)
+  const { indentWithTabs, alwaysIndentLineOnTab } = target.state.field(configField)
 
   const tree = syntaxTree(target.state)
   // Short circuit on the boolean before checking the syntax tree
