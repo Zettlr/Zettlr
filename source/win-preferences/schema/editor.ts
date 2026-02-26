@@ -322,7 +322,7 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
         {
           type: 'checkbox',
           label: trans('Always indent the current line when pressing Tab'),
-          model: 'editor.indentLine'
+          model: 'editor.alwaysIndentLineOnTab'
         },
         { type: 'separator' },
         {
