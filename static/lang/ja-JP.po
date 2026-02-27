@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 4.0.0-beta.5\n"
+"Project-Id-Version: Zettlr 4.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-02-16 14:58+0000\n"
-"PO-Revision-Date: 2026-02-20 15:02+0900\n"
+"PO-Revision-Date: 2026-02-27 09:32+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -4465,7 +4465,7 @@ msgstr "再有効化"
 
 #: source/win-preferences/schema/spellchecking.ts:235
 msgid "No ignored rules."
-msgstr "無視されたルールはありません。"
+msgstr "無効化されたルールはありません。"
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
@@ -4636,7 +4636,7 @@ msgstr "フォルダーへのパス"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
-msgstr "引用の自動補完時のどのように挿入しますか?"
+msgstr "引用の自動補完時どのように挿入しますか?"
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation database (CSL JSON or BibTex)"
