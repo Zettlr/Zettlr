@@ -131,6 +131,7 @@
     v-bind:editable="props.field.editable"
     v-bind:striped="props.field.striped"
     v-bind:addable="props.field.addable"
+    v-bind:optional="props.field.optional"
     v-bind:searchable="props.field.searchable"
     v-bind:search-label="props.field.searchLabel"
     v-bind:empty-message="props.field.emptyMessage"

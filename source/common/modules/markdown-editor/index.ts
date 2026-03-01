@@ -32,9 +32,11 @@ import {
   type EditorSelection,
   EditorState,
   Text,
+  type ChangeDesc,
   type StateEffect,
   type Extension,
-  type SelectionRange
+  type SelectionRange,
+  ChangeSet,
 } from '@codemirror/state'
 import { foldEffect, foldState, syntaxTree } from '@codemirror/language'
 
@@ -100,7 +102,11 @@ import { darkModeEffect } from './theme/dark-mode'
 import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 import { moveSection } from './commands/move-section'
+import { hunspellChangesEffect, hunspellChangesField } from './linters/hunspell'
+import { ltChangesEffect, ltChangesField } from './linters/language-tool'
+import { forEachDiagnostic, setDiagnosticsEffect, type Diagnostic } from '@codemirror/lint'
 import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
+import { refreshLinterEffect } from './linters/utils'
 
 export interface DocumentWrapper {
   path: string
@@ -179,6 +185,15 @@ export interface EditorViewPersistentState {
    * A decoration set containing currently folded ranges.
    */
   foldedRanges: DecorationSet
+
+  /**
+   * Linter diagnostics
+   */
+  linters: {
+    diagnostics: Diagnostic[]
+    spellcheckChanges: ChangeDesc
+    languagetoolChanges: ChangeDesc
+  }
 }
 
 export default class MarkdownEditor extends EventEmitter {
@@ -444,9 +459,19 @@ export default class MarkdownEditor extends EventEmitter {
     if (persistentState !== undefined) {
       // Now that the correct document has been loaded, there will be content
       // and we can restore the persisted information.
-      const { scrollSnapshot, selection, foldedRanges } = persistentState
+      const { scrollSnapshot, selection, foldedRanges, linters } = persistentState
 
       const effects: StateEffect<any>[] = [scrollSnapshot]
+
+      effects.push(setDiagnosticsEffect.of(linters.diagnostics))
+
+      linters.spellcheckChanges.iterChangedRanges((_,__, fromB, toB) => {
+        effects.push(hunspellChangesEffect.of({ from: fromB, to: toB }))
+      })
+
+      linters.languagetoolChanges.iterChangedRanges((_,__, fromB, toB) => {
+        effects.push(ltChangesEffect.of({ from: fromB, to: toB }))
+      })
 
       const cursor = foldedRanges.iter()
       while (cursor.value) {
@@ -488,10 +513,26 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {EditorViewPersistentState}  The persistent state object.
    */
   public get persistentState (): EditorViewPersistentState {
+    const scrollSnapshot = this._instance.scrollSnapshot()
+    const selection = this._instance.state.selection
+    const foldedRanges = this._instance.state.field(foldState, false) ?? Decoration.set([])
+
+    const diagnostics: Diagnostic[] = []
+    forEachDiagnostic(this._instance.state, (d) => diagnostics.push(d))
+
+    const docLength = this._instance.state.doc.length
+    const spellcheckChanges = this._instance.state.field(hunspellChangesField, false) ?? ChangeSet.empty(docLength).desc
+    const languagetoolChanges = this._instance.state.field(ltChangesField, false) ?? ChangeSet.empty(docLength).desc
+
     return {
-      scrollSnapshot: this._instance.scrollSnapshot(),
-      selection: this._instance.state.selection,
-      foldedRanges: this._instance.state.field(foldState, false) ?? Decoration.set([])
+      scrollSnapshot,
+      selection,
+      foldedRanges,
+      linters: {
+        diagnostics,
+        spellcheckChanges,
+        languagetoolChanges,
+      }
     }
   }
 
@@ -656,6 +697,28 @@ export default class MarkdownEditor extends EventEmitter {
         break
       case 'markdownMakeTaskList':
         applyTaskList(this._instance)
+        break
+      case 'markdownLint':
+        // When forcing a lint, reset the stored changes to run over
+        // the entire document.
+        const range = { from: 0, to: this._instance.state.doc.length }
+
+        this._instance.dispatch({
+          effects: [
+            ltChangesEffect.of(range),
+            hunspellChangesEffect.of(range)
+          ]
+        })
+
+        // `forceLint` does not seem to do what we need here, possibly because
+        // we override `needsRefresh`. So instead, we dispatch the effect which
+        // triggers `needsRefresh`
+        this._instance.dispatch({
+          effects: [
+            refreshLinterEffect.of(true),
+          ]
+        })
+
         break
       default:
         console.warn('Unimplemented command:', cmd)

@@ -67,13 +67,17 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
       fields: [
         {
           type: 'list',
-          valueType: 'simpleArray',
+          valueType: 'record',
+          keyNames: [ 'word', 'affix' ],
+          columnLabels: [ trans('Word'), trans('Affixes') ],
           model: 'userDictionaryContents',
-          columnLabels: [trans('Dictionary entry')],
           deletable: true,
+          addable: true,
+          optional: [1],
+          editable: false,
           searchable: true,
           searchLabel: trans('Search for entries …'),
-          striped: true
+          striped: true,
         }
       ]
     },
@@ -185,6 +189,27 @@ export function getSpellcheckingFields (config: ConfigOptions): PreferencesField
           label: trans('Custom server address'),
           placeholder: 'https://api.languagetoolplus.com',
           model: 'editor.lint.languageTool.customServer',
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
+        },
+        {
+          type: 'number',
+          label: trans('Custom server characters per request'),
+          placeholder: '75_000',
+          model: 'editor.lint.languageTool.charsPerRequest',
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
+        },
+        {
+          type: 'number',
+          label: trans('Custom server characters per minute'),
+          placeholder: '300_000',
+          model: 'editor.lint.languageTool.charsPerMinute',
+          disabled: config.editor.lint.languageTool.provider !== 'custom'
+        },
+        {
+          type: 'number',
+          label: trans('Custom server requests per minute'),
+          placeholder: '80',
+          model: 'editor.lint.languageTool.requestsPerMinute',
           disabled: config.editor.lint.languageTool.provider !== 'custom'
         },
         { type: 'separator' },
