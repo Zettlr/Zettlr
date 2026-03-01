@@ -51,7 +51,10 @@ import { type Extension } from '@codemirror/state'
 
 import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
 import {
-  handleReplacement, handleBackspace, handleQuote
+  handleBackspace,
+  handleQuote,
+  handleAutocorrectEnter,
+  handleAutocorrectSpace
 } from '../commands/autocorrect'
 import { addNewFootnote, selectFootnoteBeforeDelete } from '../commands/footnotes'
 import {
@@ -108,7 +111,7 @@ export function defaultKeymap (): Extension {
     { key: 'Tab', run: insertTabOrSpace },
 
     // Overload Enter
-    { key: 'Enter', run: handleReplacement },
+    { key: 'Enter', run: handleAutocorrectEnter },
     { key: 'Enter', run: moveNextRow, shift: movePrevRow },
     // If no replacement can be handled, the default should be newlineAndIndent
     { key: 'Enter', run: insertNewlineContinueMarkup },
@@ -122,7 +125,7 @@ export function defaultKeymap (): Extension {
     { key: 'Backspace', run: handleBackspace },
 
     { key: 'Escape', run: abortSnippet },
-    { key: 'Space', run: handleReplacement },
+    { key: 'Space', run: handleAutocorrectSpace },
 
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
