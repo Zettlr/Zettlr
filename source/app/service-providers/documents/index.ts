@@ -35,7 +35,7 @@ import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
-import { hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import { getDocumentTypeForExtension, hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import isDir from 'source/common/util/is-dir'
 
 type DocumentWindows = Record<string, DocumentTree>
@@ -502,8 +502,10 @@ export default class DocumentManager extends ProviderContract {
         }
         this._windows[key] = tree
         this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
-      } catch (err: any) {
-        this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
+        }
       }
     }
 
@@ -613,8 +615,6 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
-    let type = DocumentType.Markdown
-
     // TODO: We also need to be able to load files not present in the file tree!
     const descriptor = await this._app.fsal.getDescriptorForAnySupportedFile(filePath)
     if (descriptor === undefined || descriptor.type === 'other') {
@@ -623,18 +623,12 @@ export default class DocumentManager extends ProviderContract {
 
     const content = await this._app.fsal.loadAnySupportedFile(filePath)
 
+    let type = DocumentType.Markdown
+
     if (descriptor.type === 'code') {
-      switch (descriptor.ext) {
-        case '.yaml':
-        case '.yml':
-          type = DocumentType.YAML
-          break
-        case '.json':
-          type = DocumentType.JSON
-          break
-        case '.tex':
-        case '.latex':
-          type = DocumentType.LaTeX
+      const codeDocumentType = getDocumentTypeForExtension(descriptor.path)
+      if (codeDocumentType !== undefined) {
+        type = codeDocumentType
       }
     }
 
@@ -703,7 +697,7 @@ export default class DocumentManager extends ProviderContract {
       doc.updates.push(update)
       try {
         doc.document = changes.apply(doc.document)
-      } catch (err: any) {
+      } catch (err: unknown) {
         dialog.showErrorBox(
           'Document out of sync',
           `Your modifications could not be applied to the document in memory.
@@ -1555,8 +1549,11 @@ current contents from the editor somewhere else, and restart the application.`
         await this._app.fsal.writeTextFile(doc.descriptor.path, content)
         doc.descriptor = await this._app.fsal.getDescriptorFor(doc.descriptor.path, false) as CodeFileDescriptor
       }
-    } catch (err: any) {
-      dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+      }
+
       throw err
     }
 

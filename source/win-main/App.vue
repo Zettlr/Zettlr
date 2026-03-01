@@ -169,7 +169,7 @@ import {
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
-import { type LeafNodeJSON } from '@dts/common/documents'
+import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
@@ -383,7 +383,7 @@ const parsedDocumentInfo = computed<string>(() => {
   if (info.selections.length > 0) {
     // We have selections to display.
     let length = 0
-    info.selections.forEach((sel: any) => {
+    info.selections.forEach((sel) => {
       length += shouldCountChars.value ? sel.chars : sel.words
     })
 
@@ -853,7 +853,7 @@ function handleClick (clickedID?: string): void {
     ipcRenderer.invoke('application', { command: 'open-preferences' })
       .catch(e => console.error(e))
   } else if (clickedID === 'new-file') {
-    ipcRenderer.invoke('application', { command: 'file-new', payload: { type: 'md' } })
+    ipcRenderer.invoke('application', { command: 'file-new', payload: { type: DocumentType.Markdown } })
       .catch(e => console.error(e))
   } else if (clickedID === 'previous-file') {
     ipcRenderer.invoke('documents-provider', {

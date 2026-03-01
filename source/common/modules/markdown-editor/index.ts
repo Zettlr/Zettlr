@@ -58,7 +58,7 @@ import {
   getTexExtensions,
   getYAMLExtensions,
   inputModeCompartment,
-  getMainEditorThemes
+  getMainEditorThemes,
 } from './editor-extension-sets'
 
 import {
@@ -413,12 +413,12 @@ export default class MarkdownEditor extends EventEmitter {
     switch (type) {
       case DocumentType.Markdown:
         return getMarkdownExtensions(options)
-      case DocumentType.JSON:
-        return getJSONExtensions(options)
-      case DocumentType.YAML:
-        return getYAMLExtensions(options)
       case DocumentType.LaTeX:
         return getTexExtensions(options)
+      case DocumentType.YAML:
+        return getYAMLExtensions(options)
+      case DocumentType.JSON:
+        return getJSONExtensions(options)
     }
   }
 

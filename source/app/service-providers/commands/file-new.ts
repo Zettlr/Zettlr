@@ -18,8 +18,9 @@ import path from 'path'
 import sanitize from 'sanitize-filename'
 import generateFilename from '@common/util/generate-filename'
 import { app } from 'electron'
-import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import { getExtensionForDocumentType, hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
+import type { DocumentType } from '@dts/common/documents'
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -28,11 +29,11 @@ export default class FileNew extends ZettlrCommand {
 
   /**
    * Create a new file.
-   * @param {String} evt The event name
-   * @param  {Object} arg An object containing a hash of containing directory and a file name.
-   * @return {void}     This function does not return anything.
+   * @param  {String} evt   The event name
+   * @param  {Object} arg   An object containing information about the file to create.
+   * @return {void}         This function does not return anything.
    */
-  async run (evt: string, arg: { leafId?: string, windowId?: string, name?: string, path?: string, type: 'md'|'yaml'|'json'|'tex' }): Promise<void> {
+  async run (evt: string, arg: { leafId?: string, windowId?: string, name?: string, path?: string, type?: DocumentType }): Promise<void> {
     // A few notes on how this command works with respect to its input. As you
     // can see, all parameters are optional and all which are missing will be
     // inferred from context (otherwise the command will fail). The type
@@ -40,9 +41,10 @@ export default class FileNew extends ZettlrCommand {
     // the name has the following function: If it is given, the user will not
     // be asked for a filename, but if it's missing, a new name will be
     // generated and the user is asked to confirm the name.
-    const { newFileDontPrompt, newFileNamePattern } = this._app.config.get()
-    const type = arg.type ?? 'md'
-    const generatedName = generateFilename(newFileNamePattern, this._app.config.get().zkn.idGen)
+    const { newFileDontPrompt, newFileNamePattern, openDirectory, attachmentExtensions, zkn } = this._app.config.get()
+
+    const generatedName = generateFilename(newFileNamePattern, zkn.idGen)
+
     const leafId = arg.leafId
 
     if (arg.windowId === undefined) {
@@ -66,7 +68,6 @@ export default class FileNew extends ZettlrCommand {
     // directory, but (by setting isFallbackDir to true) allow the user to
     // change it.
     let dirpath = app.getPath('documents')
-    const { openDirectory } = this._app.config.get()
     let isFallbackDir = true
     if (typeof arg.path === 'string' && await this._app.fsal.isDir(arg.path)) {
       // Explicitly provided directory
@@ -114,22 +115,15 @@ export default class FileNew extends ZettlrCommand {
         throw new Error('Could not create file: Filename was not valid')
       }
 
-      if (!hasMdOrCodeExt(filename)) {
-        // There's no valid file extension given. We have to add one. By default
-        // we assume Markdown, but let ourselves be guided by the given type.
-        switch (type) {
-          case 'json':
-            filename += '.json'
-            break
-          case 'tex':
-            filename += '.tex'
-            break
-          case 'yaml':
-            filename += '.yml'
-            break
-          default:
-            filename += '.md'
-        }
+      const ext = path.extname(filename)
+      const extType = arg.type !== undefined ? getExtensionForDocumentType(arg.type) : '.md'
+      const invalidExt = !hasAnyRecognizedFileExtension(filename, attachmentExtensions)
+
+      // If a type was provided, but the actual and expected extensions do not
+      // match, or if the new extension is not recognized, set the extension to
+      // the expected one, defaulting to `.md`
+      if ((arg.type !== undefined && ext !== extType) || invalidExt) {
+        filename += extType
       }
 
       const absPath = path.join(dirpath, filename)
@@ -161,13 +155,15 @@ export default class FileNew extends ZettlrCommand {
       if ((await this._app.fsal.getAnyDirectoryDescriptor(path.dirname(absPath))) === undefined) {
         this._app.config.addPath(absPath)
       }
-    } catch (err: any) {
-      this._app.log.error(`Could not create file: ${err.message as string}`)
-      this._app.windows.prompt({
-        type: 'error',
-        title: trans('Could not create file'),
-        message: err.message
-      })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._app.log.error(`Could not create file: ${err.message as string}`)
+        this._app.windows.prompt({
+          type: 'error',
+          title: trans('Could not create file'),
+          message: err.message
+        })
+      }
     }
   }
 }

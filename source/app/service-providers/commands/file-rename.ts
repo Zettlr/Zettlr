@@ -18,7 +18,7 @@ import sanitize from 'sanitize-filename'
 import { dialog } from 'electron'
 import { trans } from '@common/i18n-main'
 import replaceLinks from '@common/util/replace-links'
-import { hasMdOrCodeExt } from '@common/util/file-extention-checks'
+import { hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import pathExists from 'source/common/util/path-exists'
 
@@ -44,9 +44,43 @@ export default class FileRename extends ZettlrCommand {
       return
     }
 
-    // If no valid filename extension is provided, assume .md
-    if (!hasMdOrCodeExt(newName)) {
-      newName += '.md'
+    let oldExt = path.extname(arg.path)
+    let newExt = path.extname(newName)
+
+    const invalidExt = !hasAnyRecognizedFileExtension(newName, this._app.config.get().attachmentExtensions)
+
+    // If no new extension was provided, or the extension is otherwise invalid,
+    // assume it was a rename targeting the old extension. If the extensions
+    // are not the same, show a dialogue asking the user to confirm  if they
+    // would like to change the file extension.
+    //
+    // If they respond with `Keep`, the file is still renamed, but the new
+    // extension is replaced with the old one.
+    if (newExt !== '' && !invalidExt && oldExt !== newExt) {
+      const response = await dialog.showMessageBox({
+        title: trans('Confirm'),
+        message: trans('Change file extension from %s to %s?', oldExt, newExt),
+        buttons: [
+          trans('Use %s', newExt),
+          trans('Keep %s', oldExt),
+        ],
+        defaultId: 1
+      })
+
+      // If `Keep`, replace the new extension with the old one.
+      if (response.response === 1) {
+        let newExtPos = newName.lastIndexOf(newExt)
+
+        newName = newName.slice(0, newExtPos) + oldExt
+        newExt = oldExt
+      }
+    }
+
+    // If the old and new file extensions do not match (they were changed),
+    // and the new name does not have a recognized extension, add the old
+    // extension, or if one was not found, default to `.md`
+    if (oldExt !== newExt && invalidExt) {
+      newName += (oldExt !== '' ? oldExt : '.md')
     }
 
     const file = await this._app.fsal.getDescriptorForAnySupportedFile(arg.path)
@@ -150,8 +184,10 @@ export default class FileRename extends ZettlrCommand {
           }
         }
       }
-    } catch (e: any) {
-      this._app.log.error(`Error during renaming file: ${e.message as string}`, e)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._app.log.error(`Error during renaming file: ${err.message as string}`, err)
+      }
     }
   }
 }
