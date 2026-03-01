@@ -24,7 +24,7 @@ import { tableEditorKeymap } from '../keymaps/table-editor'
 import { dispatchFromSubview, maybeDispatchToSubview, syncAnnotation } from './util/data-exchange'
 import { configField, type EditorConfiguration } from '../util/configuration'
 import { getMainEditorThemes } from '../editor-extension-sets'
-import { darkMode } from '../theme/dark-mode'
+import { darkMode, useDarkModeEditor } from '../theme/dark-mode'
 import { markdownSyntaxHighlighter } from '../theme/syntax'
 import { defaultKeymap } from '../keymaps/default'
 
@@ -219,7 +219,7 @@ export function createSubviewForCell (
       // The config field will automagically update since we forward any effects
       // to the subview.
       configField.init(_state => cfg),
-      darkMode({ darkMode: cfg.darkMode, ...themes[cfg.theme] }),
+      darkMode({ darkMode: useDarkModeEditor(cfg.darkMode, cfg.darkModeEditor), ...themes[cfg.theme] }),
       syntaxHighlighting(defaultHighlightStyle),
       markdownSyntaxHighlighter(),
       EditorView.lineWrapping,

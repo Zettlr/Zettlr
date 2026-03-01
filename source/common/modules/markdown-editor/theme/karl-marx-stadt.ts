@@ -14,6 +14,8 @@
 import { EditorView } from '@codemirror/view'
 
 const primaryColor = 'rgba(220, 45, 45, 1)'
+const backgroundLight = '#ffffff'
+const backgroundDark = '#2b2b2c'
 const selectionLight = 'rgb(251, 206, 177)'
 const selectionDark = 'rgba(163, 35, 35, 0.7)'
 
@@ -43,6 +45,7 @@ const commonRules: Record<string, any> = {
 export const themeKarlMarxStadtLight = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
+    backgroundColor: backgroundLight,
     color: 'var(--grey-5)',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
   },
@@ -75,6 +78,7 @@ export const themeKarlMarxStadtLight = EditorView.theme({
 export const themeKarlMarxStadtDark = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
+    backgroundColor: backgroundDark,
     color: 'var(--grey-0)',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
   },

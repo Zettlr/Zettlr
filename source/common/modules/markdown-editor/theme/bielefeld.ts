@@ -14,6 +14,8 @@
 import { EditorView } from '@codemirror/view'
 
 const primaryColor = 'rgba(255, 180, 108, 1)'
+const backgroundLight = 'var(--beige-0)'
+const backgroundDark = '#2b2b2c'
 const selectionLight = 'rgba(205, 205, 170, 1)'
 const selectionDark = 'var(--grey-6)'
 
@@ -30,7 +32,7 @@ const commonRules: Record<string, any> = {
 export const themeBielefeldLight = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
-    backgroundColor: 'var(--beige-0)',
+    backgroundColor: backgroundLight,
     color: 'var(--grey-5)',
     fontFamily: '"Liberation Mono", monospace'
   },
@@ -66,6 +68,7 @@ export const themeBielefeldLight = EditorView.theme({
 export const themeBielefeldDark = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
+    backgroundColor: backgroundDark,
     color: 'var(--grey-0)',
     fontFamily: '"Liberation Mono", monospace'
   },
