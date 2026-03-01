@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+* Fix indenting and tab insertion behavior (#6196).
 
 ## Under the Hood
 
