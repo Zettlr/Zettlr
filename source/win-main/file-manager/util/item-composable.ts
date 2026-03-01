@@ -25,6 +25,45 @@ import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documen
 
 const ipcRenderer = window.ipc
 
+export function closeFile (path: string): void {
+  ipcRenderer.invoke('documents-provider', {
+    command: 'close-file-everywhere',
+    payload: { path }
+  } as DocumentManagerIPCAPI)
+    .catch(e => console.error(e))
+
+  ipcRenderer.invoke('application', {
+    command: 'root-close',
+    payload: path
+  })
+    .catch(err => console.error(err))
+}
+
+export function closeWorkspace (path: string): void {
+  ipcRenderer.invoke('documents-provider', {
+    command: 'get-open-workspace-files',
+    payload: {
+      path: path,
+    }
+  } as DocumentManagerIPCAPI)
+    .then(openFiles => {
+      for (const file of openFiles) {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'close-file-everywhere',
+          payload: { path: file }
+        } as DocumentManagerIPCAPI)
+          .catch(e => console.error(e))
+      }
+    })
+    .catch(e => console.error(e))
+
+  ipcRenderer.invoke('application', {
+    command: 'root-close',
+    payload: path
+  })
+    .catch(err => console.error(err))
+}
+
 export function useItemComposable (
   object: AnyDescriptor,
   rootElement: Ref<HTMLElement|null>,
@@ -100,6 +139,13 @@ export function useItemComposable (
           newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
         }
       } as DocumentManagerIPCAPI)
+        .then(() => {
+          configStore.setConfigValue('openDirectory', obj.value.dir)
+          // Finally, since it's a directory, uncollapse it.
+          if (!windowStateStore.uncollapsedDirectories.includes(obj.value.dir)) {
+            windowStateStore.uncollapsedDirectories.push(obj.value.dir)
+          }
+        })
         .catch(e => console.error(e))
     } else if (type === 'other') {
       const { files } = configStore.config
@@ -113,6 +159,13 @@ export function useItemComposable (
           // We leave leafId undefined
           payload: { path: obj.value.path, windowId }
         })
+          .then(() => {
+            configStore.setConfigValue('openDirectory', obj.value.dir)
+            // Finally, since it's a directory, uncollapse it.
+            if (!windowStateStore.uncollapsedDirectories.includes(obj.value.dir)) {
+              windowStateStore.uncollapsedDirectories.push(obj.value.dir)
+            }
+          })
           .catch(e => console.error(e))
       } else {
         // Open the file externally (again, NOTE, this only works because main
@@ -130,6 +183,7 @@ export function useItemComposable (
       }
     }
   }
+
   /**
    * Handles a context menu on a file or directory item.
    *
@@ -155,11 +209,7 @@ export function useItemComposable (
           })
             .catch(err => console.error(err))
         } else if (clickedID === 'menu.close_workspace') {
-          ipcRenderer.invoke('application', {
-            command: 'root-close',
-            payload: obj.value.path
-          })
-            .catch(err => console.error(err))
+          closeWorkspace(obj.value.path)
         } else if (clickedID === 'menu.project_build') {
           // We should trigger an export of this project.
           ipcRenderer.invoke('application', {
@@ -205,12 +255,7 @@ export function useItemComposable (
         } else if (clickedID === 'properties') {
           showPopover.value = true
         } else if (clickedID === 'menu.close_file') {
-          // The close_file item is only shown in the tree view on root files
-          ipcRenderer.invoke('application', {
-            command: 'root-close',
-            payload: obj.value.path
-          })
-            .catch(err => console.error(err))
+          closeFile(obj.value.path)
         }
       })
     }

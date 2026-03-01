@@ -6,6 +6,8 @@
     v-bind:class="{ 'hidden': !isVisible }"
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
+    v-on:pointerenter="hover = true"
+    v-on:pointerleave="hover = false; shiftHeld = false"
   >
     <template v-if="rootDescriptors.length > 0">
       <div v-if="filterQuery.trim() !== '' && filterResults.length === 0" class="empty-tree">
@@ -17,12 +19,16 @@
       <template v-if="getFiles.length > 0">
         <div
           id="directories-files-header"
-          v-on:click="configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
+          v-bind:title="showClose ? 'Close all files' : showFilesSection ? 'Hide files' : 'Show files'"
+          v-on:click="showClose ? undefined : configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
         >
           <cds-icon
-            shape="angle"
-            v-bind:direction="showFilesSection ? 'down' : 'right'"
             role="presentation"
+            v-bind:shape="showClose ? 'times' : 'angle'"
+            v-bind:direction="showClose ? undefined : showFilesSection ? 'down' : 'right'"
+            v-bind:status="showClose ? 'danger' : undefined"
+            v-bind:class="{ 'close-all': showClose }"
+            v-on:dblclick="showClose ? closeAllFiles() : undefined"
           ></cds-icon>
 
           <cds-icon
@@ -30,8 +36,8 @@
             shape="file"
             role="presentation"
           ></cds-icon>
-          
-          {{ fileSectionHeading }}
+
+          {{ fileSectionHeading.toUpperCase() }}
         </div>
 
         <template v-if="showFilesSection">
@@ -53,12 +59,16 @@
       <template v-if="getDirectories.length > 0">
         <div
           id="directories-dirs-header"
-          v-on:click="configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
+          v-bind:title="showClose ? 'Close all workspaces' : showWorkspacesSection ? 'Hide workspaces' : 'Show workspaces'"
+          v-on:click="showClose ? undefined : configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
         >
           <cds-icon
-            shape="angle"
-            v-bind:direction="showWorkspacesSection ? 'down' : 'right'"
             role="presentation"
+            v-bind:shape="showClose ? 'times' : 'angle'"
+            v-bind:direction="showClose ? undefined : showWorkspacesSection ? 'down' : 'right'"
+            v-bind:status="showClose ? 'danger' : undefined"
+            v-bind:class="{ 'close-all': showClose }"
+            v-on:dblclick.stop="showClose ? closeAllWorkspaces() : undefined"
           ></cds-icon>
 
           <cds-icon
@@ -66,8 +76,18 @@
             shape="tree-view"
             role="presentation"
           ></cds-icon>
-          
-          {{ workspaceSectionHeading }}
+
+          {{ workspaceSectionHeading.toUpperCase() }}
+
+          <cds-icon
+            class="collapse-all"
+            role="presentation"
+            shape="minus-circle"
+            v-bind:solid="collapseHover"
+            v-on:click.stop="collapseAll()"
+            v-on:pointerenter="collapseHover = true"
+            v-on:pointerleave="collapseHover = false"
+          ></cds-icon>
         </div>
 
         <template v-if="showWorkspacesSection">
@@ -114,7 +134,7 @@
 import { trans } from '@common/i18n-renderer'
 import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
@@ -122,6 +142,7 @@ import type { AnyDescriptor } from 'source/types/common/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import { closeFile, closeWorkspace } from './util/item-composable'
 
 const ipcRenderer = window.ipc
 
@@ -135,6 +156,33 @@ const emit = defineEmits<{
   (e: 'selection', event: MouseEvent): void
   (e: 'toggle-file-list'): void
 }>()
+
+const shiftHeld = ref(false)
+const hover = ref(false)
+const collapseHover = ref(false)
+const showClose = computed(() => shiftHeld.value && hover.value)
+
+function onKeyDown (e: KeyboardEvent) {
+  if (e.key === 'Shift') {
+    shiftHeld.value = true
+  }
+}
+
+function onKeyUp (e: KeyboardEvent) {
+  if (e.key === 'Shift') {
+    shiftHeld.value = false
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('keyup', onKeyUp)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown)
+  window.removeEventListener('keyup', onKeyUp)
+})
 
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
@@ -209,12 +257,11 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
     .filter(descriptor => {
       return query.value === '' ? true : filterResults.value.some(res => res.startsWith(descriptor.path))
     })
-  
+
   const uncollapsed = windowStateStore.uncollapsedDirectories
   const collapsed = allDescriptors
-    .filter(d => d.type === 'directory')
+    .filter(d => d.type === 'directory' && !uncollapsed.includes(d.path))
     .map(d => d.path)
-    .filter(absPath => !uncollapsed.includes(absPath))
 
   const visibleDescriptors = allDescriptors
     // Third, remove any file that is within a collapsed directory
@@ -243,9 +290,48 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
  * @param  {MouseEvent} evt The click event.
  * @return {void}     Does not return.
  */
-function requestOpenRoot (_event: MouseEvent): void {
-  ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
+function requestOpenRoot (event: MouseEvent): void {
+  let command = 'root-open-workspaces'
+  if (event.shiftKey) {
+    command = 'root-open-files'
+  }
+
+  ipcRenderer.invoke('application', { command })
     .catch(err => console.error(err))
+}
+
+function collapseAll (): void {
+  const uncollapsed = [...windowStateStore.uncollapsedDirectories]
+  const roots = rootDescriptors.value.map(r => r.path)
+
+  // Only collapse child folders, not roots, if any children are uncollapsed.
+  let onlyRoots = true
+  for (const filePath of uncollapsed) {
+    if (!roots.includes(filePath)) {
+      let idx = windowStateStore.uncollapsedDirectories.indexOf(filePath)
+      if (idx > -1) {
+        windowStateStore.uncollapsedDirectories.splice(idx, 1)
+        onlyRoots = false
+      }
+    }
+  }
+
+  // If all of the children are collapsed, then collapse the roots.
+  if (onlyRoots) {
+    windowStateStore.uncollapsedDirectories.splice(0)
+  }
+}
+
+function closeAllFiles (): void {
+  for (const rootFile of getFiles.value) {
+    closeFile(rootFile.path)
+  }
+}
+
+function closeAllWorkspaces (): void {
+  for (const dir of getDirectories.value) {
+    closeWorkspace(dir.path)
+  }
 }
 
 function clickHandler (event: MouseEvent): void {
@@ -274,7 +360,7 @@ function navigate (event: KeyboardEvent): void {
 
   if (event.key === 'Enter' && activeTreeItem.value !== undefined) {
     // Open the currently active item
-    if (activeTreeItem.value[1] === 'directory') {
+    if (activeTreeItem.value[0] === 'directory') {
       configStore.setConfigValue('openDirectory', activeTreeItem.value[0])
     } else {
       // Select the active file (if there is one)
@@ -367,6 +453,8 @@ body {
     cds-icon {
       width: 18px;
       height: 18px;
+      min-height: 18px;
+      min-width: 18px;
     }
 
     &.hidden { left:-100%; }
@@ -380,6 +468,16 @@ body {
         margin-left: 3px;
         margin-right: 3px;
         vertical-align: bottom;
+      }
+
+      .close-all:hover {
+        border-radius: 20%;
+        background-color: rgb(200, 200, 200);
+      }
+
+      .collapse-all {
+        margin-inline-start: auto;
+        margin-inline-end: 5px;
       }
     }
 
@@ -403,6 +501,16 @@ body {
             font-weight: bold;
             font-size: 200%;
         }
+    }
+  }
+
+  &.dark {
+    #file-tree {
+      #directories-dirs-header, #directories-files-header {
+        .close-all:hover {
+          background-color: rgb(80, 80, 80);
+        }
+      }
     }
   }
 }
