@@ -29,6 +29,7 @@ import {
   EditorView,
   lineNumbers,
   dropCursor,
+  ViewPlugin,
   type ViewUpdate,
   type DOMEventHandlers
 } from '@codemirror/view'
@@ -75,6 +76,38 @@ import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
 import { codeTheme } from './renderers/render-code'
+
+/**
+ * A custom scroll-past-end plugin that adds padding equal to half the editor
+ * height, allowing the last line to be scrolled to the middle of the viewport.
+ */
+const scrollPastEndPlugin = ViewPlugin.fromClass(class {
+  height = 500
+  attrs: { style: string } = { style: 'padding-bottom: 500px' }
+
+  update (update: ViewUpdate): void {
+    const { view } = update
+    // Calculate half the editor height for the padding
+    const height = view.dom.clientHeight / 2
+    if (height >= 0 && height !== this.height) {
+      this.height = height
+      this.attrs = { style: `padding-bottom: ${height}px` }
+    }
+  }
+})
+
+/**
+ * Returns an extension that adds bottom padding equal to half the editor
+ * height, so that the last line can be scrolled to the middle of the viewport.
+ */
+function scrollPastEnd (): Extension {
+  return [
+    scrollPastEndPlugin,
+    EditorView.contentAttributes.of(view => {
+      return view.plugin(scrollPastEndPlugin)?.attrs ?? null
+    })
+  ]
+}
 
 /**
  * This interface describes the required properties which the extension sets
@@ -212,6 +245,9 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       options.remoteConfig.pullUpdates,
       options.remoteConfig.pushUpdates
     ),
+    // Enable scrolling past the end of the document so users can position the
+    // last line in the middle of the viewport without adding empty lines
+    scrollPastEnd(),
     highlightRanges
   ]
 }
