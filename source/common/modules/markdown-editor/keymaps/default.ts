@@ -59,7 +59,8 @@ import {
 } from '../commands/lists'
 import {
   insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList,
-  applyHighlight
+  applyHighlight,
+  insertTabOrSpace
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
@@ -104,6 +105,7 @@ export function defaultKeymap (): Extension {
     { key: 'Tab', run: nextSnippet },
     { key: 'Tab', run: moveNextCell, shift: movePrevCell },
     { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
+    { key: 'Tab', run: insertTabOrSpace },
 
     // Overload Enter
     { key: 'Enter', run: handleReplacement },

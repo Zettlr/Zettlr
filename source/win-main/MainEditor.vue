@@ -233,6 +233,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   return {
     indentUnit: editor.indentUnit,
     indentWithTabs: editor.indentWithTabs,
+    alwaysIndentLineOnTab: editor.alwaysIndentLineOnTab,
     autoCloseBrackets: editor.autoCloseBrackets,
     autocorrect: {
       active: editor.autoCorrect.active,

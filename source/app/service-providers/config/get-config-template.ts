@@ -132,6 +132,7 @@ export interface ConfigOptions {
     enableTableHelper: boolean
     indentUnit: number
     indentWithTabs: boolean
+    alwaysIndentLineOnTab: boolean
     fontSize: number
     countChars: boolean
     inputMode: 'default'|'vim'|'emacs'
@@ -340,6 +341,7 @@ export function getConfigTemplate (): ConfigOptions {
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       indentWithTabs: false,
+      alwaysIndentLineOnTab: false, // Whether `Tab` always indents the current line
       fontSize: 18, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs

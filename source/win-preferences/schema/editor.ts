@@ -319,6 +319,12 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           label: trans('Indent using tabs instead of spaces'),
           model: 'editor.indentWithTabs'
         },
+        {
+          type: 'checkbox',
+          label: trans('Always indent the current line when pressing Tab'),
+          info: trans('Zettlr always indents the line for list items. Turn this setting on to always indent any line.'),
+          model: 'editor.alwaysIndentLineOnTab'
+        },
         { type: 'separator' },
         {
           type: 'checkbox',

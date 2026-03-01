@@ -14,9 +14,11 @@
 
 import { type ChangeSpec, EditorSelection } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
-import { configField } from '../util/configuration'
-import { language } from '@codemirror/language'
+import { configField, configUpdateEffect } from '../util/configuration'
+import { indentUnit, language, syntaxTree } from '@codemirror/language'
 import { formatPandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
+import { indentMore } from '@codemirror/commands'
+import { nodeInSelection } from '../util/node-in-selection'
 
 /**
  * Helper function that checks whether the provided target EditorView uses a
@@ -611,4 +613,46 @@ export function applyPandocDivOrSpan (target: EditorView, type: 'div'|'span', at
   }
 
   return false
+}
+
+/**
+ * Reimplementation of the `@codemirror/commands` `insertTab` function.
+ * https://codemirror.net/docs/ref/#commands.insertTab
+ *
+ * This version inserts either the configured `indentUnit`, or, if the selection
+ * is within a YAMLFrontmatter node, it inserts `tabSize` number of spaces
+ *
+ * @param   {EditorView}  target      The target view
+ *
+ * @returns {boolean}
+ */
+export function insertTabOrSpace (target: EditorView): boolean {
+  const { indentWithTabs, alwaysIndentLineOnTab } = target.state.field(configField)
+
+  const tree = syntaxTree(target.state)
+  // Short circuit on the boolean before checking the syntax tree
+  if (indentWithTabs && nodeInSelection(target.state.selection, tree, [ 'YAMLFrontmatter', 'YAMLFrontmatterStart', 'YAMLFrontmatterEnd' ], -1)) {
+    // We need to temporarily override the `indentWithTabs` setting
+    // so that the `indentUnit` facet updates to insert spaces.
+    // This is necessary for `indentMore` to insert the correct indent.
+    target.dispatch({ effects: configUpdateEffect.of({ indentWithTabs: false }) })
+  }
+
+  let result = false
+  // If any range is not empty, indent the line
+  if (alwaysIndentLineOnTab || target.state.selection.ranges.some(r => !r.empty)) {
+    // Store the return value of `indentMore` because
+    // we need to reset the `indentWithTabs` config value
+    result = indentMore(target)
+  } else {
+    // Otherwise, insert the configured `indentUnit`
+    let insert = target.state.facet(indentUnit)
+    target.dispatch(target.state.replaceSelection(insert), { scrollIntoView: true, userEvent: 'input' })
+    result = true
+  }
+
+  // Reset the config to the initial value.
+  target.dispatch({ effects: configUpdateEffect.of({ indentWithTabs }) })
+
+  return result
 }
