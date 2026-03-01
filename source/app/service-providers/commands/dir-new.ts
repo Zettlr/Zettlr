@@ -45,11 +45,11 @@ export default class DirNew extends ZettlrCommand {
 
     try {
       await this._app.fsal.createDir(dirPath)
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('Could not create directory'),
-        message: err.message
+        message: err instanceof Error ? err.message : 'unknown error'
       })
       return false
     }

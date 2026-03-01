@@ -58,8 +58,8 @@ export async function bootApplication (): Promise<AppServiceContainer> {
       log.info('Installing developer extensions ...')
       const extension = await installExtension(VUEJS_DEVTOOLS)
       log.info(`Added extension: ${extension.name} v${extension.version}`)
-    } catch (err: any) {
-      log.error(`Could not install extension: ${String(err.message)}`, err)
+    } catch (err: unknown) {
+      log.error(`Could not install extension: ${err instanceof Error ? err.message : 'unknown error'}`, err)
     }
   }
 

@@ -153,13 +153,15 @@ export default class DirProjectExport extends ZettlrCommand {
           throw new Error(`Export failed: ${result.stderr.join('\n')}`)
         }
         this._app.log.info(`[Project] Exported ${dir.name} as ${result.targetFile}`)
-      } catch (err: any) {
-        this._app.log.error(String(err.message), err)
-        this._app.windows.showErrorMessage(
-          ('title' in err) ? String(err.title) : String(err.message),
-          String(err.message),
-          ('additionalInfo' in err) ? String(err.additionalInfo) : ''
-        )
+      } catch (err: unknown) {
+        this._app.log.error(err instanceof Error ? err.message : 'unknown error', err)
+        if (err instanceof Error) {
+          this._app.windows.showErrorMessage(
+            ('title' in err) ? String(err.title) : err.message,
+            err.message,
+            ('additionalInfo' in err) ? String(err.additionalInfo) : ''
+          )
+        }
       }
     }
 

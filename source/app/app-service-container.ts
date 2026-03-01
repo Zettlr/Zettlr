@@ -342,9 +342,9 @@ export class AppServiceContainer {
   private async _safeShutdown <T extends ProviderContract> (provider: T, displayName: string): Promise<void> {
     try {
       await provider.shutdown()
-    } catch (err: any) {
+    } catch (err: unknown) {
       const title = `Error shutting down ${displayName}`
-      const message = `Could not shut down ${displayName}: ${err.message as string}`
+      const message = `Could not shut down ${displayName}: ${err instanceof Error ? err.message : 'unknown error'}`
       dialog.showErrorBox(title, message)
       this._logProvider.error(`[AppServiceContainer] ${message}`, err)
     }
@@ -364,9 +364,9 @@ export class AppServiceContainer {
       updateSplashScreen(trans('Booting %s…', displayName), 0)
       await provider.boot()
       this._logProvider.verbose(`[AppServiceContainer] Booted ${displayName} in ${Math.round(performance.now() - start)}ms`)
-    } catch (err: any) {
+    } catch (err: unknown) {
       const title = `Error starting ${displayName}`
-      const message = `Could not start ${displayName}: ${err.message as string}`
+      const message = `Could not start ${displayName}: ${err instanceof Error ? err.message : 'unknown error'}`
       dialog.showErrorBox(title, message)
       this._logProvider.error(`[AppServiceContainer] ${message}`, err)
       throw err // Re-Throw since we need to quit the app now.
