@@ -6201,7 +6201,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^40.0.0":
+"electron@npm:^40.6.1":
   version: 40.6.1
   resolution: "electron@npm:40.6.1"
   dependencies:
@@ -15164,7 +15164,7 @@ __metadata:
     css-loader: "npm:^7.1.2"
     csso: "npm:^5.0.5"
     d3: "npm:^7.9.0"
-    electron: "npm:^40.0.0"
+    electron: "npm:^40.6.1"
     electron-builder: "npm:^26.5.0"
     electron-devtools-installer: "npm:^4.0.0"
     eslint: "npm:^9.39.1"

@@ -17,6 +17,7 @@ verify any of your exports.
 ## Under the Hood
 
 - Add unit tests for `parseReaderWriter` utility function.
+- Upgrade Electron to `v40.6.1`.
 
 # 4.2.0
 
