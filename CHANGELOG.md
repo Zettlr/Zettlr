@@ -18,6 +18,7 @@ verify any of your exports.
 
 - Add unit tests for `parseReaderWriter` utility function.
 - Upgrade Electron to `v40.6.1`.
+- Upgrade Pandoc to `v3.9.0`.
 
 # 4.2.0
 
