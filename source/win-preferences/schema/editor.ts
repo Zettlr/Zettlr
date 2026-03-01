@@ -357,6 +357,11 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           type: 'checkbox',
           label: trans('Automatically close matching character pairs'),
           model: 'editor.autoCloseBrackets'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Treat .txt files as Plain Text (only highlight links and metadata)'),
+          model: 'editor.txtAsPlainText'
         }
       ]
     }

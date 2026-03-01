@@ -88,6 +88,27 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.PandocSpanMark, class: 'cm-pandoc-span-mark cm-code-mark' },
 ])
 
+const plainTextTheme = HighlightStyle.define([
+  { tag: tags.url, class: 'cm-url' },
+  { tag: tags.link, class: 'cm-link' },
+  // Styling for YAML frontmatters
+  { tag: customTags.YAMLFrontmatter, class: 'cm-yaml-frontmatter' },
+  { tag: customTags.YAMLFrontmatterStart, class: 'cm-yaml-frontmatter-start' },
+  { tag: customTags.YAMLFrontmatterEnd, class: 'cm-yaml-frontmatter-end' },
+  // Keep Zettelkasten elements
+  { tag: customTags.ZknLinkContent, class: 'cm-zkn-link' },
+  { tag: customTags.ZknTagContent, class: 'cm-zkn-tag' },
+  // Keep Citations
+  { tag: customTags.Citation, class: 'cm-citation' },
+  { tag: customTags.CitationMark, class: 'cm-citation-mark' },
+  { tag: customTags.CitationPrefix, class: 'cm-citation-prefix' },
+  { tag: customTags.CitationSuppressAuthorFlag, class: 'cm-citation-suppress-author-flag' },
+  { tag: customTags.CitationAtSign, class: 'cm-citation-at-sign' },
+  { tag: customTags.CitationCitekey, class: 'cm-citation-citekey' },
+  { tag: customTags.CitationLocator, class: 'cm-citation-locator' },
+  { tag: customTags.CitationSuffix, class: 'cm-citation-suffix' },
+])
+
 const codeTheme = HighlightStyle.define([
   { tag: tags.comment, class: 'cm-comment' },
   { tag: tags.lineComment, class: 'cm-line-comment' },
@@ -156,6 +177,10 @@ const codeTheme = HighlightStyle.define([
 
 export function markdownSyntaxHighlighter (): Extension {
   return [ syntaxHighlighting(markdownTheme), syntaxHighlighting(codeTheme) ]
+}
+
+export function plainTextSyntaxHighlighter (): Extension {
+  return [ syntaxHighlighting(plainTextTheme), syntaxHighlighting(codeTheme) ]
 }
 
 export function codeSyntaxHighlighter (): Extension {

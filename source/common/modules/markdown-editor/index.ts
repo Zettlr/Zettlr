@@ -55,6 +55,7 @@ import {
   type CoreExtensionOptions,
   getJSONExtensions,
   getMarkdownExtensions,
+  getPlainTextExtensions,
   getTexExtensions,
   getYAMLExtensions,
   inputModeCompartment,
@@ -412,6 +413,9 @@ export default class MarkdownEditor extends EventEmitter {
 
     switch (type) {
       case DocumentType.Markdown:
+        if (filePath.toLowerCase().endsWith('.txt') && this.config.txtAsPlainText) {
+          return getPlainTextExtensions(options)
+        }
         return getMarkdownExtensions(options)
       case DocumentType.JSON:
         return getJSONExtensions(options)
