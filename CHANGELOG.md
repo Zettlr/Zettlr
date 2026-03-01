@@ -1,12 +1,22 @@
 # Upcoming
 
+## Fixed Pandoc Extension Parsing
+
+If you ever used [Pandoc extensions](https://pandoc.org/MANUAL.html#extensions)
+with Zettlr, you may have wondered why they sometimes appeared not to work.
+After a report by a user, we have found out that Zettlr never actually parsed
+these correctly. We decided to make this a bit more visible in the changelog
+since your exports may have been broken without you realizing. This way you can
+verify any of your exports.
+
 ## GUI and Functionality
 
-* Fix indenting and tab insertion behavior (#6196).
+- Fix indenting and tab insertion behavior (#6196).
+- Fix Zettlr not correctly parsing Pandoc extensions (#6212).
 
 ## Under the Hood
 
-(nothing here)
+- Add unit tests for `parseReaderWriter` utility function.
 
 # 4.2.0
 
