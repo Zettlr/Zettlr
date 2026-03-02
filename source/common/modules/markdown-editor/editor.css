@@ -292,10 +292,6 @@ body.dark {
     color: #d7d7d7;
   }
 
-  .cm-panel.cm-panel-lint ul [aria-selected] {
-    background-color: #787878;
-  }
-
   .cm-panel .cm-button {
     border-color: #646464;
   }
