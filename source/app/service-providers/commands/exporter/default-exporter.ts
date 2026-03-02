@@ -30,17 +30,29 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // First file determines the name of the exported file.
   const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
-  const target = path.join(options.targetDirectory, `${title}.${extension}`)
+  let target = path.join(options.targetDirectory, `${title}.${extension}`)
 
   // Get the corresponding defaults file
   const defaultKeys = {
     'input-files': sourceFiles,
     'output-file': target
   }
-  const defaultsFile = await ctx.writeDefaults(options.profile.name, defaultKeys)
+  const defaults = await ctx.writeDefaults(options.profile.name, defaultKeys)
+
+  // Check that the defaults profile did not change
+  // `output-file`, and if it did, update the target.
+  if (defaults['output-file'] !== target) {
+    const parsed = path.parse(defaults['output-file'] as string)
+    target = path.join(parsed.dir, parsed.name + `.${extension}`)
+
+    if (!path.isAbsolute(target)) {
+      target = path.join(options.targetDirectory, target)
+      defaults['output-file'] = target
+    }
+  }
 
   // Run Pandoc
-  const pandocOutput = await ctx.runPandoc(defaultsFile)
+  const pandocOutput = await ctx.runPandoc(defaults)
 
   // Make sure to propagate the results
   return {

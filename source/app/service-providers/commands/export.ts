@@ -25,6 +25,9 @@ import { runShellCommand } from './exporter/run-shell-command'
 import { showNativeNotification } from '@common/util/show-notification'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 
+type ExportArgs = { file: string, profile: PandocProfileMetadata, exportTo: string }
+type CustomExportArgs = { displayName: string, file: string }
+
 export default class Export extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
     super(app, [ 'export', 'custom-export' ])
@@ -37,10 +40,10 @@ export default class Export extends ZettlrCommand {
     * @param  {Object} arg An object containing hash and wanted extension.
     * @return {Boolean}     Whether or not the call succeeded.
     */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, arg: unknown): Promise<void> {
     // Custom export
     if (evt === 'custom-export') {
-      const { displayName, file } = arg as { displayName: string, file: string }
+      const { displayName, file } = arg as CustomExportArgs
       const commands = this._app.config.get().export.customCommands
       const foundCommand = commands.find(c => c.displayName === displayName)
       if (foundCommand === undefined) {
@@ -67,7 +70,7 @@ export default class Export extends ZettlrCommand {
     }
 
     // Regular export
-    const { file, profile, exportTo } = arg as { file: string, profile: PandocProfileMetadata, exportTo: string }
+    const { file, profile, exportTo } = arg as ExportArgs
 
     const exporterOptions: ExporterOptions = {
       profile,
@@ -147,7 +150,7 @@ export default class Export extends ZettlrCommand {
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if (this._app.config.get().export.autoOpenExportedFiles) {
-          if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer as string)) {
+          if ([ 'textbundle', 'textpack' ].includes((arg as ExportArgs).profile.writer as string)) {
             shell.showItemInFolder(output.targetFile)
           } else {
             const potentialError = await shell.openPath(output.targetFile)
@@ -162,10 +165,12 @@ export default class Export extends ZettlrCommand {
         const contents = output.stderr.join('\n')
         this._app.windows.showErrorMessage(title, message, contents)
       }
-    } catch (err: any) {
-      const message: string = err.message
-      this._app.windows.showErrorMessage(message, message)
-      this._app.log.error(message, err)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        const message: string = err.message
+        this._app.windows.showErrorMessage(message, message)
+        this._app.log.error(message, err)
+      }
     }
   }
 }

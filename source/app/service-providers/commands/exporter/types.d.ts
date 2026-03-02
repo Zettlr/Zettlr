@@ -15,6 +15,14 @@
 
 import { type PandocProfileMetadata } from '@providers/assets'
 
+export type PandocDefaults = Record<string, unknown> & {
+  filters?: Array<string>
+  metadata?: Record<string, unknown> & {
+    zettlr?: Record<string, unknown>
+  }
+  bibliography?: string|Array<string>
+}
+
 // The exporter only needs a few properties, so by defining a minimal type here
 // we can make the exporter more flexible to accept also objects that only
 // contain path information
@@ -117,7 +125,7 @@ export interface ExporterAPI {
    *
    * @return  {Promise<PandocRunnerOutput>}                Any output produced by Pandoc.
    */
-  runPandoc: (defaultsFile: string) => Promise<PandocRunnerOutput>
+  runPandoc: (defaults: PandocDefaults) => Promise<PandocRunnerOutput>
 
   /**
    * Retrieves a user-customised defaults file, adds the given properties and
@@ -126,9 +134,10 @@ export interface ExporterAPI {
    * @param   {string}               filename    The filename for which the defaults apply
    * @param   {Record<string, any>}  properties  Any additional properties to add to the defaults.
    *
-   * @return  {Promise<string>}                  Resolves with an absolute path to the written file.
+   * @return  {Promise<string>}                  Resolves with an absolute path to the written file
+   *                                             and the parsed content of the defaults file.
    */
-  writeDefaults: (writer: string, properties: Record<string, any> = {}) => Promise<string>
+  writeDefaults: (writer: string, properties: PandocDefaults = {}) => Promise<PandocDefaults>
   listDefaults: () => Promise<PandocProfileMetadata[]>
 }
 
