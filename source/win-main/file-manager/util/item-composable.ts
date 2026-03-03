@@ -25,6 +25,12 @@ import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documen
 
 const ipcRenderer = window.ipc
 
+/**
+ * Close a file root path at `path`, including all open
+ * instances of the file.
+ *
+ * @param {string}  path    The filepath to close
+ */
 export function closeFile (path: string): void {
   ipcRenderer.invoke('documents-provider', {
     command: 'close-file-everywhere',
@@ -39,6 +45,12 @@ export function closeFile (path: string): void {
     .catch(err => console.error(err))
 }
 
+/**
+ * Close a workspace root path at `path`, including all open files
+ * within the workspace
+ *
+ * @param {string}  path    The workspace path to close
+ */
 export function closeWorkspace (path: string): void {
   ipcRenderer.invoke('documents-provider', {
     command: 'get-open-workspace-files',

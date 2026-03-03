@@ -980,6 +980,9 @@ export default class WindowProvider extends ProviderContract {
    * returns the ID of the clicked button in the message box, which is 0 to
    * simply drop changes, 1 to abort closing in order to save.
    *
+   * @param   {string}              [detail]  An optional string to display in the
+   *                                          `detail` section of the dialogue.
+   *
    * @return  {Promise<any>}  Returns the message box results
    */
   async askSaveChanges (detail?: string): Promise<Electron.MessageBoxReturnValue> {

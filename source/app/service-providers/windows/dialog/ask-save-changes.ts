@@ -23,7 +23,9 @@ import { trans } from '@common/i18n-main'
 /**
  * Displays a prompt to ask the user if they want to save the files first
  *
- * @param   {BrowserWindow|null}  win      The window to attach to
+ * @param   {BrowserWindow|null}  win       The window to attach to
+ * @param   {string}              [detail]  An optional string to display in the
+ *                                          `detail` section of the dialogue.
  */
 export default async function askSaveChanges (win: BrowserWindow|null, detail?: string): Promise<MessageBoxReturnValue> {
   const boxOptions: MessageBoxOptions = {

@@ -1031,6 +1031,16 @@ current contents from the editor somewhere else, and restart the application.`
     this.syncWatchedFilePaths()
   }
 
+  /**
+   * For the provided root workspace directory at `filePath`,
+   * retrieve a list of filepaths representing every open file
+   * within the workspace.
+   *
+   * @param {string}      filePath  Path of the workspace directory
+   *
+   * @returns {string[]}            A list of file paths representing the
+   *                                open files within `filePath`.
+   */
   public async getWorkspaceOpenFiles (filePath: string): Promise<string[]> {
     const openFiles: string[] = []
 
