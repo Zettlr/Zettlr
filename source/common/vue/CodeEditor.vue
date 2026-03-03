@@ -25,13 +25,13 @@
 
 import { drawSelection, dropCursor, EditorView, lineNumbers } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
-import { closeBrackets } from '@codemirror/autocomplete'
+import { autocompletion, closeBrackets } from '@codemirror/autocomplete'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/lang-yaml'
 import { lua } from '@codemirror/legacy-modes/mode/lua'
 import { EditorState, type Extension } from '@codemirror/state'
-import { cssLanguage } from '@codemirror/lang-css'
+import { css } from '@codemirror/lang-css'
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
 import { yamlLint } from '@common/modules/markdown-editor/linters/yaml-lint'
 import { lintGutter } from '@codemirror/lint'
@@ -93,6 +93,7 @@ function getExtensions (mode: SupportedLanguage): Extension[] {
     closeBrackets(),
     bracketMatching(),
     indentOnInput(),
+    autocompletion(),
     codeSyntaxHighlighter(), // This comes from the main editor component
     darkMode({ darkMode: configStore.config.darkMode }),
     plainLinkHighlighter,
@@ -115,7 +116,7 @@ function getExtensions (mode: SupportedLanguage): Extension[] {
     case 'css':
       return [
         ...extensions,
-        cssLanguage
+        css(),
       ]
     case 'markdown-snippets':
       return [
@@ -133,7 +134,8 @@ function getExtensions (mode: SupportedLanguage): Extension[] {
       ]
     case 'lua':
       return [
-        ...extensions, StreamLanguage.define(lua)
+        ...extensions,
+        StreamLanguage.define(lua)
       ]
   }
 }
