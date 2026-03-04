@@ -13,12 +13,15 @@ verify any of your exports.
 
 - Fix indenting and tab insertion behavior (#6196).
 - Fix Zettlr not correctly parsing Pandoc extensions (#6212).
+- Improved error handling when opening PDF attachments.
 
 ## Under the Hood
 
 - Add unit tests for `parseReaderWriter` utility function.
 - Upgrade Electron to `v40.6.1`.
 - Upgrade Pandoc to `v3.9.0`.
+- Properly parse and check the returned results from the BetterBibTex JSON RPC
+  API when querying PDF attachments.
 
 # 4.2.0
 
