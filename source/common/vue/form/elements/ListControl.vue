@@ -611,7 +611,7 @@ function handleAddition (): void {
     for (let i = 0; i < keys.length; i++) {
       const newVal = newValues[i]
 
-      if (isColumnOptional(i) && newVal === undefined) {
+      if (!isColumnOptional(i) && newVal === undefined) {
         console.error('Cannot add new record: Didn\'t receive the right amount of values to add.')
         return
       }
