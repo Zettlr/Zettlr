@@ -20,6 +20,7 @@ verify any of your exports.
 - Add unit tests for `parseReaderWriter` utility function.
 - Upgrade Electron to `v40.8.0`.
 - Upgrade Pandoc to `v3.9.0`.
+- Upgrade ESLint to `v10.0.3`.
 - Properly parse and check the returned results from the BetterBibTex JSON RPC
   API when querying PDF attachments.
 
