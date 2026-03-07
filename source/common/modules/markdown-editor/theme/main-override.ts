@@ -25,10 +25,12 @@ export interface ThemeVars {
   '--zettlr-editor-selection-color': string
   '--zettlr-editor-highlight-color': string
   '--zettlr-editor-font': string
+  '--zettlr-editor-font-size': string,
   '--zettlr-editor-code-font': string
-  '--zettlr-editor-emphasis-font': string
-  '--zettlr-editor-strong-font': string
-  '--zettlr-editor-header-font': string
+  '--zettlr-editor-code-style': string,
+  '--zettlr-editor-emphasis-style': string
+  '--zettlr-editor-strong-style': string
+  '--zettlr-editor-header-style': string
   '--zettlr-editor-citation-color': string,
   '--zettlr-editor-citation-bg': string
   '--zettlr-editor-code-color': string
@@ -83,11 +85,14 @@ const highlightLight = '#ffff0080'
 const highlightDark = '#ffff0060'
 
 const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
-const codeFont = 'Inconsolata, monospace'
+const fontSize = '1em'
 
-const emphasisFont = 'italic'
-const strongFont = 'bold'
-const headerFont = 'bold'
+const codeFont = 'Inconsolata, monospace'
+const codeStyle = 'normal'
+
+const emphasisStyle = 'italic'
+const strongStyle = 'bold'
+const headerStyle = 'bold'
 
 const citationColor = 'var(--grey-1)'
 const citationColorDark = 'var(--grey-4)'
@@ -131,10 +136,12 @@ export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-selection-color': selectionLight,
   '--zettlr-editor-highlight-color': highlightLight,
   '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-font-size': fontSize,
   '--zettlr-editor-code-font': codeFont,
-  '--zettlr-editor-emphasis-font': emphasisFont,
-  '--zettlr-editor-strong-font': strongFont,
-  '--zettlr-editor-header-font': headerFont,
+  '--zettlr-editor-code-style': codeStyle,
+  '--zettlr-editor-emphasis-style': emphasisStyle,
+  '--zettlr-editor-strong-style': strongStyle,
+  '--zettlr-editor-header-style': headerStyle,
   '--zettlr-editor-citation-color': citationColor,
   '--zettlr-editor-citation-bg': citationBackground,
   '--zettlr-editor-code-color': codeColor,
@@ -161,10 +168,12 @@ export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-selection-color': selectionDark,
   '--zettlr-editor-highlight-color': highlightDark,
   '--zettlr-editor-font': fontFamily,
+  '--zettlr-editor-font-size': fontSize,
   '--zettlr-editor-code-font': codeFont,
-  '--zettlr-editor-emphasis-font': emphasisFont,
-  '--zettlr-editor-strong-font': strongFont,
-  '--zettlr-editor-header-font': headerFont,
+  '--zettlr-editor-code-style': codeStyle,
+  '--zettlr-editor-emphasis-style': emphasisStyle,
+  '--zettlr-editor-strong-style': strongStyle,
+  '--zettlr-editor-header-style': headerStyle,
   '--zettlr-editor-citation-color': citationColorDark,
   '--zettlr-editor-citation-bg': citationBackgroundDark,
   '--zettlr-editor-code-color': codeColorDark,
@@ -193,7 +202,7 @@ export const defaultDark = EditorView.theme({
 
 const mainTheme = EditorView.baseTheme({
   '.cm-scroller': {
-    fontFamily: 'var(--zettlr-editor-font)',
+    font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
     color: 'var(--zettlr-editor-scroller-color)',
     backgroundColor: 'var(--zettlr-editor-scroller-bg)',
   },
@@ -227,18 +236,18 @@ const mainTheme = EditorView.baseTheme({
     color: 'var(--zettlr-editor-error-color)',
   },
   '.cm-citation-mark': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
+    font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
     color: 'var(--zettlr-editor-citation-color)',
   },
   '.cm-citation-at-sign': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
+    font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
     color: 'var(--zettlr-editor-citation-color)',
   },
   '.cm-citation-citekey': {
     color: 'var(--zettlr-editor-secondary-color)',
   },
   '.cm-citation-locator': {
-    fontStyle: 'var(--zettlr-editor-emphasis-font)',
+    font: 'var(--zettlr-editor-emphasis-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
     textDecoration: 'var(--zettlr-editor-line-decoration)'
   },
   '.cm-citation-suppress-author-flag': {
@@ -248,9 +257,9 @@ const mainTheme = EditorView.baseTheme({
   '.cm-link.cm-code-mark': {
     color: 'inherit',
   },
-  // Don't change the font for `*`, `-`, and `_`, etc. formatting characters
+  // Don't change the font for `*`, `-`, and `_`, `#` etc. formatting characters
   '.cm-code-mark:not(.cm-emphasis, .cm-strong, .cm-list)': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
+    font: 'var(--zettlr-editor-code-style) var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
   },
   '.cm-code-mark': {
     color: 'var(--zettlr-editor-primary-color)',
@@ -265,7 +274,7 @@ const mainTheme = EditorView.baseTheme({
     borderLeftColor: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-emphasis': {
-    fontStyle: 'var(--zettlr-editor-emphasis-font)',
+    font: 'var(--zettlr-editor-emphasis-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
   },
   // Shown when a region is folded
   '.cm-foldPlaceholder': {
@@ -273,14 +282,13 @@ const mainTheme = EditorView.baseTheme({
     borderColor: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-gutters': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
+    font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
   },
   '.cm-highlight': {
     backgroundColor: 'var(--zettlr-editor-highlight-color)',
   },
   '.cm-hr':  {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    fontWeight: 'var(--zettlr-editor-strong-font)',
+    font: 'var(--zettlr-editor-strong-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
     color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-info-string': {
@@ -294,20 +302,18 @@ const mainTheme = EditorView.baseTheme({
     color: 'var(--zettlr-editor-secondary-color)',
   },
   '.cm-strong': {
-    fontWeight: 'var(--zettlr-editor-strong-font)',
+    font: 'var(--zettlr-editor-strong-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
   },
   '.cm-url': {
     color: 'var(--zettlr-editor-primary-color)',
     textDecoration: 'var(--zettlr-editor-line-decoration)',
   },
   '.cm-yaml-frontmatter-start': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    fontWeight: 'var(--zettlr-editor-strong-font)',
+    font: 'var(--zettlr-editor-strong-style) var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
     color: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-yaml-frontmatter-end': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    fontWeight: 'var(--zettlr-editor-strong-font)',
+    font: 'var(--zettlr-editor-strong-style) var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
     color: 'var(--zettlr-editor-primary-color)',
   },
   // Provide the default YAML frontmatter indicator
@@ -322,8 +328,7 @@ const mainTheme = EditorView.baseTheme({
     color: 'var(--zettlr-editor-primary-color)',
   },
   '.mermaid-chart.error': {
-    fontFamily: 'var(--zettlr-editor-code-font)',
-    color: 'var(--zettlr-editor-error-color)',
+    font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',    color: 'var(--zettlr-editor-error-color)',
   },
   'pandoc-div-info-wrapper': {
     backgroundColor: 'var(--zettlr-editor-scroller-bg)',
@@ -331,16 +336,32 @@ const mainTheme = EditorView.baseTheme({
   '.cm-heading': {
     textDecoration: 'var(--zettlr-editor-line-decoration)',
   },
-  '.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6': {
-    fontWeight: 'var(--zettlr-editor-header-font)'
-  },
   // Don't increase font-size within blockquotes
-  '.cm-line:has(:not(.cm-quote).cm-header-1)': { fontSize: 'var(--zettlr-editor-header-1-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-2)': { fontSize: 'var(--zettlr-editor-header-2-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-3)': { fontSize: 'var(--zettlr-editor-header-3-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-4)': { fontSize: 'var(--zettlr-editor-header-4-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-5)': { fontSize: 'var(--zettlr-editor-header-5-size)' },
-  '.cm-line:has(:not(.cm-quote).cm-header-6)': { fontSize: 'var(--zettlr-editor-header-6-size)' },
+  '.cm-line:has(:not(.cm-quote).cm-header-1)': {
+    font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-1-size) var(--zettlr-editor-font)',
+    // TODO: find a better way to override the `cm-code-mark` styling above
+    '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
+  },
+  '.cm-line:has(:not(.cm-quote).cm-header-2)': {
+    font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-2-size) var(--zettlr-editor-font)',
+    '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
+  },
+  '.cm-line:has(:not(.cm-quote).cm-header-3)': {
+    font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-3-size) var(--zettlr-editor-font)',
+    '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
+  },
+  '.cm-line:has(:not(.cm-quote).cm-header-4)': {
+    font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-4-size) var(--zettlr-editor-font)',
+    '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
+  },
+  '.cm-line:has(:not(.cm-quote).cm-header-5)': {
+    font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-5-size) var(--zettlr-editor-font)',
+    '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
+  },
+  '.cm-line:has(:not(.cm-quote).cm-header-6)': {
+    font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-6-size) var(--zettlr-editor-font)',
+    '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
+  },
 })
 
 /* Code Theme
