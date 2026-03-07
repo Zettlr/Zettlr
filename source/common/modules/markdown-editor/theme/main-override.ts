@@ -18,34 +18,63 @@ import { EditorView } from '@codemirror/view'
 
 export interface ThemeVars {
   [selector: string]: string|number // necessary to match the type of StyleSpec
+  /** CSS `<color>` value */
   '--zettlr-editor-primary-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-secondary-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-scroller-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-scroller-bg': string
+  /** CSS `<color>` value */
   '--zettlr-editor-selection-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-highlight-color': string
+  /** CSS `font-family` value */
   '--zettlr-editor-font': string
-  '--zettlr-editor-font-size': string,
+  /** CSS `font-family` value */
   '--zettlr-editor-code-font': string
+  /** CSS `font-size` value */
+  '--zettlr-editor-font-size': string,
+  /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-code-style': string,
+  /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-emphasis-style': string
+  /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-strong-style': string
+  /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-header-style': string
+  /** CSS `<color>` value */
   '--zettlr-editor-citation-color': string,
+  /** CSS `<color>` value */
   '--zettlr-editor-citation-bg': string
+  /** CSS `<color>` value */
   '--zettlr-editor-code-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-code-bg': string
+  /** CSS `<color>` value */
   '--zettlr-editor-escape-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-accent-color': string
+  /** CSS `<color>` value */
   '--zettlr-editor-accent-bg': string
+  /** CSS `font-size` value */
   '--zettlr-editor-header-1-size': string
+  /** CSS `font-size` value */
   '--zettlr-editor-header-2-size': string
+  /** CSS `font-size` value */
   '--zettlr-editor-header-3-size': string
+  /** CSS `font-size` value */
   '--zettlr-editor-header-4-size': string
+  /** CSS `font-size` value */
   '--zettlr-editor-header-5-size': string
+  /** CSS `font-size` value */
   '--zettlr-editor-header-6-size': string
+  /** CSS `<color>` value */
   '--zettlr-editor-error-color': string
+  /** CSS `opacity` value */
   '--zettlr-editor-opacity': string|number
+  /** CSS `text-decoration` value */
   '--zettlr-editor-line-decoration': string
 }
 
