@@ -159,7 +159,7 @@ export default class OpenAttachment extends ZettlrCommand {
         showNativeNotification(trans('Could not open attachment for key %s. Check the logs for more information.', arg.citekey))
       } else if (err instanceof Error) {
         // This could be an error in the fetching stage
-        this._app.log.error(`Could not open attachment: ${err.message as string}`, err)
+        this._app.log.error(`Could not open attachment: ${err.message}`, err)
         showNativeNotification(trans('Could not open attachment. Is Zotero running?'))
       } else {
         // Something else went wrong
