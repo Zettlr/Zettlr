@@ -6,8 +6,6 @@
     v-bind:class="{ 'hidden': !isVisible }"
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
-    v-on:pointerenter="hover = true"
-    v-on:pointerleave="hover = false; shiftHeld = false"
   >
     <template v-if="rootDescriptors.length > 0">
       <div v-if="filterQuery.trim() !== '' && filterResults.length === 0" class="empty-tree">
@@ -19,16 +17,14 @@
       <template v-if="getFiles.length > 0">
         <div
           id="directories-files-header"
-          v-bind:title="showClose ? 'Close all files' : showFilesSection ? 'Hide files' : 'Show files'"
-          v-on:click="showClose ? undefined : configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
+          v-bind:title="showFilesSection ? 'Hide files' : 'Show files'"
+          v-on:click="configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
+          v-on:contextmenu="fileRootContextMenu"
         >
           <cds-icon
             role="presentation"
-            v-bind:shape="showClose ? 'times' : 'angle'"
-            v-bind:direction="showClose ? undefined : showFilesSection ? 'down' : 'right'"
-            v-bind:status="showClose ? 'danger' : undefined"
-            v-bind:class="{ 'close-all': showClose }"
-            v-on:dblclick="showClose ? closeAllFiles() : undefined"
+            shape="angle"
+            v-bind:direction="showFilesSection ? 'down' : 'right'"
           ></cds-icon>
 
           <cds-icon
@@ -37,7 +33,7 @@
             role="presentation"
           ></cds-icon>
 
-          {{ fileSectionHeading.toUpperCase() }}
+          {{ fileSectionHeading }}
         </div>
 
         <template v-if="showFilesSection">
@@ -59,16 +55,14 @@
       <template v-if="getDirectories.length > 0">
         <div
           id="directories-dirs-header"
-          v-bind:title="showClose ? 'Close all workspaces' : showWorkspacesSection ? 'Hide workspaces' : 'Show workspaces'"
-          v-on:click="showClose ? undefined : configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
+          v-bind:title="showWorkspacesSection ? 'Hide workspaces' : 'Show workspaces'"
+          v-on:click="configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
+          v-on:contextmenu="workspaceRootContextMenu"
         >
           <cds-icon
             role="presentation"
-            v-bind:shape="showClose ? 'times' : 'angle'"
-            v-bind:direction="showClose ? undefined : showWorkspacesSection ? 'down' : 'right'"
-            v-bind:status="showClose ? 'danger' : undefined"
-            v-bind:class="{ 'close-all': showClose }"
-            v-on:dblclick.stop="showClose ? closeAllWorkspaces() : undefined"
+            shape="angle"
+            v-bind:direction="showWorkspacesSection ? 'down' : 'right'"
           ></cds-icon>
 
           <cds-icon
@@ -77,17 +71,7 @@
             role="presentation"
           ></cds-icon>
 
-          {{ workspaceSectionHeading.toUpperCase() }}
-
-          <cds-icon
-            class="collapse-all"
-            role="presentation"
-            shape="minus-circle"
-            v-bind:solid="collapseHover"
-            v-on:click.stop="collapseAll()"
-            v-on:pointerenter="collapseHover = true"
-            v-on:pointerleave="collapseHover = false"
-          ></cds-icon>
+          {{ workspaceSectionHeading }}
         </div>
 
         <template v-if="showWorkspacesSection">
@@ -134,7 +118,7 @@
 import { trans } from '@common/i18n-renderer'
 import TreeItem from './TreeItem.vue'
 import matchQuery from './util/match-query'
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
@@ -143,6 +127,8 @@ import { getSorter } from 'source/common/util/directory-sorter'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { closeFile, closeWorkspace } from './util/item-composable'
+import showPopupMenu, { type AnyMenuItem } from 'source/common/modules/window-register/application-menu-helper'
+import type { CloseAllIPCAPI } from 'source/app/service-providers/windows'
 
 const ipcRenderer = window.ipc
 
@@ -156,33 +142,6 @@ const emit = defineEmits<{
   (e: 'selection', event: MouseEvent): void
   (e: 'toggle-file-list'): void
 }>()
-
-const shiftHeld = ref(false)
-const hover = ref(false)
-const collapseHover = ref(false)
-const showClose = computed(() => shiftHeld.value && hover.value)
-
-function onKeyDown (e: KeyboardEvent) {
-  if (e.key === 'Shift') {
-    shiftHeld.value = true
-  }
-}
-
-function onKeyUp (e: KeyboardEvent) {
-  if (e.key === 'Shift') {
-    shiftHeld.value = false
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('keydown', onKeyDown)
-  window.addEventListener('keyup', onKeyUp)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', onKeyDown)
-  window.removeEventListener('keyup', onKeyUp)
-})
 
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
@@ -300,6 +259,59 @@ function requestOpenRoot (event: MouseEvent): void {
     .catch(err => console.error(err))
 }
 
+// Close all open root files, including open tabs
+function closeAllFiles (): void {
+  // Ask for confirmation before closing
+  ipcRenderer.invoke('close-all', {
+    rootType: 'file'
+  } as CloseAllIPCAPI).then((confirm: boolean) => {
+    if (!confirm) {
+      return
+    }
+
+    for (const rootFile of getFiles.value) {
+      closeFile(rootFile.path)
+    }
+  }).catch(err => console.error(err))
+}
+
+// Context menu for the `Files` header
+function fileRootContextMenu (event: MouseEvent): void {
+  const template: AnyMenuItem[] = [
+    {
+      label: trans('Close all files'),
+      id: 'close-all-files',
+      type: 'normal'
+    },
+  ]
+
+  const point = { x: event.clientX, y: event.clientY }
+  showPopupMenu(point, template, (clickedID) => {
+    switch (clickedID) {
+      case 'close-all-files':
+        closeAllFiles()
+        break
+    }
+  })
+}
+
+// Close all open workspaces and associated files, including open tabs.
+function closeAllWorkspaces (): void {
+  // Ask for confirmation before closing
+  ipcRenderer.invoke('close-all', {
+    rootType: 'workspace'
+  } as CloseAllIPCAPI).then((confirm: boolean) => {
+    if (!confirm) {
+      return
+    }
+
+    for (const dir of getDirectories.value) {
+      closeWorkspace(dir.path)
+    }
+  }).catch(err => console.error(err))
+}
+
+// Collapse all folders.
 function collapseAll (): void {
   const uncollapsed = [...windowStateStore.uncollapsedDirectories]
   const roots = rootDescriptors.value.map(r => r.path)
@@ -322,16 +334,35 @@ function collapseAll (): void {
   }
 }
 
-function closeAllFiles (): void {
-  for (const rootFile of getFiles.value) {
-    closeFile(rootFile.path)
-  }
-}
+// Context menu for the `Workspaces` header
+function workspaceRootContextMenu (event: MouseEvent): void {
+  const template: AnyMenuItem[] = [
+    {
+      label: trans('Collapse directories'),
+      id: 'collapse-all-workspaces',
+      type: 'normal'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('Close all workspaces'),
+      id: 'close-all-workspaces',
+      type: 'normal'
+    },
+  ]
 
-function closeAllWorkspaces (): void {
-  for (const dir of getDirectories.value) {
-    closeWorkspace(dir.path)
-  }
+  const point = { x: event.clientX, y: event.clientY }
+  showPopupMenu(point, template, (clickedID) => {
+    switch (clickedID) {
+      case 'collapse-all-workspaces':
+        collapseAll()
+        break
+      case 'close-all-workspaces':
+        closeAllWorkspaces()
+        break
+    }
+  })
 }
 
 function clickHandler (event: MouseEvent): void {
@@ -468,16 +499,6 @@ body {
         margin-left: 3px;
         margin-right: 3px;
         vertical-align: bottom;
-      }
-
-      .close-all:hover {
-        border-radius: 20%;
-        background-color: rgb(200, 200, 200);
-      }
-
-      .collapse-all {
-        margin-inline-start: auto;
-        margin-inline-end: 5px;
       }
     }
 

@@ -39,6 +39,7 @@ import createProjectPropertiesWindow from './create-project-properties-window'
 import createPasteImageModal from './create-paste-image-modal'
 import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
+import shouldCloseAllDialog from './dialog/should-close-all'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
 import askSaveChanges from './dialog/ask-save-changes'
@@ -61,6 +62,10 @@ import type { PasteModalResult } from '../commands/save-image-from-clipboard'
 export interface RequestFilesIPCAPI {
   filters: FileFilter[],
   multiSelection: boolean
+}
+
+export interface CloseAllIPCAPI {
+  rootType: 'workspace'|'file'
 }
 
 export type WindowControlsIPCAPI = IPCAPI<{
@@ -236,6 +241,11 @@ export default class WindowProvider extends ProviderContract {
     ipcMain.handle('request-dir', async (event, _message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
       return await this.askDir(trans('Open project folder'), focusedWindow)
+    })
+
+    ipcMain.handle('close-all', async (event, message: CloseAllIPCAPI) => {
+      const { rootType } = message
+      return await this.shouldCloseAll(rootType)
     })
 
     this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (_ctx: any) => {
@@ -973,6 +983,23 @@ export default class WindowProvider extends ProviderContract {
     }
 
     return await shouldOverwriteFileDialog(firstMainWin, filename)
+  }
+
+
+  /**
+    * Ask whether or not the user wants to close all open workspaces or files
+    *
+    * @param   {'workspace'|'file'} rootType The type of the roots being closed.
+    *
+    * @return  {boolean}  Resolves with `true` if the roots should be closed
+    */
+  async shouldCloseAll (rootType: 'workspace'|'file'): Promise<boolean> {
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
+      return false
+    }
+
+    return await shouldCloseAllDialog(firstMainWin, rootType)
   }
 
   /**
