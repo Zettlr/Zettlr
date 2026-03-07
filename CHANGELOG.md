@@ -2,6 +2,10 @@
 
 ## GUI and Functionality
 
+- **Feature**: Added a citation tooltip. When hovering over a citation cluster
+  in your documents with your mouse, this will generate a small bibliography of
+  just the items contained in the citation cluster and display it using the
+  tooltip. This allows you to quickly check which item you cited exactly.
 - Fixed potential crashes when standalone/root files or workspaces have been
   removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
   who started this effort. Previously, the re-indexing process when Zettlr boots
