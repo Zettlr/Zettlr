@@ -6,6 +6,7 @@
   removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
   who started this effort. Previously, the re-indexing process when Zettlr boots
   would not check for the existence of open paths, causing crashes.
+- Show citation menu when right-clicking on a non-rendered citation (#6213).
 
 ## Under the Hood
 
