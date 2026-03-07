@@ -14,6 +14,7 @@ verify any of your exports.
 - Fix indenting and tab insertion behavior (#6196).
 - Fix Zettlr not correctly parsing Pandoc extensions (#6212).
 - Improved error handling when opening PDF attachments.
+- Make Zettlr more resilient when CSL JSON library files are malformed.
 
 ## Under the Hood
 
@@ -23,6 +24,9 @@ verify any of your exports.
 - Upgrade ESLint to `v10.0.3`.
 - Properly parse and check the returned results from the BetterBibTex JSON RPC
   API when querying PDF attachments.
+- Zettlr no longer assumes CSL JSON files are well-formed. Instead, each item is
+  checked for the presence of required keys, and is skipped if there is an
+  issue. This ensures library files can also be loaded partially.
 
 # 4.2.0
 
