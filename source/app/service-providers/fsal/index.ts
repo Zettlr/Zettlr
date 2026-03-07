@@ -287,7 +287,7 @@ export default class FSAL extends ProviderContract {
         // Zettlr was not running. Skip those stale entries so startup can
         // continue and the remaining files/workspaces still load.
         const message = err instanceof Error ? err.message : String(err)
-        this._logger.warning(`[FSAL] Skipping stale path during reindex: ${absPath} (${message})`)
+        this._logger.error(`[FSAL] Skipping stale path during reindex: ${absPath} (${message})`)
       }
     }
 
@@ -310,14 +310,24 @@ export default class FSAL extends ProviderContract {
     const allDescriptors: AnyDescriptor[] = []
 
     for (const file of openFiles) {
-      allDescriptors.push(await this.getDescriptorFor(file))
+      try {
+        allDescriptors.push(await this.getDescriptorFor(file))
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err)
+        this._logger.error(`[FSAL] Skipping stale path while collecting descriptors: ${file} (${message})`)
+      }
     }
 
     for (const workspace of openWorkspaces) {
       const allPaths = await this.readDirectoryRecursively(workspace)
       for (const child of allPaths) {
-        const descriptor = await this.getDescriptorFor(child)
-        allDescriptors.push(descriptor)
+        try {
+          const descriptor = await this.getDescriptorFor(child)
+          allDescriptors.push(descriptor)
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : String(err)
+          this._logger.error(`[FSAL] Skipping stale path while collecting descriptors: ${child} (${message})`)
+        }
       }
     }
 
