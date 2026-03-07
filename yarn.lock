@@ -120,7 +120,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cds/core@npm:^6.16.1":
+"@cds/core@npm:^6.17.0":
   version: 6.17.0
   resolution: "@cds/core@npm:6.17.0"
   dependencies:
@@ -2434,13 +2434,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/gettext-parser@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@types/gettext-parser@npm:8.0.0"
+"@types/gettext-parser@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@types/gettext-parser@npm:9.0.0"
   dependencies:
     "@types/node": "npm:*"
-    "@types/readable-stream": "npm:*"
-  checksum: 10/e84fee97e340969df3d0ea568e78ac1846a9426b9ca702875cfbc1aa6d09106fcc360e5b4a86746fcbbf3f034d1b12f3c11c4f3f684920c88e86daf28080c33e
+  checksum: 10/df29be69892cf96351dc9ac114049d92146efd8abf77c96fdd0d84a70611c5c63a089531919171206a438ec1703038db06124a70a889783f73784364d3d9a9ad
   languageName: node
   linkType: hard
 
@@ -2626,15 +2625,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/readable-stream@npm:*":
-  version: 4.0.23
-  resolution: "@types/readable-stream@npm:4.0.23"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10/2798c083eb74c9c5910cdda2e8132e333e2435362cc811eb866871e6a2ea77cd5a665dd3085be0e45ccc90a6d7b533d3d221f3b5ccfcf3080f4133517105b3fd
-  languageName: node
-  linkType: hard
-
 "@types/readdir-glob@npm:*":
   version: 1.1.5
   resolution: "@types/readdir-glob@npm:1.1.5"
@@ -2660,7 +2650,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sanitize-html@npm:^2.16.0":
+"@types/sanitize-html@npm:^2.16.1":
   version: 2.16.1
   resolution: "@types/sanitize-html@npm:2.16.1"
   dependencies:
@@ -4015,7 +4005,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"biblatex-csl-converter@npm:^3.2.2":
+"biblatex-csl-converter@npm:^3.4.0":
   version: 3.4.0
   resolution: "biblatex-csl-converter@npm:3.4.0"
   dependencies:
@@ -4894,18 +4884,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:^13.0.1":
-  version: 13.0.1
-  resolution: "copy-webpack-plugin@npm:13.0.1"
+"copy-webpack-plugin@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "copy-webpack-plugin@npm:14.0.0"
   dependencies:
     glob-parent: "npm:^6.0.1"
     normalize-path: "npm:^3.0.0"
     schema-utils: "npm:^4.2.0"
-    serialize-javascript: "npm:^6.0.2"
+    serialize-javascript: "npm:^7.0.3"
     tinyglobby: "npm:^0.2.12"
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 10/2abf3b85c32556b1cb9ef47f2198f6497ef414505cf42d249e3b7e65185db738756bec85333b4a32865d1c6b09343ea63eb9e8d154c133ddcebb4c7f066be5af
+  checksum: 10/734524b9569b873686bdd3addef77ac9604ecaf6eaadaf2fc37f1a91eb4a50c38e8d034899e65a189af37d29b1778b34b818493e5922dc1d089625ecd0f33211
   languageName: node
   linkType: hard
 
@@ -5064,7 +5054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:^7.1.2":
+"css-loader@npm:^7.1.4":
   version: 7.1.4
   resolution: "css-loader@npm:7.1.4"
   dependencies:
@@ -7557,15 +7547,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gettext-parser@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "gettext-parser@npm:8.0.0"
+"gettext-parser@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "gettext-parser@npm:9.0.1"
   dependencies:
     content-type: "npm:^1.0.5"
     encoding: "npm:^0.1.13"
-    readable-stream: "npm:^4.5.2"
-    safe-buffer: "npm:^5.2.1"
-  checksum: 10/e22f42241f9fea3d8379879792a97e705b0bb31539246ee1bec024f247a6e8940c4feb66b24ab6412fa0cd778263c32a1d055992f3a2bc6983d5d191712c128f
+  checksum: 10/ce9052d728d20877c83c29042d3b974986aaf1c0006244aed5e116960b3f9896a56d7fbe87bca4af7ecf6da2978db4d3f9f5f1411dfa6c806ba2f6c9f0603d99
   languageName: node
   linkType: hard
 
@@ -8997,7 +8985,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^27.2.0":
+"jsdom@npm:^27.4.0":
   version: 27.4.0
   resolution: "jsdom@npm:27.4.0"
   dependencies:
@@ -9170,7 +9158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ky@npm:^1.14.1":
+"ky@npm:^1.14.3":
   version: 1.14.3
   resolution: "ky@npm:1.14.3"
   checksum: 10/afd6a6ff10e33138d5338c014a051ca920c6ced7f8452748dfe960c26fb5456f36e103cd8b5868ebf2a38bf13c2b3f53b74cbea44a1b53923e1921bb9a6447b1
@@ -9240,7 +9228,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less-loader@npm:^12.3.0":
+"less-loader@npm:^12.3.1":
   version: 12.3.1
   resolution: "less-loader@npm:12.3.1"
   peerDependencies:
@@ -9256,7 +9244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less@npm:^4.4.2":
+"less@npm:^4.5.1":
   version: 4.5.1
   resolution: "less@npm:4.5.1"
   dependencies:
@@ -9891,7 +9879,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^11.12.2":
+"mermaid@npm:^11.12.3":
   version: 11.12.3
   resolution: "mermaid@npm:11.12.3"
   dependencies:
@@ -11739,7 +11727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^4.0.0, readable-stream@npm:^4.5.2":
+"readable-stream@npm:^4.0.0":
   version: 4.7.0
   resolution: "readable-stream@npm:4.7.0"
   dependencies:
@@ -12406,7 +12394,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^6.1.2":
+"rimraf@npm:^6.1.3":
   version: 6.1.3
   resolution: "rimraf@npm:6.1.3"
   dependencies:
@@ -12480,7 +12468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.2.1, safe-buffer@npm:~5.2.0":
+"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.1.0, safe-buffer@npm:~5.2.0":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: 10/32872cd0ff68a3ddade7a7617b8f4c2ae8764d8b7d884c651b74457967a9e0e886267d3ecc781220629c44a865167b61c375d2da6c720c840ecd73f45d5d9451
@@ -12531,7 +12519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sanitize-html@npm:^2.17.0":
+"sanitize-html@npm:^2.17.1":
   version: 2.17.1
   resolution: "sanitize-html@npm:2.17.1"
   dependencies:
@@ -12615,7 +12603,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.1.1, semver@npm:^7.1.3, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.3, semver@npm:^7.7.3, semver@npm:~7.7.3":
+"semver@npm:^7.1.1, semver@npm:^7.1.3, semver@npm:^7.2.1, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.3, semver@npm:^7.7.3, semver@npm:^7.7.4, semver@npm:~7.7.3":
   version: 7.7.4
   resolution: "semver@npm:7.7.4"
   bin:
@@ -12660,6 +12648,13 @@ __metadata:
   dependencies:
     randombytes: "npm:^2.1.0"
   checksum: 10/445a420a6fa2eaee4b70cbd884d538e259ab278200a2ededd73253ada17d5d48e91fb1f4cd224a236ab62ea7ba0a70c6af29fc93b4f3d3078bf7da1c031fde58
+  languageName: node
+  linkType: hard
+
+"serialize-javascript@npm:^7.0.3":
+  version: 7.0.4
+  resolution: "serialize-javascript@npm:7.0.4"
+  checksum: 10/f96d59d6053739785822750e6ffbe06ec5a2651b836b3e6c76742c613e1b2fcb846b5df92294857ecfe69730fe36a1968c0eb8f258b02fd9173a1d5e73f0a32f
   languageName: node
   linkType: hard
 
@@ -13891,7 +13886,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"underscore@npm:^1.13.7":
+"underscore@npm:^1.13.8":
   version: 1.13.8
   resolution: "underscore@npm:1.13.8"
   checksum: 10/b50ac5806d059cc180b1bd9adea6f7ed500021f4dc782dfc75d66a90337f6f0506623c1b37863f4a9bf64ffbeb5769b638a54b7f2f5966816189955815953139
@@ -14352,7 +14347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-tsc@npm:^3.1.8":
+"vue-tsc@npm:^3.2.5":
   version: 3.2.5
   resolution: "vue-tsc@npm:3.2.5"
   dependencies:
@@ -14379,7 +14374,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue@npm:^3.5.25":
+"vue@npm:^3.5.29":
   version: 3.5.29
   resolution: "vue@npm:3.5.29"
   dependencies:
@@ -14542,7 +14537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.103.0, webpack@npm:^5.69.1":
+"webpack@npm:^5.105.4, webpack@npm:^5.69.1":
   version: 5.105.4
   resolution: "webpack@npm:5.105.4"
   dependencies:
@@ -15018,7 +15013,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zettlr@workspace:."
   dependencies:
-    "@cds/core": "npm:^6.16.1"
+    "@cds/core": "npm:^6.17.0"
     "@codemirror/autocomplete": "npm:^6.20.1"
     "@codemirror/collab": "npm:^6.1.1"
     "@codemirror/commands": "npm:^6.10.2"
@@ -15056,13 +15051,13 @@ __metadata:
     "@types/archiver": "npm:^7.0.0"
     "@types/command-exists": "npm:^1.2.3"
     "@types/d3": "npm:^7.4.3"
-    "@types/gettext-parser": "npm:^8.0.0"
+    "@types/gettext-parser": "npm:^9.0.0"
     "@types/katex": "npm:^0.16.8"
     "@types/luxon": "npm:^3.7.1"
     "@types/md5": "npm:^2.3.6"
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:^22.19.15"
-    "@types/sanitize-html": "npm:^2.16.0"
+    "@types/sanitize-html": "npm:^2.16.1"
     "@types/semver": "npm:^7.7.1"
     "@types/showdown": "npm:^2.0.6"
     "@types/underscore": "npm:^1.13.0"
@@ -15073,13 +15068,13 @@ __metadata:
     archiver: "npm:^7.0.1"
     astrocite: "npm:^0.16.4"
     bcp-47: "npm:^2.1.0"
-    biblatex-csl-converter: "npm:^3.2.2"
+    biblatex-csl-converter: "npm:^3.4.0"
     chalk: "npm:^5.6.2"
     chokidar: "npm:^5.0.0"
     citeproc: "npm:^2.4.63"
-    copy-webpack-plugin: "npm:^13.0.1"
+    copy-webpack-plugin: "npm:^14.0.0"
     cross-env: "npm:^10.1.0"
-    css-loader: "npm:^7.1.2"
+    css-loader: "npm:^7.1.4"
     csso: "npm:^5.0.5"
     d3: "npm:^7.9.0"
     electron: "npm:^40.8.0"
@@ -15093,17 +15088,17 @@ __metadata:
     fix-path: "npm:^5.0.0"
     fsevents: "npm:^2.3.3"
     gemoji: "npm:^8.1.0"
-    gettext-parser: "npm:^8.0.0"
+    gettext-parser: "npm:^9.0.1"
     got: "npm:^11.8.6"
-    jsdom: "npm:^27.2.0"
-    katex: "npm:^0.16.26"
-    ky: "npm:^1.14.1"
+    jsdom: "npm:^27.4.0"
+    katex: "npm:^0.16.37"
+    ky: "npm:^1.14.3"
     lang-criticmarkup: "npm:^0.3.0"
-    less: "npm:^4.4.2"
-    less-loader: "npm:^12.3.0"
+    less: "npm:^4.5.1"
+    less-loader: "npm:^12.3.1"
     luxon: "npm:^3.7.2"
     md5: "npm:^2.3.0"
-    mermaid: "npm:^11.12.2"
+    mermaid: "npm:^11.12.3"
     mocha: "npm:^11.7.5"
     node-loader: "npm:^2.1.0"
     nodehun: "npm:^3.0.2"
@@ -15137,26 +15132,26 @@ __metadata:
     remark-lint-table-cell-padding: "npm:^5.1.1"
     remark-math: "npm:^6.0.0"
     remark-stringify: "npm:^11.0.0"
-    rimraf: "npm:^6.1.2"
+    rimraf: "npm:^6.1.3"
     sanitize-filename: "npm:^1.6.3"
-    sanitize-html: "npm:^2.17.0"
-    semver: "npm:^7.7.3"
+    sanitize-html: "npm:^2.17.1"
+    semver: "npm:^7.7.4"
     style-loader: "npm:^4.0.0"
     tippy.js: "npm:^6.3.7"
     ts-loader: "npm:^9.5.4"
     ts-node: "npm:^10.9.2"
     tsconfig-paths: "npm:^4.2.0"
     typescript: "npm:^5.9.3"
-    underscore: "npm:^1.13.7"
+    underscore: "npm:^1.13.8"
     unified: "npm:^11.0.5"
     uuid: "npm:^13.0.0"
-    vue: "npm:^3.5.25"
+    vue: "npm:^3.5.29"
     vue-eslint-parser: "npm:^10.4.0"
     vue-loader: "npm:^17.4.2"
-    vue-tsc: "npm:^3.1.8"
+    vue-tsc: "npm:^3.2.5"
     vue-virtual-scroller: "npm:^2.0.0-beta.8"
     w3c-keyname: "npm:^2.2.8"
-    webpack: "npm:^5.103.0"
+    webpack: "npm:^5.105.4"
     yaml: "npm:^2.8.2"
   dependenciesMeta:
     fsevents:
