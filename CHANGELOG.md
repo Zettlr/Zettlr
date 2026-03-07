@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.2.1
+
 ## Fixed Pandoc Extension Parsing
 
 If you ever used [Pandoc extensions](https://pandoc.org/MANUAL.html#extensions)
