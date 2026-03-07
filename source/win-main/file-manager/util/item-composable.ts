@@ -16,7 +16,7 @@
 
 import { displayFileContext } from './file-item-context'
 import { displayDirContext } from './dir-item-context'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import type { AnyDescriptor } from 'source/types/common/fsal'
 import { ref, computed, type Ref, watch, nextTick } from 'vue'
 import { hasImageExt, hasPDFExt } from 'source/common/util/file-extention-checks'
@@ -25,6 +25,8 @@ import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documen
 
 const ipcRenderer = window.ipc
 
+const workspaceStore = useWorkspaceStore()
+
 /**
  * Close a file root path at `path`, including all open
  * instances of the file.
@@ -32,6 +34,11 @@ const ipcRenderer = window.ipc
  * @param {string}  path    The filepath to close
  */
 export function closeFile (path: string): void {
+  // First check if the path is actually a root path
+  if (!workspaceStore.rootDescriptors.find(r => r.path === path)) {
+    return
+  }
+
   ipcRenderer.invoke('documents-provider', {
     command: 'close-file-everywhere',
     payload: { path }
@@ -52,6 +59,11 @@ export function closeFile (path: string): void {
  * @param {string}  path    The workspace path to close
  */
 export function closeWorkspace (path: string): void {
+  // First check if the path is actually a root path
+  if (!workspaceStore.rootDescriptors.find(r => r.path === path)) {
+    return
+  }
+
   ipcRenderer.invoke('documents-provider', {
     command: 'get-open-workspace-files',
     payload: {
