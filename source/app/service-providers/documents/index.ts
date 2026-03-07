@@ -256,9 +256,9 @@ export default class DocumentManager extends ProviderContract {
 
       if (event === 'unlink') {
         // Close the file everywhere
-        this.closeFileEverywhere(filePath).catch(err => console.error(err))
+        this.closeFileEverywhere(filePath).catch(err => this._app.log.error(err))
       } else if (event === 'change') {
-        this.handleRemoteChange(filePath).catch(err => console.error(err))
+        this.handleRemoteChange(filePath).catch(err => this._app.log.error(err))
       } else {
         this._app.log.warning(`[DocumentManager] Received unexpected event ${event} for ${filePath}.`)
       }
@@ -310,7 +310,7 @@ export default class DocumentManager extends ProviderContract {
         }
         case 'get-open-workspace-files':
           const { path } = payload
-          return this.getWorkspaceOpenFiles(path)
+          return this.getOpenFilesForWorkspace(path)
         case 'sort-open-files': {
           const { windowId, leafId, newOrder } = payload
           this.sortOpenFiles(windowId, leafId, newOrder)
@@ -1041,13 +1041,13 @@ current contents from the editor somewhere else, and restart the application.`
    * @returns {string[]}            A list of file paths representing the
    *                                open files within `filePath`.
    */
-  public async getWorkspaceOpenFiles (filePath: string): Promise<string[]> {
+  public async getOpenFilesForWorkspace (workspacePath: string): Promise<string[]> {
     const openFiles: string[] = []
 
     await this.forEachLeaf(async (tabMan) => {
       openFiles.push(
         ...tabMan.openFiles
-          .filter(doc => doc.path.startsWith(filePath))
+          .filter(doc => doc.path.startsWith(workspacePath))
           .map(doc => doc.path)
       )
 
