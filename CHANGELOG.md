@@ -14,6 +14,7 @@ verify any of your exports.
 - Fix indenting and tab insertion behavior (#6196).
 - Fix Zettlr not correctly parsing Pandoc extensions (#6212).
 - Improved error handling when opening PDF attachments.
+- Prevent startup crashes when session restoration references files that were moved or deleted while Zettlr was closed (#6223).
 
 ## Under the Hood
 

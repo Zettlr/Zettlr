@@ -280,7 +280,15 @@ export default class FSAL extends ProviderContract {
 
       // Requesting the descriptor will, behind the scenes, check for cache hits
       // and automatically recache if necessary.
-      await this.getDescriptorFor(absPath)
+      try {
+        await this.getDescriptorFor(absPath)
+      } catch (err: unknown) {
+        // Session restoration can reference files that were moved/deleted while
+        // Zettlr was not running. Skip those stale entries so startup can
+        // continue and the remaining files/workspaces still load.
+        const message = err instanceof Error ? err.message : String(err)
+        this._logger.warning(`[FSAL] Skipping stale path during reindex: ${absPath} (${message})`)
+      }
     }
 
     const reindexDuration = performance.now() - start
