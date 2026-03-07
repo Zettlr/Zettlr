@@ -96,6 +96,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
           : fnBody.text,
         {
           onCitation: window.getCitationCallback(library),
+          sanitizeHTML: true,
           zknLinkFormat
         }
       )

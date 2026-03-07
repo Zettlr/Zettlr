@@ -19,7 +19,6 @@ import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils/markdown-to-html'
 import formatDate from '@common/util/format-date'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import sanitizeHtml from 'sanitize-html'
 import { configField } from '../util/configuration'
 import type { FindFileAndReturnMetadataResult } from 'source/app/service-providers/commands/file-find-and-return-meta-data'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
@@ -101,6 +100,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
     metadata.previewMarkdown,
     {
       zknLinkFormat,
+      sanitizeHTML: true,
       onCitation: window.getCitationCallback(CITEPROC_MAIN_DB),
       // Convert the image links to absolute (if necessary)
       onImageSrc (src) {
@@ -115,17 +115,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   )
     .then(html => {
       // ... and then apply it to the content element.
-      content.innerHTML = sanitizeHtml(html, {
-        // These options basically translate into: Allow nothing but bare metal tags
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-        disallowedTagsMode: 'escape',
-        allowedIframeDomains: [],
-        allowedIframeHostnames: [],
-        allowedScriptDomains: [],
-        allowedSchemes: sanitizeHtml.defaults.allowedSchemes.concat(['safe-file']),
-        allowedScriptHostnames: [],
-        allowVulnerableTags: false
-      })
+      content.innerHTML = html
     })
     .catch(err => console.error(err))
 

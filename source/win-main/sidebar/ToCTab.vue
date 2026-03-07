@@ -142,7 +142,11 @@ function updateToCHTML () {
 
   for (const entry of tableOfContents.value) {
     promises.push(
-      md2html(entry.text, { onCitation: window.getCitationCallback(library.value), zknLinkFormat: configStore.config.zkn.linkFormat })
+      md2html(entry.text, {
+        onCitation: window.getCitationCallback(library.value),
+        zknLinkFormat: configStore.config.zkn.linkFormat,
+        sanitizeHTML: true
+      })
     )
   }
 

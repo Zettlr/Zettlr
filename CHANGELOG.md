@@ -12,10 +12,22 @@
   would not check for the existence of open paths, causing crashes.
 - Show citation menu when right-clicking on a non-rendered citation (#6213).
 - Updated `ja-JP` translations (#6227).
+- Fixed an issue with improper HTML sanitization in the file preview tooltip,
+  which would escape unusual HTML (such as KaTeX equations) instead of allowing
+  them (#6221).
 
 ## Under the Hood
 
-(nothing here)
+- The `md2html` utility function now has a new flag, `sanitizeHTML` that you can
+  use to make the function properly sanitize potentially harmful HTML in
+  situations where HTML shall be inserted into the DOM without endangering the
+  display of special elements such as equations.
+- The app now sanitizes HTML in more cases where it is inserted into the DOM.
+  This preemptively prevents attacks using malicious HTML in the table of
+  contents, the print window, and footnote tooltip rendering. Note that this
+  does not apply when copying Markdown as HTML, since in this case we expect the
+  user wishes to retain every bit of HTML (also, in that case, they usually have
+  seen the code, making possible attacks unlikely).
 
 # 4.2.1
 
