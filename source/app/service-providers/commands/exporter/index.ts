@@ -93,7 +93,7 @@ export async function makeExport (
     runPandoc: async (defaults: string) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
-    writeDefaults: async (filename: string, overrides: any = {}) => {
+    writeDefaults: async (filename: string, overrides: Record<string, unknown> = {}) => {
       return await writeDefaults(filename, overrides, config, assets, options.defaultsOverride)
     },
     listDefaults: async () => {
@@ -163,13 +163,13 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
 
 async function writeDefaults (
   filename: string, // The profile to use
-  properties: any, // Contains properties that will be written to the defaults
+  properties: Record<string, unknown>, // Contains properties that will be written to the defaults
   config: ConfigProvider,
   assets: AssetsProvider,
   defaultsOverride?: DefaultsOverride
 ): Promise<string> {
   const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
-  const defaults: any = await assets.getDefaultsFile(filename)
+  const defaults = await assets.getDefaultsFile(filename)
 
   const cfg = config.get()
   const { cslLibrary, cslStyle, stripTags, stripLinks, enforceMarkSupport } = cfg.export

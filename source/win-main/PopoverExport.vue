@@ -60,6 +60,7 @@ import { trans } from '@common/i18n-renderer'
 import { pathBasename } from '@common/util/renderer-path-polyfill'
 import { useConfigStore } from 'source/pinia'
 import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
+import type { CustomExportIPCAPI, ExportIPCAPI } from 'source/app/service-providers/commands/export'
 
 const ipcRenderer = window.ipc
 
@@ -181,7 +182,7 @@ function doExport (): void {
       payload: {
         displayName: customCommand.displayName,
         file: props.filePath
-      }
+      } satisfies CustomExportIPCAPI
     })
       .finally(() => {
         isExporting.value = false
@@ -196,7 +197,7 @@ function doExport (): void {
         profile: JSON.parse(JSON.stringify(profile)),
         exportTo: exportDirectory.value,
         file: props.filePath
-      }
+      } satisfies ExportIPCAPI
     })
       .finally(() => {
         isExporting.value = false

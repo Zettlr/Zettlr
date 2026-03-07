@@ -48,10 +48,10 @@ export default async function makeImport (
         if (successCallback !== null) {
           successCallback(file.path)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         failedFiles.push(file.path)
         if (errorCallback !== null) {
-          errorCallback(file.path, err.message as string)
+          errorCallback(file.path, err instanceof Error ? err.message : 'Unknown error')
         }
       }
     } else if (hasMarkdownExt(file.path)) {
@@ -62,10 +62,10 @@ export default async function makeImport (
         if (successCallback !== null) {
           successCallback(file.path)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         failedFiles.push(file.path)
         if (errorCallback !== null) {
-          errorCallback(file.path, err.message as string)
+          errorCallback(file.path, err instanceof Error ? err.message : 'Unknown error')
         }
       }
     } else if (file.availableReaders.length > 0) {
@@ -145,10 +145,10 @@ export default async function makeImport (
         if (successCallback !== null) {
           successCallback(file.path)
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         failedFiles.push(file.path)
         if (errorCallback !== null) {
-          errorCallback(file.path, err.message as string)
+          errorCallback(file.path, err instanceof Error ? err.message : 'Unknown error')
         }
       }
     } else {

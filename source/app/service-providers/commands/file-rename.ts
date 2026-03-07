@@ -150,8 +150,8 @@ export default class FileRename extends ZettlrCommand {
           }
         }
       }
-    } catch (e: any) {
-      this._app.log.error(`Error during renaming file: ${e.message as string}`, e)
+    } catch (err: unknown) {
+      this._app.log.error(`Error during renaming file: ${err instanceof Error ? err.message : 'Unknown error'}`, err)
     }
   }
 }

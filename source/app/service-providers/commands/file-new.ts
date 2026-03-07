@@ -161,13 +161,22 @@ export default class FileNew extends ZettlrCommand {
       if ((await this._app.fsal.getAnyDirectoryDescriptor(path.dirname(absPath))) === undefined) {
         this._app.config.addPath(absPath)
       }
-    } catch (err: any) {
-      this._app.log.error(`Could not create file: ${err.message as string}`)
-      this._app.windows.prompt({
-        type: 'error',
-        title: trans('Could not create file'),
-        message: err.message
-      })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._app.log.error(`Could not create file: ${err.message}`)
+        this._app.windows.prompt({
+          type: 'error',
+          title: trans('Could not create file'),
+          message: err.message
+        })
+      } else {
+        this._app.log.error('Unknown error during file creation')
+        this._app.windows.prompt({
+          type: 'error',
+          title: trans('Could not create file'),
+          message: trans('An unknown error occurred.')
+        })
+      }
     }
   }
 }

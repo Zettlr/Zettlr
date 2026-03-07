@@ -16,6 +16,7 @@ import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
 import type { AppServiceContainer } from 'source/app/app-service-container'
+import { trans } from 'source/common/i18n-main'
 
 export default class DirRename extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -57,13 +58,22 @@ export default class DirRename extends ZettlrCommand {
       if (isRoot) {
         this._app.config.addPath(newPath)
       }
-    } catch (err: any) {
-      this._app.log.error(`Error during renaming file: ${err.message as string}`, err)
-      this._app.windows.prompt({
-        type: 'error',
-        title: err.name,
-        message: err.message
-      })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._app.log.error(`Error during renaming file: ${err.message}`, err)
+        this._app.windows.prompt({
+          type: 'error',
+          title: err.name,
+          message: err.message
+        })
+      } else {
+        this._app.log.error('Unknown error while renaming file.', err)
+        this._app.windows.prompt({
+          type: 'error',
+          title: trans('Could not rename file'),
+          message: trans('There was an error renaming the file.')
+        })
+      }
       return false
     }
 

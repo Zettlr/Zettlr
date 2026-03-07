@@ -31,7 +31,7 @@ export default class ImportLangFile extends ZettlrCommand {
     * @param {String} evt The event name
     * @param {Object} arg The arguments
     */
-  async run (event: string, _arg: any): Promise<boolean> {
+  async run (event: string, _arg: void): Promise<boolean> {
     let files
     try {
       files = await this._app.windows.askFile([
