@@ -1,13 +1,9 @@
 name: i18n
 
 on:
-  push:
-    paths:
-      - '.github/workflows/i18n.yaml'
   workflow_dispatch: {} # Enable manual triggers
-  workflow_call: {} # Enable other workflows to call this one
-  # schedule:
-    # - cron: '17 2 * * 1' # Run every night at 02:17 (random minute to avoid high loads)
+  schedule:
+    - cron: '17 2 * * *' # Run every night at 02:17 (random minute to avoid high loads)
 
 permissions:
   contents: write
