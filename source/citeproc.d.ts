@@ -363,10 +363,10 @@ declare module 'citeproc' {
      * on the current state of the processor registry. It accepts on optional
      * argument.
      *
-     * @param   {any}                filter  Undocumented option
+     * @param   {unknown}                filter  Undocumented option
      *
      * @return  {[BibliographyOptions, string[]]}          The output is a two-index array
      */
-    makeBibliography (filter?: any): [BibliographyOptions, string[]]
+    makeBibliography (filter?: unknown): [BibliographyOptions, string[]]
   }
 }

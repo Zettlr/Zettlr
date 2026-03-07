@@ -43,7 +43,7 @@ function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   }
 }
 
-const bibliography = ref<[{ bibstart: string, bibend: string }, string[]]|undefined>(undefined)
+const bibliography = ref<[BibliographyOptions, string[]]|undefined>(undefined)
 
 const referencesLabel = trans('References')
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
