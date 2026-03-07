@@ -502,8 +502,12 @@ export default class DocumentManager extends ProviderContract {
         }
         this._windows[key] = tree
         this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
-      } catch (err: any) {
-        this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message}`, err)
+        } else {
+          this._app.log.error(`[Document Provider] Could not instantiate window ${key}: Unknown error`, err)
+        }
       }
     }
 
@@ -703,7 +707,7 @@ export default class DocumentManager extends ProviderContract {
       doc.updates.push(update)
       try {
         doc.document = changes.apply(doc.document)
-      } catch (err: any) {
+      } catch (err: unknown) {
         dialog.showErrorBox(
           'Document out of sync',
           `Your modifications could not be applied to the document in memory.
