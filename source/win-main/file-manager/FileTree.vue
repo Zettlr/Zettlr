@@ -524,16 +524,6 @@ body {
         }
     }
   }
-
-  &.dark {
-    #file-tree {
-      #directories-dirs-header, #directories-files-header {
-        .close-all:hover {
-          background-color: rgb(80, 80, 80);
-        }
-      }
-    }
-  }
 }
 
 body.darwin {
