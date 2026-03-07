@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 4.0.0-beta.5\n"
+"Project-Id-Version: Zettlr 4.2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-03-07 14:40+0100\n"
-"PO-Revision-Date: 2026-02-20 15:02+0900\n"
+"PO-Revision-Date: 2026-03-08 01:26+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -686,7 +686,7 @@ msgstr "ファイルを作成できません"
 
 #: source/app/service-providers/commands/file-new.ts:177
 msgid "An unknown error occurred."
-msgstr ""
+msgstr "不明なエラーが発生しました。"
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:68
 #: source/app/service-providers/commands/importer/import-textbundle.ts:75
@@ -807,7 +807,7 @@ msgstr "エクスポート中にエラーが発生しました : %s"
 
 #: source/app/service-providers/commands/export.ts:187
 msgid "Export error"
-msgstr ""
+msgstr "エクスポートエラー"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
@@ -837,6 +837,7 @@ msgstr "キー %s の参照には添付ファイルがないようです。"
 msgid ""
 "Could not open attachment for key %s. Check the logs for more information."
 msgstr ""
+"キー %s の添付ファイルを開けません。詳細についてはログを確認してください。"
 
 #: source/app/service-providers/commands/open-attachment.ts:163
 #: source/app/service-providers/commands/open-attachment.ts:167
@@ -907,7 +908,7 @@ msgstr "次の %s ファイルをインポートできませんでした : %s"
 #: source/app/service-providers/commands/import.ts:89
 #, javascript-format
 msgid "Could not import files due to an error: %s"
-msgstr ""
+msgstr "エラーのためファイルをインポートできませんでした: %s"
 
 #: source/app/service-providers/commands/import.ts:86
 #: source/app/service-providers/commands/import.ts:89
@@ -916,15 +917,15 @@ msgstr "インポート失敗"
 
 #: source/app/service-providers/commands/import.ts:89
 msgid "Unknown error"
-msgstr ""
+msgstr "不明なエラー"
 
 #: source/app/service-providers/commands/dir-rename.ts:73
 msgid "Could not rename file"
-msgstr ""
+msgstr "ファイルの名前を変更できませんでした"
 
 #: source/app/service-providers/commands/dir-rename.ts:74
 msgid "There was an error renaming the file."
-msgstr ""
+msgstr "ファイルの名前変更中にエラーが発生しました。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:84
 msgid "Cannot export project"
@@ -1626,7 +1627,7 @@ msgstr "強調表示なし"
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:239
 #, javascript-format
 msgid "%s characters"
-msgstr "%s文字"
+msgstr "%s 文字"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
@@ -1638,7 +1639,7 @@ msgstr "%s文字"
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:241
 #, javascript-format
 msgid "%s words"
-msgstr "%s単語"
+msgstr "%s 単語"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:82
 #, javascript-format
@@ -2244,15 +2245,15 @@ msgstr "すべてのタブを閉じる"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:456
 msgid "Move"
-msgstr ""
+msgstr "移動"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:461
 msgid "Move to start"
-msgstr ""
+msgstr "開始地点へ移動"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:467
 msgid "Move to end"
-msgstr ""
+msgstr "終了地点へ移動"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:475
 msgid "Unpin tab"
@@ -4104,13 +4105,15 @@ msgstr "スペースの代わりにタブを使用してインデントする"
 
 #: source/win-preferences/schema/editor.ts:324
 msgid "Always indent the current line when pressing Tab"
-msgstr ""
+msgstr "Tabキーを押したときに常に現在の行をインデントする"
 
 #: source/win-preferences/schema/editor.ts:325
 msgid ""
 "Zettlr always indents the line for list items. Turn this setting on to "
 "always indent any line."
 msgstr ""
+"Zettlr は、リスト項目の行を常にインデントします。任意の行を常にインデントする"
+"には、この設定をオンにします。"
 
 #: source/win-preferences/schema/editor.ts:331
 msgid "Show formatting toolbar when text is selected"
