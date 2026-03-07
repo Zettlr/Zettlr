@@ -25,8 +25,6 @@ import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documen
 
 const ipcRenderer = window.ipc
 
-const workspaceStore = useWorkspaceStore()
-
 /**
  * Close a file root path at `path`, including all open
  * instances of the file.
@@ -34,6 +32,8 @@ const workspaceStore = useWorkspaceStore()
  * @param {string}  path    The filepath to close
  */
 export function closeFile (path: string): void {
+  const workspaceStore = useWorkspaceStore()
+
   // First check if the path is actually a root path
   if (!workspaceStore.rootDescriptors.find(r => r.path === path)) {
     return
@@ -59,6 +59,8 @@ export function closeFile (path: string): void {
  * @param {string}  path    The workspace path to close
  */
 export function closeWorkspace (path: string): void {
+  const workspaceStore = useWorkspaceStore()
+
   // First check if the path is actually a root path
   if (!workspaceStore.rootDescriptors.find(r => r.path === path)) {
     return
