@@ -251,10 +251,20 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
+      if (!await this.isFile(file)) {
+        this._logger.warning(`[FSAL] Could not re-index standalone file ${file}: File not found.`)
+        continue
+      }
+
       pathsToIndex.push(file)
     }
 
     for (const workspace of openWorkspaces) {
+      if (!await this.isDir(workspace)) {
+        this._logger.warning(`[FSAL] Could not re-index workspace ${workspace}: Folder not found.`)
+        continue
+      }
+
       const allPaths = await this.readDirectoryRecursively(workspace)
       pathsToIndex.push(...allPaths)
     }

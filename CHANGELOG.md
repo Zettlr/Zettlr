@@ -2,7 +2,10 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed potential crashes when standalone/root files or workspaces have been
+  removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
+  who started this effort. Previously, the re-indexing process when Zettlr boots
+  would not check for the existence of open paths, causing crashes.
 
 ## Under the Hood
 
