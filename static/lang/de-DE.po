@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 2.3.0\n"
+"Project-Id-Version: Zettlr 4.2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-03-07 14:40+0100\n"
-"PO-Revision-Date: 2026-02-21 10:04+0100\n"
+"PO-Revision-Date: 2026-03-07 15:00+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -684,7 +684,7 @@ msgstr "Konnte Datei nicht erstellen"
 
 #: source/app/service-providers/commands/file-new.ts:177
 msgid "An unknown error occurred."
-msgstr ""
+msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:68
 #: source/app/service-providers/commands/importer/import-textbundle.ts:75
@@ -804,7 +804,7 @@ msgstr "Ein Fehler ist beim Export aufgetreten: %s"
 
 #: source/app/service-providers/commands/export.ts:187
 msgid "Export error"
-msgstr ""
+msgstr "Fehler beim Exportieren"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
@@ -834,6 +834,8 @@ msgstr "Die Referenz mit dem Schlüssel %s scheint keine Anhänge zu haben."
 msgid ""
 "Could not open attachment for key %s. Check the logs for more information."
 msgstr ""
+"Konnte Anhang für Zitation %s nicht öffnen. Für mehr Informationen siehe "
+"Logs."
 
 #: source/app/service-providers/commands/open-attachment.ts:163
 #: source/app/service-providers/commands/open-attachment.ts:167
@@ -905,7 +907,7 @@ msgstr "Die folgenden %s konnten nicht importiert werden: %s"
 #: source/app/service-providers/commands/import.ts:89
 #, javascript-format
 msgid "Could not import files due to an error: %s"
-msgstr ""
+msgstr "Konnte Dateien aufgrund eines Fehlers nicht importieren: %s"
 
 #: source/app/service-providers/commands/import.ts:86
 #: source/app/service-providers/commands/import.ts:89
@@ -914,15 +916,15 @@ msgstr "Import fehlgeschlagen"
 
 #: source/app/service-providers/commands/import.ts:89
 msgid "Unknown error"
-msgstr ""
+msgstr "Unbekannter Fehler"
 
 #: source/app/service-providers/commands/dir-rename.ts:73
 msgid "Could not rename file"
-msgstr ""
+msgstr "Konnte Datei nicht umbenennen"
 
 #: source/app/service-providers/commands/dir-rename.ts:74
 msgid "There was an error renaming the file."
-msgstr ""
+msgstr "Es gab einen Fehler beim Umbenennen der Datei."
 
 #: source/app/service-providers/commands/dir-project-export.ts:84
 msgid "Cannot export project"
@@ -2240,15 +2242,15 @@ msgstr "Alle Tabs schließen"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:456
 msgid "Move"
-msgstr ""
+msgstr "Verschieben"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:461
 msgid "Move to start"
-msgstr ""
+msgstr "An den Anfang verschieben"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:467
 msgid "Move to end"
-msgstr ""
+msgstr "Ans Ende verschieben"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:475
 msgid "Unpin tab"
@@ -4100,13 +4102,15 @@ msgstr "Mit Tab-Zeichen einrücken"
 
 #: source/win-preferences/schema/editor.ts:324
 msgid "Always indent the current line when pressing Tab"
-msgstr ""
+msgstr "Aktuelle Zeile bei Tab immer einrücken"
 
 #: source/win-preferences/schema/editor.ts:325
 msgid ""
 "Zettlr always indents the line for list items. Turn this setting on to "
 "always indent any line."
 msgstr ""
+"Zettlr rückt Listeneinträge immer ein. Wenn diese Option ein ist, rückt "
+"Zettlr jede Zeile immer ein."
 
 #: source/win-preferences/schema/editor.ts:331
 msgid "Show formatting toolbar when text is selected"
