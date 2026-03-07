@@ -20,7 +20,7 @@ import clickAndSelect from './click-and-select'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { citationMenu } from '../context-menu/citation-menu'
 import { configField } from '../util/configuration'
-import { type Citation, nodeToCiteItem } from '../parser/citation-parser'
+import { type Citation, NODES, nodeToCiteItem } from '../parser/citation-parser'
 
 class CitationWidget extends WidgetType {
   constructor (readonly citation: Citation, readonly rawCitation: string, readonly node: SyntaxNode) {
@@ -74,16 +74,9 @@ class CitationWidget extends WidgetType {
     }
     elem.addEventListener('click', clickAndSelect(view))
 
-    // Render each individual item as a composite citation for the user to
-    // select.
-    const keys = items.map(x => x.id)
-    const renderedItems: Record<string, string> = Object.fromEntries(keys.map(key => {
-      return [ key, callback([{ id: key }], true) ?? key ]
-    }))
-
     elem.addEventListener('contextmenu', (event) => {
       const coords = { x: event.clientX, y: event.clientY }
-      citationMenu(view, coords, renderedItems, elem.innerText)
+      citationMenu(view, coords, this.node)
     })
 
     return elem
@@ -95,8 +88,7 @@ class CitationWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  // console.log(node.type.name, 'Parent: ', node.node.parent?.type.name)
-  return node.type.name === 'Citation'
+  return node.type.name === NODES.CITATION
 }
 
 function createWidget (state: EditorState, node: SyntaxNodeRef): CitationWidget|undefined {
