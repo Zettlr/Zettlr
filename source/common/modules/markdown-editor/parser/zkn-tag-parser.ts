@@ -19,7 +19,7 @@ const allowedCharsBefore = /^[ \t\n\(\{\[]$/
 
 // Tags start with one or two '#' followed by letters, numbers, emojis,
 // underscores, or hyphens
-const tagRE = /^##?[\p{L}\p{N}\p{Emoji_Presentation}_-]+#?/u
+const tagRE = /^##?[\p{L}\p{N}\p{Emoji}\uFE0F_-]+#?/u
 
 export const zknTagParser: InlineParser = {
   name: 'zkn-tags',
