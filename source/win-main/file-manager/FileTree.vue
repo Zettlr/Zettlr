@@ -518,8 +518,8 @@ body {
       .close-all {
         margin-inline-start: auto;
         margin-inline-end: 5px;
-        border: solid;
-        border-radius: 100%;
+        border: 1px solid;
+        border-radius: 4px;
         padding: 1px;
       }
 
