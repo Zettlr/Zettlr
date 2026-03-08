@@ -138,24 +138,30 @@ export class DocumentTree {
    *
    * @return  {DocumentTree}        The tree
    */
-  static fromJSON (data: any): DocumentTree {
+  static fromJSON (data: unknown): DocumentTree {
     if (Array.isArray(data)) {
       throw new Error('Could not instantiate tree: Data was an array')
     }
 
-    if (data.type === undefined) {
+    if (typeof data !== 'object' || data === null) {
+      throw new Error('Could not instantiate tree: Data was null or not a valid object')
+    }
+
+    const { type } = data as Partial<LeafNodeJSON|BranchNodeJSON>
+
+    if (type === undefined) {
       throw new Error('Could not instantiate tree: Data missing required property "type"')
     }
 
-    if (![ 'leaf', 'branch' ].includes(data.type as string)) {
-      throw new Error(`Could not instantiate tree: data.type contained unrecognized value ${data.type as string}`)
+    if (![ 'leaf', 'branch' ].includes(type)) {
+      throw new Error(`Could not instantiate tree: data.type contained unrecognized value ${type}`)
     }
 
     const newTree = new DocumentTree()
 
-    if (data.type === 'leaf') {
+    if (type === 'leaf') {
       newTree.node = DTLeaf.fromJSON(newTree, data)
-    } else if (data.type === 'branch') {
+    } else if (type === 'branch') {
       newTree.node = DTBranch.fromJSON(newTree, data)
     }
 

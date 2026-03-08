@@ -278,16 +278,16 @@ export class DTBranch {
    * Create a new Branch from the given JSON data
    *
    * @param   {DocumentTree|DTBranch}  parent    The parent node
-   * @param   {any}                    nodeData  The JSON data to fill the branch with
+   * @param   {unknown}                nodeData  The JSON data to fill the branch with
    *
    * @return  {Promise<DTBranch>}                 The new branch
    */
-  static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTBranch {
-    if (typeof nodeData !== 'object') {
-      throw new Error('Could not instantiate DTBranch: Provided JSON was not an object.')
+  static fromJSON (parent: DocumentTree|DTBranch, nodeData: unknown): DTBranch {
+    if (typeof nodeData !== 'object' || nodeData === null || Array.isArray(nodeData)) {
+      throw new Error('Could not instantiate DTBranch: Provided JSON was not a valid object.')
     }
 
-    const { direction, id, nodes, sizes } = nodeData
+    const { direction, id, nodes, sizes } = nodeData as Partial<BranchNodeJSON>
 
     if (typeof direction !== 'string' || (direction !== 'horizontal' && direction !== 'vertical')) {
       throw new Error(`Could not instantiate DTBranch: Invalid split direction: ${direction}`)
@@ -317,7 +317,7 @@ export class DTBranch {
     // We don't have to throw an error if the sizes are wrong, since then the
     // leafs/branches are simply equally large.
     if (Array.isArray(sizes) && sizes.every(x => typeof x === 'number') && sizes.length === nodes.length) {
-      newBranch.sizes = nodeData.sizes
+      newBranch.sizes = sizes
     }
 
     return newBranch
