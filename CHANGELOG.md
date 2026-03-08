@@ -25,6 +25,8 @@
   is available, so there may be inconsistencies in highlighting.
 - Allow more emojis in tags (#6202).
 - Fix crashes when directories aren't accessible by the app (#6172).
+- Improve autocorrect handling. Now, users can undo an unwanted replacement
+  (`Ctrl/Cmd+Z`) without losing the inserted space or new line (#6210).
 
 ## Under the Hood
 
