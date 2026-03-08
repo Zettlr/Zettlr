@@ -27,8 +27,9 @@ import { trans } from '@common/i18n-main'
 export default async function shouldCloseAllDialog (win: BrowserWindow|null, rootType: 'workspace'|'file'): Promise<boolean> {
   const options: MessageBoxOptions = {
     type: 'question',
-    title: trans('Close all %ss?', rootType),
-    message: trans('Close all %ss?', rootType),
+    title: trans('Close all %ss', rootType),
+    message: trans('Close all %ss', rootType),
+    detail: trans('Do you really want to close all %ss?', rootType),
     buttons: [
       trans('Cancel'),
       trans('Ok')
