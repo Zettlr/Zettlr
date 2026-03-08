@@ -23,6 +23,7 @@
 - Re-enabled the broken System Verilog syntax highlighting. However, the code
   highlighting uses the Verilog parser, since no dedicated System Verilog parser
   is available, so there may be inconsistencies in highlighting.
+- Allow more emojis in tags (#6202).
 
 ## Under the Hood
 
