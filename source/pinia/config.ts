@@ -45,7 +45,7 @@ export const useConfigStore = defineStore('config', () => {
     }
   })
 
-  function setConfigValue (property: string, value: any): boolean {
+  function setConfigValue (property: string, value: unknown): boolean {
     return ipcRenderer.sendSync('config-provider', {
       command: 'set-config-single',
       payload: { key: property, val: value }

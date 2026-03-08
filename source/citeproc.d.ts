@@ -32,7 +32,7 @@ interface CSLItem {
   /**
    * Arbitrary values can be passed here as well
    */
-  [key?: string]: any
+  [key?: string]: unknown
 }
 
 /**

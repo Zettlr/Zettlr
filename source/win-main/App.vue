@@ -383,7 +383,7 @@ const parsedDocumentInfo = computed<string>(() => {
   if (info.selections.length > 0) {
     // We have selections to display.
     let length = 0
-    info.selections.forEach((sel: any) => {
+    info.selections.forEach(sel => {
       length += shouldCountChars.value ? sel.chars : sel.words
     })
 

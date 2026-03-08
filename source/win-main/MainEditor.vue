@@ -566,16 +566,16 @@ async function updateCitationKeys (library: string): Promise<void> {
     command: 'get-items',
     payload: { database: library }
   } as CiteprocProviderIPCAPI))
-    .map((item: any) => {
+    .map((item: CSLItem) => {
       // Get a rudimentary author list. Precedence are authors, then editors.
       // Fallback: Container title.
       let authors = ''
-      const authorSrc = item.author !== undefined
+      const authorSrc = item.author !== undefined && Array.isArray(item.author)
         ? item.author
-        : item.editor !== undefined ? item.editor : []
+        : item.editor !== undefined && Array.isArray(item.editor) ? item.editor : []
 
       if (authorSrc.length > 0) {
-        authors = authorSrc.map((author: any) => {
+        authors = authorSrc.map(author => {
           if (author.family !== undefined) {
             return author.family
           } else if (author.literal !== undefined) {
@@ -583,21 +583,21 @@ async function updateCitationKeys (library: string): Promise<void> {
           } else {
             return undefined
           }
-        }).filter((elem: any) => elem !== undefined).join(', ')
-      } else if (item['container-title'] !== undefined) {
+        }).filter(elem => elem !== undefined).join(', ')
+      } else if (item['container-title'] !== undefined && typeof item['container-title'] === 'string') {
         authors = item['container-title']
       }
 
       let title = ''
-      if (item.title !== undefined) {
+      if (item.title !== undefined && typeof item.title === 'string') {
         title = item.title
-      } else if (item['container-title'] !== undefined) {
+      } else if (item['container-title'] !== undefined && typeof item['container-title'] === 'string') {
         title = item['container-title']
       }
 
       let date = ''
-      if (item.issued !== undefined) {
-        if ('date-parts' in item.issued) {
+      if (item.issued != undefined && typeof item.issued === 'object') {
+        if ('date-parts' in item.issued && Array.isArray(item.issued['date-parts'])) {
           const year = item.issued['date-parts'][0][0]
           date = ` (${year})`
         } else if ('literal' in item.issued) {
