@@ -15,6 +15,8 @@
 - Fixed an issue with improper HTML sanitization in the file preview tooltip,
   which would escape unusual HTML (such as KaTeX equations) instead of allowing
   them (#6221).
+- Fixed an issue that might prevent the correct app icon to show up for the
+  AppImage release of Zettlr.
 
 ## Under the Hood
 

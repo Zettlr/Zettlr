@@ -68,7 +68,7 @@ linux:
   icon: "./resources/icons/png"
   desktop:
     entry:
-      StartupWMClass: zettlr
+      StartupWMClass: Zettlr
 #
 # Configuration for DMG builds
 #
