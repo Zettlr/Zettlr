@@ -325,34 +325,39 @@ function closeAllWorkspaces (): void {
   }).catch(err => console.error(err))
 }
 
-// Collapse all folders.
-function collapseAll (): void {
-  const uncollapsed = [...windowStateStore.uncollapsedDirectories]
-  const roots = rootDescriptors.value.map(r => r.path)
-
-  // Only collapse child folders, not roots, if any children are uncollapsed.
-  let onlyRoots = true
-  for (const filePath of uncollapsed) {
-    if (!roots.includes(filePath)) {
-      let idx = windowStateStore.uncollapsedDirectories.indexOf(filePath)
-      if (idx > -1) {
-        windowStateStore.uncollapsedDirectories.splice(idx, 1)
-        onlyRoots = false
-      }
-    }
+// Collapse uncollapse folders. If `collapseRoots` is `true`, also collapse
+// root workspace directories.
+function collapseAll (collapseRoots: boolean): void {
+  // Collapse all folders and roots.
+  if (collapseRoots) {
+    windowStateStore.uncollapsedDirectories.splice(0)
+    return
   }
 
-  // If all of the children are collapsed, then collapse the roots.
-  if (onlyRoots) {
-    windowStateStore.uncollapsedDirectories.splice(0)
+  // Collapse only child folders, leaving roots uncollapsed
+  const roots = new Set(rootDescriptors.value.map(r => r.path))
+
+  const uncollapsed = windowStateStore.uncollapsedDirectories
+    .filter(path => !roots.has(path))
+
+  for (const filePath of uncollapsed) {
+    let idx = windowStateStore.uncollapsedDirectories.indexOf(filePath)
+    if (idx > -1) {
+      windowStateStore.uncollapsedDirectories.splice(idx, 1)
+    }
   }
 }
 
 // Context menu for the `Workspaces` header
 function workspaceRootContextMenu (event: MouseEvent): void {
+  const roots = new Set(rootDescriptors.value.map(r => r.path))
+
+  const onlyRoots = windowStateStore.uncollapsedDirectories
+    .every(path => roots.has(path))
+
   const template: AnyMenuItem[] = [
     {
-      label: trans('Collapse directories'),
+      label: trans('Collapse %s', onlyRoots ? 'workspaces' : 'folders'),
       id: 'collapse-all-workspaces',
       type: 'normal'
     },
@@ -370,7 +375,7 @@ function workspaceRootContextMenu (event: MouseEvent): void {
   showPopupMenu(point, template, (clickedID) => {
     switch (clickedID) {
       case 'collapse-all-workspaces':
-        collapseAll()
+        collapseAll(onlyRoots)
         break
       case 'close-all-workspaces':
         closeAllWorkspaces()
