@@ -6,6 +6,9 @@
   in your documents with your mouse, this will generate a small bibliography of
   just the items contained in the citation cluster and display it using the
   tooltip. This allows you to quickly check which item you cited exactly.
+- **Feature**: The Custom CSS editor now offers autocomplete assistance (#6226).
+- **Feature**: Added dedicated `math` code block syntax highlighting to add
+  MathTeX to files without rendering (#6226).
 - Fixed potential crashes when standalone/root files or workspaces have been
   removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
   who started this effort. Previously, the re-indexing process when Zettlr boots
@@ -17,6 +20,9 @@
   them (#6221).
 - Fixed an issue that might prevent the correct app icon to show up for the
   AppImage release of Zettlr.
+- Re-enabled the broken System Verilog syntax highlighting. However, the code
+  highlighting uses the Verilog parser, since no dedicated System Verilog parser
+  is available, so there may be inconsistencies in highlighting.
 
 ## Under the Hood
 
@@ -30,6 +36,8 @@
   does not apply when copying Markdown as HTML, since in this case we expect the
   user wishes to retain every bit of HTML (also, in that case, they usually have
   seen the code, making possible attacks unlikely).
+- Updated various code syntax highlighting parsers from the legacy mode to the
+  corresponding dedicated parsers (#6226).
 
 # 4.2.1
 

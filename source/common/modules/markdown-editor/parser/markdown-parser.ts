@@ -70,7 +70,7 @@ import { scheme } from '@codemirror/legacy-modes/mode/scheme'
 import { shell } from '@codemirror/legacy-modes/mode/shell'
 import { smalltalk } from '@codemirror/legacy-modes/mode/smalltalk'
 import { sparql } from '@codemirror/legacy-modes/mode/sparql'
-import { stex } from '@codemirror/legacy-modes/mode/stex'
+import { stex, stexMath } from '@codemirror/legacy-modes/mode/stex'
 import { swift } from '@codemirror/legacy-modes/mode/swift'
 import { tcl } from '@codemirror/legacy-modes/mode/tcl'
 import { toml } from '@codemirror/legacy-modes/mode/toml'
@@ -156,13 +156,14 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(shell), selectors: [ 'shell', 'sh', 'bash' ] },
   { mode: StreamLanguage.define(smalltalk), selectors: [ 'smalltalk', 'st' ] },
   { mode: StreamLanguage.define(sparql), selectors: ['sparql'] },
-  { mode: StreamLanguage.define(stex), selectors: [ 'latex', 'tex', 'math' ] },
+  { mode: StreamLanguage.define(stex), selectors: [ 'latex', 'tex' ] },
+  { mode: StreamLanguage.define(stexMath), selectors: ['math'] },
   { mode: StreamLanguage.define(swift), selectors: ['swift'] },
   { mode: StreamLanguage.define(tcl), selectors: ['tcl'] },
   { mode: StreamLanguage.define(toml), selectors: [ 'toml', 'ini' ] },
   { mode: StreamLanguage.define(turtle), selectors: [ 'turtle', 'ttl' ] },
   { mode: StreamLanguage.define(vb), selectors: [ 'vb.net', 'vb', 'visualbasic' ] },
-  { mode: StreamLanguage.define(verilog), selectors: [ 'verilog', 'v' ] },
+  { mode: StreamLanguage.define(verilog), selectors: [ 'verilog', 'v', 'systemverilog' ] },
   { mode: StreamLanguage.define(vhdl), selectors: [ 'vhdl', 'vhd' ] },
 ]
 
