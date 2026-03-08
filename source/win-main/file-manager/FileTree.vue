@@ -34,6 +34,13 @@
           ></cds-icon>
 
           {{ fileSectionHeading }}
+
+          <cds-icon
+            role="presentation"
+            shape="ellipsis-horizontal"
+            class="close-all"
+            v-on:click.stop="fileRootContextMenu"
+          ></cds-icon>
         </div>
 
         <template v-if="showFilesSection">
@@ -72,6 +79,13 @@
           ></cds-icon>
 
           {{ workspaceSectionHeading }}
+
+          <cds-icon
+            role="presentation"
+            shape="ellipsis-horizontal"
+            class="close-all"
+            v-on:click.stop="workspaceRootContextMenu"
+          ></cds-icon>
         </div>
 
         <template v-if="showWorkspacesSection">
@@ -500,6 +514,18 @@ body {
         margin-right: 3px;
         vertical-align: bottom;
       }
+
+      .close-all {
+        margin-inline-start: auto;
+        margin-inline-end: 5px;
+        border: solid;
+        border-radius: 100%;
+        padding: 1px;
+      }
+
+      .close-all:hover {
+          background-color: var(--grey-2);
+        }
     }
 
     .list-item {
@@ -522,6 +548,16 @@ body {
             font-weight: bold;
             font-size: 200%;
         }
+    }
+  }
+
+  &.dark {
+    #file-tree {
+      #directories-dirs-header, #directories-files-header {
+        .close-all:hover {
+            background-color: var(--grey-3);
+          }
+      }
     }
   }
 }
