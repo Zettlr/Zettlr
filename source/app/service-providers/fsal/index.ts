@@ -843,19 +843,17 @@ export default class FSAL extends ProviderContract {
       const contents = await Promise.all(
         children
           .filter(dirent => !ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
-          .map(async (dirent) => {
+          .map(dirent => {
             const childPath = path.join(directoryPath, dirent.name)
-            if (dirent.isFile()) {
-              return [childPath]
-            }
-            return this.readDirectoryRecursively(childPath)
+            return dirent.isFile() ? [childPath] : this.readDirectoryRecursively(childPath)
           })
       )
       return [ directoryPath, ...contents.flat() ]
     } catch (err: unknown) {
       const code = err instanceof Error ? (err as NodeJS.ErrnoException).code : undefined
-      if (code === 'EACCES' || code === 'EPERM') {return []}
-      if (err instanceof Error) {
+      if (code === 'EACCES' || code === 'EPERM') {
+        this._logger.error(`[FSAL] Could not read directiroy ${directoryPath}: Could not read/access the directory (code: ${code})`)
+      } else if (err instanceof Error) {
         this._logger.error(`[FSAL] Could not read directory: ${directoryPath}`, err)
       }
       return []
@@ -878,15 +876,20 @@ export default class FSAL extends ProviderContract {
     const { files } = this._config.get()
     const ignoreDotFiles = !files.dotFiles.showInFilemanager && !files.dotFiles.showInSidebar
 
-    let children: { name: string, isFile: () => boolean, isDirectory: () => boolean }[]
     try {
-      children = await fs.readdir(absPath, { withFileTypes: true })
+      const children = await fs.readdir(absPath, { withFileTypes: true })
 
       const childPaths = children
         .filter(dirent => !ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
         .map(dirent => path.join(absPath, dirent.name))
 
-      const results = await Promise.allSettled(childPaths.map(p => this.getDescriptorFor(p)))
+      const results = await Promise.allSettled(
+        childPaths.map(p => {
+          return this.getDescriptorFor(p)
+            .catch(err => this._logger.error(`[FSAL] Error while reading directory ${absPath}: Could not read child ${path.relative(absPath, p)}`, err))
+        })
+      )
+
       return results
         .filter((r): r is PromiseFulfilledResult<AnyDescriptor> => r.status === 'fulfilled')
         .map(r => r.value)
