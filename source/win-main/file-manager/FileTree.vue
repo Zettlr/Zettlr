@@ -518,13 +518,13 @@ body {
       .close-all {
         margin-inline-start: auto;
         margin-inline-end: 5px;
-        border: 1px solid;
         border-radius: 4px;
-        padding: 1px;
+        padding: 2px;
+        background-color: var(--grey-2);
       }
 
       .close-all:hover {
-          background-color: var(--grey-2);
+          background-color: var(--grey-1);
         }
     }
 
@@ -554,6 +554,9 @@ body {
   &.dark {
     #file-tree {
       #directories-dirs-header, #directories-files-header {
+        .close-all {
+            background-color: var(--grey-4);
+          }
         .close-all:hover {
             background-color: var(--grey-3);
           }
