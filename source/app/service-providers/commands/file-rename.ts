@@ -59,7 +59,7 @@ export default class FileRename extends ZettlrCommand {
     if (newExt !== '' && !invalidExt && oldExt !== newExt) {
       const response = await dialog.showMessageBox({
         title: trans('Change file extension'),
-        message: trans('Change file extension from %s to %s?', oldExt, newExt),
+        message: trans('Do you want to change the file extension from %s to %s?', oldExt, newExt),
         buttons: [
           trans('Use %s', newExt),
           trans('Keep %s', oldExt),
