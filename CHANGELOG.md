@@ -24,6 +24,7 @@
   highlighting uses the Verilog parser, since no dedicated System Verilog parser
   is available, so there may be inconsistencies in highlighting.
 - Allow more emojis in tags (#6202).
+- Fix crashes when directories aren't accessible by the app (#6172).
 
 ## Under the Hood
 
