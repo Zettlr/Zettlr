@@ -17,7 +17,7 @@
       <template v-if="getFiles.length > 0">
         <div
           id="directories-files-header"
-          v-bind:title="showFilesSection ? 'Hide files' : 'Show files'"
+          v-bind:title="showFilesSection ? hideFilesLabel : showFilesLabel"
           v-on:click="configStore.setConfigValue('fileManagerShowFiles', !showFilesSection)"
           v-on:contextmenu="fileRootContextMenu"
         >
@@ -62,7 +62,7 @@
       <template v-if="getDirectories.length > 0">
         <div
           id="directories-dirs-header"
-          v-bind:title="showWorkspacesSection ? 'Hide workspaces' : 'Show workspaces'"
+          v-bind:title="showWorkspacesSection ? hideWorkspacesLabel : showWorkspacesLabel"
           v-on:click="configStore.setConfigValue('fileManagerShowWorkspaces', !showWorkspacesSection)"
           v-on:contextmenu="workspaceRootContextMenu"
         >
@@ -176,6 +176,10 @@ const fileSectionHeading = trans('Files')
 const workspaceSectionHeading = trans('Workspaces')
 const noRootsMessage = trans('No open files or folders')
 const noResultsMessage = trans('No results')
+const hideFilesLabel = trans('Hide files')
+const showFilesLabel = trans('Show files')
+const hideWorkspacesLabel = trans('Hide workspaces')
+const showWorkspacesLabel = trans('Show workspaces')
 
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
@@ -294,19 +298,14 @@ function fileRootContextMenu (event: MouseEvent): void {
   const template: AnyMenuItem[] = [
     {
       label: trans('Close all files'),
-      id: 'close-all-files',
-      type: 'normal'
+      type: 'normal',
+      action () {
+        closeAllFiles()
+      }
     },
   ]
 
-  const point = { x: event.clientX, y: event.clientY }
-  showPopupMenu(point, template, (clickedID) => {
-    switch (clickedID) {
-      case 'close-all-files':
-        closeAllFiles()
-        break
-    }
-  })
+  showPopupMenu({ x: event.clientX, y: event.clientY }, template)
 }
 
 // Close all open workspaces and associated files, including open tabs.
@@ -357,31 +356,21 @@ function workspaceRootContextMenu (event: MouseEvent): void {
 
   const template: AnyMenuItem[] = [
     {
-      label: trans('Collapse %s', onlyRoots ? 'workspaces' : 'folders'),
-      id: 'collapse-all-workspaces',
-      type: 'normal'
+      label: onlyRoots ? trans('Collapse workspaces') : trans('Collapse subfolders'),
+      type: 'normal',
+      action () { collapseAll(onlyRoots) }
     },
     {
       type: 'separator'
     },
     {
       label: trans('Close all workspaces'),
-      id: 'close-all-workspaces',
-      type: 'normal'
+      type: 'normal',
+      action () { closeAllWorkspaces() }
     },
   ]
 
-  const point = { x: event.clientX, y: event.clientY }
-  showPopupMenu(point, template, (clickedID) => {
-    switch (clickedID) {
-      case 'collapse-all-workspaces':
-        collapseAll(onlyRoots)
-        break
-      case 'close-all-workspaces':
-        closeAllWorkspaces()
-        break
-    }
-  })
+  showPopupMenu({ x: event.clientX, y: event.clientY }, template)
 }
 
 function clickHandler (event: MouseEvent): void {
