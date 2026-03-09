@@ -35,7 +35,7 @@
   who started this effort. Previously, the re-indexing process when Zettlr boots
   would not check for the existence of open paths, causing crashes.
 - Show citation menu when right-clicking on a non-rendered citation (#6213).
-- Updated `ja-JP` translations (#6227).
+- Updated `ja-JP` translations (#6227; #6230).
 - Fixed an issue with improper HTML sanitization in the file preview tooltip,
   which would escape unusual HTML (such as KaTeX equations) instead of allowing
   them (#6221).
