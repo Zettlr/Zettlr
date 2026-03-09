@@ -81,6 +81,7 @@
           {{ workspaceSectionHeading }}
 
           <cds-icon
+            ref="workspacesContextMenuButton"
             role="presentation"
             shape="ellipsis-horizontal"
             class="close-all"
@@ -112,6 +113,33 @@
       </div>
     </template>
   </div>
+
+  <PopoverWrapper
+    v-if="workspacesContextMenuButton !== null && showSortingPopover"
+    v-bind:target="workspacesContextMenuButton"
+    v-bind:placement-priorities="[ 'right', 'below' ]"
+    v-on:close="showSortingPopover = false"
+  >
+    <h4>Sort workspaces</h4>
+    <p>Drag and drop to sort workspaces manually.</p>
+    <ul id="workspaces-drag-list">
+      <li
+        v-for="ws in getDirectories"
+        v-bind:key="ws.path"
+        v-bind:data-path="ws.path"
+        draggable="true"
+        v-on:dragstart="startDragging"
+        v-on:dragover="dragOver"
+        v-on:drop="drop"
+      >
+        <cds-icon shape="bars"></cds-icon>
+        {{ ws.name }}
+      </li>
+    </ul>
+    <p v-if="configStore.config.fileManager.sortWorkspacesManually">
+      <ButtonControl v-bind:label="autoSortButtonLabel" v-on:click="configStore.setConfigValue('fileManager.sortWorkspacesManually', false)"></ButtonControl>
+    </p>
+  </PopoverWrapper>
 </template>
 
 <script setup lang="ts">
@@ -143,6 +171,8 @@ import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { closeFile, closeWorkspace } from './util/item-composable'
 import showPopupMenu, { type AnyMenuItem } from 'source/common/modules/window-register/application-menu-helper'
 import type { CloseAllIPCAPI } from 'source/app/service-providers/windows'
+import PopoverWrapper from 'source/common/vue/PopoverWrapper.vue'
+import ButtonControl from 'source/common/vue/form/elements/ButtonControl.vue'
 
 const ipcRenderer = window.ipc
 
@@ -159,6 +189,9 @@ const emit = defineEmits<{
 
 // Can contain the path to a tree item that is focused
 const activeTreeItem = ref<undefined|[string, string]>(undefined)
+
+const workspacesContextMenuButton = ref<HTMLElement|null>(null)
+const showSortingPopover = ref(false)
 
 const workspaceStore = useWorkspaceStore()
 const windowStateStore = useWindowStateStore()
@@ -180,6 +213,7 @@ const hideFilesLabel = trans('Hide files')
 const showFilesLabel = trans('Show files')
 const hideWorkspacesLabel = trans('Hide workspaces')
 const showWorkspacesLabel = trans('Show workspaces')
+const autoSortButtonLabel = trans('Switch to automatic sorting')
 
 const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
@@ -367,6 +401,11 @@ function workspaceRootContextMenu (event: MouseEvent): void {
       action () { collapseAll(collapseRoots) }
     },
     {
+      label: trans('Sort workspaces…'),
+      type: 'normal',
+      action () { showSortingPopover.value = true }
+    },
+    {
       type: 'separator'
     },
     {
@@ -478,11 +517,101 @@ function stopNavigate (): void {
   activeTreeItem.value = undefined
 }
 
+// Dragging for the manual workspaces sort popover
+function startDragging (event: DragEvent): void {
+  if (event.currentTarget === null || !(event.currentTarget instanceof HTMLLIElement)) {
+    return
+  }
+
+  const dragPath = event.currentTarget.dataset.path
+  if (dragPath !== undefined && event.dataTransfer !== null) {
+    event.dataTransfer.dropEffect = 'move'
+    event.dataTransfer.setData('x-zettlr/workspaces-drag-source', dragPath)
+  }
+}
+
+function dragOver (event: DragEvent): void {
+  const lis = document.querySelectorAll('ul#workspaces-drag-list li')
+  lis.forEach(li => li.classList.remove('drag-over'))
+
+  if (event.target === null || !(event.target instanceof HTMLLIElement)) {
+    return
+  }
+
+  event.preventDefault()
+  event.target.classList.add('drag-over')
+}
+
+function drop (event: DragEvent): void {
+  const lis = document.querySelectorAll<HTMLLIElement>('ul#workspaces-drag-list li')
+  const targetLi = lis.entries().map(([ idx, li ]) => li).find(li => li.classList.contains('drag-over'))
+  lis.forEach(li => li.classList.remove('drag-over'))
+
+  if (
+    targetLi === undefined ||
+    event.currentTarget === null || event.dataTransfer === null ||
+    !(event.currentTarget instanceof HTMLLIElement)
+  ) {
+    return
+  }
+
+  const sourcePath = event.dataTransfer.getData('x-zettlr/workspaces-drag-source')
+  const targetPath = targetLi.dataset.path
+
+  if (sourcePath === '' || targetPath === undefined) {
+    return
+  }
+
+  if (sourcePath === targetPath) {
+    return
+  }
+
+  // Now we have to perform the sorting. The animation indicates that the source
+  // path will be moved BEFORE the target path, and that is how splice works.
+  const wsPaths = getDirectories.value.map(ws => ws.path)
+  const sourceIdx = wsPaths.findIndex(ws => ws === sourcePath)
+  const targetIdx = wsPaths.findIndex(ws => ws === targetPath)
+
+  if (sourceIdx < 0 || targetIdx < 0) {
+    return
+  }
+
+  wsPaths.splice(sourceIdx, 1)
+  wsPaths.splice(targetIdx, 0, sourcePath) // NOTE: Inserts *before* targetIdx
+
+  // Finally, emit a config setting
+  ipcRenderer.invoke('application', { command: 'sort-workspaces', payload: wsPaths })
+    .catch(e => console.error(e))
+}
+
 defineExpose({ navigate, stopNavigate })
 </script>
 
 <style lang="less">
 // @list-item-height: 20px;
+ul#workspaces-drag-list {
+  margin: 20px;
+  padding-left: 0;
+
+  li {
+    font-size: 16px;
+    list-style-type: none;
+    padding: 4px;
+    cursor: move;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--grey-6);
+    }
+
+    &.drag-over {
+      /*
+        We need a padding here, not margin, because the element needs to
+        "contain" the source for drag to work.
+      */
+      padding-top: 24px;
+    }
+  }
+}
 
 body {
   #file-tree {

@@ -147,6 +147,13 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   })
 
   watch(openPaths, async (value) => {
+    // Whenever openPaths changes, also update the rootDescriptors to reflect a
+    // potentially changed sorting.
+    rootDescriptors.value = openPaths.value
+      .filter(rootPath => descriptorMap.value.has(rootPath))
+      .map(rootPath => descriptorMap.value.get(rootPath))
+      .filter(root => root !== undefined)
+
     // Retrieve all new paths to load.
     const pathsToLoad: string[] = []
     for (const newPath of value) {

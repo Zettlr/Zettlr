@@ -52,6 +52,7 @@ import { clipboard, ipcMain, nativeImage } from 'electron'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
 import RenameTag from './rename-tag'
+import WorkspaceSort from './ws-sort'
 
 export const commands = [
   DirDelete,
@@ -86,7 +87,8 @@ export const commands = [
   SaveImageFromClipboard,
   TutorialOpen,
   UpdateProjectProperties,
-  UpdateUserDictionary
+  UpdateUserDictionary,
+  WorkspaceSort
 ]
 
 export default class CommandProvider extends ProviderContract {

@@ -13,6 +13,16 @@
   workspaces from a new file manager context menu that opens via right-click
   onto the section headers or with a click on the corresponding button. In
   addition, you can collapse all folders with a simple click (#6209).
+- **Feature**: You can now manually change the sorting of your workspaces. By
+  default, Zettlr automatically sorts your workspaces by name. However,
+  sometimes you may wish to change the ordering. To do so, use the new file
+  manager context menu and select "Sort workspaces…". This will open a popover
+  that allows you to change the workspace ordering using drag and drop. As soon
+  as you overwrite the sort order manually, this will disable automatic sorting
+  from here on. Newly opened workspaces will simply be appended at the end of
+  the list of open workspaces. To re-enable automatic sorting of your
+  workspaces, use the new setting in the file manager preferences, or click the
+  corresponding button in the sort popover.
 - Fixed potential crashes when standalone/root files or workspaces have been
   removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
   who started this effort. Previously, the re-indexing process when Zettlr boots

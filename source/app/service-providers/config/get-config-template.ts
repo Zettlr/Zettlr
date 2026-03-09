@@ -84,6 +84,8 @@ export interface ConfigOptions {
   // time be migrated into this group.
   fileManager: {
     twoStepCollapseWorkspaces: boolean
+    // If this is true, the config will never attempt to auto-sort workspaces.
+    sortWorkspacesManually: boolean
   }
 
   newFileNamePattern: string
@@ -311,7 +313,8 @@ export function getConfigTemplate (): ConfigOptions {
     fileManagerShowWorkspaces: true,
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
     fileManager: {
-      twoStepCollapseWorkspaces: false
+      twoStepCollapseWorkspaces: false,
+      sortWorkspacesManually: false // By default, let Zettlr sort workspaces
     },
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files

@@ -370,18 +370,24 @@ export default class ConfigProvider extends ProviderContract {
     */
   private sortPaths (): void {
     const { openFiles, openWorkspaces } = this.config.app
+    const { sortWorkspacesManually } = this.config.fileManager
 
     // We only want to sort the paths based on rudimentary, natural order.
     const coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
+
     openFiles.sort((a, b) => {
       return coll.compare(path.basename(a), path.basename(b))
     })
-    openWorkspaces.sort((a, b) => {
-      return coll.compare(path.basename(a), path.basename(b))
-    })
-
     this.config.app.openFiles = openFiles
-    this.config.app.openWorkspaces = openWorkspaces
+
+    // Only sort the workspaces if the user did not override the order manually.
+    if (!sortWorkspacesManually) {
+      openWorkspaces.sort((a, b) => {
+        return coll.compare(path.basename(a), path.basename(b))
+      })
+      this.config.app.openWorkspaces = openWorkspaces
+    }
+
     this._container.set(this.config)
   }
 
@@ -547,6 +553,12 @@ export default class ConfigProvider extends ProviderContract {
         broadcastIpcMessage('config-provider', { command: 'update', payload: option })
         if (!skipChecks) {
           this.checkOptionForGuard(option)
+
+          // Special treatment, since this is a config option that affects the
+          // config provider itself.
+          if (option === 'fileManager.sortWorkspacesManually' && !this.config.fileManager.sortWorkspacesManually) {
+            this.sortPaths()
+          }
         }
       }
     }
