@@ -140,6 +140,8 @@ export type DocumentManagerIPCAPI = IPCAPI<{
   'save-file': { path: string }
   'open-file': LeafLoc & { path: string, newTab: boolean }
   'close-file': LeafLoc & { path: string }
+  'close-file-everywhere': { path: string }
+  'get-open-workspace-files': { path: string }
   'sort-open-files': LeafLoc & { newOrder: string[] }
   'get-file-modification-status': unknown
   'move-file': {
@@ -254,9 +256,9 @@ export default class DocumentManager extends ProviderContract {
 
       if (event === 'unlink') {
         // Close the file everywhere
-        this.closeFileEverywhere(filePath)
+        this.closeFileEverywhere(filePath).catch(err => this._app.log.error(err))
       } else if (event === 'change') {
-        this.handleRemoteChange(filePath).catch(err => console.error(err))
+        this.handleRemoteChange(filePath).catch(err => this._app.log.error(err))
       } else {
         this._app.log.warning(`[DocumentManager] Received unexpected event ${event} for ${filePath}.`)
       }
@@ -302,6 +304,13 @@ export default class DocumentManager extends ProviderContract {
           const { windowId, leafId, path } = payload
           return await this.closeFile(windowId, leafId, path)
         }
+        case 'close-file-everywhere': {
+          const { path } = payload
+          return this.closeFileEverywhere(path)
+        }
+        case 'get-open-workspace-files':
+          const { path } = payload
+          return this.getOpenFilesForWorkspace(path)
         case 'sort-open-files': {
           const { windowId, leafId, newOrder } = payload
           this.sortOpenFiles(windowId, leafId, newOrder)
@@ -944,7 +953,8 @@ current contents from the editor somewhere else, and restart the application.`
     // don't have to do anything.
     const openFile = this.documents.find(doc => doc.filePath === filePath)
     if (openFile !== undefined && this.isModified(filePath) && numOpenInstances === 1) {
-      const result = await this._app.windows.askSaveChanges()
+      const detail = trans('File: %s', openFile.descriptor.name)
+      const result = await this._app.windows.askSaveChanges(detail)
       // 0 = Save, 1 = Don't save, 2 = Cancel
       if (result.response === 1) {
         // Clear the modification flag
@@ -992,25 +1002,25 @@ current contents from the editor somewhere else, and restart the application.`
    *
    * @param   {string}  filePath  The file path in question
    */
-  public closeFileEverywhere (filePath: string): void {
-    for (const key in this._windows) {
-      const allLeafs = this._windows[key].getAllLeafs()
-      for (const leaf of allLeafs) {
-        if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
-          leaf.tabMan.setPinnedStatus(filePath, false)
-          const success = leaf.tabMan.closeFile(filePath)
-          if (!success) {
-            continue
-          }
+  public async closeFileEverywhere (filePath: string): Promise<void> {
+    await this.forEachLeaf(async (tabMan, windowId, leafId) => {
+      if (tabMan.openFiles.map(x => x.path).includes(filePath)) {
+        tabMan.setPinnedStatus(filePath, false)
+        const success = tabMan.closeFile(filePath)
 
-          this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId: key, leafId: leaf.id, filePath })
+        if (!success) {
+          return false
+        }
 
-          if (leaf.tabMan.openFiles.length === 0) {
-            this.closeLeaf(key, leaf.id)
-          }
+        this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
+
+        if (tabMan.openFiles.length === 0) {
+          this.closeLeaf(windowId, leafId)
         }
       }
-    }
+
+      return true
+    })
 
     // We also must splice the document out of our provider
     const idx = this.documents.findIndex(doc => doc.filePath === filePath)
@@ -1019,6 +1029,32 @@ current contents from the editor somewhere else, and restart the application.`
     }
 
     this.syncWatchedFilePaths()
+  }
+
+  /**
+   * For the provided root workspace directory at `filePath`,
+   * retrieve a list of filepaths representing every open file
+   * within the workspace.
+   *
+   * @param {string}      filePath  Path of the workspace directory
+   *
+   * @returns {string[]}            A list of file paths representing the
+   *                                open files within `filePath`.
+   */
+  public async getOpenFilesForWorkspace (workspacePath: string): Promise<string[]> {
+    const openFiles: string[] = []
+
+    await this.forEachLeaf(async (tabMan) => {
+      openFiles.push(
+        ...tabMan.openFiles
+          .filter(doc => doc.path.startsWith(workspacePath))
+          .map(doc => doc.path)
+      )
+
+      return false
+    })
+
+    return openFiles
   }
 
   /**
@@ -1559,8 +1595,11 @@ current contents from the editor somewhere else, and restart the application.`
         await this._app.fsal.writeTextFile(doc.descriptor.path, content)
         doc.descriptor = await this._app.fsal.getDescriptorFor(doc.descriptor.path, false) as CodeFileDescriptor
       }
-    } catch (err: any) {
-      dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        dialog.showErrorBox(trans('Could not save file'), trans('Could not save file %s: %s', doc.descriptor.name, err.message))
+      }
+
       throw err
     }
 

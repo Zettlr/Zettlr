@@ -185,6 +185,7 @@ import {
 import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
+import type { WritingTarget } from 'source/app/service-providers/targets'
 
 const ipcRenderer = window.ipc
 
@@ -318,7 +319,7 @@ const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', 
   if (props.item.type !== 'file') {
     return undefined
   } else {
-    return windowStateStore.writingTargets.find((x: any) => x.path === props.item.path)
+    return windowStateStore.writingTargets.find((x: WritingTarget) => x.path === props.item.path)
   }
 })
 
@@ -474,9 +475,6 @@ const isSelected = computed(() => {
   }
 })
 
-watch(selectedFile, uncollapseIfApplicable)
-watch(selectedDir, uncollapseIfApplicable)
-
 watch(operationType, (newVal) => {
   if (newVal !== undefined) {
     nextTick().then(() => {
@@ -509,14 +507,12 @@ watch(toRef(props, 'item'), function (value) {
 
 watch(showDotFiles, async function () {
   if (props.item.type === 'directory') {
-    uncollapseIfApplicable()
     await fetchChildren()
   }
 })
 
 onMounted(async () => {
   if (props.item.type === 'directory') {
-    uncollapseIfApplicable()
     ipcRenderer.on('shortcut', (_, message) => {
       if (message === 'new-dir') {
         operationType.value = 'createDir'
@@ -563,25 +559,6 @@ async function fetchChildren (): Promise<void> {
   children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
 }
 
-function uncollapseIfApplicable (): void {
-  if (!collapsed.value) {
-    return // We are already open, no need to do anything.
-  }
-
-  const filePath = selectedFile.value?.path ?? ''
-  const dirPath = selectedDir.value ?? ''
-
-  // Open the tree, if the selected file is contained in this dir somewhere
-  if (filePath.startsWith(props.item.path)) {
-    windowStateStore.uncollapsedDirectories.push(props.item.path)
-  }
-
-  // If a directory within this has been selected, open up, lads!
-  if (dirPath.startsWith(props.item.path)) {
-    windowStateStore.uncollapsedDirectories.push(props.item.path)
-  }
-}
-
 /**
  * Initiates a drag movement and inserts the correct data
  * @param {DragEvent} event The drag event
@@ -616,7 +593,7 @@ function enterDragging (_event: DragEvent): void {
   uncollapseTimeout.value = setTimeout(() => {
     windowStateStore.uncollapsedDirectories.push(props.item.path)
     uncollapseTimeout.value = undefined
-  }, 2000)
+  }, 1000)
 }
 
 /**
@@ -774,7 +751,6 @@ body {
         overflow: hidden;
         text-overflow: ellipsis;
         margin-right: 8px;
-
       }
 
       &.project {
