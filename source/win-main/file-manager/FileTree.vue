@@ -504,16 +504,15 @@ body {
       align-items: center;
 
       cds-icon {
-        margin-left: 3px;
-        margin-right: 3px;
         vertical-align: bottom;
       }
 
       .close-all {
         margin-inline-start: auto;
-        margin-inline-end: 5px;
+        margin-inline-end: 10px;
         border-radius: 4px;
         padding: 2px;
+        color: var(--grey-6);
         background-color: var(--grey-2);
       }
 
