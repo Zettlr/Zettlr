@@ -48,6 +48,9 @@
 - Fix crashes when directories aren't accessible by the app (#6172).
 - Improve autocorrect handling. Now, users can undo an unwanted replacement
   (`Ctrl/Cmd+Z`) without losing the inserted space or new line (#6210).
+- Made the app more resilient in light of missing workspaces or root files. Now,
+  crashes on startup due to missing standalone files or workspaces should be
+  much less frequent and the app should be more stable.
 
 ## Under the Hood
 

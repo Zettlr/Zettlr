@@ -71,6 +71,7 @@ export default class FSAL extends ProviderContract {
   private readonly _cache: FSALCache
   private readonly _emitter: EventEmitter
   private readonly watchers: Map<string, FSALWatchdog>
+  private readonly deadWorkspaces: Set<string>
 
   constructor (
     private readonly _logger: LogProvider,
@@ -82,6 +83,7 @@ export default class FSAL extends ProviderContract {
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
     this.watchers = new Map()
+    this.deadWorkspaces = new Set()
 
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
@@ -200,7 +202,27 @@ export default class FSAL extends ProviderContract {
    * emitted.
    */
   private async syncRoots (): Promise<void> {
-    const { openFiles, openWorkspaces } = this._config.get().app
+    let { openFiles, openWorkspaces } = this._config.get().app
+
+    // Check if any of the open files have gone missing. This is particularly
+    // important on boot to ensure no errors due to missing files are thrown.
+    // Unlike workspaces, we just get rid of the files here. (Workspaces can be
+    // marked as "dead" so that users don't lose them.)
+    const workingOpenFiles: string[] = []
+    for (const file of openFiles) {
+      if (await this.isFile(file)) {
+        workingOpenFiles.push(file)
+      }
+    }
+
+    if (workingOpenFiles.length < openFiles.length) {
+      const deadCount = openFiles.length - workingOpenFiles.length
+      const deadFiles = [...(new Set(openFiles)).difference(new Set(workingOpenFiles))]
+      this._logger.warning(`[FSAL] Discovered ${deadCount} dead standalone files while synchronizing root paths: ${deadFiles.join(', ')}`)
+      this._config.set('app.openFiles', workingOpenFiles)
+      openFiles = workingOpenFiles
+    }
+
     const allRoots = openFiles.concat(openWorkspaces)
 
     for (const rootPath of allRoots) {
@@ -222,9 +244,11 @@ export default class FSAL extends ProviderContract {
           })
           watcher.watchPath(rootPath)
           this.watchers.set(rootPath, watcher)
+          this.deadWorkspaces.delete(rootPath)
         }
       } catch (err: unknown) {
-        this._logger.error(`Could not load root ${rootPath}.`)
+        this._logger.error(`Could not load root ${rootPath}.`, err)
+        this.deadWorkspaces.add(rootPath)
       }
     }
 
@@ -260,6 +284,11 @@ export default class FSAL extends ProviderContract {
     }
 
     for (const workspace of openWorkspaces) {
+      if (this.deadWorkspaces.has(workspace)) {
+        this._logger.info(`[FSAL] Not re-indexing workspace ${workspace}: Marked as dead`)
+        continue
+      }
+
       if (!await this.isDir(workspace)) {
         this._logger.warning(`[FSAL] Could not re-index workspace ${workspace}: Folder not found.`)
         continue
@@ -311,15 +340,42 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const allDescriptors: AnyDescriptor[] = []
 
+    const reportError = (message: string, err: unknown) => {
+      if (err instanceof Error) {
+        this._logger.error(`[FSAL] ${message}: ${err.message}`, err)
+      } else {
+        this._logger.error(`[FSAL] ${message}`, err)
+      }
+    }
+
     for (const file of openFiles) {
-      allDescriptors.push(await this.getDescriptorFor(file))
+      try {
+        const descriptor = await this.getDescriptorFor(file)
+        allDescriptors.push(descriptor)
+      } catch (err: unknown) {
+        reportError(`Could not load descriptor for root file ${file}`, err)
+      }
     }
 
     for (const workspace of openWorkspaces) {
-      const allPaths = await this.readDirectoryRecursively(workspace)
-      for (const child of allPaths) {
-        const descriptor = await this.getDescriptorFor(child)
-        allDescriptors.push(descriptor)
+      if (this.deadWorkspaces.has(workspace)) {
+        this._logger.info(`[FSAL] Not trying to load descriptors from workspace ${workspace}: Marked as dead`)
+        allDescriptors.push(this.loadDummyDirectoryDescriptor(workspace))
+        continue
+      }
+
+      try {
+        const allPaths = await this.readDirectoryRecursively(workspace)
+        for (const child of allPaths) {
+          try {
+            const descriptor = await this.getDescriptorFor(child)
+            allDescriptors.push(descriptor)
+          } catch (err: unknown) {
+            reportError(`Could not load descriptor for file ${child}`, err)
+          }
+        }
+      } catch (err: unknown) {
+        reportError(`Could not read workspace ${workspace}`, err)
       }
     }
 
@@ -774,6 +830,10 @@ export default class FSAL extends ProviderContract {
    * @throws if the path is not a directory
    */
   public async getAnyDirectoryDescriptor (absPath: string): Promise<DirDescriptor> {
+    if (this.deadWorkspaces.has(absPath)) {
+      return this.loadDummyDirectoryDescriptor(absPath)
+    }
+
     if (!await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
@@ -869,7 +929,7 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<AnyDescriptor>[]}           The children.
    */
   public async readDirectory (absPath: string): Promise<AnyDescriptor[]> {
-    if (!await this.isDir(absPath)) {
+    if (this.deadWorkspaces.has(absPath) || !await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
