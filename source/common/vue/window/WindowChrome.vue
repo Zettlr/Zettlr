@@ -250,6 +250,16 @@ function handleDoubleClick (origin: 'titlebar'|'toolbar'): void {
   --green-1:               rgba(  4, 125, 101, 1);
 
   --apricot:               rgba(251, 206, 177, 1);
+
+  // These are various accent colors that can be used across the app in various settings.
+  // Currently, they are used to color directories using custom colors.
+  --accent-blue: rgb(35, 122, 255);
+  --accent-purple: rgb(195, 88, 196); // c358c4
+  --accent-rose: rgb(247, 79, 158);
+  --accent-red: rgb(223, 56, 62);
+  --accent-orange: rgb(246, 130, 28);
+  --accent-yellow: rgb(229, 180, 31);
+  --accent-green: rgb(98, 186, 70);
 }
 
 body {

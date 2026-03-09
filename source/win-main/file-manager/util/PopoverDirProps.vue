@@ -58,6 +58,21 @@
         ></ButtonControl>
       </div>
       <hr style="clear: both;">
+      <!-- Color selector -->
+      <div class="color-selector">
+        <div
+          v-for="color, i in AVAILABLE_DIRECTORY_COLORS"
+          v-bind:key="i"
+          v-bind:class="{
+            'color-swatch': true,
+            [color ?? 'null']: true,
+            active: directory.settings.color === color
+          }"
+          v-bind:title="COLOR_SWATCH_LABELS[color ?? 'null'] ?? ''"
+          v-on:click="updateColor(color)"
+        ></div>
+      </div>
+      <hr>
       <!-- Directory icon -->
       <div class="icon-selector">
         <div
@@ -104,6 +119,25 @@ import { trans } from '@common/i18n-renderer'
 import type { AnyDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { ref, computed, watch, toRef, onBeforeMount } from 'vue'
 import { useConfigStore } from 'source/pinia'
+import type { DirSettingsCommandAPI } from 'source/app/service-providers/commands/dir-settings'
+
+// Currently defined directory colors
+const AVAILABLE_DIRECTORY_COLORS = [
+  null, 'blue', 'purple', 'rose',
+  'red', 'orange', 'yellow', 'green'
+] as const // Necessary so that we can use it to index the labels
+
+// Labels/titles for the swatches
+const COLOR_SWATCH_LABELS = {
+  null: trans('Remove the custom color'),
+  blue: trans('Assign a blue accent color'),
+  purple: trans('Assign a purple accent color'),
+  rose: trans('Assign a rose accent color'),
+  red: trans('Assign a red accent color'),
+  orange: trans('Assign a orange accent color'),
+  yellow: trans('Assign a yellow accent color'),
+  green: trans('Assign a green accent color'),
+} as const
 
 const ipcRenderer = window.ipc
 
@@ -256,11 +290,22 @@ function openProjectPreferences (): void {
 
 function updateIcon (iconShape: string|null): void {
   ipcRenderer.invoke('application', {
-    command: 'dir-set-icon',
+    command: 'set-directory-setting',
     payload: {
       path: props.directory.path,
-      icon: iconShape
-    }
+      settings: { icon: iconShape }
+    } satisfies DirSettingsCommandAPI
+  })
+    .catch(e => console.error(e))
+}
+
+function updateColor (color: string|null): void {
+  ipcRenderer.invoke('application', {
+    command: 'set-directory-setting',
+    payload: {
+      path: props.directory.path,
+      settings: { color }
+    } satisfies DirSettingsCommandAPI
   })
     .catch(e => console.error(e))
 }
@@ -319,6 +364,31 @@ body {
 
     .form-control {
       padding: 5px 0;
+    }
+  }
+
+  .color-selector {
+    display: flex;
+    justify-content: space-evenly;
+
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      border: 2px solid var(--grey-2);
+      cursor: pointer;
+
+      &.active {
+        border-color: #1cb27e;
+      }
+
+      &.blue { background-color: var(--accent-blue); }
+      &.purple { background-color: var(--accent-purple); }
+      &.rose { background-color: var(--accent-rose); }
+      &.red { background-color: var(--accent-red); }
+      &.orange { background-color: var(--accent-orange); }
+      &.yellow { background-color: var(--accent-yellow); }
+      &.green { background-color: var(--accent-green); }
     }
   }
 

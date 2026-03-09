@@ -4,10 +4,11 @@
       v-bind:class="{
         'tree-item': true,
         [item.type]: true,
-        'selected': isSelected,
-        'active': activeItem === item.path,
-        'project': item.type === 'directory' && item.settings.project != null,
-        'root': isRoot
+        [item.type === 'directory' ? item.settings.color ?? '' : '']: true,
+        selected: isSelected,
+        active: activeItem === item.path,
+        project: item.type === 'directory' && item.settings.project != null,
+        root: isRoot
       }"
       v-bind:data-id="item.type === 'file' ? item.id : ''"
       v-bind:data-path="item.path"
@@ -737,6 +738,16 @@ body {
       white-space: nowrap;
       display: flex;
       margin: 8px 0px;
+
+      // Available directory colors (the colors are CSS variables specified
+      // in WindowChrome.vue and string-values defined in PopoverDirProps.vue)
+      &.blue { color: var(--accent-blue); }
+      &.purple { color: var(--accent-purple); }
+      &.rose { color: var(--accent-rose); }
+      &.red { color: var(--accent-red); }
+      &.orange { color: var(--accent-orange); }
+      &.yellow { color: var(--accent-yellow); }
+      &.green { color: var(--accent-green); }
 
       .item-icon, .toggle-icon {
         display: flex;
