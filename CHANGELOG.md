@@ -9,6 +9,10 @@
 - **Feature**: The Custom CSS editor now offers autocomplete assistance (#6226).
 - **Feature**: Added dedicated `math` code block syntax highlighting to add
   MathTeX to files without rendering (#6226).
+- **Feature**: You can now close all standalone/root files as well as all
+  workspaces from a new file manager context menu that opens via right-click
+  onto the section headers or with a click on the corresponding button. In
+  addition, you can collapse all folders with a simple click (#6209).
 - Fixed potential crashes when standalone/root files or workspaces have been
   removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
   who started this effort. Previously, the re-indexing process when Zettlr boots
