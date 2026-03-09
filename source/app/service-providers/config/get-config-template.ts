@@ -69,6 +69,8 @@ export interface ConfigOptions {
   alwaysReloadFiles: boolean
   muteLines: boolean
 
+  // NOTE to everyone: These options (and possibly others) that pertain to the
+  // file manager should slowly be migrated into the fileManager group below.
   fileManagerMode: 'thin'|'combined'|'expanded'
   fileManagerShowFiles: boolean
   fileManagerShowWorkspaces: boolean
@@ -77,6 +79,12 @@ export interface ConfigOptions {
   sorting: 'natural'|'ascii'
   sortFoldersFirst: boolean
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
+
+  // NOTE to everyone: The various filemanager options (see above) should over
+  // time be migrated into this group.
+  fileManager: {
+    twoStepCollapseWorkspaces: boolean
+  }
 
   newFileNamePattern: string
   newFileDontPrompt: boolean
@@ -302,6 +310,9 @@ export function getConfigTemplate (): ConfigOptions {
     fileManagerShowFiles: true, // Allow users to persistently collapse or uncollapse the files and workspaces sections.
     fileManagerShowWorkspaces: true,
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
+    fileManager: {
+      twoStepCollapseWorkspaces: false
+    },
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
     export: {

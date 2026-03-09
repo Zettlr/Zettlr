@@ -110,6 +110,20 @@ export function getFileManagerFields (config: ConfigOptions): PreferencesFieldse
           }
         }
       ]
+    },
+    {
+      title: trans('Collapse Workspaces Behavior'),
+      group: PreferencesGroups.FileManager,
+      infoString: trans('Determine how the context menu item to collapse workspaces in the file manager behaves. You can choose single-step or two-step.'),
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Require two steps to collapse workspaces'),
+          info: trans('When this is active, the first collapse workspace will only collapse subfolders, the second the workspaces.'),
+          model: 'fileManager.twoStepCollapseWorkspaces',
+        }
+      ]
     }
   ]
 }

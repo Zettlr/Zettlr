@@ -324,8 +324,12 @@ function closeAllWorkspaces (): void {
   }).catch(err => console.error(err))
 }
 
-// Collapse uncollapse folders. If `collapseRoots` is `true`, also collapse
-// root workspace directories.
+/**
+ * Collapse uncollapse folders. If `collapseRoots` is `true`, also collapse root
+ * workspace directories.
+ *
+ * @param   {boolean}  collapseRoots  If true, collapses everything.
+ */
 function collapseAll (collapseRoots: boolean): void {
   // Collapse all folders and roots.
   if (collapseRoots) {
@@ -349,16 +353,18 @@ function collapseAll (collapseRoots: boolean): void {
 
 // Context menu for the `Workspaces` header
 function workspaceRootContextMenu (event: MouseEvent): void {
+  const twoStep = configStore.config.fileManager.twoStepCollapseWorkspaces
   const roots = new Set(rootDescriptors.value.map(r => r.path))
-
   const onlyRoots = windowStateStore.uncollapsedDirectories
     .every(path => roots.has(path))
 
+  const collapseRoots = !twoStep || onlyRoots
+
   const template: AnyMenuItem[] = [
     {
-      label: onlyRoots ? trans('Collapse workspaces') : trans('Collapse subfolders'),
+      label: collapseRoots ? trans('Collapse workspaces') : trans('Collapse subfolders'),
       type: 'normal',
-      action () { collapseAll(onlyRoots) }
+      action () { collapseAll(collapseRoots) }
     },
     {
       type: 'separator'
