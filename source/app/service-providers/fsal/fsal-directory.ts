@@ -14,19 +14,21 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
+import assert, { AssertionError } from 'assert'
 import isFile from '@common/util/is-file'
 import safeAssign from '@common/util/safe-assign'
 
-import type { DirDescriptor, SortMethod, ProjectSettings } from '@dts/common/fsal'
+import type { DirDescriptor, SortMethod, ProjectSettings, DirectorySettings } from '@dts/common/fsal'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 /**
  * Determines what will be written to file (.ztr-directory)
  */
-const SETTINGS_TEMPLATE = {
-  sorting: 'name-up' as SortMethod,
-  project: null as ProjectSettings|null, // Default: no project
-  icon: null as null|string // Default: no icon
+const SETTINGS_TEMPLATE: DirectorySettings = {
+  sorting: 'name-up',
+  project: null, // Default: no project
+  icon: null, // Default: no icon
+  color: null // Default: no color
 }
 
 /**
@@ -98,13 +100,20 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
       dir.settings.project = safeAssign(settings.project, PROJECT_TEMPLATE)
     }
 
-    if (JSON.stringify(dir.settings) === JSON.stringify(SETTINGS_TEMPLATE)) {
+    try {
+      assert.deepStrictEqual(dir.settings, SETTINGS_TEMPLATE)
       // The settings are the default, so no need to write them to file
       await fs.unlink(configPath)
+    } catch (err: unknown) {
+      if (err instanceof AssertionError) {
+        // Settings are non-default -> do nothing with the file.
+      } else {
+        throw err // Something else went wrong
+      }
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Ignore file-not-found errors
-    if (err.code === 'ENOENT') {
+    if (err instanceof Error && 'code' in err && err.code === 'ENOENT') {
       return
     }
 
