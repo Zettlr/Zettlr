@@ -20,7 +20,7 @@ import DirProjectExport from './dir-project-export'
 import DirRemoveProject from './dir-remove-project'
 import DirRename from './dir-rename'
 import DirRescan from './dir-rescan'
-import DirSetIcon from './dir-set-icon'
+import DirSettings from './dir-settings'
 import DirSort from './dir-sort'
 import Export from './export'
 import FetchLinkPreview from './fetch-link-preview'
@@ -62,7 +62,7 @@ export const commands = [
   DirRemoveProject,
   DirRename,
   DirRescan,
-  DirSetIcon,
+  DirSettings,
   DirSort,
   Export,
   FetchLinkPreview,
