@@ -23,6 +23,13 @@
   the list of open workspaces. To re-enable automatic sorting of your
   workspaces, use the new setting in the file manager preferences, or click the
   corresponding button in the sort popover.
+- **Feature**: You can now assign custom accent colors to folders across your
+  workspaces to make them easier identifiable. This aids the existing custom
+  icons that you can already use to differentiate folders. You can assign one of
+  seven built-in colors to every directory: blue, purple, rose, red, orange,
+  yellow, and green. For friends of Custom CSS: These are specified as CSS
+  variables so that you can adjust them if you wish. The pattern is:
+  `--accent-<color>`.
 - Fixed potential crashes when standalone/root files or workspaces have been
   removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
   who started this effort. Previously, the re-indexing process when Zettlr boots
@@ -56,6 +63,10 @@
   seen the code, making possible attacks unlikely).
 - Updated various code syntax highlighting parsers from the legacy mode to the
   corresponding dedicated parsers (#6226).
+- Since `JSON.stringify` is sensitive to object insertion order, we switched the
+  detection logic whether directory settings are all on default to
+  `assert.deepStrictEqual`. This means that we now compare the values of the
+  properties instead of their ordering.
 
 # 4.2.1
 
