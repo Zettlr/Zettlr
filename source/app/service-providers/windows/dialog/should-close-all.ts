@@ -37,7 +37,7 @@ export default async function shouldCloseAllDialog (win: BrowserWindow|null, roo
       trans('Ok')
     ],
     cancelId: 0,
-    defaultId: 1
+    defaultId: 0
   }
 
   // showMessageBox returns a Promise, resolves to:
