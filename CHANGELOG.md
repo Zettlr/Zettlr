@@ -70,6 +70,8 @@
   detection logic whether directory settings are all on default to
   `assert.deepStrictEqual`. This means that we now compare the values of the
   properties instead of their ordering.
+- Harden the TableEditor by properly sanitizing possibly unsafe HTML using the
+  new `sanitizeHTML` option on the `nodeToHTML` function (via `md2html`).
 
 # 4.2.1
 
