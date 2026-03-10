@@ -39,16 +39,25 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   }
   const defaults = await ctx.writeDefaults(options.profile.name, defaultKeys)
 
-  // Check that the defaults profile did not change
-  // `output-file`, and if it did, update the target.
+  // Update `target` if the defaults profile changed`output-file`
   if (defaults['output-file'] !== target) {
-    const parsed = path.parse(defaults['output-file'] as string)
-    target = path.join(parsed.dir, parsed.name + `.${extension}`)
+    // Remove any internal `..` and `.` paths
+    target = path.normalize(defaults['output-file'] as string)
 
+    // If the target is a relative path, resolve it to the target directory
+    // and sanitize any potential path traversals.
     if (!path.isAbsolute(target)) {
-      target = path.join(options.targetDirectory, target)
-      defaults['output-file'] = target
+      target = path.resolve(options.targetDirectory, target)
+
+      // Make sure that the resolved path still falls under `targetDirectory`
+      // to prevent potentially insecure path traversals.
+      if (!target.startsWith(options.targetDirectory)) {
+        const parsed = path.parse(target)
+        target = path.join(options.targetDirectory, parsed.base)
+      }
     }
+
+    defaults['output-file'] = target
   }
 
   // Run Pandoc
