@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-03-08 03:16+0000\n"
+"POT-Creation-Date: 2026-03-10 03:13+0000\n"
 "PO-Revision-Date: 2025-03-04 03:36+0800\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: \n"
@@ -477,7 +477,7 @@ msgstr "全選"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:172
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:241
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:145
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:164
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
 #: source/tmp/win-main/App.vue.ts:279
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:53
@@ -548,7 +548,7 @@ msgid "Link"
 msgstr "連結"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:74
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
 msgid "Image"
 msgstr "圖片"
 
@@ -585,7 +585,7 @@ msgid "Word count"
 msgstr "字數統計"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:30
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 msgid "Modified"
 msgstr "已修改"
@@ -729,7 +729,7 @@ msgid "Open image"
 msgstr "開啟圖片"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
-#: source/tmp/win-main/DocumentTabs.vue.ts:504
+#: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in Finder"
@@ -904,7 +904,7 @@ msgstr ""
 msgid "No highlighting"
 msgstr "無醒目標示"
 
-#: source/pinia/workspace-store.ts:260
+#: source/pinia/workspace-store.ts:267
 msgid "Current folder"
 msgstr "目前資料夾"
 
@@ -936,7 +936,7 @@ msgstr ""
 #: source/tmp/common/vue/form/elements/ShortcutChooser.vue.ts:61
 #: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
 #: source/tmp/common/vue/form/elements/TextControl.vue.ts:56
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
 msgid "Reset"
 msgstr "重設"
@@ -1258,6 +1258,7 @@ msgstr "參考"
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/should-close-all.ts:37
 msgid "Ok"
 msgstr "OK"
 
@@ -1370,15 +1371,16 @@ msgstr "儲存"
 #. 1: Omit all changes
 #: source/tmp/win-paste-image/App.vue.ts:67
 #: source/tmp/win-main/GlobalSearch.vue.ts:38
-#: source/app/service-providers/documents/index.ts:387
+#: source/app/service-providers/documents/index.ts:396
 #: source/app/service-providers/commands/dir-delete.ts:37
 #: source/app/service-providers/commands/rename-tag.ts:48
 #: source/app/service-providers/commands/file-delete.ts:38
 #: source/app/service-providers/menu/menu.win32.ts:677
 #: source/app/service-providers/menu/menu.darwin.ts:705
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/should-close-all.ts:36
 msgid "Cancel"
 msgstr "取消"
 
@@ -1513,8 +1515,8 @@ msgstr ""
 #: source/tmp/win-assets/FilterTab.vue.ts:62
 #: source/tmp/win-assets/SnippetsTab.vue.ts:49
 #: source/tmp/win-tag-manager/App.vue.ts:94
-#: source/app/service-providers/documents/index.ts:391
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+#: source/app/service-providers/documents/index.ts:400
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:40
 msgid "Unsaved changes"
 msgstr "尚未儲存的修改"
 
@@ -1696,7 +1698,7 @@ msgstr "有些檔案已選擇匯出，但在目錄中已不存在。"
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:27
 #: source/tmp/win-stats/App.vue.ts:28
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:59
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
 msgid "Calendar"
 msgstr "日曆"
 
@@ -1808,7 +1810,7 @@ msgid "Last year"
 msgstr ""
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:71
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:59
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
 msgid "No results"
 msgstr "沒有結果"
 
@@ -1822,14 +1824,14 @@ msgstr "空目錄"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:147
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:149
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:29
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
 msgid "Directories"
 msgstr "目錄"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:154
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:156
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:56
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:32
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:64
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Files"
 msgstr "檔案"
 
@@ -1843,12 +1845,12 @@ msgstr "字元"
 msgid "Words"
 msgstr "字數"
 
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:82
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:83
 msgid "Enter a name"
 msgstr ""
 
 #. Else standard val for new dirs.
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:345
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:343
 #: source/app/service-providers/commands/dir-new.ts:32
 msgid "Untitled"
 msgstr "未命名"
@@ -1858,310 +1860,384 @@ msgstr "未命名"
 msgid "Filter…"
 msgstr "篩選…"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:57
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
 msgid "Workspaces"
 msgstr "工作區"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:58
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
 msgid "No open files or folders"
 msgstr "沒有開啟的檔案或資料夾"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:31
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
+msgid "Hide files"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
+msgid "Show files"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
+msgid "Hide workspaces"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
+msgid "Show workspaces"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
+msgid "Switch to automatic sorting"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:190
+#: source/app/service-providers/windows/dialog/should-close-all.ts:31
+msgid "Close all files"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:255
+msgid "Collapse workspaces"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:255
+msgid "Collapse subfolders"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:260
+msgid "Sort workspaces…"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:268
+#: source/app/service-providers/windows/dialog/should-close-all.ts:31
+msgid "Close all workspaces"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
+msgid "Remove the custom color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
+msgid "Assign a blue accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
+msgid "Assign a purple accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:39
+msgid "Assign a rose accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:40
+msgid "Assign a red accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
+msgid "Assign a orange accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
+msgid "Assign a yellow accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
+msgid "Assign a green accent color"
+msgstr ""
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
 msgid "Created"
 msgstr "已建立"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:33
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
 msgid "Project Settings…"
 msgstr "專案設定…"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:34
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
 msgid "Enable Project"
 msgstr "啟用專案"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:35
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Sort by name"
 msgstr "照名稱排序"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Sort by time"
 msgstr "照時間排序"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
 msgid "ascending"
 msgstr "升序"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
 msgid "descending"
 msgstr "降序"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
 msgid "Cog"
 msgstr "齒輪"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
 msgid "Cloud"
 msgstr "雲"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:44
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
 msgid "Check"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:45
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
 msgid "Times"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:46
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
 #: source/app/service-providers/menu/menu.win32.ts:609
 #: source/app/service-providers/menu/menu.darwin.ts:637
 msgid "Help"
 msgstr "說明"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:47
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
 msgid "Info"
 msgstr "資訊"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
 msgid "Success"
 msgstr "成功"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
 msgid "Error"
 msgstr "錯誤"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
 msgid "Warning"
 msgstr "警告"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Bell"
 msgstr "鈴"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
 msgid "Person"
 msgstr "人"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
 msgid "People"
 msgstr "人們"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
 msgid "Home"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
 msgid "Ban"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
 msgid "Eye"
 msgstr "眼"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:58
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
 msgid "Eye (crossed)"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
 msgid "Calculator"
 msgstr "計算機"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
 msgid "Store"
 msgstr "商店"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
 msgid "Shopping bag"
 msgstr "購物袋"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
 msgid "Shopping cart"
 msgstr "購物車"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
 msgid "Factory"
 msgstr "工廠"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
 msgid "Heart"
 msgstr "心"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
 msgid "Heart (broken)"
 msgstr "心（碎）"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
 msgid "Bubbles"
 msgstr "氣泡（多個）"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
 msgid "Bubble"
 msgstr "氣泡"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
 msgid "Bubble (exclamation)"
 msgstr "氣泡（破裂）"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
 msgid "Colour Palette"
 msgstr "調色盤"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
 msgid "Bars"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
 msgid "Thermometer"
 msgstr "溫度計"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
 msgid "Book"
 msgstr "書"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
 msgid "Library"
 msgstr "圖書館"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Bug"
 msgstr "蟲"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Note"
 msgstr "筆記"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Lightbulb"
 msgstr "燈泡"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
 msgid "Trash"
 msgstr "垃圾"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
 msgid "Snowflake"
 msgstr "雪花"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
 msgid "Asterisk"
 msgstr "星號"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
 msgid "Key"
 msgstr "鑰匙"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
 msgid "Bolt"
 msgstr "螺栓"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
 msgid "Wrench"
 msgstr "扳手"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Flame"
 msgstr "火焰"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Hourglass"
 msgstr "沙漏"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
 msgid "Briefcase"
 msgstr "公事包"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
 msgid "Tools"
 msgstr "工具"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
 msgid "Moon"
 msgstr "月亮"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
 msgid "Sun"
 msgstr "太陽"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
 msgid "Tree"
 msgstr "樹"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
 msgid "Circle (dot)"
 msgstr "圓圈（點狀）"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:111
 msgid "Circle"
 msgstr "圓圈"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:112
 msgid "Video camera"
 msgstr "攝影機"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:113
 msgid "Film strip"
 msgstr "膠卷"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:114
 msgid "Microphone"
 msgstr "麥克風"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:115
 msgid "Crown"
 msgstr "皇冠"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:116
 msgid "Star"
 msgstr "星星"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:117
 msgid "Flag"
 msgstr "旗"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:118
 msgid "Envelope"
 msgstr "信封"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:119
 msgid "Airplane"
 msgstr "飛機"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:120
 msgid "Happy emoji"
 msgstr "開心表情符號"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:121
 msgid "Neutral emoji"
 msgstr "中立表情符號"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:122
 msgid "Sad emoji"
 msgstr "哭泣表情符號"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:123
 msgid "Thumbs up"
 msgstr "姆指向上"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:124
 msgid "Thumbs down"
 msgstr "姆指向下"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:125
 msgid "Map"
 msgstr "地圖"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:126
 msgid "Compass"
 msgstr "羅盤"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:127
 msgid "Map marker"
 msgstr "地圖標記"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:128
 msgid "Flask"
 msgstr "燒瓶"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:129
 msgid "CD/DVD"
 msgstr "CD/DVD"
 
@@ -2481,67 +2557,72 @@ msgstr "字元"
 msgid "No open document"
 msgstr "沒有開啟的文件"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:413
+#: source/tmp/win-main/DocumentTabs.vue.ts:414
 msgid "Close tab"
 msgstr "關閉分頁"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:424
+#: source/tmp/win-main/DocumentTabs.vue.ts:425
 msgid "Close other tabs"
 msgstr "關閉其他分頁"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:440
+#: source/tmp/win-main/DocumentTabs.vue.ts:441
 msgid "Close all tabs"
 msgstr "關閉全部分頁"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:456
+#: source/tmp/win-main/DocumentTabs.vue.ts:457
 msgid "Move"
 msgstr ""
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:461
+#: source/tmp/win-main/DocumentTabs.vue.ts:462
 msgid "Move to start"
 msgstr ""
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:467
+#: source/tmp/win-main/DocumentTabs.vue.ts:468
 msgid "Move to end"
 msgstr ""
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:475
+#: source/tmp/win-main/DocumentTabs.vue.ts:476
 msgid "Unpin tab"
 msgstr "取消固定分頁"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:475
+#: source/tmp/win-main/DocumentTabs.vue.ts:476
 msgid "Pin tab"
 msgstr "固定分頁"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:490
+#: source/tmp/win-main/DocumentTabs.vue.ts:491
 #: source/win-main/file-manager/util/file-item-context.ts:68
 msgid "Copy filename"
 msgstr "複製檔案名稱"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:497
+#: source/tmp/win-main/DocumentTabs.vue.ts:498
 #: source/win-main/file-manager/util/file-item-context.ts:63
 #: source/win-main/file-manager/util/dir-item-context.ts:64
 msgid "Copy path"
 msgstr "複製路徑"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:504
+#: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in Explorer"
 msgstr "在 Explorer 中顯示"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:504
+#: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in File Browser"
 msgstr "在檔案瀏覽器中顯示"
 
-#: source/tmp/win-main/DocumentTabs.vue.ts:514
+#: source/tmp/win-main/DocumentTabs.vue.ts:515
 #: source/app/service-providers/menu/menu.win32.ts:415
 #: source/app/service-providers/menu/menu.darwin.ts:415
 #: source/win-main/file-manager/util/file-item-context.ts:73
 msgid "Copy ID"
 msgstr "複製 ID"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:528
+#: source/win-main/file-manager/util/file-item-context.ts:94
+msgid "Close file"
+msgstr "關閉檔案"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:31
 msgid "Enter your search terms below"
@@ -2667,28 +2748,33 @@ msgstr "無法載入引文資料庫"
 msgid "Changes to the library file detected. Reloading …"
 msgstr "偵測到資源庫檔案的變更，正在重新載入…"
 
-#: source/app/service-providers/documents/index.ts:385
+#: source/app/service-providers/documents/index.ts:394
 msgid "Save changes"
 msgstr "儲存變更"
 
-#: source/app/service-providers/documents/index.ts:386
+#: source/app/service-providers/documents/index.ts:395
 msgid "Discard changes"
 msgstr "放棄變更"
 
-#: source/app/service-providers/documents/index.ts:392
+#: source/app/service-providers/documents/index.ts:401
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "有些尚未儲存的修改。您要放棄它們還是要存檔？"
 
-#: source/app/service-providers/documents/index.ts:1083
+#: source/app/service-providers/documents/index.ts:956
+#, javascript-format
+msgid "File: %s"
+msgstr ""
+
+#: source/app/service-providers/documents/index.ts:1119
 msgid "File changed on disk"
 msgstr "檔案在磁碟上已變更"
 
-#: source/app/service-providers/documents/index.ts:1084
+#: source/app/service-providers/documents/index.ts:1120
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s 在磁碟上已變更"
 
-#: source/app/service-providers/documents/index.ts:1086
+#: source/app/service-providers/documents/index.ts:1122
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -2697,29 +2783,29 @@ msgstr ""
 "%s 在磁碟上已變更，但編輯器中有尚未儲存的修改。您要保留目前的編輯器內容還是從"
 "磁碟載入檔案？"
 
-#: source/app/service-providers/documents/index.ts:1087
+#: source/app/service-providers/documents/index.ts:1123
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr "您要保留目前的編輯器內容還是從磁碟載入檔案？"
 
-#: source/app/service-providers/documents/index.ts:1090
+#: source/app/service-providers/documents/index.ts:1126
 msgid "Keep editor contents"
 msgstr "保留編輯器內容"
 
-#: source/app/service-providers/documents/index.ts:1091
+#: source/app/service-providers/documents/index.ts:1127
 msgid "Load changes from disk"
 msgstr "從磁碟載入變更"
 
-#: source/app/service-providers/documents/index.ts:1094
+#: source/app/service-providers/documents/index.ts:1130
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr "如果編輯器中沒有尚未儲存的修改，則總是從磁碟載入變更"
 
-#: source/app/service-providers/documents/index.ts:1563
+#: source/app/service-providers/documents/index.ts:1600
 msgid "Could not save file"
 msgstr "無法儲存檔案"
 
-#: source/app/service-providers/documents/index.ts:1563
+#: source/app/service-providers/documents/index.ts:1600
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "無法儲存檔案 %s：%s"
@@ -2745,7 +2831,7 @@ msgstr "離線"
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:130
-#: source/app/service-providers/config/index.ts:588
+#: source/app/service-providers/config/index.ts:600
 msgid "Confirm"
 msgstr "確認"
 
@@ -2756,7 +2842,7 @@ msgstr "在 %s 個檔案中將標籤 \"%s\" 取代為 \"%s\"？"
 
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-rename.ts:133
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 msgid "Yes"
 msgstr "是"
 
@@ -2890,7 +2976,7 @@ msgstr "更新 %s 個指向檔案 %s 的內部連結？"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:134
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:35
 msgid "No"
 msgstr "否"
 
@@ -3043,17 +3129,17 @@ msgstr "選項 %s 至少要有 %s 字元。"
 msgid "Option %s is required."
 msgstr "選項 %s 是必需的。"
 
-#: source/app/service-providers/config/index.ts:580
+#: source/app/service-providers/config/index.ts:592
 msgid "Changing this option requires a restart to take effect."
 msgstr "更改此選項需要重新啟動才能生效。"
 
-#: source/app/service-providers/config/index.ts:583
+#: source/app/service-providers/config/index.ts:595
 #: source/app/service-providers/menu/menu.win32.ts:676
 #: source/app/service-providers/menu/menu.darwin.ts:704
 msgid "Restart now"
 msgstr "立即重新啟動"
 
-#: source/app/service-providers/config/index.ts:584
+#: source/app/service-providers/config/index.ts:596
 msgid "Restart later"
 msgstr "稍後重新啟動"
 
@@ -3424,7 +3510,7 @@ msgstr "全部移到最前方"
 msgid "Open file"
 msgstr "開啟檔案"
 
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:41
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "有些尚未儲存的修改。您要先儲存它們嗎？"
 
@@ -3453,11 +3539,23 @@ msgstr "檔案 %s 已被遠端修改。要用磁碟上的新版本取代已載�
 msgid "Always load remote changes to the current file"
 msgstr "總是將遠端的修改載入到目前檔案"
 
+#: source/app/service-providers/windows/dialog/should-close-all.ts:30
+msgid "Close all"
+msgstr ""
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:33
+msgid "Do you really want to close all files?"
+msgstr ""
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:34
+msgid "Do you really want to close all workspaces?"
+msgstr ""
+
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
 msgstr "存檔"
 
-#: source/app/service-providers/windows/index.ts:238
+#: source/app/service-providers/windows/index.ts:243
 msgid "Open project folder"
 msgstr "開啟專案資料夾"
 
@@ -4260,6 +4358,44 @@ msgstr "使用自然順序（2 在 10 之前）"
 msgid "Use ASCII order (2 comes after 10)"
 msgstr "使用 ASCII 順序（2 在 10 之後）"
 
+#: source/win-preferences/schema/file-manager.ts:115
+msgid "Workspace sorting"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:116
+msgid "Zettlr automatically sorts your workspaces by name."
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:122
+msgid "Sort workspaces manually"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:123
+msgid ""
+"This will be active as soon as you manually change the sort order. Disable "
+"this to reinstate automatic sorting."
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:129
+msgid "Collapse Workspaces Behavior"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:131
+msgid ""
+"Determine how the context menu item to collapse workspaces in the file "
+"manager behaves. You can choose single-step or two-step."
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:136
+msgid "Require two steps to collapse workspaces"
+msgstr ""
+
+#: source/win-preferences/schema/file-manager.ts:137
+msgid ""
+"When this is active, the first collapse workspace will only collapse "
+"subfolders, the second the workspaces."
+msgstr ""
+
 #: source/win-preferences/schema/spellchecking.ts:27
 msgid ""
 "The spellchecker checks your words for misspellings. It uses Hunspell-"
@@ -4603,10 +4739,6 @@ msgstr "內容"
 #: source/win-main/file-manager/util/file-item-context.ts:49
 msgid "Duplicate file"
 msgstr "建立檔案複本"
-
-#: source/win-main/file-manager/util/file-item-context.ts:94
-msgid "Close file"
-msgstr "關閉檔案"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:51
 msgid "Rename directory"
