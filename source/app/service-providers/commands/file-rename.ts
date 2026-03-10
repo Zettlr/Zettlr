@@ -44,43 +44,38 @@ export default class FileRename extends ZettlrCommand {
       return
     }
 
-    let oldExt = path.extname(arg.path)
-    let newExt = path.extname(newName)
+    let parsedOldPath = path.parse(arg.path)
+    let parsedNewPath = path.parse(newName)
 
-    const invalidExt = !hasAnyRecognizedFileExtension(newName, this._app.config.get().attachmentExtensions)
+    // If the old and new extensions do not match, we must check
+    // that the new extension is recognized by Zettlr, and if it
+    // is, confirm with the user to change the file extension. If
+    // it is not, simply append the old extension.
+    if (parsedOldPath.ext !== parsedNewPath.ext) {
+      const validExt = hasAnyRecognizedFileExtension(parsedNewPath.ext, this._app.config.get().attachmentExtensions)
 
-    // If no new extension was provided, or the extension is otherwise invalid,
-    // assume it was a rename targeting the old extension. If the extensions
-    // are not the same, show a dialogue asking the user to confirm  if they
-    // would like to change the file extension.
-    //
-    // If they respond with `Keep`, the file is still renamed, but the new
-    // extension is replaced with the old one.
-    if (newExt !== '' && !invalidExt && oldExt !== newExt) {
-      const response = await dialog.showMessageBox({
-        title: trans('Change file extension'),
-        message: trans('Do you want to change the file extension from %s to %s?', oldExt, newExt),
-        buttons: [
-          trans('Use %s', newExt),
-          trans('Keep %s', oldExt),
-        ],
-        defaultId: 1
-      })
+      // Show a dialog asking the user to confirm if they would like to change
+      // the file extension. If they respond with `Keep`, the file is still
+      // renamed, but the new extension is replaced with the old one.
+      if (validExt) {
+        const response = await dialog.showMessageBox({
+          title: trans('Change file extension'),
+          message: trans('Do you want to change the file extension from %s to %s?', parsedOldPath.ext, parsedNewPath.ext),
+          buttons: [
+            trans('Use %s', parsedNewPath.ext),
+            trans('Keep %s', parsedOldPath.ext),
+          ],
+          defaultId: 1
+        })
 
-      // If `Keep`, replace the new extension with the old one.
-      if (response.response === 1) {
-        let newExtPos = newName.lastIndexOf(newExt)
-
-        newName = newName.slice(0, newExtPos) + oldExt
-        newExt = oldExt
+        // If `Keep`, replace the new extension with the old one.
+        if (response.response === 1) {
+          newName = path.join(parsedNewPath.dir, parsedNewPath.name + parsedOldPath.ext)
+        }
+      // The new extension was not recognized by Zettlr, so append the old extension
+      } else {
+        newName += parsedOldPath.ext
       }
-    }
-
-    // If the old and new file extensions do not match (they were changed),
-    // and the new name does not have a recognized extension, add the old
-    // extension, or if one was not found, default to `.md`
-    if (oldExt !== newExt && invalidExt) {
-      newName += (oldExt !== '' ? oldExt : '.md')
     }
 
     const file = await this._app.fsal.getDescriptorForAnySupportedFile(arg.path)

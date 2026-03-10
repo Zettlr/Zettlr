@@ -18,9 +18,9 @@ import path from 'path'
 import sanitize from 'sanitize-filename'
 import generateFilename from '@common/util/generate-filename'
 import { app } from 'electron'
-import { getExtensionForDocumentType, hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
+import { getDocumentTypeForExtension, getExtensionForDocumentType, hasAnyRecognizedFileExtension } from '@common/util/file-extention-checks'
 import type { AppServiceContainer } from 'source/app/app-service-container'
-import type { DocumentType } from '@dts/common/documents'
+import { DocumentType } from '@dts/common/documents'
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -115,15 +115,30 @@ export default class FileNew extends ZettlrCommand {
         throw new Error('Could not create file: Filename was not valid')
       }
 
-      const ext = path.extname(filename)
-      const extType = arg.type !== undefined ? getExtensionForDocumentType(arg.type) : '.md'
-      const invalidExt = !hasAnyRecognizedFileExtension(filename, attachmentExtensions)
+      const docType = arg.type ?? DocumentType.Markdown
+      const docExtension = getExtensionForDocumentType(docType)
 
-      // If a type was provided, but the actual and expected extensions do not
-      // match, or if the new extension is not recognized, set the extension to
-      // the expected one, defaulting to `.md`
-      if ((arg.type !== undefined && ext !== extType) || invalidExt) {
-        filename += extType
+      // No DocumentType was provided, so this could be a generic file.
+      // Check if the file extension is recognized. If it is not, then
+      // append the default DocumentType extension to the filename.
+      if (arg.type === undefined && !hasAnyRecognizedFileExtension(filename, attachmentExtensions)) {
+        filename += docExtension
+      }
+
+      // A DocumentType was provided, so the DocumentType for the filename
+      // must match the provided DocumentType. If it doees not, then append
+      // the default DocumentType extension to the filename.
+      if (arg.type !== undefined) {
+        const ext = path.extname(filename)
+        const extDocType = getDocumentTypeForExtension(ext)
+
+        // If the document types do not match, then an invalid extension was provided.
+        // Append the default wanted extension to the filename. Do not try to
+        // strip and replace the existing extension, as this could clobber otherwise
+        // normal user input, such as dot-separated filename schemes.
+        if (docType !== extDocType) {
+          filename += docExtension
+        }
       }
 
       const absPath = path.join(dirpath, filename)
