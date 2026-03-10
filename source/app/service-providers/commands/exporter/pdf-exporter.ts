@@ -47,18 +47,34 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // Write to an intermediary HTML file which we will convert to PDF below.
   const defaults = await ctx.writeDefaults(allDefaults[0].name, defaultKeys)
 
-  // Check that the defaults profile did not change
-  // `output-file`, and if it did, update the target.
-  if (defaults['output-file'] !== pdfFilePath) {
-    const parsed = path.parse(defaults['output-file'] as string)
-    pdfFilePath = path.join(parsed.dir, parsed.name + '.pdf')
-    htmlFilePath = path.join(parsed.dir, parsed.name + '.html')
+  // Since the PDF exporter is a two-stage process, `htmlFilePath` is what
+  // is actually passed to pandoc, however, a user provided `output-file`
+  // likely refers to the path of the output PDF. So, if `output-file` has
+  // changed, normalize the path based on the PDF and set `output-file` to
+  // the updated `htmlFilePath`.
+  if (defaults['output-file'] !== htmlFilePath) {
+    // Remove any internal `..` and `.` paths
+    pdfFilePath = path.normalize(defaults['output-file'] as string)
 
+    // If the target is a relative path, resolve it to the target directory
+    // and sanitize any potential path traversals.
     if (!path.isAbsolute(pdfFilePath)) {
-      pdfFilePath = path.join(options.targetDirectory, pdfFilePath)
-      htmlFilePath = path.join(options.targetDirectory, htmlFilePath)
-      defaults['output-file'] = htmlFilePath
+      pdfFilePath = path.resolve(options.targetDirectory, pdfFilePath)
+
+      // Make sure that the resolved path still falls under `targetDirectory`
+      // to prevent potentially insecure path traversals.
+      if (!pdfFilePath.startsWith(options.targetDirectory)) {
+        const parsed = path.parse(pdfFilePath)
+        pdfFilePath = path.join(options.targetDirectory, parsed.base)
+      }
     }
+
+    // This is a temporary file, so potentially duplicating the extension as
+    // `.pdf.html` doesn't really matter. We probably could disregard updating
+    // this path entirely, but here it is done for consistency.
+    htmlFilePath = pdfFilePath + '.html'
+
+    defaults['output-file'] = htmlFilePath
   }
 
   // Run Pandoc
