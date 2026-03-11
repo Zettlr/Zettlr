@@ -19,6 +19,7 @@ import { EditorSelection, type ChangeSpec, type EditorState } from '@codemirror/
 import { type Command, type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { insertNewlineAndIndent, isolateHistory } from '@codemirror/commands'
+import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
 
 // These characters can be directly followed by a starting magic quote
 const startChars = ' ([{-–—\n\r\t\v\f/\\'
@@ -158,10 +159,13 @@ export const handleAutocorrectSpace: Command = (target: EditorView) => {
 export const handleAutocorrectEnter: Command = (target: EditorView) => {
   // By dispatching the Enter transaction first, the replacement
   // appears after it in the undo history, providing better undo UX.
-  if (insertNewlineAndIndent(target)) {
+  // NOTE: We first need to invoke `insertNewlineContinueMarkup` and, if that
+  // returns false, immediately invoke `insertNewlineAndIndent` to mimick the
+  // Enter overloads in the default keymap and ensure lists are continued.
+  if (insertNewlineContinueMarkup(target) || insertNewlineAndIndent(target)) {
     handleReplacement(target)
 
-    // Always return `true` due to dispatching `insertNewlineAndIndent`,
+    // Always return `true` due to dispatching `insertNewlineContinueMarkup`,
     // even if `handleReplacement` fails.
     return true
   }
