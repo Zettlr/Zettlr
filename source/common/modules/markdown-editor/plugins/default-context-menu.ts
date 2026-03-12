@@ -88,6 +88,7 @@ export const defaultContextMenu = EditorView.domEventHandlers({
     if (citationNode !== null) {
       // We can show a citation menu
       citationMenu(view, coords, citationNode)
+      return true
     }
 
     // If there is nothing selected, select the word at the coords

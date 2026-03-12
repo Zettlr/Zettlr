@@ -51,6 +51,8 @@
 - Made the app more resilient in light of missing workspaces or root files. Now,
   crashes on startup due to missing standalone files or workspaces should be
   much less frequent and the app should be more stable.
+- Fixed a regression that would overlay the default menu on top of the citation
+  menu on non-macOS clients, rendering it unusable (#6213).
 
 ## Under the Hood
 
