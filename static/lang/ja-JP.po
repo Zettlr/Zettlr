@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 4.2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-03-10 03:13+0000\n"
-"PO-Revision-Date: 2026-03-09 12:25+0900\n"
+"PO-Revision-Date: 2026-03-12 13:25+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -605,7 +605,7 @@ msgstr "読み込み中…"
 
 #: source/common/modules/markdown-editor/tooltips/citations.ts:98
 msgid "Could not fetch bibliography for citation."
-msgstr ""
+msgstr "引用のための参考文献を取得できませんでした。"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:149
 #, javascript-format
@@ -1935,77 +1935,77 @@ msgstr "開いているファイルまたはフォルダーはありません"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
-msgstr ""
+msgstr "ファイルを隠す"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
-msgstr ""
+msgstr "ファイルを表示"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
-msgstr ""
+msgstr "ワークスペースを隠す"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
-msgstr ""
+msgstr "ワークスペースを表示"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
-msgstr ""
+msgstr "自動並べ替えの切り替え"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:190
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 msgid "Close all files"
-msgstr ""
+msgstr "すべてのファイルを閉じる"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:255
 msgid "Collapse workspaces"
-msgstr ""
+msgstr "ワークスペースを折りたたむ"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:255
 msgid "Collapse subfolders"
-msgstr ""
+msgstr "サブフォルダーを折りたたむ"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:260
 msgid "Sort workspaces…"
-msgstr ""
+msgstr "ワークスペースの並べ替え…"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 msgid "Close all workspaces"
-msgstr ""
+msgstr "すべてのワークスペースを閉じる"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
 msgid "Remove the custom color"
-msgstr ""
+msgstr "カスタム色を削除"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
 msgid "Assign a blue accent color"
-msgstr ""
+msgstr "青のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "Assign a purple accent color"
-msgstr ""
+msgstr "紫のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:39
 msgid "Assign a rose accent color"
-msgstr ""
+msgstr "紅のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:40
 msgid "Assign a red accent color"
-msgstr ""
+msgstr "赤のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 msgid "Assign a orange accent color"
-msgstr ""
+msgstr "橙のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Assign a yellow accent color"
-msgstr ""
+msgstr "黄のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
 msgid "Assign a green accent color"
-msgstr ""
+msgstr "緑のアクセントカラーの割り当て"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
@@ -2829,7 +2829,7 @@ msgstr "保存されていない変更があります。保存しますか、そ
 #: source/app/service-providers/documents/index.ts:956
 #, javascript-format
 msgid "File: %s"
-msgstr ""
+msgstr "ファイル : %s"
 
 #: source/app/service-providers/documents/index.ts:1119
 msgid "File changed on disk"
@@ -3634,15 +3634,15 @@ msgstr "リモートの変更を常に現在のファイルに読み込む"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:30
 msgid "Close all"
-msgstr ""
+msgstr "すべて閉じる"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:33
 msgid "Do you really want to close all files?"
-msgstr ""
+msgstr "本当にすべてのファイルを閉じますか?"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:34
 msgid "Do you really want to close all workspaces?"
-msgstr ""
+msgstr "本当にすべてのワークスペースを閉じますか?"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
@@ -4497,41 +4497,47 @@ msgstr "ASCII 順 (10→2の順番)"
 
 #: source/win-preferences/schema/file-manager.ts:115
 msgid "Workspace sorting"
-msgstr ""
+msgstr "ワークスペースの並べ替え"
 
 #: source/win-preferences/schema/file-manager.ts:116
 msgid "Zettlr automatically sorts your workspaces by name."
-msgstr ""
+msgstr "Zettlr はワークスペースを名前で自動的に並べ替えます。"
 
 #: source/win-preferences/schema/file-manager.ts:122
 msgid "Sort workspaces manually"
-msgstr ""
+msgstr "ワークスペースを手動で並べ替える"
 
 #: source/win-preferences/schema/file-manager.ts:123
 msgid ""
 "This will be active as soon as you manually change the sort order. Disable "
 "this to reinstate automatic sorting."
 msgstr ""
+"手動で並べ替え順序を変更するとすぐに有効になります。自動並べ替えを再開するに"
+"は、これを無効にしてください。"
 
 #: source/win-preferences/schema/file-manager.ts:129
 msgid "Collapse Workspaces Behavior"
-msgstr ""
+msgstr "ワークスペースの折りたたみ動作"
 
 #: source/win-preferences/schema/file-manager.ts:131
 msgid ""
 "Determine how the context menu item to collapse workspaces in the file "
 "manager behaves. You can choose single-step or two-step."
 msgstr ""
+"ファイルマネージャーでワークスペースを折りたたむためのコンテキストメニュー項"
+"目の動作を指定します。シングルステップまたはツーステップを選択できます。"
 
 #: source/win-preferences/schema/file-manager.ts:136
 msgid "Require two steps to collapse workspaces"
-msgstr ""
+msgstr "ワークスペースを折りたたむには 2つの操作が必要です"
 
 #: source/win-preferences/schema/file-manager.ts:137
 msgid ""
 "When this is active, the first collapse workspace will only collapse "
 "subfolders, the second the workspaces."
 msgstr ""
+"これが有効な場合、最初の折りたたみ操作ではサブフォルダーのみが折りたたまれ、2"
+"回目の操作ではワークスペース全体が折りたたまれます。"
 
 #: source/win-preferences/schema/spellchecking.ts:27
 msgid ""
