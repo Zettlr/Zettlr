@@ -376,6 +376,7 @@ const ltLinter = linter(async view => {
         }
 
         // Try the chunk again
+        numRetries++
         chunk--
         continue
       }
