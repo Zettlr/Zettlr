@@ -55,6 +55,7 @@
   menu on non-macOS clients, rendering it unusable (#6213).
 - Fixed an issue that would make code blocks exceed the size of the preview
   window in some instances.
+- Fix footnote preview styling in footnote tooltips.
 
 ## Under the Hood
 
