@@ -53,6 +53,8 @@
   much less frequent and the app should be more stable.
 - Fixed a regression that would overlay the default menu on top of the citation
   menu on non-macOS clients, rendering it unusable (#6213).
+- Fixed an issue that would make code blocks exceed the size of the preview
+  window in some instances.
 
 ## Under the Hood
 

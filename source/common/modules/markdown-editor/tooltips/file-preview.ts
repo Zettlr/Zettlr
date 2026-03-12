@@ -187,6 +187,7 @@ export const filePreview = [
       padding: '5px',
       fontSize: '80%'
     },
+    '.editor-note-preview pre': { whiteSpace: 'pre-wrap' },
     '.editor-note-preview h1': { fontSize: '100%' },
     '.editor-note-preview h2': { fontSize: '95%' },
     '.editor-note-preview h3': { fontSize: '90%' },
