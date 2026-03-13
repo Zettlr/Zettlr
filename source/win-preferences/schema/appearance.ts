@@ -147,6 +147,11 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
           label: trans('Display "Next file" button'),
           model: 'displayToolbarButtons.showNextFileButton'
         },
+        {
+          type: 'checkbox',
+          label: trans('Display "Lint document" button'),
+          model: 'displayToolbarButtons.showMarkdownLintButton'
+        },
         { type: 'separator' },
         {
           type: 'form-text',

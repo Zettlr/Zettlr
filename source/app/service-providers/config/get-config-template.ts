@@ -165,6 +165,9 @@ export interface ConfigOptions {
         ignoredRules: LanguageToolIgnoredRuleEntry[]
         provider: 'official'|'custom'
         customServer: string
+        charsPerRequest: number
+        charsPerMinute: number
+        requestsPerMinute: number
         username: string
         apiKey: string
       }
@@ -245,6 +248,7 @@ export interface ConfigOptions {
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean
     showMarkdownMakeTaskListButton: boolean
+    showMarkdownLintButton: boolean
     showInsertTableButton: boolean
     showInsertFootnoteButton: boolean
     showDocumentInfoText: boolean
@@ -383,6 +387,9 @@ export function getConfigTemplate (): ConfigOptions {
           ignoredRules: [],
           provider: 'official',
           customServer: '',
+          charsPerRequest: 0, // 0 disables the limit
+          charsPerMinute: 0, // 0 disables the limit
+          requestsPerMinute: 0, // 0 disables the limit
           username: '',
           apiKey: ''
         }
@@ -509,6 +516,7 @@ export function getConfigTemplate (): ConfigOptions {
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,
       showMarkdownMakeTaskListButton: true,
+      showMarkdownLintButton: true,
       showInsertTableButton: true,
       showInsertFootnoteButton: true,
       showDocumentInfoText: true,

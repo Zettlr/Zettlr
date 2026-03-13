@@ -488,6 +488,13 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       icon: 'export'
     },
     {
+      type: 'button',
+      id: 'markdownLint',
+      title: trans('Check document for errors'),
+      icon: 'pencil',
+      visible: getToolbarButtonDisplay('showMarkdownLintButton')
+    },
+    {
       type: 'spacer',
       id: 'spacer-two',
       size: '1x'
