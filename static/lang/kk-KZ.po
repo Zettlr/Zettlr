@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.4.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-03-10 03:13+0000\n"
+"POT-Creation-Date: 2026-03-13 03:14+0000\n"
 "PO-Revision-Date: 2025-05-17 14:47+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -561,11 +561,11 @@ msgstr "Түсініктеме"
 msgid "Code"
 msgstr "Код"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:95
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:96
 msgid "No footnote text found."
 msgstr "Түсіндірме мәтіні табылмады."
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:113
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:116
 #: source/app/service-providers/menu/menu.win32.ts:318
 #: source/app/service-providers/menu/menu.darwin.ts:318
 msgid "Edit"
