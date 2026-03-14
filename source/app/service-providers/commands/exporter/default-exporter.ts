@@ -37,7 +37,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
     'input-files': sourceFiles,
     'output-file': target
   }
-  const defaults = await ctx.writeDefaults(options.profile.name, defaultKeys)
+  const defaults = await ctx.loadDefaults(options.profile.name, defaultKeys)
 
   // Update `target` if the defaults profile changed`output-file`
   if (defaults['output-file'] !== target) {
