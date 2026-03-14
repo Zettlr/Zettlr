@@ -45,7 +45,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   }
 
   // Write to an intermediary HTML file which we will convert to PDF below.
-  const defaults = await ctx.writeDefaults(allDefaults[0].name, defaultKeys)
+  const defaults = await ctx.loadDefaults(allDefaults[0].name, defaultKeys)
 
   // Since the PDF exporter is a two-stage process, `htmlFilePath` is what
   // is actually passed to pandoc, however, a user provided `output-file`
