@@ -57,6 +57,7 @@
   window in some instances.
 - Fix footnote preview styling in footnote tooltips.
 - Fixed custom export profiles not working during project exports (#6235).
+- Fixed text color of disabled menu items on Linux and Windows.
 
 ## Under the Hood
 
