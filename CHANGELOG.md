@@ -59,6 +59,7 @@
 - Fixed custom export profiles not working during project exports (#6235).
 - Fixed text color of disabled menu items on Linux and Windows.
 - Fixed "Find in file" menu item (#6234).
+- Improve file name extension handling (#6194).
 
 ## Under the Hood
 
