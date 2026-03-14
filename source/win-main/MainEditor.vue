@@ -120,7 +120,7 @@ ipcRenderer.on('shortcut', (event, command) => {
       })
       .catch(e => console.error(e))
   } else if (command === 'search') {
-    showSearch.value = !showSearch.value
+    currentEditor.toggleSearchPanel()
   } else if (command === 'toggle-typewriter-mode') {
     currentEditor.hasTypewriterMode = !currentEditor.hasTypewriterMode
   } else if (command === 'copy-as-html') {
@@ -210,7 +210,6 @@ onUpdated(() => {
 })
 
 // DATA SETUP
-const showSearch = ref(false)
 const mainEditorWrapper = ref<HTMLDivElement|null>(null)
 
 // COMPUTED PROPERTIES
