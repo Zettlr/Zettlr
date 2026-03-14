@@ -79,9 +79,13 @@ export type PandocWriter = typeof pandocWriters[number]
 export function parseReaderWriter (readerWriter: string): PandocReaderWriter {
   const parsed: PandocReaderWriter = {
     name: readerWriter.split(/[+-]/g)[0],
-    isCustom: readerWriter.endsWith('.lua'),
+    isCustom: false,
     enabledExtensions: [],
     disabledExtensions: []
+  }
+
+  if (parsed.name.endsWith('.lua')) {
+    parsed.isCustom = true
   }
 
   for (const match of readerWriter.matchAll(/([+-][a-z0-9_]+)/gi)) {
