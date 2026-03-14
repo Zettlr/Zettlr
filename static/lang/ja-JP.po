@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-03-13 03:14+0000\n"
+"POT-Creation-Date: 2026-03-14 03:13+0000\n"
 "PO-Revision-Date: 2026-03-09 12:25+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -603,7 +603,7 @@ msgstr "新しいタブで開く"
 msgid "Loading…"
 msgstr "読み込み中…"
 
-#: source/common/modules/markdown-editor/tooltips/citations.ts:98
+#: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
 msgstr ""
 

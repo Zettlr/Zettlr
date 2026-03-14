@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-03-13 03:14+0000\n"
+"POT-Creation-Date: 2026-03-14 03:13+0000\n"
 "PO-Revision-Date: 2026-03-07 15:00+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -602,7 +602,7 @@ msgstr "In neuem Tab öffnen"
 msgid "Loading…"
 msgstr "Lade…"
 
-#: source/common/modules/markdown-editor/tooltips/citations.ts:98
+#: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
 msgstr ""
 

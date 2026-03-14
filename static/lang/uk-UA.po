@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-03-13 03:14+0000\n"
+"POT-Creation-Date: 2026-03-14 03:13+0000\n"
 "PO-Revision-Date: 2024-12-19 13:37+0200\n"
 "Last-Translator: Fedir Zinchuk <fedikw@gmail.com>\n"
 "Language-Team: Ukrainian translators\n"
@@ -602,7 +602,7 @@ msgstr "Відкрити в новій вкладці"
 msgid "Loading…"
 msgstr "Завантаження..."
 
-#: source/common/modules/markdown-editor/tooltips/citations.ts:98
+#: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
 msgstr ""
 
