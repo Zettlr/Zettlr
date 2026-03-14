@@ -56,6 +56,7 @@
 - Fixed an issue that would make code blocks exceed the size of the preview
   window in some instances.
 - Fix footnote preview styling in footnote tooltips.
+- Fixed custom export profiles not working during project exports (#6235).
 
 ## Under the Hood
 

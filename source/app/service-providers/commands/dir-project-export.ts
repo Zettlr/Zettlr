@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { makeExport } from './exporter'
+import { getCustomProfiles, makeExport } from './exporter'
 import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
@@ -93,7 +93,10 @@ export default class DirProjectExport extends ZettlrCommand {
       }) // Don't return, because we still can export
     }
 
-    const allDefaults = await this._app.assets.listDefaults()
+    // We have to fetch both the regular as well as the custom defaults profiles.
+    const regularDefaults = await this._app.assets.listDefaults()
+    const customDefaults = getCustomProfiles()
+    const allDefaults = regularDefaults.concat(customDefaults)
 
     for (const profilePathOrCommand of config.profiles) {
       // Spin up one exporter per format.
