@@ -93,8 +93,8 @@ export async function makeExport (
     runPandoc: async (defaults: PandocDefaults) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
-    writeDefaults: async (filename: string, overrides: PandocDefaults = {}) => {
-      return await writeDefaults(filename, overrides, logger, config, assets, options.defaultsOverride)
+    loadDefaults: async (filename: string, overrides: PandocDefaults = {}) => {
+      return await loadDefaults(filename, overrides, logger, config, assets, options.defaultsOverride)
     },
     listDefaults: async () => {
       return await assets.listDefaults()
@@ -168,7 +168,7 @@ async function runPandoc (logger: LogProvider, defaults: PandocDefaults, cwd?: s
 
 // REFERENCE: Full defaults file here: https://pandoc.org/MANUAL.html#default-files
 
-async function writeDefaults (
+async function loadDefaults (
   filename: string, // The profile to use
   properties: PandocDefaults, // Contains properties that will be written to the defaults
   logger: LogProvider,
@@ -260,8 +260,19 @@ async function writeDefaults (
 
   // After we have added our default keys, let the plugin add keys, which
   // may be overridden by the default file if already set.
+  const alwaysOverrideKeys = [
+    'input-files'
+  ]
+
   for (const key in properties) {
-    if (defaults[key] === undefined) {
+    // Some keys should always be overridden by the plugin values to provide the
+    // expected functionality.
+    if (alwaysOverrideKeys.includes(key)) {
+      defaults[key] = properties[key]
+      logger.warning(`Overriding \`${key}\`: \`${properties[key]}\``)
+      logger.warning(`Ignoring default property \`${key}\`: \`${defaults[key]}\``)
+    // If the defaults file does not define a key, set it to the plugin value.
+    } else if (defaults[key] === undefined) {
       defaults[key] = properties[key]
     } else {
       logger.info(`Default property \`${key}\` is already set: \`${YAML.stringify(defaults[key], { indent: 4, simpleKeys: false })}\``)
