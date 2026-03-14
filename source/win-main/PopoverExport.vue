@@ -126,9 +126,9 @@ const availableFormats = computed(() => {
   profileMetadata.value
     // Remove files that cannot read any of Zettlr's internal formats ...
     .filter(prof => {
-      const name = parseReaderWriter(prof.reader).name
+      const reader = parseReaderWriter(prof.reader)
 
-      return name.endsWith('.lua') || SUPPORTED_READERS.includes(name)
+      return reader.isCustom || SUPPORTED_READERS.includes(reader.name)
     })
     // ... and add the others to the available options
     .forEach(elem => { selectOptions[elem.name] = getDisplayText(elem) })
