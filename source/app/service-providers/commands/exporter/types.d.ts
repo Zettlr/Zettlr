@@ -137,7 +137,7 @@ export interface ExporterAPI {
    * @return  {Promise<string>}                  Resolves with an absolute path to the written file
    *                                             and the parsed content of the defaults file.
    */
-  writeDefaults: (writer: string, properties: PandocDefaults = {}) => Promise<PandocDefaults>
+  loadDefaults: (writer: string, properties: PandocDefaults = {}) => Promise<PandocDefaults>
   listDefaults: () => Promise<PandocProfileMetadata[]>
 }
 
