@@ -24,6 +24,7 @@ import type LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
 import type ConfigProvider from '@providers/config'
 import type DocumentManager from '@providers/documents'
+import { DocumentType } from '@dts/common/documents'
 
 export default function getMenu (
   logger: LogProvider,
@@ -79,7 +80,11 @@ export default function getMenu (
           label: path.basename(item),
           click: function (_menuitem, _focusedWindow) {
             documents.openFile(undefined, undefined, item, true)
-              .catch((e: any) => logger.error(`[Menu] Could not open recent document ${item}`, e))
+              .catch((err: unknown) => {
+                if (err instanceof Error) {
+                  logger.error(`[Menu] Could not open recent document ${item}`, err)
+                }
+              })
           }
         }
 
@@ -102,7 +107,7 @@ export default function getMenu (
               label: 'Markdown',
               accelerator: 'Ctrl+N',
               click: function (_menuitem, _focusedWindow) {
-                commands.run('file-new', { type: 'md' })
+                commands.run('file-new', { type: DocumentType.Markdown })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -110,7 +115,7 @@ export default function getMenu (
               id: 'menu.new_tex_file',
               label: 'TeX',
               click: function (_menuitem, _focusedWindow) {
-                commands.run('file-new', { type: 'tex' })
+                commands.run('file-new', { type: DocumentType.LaTeX })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -118,7 +123,7 @@ export default function getMenu (
               id: 'menu.new_yaml_file',
               label: 'YAML',
               click: function (_menuitem, _focusedWindow) {
-                commands.run('file-new', { type: 'yaml' })
+                commands.run('file-new', { type: DocumentType.YAML })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -126,7 +131,7 @@ export default function getMenu (
               id: 'menu.new_json_file',
               label: 'JSON',
               click: function (_menuitem, _focusedWindow) {
-                commands.run('file-new', { type: 'json' })
+                commands.run('file-new', { type: DocumentType.JSON })
                   .catch(e => logger.error(String(e.message), e))
               }
             }
