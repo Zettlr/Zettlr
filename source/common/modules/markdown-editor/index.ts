@@ -58,7 +58,7 @@ import {
   getTexExtensions,
   getYAMLExtensions,
   inputModeCompartment,
-  getMainEditorThemes
+  getMainEditorThemes,
 } from './editor-extension-sets'
 
 import {
@@ -101,6 +101,7 @@ import { editorMetadataFacet } from './plugins/editor-metadata'
 import { projectInfoUpdateEffect, type ProjectInfo } from './plugins/project-info-field'
 import { moveSection } from './commands/move-section'
 import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
+import { closeSearchPanel, openSearchPanel, searchPanelOpen } from '@codemirror/search'
 
 export interface DocumentWrapper {
   path: string
@@ -413,12 +414,12 @@ export default class MarkdownEditor extends EventEmitter {
     switch (type) {
       case DocumentType.Markdown:
         return getMarkdownExtensions(options)
-      case DocumentType.JSON:
-        return getJSONExtensions(options)
-      case DocumentType.YAML:
-        return getYAMLExtensions(options)
       case DocumentType.LaTeX:
         return getTexExtensions(options)
+      case DocumentType.YAML:
+        return getYAMLExtensions(options)
+      case DocumentType.JSON:
+        return getJSONExtensions(options)
     }
   }
 
@@ -562,6 +563,17 @@ export default class MarkdownEditor extends EventEmitter {
     const toc = this._instance.state.field(tocField)
     const toLineNumber = to !== -1 ? to : this._instance.state.doc.lines
     moveSection(toc, from, toLineNumber)(this._instance)
+  }
+
+  /**
+   * Toggles the visibility of the search panel in this editor state.
+   */
+  toggleSearchPanel () {
+    if (searchPanelOpen(this.instance.state)) {
+      closeSearchPanel(this.instance)
+    } else {
+      openSearchPanel(this.instance)
+    }
   }
 
   /**

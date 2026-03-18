@@ -86,7 +86,9 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
           const entries = content.querySelectorAll<HTMLDivElement>('.csl-entry')
           entries.forEach(entry => {
             entry.style.marginBottom = `${options.entryspacing}em`
-            entry.style.lineHeight = `${options.linespacing}em`
+            // Ensure we have a 1.1em minimum line height to avoid the lines
+            // being glued together (which looks ugly depending on font).
+            entry.style.lineHeight = `max(${options.linespacing}em, 1.1em)`
             if (options.hangingindent) {
               entry.style.textIndent = '-1em'
               entry.style.paddingLeft = '1em'
@@ -103,4 +105,4 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
   }
 }
 
-export const citationTooltips = hoverTooltip(citationTooltip, { hoverTime: 100 })
+export const citationTooltips = hoverTooltip(citationTooltip, { hoverTime: 500 })

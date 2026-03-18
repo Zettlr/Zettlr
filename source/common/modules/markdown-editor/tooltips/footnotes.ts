@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type EditorView, hoverTooltip, type Tooltip } from '@codemirror/view'
+import { EditorView, hoverTooltip, type Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
@@ -88,6 +88,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
     create (view) {
       const dom = document.createElement('div')
       const content = document.createElement('div')
+      content.classList.add('footnote-preview-container')
       dom.appendChild(content)
 
       md2html(
@@ -101,6 +102,8 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
         }
       )
         .then(tooltipContent => {
+          console.log(tooltipContent)
+          console.log({ content })
           content.innerHTML = tooltipContent
         })
         .catch(err => console.error(err))
@@ -124,4 +127,33 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   }
 }
 
-export const footnoteHover = hoverTooltip(footnotesTooltip, { hoverTime: 100 })
+export const footnoteHover = [
+  hoverTooltip(footnotesTooltip, { hoverTime: 100 }),
+  EditorView.baseTheme({
+    '.footnote-preview-container': {
+      maxWidth: '340px',
+      padding: '5px',
+      fontSize: '80%',
+      whiteSpace: 'break-word',
+      paddingLeft: '20px',
+      textIndent: '-20px',
+    },
+    '.footnote-preview-container pre': {
+      whiteSpace: 'pre-wrap'
+    },
+    '.footnote-preview-container .footnote-ref-label': {
+      float: 'left',
+      paddingRight: '20px',
+      fontWeight: 'bold',
+      '& a': {
+        color: 'inherit',
+        textDecoration: 'none',
+      }
+    },
+    // DEBUG: We need to find a way to just extract the children and turn those
+    // to HTML. This also absolves us from having to monkey-patch this hr.
+    '.footnote-preview-container > hr': {
+      display: 'none'
+    }
+  })
+]

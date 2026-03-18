@@ -38,7 +38,7 @@
           <cds-icon
             role="presentation"
             shape="ellipsis-horizontal"
-            class="close-all"
+            class="root-settings"
             v-on:click.stop="fileRootContextMenu"
           ></cds-icon>
         </div>
@@ -84,7 +84,7 @@
             ref="workspacesContextMenuButton"
             role="presentation"
             shape="ellipsis-horizontal"
-            class="close-all"
+            class="root-settings"
             v-on:click.stop="workspaceRootContextMenu"
           ></cds-icon>
         </div>
@@ -642,18 +642,13 @@ body {
         vertical-align: bottom;
       }
 
-      .close-all {
+      .root-settings {
         margin-inline-start: auto;
         margin-inline-end: 10px;
         border-radius: 4px;
         padding: 2px;
-        color: var(--grey-6);
-        background-color: var(--grey-2);
+        width: 22px;
       }
-
-      .close-all:hover {
-          background-color: var(--grey-1);
-        }
     }
 
     .list-item {

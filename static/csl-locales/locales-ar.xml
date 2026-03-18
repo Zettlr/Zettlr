@@ -2,13 +2,17 @@
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="ar">
   <info>
     <translator>
+        <name>Mazen Amria</name>
+        <email>t.mazenamria@gmail.com</email>
+    </translator>
+    <translator>
       <name>abdealikhurrum</name>
     </translator>
     <translator>
       <name>Dr. Ayman Saleh</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:08:07+00:00</updated>
+    <updated>2026-03-09T22:17:05+01:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -182,16 +186,27 @@
     <term name="ordinal"/>
 
     <!-- LONG ORDINALS -->
-    <term name="long-ordinal-01">الأول</term>
-    <term name="long-ordinal-02">الثاني</term>
-    <term name="long-ordinal-03">الثالث</term>
-    <term name="long-ordinal-04">الرابع</term>
-    <term name="long-ordinal-05">الخامس</term>
-    <term name="long-ordinal-06">السادس</term>
-    <term name="long-ordinal-07">السابع</term>
-    <term name="long-ordinal-08">الثامن</term>
-    <term name="long-ordinal-09">التاسع</term>
-    <term name="long-ordinal-10">العاشر</term>
+    <term name="long-ordinal-01" gender-form="masculine">الأول</term>
+    <term name="long-ordinal-02" gender-form="masculine">الثاني</term>
+    <term name="long-ordinal-03" gender-form="masculine">الثالث</term>
+    <term name="long-ordinal-04" gender-form="masculine">الرابع</term>
+    <term name="long-ordinal-05" gender-form="masculine">الخامس</term>
+    <term name="long-ordinal-06" gender-form="masculine">السادس</term>
+    <term name="long-ordinal-07" gender-form="masculine">السابع</term>
+    <term name="long-ordinal-08" gender-form="masculine">الثامن</term>
+    <term name="long-ordinal-09" gender-form="masculine">التاسع</term>
+    <term name="long-ordinal-10" gender-form="masculine">العاشر</term>
+
+    <term name="long-ordinal-01" gender-form="feminine">الأولى</term>
+    <term name="long-ordinal-02" gender-form="feminine">الثانية</term>
+    <term name="long-ordinal-03" gender-form="feminine">الثالثة</term>
+    <term name="long-ordinal-04" gender-form="feminine">الرابعة</term>
+    <term name="long-ordinal-05" gender-form="feminine">الخامسة</term>
+    <term name="long-ordinal-06" gender-form="feminine">السادسة</term>
+    <term name="long-ordinal-07" gender-form="feminine">السابعة</term>
+    <term name="long-ordinal-08" gender-form="feminine">الثامنة</term>
+    <term name="long-ordinal-09" gender-form="feminine">التاسعة</term>
+    <term name="long-ordinal-10" gender-form="feminine">العاشرة</term>
 
     <!-- LONG LOCATOR FORMS -->
     <term name="act">
@@ -396,11 +411,13 @@
       <single>citation</single>
       <multiple>citations</multiple>
     </term>
-    <term name="collection-number">
+    <term name="collection-number" gender="masculine">
       <single>عدد</single>
       <multiple>أعداد</multiple>
+      <!-- TODO: specify the gender as feminine once that is supported -->
+      <!-- <multiple gender="feminine">أعداد</multiple> -->
     </term>
-    <term name="edition">
+    <term name="edition" gender="feminine">
       <single>الطبعة</single>
       <multiple>الطبعات</multiple>
     </term>
@@ -412,7 +429,7 @@
       <single>number</single>
       <multiple>numbers</multiple>
     </term>
-    <term name="number-of-pages">
+    <term name="number-of-pages" gender="feminine">
       <single>صفحة</single>
       <multiple>صفحات</multiple>
     </term>
@@ -428,7 +445,12 @@
       <single>printing</single>
       <multiple>printings</multiple>
     </term>
-    <term name="version">إصدار</term>
+    <term name="version" gender="masculine">
+        <single>إصدار</single>
+        <multiple>إصدارات</multiple>
+        <!-- TODO: specify the gender as feminine once that is supported -->
+        <!-- <multiple gender="feminine">إصدارات</multiple> -->
+    </term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
@@ -628,18 +650,18 @@
     <term name="series-creator" form="verb-short">cre. by</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">يناير</term>
-    <term name="month-02">فبراير</term>
-    <term name="month-03">مارس</term>
-    <term name="month-04">أبريل</term>
-    <term name="month-05">مايو</term>
-    <term name="month-06">يونيو</term>
-    <term name="month-07">يوليو</term>
-    <term name="month-08">أغسطس</term>
-    <term name="month-09">سبتمبر</term>
-    <term name="month-10">أكتوبر</term>
-    <term name="month-11">نوفمبر</term>
-    <term name="month-12">ديسمبر</term>
+    <term name="month-01" gender="masculine">يناير</term>
+    <term name="month-02" gender="masculine">فبراير</term>
+    <term name="month-03" gender="masculine">مارس</term>
+    <term name="month-04" gender="masculine">أبريل</term>
+    <term name="month-05" gender="masculine">مايو</term>
+    <term name="month-06" gender="masculine">يونيو</term>
+    <term name="month-07" gender="masculine">يوليو</term>
+    <term name="month-08" gender="masculine">أغسطس</term>
+    <term name="month-09" gender="masculine">سبتمبر</term>
+    <term name="month-10" gender="masculine">أكتوبر</term>
+    <term name="month-11" gender="masculine">نوفمبر</term>
+    <term name="month-12" gender="masculine">ديسمبر</term>
 
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">يناير</term>

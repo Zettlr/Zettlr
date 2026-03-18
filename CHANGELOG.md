@@ -51,6 +51,15 @@
 - Made the app more resilient in light of missing workspaces or root files. Now,
   crashes on startup due to missing standalone files or workspaces should be
   much less frequent and the app should be more stable.
+- Fixed a regression that would overlay the default menu on top of the citation
+  menu on non-macOS clients, rendering it unusable (#6213).
+- Fixed an issue that would make code blocks exceed the size of the preview
+  window in some instances.
+- Fix footnote preview styling in footnote tooltips.
+- Fixed custom export profiles not working during project exports (#6235).
+- Fixed text color of disabled menu items on Linux and Windows.
+- Fixed "Find in file" menu item (#6234).
+- Improve file name extension handling (#6194).
 
 ## Under the Hood
 

@@ -35,7 +35,7 @@ import { markdownToAST } from '@common/modules/markdown-utils'
 import isFile from '@common/util/is-file'
 import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
-import { hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import { getDocumentTypeForExtension, hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import isDir from 'source/common/util/is-dir'
 
 type DocumentWindows = Record<string, DocumentTree>
@@ -626,8 +626,6 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
-    let type = DocumentType.Markdown
-
     // TODO: We also need to be able to load files not present in the file tree!
     const descriptor = await this._app.fsal.getDescriptorForAnySupportedFile(filePath)
     if (descriptor === undefined || descriptor.type === 'other') {
@@ -636,18 +634,12 @@ export default class DocumentManager extends ProviderContract {
 
     const content = await this._app.fsal.loadAnySupportedFile(filePath)
 
+    let type = DocumentType.Markdown
+
     if (descriptor.type === 'code') {
-      switch (descriptor.ext) {
-        case '.yaml':
-        case '.yml':
-          type = DocumentType.YAML
-          break
-        case '.json':
-          type = DocumentType.JSON
-          break
-        case '.tex':
-        case '.latex':
-          type = DocumentType.LaTeX
+      const codeDocumentType = getDocumentTypeForExtension(descriptor.path)
+      if (codeDocumentType !== undefined) {
+        type = codeDocumentType
       }
     }
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.4.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-03-10 03:13+0000\n"
+"POT-Creation-Date: 2026-03-15 03:27+0000\n"
 "PO-Revision-Date: 2025-05-17 14:47+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -443,8 +443,8 @@ msgstr "Бұл сілтемені ашу үшін Cmd/Ctrl-басу"
 #: source/common/modules/window-register/register-default-context.ts:75
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:239
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:39
-#: source/app/service-providers/menu/menu.win32.ts:338
-#: source/app/service-providers/menu/menu.darwin.ts:338
+#: source/app/service-providers/menu/menu.win32.ts:343
+#: source/app/service-providers/menu/menu.darwin.ts:339
 msgid "Cut"
 msgstr "Қию"
 
@@ -452,24 +452,24 @@ msgstr "Қию"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:245
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:45
 #: source/tmp/win-main/GlobalSearch.vue.ts:55
-#: source/app/service-providers/menu/menu.win32.ts:344
-#: source/app/service-providers/menu/menu.darwin.ts:344
+#: source/app/service-providers/menu/menu.win32.ts:349
+#: source/app/service-providers/menu/menu.darwin.ts:345
 msgid "Copy"
 msgstr "Көшіру"
 
 #: source/common/modules/window-register/register-default-context.ts:88
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:257
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:57
-#: source/app/service-providers/menu/menu.win32.ts:358
-#: source/app/service-providers/menu/menu.darwin.ts:358
+#: source/app/service-providers/menu/menu.win32.ts:363
+#: source/app/service-providers/menu/menu.darwin.ts:359
 msgid "Paste"
 msgstr "Қою"
 
 #: source/common/modules/window-register/register-default-context.ts:98
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:272
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:72
-#: source/app/service-providers/menu/menu.win32.ts:372
-#: source/app/service-providers/menu/menu.darwin.ts:372
+#: source/app/service-providers/menu/menu.win32.ts:377
+#: source/app/service-providers/menu/menu.darwin.ts:373
 msgid "Select all"
 msgstr "Барлығын таңдау"
 
@@ -561,13 +561,13 @@ msgstr "Түсініктеме"
 msgid "Code"
 msgstr "Код"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:95
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:96
 msgid "No footnote text found."
 msgstr "Түсіндірме мәтіні табылмады."
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:113
-#: source/app/service-providers/menu/menu.win32.ts:318
-#: source/app/service-providers/menu/menu.darwin.ts:318
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:323
+#: source/app/service-providers/menu/menu.darwin.ts:319
 msgid "Edit"
 msgstr "Өңдеу"
 
@@ -603,7 +603,7 @@ msgstr "Жаңа қойындыда ашу"
 msgid "Loading…"
 msgstr "Жүктелуде…"
 
-#: source/common/modules/markdown-editor/tooltips/citations.ts:98
+#: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
 msgstr ""
 
@@ -787,15 +787,15 @@ msgstr "Кесте қою"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:251
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:51
-#: source/app/service-providers/menu/menu.win32.ts:349
-#: source/app/service-providers/menu/menu.darwin.ts:349
+#: source/app/service-providers/menu/menu.win32.ts:354
+#: source/app/service-providers/menu/menu.darwin.ts:350
 msgid "Copy as HTML"
 msgstr "HTML ретінде көшіру"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:263
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:63
-#: source/app/service-providers/menu/menu.win32.ts:363
-#: source/app/service-providers/menu/menu.darwin.ts:363
+#: source/app/service-providers/menu/menu.win32.ts:368
+#: source/app/service-providers/menu/menu.darwin.ts:364
 msgid "Paste without style"
 msgstr "Пішімсіз қою"
 
@@ -1240,8 +1240,8 @@ msgid "The changes apply from the next slide."
 msgstr ""
 
 #: source/tmp/win-print/App.vue.ts:49 source/tmp/win-print/App.vue.ts:50
-#: source/app/service-providers/menu/menu.win32.ts:221
-#: source/app/service-providers/menu/menu.darwin.ts:258
+#: source/app/service-providers/menu/menu.win32.ts:226
+#: source/app/service-providers/menu/menu.darwin.ts:259
 msgid "Print…"
 msgstr "Басып шығару..."
 
@@ -1263,9 +1263,9 @@ msgid "Ok"
 msgstr "Жарайды"
 
 #: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
-#: source/app/service-providers/menu/menu.win32.ts:614
-#: source/app/service-providers/menu/menu.darwin.ts:56
-#: source/app/service-providers/menu/menu.darwin.ts:642
+#: source/app/service-providers/menu/menu.win32.ts:619
+#: source/app/service-providers/menu/menu.darwin.ts:57
+#: source/app/service-providers/menu/menu.darwin.ts:643
 msgid "About Zettlr"
 msgstr "Zettlr туралы"
 
@@ -1367,8 +1367,8 @@ msgstr "Бірегей файл атауы"
 #: source/tmp/win-assets/SnippetsTab.vue.ts:30
 #: source/tmp/win-tag-manager/App.vue.ts:88
 #: source/app/service-providers/commands/export.ts:134
-#: source/app/service-providers/menu/menu.win32.ts:169
-#: source/app/service-providers/menu/menu.darwin.ts:206
+#: source/app/service-providers/menu/menu.win32.ts:174
+#: source/app/service-providers/menu/menu.darwin.ts:207
 msgid "Save"
 msgstr "Сақтау"
 
@@ -1379,8 +1379,8 @@ msgstr "Сақтау"
 #: source/app/service-providers/commands/dir-delete.ts:37
 #: source/app/service-providers/commands/rename-tag.ts:48
 #: source/app/service-providers/commands/file-delete.ts:38
-#: source/app/service-providers/menu/menu.win32.ts:677
-#: source/app/service-providers/menu/menu.darwin.ts:705
+#: source/app/service-providers/menu/menu.win32.ts:682
+#: source/app/service-providers/menu/menu.darwin.ts:706
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
@@ -1417,8 +1417,8 @@ msgid "No update available. You have the most recent version."
 msgstr "Жаңарту жоқ. Сізде ең соңғы нұсқа бар."
 
 #: source/tmp/win-update/App.vue.ts:37
-#: source/app/service-providers/menu/menu.win32.ts:41
-#: source/app/service-providers/menu/menu.darwin.ts:40
+#: source/app/service-providers/menu/menu.win32.ts:42
+#: source/app/service-providers/menu/menu.darwin.ts:41
 msgid "Check for updates"
 msgstr "Жаңартуларды тексеру"
 
@@ -1562,8 +1562,8 @@ msgstr ""
 "қасиеті жоқ болуы мүмкін."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:58
-#: source/app/service-providers/menu/menu.win32.ts:288
-#: source/app/service-providers/menu/menu.darwin.ts:296
+#: source/app/service-providers/menu/menu.win32.ts:293
+#: source/app/service-providers/menu/menu.darwin.ts:297
 #: source/win-main/file-manager/util/file-item-context.ts:43
 msgid "Rename file"
 msgstr "Файл атауын өзгерту"
@@ -1599,8 +1599,8 @@ msgid "Open filters folder"
 msgstr ""
 
 #: source/tmp/win-assets/App.vue.ts:17
-#: source/app/service-providers/menu/menu.win32.ts:241
-#: source/app/service-providers/menu/menu.darwin.ts:69
+#: source/app/service-providers/menu/menu.win32.ts:246
+#: source/app/service-providers/menu/menu.darwin.ts:70
 msgid "Assets Manager"
 msgstr "Активтер менеджері"
 
@@ -1860,7 +1860,7 @@ msgid "Enter a name"
 msgstr ""
 
 #. Else standard val for new dirs.
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:343
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:352
 #: source/app/service-providers/commands/dir-new.ts:32
 msgid "Untitled"
 msgstr "Атаусыз"
@@ -1998,8 +1998,8 @@ msgid "Times"
 msgstr "Уақыт"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
-#: source/app/service-providers/menu/menu.win32.ts:609
-#: source/app/service-providers/menu/menu.darwin.ts:637
+#: source/app/service-providers/menu/menu.win32.ts:614
+#: source/app/service-providers/menu/menu.darwin.ts:638
 msgid "Help"
 msgstr "Анықтама"
 
@@ -2434,8 +2434,8 @@ msgid "%s selections"
 msgstr "%s таңдаулар"
 
 #: source/tmp/win-main/App.vue.ts:294
-#: source/app/service-providers/menu/menu.win32.ts:469
-#: source/app/service-providers/menu/menu.darwin.ts:488
+#: source/app/service-providers/menu/menu.win32.ts:474
+#: source/app/service-providers/menu/menu.darwin.ts:489
 msgid "Toggle File Manager"
 msgstr "Файл менеджерін ауыстыру"
 
@@ -2445,8 +2445,8 @@ msgid "Search across all files"
 msgstr "Барлық файлдар бойынша іздеу"
 
 #: source/tmp/win-main/App.vue.ts:307
-#: source/app/service-providers/menu/menu.win32.ts:156
-#: source/app/service-providers/menu/menu.darwin.ts:184
+#: source/app/service-providers/menu/menu.win32.ts:161
+#: source/app/service-providers/menu/menu.darwin.ts:185
 msgid "Open workspace…"
 msgstr "Жұмыс кеңістігін ашу..."
 
@@ -2463,21 +2463,21 @@ msgid "Open settings"
 msgstr "Параметрлерді ашу"
 
 #: source/tmp/win-main/App.vue.ts:333
-#: source/app/service-providers/menu/menu.win32.ts:98
-#: source/app/service-providers/menu/menu.darwin.ts:126
+#: source/app/service-providers/menu/menu.win32.ts:103
+#: source/app/service-providers/menu/menu.darwin.ts:127
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 msgid "New file…"
 msgstr "Жаңа файл..."
 
 #: source/tmp/win-main/App.vue.ts:340
-#: source/app/service-providers/menu/menu.win32.ts:180
-#: source/app/service-providers/menu/menu.darwin.ts:217
+#: source/app/service-providers/menu/menu.win32.ts:185
+#: source/app/service-providers/menu/menu.darwin.ts:218
 msgid "Previous file"
 msgstr "Алдыңғы файл"
 
 #: source/tmp/win-main/App.vue.ts:348
-#: source/app/service-providers/menu/menu.win32.ts:191
-#: source/app/service-providers/menu/menu.darwin.ts:228
+#: source/app/service-providers/menu/menu.win32.ts:196
+#: source/app/service-providers/menu/menu.darwin.ts:229
 msgid "Next file"
 msgstr "Келесі файл"
 
@@ -2506,8 +2506,8 @@ msgid "Pomodoro timer"
 msgstr "Помодоро таймері"
 
 #: source/tmp/win-main/App.vue.ts:441
-#: source/app/service-providers/menu/menu.win32.ts:477
-#: source/app/service-providers/menu/menu.darwin.ts:496
+#: source/app/service-providers/menu/menu.win32.ts:482
+#: source/app/service-providers/menu/menu.darwin.ts:497
 msgid "Toggle Sidebar"
 msgstr "Бүйірлік панельді ауыстыру"
 
@@ -2623,8 +2623,8 @@ msgid "Reveal in File Browser"
 msgstr "Файл браузерінде көрсету"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:515
-#: source/app/service-providers/menu/menu.win32.ts:415
-#: source/app/service-providers/menu/menu.darwin.ts:415
+#: source/app/service-providers/menu/menu.win32.ts:420
+#: source/app/service-providers/menu/menu.darwin.ts:416
 #: source/win-main/file-manager/util/file-item-context.ts:73
 msgid "Copy ID"
 msgstr "ID көшіру"
@@ -2703,8 +2703,8 @@ msgstr ""
 "Сипаттама тышқанды үстіне апарғанда көрсетіледі."
 
 #: source/tmp/win-tag-manager/App.vue.ts:34
-#: source/app/service-providers/menu/menu.win32.ts:249
-#: source/app/service-providers/menu/menu.darwin.ts:77
+#: source/app/service-providers/menu/menu.win32.ts:254
+#: source/app/service-providers/menu/menu.darwin.ts:78
 msgid "Tags Manager"
 msgstr "Тегтер менеджері"
 
@@ -2721,8 +2721,8 @@ msgid "Rename tag…"
 msgstr "Тег атауын өзгерту…"
 
 #: source/tmp/win-tag-manager/App.vue.ts:98
-#: source/app/service-providers/menu/menu.win32.ts:565
-#: source/app/service-providers/menu/menu.darwin.ts:588
+#: source/app/service-providers/menu/menu.win32.ts:570
+#: source/app/service-providers/menu/menu.darwin.ts:589
 msgid "Close"
 msgstr "Жабу"
 
@@ -2741,8 +2741,8 @@ msgid "Show Zettlr"
 msgstr "Zettlr көрсету"
 
 #: source/app/service-providers/tray/index.ts:172
-#: source/app/service-providers/menu/menu.win32.ts:308
-#: source/app/service-providers/menu/menu.darwin.ts:114
+#: source/app/service-providers/menu/menu.win32.ts:313
+#: source/app/service-providers/menu/menu.darwin.ts:115
 msgid "Quit"
 msgstr "Шығу"
 
@@ -2773,21 +2773,21 @@ msgstr ""
 "Сақталмаған өзгерістер бар. Оларды сақтағыңыз келе ме немесе олардан бас "
 "тартқыңыз келе ме?"
 
-#: source/app/service-providers/documents/index.ts:956
+#: source/app/service-providers/documents/index.ts:948
 #, javascript-format
 msgid "File: %s"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1111
 msgid "File changed on disk"
 msgstr "Файл дискіде өзгертілді"
 
-#: source/app/service-providers/documents/index.ts:1120
+#: source/app/service-providers/documents/index.ts:1112
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s дискіде өзгертілді"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1114
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -2797,33 +2797,33 @@ msgstr ""
 "Редактордың ағымдағы мазмұнын сақтағыңыз келе ме немесе файлды дискіден "
 "жүктегіңіз келе ме?"
 
-#: source/app/service-providers/documents/index.ts:1123
+#: source/app/service-providers/documents/index.ts:1115
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "Редактордың ағымдағы мазмұнын сақтағыңыз келе ме немесе файлды дискіден "
 "жүктегіңіз келе ме?"
 
-#: source/app/service-providers/documents/index.ts:1126
+#: source/app/service-providers/documents/index.ts:1118
 msgid "Keep editor contents"
 msgstr "Редактор мазмұнын сақтау"
 
-#: source/app/service-providers/documents/index.ts:1127
+#: source/app/service-providers/documents/index.ts:1119
 msgid "Load changes from disk"
 msgstr "Өзгерістерді дискіден жүктеу"
 
-#: source/app/service-providers/documents/index.ts:1130
+#: source/app/service-providers/documents/index.ts:1122
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "Егер редакторда сақталмаған өзгерістер болмаса, әрқашан өзгерістерді "
 "дискіден жүктеу"
 
-#: source/app/service-providers/documents/index.ts:1600
+#: source/app/service-providers/documents/index.ts:1592
 msgid "Could not save file"
 msgstr "Файлды сақтау мүмкін болмады"
 
-#: source/app/service-providers/documents/index.ts:1600
+#: source/app/service-providers/documents/index.ts:1592
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "Файлды сақтау мүмкін болмады %s: %s"
@@ -2848,7 +2848,7 @@ msgid "offline"
 msgstr "косылу жоқ"
 
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/commands/file-rename.ts:130
+#: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/config/index.ts:600
 msgid "Confirm"
 msgstr "Растау"
@@ -2859,7 +2859,7 @@ msgid "Replace tag \"%s\" with \"%s\" across %s files?"
 msgstr "\"%s\" тегін \"%s\" арқылы %s файлдарында ауыстырайық па?"
 
 #: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/file-rename.ts:133
+#: source/app/service-providers/commands/file-rename.ts:162
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 msgid "Yes"
 msgstr "Иә"
@@ -2872,14 +2872,14 @@ msgstr ""
 msgid "There was an error renaming the file."
 msgstr ""
 
-#: source/app/service-providers/commands/file-new.ts:169
-#: source/app/service-providers/commands/file-new.ts:176
+#: source/app/service-providers/commands/file-new.ts:178
+#: source/app/service-providers/commands/file-new.ts:185
 #: source/app/service-providers/commands/file-duplicate.ts:40
 #: source/app/service-providers/commands/file-duplicate.ts:57
 msgid "Could not create file"
 msgstr "Файлды жасау мүмкін болмады"
 
-#: source/app/service-providers/commands/file-new.ts:177
+#: source/app/service-providers/commands/file-new.ts:186
 msgid "An unknown error occurred."
 msgstr ""
 
@@ -2987,13 +2987,32 @@ msgstr "Қосымшаны ашу мүмкін болмады. Zotero іске �
 msgid "Could not create directory"
 msgstr "Қалта жасау мүмкін болмады"
 
-#: source/app/service-providers/commands/file-rename.ts:131
+#: source/app/service-providers/commands/file-rename.ts:62
+msgid "Change file extension"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:63
+#, javascript-format
+msgid "Do you want to change the file extension from %s to %s?"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:65
+#, javascript-format
+msgid "Use %s"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:66
+#, javascript-format
+msgid "Keep %s"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:160
 #, javascript-format
 msgid "Update %s internal links to file %s?"
 msgstr "%s ішкі сілтемелерін %s файлына жаңартасыз ба?"
 
 #. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:134
+#: source/app/service-providers/commands/file-rename.ts:163
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:35
 msgid "No"
 msgstr "Жоқ"
@@ -3092,12 +3111,12 @@ msgstr ""
 "жылжытылған немесе жойылған болуы мүмкін. Экспорттағыңыз келетін барлық "
 "файлдардың қосылғанын тексеріңіз."
 
-#: source/app/service-providers/commands/dir-project-export.ts:169
+#: source/app/service-providers/commands/dir-project-export.ts:172
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
 msgstr "\"%s\" жобасы сәтті экспортталды. Көрсету үшін басыңыз."
 
-#: source/app/service-providers/commands/dir-project-export.ts:170
+#: source/app/service-providers/commands/dir-project-export.ts:173
 msgid "Project Export"
 msgstr "Жобаны экспорттау"
 
@@ -3155,8 +3174,8 @@ msgid "Changing this option requires a restart to take effect."
 msgstr "Бұл параметрді өзгерту күшіне ену үшін қайта іске қосуды қажет етеді."
 
 #: source/app/service-providers/config/index.ts:595
-#: source/app/service-providers/menu/menu.win32.ts:676
-#: source/app/service-providers/menu/menu.darwin.ts:704
+#: source/app/service-providers/menu/menu.win32.ts:681
+#: source/app/service-providers/menu/menu.darwin.ts:705
 msgid "Restart now"
 msgstr "Қазір қайта іске қосу"
 
@@ -3276,230 +3295,230 @@ msgstr ""
 "Жаңартуды бастау мүмкін болмады. Қайта көріп шығыңыз немесе жаңартуды қолмен "
 "орындаңыз. Қате: %s"
 
-#: source/app/service-providers/menu/menu.win32.ts:54
-#: source/app/service-providers/menu/menu.win32.ts:66
-#: source/app/service-providers/menu/menu.darwin.ts:193
+#: source/app/service-providers/menu/menu.win32.ts:55
+#: source/app/service-providers/menu/menu.win32.ts:67
+#: source/app/service-providers/menu/menu.darwin.ts:194
 msgid "Recent files"
 msgstr "Соңғы файлдар"
 
-#: source/app/service-providers/menu/menu.win32.ts:58
-#: source/app/service-providers/menu/menu.win32.ts:70
-#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/menu/menu.win32.ts:59
+#: source/app/service-providers/menu/menu.win32.ts:71
+#: source/app/service-providers/menu/menu.darwin.ts:198
 msgid "Clear"
 msgstr "Тазалау"
 
-#: source/app/service-providers/menu/menu.win32.ts:95
-#: source/app/service-providers/menu/menu.darwin.ts:123
+#: source/app/service-providers/menu/menu.win32.ts:100
+#: source/app/service-providers/menu/menu.darwin.ts:124
 msgid "File"
 msgstr "Файл"
 
-#: source/app/service-providers/menu/menu.win32.ts:137
-#: source/app/service-providers/menu/menu.darwin.ts:165
+#: source/app/service-providers/menu/menu.win32.ts:142
+#: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/win-main/file-manager/util/dir-item-context.ts:43
 msgid "New directory…"
 msgstr "Жаңа каталог..."
 
-#: source/app/service-providers/menu/menu.win32.ts:147
-#: source/app/service-providers/menu/menu.darwin.ts:175
+#: source/app/service-providers/menu/menu.win32.ts:152
+#: source/app/service-providers/menu/menu.darwin.ts:176
 msgid "Open file…"
 msgstr "Файлды ашу..."
 
-#: source/app/service-providers/menu/menu.win32.ts:205
-#: source/app/service-providers/menu/menu.darwin.ts:242
+#: source/app/service-providers/menu/menu.win32.ts:210
+#: source/app/service-providers/menu/menu.darwin.ts:243
 msgid "Import files…"
 msgstr "Файлдарды импорттау..."
 
-#: source/app/service-providers/menu/menu.win32.ts:213
-#: source/app/service-providers/menu/menu.darwin.ts:250
+#: source/app/service-providers/menu/menu.win32.ts:218
+#: source/app/service-providers/menu/menu.darwin.ts:251
 msgid "Export…"
 msgstr "Экспорттау..."
 
-#: source/app/service-providers/menu/menu.win32.ts:229
-#: source/app/service-providers/menu/menu.win32.ts:233
-#: source/app/service-providers/menu/menu.darwin.ts:61
+#: source/app/service-providers/menu/menu.win32.ts:234
+#: source/app/service-providers/menu/menu.win32.ts:238
+#: source/app/service-providers/menu/menu.darwin.ts:62
 msgid "Preferences…"
 msgstr "Параметрлер..."
 
-#: source/app/service-providers/menu/menu.win32.ts:261
-#: source/app/service-providers/menu/menu.darwin.ts:269
+#: source/app/service-providers/menu/menu.win32.ts:266
+#: source/app/service-providers/menu/menu.darwin.ts:270
 msgid "Import translation…"
 msgstr "Аударманы импорттау..."
 
-#: source/app/service-providers/menu/menu.win32.ts:269
-#: source/app/service-providers/menu/menu.darwin.ts:277
+#: source/app/service-providers/menu/menu.win32.ts:274
+#: source/app/service-providers/menu/menu.darwin.ts:278
 msgid "Import dictionary…"
 msgstr "Сөздікті импорттау…"
 
-#: source/app/service-providers/menu/menu.win32.ts:299
-#: source/app/service-providers/menu/menu.darwin.ts:307
+#: source/app/service-providers/menu/menu.win32.ts:304
+#: source/app/service-providers/menu/menu.darwin.ts:308
 #: source/win-main/file-manager/util/file-item-context.ts:54
 msgid "Delete file"
 msgstr "Файлды жою"
 
-#: source/app/service-providers/menu/menu.win32.ts:323
-#: source/app/service-providers/menu/menu.darwin.ts:323
+#: source/app/service-providers/menu/menu.win32.ts:328
+#: source/app/service-providers/menu/menu.darwin.ts:324
 msgid "Undo"
 msgstr "Болдырмау"
 
-#: source/app/service-providers/menu/menu.win32.ts:329
-#: source/app/service-providers/menu/menu.darwin.ts:329
+#: source/app/service-providers/menu/menu.win32.ts:334
+#: source/app/service-providers/menu/menu.darwin.ts:330
 msgid "Redo"
 msgstr "Қайталау"
 
-#: source/app/service-providers/menu/menu.win32.ts:380
-#: source/app/service-providers/menu/menu.darwin.ts:380
+#: source/app/service-providers/menu/menu.win32.ts:385
+#: source/app/service-providers/menu/menu.darwin.ts:381
 msgid "Find in current file"
 msgstr "Ағымдағы файлда табу"
 
-#: source/app/service-providers/menu/menu.win32.ts:388
-#: source/app/service-providers/menu/menu.darwin.ts:388
+#: source/app/service-providers/menu/menu.win32.ts:393
+#: source/app/service-providers/menu/menu.darwin.ts:389
 msgid "Search all files"
 msgstr "Барлық файлдарды іздеу"
 
-#: source/app/service-providers/menu/menu.win32.ts:396
-#: source/app/service-providers/menu/menu.darwin.ts:396
+#: source/app/service-providers/menu/menu.win32.ts:401
+#: source/app/service-providers/menu/menu.darwin.ts:397
 msgid "Filter files"
 msgstr "Файлдарды сүзу"
 
-#: source/app/service-providers/menu/menu.win32.ts:407
-#: source/app/service-providers/menu/menu.darwin.ts:407
+#: source/app/service-providers/menu/menu.win32.ts:412
+#: source/app/service-providers/menu/menu.darwin.ts:408
 msgid "Generate new ID"
 msgstr "Жаңа ID жасау"
 
-#: source/app/service-providers/menu/menu.win32.ts:426
-#: source/app/service-providers/menu/menu.darwin.ts:445
+#: source/app/service-providers/menu/menu.win32.ts:431
+#: source/app/service-providers/menu/menu.darwin.ts:446
 msgid "View"
 msgstr "Көрініс"
 
-#: source/app/service-providers/menu/menu.win32.ts:430
-#: source/app/service-providers/menu/menu.darwin.ts:449
+#: source/app/service-providers/menu/menu.win32.ts:435
+#: source/app/service-providers/menu/menu.darwin.ts:450
 #: source/win-preferences/schema/appearance.ts:26
 msgid "Dark mode"
 msgstr "Қараңғы режим"
 
-#: source/app/service-providers/menu/menu.win32.ts:440
-#: source/app/service-providers/menu/menu.darwin.ts:459
+#: source/app/service-providers/menu/menu.win32.ts:445
+#: source/app/service-providers/menu/menu.darwin.ts:460
 msgid "Additional information"
 msgstr "Қосымша ақпарат"
 
-#: source/app/service-providers/menu/menu.win32.ts:450
-#: source/app/service-providers/menu/menu.darwin.ts:469
+#: source/app/service-providers/menu/menu.win32.ts:455
+#: source/app/service-providers/menu/menu.darwin.ts:470
 #: source/win-preferences/schema/editor.ts:225
 msgid "Distraction-free mode"
 msgstr "Алаңдамау режимі"
 
-#: source/app/service-providers/menu/menu.win32.ts:458
-#: source/app/service-providers/menu/menu.darwin.ts:477
+#: source/app/service-providers/menu/menu.win32.ts:463
+#: source/app/service-providers/menu/menu.darwin.ts:478
 msgid "Typewriter mode"
 msgstr "Жазу машинкасы режимі"
 
-#: source/app/service-providers/menu/menu.win32.ts:488
-#: source/app/service-providers/menu/menu.darwin.ts:510
+#: source/app/service-providers/menu/menu.win32.ts:493
+#: source/app/service-providers/menu/menu.darwin.ts:511
 msgid "Reset zoom"
 msgstr "Масштабты қалпына келтіру"
 
-#: source/app/service-providers/menu/menu.win32.ts:497
-#: source/app/service-providers/menu/menu.darwin.ts:519
+#: source/app/service-providers/menu/menu.win32.ts:502
+#: source/app/service-providers/menu/menu.darwin.ts:520
 msgid "Zoom in"
 msgstr "Үлкейту"
 
-#: source/app/service-providers/menu/menu.win32.ts:504
-#: source/app/service-providers/menu/menu.darwin.ts:526
+#: source/app/service-providers/menu/menu.win32.ts:509
+#: source/app/service-providers/menu/menu.darwin.ts:527
 msgid "Zoom out"
 msgstr "Кішірейту"
 
-#: source/app/service-providers/menu/menu.win32.ts:514
-#: source/app/service-providers/menu/menu.darwin.ts:536
+#: source/app/service-providers/menu/menu.win32.ts:519
+#: source/app/service-providers/menu/menu.darwin.ts:537
 msgid "Toggle fullscreen"
 msgstr "Толық экран режимін ауыстыру"
 
-#: source/app/service-providers/menu/menu.win32.ts:523
-#: source/app/service-providers/menu/menu.darwin.ts:544
+#: source/app/service-providers/menu/menu.win32.ts:528
+#: source/app/service-providers/menu/menu.darwin.ts:545
 msgid "Develop"
 msgstr "Әзірлеу"
 
-#: source/app/service-providers/menu/menu.win32.ts:527
-#: source/app/service-providers/menu/menu.darwin.ts:548
+#: source/app/service-providers/menu/menu.win32.ts:532
+#: source/app/service-providers/menu/menu.darwin.ts:549
 msgid "Reload"
 msgstr "Қайта жүктеу"
 
-#: source/app/service-providers/menu/menu.win32.ts:535
-#: source/app/service-providers/menu/menu.darwin.ts:556
+#: source/app/service-providers/menu/menu.win32.ts:540
+#: source/app/service-providers/menu/menu.darwin.ts:557
 msgid "Toggle developer tools"
 msgstr "Әзірлеуші құралдарын ауыстыру"
 
-#: source/app/service-providers/menu/menu.win32.ts:543
-#: source/app/service-providers/menu/menu.darwin.ts:564
+#: source/app/service-providers/menu/menu.win32.ts:548
+#: source/app/service-providers/menu/menu.darwin.ts:565
 msgid "View logs"
 msgstr "Журналдарды қарау"
 
-#: source/app/service-providers/menu/menu.win32.ts:554
-#: source/app/service-providers/menu/menu.darwin.ts:575
+#: source/app/service-providers/menu/menu.win32.ts:559
+#: source/app/service-providers/menu/menu.darwin.ts:576
 msgid "Window"
 msgstr "Терезе"
 
-#: source/app/service-providers/menu/menu.win32.ts:559
-#: source/app/service-providers/menu/menu.darwin.ts:580
+#: source/app/service-providers/menu/menu.win32.ts:564
+#: source/app/service-providers/menu/menu.darwin.ts:581
 msgid "Minimize"
 msgstr "Тасалау"
 
-#: source/app/service-providers/menu/menu.win32.ts:574
-#: source/app/service-providers/menu/menu.darwin.ts:602
+#: source/app/service-providers/menu/menu.win32.ts:579
+#: source/app/service-providers/menu/menu.darwin.ts:603
 msgid "Close Tab"
 msgstr "Қойындыны жабу"
 
-#: source/app/service-providers/menu/menu.win32.ts:582
-#: source/app/service-providers/menu/menu.darwin.ts:610
+#: source/app/service-providers/menu/menu.win32.ts:587
+#: source/app/service-providers/menu/menu.darwin.ts:611
 msgid "Previous Tab"
 msgstr "Алдыңғы қойынды"
 
-#: source/app/service-providers/menu/menu.win32.ts:590
-#: source/app/service-providers/menu/menu.darwin.ts:618
+#: source/app/service-providers/menu/menu.win32.ts:595
+#: source/app/service-providers/menu/menu.darwin.ts:619
 msgid "Next Tab"
 msgstr "Келесі қойынды"
 
-#: source/app/service-providers/menu/menu.win32.ts:598
-#: source/app/service-providers/menu/menu.darwin.ts:626
+#: source/app/service-providers/menu/menu.win32.ts:603
+#: source/app/service-providers/menu/menu.darwin.ts:627
 msgid "New window"
 msgstr "Жаңа терезе"
 
-#: source/app/service-providers/menu/menu.win32.ts:625
-#: source/app/service-providers/menu/menu.darwin.ts:653
+#: source/app/service-providers/menu/menu.win32.ts:630
+#: source/app/service-providers/menu/menu.darwin.ts:654
 msgid "Support Zettlr ↗︎"
 msgstr "Zettlr-ді қолдау ↗︎"
 
-#: source/app/service-providers/menu/menu.win32.ts:635
-#: source/app/service-providers/menu/menu.darwin.ts:663
+#: source/app/service-providers/menu/menu.win32.ts:640
+#: source/app/service-providers/menu/menu.darwin.ts:664
 msgid "Visit website ↗︎"
 msgstr "Веб-сайтқа кіру ↗︎"
 
-#: source/app/service-providers/menu/menu.win32.ts:645
-#: source/app/service-providers/menu/menu.darwin.ts:673
+#: source/app/service-providers/menu/menu.win32.ts:650
+#: source/app/service-providers/menu/menu.darwin.ts:674
 msgid "Open user manual ↗︎"
 msgstr "Пайдаланушы нұсқаулығын ашу ↗︎"
 
-#: source/app/service-providers/menu/menu.win32.ts:659
-#: source/app/service-providers/menu/menu.darwin.ts:687
+#: source/app/service-providers/menu/menu.win32.ts:664
+#: source/app/service-providers/menu/menu.darwin.ts:688
 msgid "Open tutorial"
 msgstr "Оқулықты ашу"
 
-#: source/app/service-providers/menu/menu.win32.ts:667
-#: source/app/service-providers/menu/menu.darwin.ts:695
+#: source/app/service-providers/menu/menu.win32.ts:672
+#: source/app/service-providers/menu/menu.darwin.ts:696
 msgid "Clear FSAL cache…"
 msgstr "FSAL кэшін тазалау..."
 
-#: source/app/service-providers/menu/menu.win32.ts:671
-#: source/app/service-providers/menu/menu.darwin.ts:699
+#: source/app/service-providers/menu/menu.win32.ts:676
+#: source/app/service-providers/menu/menu.darwin.ts:700
 msgid "Clear FSAL Cache"
 msgstr "FSAL кэшін тазалау"
 
-#: source/app/service-providers/menu/menu.win32.ts:672
-#: source/app/service-providers/menu/menu.darwin.ts:700
+#: source/app/service-providers/menu/menu.win32.ts:677
+#: source/app/service-providers/menu/menu.darwin.ts:701
 msgid "Clearing the FSAL cache requires a restart."
 msgstr "FSAL кэшін тазалау қайта іске қосуды қажет етеді."
 
-#: source/app/service-providers/menu/menu.win32.ts:673
-#: source/app/service-providers/menu/menu.darwin.ts:701
+#: source/app/service-providers/menu/menu.win32.ts:678
+#: source/app/service-providers/menu/menu.darwin.ts:702
 msgid ""
 "After the restart, Zettlr will recreate the entire cache, which may take a "
 "few moments, depending on the amount of files you have loaded and the speed "
@@ -3509,35 +3528,35 @@ msgstr ""
 "файлдардың санына және дискіңіздің жылдамдығына байланысты біраз уақыт алуы "
 "мүмкін. Терезе(лер) содан кейін көрсетіледі."
 
-#: source/app/service-providers/menu/menu.darwin.ts:87
+#: source/app/service-providers/menu/menu.darwin.ts:88
 msgid "Services"
 msgstr "Қызметтер"
 
-#: source/app/service-providers/menu/menu.darwin.ts:96
+#: source/app/service-providers/menu/menu.darwin.ts:97
 msgid "Hide"
 msgstr "Жасыру"
 
-#: source/app/service-providers/menu/menu.darwin.ts:101
+#: source/app/service-providers/menu/menu.darwin.ts:102
 msgid "Hide others"
 msgstr "Басқаларды жасыру"
 
-#: source/app/service-providers/menu/menu.darwin.ts:106
+#: source/app/service-providers/menu/menu.darwin.ts:107
 msgid "Show"
 msgstr "Көрсету"
 
-#: source/app/service-providers/menu/menu.darwin.ts:426
+#: source/app/service-providers/menu/menu.darwin.ts:427
 msgid "Speech"
 msgstr "Сөйлеу"
 
-#: source/app/service-providers/menu/menu.darwin.ts:430
+#: source/app/service-providers/menu/menu.darwin.ts:431
 msgid "Start speaking"
 msgstr "Сөйлеуді бастау"
 
-#: source/app/service-providers/menu/menu.darwin.ts:435
+#: source/app/service-providers/menu/menu.darwin.ts:436
 msgid "Stop speaking"
 msgstr "Сөйлеуді тоқтату"
 
-#: source/app/service-providers/menu/menu.darwin.ts:594
+#: source/app/service-providers/menu/menu.darwin.ts:595
 msgid "Bring All to Front"
 msgstr "Барлығын алдыға шығару"
 
