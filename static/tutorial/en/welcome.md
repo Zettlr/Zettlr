@@ -30,7 +30,7 @@ You can right-click the directory, and either “close” or “delete” it. Wh
 
 Zettlr is built around the concept of workspaces. So you will have the best experience having open at least one workspace directory at all times, and do all your work in that. The workspaces are loaded automatically everytime you open the app, and are always displayed in the directory tree that’s visible right now.
 
-If you already have a folder in which you want to store your actual notes, or if you already have some notes, you can open it now by pressing the “Open Workspace…” button in the toolbar or via the shortcut `Cmd/Ctrl`+`O`.
+If you already have a folder in which you want to store your actual notes, or if you already have some notes, you can open it now by pressing the “Open Workspace…” button in the toolbar or via the shortcut `Cmd/Ctrl`+ Shift + `o`.
 
 ## How to use Markdown 📝
 
