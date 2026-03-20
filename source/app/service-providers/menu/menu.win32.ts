@@ -467,6 +467,14 @@ export default function getMenu (
           }
         },
         {
+          id: 'menu.toggle_rendering_mode',
+          label: trans('Toggle Rendering Mode'),
+          accelerator: 'Ctrl+Alt+M',
+          click: function (_menuitem, focusedWindow) {
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'toggle-rendering-mode')
+          }
+        },
+        {
           type: 'separator'
         },
         {
