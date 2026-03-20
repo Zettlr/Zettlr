@@ -637,6 +637,10 @@ msgstr ""
 msgid "Rendering: %s"
 msgstr ""
 
+#: source/app/service-providers/menu/menu.darwin.ts source/app/service-providers/menu/menu.win32.ts
+msgid "Toggle Rendering Mode"
+msgstr "வழங்கல் பயன்முறையை மாற்று"
+
 #: source/common/modules/markdown-editor/renderers/index.ts:142
 msgid "Enable or disable the preview mode for Markdown files by clicking"
 msgstr ""
