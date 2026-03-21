@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.3.0
+
+## GUI and Functionality
+
 - **Feature**: Added a citation tooltip. When hovering over a citation cluster
   in your documents with your mouse, this will generate a small bibliography of
   just the items contained in the citation cluster and display it using the
