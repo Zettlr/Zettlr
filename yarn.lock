@@ -8302,8 +8302,8 @@ __metadata:
   linkType: hard
 
 "h3@npm:^1.15.5":
-  version: 1.15.5
-  resolution: "h3@npm:1.15.5"
+  version: 1.15.9
+  resolution: "h3@npm:1.15.9"
   dependencies:
     cookie-es: "npm:^1.2.2"
     crossws: "npm:^0.3.5"
@@ -8314,7 +8314,7 @@ __metadata:
     radix3: "npm:^1.1.2"
     ufo: "npm:^1.6.3"
     uncrypto: "npm:^0.1.3"
-  checksum: 10/95a6a1b6db286d71983f41b6e25d85ecc554c088675811eabf5d871dec6657a88b659b94536e1ec10a1cae7d1269a51d4f5d96d6b4a1e15c10c80719da9b4326
+  checksum: 10/c786efdcf1307ef0415b592b3935f64e11cafe7d3ccb3ec6aba52332bee26463b9c165b82ae23fe42488f5c56c146ef2c5da8f5f00ded520cc24a89793c9ab7b
   languageName: node
   linkType: hard
 
