@@ -639,6 +639,10 @@ msgstr "原始"
 msgid "Rendering: %s"
 msgstr "正在渲染：%s"
 
+#: source/app/service-providers/menu/menu.darwin.ts source/app/service-providers/menu/menu.win32.ts
+msgid "Toggle Rendering Mode"
+msgstr "切换渲染模式"
+
 #: source/common/modules/markdown-editor/renderers/index.ts:142
 msgid "Enable or disable the preview mode for Markdown files by clicking"
 msgstr "点击以开启或关闭 Markdown 预览模式"

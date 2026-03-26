@@ -710,6 +710,9 @@ onMounted(() => {
           leafId: lastLeafId.value
         }
       } as DocumentManagerIPCAPI).catch(err => console.error(err))
+    } else if (shortcut === 'toggle-rendering-mode') {
+      const current = configStore.config.display.renderingMode
+      configStore.setConfigValue('display.renderingMode', current === 'preview' ? 'raw' : 'preview')
     }
   })
 

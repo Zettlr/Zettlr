@@ -638,6 +638,10 @@ msgstr "Code"
 msgid "Rendering: %s"
 msgstr "Darstellung: %s"
 
+#: source/app/service-providers/menu/menu.darwin.ts source/app/service-providers/menu/menu.win32.ts
+msgid "Toggle Rendering Mode"
+msgstr "Darstellungsmodus umschalten"
+
 #: source/common/modules/markdown-editor/renderers/index.ts:142
 msgid "Enable or disable the preview mode for Markdown files by clicking"
 msgstr "Zwischen Vorschau- und Code-Darstellung umschalten"
