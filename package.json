@@ -145,7 +145,7 @@
     "vue": "^3.5.29",
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "w3c-keyname": "^2.2.8",
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.3"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
