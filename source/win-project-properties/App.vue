@@ -382,7 +382,7 @@ function updateProperties (): void {
 
   updateLock.value = true
 
-  ipcRenderer.invoke('application', {
+  ipcRenderer.invoke('fsal', {
     command: 'get-descriptor',
     payload: dirPath
   })
@@ -406,7 +406,7 @@ function updateProperties (): void {
 }
 
 async function fetchProperties (): Promise<void> {
-  const descriptor: DirDescriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: dirPath })
+  const descriptor: DirDescriptor = await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: dirPath })
   // Save the actually used formats.
   if (descriptor.settings.project !== null) {
     projectSettings.value = descriptor.settings.project

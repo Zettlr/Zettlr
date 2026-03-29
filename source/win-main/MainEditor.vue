@@ -140,7 +140,7 @@ ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: Doc
   } else if (event === DP_EVENTS.FILE_SAVED && context.filePath === props.file.path) {
     // The file has been saved to disk. This means we should probably update the
     // descriptor to know of, e.g., library changes.
-    ipcRenderer.invoke('application', { command: 'get-descriptor', payload: props.file.path })
+    ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: props.file.path })
       .then((descriptor: MDFileDescriptor|CodeFileDescriptor|undefined) => {
         if (descriptor === undefined) {
           throw new Error(`Could not swap document: Could not retrieve descriptor for path ${props.file.path}!`)
@@ -531,7 +531,7 @@ async function loadDocument (): Promise<void> {
 
   maybeHighlightSearchResults()
 
-  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: props.file.path })
+  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: props.file.path })
   if (descriptor === undefined) {
     throw new Error(`Could not swap document: Could not retrieve descriptor for path ${props.file.path}!`)
   }

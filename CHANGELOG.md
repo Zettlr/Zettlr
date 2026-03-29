@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Removed duplicate FSAL descriptor fetching.
 
 # 4.3.0
 

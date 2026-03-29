@@ -656,7 +656,7 @@ onMounted(() => {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
     } else if (shortcut === 'copy-current-id' && documentTreeStore.lastLeafActiveFile !== undefined) {
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('fsal', {
         command: 'get-descriptor',
         payload: documentTreeStore.lastLeafActiveFile.path
       })

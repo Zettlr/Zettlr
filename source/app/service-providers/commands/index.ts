@@ -123,15 +123,7 @@ export default class CommandProvider extends ProviderContract {
   async run (command: string, payload: unknown): Promise<unknown> {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
-    if (command === 'get-descriptor' && typeof payload === 'string') {
-      if (await this._app.fsal.isFile(payload)) {
-        return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
-      } else if (await this._app.fsal.isDir(payload)) {
-        return await this._app.fsal.getAnyDirectoryDescriptor(payload)
-      } else {
-        this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)
-      }
-    } else if (command === 'next-file') {
+    if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       // await this._app.documents.forward()
       // TODO!!!

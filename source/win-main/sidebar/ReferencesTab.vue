@@ -113,7 +113,7 @@ async function updateBibliography (): Promise<void> {
     return
   }
 
-  const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
+  const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('fsal', {
     command: 'get-descriptor',
     payload: activeFile.value.path
   })
