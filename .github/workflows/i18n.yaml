@@ -2,11 +2,12 @@ name: i18n
 
 on:
   workflow_dispatch: {} # Enable manual triggers
-  schedule:
-    - cron: '17 2 * * *' # Run every night at 02:17 (random minute to avoid high loads)
+  schedule: # Run every Tuesday night at 02:17 (random minute to avoid high loads)
+    - cron: '17 2 * * TUE'
 
 permissions:
   contents: write
+  pull-requests: write
 
 env:
   NODE_VERSION: '22'
@@ -20,10 +21,11 @@ jobs:
     name: i18n
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: Clone repository (develop branch)
         uses: actions/checkout@v6
         with:
           ref: develop
+          fetch-depth: 0
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
@@ -39,16 +41,20 @@ jobs:
           sudo apt-get install gettext
       - name: Configure git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+      - name: Create new branch `i18n-update-${{ github.run_id }}`
+        run: |
+          git checkout -b i18n-update-${{ github.run_id }}
       # Update translations
       - name: Update translations
         run: |
           ./scripts/i18n.sh
           git add -A
-          git diff-index --quiet HEAD || git commit -m "chore(i18n): Update translations"
-      - name: Push changes
-        uses: ad-m/github-push-action@v1.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: develop
+          git diff-index --quiet HEAD || git commit -m "chore(i18n): Update translations ($(date))"
+          git diff-index --quiet HEAD || git push -u origin i18n-update-${{ github.run_id }}
+      - name: Open PR
+        run: |
+          gh pr create -B develop -H i18n-update-${{ github.run_id }} --title "chore(i18n): Update translations ($(date))" --body "This PR updates all translation PO-files. CAUTION: Do not merge this PR if there are unmerged translation updates, since those will otherwise become unmergeable. This PR will be recreated every week, so it's better to close it rather than have contributors rebase their changes."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
