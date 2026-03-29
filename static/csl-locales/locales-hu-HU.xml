@@ -4,8 +4,11 @@
     <translator>
       <name>Miklos Vajna</name>
     </translator>
+    <translator>
+      <name>Simon Farády</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-03-29T11:35:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -21,13 +24,13 @@
   <terms>
     <!-- LONG GENERAL TERMS -->
     <term name="accessed">elérés</term>
-    <term name="advance-online-publication">advance online publication</term>
+    <term name="advance-online-publication">előzetes online publikáció</term>
     <term name="album">album</term>
     <term name="and">és</term>
     <term name="and others">és mások</term>
     <term name="anonymous">szerző nélkül</term>
     <term name="at"/>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">hangfelvétel</term>
     <term name="available at">elérhető</term>
     <term name="by">by</term>
     <term name="circa">körülbelül</term>
@@ -36,7 +39,7 @@
     <term name="film">film</term>
     <term name="forthcoming">megjelenés alatt</term>
     <term name="from">forrás</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">a továbbiakban</term>
     <term name="ibid">uo.</term>
     <term name="in">in</term>
     <term name="in press">nyomtatás alatt</term>
@@ -44,118 +47,118 @@
     <term name="letter">levél</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no date">évszám nélkül</term>
-    <term name="no-place">no place</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
+    <term name="no-place">hely nélkül</term>
+    <term name="no-publisher">kiadó nélkül</term> <!-- sine nomine -->
     <term name="on">on</term>
     <term name="online">online</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">eredeti mű kiadva</term>
     <term name="personal-communication">személyes kommunikáció</term>
     <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast-episode">podcast epizód</term>
     <term name="preprint">preprint</term>
     <term name="presented at">előadás</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
+    <term name="radio-broadcast">rádióadás</term>
+    <term name="radio-series">rádiósorozat</term>
+    <term name="radio-series-episode">rádiósorozat epizód</term>
     <term name="reference">
       <single>hivatkozás</single>
       <multiple>hivatkozás</multiple>
     </term>
     <term name="retrieved">elérés</term>
-    <term name="review-of">review of</term>
+    <term name="review-of">recenzió</term>
     <term name="scale">skála</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="special-issue">különszám</term>
+    <term name="special-section">különleges rovat</term>
+    <term name="television-broadcast">televíziós adás</term>
+    <term name="television-series">televíziós sorozat</term>
+    <term name="television-series-episode">televíziós sorozat epizód</term>
+    <term name="video">videó</term>
+    <term name="working-paper">munkadolgozat</term>
 
     <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">sz. n.</term>
     <term name="circa" form="short">kb.</term>
     <term name="no date" form="short">é. n.</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-place" form="short">h. n.</term>
+    <term name="no-publisher" form="short">k. n.</term>
     <term name="reference" form="short">
       <single>hiv.</single>
       <multiple>hiv.</multiple>
     </term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of" form="short">rec.</term>
 
     <!-- SYMBOLIC GENERAL FORMS -->
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article-journal">folyóiratcikk</term>
+    <term name="article-magazine">magazincikk</term>
+    <term name="article-newspaper">újságcikk</term>
+    <term name="bill">törvényjavaslat</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">közvetítés</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
-    <term name="dataset">dataset</term>
-    <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="classic">klasszikus</term>
+    <term name="collection">gyűjtemény</term>
+    <term name="dataset">adatbázis</term>
+    <term name="document">dokumentum</term>
+    <term name="entry">cikk</term>
+    <term name="entry-dictionary">szótár-bejegyzés</term>
+    <term name="entry-encyclopedia">enciklopédia-bejegyzés</term>
+    <term name="event">esemény</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">grafika</term>
+    <term name="hearing">tárgyalás</term>
     <term name="interview">interjú</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
-    <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="legal_case">jogi eset</term>
+    <term name="legislation">jogszabály</term>
+    <term name="manuscript">kézirat</term>
+    <term name="map">térkép</term>
+    <term name="motion_picture">mozgókép</term>
+    <term name="musical_score">zenei partitúra</term>
+    <term name="pamphlet">röpirat</term>
+    <term name="paper-conference">konferencia dolgozat</term>
+    <term name="patent">szabadalom</term>
+    <term name="performance">előadás</term>
+    <term name="periodical">folyóirat</term>
     <term name="personal_communication">személyes kommunikáció</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="post">bejegyzés</term>
+    <term name="post-weblog">blogbejegyzés</term>
+    <term name="regulation">előírás</term>
+    <term name="report">jelentés</term>
+    <term name="review">recenzió</term>
+    <term name="review-book">könyvrecenzió</term>
+    <term name="software">szoftver</term>
+    <term name="song">hangfelvétel</term>
+    <term name="speech">előadás</term>
+    <term name="standard">szabvány</term>
+    <term name="thesis">dolgozat</term>
+    <term name="treaty">egyezmény</term>
+    <term name="webpage">weboldal</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-journal" form="short">foly.c.</term>
+    <term name="article-magazine" form="short">mag.c.</term>
+    <term name="article-newspaper" form="short">újs.c.</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
-    <term name="document" form="short">doc.</term>
+    <term name="document" form="short">dok.</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
-    <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
-    <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="graphic" form="short">graf.</term>
+    <term name="interview" form="short">interjú</term>
+    <term name="manuscript" form="short">kézir.</term>
+    <term name="motion_picture" form="short">mozgókép</term>
+    <term name="report" form="short">jel.</term>
+    <term name="review" form="short">rec.</term>
+    <term name="review-book" form="short">könyvrec.</term>
+    <term name="song" form="short">hangfelv.</term>
 
     <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">beszámolója</term>
+    <term name="review" form="verb">recenziója</term>
+    <term name="review-book" form="verb">könyvrecenziója</term>
 
     <!-- SHORT VERB ITEM TYPE FORMS -->
 
@@ -192,24 +195,24 @@
 
     <!-- LONG LOCATOR FORMS -->
     <term name="act">
-      <single>act</single>
-      <multiple>acts</multiple>
+      <single>törvénycikk</single>
+      <multiple>törvénycikk</multiple>
     </term>
     <term name="appendix">
-      <single>appendix</single>
-      <multiple>appendices</multiple>
+      <single>függelék</single>
+      <multiple>függelék</multiple>
     </term>
     <term name="article-locator">
-      <single>article</single>
-      <multiple>articles</multiple>
+      <single>cikk</single>
+      <multiple>cikk</multiple>
     </term>
     <term name="book">
       <single>könyv</single>
       <multiple>könyv</multiple>
     </term>
     <term name="canon">
-      <single>canon</single>
-      <multiple>canons</multiple>
+      <single>kánon</single>
+      <multiple>kánon</multiple>
     </term>
     <term name="chapter">
       <single>fejezet</single>
@@ -220,12 +223,12 @@
       <multiple>oszlop</multiple>
     </term>
     <term name="elocation">
-      <single>location</single>
-      <multiple>locations</multiple>
+      <single>cikkazonosító</single>
+      <multiple>cikkazonosító</multiple>
     </term>
     <term name="equation">
-      <single>equation</single>
-      <multiple>equations</multiple>
+      <single>egyenlet</single>
+      <multiple>egyenletek</multiple>
     </term>
     <term name="figure">
       <single>ábra</single>
@@ -264,12 +267,12 @@
       <multiple>rész</multiple>
     </term>
     <term name="rule">
-      <single>rule</single>
-      <multiple>rules</multiple>
+      <single>szabály</single>
+      <multiple>szabály</multiple>
     </term>
     <term name="scene">
-      <single>scene</single>
-      <multiple>scenes</multiple>
+      <single>jelenet</single>
+      <multiple>jelenet</multiple>
     </term>
     <term name="section">
       <single>szakasz</single>
@@ -280,20 +283,20 @@
       <multiple>sub verbis</multiple>
     </term>
     <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
+      <single>melléklet</single>
+      <multiple>melléklet</multiple>
     </term>
     <term name="table">
-      <single>table</single>
-      <multiple>tables</multiple>
+      <single>táblázat</single>
+      <multiple>táblázat</multiple>
     </term>
     <term name="timestamp"> <!-- generally blank -->
       <single/>
       <multiple/>
     </term>
     <term name="title-locator">
-      <single>title</single>
-      <multiple>titles</multiple>
+      <single>rész</single>
+      <multiple>rész</multiple>
     </term>
     <term name="verse">
       <single>versszak</single>
@@ -306,30 +309,30 @@
 
     <!-- SHORT LOCATOR FORMS -->
     <term name="appendix" form="short">
-      <single>app.</single>
-      <multiple>apps.</multiple>
+      <single>függ.</single>
+      <multiple>függ.</multiple>
     </term>
     <term name="article-locator" form="short">
-      <single>art.</single>
-      <multiple>arts.</multiple>
+      <single>cikk</single>
+      <multiple>cikk</multiple>
     </term>
     <term name="book" form="short">könyv</term>
     <term name="chapter" form="short">fej.</term>
     <term name="column" form="short">oszl.</term>
     <term name="elocation" form="short">
-      <single>loc.</single>
-      <multiple>locs.</multiple>
+      <single>cikkazon.</single>
+      <multiple>cikkazon.</multiple>
     </term>
     <term name="equation" form="short">
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
+      <single>egyenlet</single>
+      <multiple>egyenlet</multiple>
     </term>
     <term name="figure" form="short">ábr.</term>
     <term name="folio" form="short">fol.</term>
     <term name="issue" form="short">sz.</term>
     <term name="line" form="short">s.</term>
     <term name="note" form="short">j.</term>
-    <term name="opus" form="short">op.</term>
+    <term name="opus" form="short">mű</term>
     <term name="page" form="short">
       <single>o.</single>
       <multiple>o.</multiple>
@@ -341,8 +344,8 @@
       <multiple>rr.</multiple>
     </term>
     <term name="scene" form="short">
-      <single>sc.</single>
-      <multiple>scs.</multiple>
+      <single>jelenet</single>
+      <multiple>jelenet</multiple>
     </term>
     <term name="section" form="short">szak.</term>
     <term name="sub-verbo" form="short">
@@ -350,24 +353,24 @@
       <multiple>s. vv.</multiple>
     </term>
     <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
+      <single>mell.</single>
+      <multiple>mell.</multiple>
     </term>
     <term name="table" form="short">
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>
+      <single>tábl.</single>
+      <multiple>tábl.</multiple>
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
       <single/>
       <multiple/>
     </term>
     <term name="title-locator" form="short">
-      <single>tit.</single>
-      <multiple>tits.</multiple>
+      <single>rész</single>
+      <multiple>rész</multiple>
     </term>
     <term name="verse" form="short">
-      <single>vsz.</single>
-      <multiple>vsz.</multiple>
+      <single>vers</single>
+      <multiple>vers</multiple>
     </term>
     <term name="volume" form="short">
       <single>köt.</single>
@@ -386,12 +389,12 @@
 
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>fejezet</single>
+      <multiple>fejezet</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>hivatkozás</single>
+      <multiple>hivatkozás</multiple>
     </term>
     <term name="collection-number">
       <single>szám</single>
@@ -402,90 +405,90 @@
       <multiple>kiadás</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>hivatkozás</single>
+      <multiple>hivatkozás</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>szám</single>
+      <multiple>szám</multiple>
     </term>
     <term name="number-of-pages">
       <single>oldal</single>
       <multiple>oldal</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>kötet</single>
+      <multiple>kötet</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>oldal</single>
+      <multiple>oldal</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>nyomtatás</single>
+      <multiple>nyomtatás</multiple>
     </term>
     <term name="version">verzió</term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>fej.</single>
+      <multiple>fej.</multiple>
     </term>
     <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
+      <single>hiv.</single>
+      <multiple>hiv.</multiple>
     </term>
     <term name="collection-number" form="short">sz.</term>
     <term name="edition" form="short">kiad.</term>
     <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
+      <single>hiv.</single>
+      <multiple>hiv.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>szám</single>
+      <multiple>szám</multiple>
     </term>
     <term name="number-of-pages" form="short">
       <single>o.</single>
       <multiple>o.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
+      <single>köt.</single>
+      <multiple>köt.</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>o.</single>
+      <multiple>o.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <single>nyom.</single>
+      <multiple>nyom.</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
     <term name="author"/> <!-- generally blank -->
     <term name="chair">
-      <single>chair</single>
-      <multiple>chairs</multiple>
+      <single>elnök</single>
+      <multiple>elnök</multiple>
     </term>
     <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>sorozatszerkesztő</single>
+      <multiple>sorozatszerkesztő</multiple>
     </term>
     <term name="compiler">
-      <single>compiler</single>
-      <multiple>compilers</multiple>
+      <single>összeállító</single>
+      <multiple>összeállító</multiple>
     </term>
     <term name="composer"/> <!-- generally blank -->
     <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
-      <single>contributor</single>
-      <multiple>contributors</multiple>
+      <single>közreműködő</single>
+      <multiple>közreműködő</multiple>
     </term>
     <term name="curator">
-      <single>curator</single>
-      <multiple>curators</multiple>
+      <single>kurátor</single>
+      <multiple>kurátor</multiple>
     </term>
     <term name="director">
       <single>igazgató</single>
@@ -509,15 +512,15 @@
     </term>
     <term name="executive-producer">
       <single>executive producer</single>
-      <multiple>executive producers</multiple>
+      <multiple>executive producer</multiple>
     </term>
     <term name="guest">
-      <single>guest</single>
-      <multiple>guests</multiple>
+      <single>vendég</single>
+      <multiple>vendég</multiple>
     </term>
     <term name="host">
-      <single>host</single>
-      <multiple>hosts</multiple>
+      <single>házigazda</single>
+      <multiple>házigazda</multiple>
     </term>
     <term name="illustrator">
       <single>illusztrátor</single>
@@ -525,31 +528,31 @@
     </term>
     <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
-      <single>narrator</single>
-      <multiple>narrators</multiple>
+      <single>narrátor</single>
+      <multiple>narrátor</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>szervező</single>
+      <multiple>szervező</multiple>
     </term>
     <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
-      <single>performer</single>
-      <multiple>performers</multiple>
+      <single>előadó</single>
+      <multiple>előadó</multiple>
     </term>
     <term name="producer">
       <single>producer</single>
-      <multiple>producers</multiple>
+      <multiple>producer</multiple>
     </term>
     <term name="recipient"/> <!-- generally blank -->
     <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>forgatókönyvíró</single>
+      <multiple>forgatókönyvíró</multiple>
     </term>
     <term name="series-creator">
-      <single>series creator</single>
-      <multiple>series creators</multiple>
+      <single>sorozat készítője</single>
+      <multiple>sorozat készítője</multiple>
     </term>
     <term name="translator">
       <single>fordító</single>
@@ -558,16 +561,16 @@
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
-      <single>comp.</single>
-      <multiple>comps.</multiple>
+      <single>összeáll.</single>
+      <multiple>összeáll.</multiple>
     </term>
     <term name="contributor" form="short">
-      <single>contrib.</single>
-      <multiple>contribs.</multiple>
+      <single>közr.</single>
+      <multiple>közr.</multiple>
     </term>
     <term name="curator" form="short">
-      <single>cur.</single>
-      <multiple>curs.</multiple>
+      <single>kur.</single>
+      <multiple>kur.</multiple>
     </term>
     <term name="director" form="short">
       <single>ig.</single>
@@ -591,7 +594,7 @@
     </term>
     <term name="executive-producer" form="short">
       <single>exec. prod.</single>
-      <multiple>exec. prods.</multiple>
+      <multiple>exec. prod.</multiple>
     </term>
     <term name="illustrator" form="short">
       <single>ill.</single>
@@ -599,27 +602,27 @@
     </term>
     <term name="narrator" form="short">
       <single>narr.</single>
-      <multiple>narrs.</multiple>
+      <multiple>narr.</multiple>
     </term>
     <term name="organizer" form="short">
-      <single>org.</single>
-      <multiple>orgs.</multiple>
+      <single>szerv.</single>
+      <multiple>szerv.</multiple>
     </term>
     <term name="performer" form="short">
-      <single>perf.</single>
-      <multiple>perfs.</multiple>
+      <single>előadó</single>
+      <multiple>előadó</multiple>
     </term>
     <term name="producer" form="short">
       <single>prod.</single>
-      <multiple>prods.</multiple>
+      <multiple>prod.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
+      <single>forg.könyvíró</single>
+      <multiple>forg.könyvíró</multiple>
     </term>
     <term name="series-creator" form="short">
-      <single>cre.</single>
-      <multiple>cres.</multiple>
+      <single>sor.kész.</single>
+      <multiple>sor.kész.</multiple>
     </term>
     <term name="translator" form="short">
       <single>ford.</single>
@@ -627,52 +630,52 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="chair" form="verb">chaired by</term>
-    <term name="collection-editor" form="verb">edited by</term>
-    <term name="compiler" form="verb">compiled by</term>
-    <term name="container-author" form="verb">by</term>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
-    <term name="director" form="verb">directed by</term>
+    <term name="chair" form="verb">elnök</term>
+    <term name="collection-editor" form="verb">sorozatszerkesztő</term>
+    <term name="compiler" form="verb">összeállította</term>
+    <term name="container-author" form="verb">által</term>
+    <term name="contributor" form="verb">közreműködésével</term>
+    <term name="curator" form="verb">gondozta</term>
+    <term name="director" form="verb">rendezte</term>
     <term name="editor" form="verb">szerkesztette</term>
     <term name="editor-translator" form="verb">szerkesztette &amp; fordította</term>
     <term name="editortranslator" form="verb">szerkesztette &amp; fordította</term>
-    <term name="editorial-director" form="verb">edited by</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
+    <term name="editorial-director" form="verb">szerkesztette</term>
+    <term name="executive-producer" form="verb">executive producer</term>
+    <term name="guest" form="verb">vendég</term>
+    <term name="host" form="verb">házigazda</term>
     <term name="illustrator" form="verb">illusztrálta</term>
     <term name="interviewer" form="verb">interjúkészítő</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
+    <term name="narrator" form="verb">narrátor</term>
+    <term name="organizer" form="verb">szervezte</term>
+    <term name="performer" form="verb">előadó</term>
+    <term name="producer" form="verb">producer</term>
     <term name="recipient" form="verb">címzett</term>
-    <term name="reviewed-author" form="verb">by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="reviewed-author" form="verb">ismertette</term>
+    <term name="script-writer" form="verb">írta</term>
+    <term name="series-creator" form="verb">készítette</term>
     <term name="translator" form="verb">fordította</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
+    <term name="collection-editor" form="verb-short">sor.szerk.</term>
+    <term name="compiler" form="verb-short">összeáll.</term>
+    <term name="contributor" form="verb-short">közr.</term>
+    <term name="curator" form="verb-short">gond.</term>
     <term name="director" form="verb-short">ig.</term>
     <term name="editor" form="verb-short">szerk.</term>
     <term name="editor-translator" form="verb-short">szerk. &amp; ford.</term>
     <term name="editortranslator" form="verb-short">szerk. &amp; ford.</term>
-    <term name="editorial-director" form="verb-short">ed.</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
+    <term name="editorial-director" form="verb-short">szerk.</term>
+    <term name="executive-producer" form="verb-short">exec. prod.</term>
+    <term name="guest" form="verb-short">vendég</term>
+    <term name="host" form="verb-short">házigazda</term>
     <term name="illustrator" form="verb-short">ill.</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="narrator" form="verb-short">narr.</term>
+    <term name="organizer" form="verb-short">szerv.</term>
+    <term name="performer" form="verb-short">előadó</term>
+    <term name="producer" form="verb-short">prod.</term>
+    <term name="script-writer" form="verb-short">f.könyvíró</term>
+    <term name="series-creator" form="verb-short">sor.kész.</term>
     <term name="translator" form="verb-short">ford.</term>
 
     <!-- LONG MONTH FORMS -->
