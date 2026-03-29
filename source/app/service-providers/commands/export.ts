@@ -64,20 +64,35 @@ export default class Export extends ZettlrCommand {
       }
 
       this._app.log.info(`[Export] Running custom export command ${displayName} on file ${file} ...`)
+      const task = this._app.lrt.registerTask(trans('Exporting file "%s"', path.basename(file)), trans('Exporting using custom command %s', displayName))
       const cwd = path.dirname(file)
-      const output = await runShellCommand(foundCommand.command, [`"${file}"`], cwd)
 
-      if (output.code !== 0) {
-        this._app.log.error(`[Export] Custom export ${displayName} failed with code ${output.code}`, output.stderr)
-        const title = trans('Export failed')
-        const message = trans('An error occurred during export: %s', `Custom Command exited with code ${output.code}`)
-        this._app.windows.showErrorMessage(title, message, output.stderr)
-      } else {
-        this._app.log.info(`[Export] File ${path.basename(file)} exported successfully.`)
-      }
-
-      if (output.stdout.length > 0) {
-        this._app.log.info('This custom export run produced additional output.', output.stdout)
+      try {
+        const output = await runShellCommand(foundCommand.command, [`"${file}"`], cwd)
+  
+        if (output.code !== 0) {
+          this._app.log.error(`[Export] Custom export ${displayName} failed with code ${output.code}`, output.stderr)
+          const title = trans('Export failed')
+          const message = trans('An error occurred during export: %s', `Custom Command exited with code ${output.code}`)
+          this._app.windows.showErrorMessage(title, message, output.stderr)
+          task.endTask('error', new Error(message))
+        } else {
+          this._app.log.info(`[Export] File ${path.basename(file)} exported successfully.`)
+          task.update({ info: trans('Exported file successfully.') })
+          task.endTask('success')
+        }
+  
+        if (output.stdout.length > 0) {
+          this._app.log.info('This custom export run produced additional output.', output.stdout)
+        }
+      } catch (err: unknown) {
+        if (!(err instanceof Error)) {
+          this._app.log.error(`[Export] Custom export ${displayName} failed with an unknown error`, err)
+          task.endTask('error', new Error('Unknown error'))
+        } else {
+          this._app.log.error(`[Export] Custom export ${displayName} failed with an error: ${err.message}`, err)
+          task.endTask('error', err)
+        }
       }
       return // Done
     }
@@ -155,6 +170,8 @@ export default class Export extends ZettlrCommand {
       return
     }
 
+    const task = this._app.lrt.registerTask(trans('Exporting file %s', path.basename(file)), trans('Exporting using profile %s', profile.name))
+
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
       this._app.log.verbose(`[Exporter] Exporting ${exporterOptions.sourceFiles.length} files to ${exporterOptions.targetDirectory}`)
@@ -162,7 +179,9 @@ export default class Export extends ZettlrCommand {
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
-        showNativeNotification(trans('Exporting to %s', readableFormat))
+        showNativeNotification(trans('Exported to %s', readableFormat))
+        task.update({ info: trans('Exported to %s', readableFormat) })
+        task.endTask('success')
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if (this._app.config.get().export.autoOpenExportedFiles) {
@@ -180,14 +199,17 @@ export default class Export extends ZettlrCommand {
         const message = trans('An error occurred on export: %s', `Pandoc exited with code ${output.code}`)
         const contents = output.stderr.join('\n')
         this._app.windows.showErrorMessage(title, message, contents)
+        task.endTask('error', new Error(`Export failed with status ${output.code}`))
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
         const message: string = err.message
         this._app.windows.showErrorMessage(trans('Export error'), message)
         this._app.log.error(message, err)
+        task.endTask('error', err)
       } else {
         this._app.log.error('Export failed with an unknown error.', err)
+        task.endTask('error', new Error('Unknown error'))
       }
     }
   }
