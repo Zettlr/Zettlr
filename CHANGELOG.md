@@ -7,6 +7,7 @@
 
 ## Under the Hood
 
+- Escape file and directory paths passed to `runShellCommand`.
 - Update Pandoc to `v3.9.0.2`.
 - Updated some dependencies.
 - Removed duplicate FSAL descriptor fetching.

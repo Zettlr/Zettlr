@@ -112,7 +112,7 @@ export default class DirProjectExport extends ZettlrCommand {
       // much easier than the regular exports.
       if (command !== undefined) {
         this._app.log.info(`[Project] Exporting ${dir.name} using custom command ${command.displayName}.`)
-        const output = await runShellCommand(command.command, [`"${dir.path}"`], dir.path)
+        const output = await runShellCommand(command.command, [`'${dir.path}'`], dir.path)
         if (output.code !== 0) {
           // We got an error!
           throw new Error(`Export failed: ${output.stderr}`)
