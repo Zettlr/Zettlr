@@ -17,54 +17,11 @@
 import { type ChangeSpec, type EditorState, type Transaction } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
-import { indentLess, indentMore, insertTab, moveLineDown, moveLineUp } from '@codemirror/commands'
+import { indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { type SyntaxNode } from '@lezer/common'
 import { markdownToAST } from '@common/modules/markdown-utils'
 import type { BulletList, OrderedList } from '@common/modules/markdown-utils/markdown-ast'
-
-/**
- * Tests if there is any list affected by the current editor selection
- *
- * @param   {EditorState}  state  The state in question
- *
- * @return  {boolean}             Returns true if there is any type of list in
- *                                the current editor selection
- */
-function isListTouchedBySelection (state: EditorState): boolean {
-  // Then make sure there's anything listy in there.
-  let containsList = false
-  for (const range of state.selection.ranges) {
-    // NOTE: The Markdown mode nests lists under the parent nodes OrderedList
-    // and BulletList, so basically I just have to move up the syntaxtree until
-    // I either find such a node, or Document (meaning there is no parent)
-    syntaxTree(state).iterate({
-      from: range.from,
-      to: range.to,
-      enter (node) {
-        if (containsList) {
-          return false // Ensure we leave the tree asap
-        }
-
-        switch (node.type.name) {
-          case 'Document':
-            return
-          case 'OrderedList':
-          case 'BulletList':
-            containsList = true
-            // falls through
-          default:
-            return false
-        }
-      }
-    })
-
-    if (containsList) {
-      break
-    }
-  }
-
-  return containsList
-}
+import { nodeInSelection } from '../util/node-in-selection'
 
 /**
  * Returns a set of changes required in order to sanitize the given list node.
@@ -243,18 +200,16 @@ function correctListMarkers (state: EditorState): Transaction {
  * @return  {boolean}             Whether the command has handled the keypress
  */
 export function maybeIndentList (target: EditorView): boolean {
-  const cmd = {
-    state: target.state,
-    dispatch: (transaction: Transaction) => target.dispatch(transaction)
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
+    // `indentMore` may return false, in which case we do not want to continue
+    if (indentMore(target)) {
+      target.dispatch(correctListMarkers(target.state))
+      return true
+    }
   }
 
-  if (isListTouchedBySelection(target.state)) {
-    indentMore(cmd)
-    target.dispatch(correctListMarkers(target.state))
-    return true
-  } else {
-    return insertTab(cmd)
-  }
+  return false
 }
 
 /**
@@ -271,7 +226,8 @@ export function maybeUnindentList (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
-  if (isListTouchedBySelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
   }
@@ -293,7 +249,8 @@ export function customMoveLineDown (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
-  if (isListTouchedBySelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
   }
@@ -315,7 +272,8 @@ export function customMoveLineUp (target: EditorView): boolean {
     dispatch: (transaction) => target.dispatch(transaction)
   })
 
-  if (isListTouchedBySelection(target.state)) {
+  const tree = syntaxTree(target.state)
+  if (nodeInSelection(target.state.selection, tree, [ 'OrderedList', 'BulletList' ], -1)) {
     target.dispatch(correctListMarkers(target.state))
     hasHandled = true
   }

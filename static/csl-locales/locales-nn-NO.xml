@@ -4,8 +4,11 @@
     <translator>
       <name>Guttorm Flatabø</name>
     </translator>
+    <translator>
+      <name>Stian Øby Johansen</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-01-15T15:16:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -349,8 +352,8 @@
 
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>kapittel</single>
+      <multiple>kapitler</multiple>
     </term>
     <term name="citation-number">
       <single>citation</single>
@@ -392,8 +395,8 @@
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>kap.</single>
+      <multiple>kap.</multiple>
     </term>
     <term name="citation-number" form="short">
       <single>cit.</single>
@@ -406,8 +409,8 @@
       <multiple>refs.</multiple>
     </term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>nr.</single>
+      <multiple>nr.</multiple>
     </term>
     <term name="number-of-pages" form="short">
       <single>s.</single>
@@ -418,8 +421,8 @@
       <multiple>vols.</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>s.</single>
+      <multiple>s.</multiple>
     </term>
     <term name="printing" form="short">
       <single>print.</single>

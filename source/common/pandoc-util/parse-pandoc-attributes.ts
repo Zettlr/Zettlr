@@ -1,7 +1,7 @@
 /**
  * Represents a parsed Pandoc LinkAttributes string (e.g., `{width=50%}`).
  */
-export interface ParsedPandocLinkAttributes {
+export interface ParsedPandocAttributes {
   /**
    * The ID, if present (`#id`)
    */
@@ -11,18 +11,43 @@ export interface ParsedPandocLinkAttributes {
    */
   classes?: string[]
   /**
-   * The `width`-property, if present
-   */
-  width?: string
-  /**
-   * The `height`-property, if present
-   */
-  height?: string
-  /**
    * Any additional properties. NOTE: This parser does not, unlike Pandoc's
    * parser, distinguish between HTML5 properties and custom-properties.
    */
   properties?: Record<string, string>
+}
+
+/**
+ * Formats a `PandocAttributes` object into a useable HTML string.
+ *
+ * @param attributes
+ */
+export function formatPandocAttributes (attributes: ParsedPandocAttributes): string {
+  const parts: string[] = []
+
+  if (attributes.id !== undefined) {
+    parts.push('#' + attributes.id)
+  }
+
+  if (attributes.classes !== undefined) {
+    parts.push(attributes.classes.map(v => '.' + v).join(' '))
+  }
+
+  if (attributes.properties !== undefined) {
+    const properties = Object.entries(attributes.properties)
+      .map(([ key, value ]) => {
+        if (value !== undefined) {
+          return (`${key}="${value}"`)
+        }
+
+        return key
+      })
+      .join(' ')
+
+    parts.push(properties)
+  }
+
+  return parts.join(' ')
 }
 
 /** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
@@ -41,23 +66,19 @@ const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>
  *
  * @param   {string}  attrString  The attribute string (e.g., `{width=50%}`)
  *
- * @return  {ParsedPandocLinkAttributes}  The parsed string
+ * @return  {ParsedPandocAttributes}  The parsed string
  */
-export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttributes {
+export function parsePandocAttributes (attrString: string): ParsedPandocAttributes {
   attrString = attrString.trim()
-  if (!attrString.startsWith('{') || !attrString.endsWith('}')) {
-    // NOTE: In response to issue #6110, I realized that we really should not
-    // throw the error here, because this function is also called in certain
-    // contexts (here: With the TableEditor active) where throwing this error
-    // would completely abort parsing of an entire file. So we only log it and
-    // return an empty Record.
-    console.error(new Error('Invalid Pandoc link attributes string: Not surrounded by curly braces'))
-    return {}
+  if (attrString.startsWith('{')) {
+    attrString = attrString.slice(1)
   }
 
-  attrString = attrString.substring(1, attrString.length - 1)
+  if (attrString.endsWith('}')) {
+    attrString = attrString.slice(0, -1)
+  }
 
-  const parsed: ParsedPandocLinkAttributes = {}
+  const parsed: ParsedPandocAttributes = {}
 
   let match
   while ((match = pandocAttributeRe.exec(attrString)) !== null) {
@@ -77,22 +98,18 @@ export function parseLinkAttributes (attrString: string): ParsedPandocLinkAttrib
 
     if (match.groups.attr) {
       const key = match.groups.key
-      const value = match.groups.unquoted ?? match.groups.quoted
+      let value = match.groups.unquoted ?? match.groups.quoted ?? ''
 
       if (key.toLowerCase() === 'width') {
-        parsed.width = value
         if (/^\d+$/.test(value)) {
-          parsed.width += 'px'
+          value += 'px'
         }
-        continue
       }
 
       if (key.toLowerCase() === 'height') {
-        parsed.height = value
         if (/^\d+$/.test(value)) {
-          parsed.height += 'px'
+          value += 'px'
         }
-        continue
       }
 
       if (parsed.properties === undefined) {

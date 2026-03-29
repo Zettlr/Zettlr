@@ -120,7 +120,7 @@ ipcRenderer.on('shortcut', (event, command) => {
       })
       .catch(e => console.error(e))
   } else if (command === 'search') {
-    showSearch.value = !showSearch.value
+    currentEditor.toggleSearchPanel()
   } else if (command === 'toggle-typewriter-mode') {
     currentEditor.hasTypewriterMode = !currentEditor.hasTypewriterMode
   } else if (command === 'copy-as-html') {
@@ -140,7 +140,7 @@ ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: Doc
   } else if (event === DP_EVENTS.FILE_SAVED && context.filePath === props.file.path) {
     // The file has been saved to disk. This means we should probably update the
     // descriptor to know of, e.g., library changes.
-    ipcRenderer.invoke('application', { command: 'get-descriptor', payload: props.file.path })
+    ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: props.file.path })
       .then((descriptor: MDFileDescriptor|CodeFileDescriptor|undefined) => {
         if (descriptor === undefined) {
           throw new Error(`Could not swap document: Could not retrieve descriptor for path ${props.file.path}!`)
@@ -210,7 +210,6 @@ onUpdated(() => {
 })
 
 // DATA SETUP
-const showSearch = ref(false)
 const mainEditorWrapper = ref<HTMLDivElement|null>(null)
 
 // COMPUTED PROPERTIES
@@ -233,6 +232,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   return {
     indentUnit: editor.indentUnit,
     indentWithTabs: editor.indentWithTabs,
+    alwaysIndentLineOnTab: editor.alwaysIndentLineOnTab,
     autoCloseBrackets: editor.autoCloseBrackets,
     autocorrect: {
       active: editor.autoCorrect.active,
@@ -248,11 +248,13 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     imagePreviewHeight: display.imageHeight,
     boldFormatting: editor.boldFormatting,
     italicFormatting: editor.italicFormatting,
+    highlightFormatting: editor.highlightFormatting,
     muteLines: configStore.config.muteLines,
     citeStyle: editor.citeStyle,
     readabilityAlgorithm: editor.readabilityAlgorithm,
     idRE: zkn.idRE,
     idGen: zkn.idGen,
+    previewModeShowSyntaxWhenCursorIsAdjacent: display.previewModeShowSyntaxWhenCursorIsAdjacent,
     renderCitations: display.renderCitations,
     renderingMode: display.renderingMode,
     renderIframes: display.renderIframes,
@@ -396,6 +398,24 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   currentEditor?.replaceSelection(textToInsert)
 })
 
+watch(toRef(props.editorCommands, 'insertPandoc'), () => {
+  if (props.activeFile?.path !== props.file.path || currentEditor === null) {
+    return
+  }
+
+  if (documentTreeStore.lastLeafId !== props.leafId) {
+    // This editor, even though it may be focused, was not the last focused
+    // See https://github.com/Zettlr/Zettlr/issues/4361
+    return
+  }
+
+  const { type, attributes } = props.editorCommands.data
+  if ((type === 'div' || type === 'span') && typeof attributes === 'string') {
+    currentEditor?.insertPandocDivOrSpan(type as 'div'|'span', attributes)
+    currentEditor?.focus()
+  }
+})
+
 const fsalFiles = computed<MDFileDescriptor[]>(() => {
   return [...workspaceStore.descriptorMap.values()].filter(d => d.type === 'file')
 })
@@ -511,7 +531,7 @@ async function loadDocument (): Promise<void> {
 
   maybeHighlightSearchResults()
 
-  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: props.file.path })
+  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: props.file.path })
   if (descriptor === undefined) {
     throw new Error(`Could not swap document: Could not retrieve descriptor for path ${props.file.path}!`)
   }
@@ -545,16 +565,16 @@ async function updateCitationKeys (library: string): Promise<void> {
     command: 'get-items',
     payload: { database: library }
   } as CiteprocProviderIPCAPI))
-    .map((item: any) => {
+    .map((item: CSLItem) => {
       // Get a rudimentary author list. Precedence are authors, then editors.
       // Fallback: Container title.
       let authors = ''
-      const authorSrc = item.author !== undefined
+      const authorSrc = item.author !== undefined && Array.isArray(item.author)
         ? item.author
-        : item.editor !== undefined ? item.editor : []
+        : item.editor !== undefined && Array.isArray(item.editor) ? item.editor : []
 
       if (authorSrc.length > 0) {
-        authors = authorSrc.map((author: any) => {
+        authors = authorSrc.map(author => {
           if (author.family !== undefined) {
             return author.family
           } else if (author.literal !== undefined) {
@@ -562,21 +582,21 @@ async function updateCitationKeys (library: string): Promise<void> {
           } else {
             return undefined
           }
-        }).filter((elem: any) => elem !== undefined).join(', ')
-      } else if (item['container-title'] !== undefined) {
+        }).filter(elem => elem !== undefined).join(', ')
+      } else if (item['container-title'] !== undefined && typeof item['container-title'] === 'string') {
         authors = item['container-title']
       }
 
       let title = ''
-      if (item.title !== undefined) {
+      if (item.title !== undefined && typeof item.title === 'string') {
         title = item.title
-      } else if (item['container-title'] !== undefined) {
+      } else if (item['container-title'] !== undefined && typeof item['container-title'] === 'string') {
         title = item['container-title']
       }
 
       let date = ''
-      if (item.issued !== undefined) {
-        if ('date-parts' in item.issued) {
+      if (item.issued != undefined && typeof item.issued === 'object') {
+        if ('date-parts' in item.issued && Array.isArray(item.issued['date-parts'])) {
           const year = item.issued['date-parts'][0][0]
           date = ` (${year})`
         } else if ('literal' in item.issued) {
@@ -677,6 +697,7 @@ function maybeHighlightSearchResults (): void {
 
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }
+    .cm-content { min-width: 0; }
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
@@ -685,10 +706,6 @@ function maybeHighlightSearchResults (): void {
 
     // Reset the margins for code files
     .cm-scroller { padding: 0px; }
-  }
-
-  .cm-content {
-    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
   }
 }
 

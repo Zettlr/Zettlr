@@ -19,6 +19,8 @@ import { EditorView } from '@codemirror/view'
 import { defaultMenu } from '../context-menu/default-menu'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import type { SyntaxNode } from '@lezer/common'
+import { NODES } from '../parser/citation-parser'
+import { citationMenu } from '../context-menu/citation-menu'
 
 /**
  * Takes an EditorView and a position within it, and returns either a SyntaxNode
@@ -45,6 +47,24 @@ function getLinkOrImageNodeFromPos (view: EditorView, pos: number): SyntaxNode|n
   return nodeAt
 }
 
+/**
+ * If available, returns a Citation node at the current position.
+ *
+ * @param   {EditorView}  view  The editor view
+ * @param   {number}      pos   The position
+ *
+ * @return  {SyntaxNode}        Either the citation node, or null
+ */
+function getCitationNodeFromPos (view: EditorView, pos: number): SyntaxNode|null {
+  let node: SyntaxNode|null = syntaxTree(view.state).resolveInner(pos)
+
+  while (node !== null && node.name !== NODES.CITATION) {
+    node = node.parent
+  }
+
+  return node
+}
+
 export const defaultContextMenu = EditorView.domEventHandlers({
   contextmenu (event, view) {
     const coords = { x: event.clientX, y: event.clientY }
@@ -60,6 +80,14 @@ export const defaultContextMenu = EditorView.domEventHandlers({
     if (maybeLinkNode !== null) {
       // We can show a Link/Image context menu!
       linkImageMenu(view, maybeLinkNode, coords)
+      return true
+    }
+
+    const citationNode = getCitationNodeFromPos(view, pos)
+
+    if (citationNode !== null) {
+      // We can show a citation menu
+      citationMenu(view, coords, citationNode)
       return true
     }
 

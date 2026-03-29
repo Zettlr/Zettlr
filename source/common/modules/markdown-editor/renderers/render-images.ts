@@ -23,7 +23,7 @@ import { trans } from '@common/i18n-renderer'
 import clickAndSelect from './click-and-select'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
 import { syntaxTree } from '@codemirror/language'
-import { parseLinkAttributes, type ParsedPandocLinkAttributes } from 'source/common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes, type ParsedPandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 const ipcRenderer = window.ipc
 
@@ -82,7 +82,7 @@ class ImageWidget extends WidgetType {
     readonly imageUrl: string,
     readonly resolvedImageUrl: string,
     readonly altText: string,
-    readonly data: ParsedPandocLinkAttributes
+    readonly data: ParsedPandocAttributes
   ) {
     super()
   }
@@ -104,8 +104,8 @@ class ImageWidget extends WidgetType {
     const defaultHeight = (!Number.isNaN(imagePreviewHeight)) ? `${imagePreviewHeight}vh` : '100vh'
 
     // Normalize the local width/height arguments
-    const normWidth = normalizeSize(this.data.width)
-    const normHeight = normalizeSize(this.data.height)
+    const normWidth = normalizeSize(this.data.properties?.width)
+    const normHeight = normalizeSize(this.data.properties?.height)
     // Generate maxWidth/height properties
     const maxWidth = normWidth !== undefined ? `min(${normWidth}, ${defaultWidth})` : defaultWidth
     const maxHeight = normHeight !== undefined ? `min(${normHeight}, ${defaultHeight})` : defaultHeight
@@ -315,16 +315,23 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
     return undefined
   }
 
+  // Images (particularly captions) can include newlines and still be valid.
+  // However, the current implementation as an inline-plugin does not allow for
+  // that, and attempting to render such an image would crash the editor.
+  if (state.sliceDoc(node.from, node.to).includes('\n')) {
+    return undefined
+  }
+
   const alt = state.sliceDoc(marks[0].to, marks[1].from)
   const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
   const url = state.sliceDoc(urlNode.from, urlNode.to)
 
-  let data: ParsedPandocLinkAttributes = {}
+  let data: ParsedPandocAttributes = {}
   const nextSibling = node.node.nextSibling
   if (nextSibling !== null && nextSibling.name === 'PandocAttribute') {
     try {
       const text = state.sliceDoc(nextSibling.from, nextSibling.to)
-      data = parseLinkAttributes(text)
+      data = parsePandocAttributes(text)
     } catch (err) {
       // Silently ignore error
     }

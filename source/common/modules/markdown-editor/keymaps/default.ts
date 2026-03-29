@@ -51,7 +51,10 @@ import { type Extension } from '@codemirror/state'
 
 import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
 import {
-  handleReplacement, handleBackspace, handleQuote
+  handleBackspace,
+  handleQuote,
+  handleAutocorrectEnter,
+  handleAutocorrectSpace
 } from '../commands/autocorrect'
 import { addNewFootnote, selectFootnoteBeforeDelete } from '../commands/footnotes'
 import {
@@ -59,7 +62,8 @@ import {
 } from '../commands/lists'
 import {
   insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList,
-  toggleHighlight
+  applyHighlight,
+  insertTabOrSpace
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
@@ -92,7 +96,7 @@ export function defaultKeymap (): Extension {
     { key: 'Mod-b', run: applyBold },
     { key: 'Mod-i', run: applyItalic },
     { key: 'Mod-k', run: insertLink },
-    { key: 'Ctrl-Shift-h', run: toggleHighlight },
+    { key: 'Ctrl-Shift-h', run: applyHighlight },
     // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
     // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
     { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
@@ -104,9 +108,10 @@ export function defaultKeymap (): Extension {
     { key: 'Tab', run: nextSnippet },
     { key: 'Tab', run: moveNextCell, shift: movePrevCell },
     { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
+    { key: 'Tab', run: insertTabOrSpace },
 
     // Overload Enter
-    { key: 'Enter', run: handleReplacement },
+    { key: 'Enter', run: handleAutocorrectEnter },
     { key: 'Enter', run: moveNextRow, shift: movePrevRow },
     // If no replacement can be handled, the default should be newlineAndIndent
     { key: 'Enter', run: insertNewlineContinueMarkup },
@@ -120,7 +125,7 @@ export function defaultKeymap (): Extension {
     { key: 'Backspace', run: handleBackspace },
 
     { key: 'Escape', run: abortSnippet },
-    { key: 'Space', run: handleReplacement },
+    { key: 'Space', run: handleAutocorrectSpace },
 
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },

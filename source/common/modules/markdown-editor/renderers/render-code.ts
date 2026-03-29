@@ -78,7 +78,9 @@ const BLUE = '#268bd2'
 const CYAN = '#2aa198'
 const GREEN = '#859900'
 
-const codeTheme = EditorView.baseTheme({
+// TODO: Move this out here. It should be included with the
+// `codeSyntaxHighlighter`.
+export const codeTheme = EditorView.baseTheme({
   '.code': {
     color: BASE_02,
     fontFamily: 'Inconsolata, monospace'

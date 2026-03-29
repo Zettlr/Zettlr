@@ -132,6 +132,13 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
               disabled: config.display.renderingMode === 'raw'
             }
           ]
+        },
+        { type: 'separator' },
+        {
+          type: 'checkbox',
+          label: trans('Show Markdown syntax when the cursor is adjacent or inside an element'),
+          info: trans('If disabled, the editor will not show the Markdown syntax if the cursor is adjacent to the element.'),
+          model: 'display.previewModeShowSyntaxWhenCursorIsAdjacent'
         }
       ]
     },
@@ -158,6 +165,14 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
               options: {
                 '*': '*' + trans('Italics') + '*',
                 _: '_' + trans('Italics') + '_'
+              }
+            },
+            {
+              type: 'radio',
+              model: 'editor.highlightFormatting',
+              options: {
+                'span': '[' + trans('Highlight') + ']{.mark}',
+                '==': '==' + trans('Highlight') + '=='
               }
             }
           ]
@@ -303,6 +318,12 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           type: 'checkbox',
           label: trans('Indent using tabs instead of spaces'),
           model: 'editor.indentWithTabs'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Always indent the current line when pressing Tab'),
+          info: trans('Zettlr always indents the line for list items. Turn this setting on to always indent any line.'),
+          model: 'editor.alwaysIndentLineOnTab'
         },
         { type: 'separator' },
         {

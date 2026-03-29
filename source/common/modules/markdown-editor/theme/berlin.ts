@@ -31,7 +31,7 @@ const commonRules: Record<string, any> = {
   '.cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end, .mermaid-chart.error': {
     fontFamily: 'Inconsolata, monospace'
   }, // END: Monospace elements
-  '.cm-quote': { fontStyle: 'italic' },
+  '.blockquote-wrapper': { borderLeftColor: primaryColor },
   '.cm-hr, .cm-yaml-frontmatter-start, .cm-yaml-frontmatter-end': {
     fontWeight: 'bold'
   },

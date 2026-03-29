@@ -119,7 +119,7 @@ const ROMAN_NUMERAL_CODES = [
 /**
  * Record of all valid citation node names.
  */
-const NODES = {
+export const NODES = {
   /**
    * The containing citation node
    */

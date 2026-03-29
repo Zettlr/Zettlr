@@ -110,6 +110,34 @@ export function getFileManagerFields (config: ConfigOptions): PreferencesFieldse
           }
         }
       ]
+    },
+    {
+      title: trans('Workspace sorting'),
+      infoString: trans('Zettlr automatically sorts your workspaces by name.'),
+      group: PreferencesGroups.FileManager,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Sort workspaces manually'),
+          info: trans('This will be active as soon as you manually change the sort order. Disable this to reinstate automatic sorting.'),
+          model: 'fileManager.sortWorkspacesManually'
+        }
+      ]
+    },
+    {
+      title: trans('Collapse Workspaces Behavior'),
+      group: PreferencesGroups.FileManager,
+      infoString: trans('Determine how the context menu item to collapse workspaces in the file manager behaves. You can choose single-step or two-step.'),
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Require two steps to collapse workspaces'),
+          info: trans('When this is active, the first collapse workspace will only collapse subfolders, the second the workspaces.'),
+          model: 'fileManager.twoStepCollapseWorkspaces',
+        }
+      ]
     }
   ]
 }

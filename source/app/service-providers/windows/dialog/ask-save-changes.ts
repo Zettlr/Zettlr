@@ -23,9 +23,11 @@ import { trans } from '@common/i18n-main'
 /**
  * Displays a prompt to ask the user if they want to save the files first
  *
- * @param   {BrowserWindow|null}  win      The window to attach to
+ * @param   {BrowserWindow|null}  win       The window to attach to
+ * @param   {string}              [detail]  An optional string to display in the
+ *                                          `detail` section of the dialogue.
  */
-export default async function askSaveChanges (win: BrowserWindow|null): Promise<MessageBoxReturnValue> {
+export default async function askSaveChanges (win: BrowserWindow|null, detail?: string): Promise<MessageBoxReturnValue> {
   const boxOptions: MessageBoxOptions = {
     type: 'warning',
     buttons: [
@@ -36,7 +38,8 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
     defaultId: 0,
     cancelId: 2, // If the user cancels, do not omit (the default) but actually cancel
     title: trans('Unsaved changes'),
-    message: trans('There are unsaved changes. Do you want to save them first?')
+    message: trans('There are unsaved changes. Do you want to save them first?'),
+    detail,
   }
 
   // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status

@@ -5,7 +5,7 @@
 # because this gives us more control over the built-in pandoc binary.
 
 # Retrieve the versions from https://github.com/jgm/pandoc/releases/latest
-VERSION="3.8.3"
+VERSION="3.9"
 
 BASE_PATH="https://github.com/jgm/pandoc/releases/download/$VERSION"
 
@@ -120,8 +120,14 @@ then
 elif [ "$PLATFORM" == "win32" ]
 then
     # Windows builds are a zip file where the binary is in .
-    unzip -qq $BASENAME # -qq makes unzip quiet
-    EXTRACTEDFOLDER="$(unzip -Z -1 $BASENAME | head -1)"
+    EXTRACTEDFOLDER="pandoc-$VERSION"
+    # Unzip the archive. -qq makes unzip quiet, and -d specifies a custom output
+    # directory. The -j flag instructs unzip not to recreate the folder
+    # structure. The reason is that `unzip -Z -1 $BASENAME | head -1`` will no
+    # longer give us the root folder of the archive. (This was updated on March
+    # 7, 2026, since we had a failing nightly build on Monday, March 2, after
+    # having upgraded to Pandoc 3.9.)
+    unzip -qq -d $EXTRACTEDFOLDER -j $BASENAME
     echo "Extracted to: $EXTRACTEDFOLDER"
     cd $EXTRACTEDFOLDER
     echo "Moving binary from ./ to resources directory ..."

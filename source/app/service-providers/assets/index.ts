@@ -268,8 +268,8 @@ export default class AssetsProvider extends ProviderContract {
       // Stringify the new defaults according to the verbatim flag
       await fs.writeFile(absPath, contents)
       return true
-    } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not save lua filter: ${String(err.message)}`, err)
+    } catch (err: unknown) {
+      this._logger.error(`[Assets Provider] Could not save lua filter: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return false
     }
   }
@@ -302,7 +302,7 @@ export default class AssetsProvider extends ProviderContract {
         await this.restoreFilterFor(oldName)
       }
       return true
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._logger.error(`[Assets Provider] Could not rename lua filter from ${oldPath} to ${newPath}.`, err)
       return false
     }
@@ -325,7 +325,7 @@ export default class AssetsProvider extends ProviderContract {
         await this.restoreFilterFor(filename)
       }
       return true
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._logger.error(`[Assets Provider] Could not remove lua filter: ${absPath}`, err)
       return false
     }
@@ -344,7 +344,7 @@ export default class AssetsProvider extends ProviderContract {
 
     try {
       await fs.copyFile(source, target)
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._logger.error(`[Assets Provider] Could not restore filter file ${filename}!`, err)
       return false
     }
@@ -423,8 +423,8 @@ export default class AssetsProvider extends ProviderContract {
       const yaml = (verbatim) ? newDefaults : YAML.stringify(newDefaults)
       await fs.writeFile(absPath, yaml)
       return true
-    } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
+    } catch (err: unknown) {
+      this._logger.error(`[Assets Provider] Could not save defaults file: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return false
     }
   }
@@ -459,7 +459,7 @@ export default class AssetsProvider extends ProviderContract {
         await this.restoreDefaultsFor(oldName)
       }
       return true
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._logger.error(`[Assets Provider] Could not rename file ${oldPath} to ${newPath}.`, err)
       return false
     }
@@ -484,7 +484,7 @@ export default class AssetsProvider extends ProviderContract {
         await this.restoreDefaultsFor(filename)
       }
       return true
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._logger.error(`[Assets Provider] Could not remove defaults file: ${absPath}`, err)
       return false
     }
@@ -504,7 +504,7 @@ export default class AssetsProvider extends ProviderContract {
 
     try {
       await fs.copyFile(source, target)
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._logger.error(`[Assets Provider] Could not restore defaults file ${filename}!`, err)
       return false
     }
@@ -602,8 +602,8 @@ export default class AssetsProvider extends ProviderContract {
       await fs.writeFile(filePath, content)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
-    } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not save snippets file: ${String(err.message)}`, err)
+    } catch (err: unknown) {
+      this._logger.error(`[Assets Provider] Could not save snippets file: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return false
     }
   }
@@ -624,8 +624,8 @@ export default class AssetsProvider extends ProviderContract {
       await fs.unlink(filePath)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
-    } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not remove snippets file: ${String(err.message)}`, err)
+    } catch (err: unknown) {
+      this._logger.error(`[Assets Provider] Could not remove snippets file: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return false
     }
   }
@@ -661,8 +661,8 @@ export default class AssetsProvider extends ProviderContract {
       await fs.rename(oldPath, newPath)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
-    } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not rename snippets file: ${String(err.message)}`, err)
+    } catch (err: unknown) {
+      this._logger.error(`[Assets Provider] Could not rename snippets file: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return false
     }
   }

@@ -364,8 +364,7 @@ function startSearch (overrideQuery?: string): void {
   }
 
   recentSearches.unshift(query.value)
-  // TODO: Refactor to use pinia's config store instead!
-  ;(global as any).config.set('window.recentGlobalSearches', recentSearches.slice(0, 10))
+  configStore.setConfigValue('window.recentGlobalSearches', recentSearches.slice(0, 10))
 
   // Now we're good to go!
   emptySearchResults()

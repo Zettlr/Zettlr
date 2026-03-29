@@ -2,6 +2,191 @@
 
 ## GUI and Functionality
 
+- Update `pt-PT` translations (#6262).
+- Translated the tutorial to Japanese (#6260).
+
+## Under the Hood
+
+- Updated some dependencies.
+- Removed duplicate FSAL descriptor fetching.
+- Improved resiliency of the descriptor fetching; now if a renderer requests an
+  array of paths, the FSAL does not fail. Instead, it simply omits those
+  descriptors from the return array and logs an error (context: #6272).
+
+# 4.3.0
+
+## GUI and Functionality
+
+- **Feature**: Added a citation tooltip. When hovering over a citation cluster
+  in your documents with your mouse, this will generate a small bibliography of
+  just the items contained in the citation cluster and display it using the
+  tooltip. This allows you to quickly check which item you cited exactly.
+- **Feature**: The Custom CSS editor now offers autocomplete assistance (#6226).
+- **Feature**: Added dedicated `math` code block syntax highlighting to add
+  MathTeX to files without rendering (#6226).
+- **Feature**: You can now close all standalone/root files as well as all
+  workspaces from a new file manager context menu that opens via right-click
+  onto the section headers or with a click on the corresponding button. In
+  addition, you can collapse all folders with a simple click (#6209).
+- **Feature**: You can now manually change the sorting of your workspaces. By
+  default, Zettlr automatically sorts your workspaces by name. However,
+  sometimes you may wish to change the ordering. To do so, use the new file
+  manager context menu and select "Sort workspaces…". This will open a popover
+  that allows you to change the workspace ordering using drag and drop. As soon
+  as you overwrite the sort order manually, this will disable automatic sorting
+  from here on. Newly opened workspaces will simply be appended at the end of
+  the list of open workspaces. To re-enable automatic sorting of your
+  workspaces, use the new setting in the file manager preferences, or click the
+  corresponding button in the sort popover.
+- **Feature**: You can now assign custom accent colors to folders across your
+  workspaces to make them easier identifiable. This aids the existing custom
+  icons that you can already use to differentiate folders. You can assign one of
+  seven built-in colors to every directory: blue, purple, rose, red, orange,
+  yellow, and green. For friends of Custom CSS: These are specified as CSS
+  variables so that you can adjust them if you wish. The pattern is:
+  `--accent-<color>`.
+- Fixed potential crashes when standalone/root files or workspaces have been
+  removed while Zettlr was closed (#6223). Recognizes PR #6225 by @SergioChan
+  who started this effort. Previously, the re-indexing process when Zettlr boots
+  would not check for the existence of open paths, causing crashes.
+- Show citation menu when right-clicking on a non-rendered citation (#6213).
+- Updated `ja-JP` translations (#6227; #6230; #6249).
+- Updated `zh-CN` translations (#6243).
+- Fixed an issue with improper HTML sanitization in the file preview tooltip,
+  which would escape unusual HTML (such as KaTeX equations) instead of allowing
+  it (#6221).
+- Fixed an issue that might prevent the correct app icon to show up for the
+  AppImage release of Zettlr.
+- Re-enabled the broken System Verilog syntax highlighting. However, the code
+  highlighting uses the Verilog parser, since no dedicated System Verilog parser
+  is available, so there may be inconsistencies in highlighting.
+- Allow more emojis in tags (#6202).
+- Fix crashes when directories aren't accessible by the app (#6172).
+- Improve autocorrect handling. Now, users can undo an unwanted replacement
+  (`Ctrl/Cmd+Z`) without losing the inserted space or new line (#6210).
+- Made the app more resilient in light of missing workspaces or root files. Now,
+  crashes on startup due to missing standalone files or workspaces should be
+  much less frequent and the app should be more stable.
+- Fixed a regression that would overlay the default menu on top of the citation
+  menu on non-macOS clients, rendering it unusable (#6213).
+- Fixed an issue that would make code blocks exceed the size of the preview
+  window in some instances.
+- Fix footnote preview styling in footnote tooltips.
+- Fixed custom export profiles not working during project exports (#6235).
+- Fixed text color of disabled menu items on Linux and Windows.
+- Fixed "Find in file" menu item (#6234).
+- Improve file name extension handling (#6194).
+
+## Under the Hood
+
+- The `md2html` utility function now has a new flag, `sanitizeHTML` that you can
+  use to make the function properly sanitize potentially harmful HTML in
+  situations where HTML shall be inserted into the DOM without endangering the
+  display of special elements such as equations.
+- The app now sanitizes HTML in more cases where it is inserted into the DOM.
+  This preemptively prevents attacks using malicious HTML in the table of
+  contents, the print window, and footnote tooltip rendering. Note that this
+  does not apply when copying Markdown as HTML, since in this case we expect the
+  user wishes to retain every bit of HTML (also, in that case, they usually have
+  seen the code, making possible attacks unlikely).
+- Updated various code syntax highlighting parsers from the legacy mode to the
+  corresponding dedicated parsers (#6226).
+- Since `JSON.stringify` is sensitive to object insertion order, we switched the
+  detection logic whether directory settings are all on default to
+  `assert.deepStrictEqual`. This means that we now compare the values of the
+  properties instead of their ordering.
+- Harden the TableEditor by properly sanitizing possibly unsafe HTML using the
+  new `sanitizeHTML` option on the `nodeToHTML` function (via `md2html`).
+
+# 4.2.1
+
+## Fixed Pandoc Extension Parsing
+
+If you ever used [Pandoc extensions](https://pandoc.org/MANUAL.html#extensions)
+with Zettlr, you may have wondered why they sometimes appeared not to work.
+After a report by a user, we have found out that Zettlr never actually parsed
+these correctly. We decided to make this a bit more visible in the changelog
+since your exports may have been broken without you realizing. This way you can
+verify any of your exports.
+
+## GUI and Functionality
+
+- Fix indenting and tab insertion behavior (#6196).
+- Fix Zettlr not correctly parsing Pandoc extensions (#6212).
+- Improved error handling when opening PDF attachments.
+- Make Zettlr more resilient when CSL JSON library files are malformed.
+
+## Under the Hood
+
+- Add unit tests for `parseReaderWriter` utility function.
+- Upgrade Electron to `v40.8.0`.
+- Upgrade Pandoc to `v3.9.0`.
+- Upgrade ESLint to `v10.0.3`.
+- Properly parse and check the returned results from the BetterBibTex JSON RPC
+  API when querying PDF attachments.
+- Zettlr no longer assumes CSL JSON files are well-formed. Instead, each item is
+  checked for the presence of required keys, and is skipped if there is an
+  issue. This ensures library files can also be loaded partially.
+
+# 4.2.0
+
+## GUI and Functionality
+
+- **Feature**: New utilities for working with native Pandoc Divs and spans
+  (#6032):
+  - Added a new setting to switch between native highlights (`==mark==`) and
+    using spans for this (`[mark]{.highlight}`).
+  - Added a new toolbar button to insert divs and spans.
+  - Added new buttons to the formatting toolbar to insert underlined,
+    strikethrough, and highlighted spans.
+- **Feature**: Blockquotes are now rendered with a vertical bar (#6122).
+- **Feature**: Users can now opt to display hidden files and folders
+  ("dot-files") in the sidebar and/or filemanager in the settings (#6041).
+- **Feature**: Custom Pandoc `div`s are now pre-rendered depending on the
+  corresponding setting (#6121). This allows you to preview any custom styling
+  you have applied to them within the editor.
+- **Feature**: You can now move document tabs to the start or end of the
+  tablist from the context menu (#6130).
+- Added an error message that explains to users that an import profile is needed
+  if they attempt to import a supported file with no profile.
+- Updated `pt-BR` translation (#6154).
+- Updated `ja-JP` translation (#6198).
+- Updated `de-DE` translation.
+- Improved the tag recognition to allow for more varied Unicode characters in
+  tags than previously, including umlauts, accents, or emojis (#6155).
+- Improved pilcrow styling when whitespace rendering is on (#6152).
+- Fixed the frontmatter linter never reporting any errors with the YAML (#6167).
+- Fixed an issue where images that spanned multiple lines could cause the editor
+  to crash when image rendering was active.
+- Fixed the tab key not respecting the "Indent using tabs instead of spaces"
+  setting. Additionally, pressing tab now always inserts spaces in YAML
+  frontmatter blocks to maintain valid YAML syntax (#6168).
+- Fix: The formatting toolbar no longer grabs focus from the editor.
+- Fix: Added a configuration setting to allow restoring the pre-4.0 behavior of
+  not showing the underlying Markdown syntax of pre-rendered elements when the
+  cursor merely touches the element. If the setting "Show Markdown syntax when
+  the cursor is adjacent or inside an element" is enabled (the default), the
+  editor will show the Markdown syntax both when the cursor is within the
+  element or if it is adjacent to it.
+- Fixed the table editor "Delete table" context menu item not working as
+  intended (#6088).
+- Updated MathJax URL in various HTML-based templates to v4 (#6148). Note that
+  Zettlr will not overwrite existing templates, so to benefit from this, you
+  will have to factory-reset the affected templates.
+- Fixed a bug starting with the Zotero 8 update in Zettlr would no longer
+  provide autocomplete for some users. The reason is that some of the items in
+  the exported CSL JSON files would lack an ID property (that is, the citekey),
+  while Zettlr assumed each item would have an ID.
+
+## Under the Hood
+
+- Increased config retrieval speed in the renderers (#6140). This can speed up
+  some UI interactions.
+
+# 4.1.1
+
+## GUI and Functionality
+
 - Fix a bug where the preferences window would allow arbitrary tab sizes. Now,
   tab sizes are bound between 2 and 10 (see #6131).
 - Fixed links not registering clicks when they are pre-rendered within table
@@ -22,9 +207,19 @@
 - Fixed "Learn more" link on the citation page in the onboarding window (#6138).
 - Fixed an issue that would make the file search crash on Windows, if a
   workspace was located at a volume root (#6142).
+- Fixed an issue that would cause Mermaid graphs to still be pre-rendered in
+  "raw" mode (#6141).
+- Fixed a bug that would cause code files (JSON/YAML/TeX) to be formatted
+  weirdly if Zettlr opens with one of these files on startup, due to relevant
+  CSS never being loaded in this case.
+- Improved PDF viewer interaction (#6153).
 
 ## Under the Hood
 
+- Update dependencies:
+  - Electron: `v40.0`
+  - Forge: `7.11.1`
+  - Builder: `26.5.0`
 - The FSAL Cache now consistently utilizes asynchronous filesystem operations
   (#5994).
 - Refactor Zettelkasten link and tag parsing (#5997).
@@ -36,7 +231,6 @@
   - Removed a lot of dead code in the FSAL.
   - Moved the save functionality away from the `FSAL*`-submodules, and divided
     the responsibility between the `DocumentsProvider` and the `FSAL` module.
-
 
 # 4.1.0
 

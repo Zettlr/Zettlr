@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="hy-AM">
+  <!-- The abbreviations in this file follow the recommendations of The System of Standards on Information, Librarianship and Publishing: Bibliographic Record; Bibliographic Description; General Requirements and Rule Specifications, HST 361-2013, https://www.armstandard.am/en/standart/15414 (cited hereafter HST-316) -->
+  <!-- Additional abbreviations are from:
+        1. Հայոց լեզվի հապավումների բառարան := Dictionary of Armenian Language Abbreviations / Ալեքսանդր Սիմոնի Մարգարյան; Խմբ.՝ Լ.Հ. Մկրտչյան.— Երևան: Հայաստան, 1979.- 148 էջ. https://haygirk.nla.am/upload/1941-/margaryan_hayoc_1979.pdf (cited hereafter as DAAL)
+		2. Գրադարանային տերմինների բառարան: Ռուս-հայերեն և հայ-ռուսերեն := Словарь библиотечных терминов := Dictionary of Library Terms / Արամ Սահակի Բաբայան; Խմբ.՝ Գուրգեն Սևակի.— Երևան: Ա. հ., 1950.- 264 էջ. https://haygirk.nla.am/upload/1941-/babayan_gradaranayin_1950.pdf (cited hereafter as DLT)
+  -->
+  <info>
+    <translator>
+      <name>Hayk M. Kocharyan</name>
+      <uri>https://orcid.org/0000-0002-1370-3325</uri>
+    </translator>
+	<translator>
+      <name>Marat M. Yavrumyan</name>
+      <uri>https://orcid.org/0000-0002-9722-0653</uri>
+    </translator>
+	<translator>
+      <name>Armenian Language Technology Research Laboratory</name>
+      <uri>https://github.com/RLALT</uri>
+    </translator>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    <updated>2026-01-31T12:37:21+04:00</updated>
+  </info>
+  <style-options punctuation-in-quote="false"/>
+  <date form="text">
+    <date-part name="day" suffix=" "/>
+    <date-part name="month" suffix=", "/>
+    <date-part name="year" suffix="&#160;թ."/>
+  </date>
+  <date form="numeric">
+    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+    <date-part name="year" suffix="&#160;թ."/>
+  </date>
+  <terms>
+    <!-- LONG GENERAL TERMS -->
+    <term name="accessed">դիտված</term>
+    <term name="advance-online-publication">առցանց առաջնատիպ</term>
+    <term name="album">ալբոմ</term>
+    <term name="and">և</term>
+    <term name="and others">և&#160;ուրիշներ</term>
+    <term name="anonymous">անանուն</term>
+    <term name="at">ըստ՝</term> <!-- the armenian comma was preferred to avoid the flexed forms -->
+    <term name="audio-recording">ձայնագրություն</term>
+    <term name="available at">հասանելի&#160;է</term>
+    <term name="by"></term>
+    <term name="circa">մոտ</term>
+    <term name="cited">մեջբերումն ըստ՝</term> <!-- the armenian comma was preferred to avoid the flexed forms -->
+    <term name="et-al">և&#160;ուրիշներ</term> <!-- like "and others", in the armenian tradition they are the same; the alternative spelling «և այլք» was deemed archaic -->
+    <term name="film">կինոնկար</term>
+    <term name="forthcoming">հանձնված&#160;է հրապարակման</term>
+    <term name="from">իմա՝</term> <!-- the term «սկզբնաղբյուրը» is more specific and is primarily used in archival studies -->
+    <term name="henceforth">այսուհետ՝</term>
+    <term name="ibid">նույնը</term>
+    <term name="in">ի&#160;մեջ</term>
+    <term name="in press">հանձնված&#160;է տպագրության</term>
+    <term name="internet">համացանց</term>
+    <term name="letter">նամակ</term>
+    <term name="loc-cit">նույն տեղում</term>
+    <term name="no date">ա.&#160;թ.</term> <!-- the abbreviated form is the regular form; -->
+    <term name="no-place">ա.&#160;տ.</term> <!-- the abbreviated form is the regular form  -->
+    <term name="no-publisher">ա.&#160;հ.</term> <!-- the abbreviated form is the regular form  -->
+    <term name="on">ընդ</term>
+    <term name="online">առցանց</term>
+    <term name="op-cit">նշվ. աշխ.</term> <!-- the abbreviated form is the regular form -->
+    <term name="original-work-published">սկզբնապես հրապարակվել&#160;է</term>
+    <term name="personal-communication">մասնավոր հաղորդակցություն</term>
+    <term name="podcast">փոդքաստ</term>
+    <term name="podcast-episode">թողարկում փոդքաստում</term>
+    <term name="preprint">սկզբնագիր</term> <!-- «սկզբնատիպ» is another possible alternative to this neologism -->
+    <term name="presented at">ներկայացվել&#160;է</term>
+    <term name="radio-broadcast">ռադիոհաղորդում</term> <!-- «հեռարձակում» is a more accurate spelling of "broadcast" -->
+    <term name="radio-series">ռադիոշարք</term>
+    <term name="radio-series-episode">թողարկում ռադիոշարքում</term>
+    <term name="reference">տե՛ս</term> <!-- no plural -->
+    <term name="retrieved">քաղված&#160;է</term>
+    <term name="review-of">գրախոսված&#160;է՝</term>
+    <term name="scale">չափ</term>
+    <term name="special-issue">հատուկ թողարկում</term>
+    <term name="special-section">հատուկ պրակ</term>
+    <term name="television-broadcast">հեռուստահաղորդում</term> <!-- «հեռարձակում» is a more accurate spelling of "broadcast" -->
+    <term name="television-series">հեռուստաշարք</term>
+    <term name="television-series-episode">թողարկում հեռուստաշարքում</term>
+    <term name="video">տեսանյութ</term>
+    <term name="working-paper">աշխատանքային նյութեր</term> <!-- "աշխատանքային թղթեր" is a more literal translation of "working-paper" -->
+
+    <!-- SHORT GENERAL TERMS -->
+    <!-- Omitted short forms: accessed, advance-online-publication, album, and (symbol), at (symbol), audio-recording, available at, circa, film, forthcoming, from, henceforth, ibid, in, in press, internet, letter, loc-cit, no date, no-place, no-publisher, on, online, op-cit, original-work-published, personal-communication, podcast, podcast-episode, preprint, presented at, radio-broadcast, radio-series, radio-series-episode, reference, retrieved, review-of, scale, special-issue, special-section, television-broadcast, television-series, television-series-episode, video, working-paper -->
+    <term name="anonymous" form="short">անան.</term>
+	<term name="and others" form="short">և&#160;ուրիշ.</term>
+    <term name="cited" form="short">մջբ.՝</term>
+    <term name="et-al" form="short">և&#160;ուրիշ.</term>
+   
+    <!-- SYMBOLIC GENERAL FORMS -->
+    <term name="and" form="symbol">և</term>
+    <term name="at" form="symbol">@</term>
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="article">հոդված</term>
+    <term name="article-journal">հոդված հանդեսում</term>
+    <term name="article-magazine">հոդված ամսագրում</term>
+    <term name="article-newspaper">հոդված թերթում</term>
+    <term name="bill">օրինագիծ</term> <!-- as a neologism, "իրավանախագիծ" is a more general term -->
+    <!-- book is in the list of locator terms -->
+    <term name="broadcast">հեռարձակում</term>
+    <!-- chapter is in the list of locator terms -->
+    <term name="classic">դասական երկ</term> <!-- «դասական գործ» is a more literal spelling of "classic" -->
+    <term name="collection">հավաքածո</term>
+    <term name="dataset">տվյալակազմ</term> <!-- neologism -->
+    <term name="document">վավերագիր</term> <!-- «փաստատուղթ» is a more general term -->
+    <term name="entry">գլխաբառ</term> <!-- the neologism «մուտքագիր» is another possible alternative to this term -->
+    <term name="entry-dictionary">բառահոդված</term>
+    <term name="entry-encyclopedia">հանրագիտարանային հոդված</term>
+    <term name="event">միջոցառում</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic">գծագիր</term>
+    <term name="hearing">լսումներ</term>
+    <term name="interview">հարցազրույց</term>
+    <term name="legal_case">դատական գործ</term>
+    <term name="legislation">օրենսդրություն</term>
+    <term name="manuscript">ձեռագիր</term>
+    <term name="map">քարտեզ</term>
+    <term name="motion_picture">շարժանկար</term>
+    <term name="musical_score">երաժշտական ստեղծագործություն</term>
+    <term name="pamphlet">գրքույկ</term>
+    <term name="paper-conference">զեկույց գիտաժողովում</term>
+    <term name="patent">արտոնագիր</term> <!-- «պատենտ» is another possible alternative -->
+    <term name="performance">պերֆորմանս</term>
+    <term name="periodical">պարբերական</term>
+    <term name="personal_communication">մասնավոր հաղորդակցություն</term>
+    <term name="post">գրառում</term>
+    <term name="post-weblog">բլոգ</term>
+    <term name="regulation">իրավակարգավորում</term>
+    <term name="report">զեկույց</term> <!-- «տեղեկագիր» is another possible alternative to this term -->
+    <term name="review">գրախոսություն</term>
+    <term name="review-book">մատենախոսություն</term> <!-- archaisms, used especially to distinguish book reviews -->
+    <term name="software">ծրագրաշար</term>
+    <term name="song">ձայնագրություն</term>
+    <term name="speech">ելույթ</term>
+    <term name="standard">ստանդարտ</term>
+    <term name="thesis">ավարտագիր</term>
+    <term name="treaty">համաձայնագիր</term>
+    <term name="webpage">կայքէջ</term>
+
+    <!-- SHORT ITEM TYPE FORMS -->
+    <!-- Omitted short forms: article, article-journal; article-magazine; article-newspaper, bill, broadcast, classic, collection, document, entry, entry-dictionary, entry-encyclopedia, event, hearing, interview, legal_case, legislation, map, motion_picture, musical_score, pamphlet, paper-conference, patent, performance, periodical, personal_communication, regulation, report, review, review-book, software, song, speech, standard, thesis, treaty -->
+	<!-- book is in the list of locator terms -->
+    <!-- chapter is in the list of locator terms -->
+    <!-- figure is in the list of locator terms -->
+	<term name="graphic" form="short">գծ.</term>
+    <term name="manuscript" form="short">ձեռ.</term> <!-- no plural -->
+	<term name="periodical" form="short">պբ.</term>
+	
+    <!-- LONG VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb">ցուցմունք</term>
+    <term name="review" form="verb">գրախոսվել&#160;է՝</term> <!-- the armenian comma was preferred to avoid the flexed forms -->
+    <term name="review-book" form="verb">գրախոսվել&#160;է՝</term> <!-- the armenian comma was preferred to avoid the flexed forms -->
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
+
+    <!-- HISTORICAL ERA TERMS -->
+    <term name="ad">Ք.հ.&#160;</term>
+    <term name="bc">Ք.ա.&#160;</term>
+    <term name="bce">մ.թ.ա.&#160;</term>
+    <term name="ce">մ.թ.&#160;</term>
+
+    <!-- PUNCTUATION -->
+    <term name="open-quote">«</term>
+    <term name="close-quote">»</term>
+    <term name="open-inner-quote">«</term>
+    <term name="close-inner-quote">»</term>
+    <term name="page-range-delimiter">–</term>
+    <term name="colon">։</term> <!-- it's not the armenian "verjaket," which looks like a latin colon with two vertically stacked dots and is used as an ordinary full stop -->
+    <term name="comma">,</term>
+    <term name="semicolon">;</term>
+
+    <!-- ORDINALS -->
+    <term name="ordinal">-րդ</term>
+    <term name="ordinal-01">-ին</term>
+ 
+    <!-- LONG ORDINALS -->
+    <term name="long-ordinal-01">առաջին</term>
+    <term name="long-ordinal-02">երկրորդ</term>
+    <term name="long-ordinal-03">երրորդ</term>
+    <term name="long-ordinal-04">չորրորդ</term>
+    <term name="long-ordinal-05">հինգերորդ</term>
+    <term name="long-ordinal-06">վեցերորդ</term>
+    <term name="long-ordinal-07">յոթերորդ</term>
+    <term name="long-ordinal-08">ութերորդ</term>
+    <term name="long-ordinal-09">իններորդ</term>
+    <term name="long-ordinal-10">տասներորդ</term>
+
+    <!-- LONG LOCATOR FORMS -->
+    <term name="act">
+      <single>ակտ</single>
+      <multiple>ակտեր</multiple>
+    </term>
+    <term name="appendix"> <!-- the archaic "Հավելվածք" (pl.) conveys the meaning more accurately -->
+      <single>հավելված</single> <!-- DLT (p. 110, p. 216) -->
+      <multiple>հավելվածներ</multiple>
+    </term>
+    <term name="article-locator">
+      <single>հոդված</single>
+      <multiple>հոդվածներ</multiple>
+    </term>
+    <term name="book">
+      <single>գիրք</single>
+      <multiple>գրքեր</multiple>
+    </term>
+    <term name="canon">
+      <single>կանոն</single>
+      <multiple>կանոններ</multiple>
+    </term>
+    <term name="chapter">
+      <single>գլուխ</single>
+      <multiple>գլուխներ</multiple>
+    </term>
+    <term name="column">
+      <single>սյունակ</single>
+      <multiple>սյունակներ</multiple>
+    </term>
+    <term name="elocation">
+      <single>հասցե</single>
+      <multiple>հասցեներ</multiple>
+    </term>
+    <term name="equation">
+      <single>հավասարում</single>
+      <multiple>հավասարումներ</multiple>
+    </term>
+    <term name="figure">
+      <single>պատկեր</single>
+      <multiple>պատկերներ</multiple>
+    </term>
+    <term name="folio">
+      <single>թերթ</single>
+      <multiple>թերթեր</multiple>
+    </term>
+    <term name="issue">
+      <single>թողարկում</single>
+      <multiple>թողարկումներ</multiple>
+    </term>
+    <term name="line">
+      <single>տող</single>
+      <multiple>տողեր</multiple>
+    </term>
+    <term name="note">
+      <single>ծանոթագրություն</single>
+      <multiple>ծանոթագրություններ</multiple>
+    </term>
+    <term name="opus">
+      <single>երկ</single>
+      <multiple>երկեր</multiple>
+    </term>
+    <term name="page">
+      <single>էջ</single>
+      <multiple>էջեր</multiple>
+    </term>
+    <term name="paragraph">
+      <single>պարբերություն</single>
+      <multiple>պարբերություններ</multiple>
+    </term>
+    <term name="part">
+      <single>մաս</single>
+      <multiple>մասեր</multiple>
+    </term>
+    <term name="rule">
+      <single>կանոն</single>
+      <multiple>կանոններ</multiple>
+    </term>
+    <term name="scene">
+      <single>գործողություն</single> <!-- «արար» is another possible alternative to this term -->
+      <multiple>գործողություններ</multiple>
+    </term>
+    <term name="section">
+      <single>բաժին</single>
+      <multiple>բաժիններ</multiple>
+	</term>
+    <term name="sub-verbo">տե՛ս գլխաբառ</term> <!-- no plural -->
+    <term name="supplement"> <!-- the DLT (p. 46) recommends using the term "լրացում;" bibliographies usually use adjectival forms such as "լրացված հրատարակություն" or "հավելյալ հատոր" (DLT, p. 203); we prefer the more general term "հավելված" (DLT, p. 110). -->
+      <single>հավելված</single>
+      <multiple>հավելվածներ</multiple>
+    </term>
+    <term name="table">
+      <single>աղյուսակ</single>
+      <multiple>աղյուսակներ</multiple>
+    </term>
+    <!-- A timestamp is a composite of hours, minutes, etc. and therefore has no default label. -->
+    <term name="timestamp"/>
+    <term name="title-locator">
+      <single>վերնագիր</single>
+      <multiple>վերնագրեր</multiple>
+    </term>
+    <term name="verse">
+      <single>բանատող</single>
+      <multiple>բանատողեր</multiple>
+    </term>
+    <term name="version"> <!-- DLT (p. 32, p. 252, p. 260) recommends the more specific term "փոխակ" -->
+      <single>տարբերակ</single>
+      <multiple>տարբերակներ</multiple>
+    </term>
+    <term name="volume">
+      <single>հատոր</single>
+      <multiple>հատորներ</multiple>
+    </term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <!-- Omitted short forms: act, appendix, book, canon, column, elocation, equation, figure, folio, line, opus, page, part, rule, scene, sub-verbo, sub-verbo, timestamp, title-locator, verse -->
+    <term name="article-locator" form="short">հոդվ.</term> <!-- no plural -->
+    <term name="chapter" form="short">գլ.</term> <!-- HST-316, no plural -->
+    <term name="issue" form="short">թող.</term> <!-- HST-316, no plural -->
+    <term name="note" form="short">ծնթ.</term> <!-- no plural -->
+    <term name="paragraph" form="short">պրբ.</term> <!-- no plural -->
+	<term name="section" form="short">բաժ.</term> <!-- no plural -->
+	<term name="table" form="short">աղ.</term> <!-- no plural -->
+    <term name="version" form="short">տարբ.</term> <!-- no plural -->
+    <term name="volume" form="short">հտ.</term> <!-- no plural -->
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="chapter-number">
+      <single>գլուխ</single>
+      <multiple>գլուխներ</multiple>
+    </term>
+    <term name="citation-number">
+      <single>հղում</single>
+      <multiple>հղումներ</multiple>
+    </term>
+    <term name="collection-number">
+      <single>համար</single>
+      <multiple>համարներ</multiple>
+    </term>
+    <term name="edition">
+      <single>հրատարակություն</single>
+      <multiple>հրատարակություններ</multiple>
+    </term>
+    <term name="first-reference-note-number">
+      <single>ծանոթագրություն</single>
+      <multiple>ծանոթագրություններ</multiple>
+    </term>
+    <term name="number">
+      <single>թիվ</single>
+      <multiple>թվեր</multiple>
+    </term>
+    <term name="number-of-pages">
+      <single>էջ</single>
+      <multiple>էջեր</multiple>
+    </term>
+    <term name="number-of-volumes">
+      <single>հատոր</single>
+      <multiple>հատորներ</multiple>
+    </term>
+    <term name="page-first">
+      <single>էջ</single>
+      <multiple>էջեր</multiple>
+    </term>
+    <term name="printing"> <!-- Ընկալվում է որպես «Վերատպություն»՝ նույն փաստաթղթի նախորդ հրատարակություններից ընթացիկը տարբերակող «Տարբերակ», «Թողարկում», «Խմբագրություն» տերմինների շարքում։ -->
+      <single>վերատպություն</single>
+      <multiple>վերատպություններ</multiple>
+    </term>
+	<term name="version">
+      <single>տարբերակ</single>
+      <multiple>տարբերակներ</multiple>
+    </term>
+	
+    <!-- SHORT NUMBER VARIABLE FORMS -->
+	<term name="chapter-number" form="short">գլ.</term> <!-- HST-316, no plural -->
+    <term name="citation-number" form="short">հղ.</term> <!-- no plural -->
+	<term name="collection-number" form="short">հմ.</term> <!-- no plural -->
+    <term name="edition" form="short">հրատ.</term> <!-- no plural -->
+    <term name="first-reference-note-number" form="short">ծնթ.</term> <!-- no plural -->
+    <term name="number" form="short">
+      <single>№</single>
+      <multiple>№№</multiple>
+    </term>
+    <term name="number-of-pages" form="short">
+      <single>էջ</single>
+      <multiple>էջեր</multiple>
+    </term>
+    <term name="number-of-volumes" form="short">հտ.</term> <!-- no plural -->
+    <term name="page-first" form="short">
+      <single>էջ</single>
+      <multiple>էջեր</multiple>
+    </term>
+    <term name="printing" form="short">վերատպ.</term> <!-- no plural -->
+	<term name="version" form="short">տարբ.</term> <!-- no plural -->
+
+    <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
+    <term name="chair">
+      <single>նախագահություն</single>
+      <multiple>նախագահություններ</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>շարքի խմբագիր</single>
+      <multiple>շարքի խմբագիրներ</multiple>
+    </term>
+    <term name="compiler">
+      <single>կազմող</single>
+      <multiple>կազմողներ</multiple>
+    </term>
+	<term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
+    <term name="contributor">
+      <single>համահեղինակ</single>
+      <multiple>համահեղինակներ</multiple>
+    </term>
+    <term name="curator">
+      <single>համակարգող</single>
+      <multiple>համակարգողներ</multiple>
+    </term>
+    <term name="director">
+      <single>ռեժիսոր</single>
+      <multiple>ռեժիսորներ</multiple>
+    </term>
+    <term name="editor">
+      <single>խմբագիր</single>
+      <multiple>խմբագիրներ</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>խմբագիր-թարգմանիչ</single>
+      <multiple>խմբագիր-թարգմանիչներ</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>խմբագիր և թարգմանիչ</single>
+      <multiple>խմբագիրներ և թարգմանիչներ</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>պատասխանատու խմբագիր</single>
+      <multiple>պատասխանատու խմբագիրներ</multiple>
+    </term>
+    <term name="executive-producer">
+      <single>գործադիր պրոդյուսեր</single>
+      <multiple>գործադիր պրոդյուսերներ</multiple>
+    </term>
+    <term name="guest">
+      <single>հյուր</single>
+      <multiple>հյուրեր</multiple>
+    </term>
+    <term name="host">
+      <single>հաղորդավար</single>
+      <multiple>հաղորդավարներ</multiple>
+    </term>
+    <term name="illustrator">
+      <single>նկարազարդող</single>
+      <multiple>նկարազարդողներ</multiple>
+    </term>
+	<term name="interviewer"/> <!-- generally blank -->
+    <term name="narrator">
+      <single>մեկնաբան</single>
+      <multiple>մեկնաբաններ</multiple>
+    </term>
+    <term name="organizer">
+      <single>կազմակերպիչ</single>
+      <multiple>կազմակերպիչներ</multiple>
+    </term>
+	<term name="original-author"/> <!-- generally blank -->
+    <term name="performer">
+      <single>կատարող</single>
+      <multiple>կատարողներ</multiple>
+    </term>
+    <term name="producer">
+      <single>պրոդյուսեր</single>
+      <multiple>պրոդյուսերներ</multiple>
+    </term>
+	<term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
+    <term name="script-writer">
+      <single>սցենարի հեղինակ</single>
+      <multiple>սցենարի հեղինակներ</multiple>
+    </term>
+    <term name="series-creator">
+      <single>շարքի հիմնադիր</single>
+      <multiple>շարքի հիմնադիրներ</multiple>
+    </term>
+    <term name="translator">
+      <single>թարգմանիչ</single>
+      <multiple>թարգմանիչներ</multiple>
+    </term>
+
+    <!-- SHORT ROLE FORMS -->
+    <!-- Omitted roles:
+         author, chair, composer, container-author, curator, executive-producer, guest, host, interviewer, illustrator, organizer, original-author, performer, recipient, reviewed-author
+    -->
+	<!-- no plural for short role forms in armenian-->
+    <term name="collection-editor" form="short">շարքի խմբ.</term> <!-- no plural -->
+    <term name="compiler" form="short">կազմ.</term> <!-- no plural -->
+    <term name="contributor" form="short">համահեղ.</term> <!-- no plural -->
+    <term name="director" form="short">ռեժ.</term> <!-- no plural -->
+    <term name="editor" form="short">խմբ.</term> <!-- no plural -->
+    <term name="editor-translator" form="short">խմբ.-թարգմ.</term> <!-- no plural -->
+    <term name="editortranslator" form="short">խմբ. և&#160;թարգմ.</term> <!-- no plural -->
+    <term name="editorial-director" form="short">պատ. խմբ.</term> <!-- no plural -->
+    <term name="narrator" form="short">մեկնաբ.</term> <!-- no plural -->
+    <term name="producer" form="short">պրոդ.</term> <!-- no plural -->
+    <term name="script-writer" form="short">սց. հեղ.</term> <!-- no plural -->
+    <term name="series-creator" form="short">շարքի հիմն.</term> <!-- no plural -->
+    <term name="translator" form="short">թարգմ.</term> <!-- no plural -->
+
+    <!-- VERB ROLE FORMS -->
+	<!-- the armenian comma was preferred to avoid the flexed forms -->
+	<!-- Այս շարքում նախընտրված տարբերակները միշտ չէ որ ամենից գործածականն են (հմմտ.՝ խմբագրությամբ, աշխատասիրությամբ, թարգմանությամբ). նման ընտրությունը և բութի գործածությունը պայմանավորված է տերմիններին հաջորդող ազգանունները հնարավորինս ուղիղ ձևով պահելու ցանկությամբ -->
+    <term name="chair" form="verb">նախագահությամբ՝</term>
+    <term name="collection-editor" form="verb">շարքը խմբագրեց՝</term>
+    <term name="compiler" form="verb">կազմեց՝</term>
+    <term name="composer" form="verb">աշխատասիրեց՝</term>
+    <term name="container-author" form="verb">հեղինակեց՝</term>
+    <term name="contributor" form="verb">համահեղինակեց՝</term>
+    <term name="curator" form="verb">համակարգեց՝</term>
+    <term name="director" form="verb">ռեժիսուրան՝</term>
+    <term name="editor" form="verb">խմբագրեց՝</term>
+    <term name="editor-translator" form="verb">խմբագրեց-թարգմանեց՝</term>
+    <term name="editortranslator" form="verb">խմբագրեց և&#160;թարգմանեց՝</term>
+    <term name="editorial-director" form="verb">պատ. խմբագրությամբ՝</term>
+    <term name="executive-producer" form="verb">գործ. պրոդյուսերը՝</term>
+    <term name="guest" form="verb">հյուրը՝</term>
+    <term name="host" form="verb">հաղորդավարը՝</term>
+    <term name="illustrator" form="verb">նկարազարդումը՝</term>
+    <term name="interviewer" form="verb">հարցազրույցը՝</term>
+    <term name="narrator" form="verb">մեկնաբանը՝</term>
+    <term name="organizer" form="verb">կազմակերպեց՝</term>
+    <term name="original-author" form="verb">հեղինակեց՝</term>
+    <term name="performer" form="verb">կատարողը՝</term>
+    <term name="producer" form="verb">պրոդյուսերը՝</term>
+    <term name="recipient" form="verb">ի</term>
+    <term name="reviewed-author" form="verb"/>
+    <term name="script-writer" form="verb">սցենարն ըստ՝</term>
+    <term name="series-creator" form="verb">շարքը հիմնադրեց՝</term>
+    <term name="translator" form="verb">թարգմանեց՝</term>
+
+    <!-- SHORT VERB ROLE FORMS -->
+    <!-- Omitted roles:
+         author, chair, container-author, contributor, curator, guest, host, interviewer, illustrator, narrator, organizer, original-author, performer, recipient, reviewed-author, series-creator
+    -->
+    <term name="collection-editor" form="verb-short">շարքը խմբ.՝</term>
+    <term name="compiler" form="verb-short">կազմ.՝</term>
+    <term name="composer" form="verb-short">աշխատ.՝</term>
+    <term name="director" form="verb-short">ռեժ.՝</term>
+    <term name="editor" form="verb-short">խմբ.՝</term>
+    <term name="editor-translator" form="verb-short">խմբ.-թարգմ.՝</term>
+    <term name="editortranslator" form="verb-short">խմբ. և&#160;թարգմ.՝</term>
+    <term name="editorial-director" form="verb-short">պատ. խմբ.՝</term>
+    <term name="executive-producer" form="verb-short">գործ. պրոդ.՝</term>
+    <term name="producer" form="verb-short">պրոդ.՝</term>
+    <term name="script-writer" form="verb-short">սց. ըստ՝</term>
+    <term name="translator" form="verb-short">թարգմ.՝</term>
+
+    <!-- LONG MONTH FORMS -->
+    <term name="month-01">հունվար</term>
+    <term name="month-02">փետրվար</term>
+    <term name="month-03">մարտ</term>
+    <term name="month-04">ապրիլ</term>
+    <term name="month-05">մայիս</term>
+    <term name="month-06">հունիս</term>
+    <term name="month-07">հուլիս</term>
+    <term name="month-08">օգոստոս</term>
+    <term name="month-09">սեպտեմբեր</term>
+    <term name="month-10">հոկտեմբեր</term>
+    <term name="month-11">նոյեմբեր</term>
+    <term name="month-12">դեկտեմբեր</term>
+
+    <!-- SHORT MONTH FORMS -->
+    <term name="month-01" form="short">հնվ.</term>
+    <term name="month-02" form="short">փտր.</term>
+    <term name="month-03" form="short">մրտ.</term>
+    <term name="month-04" form="short">ապր.</term>
+    <term name="month-05" form="short">մյս.</term>
+    <term name="month-06" form="short">հնս.</term>
+    <term name="month-07" form="short">հլս.</term>
+    <term name="month-08" form="short">օգս.</term>
+    <term name="month-09" form="short">սպտ.</term>
+    <term name="month-10" form="short">հկտ.</term>
+    <term name="month-11" form="short">նյմ.</term>
+    <term name="month-12" form="short">դկտ.</term>
+
+    <!-- SEASONS -->
+    <term name="season-01">գարուն</term>
+    <term name="season-02">ամառ</term>
+    <term name="season-03">աշուն</term>
+    <term name="season-04">ձմեռ</term>
+  </terms>
+</locale>

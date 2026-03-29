@@ -88,6 +88,7 @@ onMounted(async () => {
   md2html(fileContents, {
     referenceSectionTitle: trans('References'),
     onCitation: window.getCitationCallback(library),
+    sanitizeHTML: true,
     onBibliography: async (citations) => {
       return await ipcRenderer.invoke('citeproc-provider', {
         command: 'get-bibliography',

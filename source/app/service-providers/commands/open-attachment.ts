@@ -20,13 +20,22 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import got from 'got'
 import { shell } from 'electron'
-import pdfSorter from '@common/util/sort-by-pdf'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import path from 'path'
 import type { MDFileDescriptor } from '@dts/common/fsal'
 import { showNativeNotification } from '@common/util/show-notification'
 import type { AppServiceContainer } from 'source/app/app-service-container'
+
+/**
+ * Describes an error returned from the JSON RPC API from BetterBibTex.
+ */
+class JSONRPCAPIError extends Error {}
+
+/**
+ * Describes an error when the JSON RPC API returns an empty result set.
+ */
+class NoResultsError extends Error {}
 
 // This function overwrites the getBibliographyForDescriptor function to ensure
 // the library is always absolute. We have to do it this ridiculously since the
@@ -88,7 +97,7 @@ export default class OpenAttachment extends ZettlrCommand {
       // NOTE: We have replaced localhost with 127.0.0.1 since at some point
       // either got or Electron stopped resolving localhost there, resulting in
       // ECONNREFUSED errors. I have no idea how that happened, but it works now.
-      const res: any = await got.post('http://127.0.0.1:23119/better-bibtex/json-rpc', {
+      const res = await got.post('http://127.0.0.1:23119/better-bibtex/json-rpc', {
         json: {
           jsonrpc: '2.0',
           method: 'item.attachments',
@@ -102,27 +111,59 @@ export default class OpenAttachment extends ZettlrCommand {
         }
       }).json()
 
-      if (res.result.length === 0) {
-        appearsToHaveNoAttachments = true
+      if (typeof res !== 'object') {
+        throw new JSONRPCAPIError(`Result object had a wrong type: ${typeof res}`)
+      }
+      if (res === null) {
+        throw new JSONRPCAPIError('Result was null')
       }
 
-      // Now map the result set. It will contain ALL attachments.
-      let allAttachments: string[] = res.result.map((elem: any) => elem.path)
-      // Sort them with PDFs on top
-      allAttachments = allAttachments.sort(pdfSorter)
-      const potentialError = await shell.openPath(allAttachments[0])
+      if ('error' in res) {
+        const { message } = res.error as { message: string, code: number }
+        throw new JSONRPCAPIError(message)
+      }
+
+      if (!('result' in res) || !Array.isArray(res.result) || !res.result.every(r => 'path' in r && 'open' in r)) {
+        throw new JSONRPCAPIError('Result was malformed: `result` was either not present or had an unexpected structure.')
+      }
+
+      const result = res.result as Array<{ open: string, path: string }>
+
+      // First, filter by PDF files, then map to the path strings.
+      const pdfAttachments = result
+        .filter(elem => elem.path.toLowerCase().endsWith('.pdf'))
+        .map(elem => elem.path)
+
+      if (pdfAttachments.length === 0) {
+        throw new NoResultsError('Citation key does not have any PDF attachments.')
+      } else if (pdfAttachments.length > 1) {
+        // Warn the user so that they can see in the logs what's going on if the
+        // attachment opener consistently opens the wrong one.
+        this._app.log.warning('There was more than one PDF attachment. Opening only the first one.', pdfAttachments)
+      }
+
+      const potentialError = await shell.openPath(pdfAttachments[0])
       if (potentialError !== '') {
         throw new Error(potentialError)
       }
       return true
-    } catch (err: any) {
-      if (appearsToHaveNoAttachments) {
-        // Better error message
-        let msg = trans('The reference with key %s does not appear to have attachments.', arg.citekey)
+    } catch (err: unknown) {
+      if (appearsToHaveNoAttachments || err instanceof NoResultsError) {
+        // Citekey appears not to have any attachments
+        const msg = trans('The reference with key %s does not appear to have attachments.', arg.citekey)
         this._app.log.info(msg)
         showNativeNotification(msg)
+      } else if (err instanceof JSONRPCAPIError) {
+        // The BBT JSON RPC API has reported an error or gave us malformed output
+        this._app.log.error(`Error fetching attachments for ${arg.citekey}: ${err.message}`, err)
+        showNativeNotification(trans('Could not open attachment for key %s. Check the logs for more information.', arg.citekey))
+      } else if (err instanceof Error) {
+        // This could be an error in the fetching stage
+        this._app.log.error(`Could not open attachment: ${err.message}`, err)
+        showNativeNotification(trans('Could not open attachment. Is Zotero running?'))
       } else {
-        this._app.log.error(`Could not open attachment: ${err.message as string}`, err)
+        // Something else went wrong
+        this._app.log.error(`Unknown error when opening attachment for ${arg.citekey}`)
         showNativeNotification(trans('Could not open attachment. Is Zotero running?'))
       }
       return false

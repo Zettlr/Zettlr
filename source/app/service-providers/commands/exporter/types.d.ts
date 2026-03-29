@@ -123,12 +123,12 @@ export interface ExporterAPI {
    * Retrieves a user-customised defaults file, adds the given properties and
    * writes the file to disk. Returns the absolute path to the file.
    *
-   * @param   {string}               filename    The filename for which the defaults apply
-   * @param   {Record<string, any>}  properties  Any additional properties to add to the defaults.
+   * @param   {string}                   filename    The filename for which the defaults apply
+   * @param   {Record<string, unknown>}  properties  Any additional properties to add to the defaults.
    *
-   * @return  {Promise<string>}                  Resolves with an absolute path to the written file.
+   * @return  {Promise<string>}                      Resolves with an absolute path to the written file.
    */
-  writeDefaults: (writer: string, properties: Record<string, any> = {}) => Promise<string>
+  writeDefaults: (writer: string, properties: Record<string, unknown> = {}) => Promise<string>
   listDefaults: () => Promise<PandocProfileMetadata[]>
 }
 

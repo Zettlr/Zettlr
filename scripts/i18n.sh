@@ -59,7 +59,7 @@ for file in *.po; do
 
     # NOTE the --backup=off flag, since we're using git-svn to backup old files
     # NOTE the --no-fuzzy-matching flag that prevents inaccurate translations
-    msgmerge --update $file --backup=off --no-fuzzy-matching ../i18n.pot
+    msgmerge --update --backup=off --no-fuzzy-matching $file ../i18n.pot
 done
 
 echo "Finished generating i18n files!"

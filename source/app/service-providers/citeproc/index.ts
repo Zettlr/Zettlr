@@ -198,8 +198,8 @@ export default class CiteprocProvider extends ProviderContract {
       // if the database cannot be loaded)
       try {
         await this.loadDatabase(database)
-      } catch (err: any) {
-        this._logger.error(`[Citeproc Provider] Could not load database ${String(database)}: ${err.message as string}`, err)
+      } catch (err: unknown) {
+        this._logger.error(`[Citeproc Provider] Could not load database ${String(database)}: ${err instanceof Error ? err.message : 'unknown error'}`, err)
         // Proper early return based on the command
         return command === 'get-items' ? [] : undefined
       }
@@ -253,8 +253,8 @@ export default class CiteprocProvider extends ProviderContract {
 
     try {
       await this.loadDatabase(this.mainLibrary)
-    } catch (err: any) {
-      const msg = String(err.message)
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'unknown error'
       this._logger.error(`[Citeproc Provider] Could not load main library: ${msg}`, err)
       this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg, msg)
     }
@@ -505,9 +505,9 @@ export default class CiteprocProvider extends ProviderContract {
         const rest = this.engine.makeCitationCluster([citation])
         return author + ' ' + rest
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       const msg = citations.map(elem => elem.id).join(', ')
-      this._logger.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(err)}`, err)
+      this._logger.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return undefined
     }
   }
@@ -535,8 +535,8 @@ export default class CiteprocProvider extends ProviderContract {
       const sanitizedCitekeys = this.filterNonExistingCitekeys(citekeys)
       this.engine.updateItems(sanitizedCitekeys)
       return this.engine.makeBibliography()
-    } catch (err: any) {
-      this._logger.error(`[citeproc] makeBibliography: Could not create bibliography: ${String(err)}`, err)
+    } catch (err: unknown) {
+      this._logger.error(`[citeproc] makeBibliography: Could not create bibliography: ${err instanceof Error ? err.message : 'unknown error'}`, err)
       return undefined // Something went wrong (e.g. falsy items in the registry)
     }
   }

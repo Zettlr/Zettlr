@@ -18,9 +18,10 @@ import { type Ref, ref, watch, computed } from 'vue'
 import { useConfigStore } from './config'
 import type { OtherFileDescriptor, AnyDescriptor } from 'source/types/common/fsal'
 import { useDocumentTreeStore } from '.'
-import { isAbsolutePath, pathDirname, pathExtname, resolvePath } from 'source/common/util/renderer-path-polyfill'
+import { isAbsolutePath, pathDirname, resolvePath } from 'source/common/util/renderer-path-polyfill'
 import { trans } from 'source/common/i18n-renderer'
-import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import { hasImageExt, hasDataExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt, hasExt } from 'source/common/util/file-extention-checks'
+import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload } from 'source/app/service-providers/fsal'
 
 const ipcRenderer = window.ipc
@@ -59,7 +60,7 @@ async function getDescriptorFor (absPath: string|string[]): Promise<AnyDescripto
  * @param   {string}                    absPath  The path to read in
  *
  * @return  {Promise<AnyDescriptor>[]}           The descriptors.
- * 
+ *
  * @throws if the path is not a directory
  */
 async function readDirectory (absPath: string): Promise<AnyDescriptor[]> {
@@ -146,6 +147,13 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   })
 
   watch(openPaths, async (value) => {
+    // Whenever openPaths changes, also update the rootDescriptors to reflect a
+    // potentially changed sorting.
+    rootDescriptors.value = openPaths.value
+      .filter(rootPath => descriptorMap.value.has(rootPath))
+      .map(rootPath => descriptorMap.value.get(rootPath))
+      .filter(root => root !== undefined)
+
     // Retrieve all new paths to load.
     const pathsToLoad: string[] = []
     for (const newPath of value) {
@@ -194,7 +202,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     getDescriptorFor(descriptorsToFetch)
       .then(descriptors => descriptors.map(d => descriptorMap.value.set(d.path, d)))
       .catch(err => console.error('Could not fetch new descriptors from main!', err))
-    
+
     // Second, check which of the descriptors are no longer loaded
     for (const existingDescriptor of descriptorMap.value.keys()) {
       if (!flatMap.has(existingDescriptor)) {
@@ -234,17 +242,21 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const showOfficeFiles = files.msoffice.showInSidebar
     const showOpenOffice = files.openOffice.showInSidebar
     const showPDF = files.pdf.showInSidebar
+    const showDotFiles = files.dotFiles.showInSidebar
 
     // Quick helper function that tests whether the provided attachment should be
     // shown in the sidebar. This essentially tests the file's extension and
     // returns true if it shuld shown in the sidebar.
     const shouldShowAttachment = (filePath: string): boolean => {
-      return attachmentExtensions.includes(pathExtname(filePath).toLowerCase()) ||
+      // We have to check for hidden files first so they are not
+      // included if they end in one of the accepted extensions
+      return (showDotFiles || !isDotFile(filePath)) &&
+        (hasExt(filePath, attachmentExtensions) ||
         (showImages && hasImageExt(filePath)) ||
         (showDataFiles && hasDataExt(filePath)) ||
         (showOfficeFiles && hasMSOfficeExt(filePath)) ||
         (showOpenOffice && hasOpenOfficeExt(filePath)) ||
-        (showPDF && hasPDFExt(filePath))
+        (showPDF && hasPDFExt(filePath)))
     }
 
     const children = await readDirectory(descriptor.path)

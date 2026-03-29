@@ -47,17 +47,32 @@ export interface FSMetaInfo {
 
 export type SortMethod = 'name-up'|'name-down'|'time-up'|'time-down'
 
+export interface DirectorySettings {
+  /**
+   * Describes the sorting that should be applied to the directory
+   */
+  sorting: SortMethod
+  /**
+   * Can hold an optional custom icon for the directory
+   */
+  icon: string|null
+  /**
+   * Holds the project settings if it's a project.
+   */
+  project: ProjectSettings|null
+  /**
+   * Holds an optional color for the directory.
+   */
+  color: string|null
+}
+
 /**
  * The FSAL directory descriptor
  */
 export interface DirDescriptor extends FSMetaInfo {
   // Settings are properties that must be persisted separately in a
   // .ztr-directory file, since they are not bound to the directory.
-  settings: {
-    sorting: SortMethod
-    icon: string|null
-    project: ProjectSettings|null
-  }
+  settings: DirectorySettings
   type: 'directory'
   isGitRepository: boolean
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found

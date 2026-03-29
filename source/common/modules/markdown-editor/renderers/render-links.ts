@@ -16,10 +16,12 @@ import { type EditorView, type DecorationSet, ViewPlugin, type ViewUpdate, Decor
 import type { RangeSet, Range } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 import { rangeInSelection } from '../util/range-in-selection'
+import { configField } from '../util/configuration'
 
 function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
   const ranges: Array<Range<Decoration>> = []
   const hiddenDeco = Decoration.replace({})
+  const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
 
   for (const { from, to } of view.visibleRanges) {
     syntaxTree(view.state).iterate({
@@ -31,7 +33,7 @@ function hideLinkMarkers (view: EditorView): RangeSet<Decoration> {
         }
 
         // Do not hide any characters if a selection is inside here
-        if (rangeInSelection(view.state.selection, node.from, node.to, true)) {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
           return false
         }
 

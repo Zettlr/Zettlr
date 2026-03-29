@@ -23,6 +23,7 @@
         "hi":  "hi-IN",
         "hr":  "hr-HR",
         "hu":  "hu-HU",
+        "hy":  "hy-AM",
         "id":  "id-ID",
         "is":  "is-IS",
         "it":  "it-IT",
@@ -169,6 +170,10 @@
         "hu-HU": [
             "Magyar",
             "Hungarian"
+        ],
+        "hy-AM": [
+            "Հայերեն",
+            "Armenian"
         ],
         "id-ID": [
             "Bahasa Indonesia",

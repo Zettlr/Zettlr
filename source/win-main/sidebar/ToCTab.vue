@@ -84,7 +84,7 @@ watch(activeFile, async (newValue) => {
   if (newValue === undefined) {
     activeFileDescriptor.value = null
   } else {
-    const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
+    const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('fsal', {
       command: 'get-descriptor',
       payload: newValue.path
     })
@@ -142,7 +142,11 @@ function updateToCHTML () {
 
   for (const entry of tableOfContents.value) {
     promises.push(
-      md2html(entry.text, { onCitation: window.getCitationCallback(library.value), zknLinkFormat: configStore.config.zkn.linkFormat })
+      md2html(entry.text, {
+        onCitation: window.getCitationCallback(library.value),
+        zknLinkFormat: configStore.config.zkn.linkFormat,
+        sanitizeHTML: true
+      })
     )
   }
 

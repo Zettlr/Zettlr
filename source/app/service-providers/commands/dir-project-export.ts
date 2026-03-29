@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { makeExport } from './exporter'
+import { getCustomProfiles, makeExport } from './exporter'
 import { shell, dialog } from 'electron'
 import type { ExporterOptions } from './exporter/types'
 import type LogProvider from '@providers/log'
@@ -93,7 +93,10 @@ export default class DirProjectExport extends ZettlrCommand {
       }) // Don't return, because we still can export
     }
 
-    const allDefaults = await this._app.assets.listDefaults()
+    // We have to fetch both the regular as well as the custom defaults profiles.
+    const regularDefaults = await this._app.assets.listDefaults()
+    const customDefaults = getCustomProfiles()
+    const allDefaults = regularDefaults.concat(customDefaults)
 
     const task = this._app.lrt.registerTask(trans('Exporting project "%s"', config.title), trans('Starting export…'))
 
@@ -159,14 +162,15 @@ export default class DirProjectExport extends ZettlrCommand {
           throw new Error(`Export failed: ${result.stderr.join('\n')}`)
         }
         this._app.log.info(`[Project] Exported ${dir.name} as ${result.targetFile}`)
-      } catch (err: any) {
-        nErrors++
-        this._app.log.error(String(err.message), err)
-        this._app.windows.showErrorMessage(
-          ('title' in err) ? String(err.title) : String(err.message),
-          String(err.message),
-          ('additionalInfo' in err) ? String(err.additionalInfo) : ''
-        )
+      } catch (err: unknown) {
+        this._app.log.error(err instanceof Error ? err.message : 'unknown error', err)
+        if (err instanceof Error) {
+          this._app.windows.showErrorMessage(
+            ('title' in err) ? String(err.title) : err.message,
+            err.message,
+            ('additionalInfo' in err) ? String(err.additionalInfo) : ''
+          )
+        }
       }
     }
 

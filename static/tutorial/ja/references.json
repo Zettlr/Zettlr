@@ -1,0 +1,29 @@
+[
+  {
+    "id": "Marx1962",
+    "author": [
+      {
+        "family": "Marx",
+        "given": "Karl"
+      }
+    ],
+    "collection-title": "Marx Engels Werke",
+    "edition": "4",
+    "event-place": "Berlin",
+    "issued": {
+      "date-parts": [
+        [ 1962 ]
+      ]
+    },
+    "language": "de",
+    "number-of-pages": "956",
+    "number-of-volumes": "43",
+    "publisher": "Dietz",
+    "publisher-place": "Berlin",
+    "source": "Zotero",
+    "title": "資本論 政治経済学批判 第1巻：資本の生産過程",
+    "title-short": "資本論 第1巻",
+    "type": "book",
+    "volume": "23"
+  }
+]

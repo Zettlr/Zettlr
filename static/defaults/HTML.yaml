@@ -31,7 +31,7 @@ default-image-extension: .jpg
 highlight-style: pygments
 html-math-method:
   method: mathjax
-  url: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  url: https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js
 tab-stop: 4
 preserve-tabs: false
 html-q-tags: false

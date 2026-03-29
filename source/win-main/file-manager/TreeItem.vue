@@ -4,10 +4,11 @@
       v-bind:class="{
         'tree-item': true,
         [item.type]: true,
-        'selected': isSelected,
-        'active': activeItem === item.path,
-        'project': item.type === 'directory' && item.settings.project != null,
-        'root': isRoot
+        [item.type === 'directory' ? item.settings.color ?? '' : '']: true,
+        selected: isSelected,
+        active: activeItem === item.path,
+        project: item.type === 'directory' && item.settings.project != null,
+        root: isRoot
       }"
       v-bind:data-id="item.type === 'file' ? item.id : ''"
       v-bind:data-path="item.path"
@@ -67,7 +68,7 @@
         }"
         role="button"
         v-bind:aria-label="`Select ${item.name}`"
-        v-bind:draggable="!isRoot"
+        v-bind:draggable="!isRoot && !nameEditing"
         v-bind:title="item.path"
         v-on:dragstart="beginDragging"
         v-on:drag="onDragHandler"
@@ -173,9 +174,19 @@ import type { AnyDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathBasename, relativePath } from '@common/util/renderer-path-polyfill'
 import { useItemComposable } from './util/item-composable'
-import { hasCodeExt, hasDataExt, hasImageExt, hasMarkdownExt, hasMSOfficeExt, hasOpenOfficeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
+import {
+  hasDataExt,
+  hasImageExt,
+  hasMSOfficeExt,
+  hasOpenOfficeExt,
+  hasPDFExt,
+  hasExt,
+  hasMdOrCodeExt
+} from 'source/common/util/file-extention-checks'
+import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
+import type { WritingTarget } from 'source/app/service-providers/targets'
 
 const ipcRenderer = window.ipc
 
@@ -235,6 +246,11 @@ function sel (event: MouseEvent): void {
 
 const shouldBeCollapsed = computed<boolean>(() => props.filterResults.length === 0 && collapsed.value)
 
+const showDotFiles = ref<boolean>(configStore.config.files.dotFiles.showInFilemanager)
+configStore.$subscribe((_mutation, state) => {
+  showDotFiles.value = state.config.files.dotFiles.showInFilemanager
+})
+
 /**
  * The secondary icon's shape -- this is the visually FIRST icon to be
  * displayed. Displays either an angle (for directories with children), or
@@ -251,6 +267,8 @@ const secondaryIcon = computed(() => filteredChildren.value.length > 0 ? 'angle'
  * @return  {string}  The icon name (as in: cds-shape)
  */
 const primaryIcon = computed(() => {
+  const { files, attachmentExtensions } = configStore.config
+
   if (props.item.type === 'file' && writingTarget.value !== undefined) {
     return 'writing-target'
   } else if (props.item.type === 'file') {
@@ -258,21 +276,24 @@ const primaryIcon = computed(() => {
   } else if (props.item.type === 'code') {
     return 'code'
   } else if (props.item.type === 'other') {
-    // const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
     if (hasImageExt(props.item.path)) {
       return 'image'
     } else if (hasPDFExt(props.item.path)) {
       return 'pdf-file'
     } else if (hasMSOfficeExt(props.item.path)) {
-      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file'
     } else if (hasOpenOfficeExt(props.item.path)) {
-      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'file'
     } else if (hasDataExt(props.item.path)) {
-      return 'file' // fileExtIcon.replace('EXT', props.obj.ext.slice(1, 4))
+      return 'code'
+    } else if (hasExt(props.item.path, attachmentExtensions)) {
+      return 'file-group'
     } else {
       // Generic other file (this should not happen as they get filtered out before)
-      console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
-      return ''
+      if (!files.dotFiles.showInFilemanager) {
+        console.warn(`Encountered a file with extension ${props.item.ext}. These should've been filtered out before reaching this point!`)
+      }
+      return 'unknown-status'
     }
   } else if (props.item.type === 'directory' && props.item.dirNotFoundFlag === true) {
     return 'disconnect'
@@ -299,7 +320,7 @@ const writingTarget = computed<undefined|{ path: string, mode: 'words'|'chars', 
   if (props.item.type !== 'file') {
     return undefined
   } else {
-    return windowStateStore.writingTargets.find((x: any) => x.path === props.item.path)
+    return windowStateStore.writingTargets.find((x: WritingTarget) => x.path === props.item.path)
   }
 })
 
@@ -339,7 +360,8 @@ const filteredChildren = computed(() => {
     return []
   }
 
-  const { files } = configStore.config
+  const { files, attachmentExtensions } = configStore.config
+
   return children.value
     // Ensure we only consider filtered files
     .filter(child => {
@@ -352,13 +374,19 @@ const filteredChildren = computed(() => {
     // Filter based on our rules
     .filter(child => {
       if (!combined.value) {
-        return child.type === 'directory'
+        return child.type === 'directory' && (files.dotFiles.showInFilemanager || !isDotFile(child.name))
       }
 
       // Filter files based on our settings
       if (child.type === 'directory') {
-        return true
-      } if (hasImageExt(child.path)) {
+        return files.dotFiles.showInFilemanager || !isDotFile(child.name)
+      }
+
+      // We have to check for hidden files first so they are not
+      // included if they end in one of the accepted extensions
+      if (isDotFile(child.name)) {
+        return files.dotFiles.showInFilemanager
+      } else if (hasImageExt(child.path)) {
         return files.images.showInFilemanager
       } else if (hasPDFExt(child.path)) {
         return files.pdf.showInFilemanager
@@ -368,10 +396,10 @@ const filteredChildren = computed(() => {
         return files.openOffice.showInFilemanager
       } else if (hasDataExt(child.path)) {
         return files.dataFiles.showInFilemanager
-      } else if (hasMarkdownExt(child.path) || hasCodeExt(child.path)) {
+      } else if (hasMdOrCodeExt(child.path)) {
         return true
       } else {
-        return false // Any other "other" file should be excluded
+        return hasExt(child.path, attachmentExtensions) // Any other "other" file should be excluded
       }
     })
 })
@@ -448,8 +476,14 @@ const isSelected = computed(() => {
   }
 })
 
-watch(selectedFile, uncollapseIfApplicable)
-watch(selectedDir, uncollapseIfApplicable)
+// We need to reset the scroll position when exiting editing mode
+// so that the filename is displayed within the element correctly.
+// It would otherwise be offset to the left edge of the container.
+watch(nameEditing, (isEditing) => {
+  if (!isEditing && displayText.value !== null) {
+    displayText.value.scrollLeft = 0
+  }
+})
 
 watch(operationType, (newVal) => {
   if (newVal !== undefined) {
@@ -481,9 +515,14 @@ watch(toRef(props, 'item'), function (value) {
   updateObject(value)
 })
 
+watch(showDotFiles, async function () {
+  if (props.item.type === 'directory') {
+    await fetchChildren()
+  }
+})
+
 onMounted(async () => {
   if (props.item.type === 'directory') {
-    uncollapseIfApplicable()
     ipcRenderer.on('shortcut', (_, message) => {
       if (message === 'new-dir') {
         operationType.value = 'createDir'
@@ -497,7 +536,7 @@ onMounted(async () => {
     const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
       ? payload.path
       : (payload as FSALEventPayloadChange).descriptor.path
-    
+
     // Figure out if this event relates to us, which is only the case if the
     // affected path is a direct descendant of this tree item. If it's itself or
     // a parent path, another tree item takes over. If it's a nested dependent,
@@ -528,25 +567,6 @@ onMounted(async () => {
 
 async function fetchChildren (): Promise<void> {
   children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
-}
-
-function uncollapseIfApplicable (): void {
-  if (!collapsed.value) {
-    return // We are already open, no need to do anything.
-  }
-
-  const filePath = selectedFile.value?.path ?? ''
-  const dirPath = selectedDir.value ?? ''
-
-  // Open the tree, if the selected file is contained in this dir somewhere
-  if (filePath.startsWith(props.item.path)) {
-    windowStateStore.uncollapsedDirectories.push(props.item.path)
-  }
-
-  // If a directory within this has been selected, open up, lads!
-  if (dirPath.startsWith(props.item.path)) {
-    windowStateStore.uncollapsedDirectories.push(props.item.path)
-  }
 }
 
 /**
@@ -583,7 +603,7 @@ function enterDragging (_event: DragEvent): void {
   uncollapseTimeout.value = setTimeout(() => {
     windowStateStore.uncollapsedDirectories.push(props.item.path)
     uncollapseTimeout.value = undefined
-  }, 2000)
+  }, 1000)
 }
 
 /**
@@ -711,22 +731,20 @@ body {
   div.tree-item-container {
     font-size: 13px;
 
-    // These inputs should be more or less "invisible"
-    input.filename-input {
-      border: none;
-      color: inherit;
-      font-family: inherit;
-      font-size: inherit;
-      background-color: transparent;
-      width: auto;
-      field-sizing: content;
-      padding: 0;
-    }
-
     .tree-item {
       white-space: nowrap;
       display: flex;
       margin: 8px 0px;
+
+      // Available directory colors (the colors are CSS variables specified
+      // in WindowChrome.vue and string-values defined in PopoverDirProps.vue)
+      &.blue { color: var(--accent-blue); }
+      &.purple { color: var(--accent-purple); }
+      &.rose { color: var(--accent-rose); }
+      &.red { color: var(--accent-red); }
+      &.orange { color: var(--accent-orange); }
+      &.yellow { color: var(--accent-yellow); }
+      &.green { color: var(--accent-green); }
 
       .item-icon, .toggle-icon {
         display: flex;
@@ -736,12 +754,38 @@ body {
         flex-shrink: 0; // Prevent shrinking; only the display text should
       }
 
+      // These inputs should be more or less "invisible"
+      input.filename-input {
+        border: none;
+        border-radius: 0;
+        font-family: inherit;
+        font-size: inherit;
+        background-color: inherit;
+        width: auto;
+        field-sizing: content;
+        padding: 1px 3px;
+      }
+
       .display-text {
         padding: 3px 5px;
         overflow: hidden;
         text-overflow: ellipsis;
         margin-right: 8px;
+      }
+      // Here, the padding has to be reset in order for
+      // the padding around the input element to not change
+      // the overall size of the display element.
+      .display-text:has(input.filename-input) {
+        padding: 2px 2px;
 
+        // This enables selecting and dragging to scroll
+        overflow: auto;
+        text-overflow: unset;
+
+        // Disable scrollbars
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       &.project {
@@ -780,6 +824,10 @@ body.darwin {
 
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
+
+    input.filename-input {
+      border-radius: 4px;
+    }
 
     .display-text {
       border-radius: 4px;

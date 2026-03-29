@@ -69,6 +69,8 @@ export interface ConfigOptions {
   alwaysReloadFiles: boolean
   muteLines: boolean
 
+  // NOTE to everyone: These options (and possibly others) that pertain to the
+  // file manager should slowly be migrated into the fileManager group below.
   fileManagerMode: 'thin'|'combined'|'expanded'
   fileManagerShowFiles: boolean
   fileManagerShowWorkspaces: boolean
@@ -77,6 +79,14 @@ export interface ConfigOptions {
   sorting: 'natural'|'ascii'
   sortFoldersFirst: boolean
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
+
+  // NOTE to everyone: The various filemanager options (see above) should over
+  // time be migrated into this group.
+  fileManager: {
+    twoStepCollapseWorkspaces: boolean
+    // If this is true, the config will never attempt to auto-sort workspaces.
+    sortWorkspacesManually: boolean
+  }
 
   newFileNamePattern: string
   newFileDontPrompt: boolean
@@ -132,11 +142,13 @@ export interface ConfigOptions {
     enableTableHelper: boolean
     indentUnit: number
     indentWithTabs: boolean
+    alwaysIndentLineOnTab: boolean
     fontSize: number
     countChars: boolean
     inputMode: 'default'|'vim'|'emacs'
     boldFormatting: '**'|'__'
     italicFormatting: '_'|'*'
+    highlightFormatting: 'span'|'=='
     readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
     lint: {
       markdown: boolean
@@ -171,6 +183,7 @@ export interface ConfigOptions {
     theme: MarkdownTheme
     hideToolbarInDistractionFree: boolean
     markdownFileExtensions: boolean
+    previewModeShowSyntaxWhenCursorIsAdjacent: boolean
     imageWidth: number
     imageHeight: number
     renderingMode: 'preview'|'raw'
@@ -197,6 +210,7 @@ export interface ConfigOptions {
     msoffice: FileTypeSettings<boolean, boolean, 'system'>
     openOffice: FileTypeSettings<boolean, boolean, 'system'>
     dataFiles: FileTypeSettings<boolean, boolean, 'system'>
+    dotFiles: FileTypeSettings<boolean, boolean>
   }
   watchdog: {
     activatePolling: boolean
@@ -226,6 +240,7 @@ export interface ConfigOptions {
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean
+    showPandocDivSpanButton: boolean
     showMarkdownCommentButton: boolean
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean
@@ -297,6 +312,10 @@ export function getConfigTemplate (): ConfigOptions {
     fileManagerShowFiles: true, // Allow users to persistently collapse or uncollapse the files and workspaces sections.
     fileManagerShowWorkspaces: true,
     fileNameDisplay: 'title+heading', // Controls what info is displayed as filenames
+    fileManager: {
+      twoStepCollapseWorkspaces: false,
+      sortWorkspacesManually: false // By default, let Zettlr sort workspaces
+    },
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
@@ -336,11 +355,13 @@ export function getConfigTemplate (): ConfigOptions {
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       indentWithTabs: false,
+      alwaysIndentLineOnTab: false, // Whether `Tab` always indents the current line
       fontSize: 18, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
+      highlightFormatting: '==', // Can be 'span' or ==
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
       showStatusbar: true,
       showFormattingToolbar: true,
@@ -437,6 +458,7 @@ export function getConfigTemplate (): ConfigOptions {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
+      previewModeShowSyntaxWhenCursorIsAdjacent: true,
       imageWidth: 100, // Maximum preview image width
       imageHeight: 50, // Maximum preview image height
       renderingMode: 'preview',
@@ -457,7 +479,8 @@ export function getConfigTemplate (): ConfigOptions {
       pdf: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       msoffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
       openOffice: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
-      dataFiles: { showInFilemanager: false, showInSidebar: true, openWith: 'system' }
+      dataFiles: { showInFilemanager: false, showInSidebar: true, openWith: 'system' },
+      dotFiles: { showInFilemanager: false, showInSidebar: false, openWith: 'system' }
     },
     // Language
     selectedDicts: [], // By default no spell checking is active to speed up first start.
@@ -481,6 +504,7 @@ export function getConfigTemplate (): ConfigOptions {
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,
+      showPandocDivSpanButton: true,
       showMarkdownCommentButton: true,
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,

@@ -170,12 +170,12 @@ export class DTLeaf {
    *
    * @return  {Promise<DTLeaf>}                  Resolves with the new leaf
    */
-  static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTLeaf {
-    if (typeof nodeData !== 'object') {
-      throw new Error('Could not instantiate DTLeaf: Provided JSON was not an object.')
+  static fromJSON (parent: DocumentTree|DTBranch, nodeData: unknown): DTLeaf {
+    if (typeof nodeData !== 'object' || nodeData === null || Array.isArray(nodeData)) {
+      throw new Error('Could not instantiate DTLeaf: Provided JSON was not a valid object.')
     }
 
-    const { id, openFiles } = nodeData
+    const { id, openFiles, activeFile } = nodeData as Partial<LeafNodeJSON>
 
     if (typeof id !== 'string') {
       throw new Error(`Could not instantiate DTLeaf: ID was invalid: ${String(id)}`)
@@ -209,8 +209,8 @@ export class DTLeaf {
     }
 
     // Revitalize the active File pointer
-    const activeFile = leaf.tabMan.openFiles.find(e => e.path === nodeData.activeFile?.path) ?? null
-    leaf.tabMan.activeFile = activeFile
+    const tabManActiveFile = leaf.tabMan.openFiles.find(e => e.path === activeFile?.path) ?? null
+    leaf.tabMan.activeFile = tabManActiveFile
 
     // If the last active file can't be restored, make the first one of this
     // leaf active so that the editor shows something.

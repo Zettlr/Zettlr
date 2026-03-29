@@ -5,7 +5,7 @@
     "reader": {
       "type": "string",
       "description": "The Pandoc input format",
-      "pattern": "^[a-z_]+(?:[+-][a-z_]+)*$"
+      "pattern": "^[a-z0-9_]+(?:[+-][a-z_]+)*$"
     },
     "writer": {
       "type": "string",

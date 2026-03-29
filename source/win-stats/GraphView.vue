@@ -518,7 +518,7 @@ async function buildGraph (): Promise<void> {
     buildProgress.value.currentFile += 1
     // We have to specifically add the source, since isolates will have 0
     // targets, and hence we cannot rely on the Graph adding these vertices
-    const sourceDescriptor: MDFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: sourcePath })
+    const sourceDescriptor: MDFileDescriptor|undefined = await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: sourcePath })
     if (sourceDescriptor === undefined) {
       console.warn(`Could not find descriptor for ${sourcePath}. Not adding to graph.`)
       continue

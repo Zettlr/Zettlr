@@ -77,15 +77,21 @@ export function parseReaderWriter (readerWriter: string): PandocReaderWriter {
     return { name: readerWriter, enabledExtensions: [], disabledExtensions: [] }
   }
 
-  const [ name, ...extensions ] = readerWriter.split(/[+-]/g)
-  const enabledExtensions = extensions
-    .filter(e => e.startsWith('+'))
-    .map(e => e.slice(1))
-  const disabledExtensions = extensions
-    .filter(e => e.startsWith('-'))
-    .map(e => e.slice(1))
+  const parsed: PandocReaderWriter = {
+    name: readerWriter.split(/[+-]/g)[0],
+    enabledExtensions: [],
+    disabledExtensions: []
+  }
 
-  return { name, enabledExtensions, disabledExtensions }
+  for (const match of readerWriter.matchAll(/([+-][a-z0-9_]+)/gi)) {
+    if (match[0].startsWith('+')) {
+      parsed.enabledExtensions.push(match[0].substring(1))
+    } else if (match[0].startsWith('-')) {
+      parsed.disabledExtensions.push(match[0].substring(1))
+    }
+  }
+
+  return parsed
 }
 
 /**

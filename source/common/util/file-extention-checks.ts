@@ -14,14 +14,28 @@
  *
  * END HEADER
  */
+import { DocumentType } from '@dts/common/documents'
 
 export const MD_EXT = [ '.md', '.rmd', '.qmd', '.markdown', '.txt', '.mdx', '.mkd' ]
-export const CODE_EXT = [ '.tex', '.json', '.yaml', '.yml' ]
+export const LATEX_EXT = [ '.tex', '.latex' ]
+export const YAML_EXT = [ '.yaml', '.yml' ]
+export const JSON_EXT = ['.json']
+export const CODE_EXT = [ ...LATEX_EXT, ...YAML_EXT, ...JSON_EXT, '.dic' ]
 export const IMG_EXT = [ '.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.bmp', '.tiff' ]
 export const PDF_EXT = ['.pdf']
 export const MS_OFFICE_EXT = [ '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx' ]
 export const OPEN_OFFICE_EXT = [ '.odt', '.ods', '.odp' ]
 export const DATA_EXT = [ '.csv', '.tsv', '.sav', '.zsav' ]
+
+const ALL_EXT = [
+  ...MD_EXT,
+  ...CODE_EXT,
+  ...IMG_EXT,
+  ...PDF_EXT,
+  ...MS_OFFICE_EXT,
+  ...OPEN_OFFICE_EXT,
+  ...DATA_EXT,
+]
 
 /**
  * Returns true if the given path has a valid Markdown or Code extension
@@ -43,7 +57,7 @@ export function hasMdOrCodeExt (p: string): boolean {
  *
  * @return  {boolean}               Whether the file has one of these extensions
  */
-function hasExt (filePath: string, extensions: string[]): boolean {
+export function hasExt (filePath: string, extensions: string[]): boolean {
   return extensions.some(ext => filePath.endsWith(ext))
 }
 
@@ -132,8 +146,53 @@ export function hasDataExt (filePath: string): boolean {
  *
  * @return  {boolean}            Whether the filePath has any recognized ext.
  */
-export function hasAnyRecognizedFileExtension (filePath: string): boolean {
-  return hasMdOrCodeExt(filePath) || hasImageExt(filePath) ||
-    hasPDFExt(filePath) || hasOpenOfficeExt(filePath) ||
-    hasMSOfficeExt(filePath) || hasDataExt(filePath)
+export function hasAnyRecognizedFileExtension (filePath: string, customExtensions: string[] = []): boolean {
+  return hasExt(filePath, [ ...ALL_EXT, ...customExtensions ])
+}
+
+/**
+ * Utility to get the file extension for a DocumentType
+ *
+ * @param {DocumentType} type   The document type
+ *
+ * @returns {string}            An appropriate file extension for the document type
+ */
+export function getExtensionForDocumentType (type: DocumentType): string {
+  switch (type) {
+    case DocumentType.Markdown:
+      return '.md'
+    case DocumentType.LaTeX:
+      return '.tex'
+    case DocumentType.YAML:
+      return '.yaml'
+    case DocumentType.JSON:
+      return '.json'
+  }
+}
+
+/**
+ * Utility to get the DocumentType for a file extension
+ *
+ * @param {string} filePath             The document type
+ *
+ * @returns {DocumentType|undefined}    An appropriate DocumentType for the
+ *                                      file extension, or `undefined` if the
+ *                                      extension does not match a DocumentType
+ */
+export function getDocumentTypeForExtension (filePath: string): DocumentType|undefined {
+  if (hasMarkdownExt(filePath)) {
+    return DocumentType.Markdown
+  }
+
+  if (hasExt(filePath, LATEX_EXT)) {
+    return DocumentType.LaTeX
+  }
+
+  if (hasExt(filePath, YAML_EXT)) {
+    return DocumentType.YAML
+  }
+
+  if (hasExt(filePath, JSON_EXT)) {
+    return DocumentType.JSON
+  }
 }

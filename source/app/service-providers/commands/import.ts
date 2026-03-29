@@ -31,7 +31,7 @@ export default class ImportFiles extends ZettlrCommand {
     * @param {Object} arg The command arguments.
     * @return {void} Does not return.
     */
-  async run (event: string, _arg: any): Promise<boolean> {
+  async run (event: string, _arg: void): Promise<boolean> {
     const dirs = await this._app.windows.askDir(trans('Import directory'), undefined, trans('Select folder'), trans('Select import destination'))
     if (dirs.length === 0) {
       showNativeNotification(trans('You have to select a directory to import to.'))
@@ -67,7 +67,7 @@ export default class ImportFiles extends ZettlrCommand {
       const ret = await makeImport(fileList, directory, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
-        showNativeNotification(trans('Couldn\'t import %s.', path.basename(file)))
+        showNativeNotification(error, trans('Couldn\'t import %s.', path.basename(file)))
       }, (file: string) => {
         // And this on each success!
         this._app.log.info(`[Importer] File ${file} imported successfully.`)
@@ -76,13 +76,18 @@ export default class ImportFiles extends ZettlrCommand {
 
       if (ret.length > 0) {
         // Some files failed to import.
-        showNativeNotification(trans('The following %s files could not be imported, because their filetype is unknown: %s', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
+        showNativeNotification(trans('The following %s files could not be imported: %s', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
-      this._app.log.error(`[Importer] Could not import files: ${String(err.message)}`, err)
-      showNativeNotification(trans(`Could not import files due to an error: ${err.message as string}`), trans('Import failed'))
+      if (err instanceof Error) {
+        this._app.log.error(`[Importer] Could not import files: ${err.message}`, err)
+        showNativeNotification(trans('Could not import files due to an error: %s', err.message), trans('Import failed'))
+      } else {
+        this._app.log.error('[Importer] Could not import files: Unknown error', err)
+        showNativeNotification(trans('Could not import files due to an error: %s', trans('Unknown error')), trans('Import failed'))
+      }
     }
 
     return true

@@ -21,6 +21,7 @@ import clickAndSelect from './click-and-select'
 import { equationMenu } from '../context-menu/equation-menu'
 import { katexToElem } from 'source/common/util/mathtex-to-html'
 import { rangeInSelection } from '../util/range-in-selection'
+import { configField } from '../util/configuration'
 
 class MathWidget extends WidgetType {
   constructor (readonly equation: string, readonly displayMode: boolean, readonly node: SyntaxNode) {
@@ -88,9 +89,10 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MathWidget|unde
   // and then remove the leading and trailing dollars. Also, pass a stable node
   // reference (SyntaxNodeRef will be dropped, but the SyntaxNode itself will
   // stay, and keep its position updated depending on what happens in the doc)
+  const includeAdjacent = state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
 
   // Don't render if the selection is within the node
-  if (rangeInSelection(state.selection, node.from, node.to, true)) {
+  if (rangeInSelection(state.selection, node.from, node.to, includeAdjacent)) {
     return undefined
   }
 

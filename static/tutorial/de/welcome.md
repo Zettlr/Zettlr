@@ -26,7 +26,7 @@ Solche Arbeitsbereiche (sowie alleinstehende Dateien, welche, sobald du sie öff
 
 In den Einstellungen kannst du zwischen drei verschiedenen Modi des Dateimanagers wählen: Entweder zeigt dir der Dateimanager entweder nur die Dateiliste _oder_ den Verzeichnisbaum an; oder er zeigt dir beide nebeneinander an; oder er zeigt sowohl Dateien wie auch Verzeichnisse ineinander verwoben an.
 
-> Auf einigen Linux-Distributionen kann es passieren, dass das Löschen nicht direkt funktioniert. Das liegt daran, dass Zettlr dazu auf Linux-Betriebssystemen eine bestimmte Bibliothek benötigt, die nicht immer installiert ist. Weitere Informationen findest du [in unseren häufig gestellten Fragen](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash).
+> Auf einigen Linux-Distributionen kann es passieren, dass das Löschen nicht direkt funktioniert. Das liegt daran, dass Zettlr dazu auf Linux-Betriebssystemen eine bestimmte Bibliothek benötigt, die nicht immer installiert ist. Weitere Informationen findest du [in unseren häufig gestellten Fragen](https://docs.zettlr.com/de/faq/).
 
 Wenn du schon einen Ordner angelegt hast, in welchem du deine Notizen speichern möchtest, oder gar schon Notizen hast, kannst du den Ordner nun als Arbeitsverzeichnis öffnen – entweder mittels des Toolbar-Buttons oder dem Tastaturkürzel `Cmd/Strg+O`.
 
@@ -55,7 +55,7 @@ Zettlr unterstützt aber nicht nur gewöhnliche Weblinks. Wenn einer der Links a
 
 ## Die Seitenleiste 📎
 
-Nachdem die Markdown-Grundlagen geschafft sind, ist es Zeit, noch ein hilfreiches Werkzeug von Zettlr vorzustellen: Die Seitenleiste. Die Seitenleiste öffnest du per Klick auf das rechte Toolbar-Icon, welches aussieht wie drei Spalten. Die Seitenleiste verfügt über vier Reiter mit kontextuellen Informationen.
+Nachdem die Markdown-Grundlagen geschafft sind, ist es Zeit, noch ein hilfreiches Werkzeug von Zettlr vorzustellen: Die [Seitenleiste](https://docs.zettlr.com/de/core/attachments/). Die Seitenleiste öffnest du per Klick auf das rechte Toolbar-Icon, welches aussieht wie drei Spalten. Die Seitenleiste verfügt über vier Reiter mit kontextuellen Informationen.
 
 Der erste Reiter enthält ein Inhaltsverzeichnis aller Überschriften im aktuellen Dokument. Mit einem Klick springst du direkt zum entsprechenden Absatz.
 
@@ -89,7 +89,7 @@ Du kannst neue Zeilen und Spalten hinzufügen und entfernen sowie Spalten anordn
 
 ## Weitere Informationen 📚
 
-Dies war der erste Teil der Einführung. Wir haben nicht allzu viel behandelt, aber alles weitere kannst du [in unserer Dokumentation nachschlagen](https://docs.zettlr.com/). Vielleicht interessiert dich ja der [Tag-Manager](https://docs.zettlr.com/en/reference/settings/#manage-tags) oder die [vielfältigen Suchoptionen](https://docs.zettlr.com/en/core/search/)?
+Dies war der erste Teil der Einführung. Wir haben nicht allzu viel behandelt, aber alles weitere kannst du [in unserer Dokumentation nachschlagen](https://docs.zettlr.com/de). Vielleicht interessiert dich ja der [Tag-Manager](https://docs.zettlr.com/en/pkms/tag-manager/) oder die [vielfältigen Suchoptionen](https://docs.zettlr.com/de/core/search/)?
 
 Wenn du bereit bist, klicke mit gedrückter `Cmd/Strg`-Taste auf den folgenden Wiki-Link: [[zettelkasten]]
 

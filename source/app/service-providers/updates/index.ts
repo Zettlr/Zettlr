@@ -21,7 +21,7 @@ import {
 
 import path from 'path'
 import crypto from 'crypto'
-import got, { type Response } from 'got'
+import got, { RequestError, type Response } from 'got'
 import semver from 'semver'
 import { net } from 'electron'
 
@@ -359,30 +359,38 @@ export default class UpdateProvider extends ProviderContract {
       } else {
         this._logger.info(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err instanceof UpdateError) {
         this._reportError(err.code, err.message, true)
         return
       }
+
+      if (!(err instanceof RequestError)) {
+        // Report this error
+        this._reportError('Unexpected error', 'An unexpected error occurred while checking for updates', true)
+        return
+      }
+
+      const statusCode = err.response?.statusCode ?? -1
 
       // See for all errors https://github.com/sindresorhus/got/blob/main/documentation/8-errors.md
       // If we have an ENOTFOUND error there is no response and no statusCode
       // so we'll use TypeScript shortcuts to save us from ugly errors.
       const notFoundError = err.code === 'ENOTFOUND'
       const timeoutError = err.code === 'ETIMEDOUT'
-      const serverError = err?.response?.statusCode >= 500
-      const clientError = err?.response?.statusCode >= 400
-      const redirectError = err?.response?.statusCode >= 300
+      const serverError = statusCode >= 500
+      const clientError = statusCode >= 400 && statusCode < 500
+      const redirectError = statusCode >= 300 && statusCode < 400
 
       // Give a more detailed error message.
       if (serverError) {
-        const msg = trans('Could not check for updates: Server Error (Status code: %s)', err.response.statusCode)
+        const msg = trans('Could not check for updates: Server Error (Status code: %s)', statusCode)
         this._reportError(err.code as string, msg, false)
       } else if (clientError) {
-        const msg = trans('Could not check for updates: Client Error (Status code: %s)', err.response.statusCode)
+        const msg = trans('Could not check for updates: Client Error (Status code: %s)', statusCode)
         this._reportError(err.code as string, msg, false)
       } else if (redirectError) {
-        const msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', err.response.statusCode)
+        const msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', statusCode)
         this._reportError(err.code as string, msg, true) // This is odd and should be reported
       } else if (notFoundError) {
         // getaddrinfo has reported that the host has not been found.
@@ -447,7 +455,10 @@ export default class UpdateProvider extends ProviderContract {
 
     // Adapt the rest of the state
     state.tagName = parsedResponse.tag_name
-    state.changelog = await md2html(parsedResponse.body, { onCitation: (_c1, _c2) => undefined, zknLinkFormat: 'link|title' })
+    state.changelog = await md2html(parsedResponse.body, {
+      onCitation: (_c1, _c2) => undefined,
+      zknLinkFormat: 'link|title', sanitizeHTML: true
+    })
     state.prerelease = parsedResponse.prerelease
     state.releasePage = parsedResponse.html_url
 
@@ -508,8 +519,9 @@ export default class UpdateProvider extends ProviderContract {
           this._logger.info(`[Update Provider] Found SHA256 checksum for ${release[1]}`)
           this._sha256Data.set(release[1], release[0])
         })
-    } catch (err: any) {
-      throw new UpdateError('SHA_CHECKSUM_ERR', trans('Cannot retrieve SHA256 checksums: %s', err.message), { cause: err })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      throw new UpdateError('SHA_CHECKSUM_ERR', trans('Cannot retrieve SHA256 checksums: %s', message), { cause: err })
     }
   }
 
@@ -633,9 +645,10 @@ export default class UpdateProvider extends ProviderContract {
         await shell.openPath(this._updateState.full_path)
       }
       app.quit()
-    } catch (err: any) {
+    } catch (err: unknown) {
       this._cleanup(false)
-      this._reportError('EOPEN', trans('Could not start update. Please retry or update manually. Error was: %s', err.message), true)
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      this._reportError('EOPEN', trans('Could not start update. Please retry or update manually. Error was: %s', message), true)
     }
   }
 
@@ -650,8 +663,9 @@ export default class UpdateProvider extends ProviderContract {
     if (this._downloadWriteStream !== undefined) {
       try {
         this._downloadWriteStream.close()
-      } catch (err: any) {
-        this._logger.warning(`[Update Provider] Could not close write stream: ${err.message as string}`, err)
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Unknown error'
+        this._logger.warning(`[Update Provider] Could not close write stream: ${message}`, err)
       }
       this._downloadWriteStream = undefined
     }
@@ -659,8 +673,9 @@ export default class UpdateProvider extends ProviderContract {
     if (this._downloadReadStream !== undefined) {
       try {
         this._downloadReadStream.close()
-      } catch (err: any) {
-        this._logger.warning(`[Update Provider] Could not close read stream: ${err.message as string}`, err)
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Unknown error'
+        this._logger.warning(`[Update Provider] Could not close read stream: ${message}`, err)
       }
       this._downloadWriteStream = undefined
     }

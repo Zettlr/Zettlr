@@ -43,7 +43,9 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): RuleWidget|unde
   // reference (SyntaxNodeRef will be dropped, but the SyntaxNode itself will
   // stay, and keep its position updated depending on what happens in the doc)
 
-  // Don't render if the selection is within the node
+  // Horizontal rules must always show their syntax even if the cursor is only
+  // adjacent for a proper UX. If we didn't do that, users would have to click
+  // within this element to show the heading characters, which is undesirable.
   if (rangeInSelection(state.selection, node.from, node.to, true)) {
     return undefined
   }

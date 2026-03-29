@@ -96,7 +96,7 @@ const countWordsTesters = [
   }
 ]
 
-describe('Utility#countWords()', function () {
+describe('Utility#counter()', function () {
   let idx = 0
   for (let test of countWordsTesters) {
     idx++

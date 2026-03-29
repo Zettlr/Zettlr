@@ -227,7 +227,7 @@ app.on('activate', function () {
  * Hook into the unhandledRejection-event to prevent nasty error messages when
  * a Promise is rejected somewhere.
  */
-process.on('unhandledRejection', (err: any) => {
+process.on('unhandledRejection', (err: unknown) => {
   // Just log to console.
   if (isAppServiceContainerReady()) {
     getAppServiceContainer().log.error('[Application] Unhandled rejection received', err)

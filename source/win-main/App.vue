@@ -121,6 +121,12 @@
     v-bind:target="tasksButton"
     v-on:close="showTasksPopover = false"
   ></PopoverLRT>
+  <PopoverPandoc
+    v-if="showPandocPopover && pandocButton !== null"
+    v-bind:target="pandocButton"
+    v-on:close="showPandocPopover = false"
+    v-on:insert-pandoc="insertPandoc($event)"
+  ></PopoverPandoc>
 </template>
 
 <script setup lang="ts">
@@ -151,6 +157,7 @@ import PopoverTags from './PopoverTags.vue'
 import PopoverPomodoro from './PopoverPomodoro.vue'
 import PopoverTable from './PopoverTable.vue'
 import PopoverDocInfo from './PopoverDocInfo.vue'
+import PopoverPandoc from './PopoverPandoc.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
@@ -167,7 +174,7 @@ import {
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
-import { type LeafNodeJSON } from '@dts/common/documents'
+import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
@@ -233,6 +240,8 @@ const pomodoroButton = ref<HTMLElement|null>(null)
 const showPomodoroPopover = ref<boolean>(false)
 const tasksButton = ref<HTMLElement|null>(null)
 const showTasksPopover = ref(false)
+const pandocButton = ref<HTMLElement|null>(null)
+const showPandocPopover = ref<boolean>(false)
 
 export interface PomodoroConfig {
   currentEffectFile: string
@@ -304,6 +313,7 @@ export interface EditorCommands {
   moveSection: boolean
   addKeywords: boolean
   replaceSelection: boolean
+  insertPandoc: boolean
   executeCommand: boolean
   data: any
 }
@@ -314,6 +324,7 @@ const editorCommands = ref<EditorCommands>({
   moveSection: false,
   addKeywords: false,
   replaceSelection: false,
+  insertPandoc: false,
   executeCommand: false,
   data: undefined
 })
@@ -382,7 +393,7 @@ const parsedDocumentInfo = computed<string>(() => {
   if (info.selections.length > 0) {
     // We have selections to display.
     let length = 0
-    info.selections.forEach((sel: any) => {
+    info.selections.forEach(sel => {
       length += shouldCountChars.value ? sel.chars : sel.words
     })
 
@@ -493,6 +504,13 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       type: 'spacer',
       id: 'spacer-two',
       size: '1x'
+    },
+    {
+      type: 'button',
+      id: 'pandocDivOrSpan',
+      title: trans('Insert Pandoc Div or Span'),
+      icon: 'drag-handle',
+      visible: getToolbarButtonDisplay('showPandocDivSpanButton')
     },
     {
       type: 'button',
@@ -651,6 +669,7 @@ onMounted(() => {
   docInfoButton.value = document.querySelector('#toolbar-document-info')
   pomodoroButton.value = document.querySelector('#toolbar-pomodoro')
   tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
+  pandocButton.value = document.querySelector('#toolbar-pandocDivOrSpan')
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
     if (shortcut === 'toggle-sidebar') {
@@ -659,7 +678,7 @@ onMounted(() => {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
     } else if (shortcut === 'copy-current-id' && documentTreeStore.lastLeafActiveFile !== undefined) {
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('fsal', {
         command: 'get-descriptor',
         payload: documentTreeStore.lastLeafActiveFile.path
       })
@@ -753,6 +772,11 @@ function insertTable (spec: { rows: number, cols: number }): void {
 
   editorCommands.value.data = buildPipeMarkdownTable(ast, align)
   editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
+}
+
+function insertPandoc (spec: { type: string, attributes: string }): void {
+  editorCommands.value.data = spec
+  editorCommands.value.insertPandoc = !editorCommands.value.insertPandoc
 }
 
 function genericJtl (lineNumber: number): void {
@@ -851,7 +875,7 @@ function handleClick (clickedID?: string): void {
     ipcRenderer.invoke('application', { command: 'open-preferences' })
       .catch(e => console.error(e))
   } else if (clickedID === 'new-file') {
-    ipcRenderer.invoke('application', { command: 'file-new', payload: { type: 'md' } })
+    ipcRenderer.invoke('application', { command: 'file-new', payload: { type: DocumentType.Markdown } })
       .catch(e => console.error(e))
   } else if (clickedID === 'previous-file') {
     ipcRenderer.invoke('documents-provider', {
@@ -890,6 +914,8 @@ function handleClick (clickedID?: string): void {
     showTasksPopover.value = !showTasksPopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
+  } else if (clickedID === 'pandocDivOrSpan') {
+    showPandocPopover.value = !showPandocPopover.value
   } else if (clickedID !== undefined && clickedID.startsWith('markdown') && clickedID.length > 8) {
     // The user clicked a command button, so we just have to run that.
     editorCommands.value.data = clickedID

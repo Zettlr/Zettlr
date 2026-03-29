@@ -33,6 +33,7 @@ export interface EditorConfiguration {
   autocorrect: AutocorrectOptions
   autoCloseBrackets: boolean
   renderingMode: 'preview'|'raw'
+  previewModeShowSyntaxWhenCursorIsAdjacent: boolean
   renderCitations: boolean
   renderIframes: boolean
   renderImages: boolean
@@ -50,6 +51,7 @@ export interface EditorConfiguration {
   idGen: string
   indentUnit: number
   indentWithTabs: boolean
+  alwaysIndentLineOnTab: boolean
   linkPreference: 'always'|'never'|'withID'
   zknLinkFormat: 'link|title'|'title|link'
   zknAddFileTitle: boolean
@@ -61,6 +63,7 @@ export interface EditorConfiguration {
   }
   boldFormatting: '**'|'__'
   italicFormatting: '*'|'_'
+  highlightFormatting: 'span'|'=='
   citeStyle: 'in-text'|'in-text-suffix'|'regular'
   inputMode: 'default'|'vim'|'emacs'
   muteLines: boolean
@@ -94,6 +97,7 @@ export function getDefaultConfig (): EditorConfiguration {
     autocompleteSuggestEmojis: false,
     autoCloseBrackets: true,
     renderingMode: 'preview',
+    previewModeShowSyntaxWhenCursorIsAdjacent: true,
     renderCitations: true,
     renderIframes: true,
     renderImages: true,
@@ -111,6 +115,7 @@ export function getDefaultConfig (): EditorConfiguration {
     idGen: '',
     indentUnit: 4,
     indentWithTabs: false,
+    alwaysIndentLineOnTab: false,
     linkPreference: 'always',
     zknLinkFormat: 'link|title',
     linkWithIDIfPossible: false,
@@ -122,6 +127,7 @@ export function getDefaultConfig (): EditorConfiguration {
     },
     boldFormatting: '**',
     italicFormatting: '_',
+    highlightFormatting: '==',
     citeStyle: 'regular',
     muteLines: true,
     readabilityAlgorithm: 'dale-chall',

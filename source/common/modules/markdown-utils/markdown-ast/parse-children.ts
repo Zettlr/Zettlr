@@ -14,7 +14,7 @@
  */
 
 import type { SyntaxNode } from '@lezer/common'
-import { parseLinkAttributes } from '@common/pandoc-util/parse-link-attributes'
+import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { type ASTNode, parseNode, type MDNode } from '../markdown-ast'
 import { getWhitespaceBeforeNode } from './get-whitespace-before-node'
 import { genericTextNode } from './generic-text-node'
@@ -72,7 +72,7 @@ function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}
     return oldAttributes
   }
 
-  const attributes = parseLinkAttributes(markdown.substring(node.from, node.to))
+  const attributes = parsePandocAttributes(markdown.substring(node.from, node.to))
 
   if (attributes.id !== undefined) {
     oldAttributes.id = attributes.id
@@ -80,14 +80,6 @@ function parseAttributeNode (oldAttributes: Record<string, string|string[]> = {}
 
   if (attributes.classes !== undefined) {
     oldAttributes.class = attributes.classes
-  }
-
-  if (attributes.width !== undefined) {
-    oldAttributes.width = attributes.width
-  }
-
-  if (attributes.height !== undefined) {
-    oldAttributes.height = attributes.height
   }
 
   return {

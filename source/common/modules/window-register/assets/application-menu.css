@@ -38,6 +38,10 @@ body {
       &:not(.separator):not(.disabled):hover {
         background-color: rgb(200, 200, 200);
       }
+
+      &.disabled {
+        color: rgb(180, 180, 180);
+      }
   
       div.status {
         grid-area: status;

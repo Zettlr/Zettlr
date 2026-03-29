@@ -20,7 +20,7 @@ import DirProjectExport from './dir-project-export'
 import DirRemoveProject from './dir-remove-project'
 import DirRename from './dir-rename'
 import DirRescan from './dir-rescan'
-import DirSetIcon from './dir-set-icon'
+import DirSettings from './dir-settings'
 import DirSort from './dir-sort'
 import Export from './export'
 import FetchLinkPreview from './fetch-link-preview'
@@ -52,6 +52,7 @@ import { clipboard, ipcMain, nativeImage } from 'electron'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
 import RenameTag from './rename-tag'
+import WorkspaceSort from './ws-sort'
 
 export const commands = [
   DirDelete,
@@ -61,7 +62,7 @@ export const commands = [
   DirRemoveProject,
   DirRename,
   DirRescan,
-  DirSetIcon,
+  DirSettings,
   DirSort,
   Export,
   FetchLinkPreview,
@@ -86,7 +87,8 @@ export const commands = [
   SaveImageFromClipboard,
   TutorialOpen,
   UpdateProjectProperties,
-  UpdateUserDictionary
+  UpdateUserDictionary,
+  WorkspaceSort
 ]
 
 export default class CommandProvider extends ProviderContract {
@@ -118,18 +120,10 @@ export default class CommandProvider extends ProviderContract {
    *
    * @return  {Promise<any>}     The return from running the command
    */
-  async run (command: string, payload: any): Promise<any> {
+  async run (command: string, payload: unknown): Promise<unknown> {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
-    if (command === 'get-descriptor' && typeof payload === 'string') {
-      if (await this._app.fsal.isFile(payload)) {
-        return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
-      } else if (await this._app.fsal.isDir(payload)) {
-        return await this._app.fsal.getAnyDirectoryDescriptor(payload)
-      } else {
-        this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)
-      }
-    } else if (command === 'next-file') {
+    if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       // await this._app.documents.forward()
       // TODO!!!
@@ -142,7 +136,11 @@ export default class CommandProvider extends ProviderContract {
     } else if (command === 'copy-img-to-clipboard') {
       // We should copy the contents of an image file to clipboard. Payload
       // contains the image path. We can rely on the Electron framework here.
-      let imgPath: string = payload
+      if (typeof payload !== 'string') {
+        return false
+      }
+
+      let imgPath = payload
       if (imgPath.startsWith('safe-file://')) {
         imgPath = imgPath.replace('safe-file://', '')
       } else if (imgPath.startsWith('file://')) {
@@ -183,8 +181,8 @@ export default class CommandProvider extends ProviderContract {
         // Return the return value of the command, if there is any
         try {
           return await cmd.run(command, payload)
-        } catch (err: any) {
-          this._app.log.error('[Application] Error received while running command: ' + String(err.message), err)
+        } catch (err: unknown) {
+          this._app.log.error('[Application] Error received while running command: ' + (err instanceof Error ? err.message : 'Unknown error'), err)
           return false
         }
       } else if (command === 'get-available-languages') {

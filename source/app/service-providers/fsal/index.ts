@@ -30,7 +30,7 @@ import type {
   ProjectSettings,
   AnyDescriptor
 } from '@dts/common/fsal'
-import type { SearchTerm } from '@dts/common/search'
+import type { SearchResult, SearchTerm } from '@dts/common/search'
 import ProviderContract from '@providers/provider-contract'
 import { app, ipcMain } from 'electron'
 import type LogProvider from '@providers/log'
@@ -40,7 +40,7 @@ import type ConfigProvider from '@providers/config'
 import { promises as fs, constants as FS_CONSTANTS } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
-import ignoreDir from 'source/common/util/ignore-dir'
+import { ignorePath } from 'source/common/util/ignore-path'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import type { EventName } from 'chokidar/handler'
 import { getIDRE } from 'source/common/regular-expressions'
@@ -73,6 +73,7 @@ export default class FSAL extends ProviderContract {
   private readonly _cache: FSALCache
   private readonly _emitter: EventEmitter
   private readonly watchers: Map<string, FSALWatchdog>
+  private readonly deadWorkspaces: Set<string>
 
   constructor (
     private readonly _logger: LogProvider,
@@ -85,12 +86,13 @@ export default class FSAL extends ProviderContract {
     this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._emitter = new EventEmitter()
     this.watchers = new Map()
+    this.deadWorkspaces = new Set()
 
     ipcMain.handle('fsal', async (event, { command, payload }) => {
       if (command === 'read-path-recursively' && typeof payload === 'string') {
         if (await this.isFile(payload)) {
           return [payload]
-        } else if (await this.isDir(payload) && !ignoreDir(payload)) {
+        } else if (await this.isDir(payload)) {
           return await this.readDirectoryRecursively(payload)
         } else {
           return []
@@ -99,7 +101,17 @@ export default class FSAL extends ProviderContract {
         return await this.readDirectory(payload)
       } else if (command === 'get-descriptor' && (typeof payload === 'string' || Array.isArray(payload) && payload.every(p => typeof p === 'string'))) {
         if (Array.isArray(payload)) {
-          return await Promise.all(payload.map(absPath => this.getDescriptorFor(absPath)))
+          const descriptors: AnyDescriptor[] = []
+          for (const absPath of payload) {
+            // Check every path for existence to ensure an array lookup does not
+            // fail.
+            if (await this.isFile(absPath) || await this.isDir(absPath)) {
+              descriptors.push(await this.getDescriptorFor(absPath))
+            } else {
+              this._logger.error(`[FSAL] Could not provide descriptor for requested path ${absPath}: Neither file nor directory.`)
+            }
+          }
+          return descriptors
         } else {
           return await this.getDescriptorFor(payload)
         }
@@ -117,8 +129,10 @@ export default class FSAL extends ProviderContract {
       try {
         await this._cache.clearCache()
         this._logger.info('FSAL cache cleared.')
-      } catch (err: any) {
-        this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          this._logger.error(`FSAL Cache could not be cleared: ${String(err.message)}`, err)
+        }
       }
     }
 
@@ -127,7 +141,7 @@ export default class FSAL extends ProviderContract {
     await this.syncRoots()
 
     this._config.on('update', (which: string) => {
-      if (which === 'openPaths') {
+      if (which === 'openPaths' || which === 'files.dotFiles.showInFilemanager' || which === 'files.dotFiles.showInSidebar') {
         this.syncRoots()
           .then(() => {
             // Always reindex all files after config updates later on.
@@ -201,7 +215,27 @@ export default class FSAL extends ProviderContract {
    * emitted.
    */
   private async syncRoots (): Promise<void> {
-    const { openFiles, openWorkspaces } = this._config.get().app
+    let { openFiles, openWorkspaces } = this._config.get().app
+
+    // Check if any of the open files have gone missing. This is particularly
+    // important on boot to ensure no errors due to missing files are thrown.
+    // Unlike workspaces, we just get rid of the files here. (Workspaces can be
+    // marked as "dead" so that users don't lose them.)
+    const workingOpenFiles: string[] = []
+    for (const file of openFiles) {
+      if (await this.isFile(file)) {
+        workingOpenFiles.push(file)
+      }
+    }
+
+    if (workingOpenFiles.length < openFiles.length) {
+      const deadCount = openFiles.length - workingOpenFiles.length
+      const deadFiles = [...(new Set(openFiles)).difference(new Set(workingOpenFiles))]
+      this._logger.warning(`[FSAL] Discovered ${deadCount} dead standalone files while synchronizing root paths: ${deadFiles.join(', ')}`)
+      this._config.set('app.openFiles', workingOpenFiles)
+      openFiles = workingOpenFiles
+    }
+
     const allRoots = openFiles.concat(openWorkspaces)
 
     for (const rootPath of allRoots) {
@@ -223,9 +257,11 @@ export default class FSAL extends ProviderContract {
           })
           watcher.watchPath(rootPath)
           this.watchers.set(rootPath, watcher)
+          this.deadWorkspaces.delete(rootPath)
         }
-      } catch (err: any) {
-        this._logger.error(`Could not load root ${rootPath}.`)
+      } catch (err: unknown) {
+        this._logger.error(`Could not load root ${rootPath}.`, err)
+        this.deadWorkspaces.add(rootPath)
       }
     }
 
@@ -257,16 +293,27 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const pathsToIndex: string[] = []
     for (const file of openFiles) {
-      if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
-        pathsToIndex.push(file)
+      if (!await this.isFile(file)) {
+        this._logger.warning(`[FSAL] Could not re-index standalone file ${file}: File not found.`)
+        continue
       }
+
+      pathsToIndex.push(file)
     }
 
     for (const workspace of openWorkspaces) {
-      if (await this.isDir(workspace) && !ignoreDir(workspace)) {
-        const allPaths = await this.readDirectoryRecursively(workspace)
-        pathsToIndex.push(...allPaths)
+      if (this.deadWorkspaces.has(workspace)) {
+        this._logger.info(`[FSAL] Not re-indexing workspace ${workspace}: Marked as dead`)
+        continue
       }
+
+      if (!await this.isDir(workspace)) {
+        this._logger.warning(`[FSAL] Could not re-index workspace ${workspace}: Folder not found.`)
+        continue
+      }
+
+      const allPaths = await this.readDirectoryRecursively(workspace)
+      pathsToIndex.push(...allPaths)
     }
 
     const pathDiscoveryDuration = performance.now() - start
@@ -316,19 +363,42 @@ export default class FSAL extends ProviderContract {
     const { openFiles, openWorkspaces } = this._config.get().app
     const allDescriptors: AnyDescriptor[] = []
 
+    const reportError = (message: string, err: unknown) => {
+      if (err instanceof Error) {
+        this._logger.error(`[FSAL] ${message}: ${err.message}`, err)
+      } else {
+        this._logger.error(`[FSAL] ${message}`, err)
+      }
+    }
+
     for (const file of openFiles) {
-      if (await this.isFile(file) && !path.basename(file).startsWith('.')) {
-        allDescriptors.push(await this.getDescriptorFor(file))
+      try {
+        const descriptor = await this.getDescriptorFor(file)
+        allDescriptors.push(descriptor)
+      } catch (err: unknown) {
+        reportError(`Could not load descriptor for root file ${file}`, err)
       }
     }
 
     for (const workspace of openWorkspaces) {
-      if (await this.isDir(workspace) && !ignoreDir(workspace)) {
+      if (this.deadWorkspaces.has(workspace)) {
+        this._logger.info(`[FSAL] Not trying to load descriptors from workspace ${workspace}: Marked as dead`)
+        allDescriptors.push(this.loadDummyDirectoryDescriptor(workspace))
+        continue
+      }
+
+      try {
         const allPaths = await this.readDirectoryRecursively(workspace)
         for (const child of allPaths) {
-          const descriptor = await this.getDescriptorFor(child)
-          allDescriptors.push(descriptor)
+          try {
+            const descriptor = await this.getDescriptorFor(child)
+            allDescriptors.push(descriptor)
+          } catch (err: unknown) {
+            reportError(`Could not load descriptor for file ${child}`, err)
+          }
         }
+      } catch (err: unknown) {
+        reportError(`Could not read workspace ${workspace}`, err)
       }
     }
 
@@ -485,7 +555,7 @@ export default class FSAL extends ProviderContract {
     try {
       const stat = await fs.lstat(absPath)
       return stat.isDirectory()
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
@@ -501,7 +571,7 @@ export default class FSAL extends ProviderContract {
     try {
       const stat = await fs.lstat(absPath)
       return stat.isFile()
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
@@ -561,7 +631,7 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Promise<any>}                   Returns the results
    */
-  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<SearchResult[]> { // TODO: Implement search results type
     // Searches a file and returns the result
     if (src.type === 'file') {
       return await FSALFile.search(src, searchTerms)
@@ -763,7 +833,11 @@ export default class FSAL extends ProviderContract {
 
     try {
       return await this.getAnyDirectoryDescriptor(absPath)
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const code = err instanceof Error ? (err as NodeJS.ErrnoException).code : undefined
+      if (code === 'EACCES' || code === 'EPERM') {
+        return this.loadDummyDirectoryDescriptor(absPath)
+      }
       return await this.getDescriptorForAnySupportedFile(absPath)
     }
   }
@@ -779,6 +853,10 @@ export default class FSAL extends ProviderContract {
    * @throws if the path is not a directory
    */
   public async getAnyDirectoryDescriptor (absPath: string): Promise<DirDescriptor> {
+    if (this.deadWorkspaces.has(absPath)) {
+      return this.loadDummyDirectoryDescriptor(absPath)
+    }
+
     if (!await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
@@ -801,7 +879,7 @@ export default class FSAL extends ProviderContract {
     try {
       await fs.access(absPath, flags)
       return true
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
@@ -836,23 +914,33 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<string[]>}           Returns a list of the entire directory
    */
   public async readDirectoryRecursively (directoryPath: string): Promise<string[]> {
-    const contents = (await fs.readdir(directoryPath, { withFileTypes: true }))
-      .filter(dirent => {
-        return (dirent.isFile() && !dirent.name.startsWith('.')) ||
-          (dirent.isDirectory() && !ignoreDir(dirent.name))
-      })
-      .map(dirent => {
-        const childPath = path.join(directoryPath, dirent.name)
-        if (dirent.isFile()) {
-          return Promise.resolve([childPath])
-        } else if (dirent.isDirectory()) {
-          return this.readDirectoryRecursively(childPath)
-        } else {
-          return Promise.resolve([])
-        }
-      })
+    if (!await this.isDir(directoryPath)) {
+      throw new Error(`[FSAL] Cannot read path ${directoryPath}: Not a directory!`)
+    }
 
-    return [ directoryPath, ...(await Promise.all(contents)).flat() ]
+    const { files } = this._config.get()
+    const ignoreDotFiles = !files.dotFiles.showInFilemanager && !files.dotFiles.showInSidebar
+
+    try {
+      const children = await fs.readdir(directoryPath, { withFileTypes: true })
+      const contents = await Promise.all(
+        children
+          .filter(dirent => !ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
+          .map(dirent => {
+            const childPath = path.join(directoryPath, dirent.name)
+            return dirent.isFile() ? [childPath] : this.readDirectoryRecursively(childPath)
+          })
+      )
+      return [ directoryPath, ...contents.flat() ]
+    } catch (err: unknown) {
+      const code = err instanceof Error ? (err as NodeJS.ErrnoException).code : undefined
+      if (code === 'EACCES' || code === 'EPERM') {
+        this._logger.error(`[FSAL] Could not read directiroy ${directoryPath}: Could not read/access the directory (code: ${code})`)
+      } else if (err instanceof Error) {
+        this._logger.error(`[FSAL] Could not read directory: ${directoryPath}`, err)
+      }
+      return []
+    }
   }
 
   /**
@@ -864,16 +952,36 @@ export default class FSAL extends ProviderContract {
    * @return  {Promise<AnyDescriptor>[]}           The children.
    */
   public async readDirectory (absPath: string): Promise<AnyDescriptor[]> {
-    if (!await this.isDir(absPath)) {
+    if (this.deadWorkspaces.has(absPath) || !await this.isDir(absPath)) {
       throw new Error(`[FSAL] Cannot read path ${absPath}: Not a directory!`)
     }
 
-    const children = await fs.readdir(absPath)
+    const { files } = this._config.get()
+    const ignoreDotFiles = !files.dotFiles.showInFilemanager && !files.dotFiles.showInSidebar
 
-    return await Promise.all(
-      children
-        .map(p => path.join(absPath, p))
-        .map(p => this.getDescriptorFor(p))
-    )
+    try {
+      const children = await fs.readdir(absPath, { withFileTypes: true })
+
+      const childPaths = children
+        .filter(dirent => !ignorePath(dirent.name, ignoreDotFiles) && (dirent.isFile() || dirent.isDirectory()))
+        .map(dirent => path.join(absPath, dirent.name))
+
+      const results = await Promise.allSettled(
+        childPaths.map(p => {
+          return this.getDescriptorFor(p)
+            .catch(err => this._logger.error(`[FSAL] Error while reading directory ${absPath}: Could not read child ${path.relative(absPath, p)}`, err))
+        })
+      )
+
+      return results
+        .filter((r): r is PromiseFulfilledResult<AnyDescriptor> => r.status === 'fulfilled')
+        .map(r => r.value)
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this._logger.error(`[FSAL] Could not read directory: ${absPath}`, err)
+      }
+
+      return []
+    }
   }
 }
