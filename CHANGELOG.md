@@ -7,6 +7,7 @@
 
 ## Under the Hood
 
+- Updated some dependencies.
 - Removed duplicate FSAL descriptor fetching.
 - Improved resiliency of the descriptor fetching; now if a renderer requests an
   array of paths, the FSAL does not fail. Instead, it simply omits those
