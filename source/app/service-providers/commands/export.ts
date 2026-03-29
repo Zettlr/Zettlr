@@ -68,7 +68,7 @@ export default class Export extends ZettlrCommand {
       const cwd = path.dirname(file)
 
       try {
-        const output = await runShellCommand(foundCommand.command, [`"${file}"`], cwd)
+        const output = await runShellCommand(foundCommand.command, [`'${file}'`], cwd)
   
         if (output.code !== 0) {
           this._app.log.error(`[Export] Custom export ${displayName} failed with code ${output.code}`, output.stderr)

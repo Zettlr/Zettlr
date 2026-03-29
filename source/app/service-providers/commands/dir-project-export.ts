@@ -162,7 +162,7 @@ async function exportUsingCustomCommand (app: AppServiceContainer, dir: DirDescr
 
   app.log.info(`[Project] Exporting ${config.title} using custom command ${command.displayName}.`)
   try {
-    const output = await runShellCommand(command.command, [`"${dir.path}"`], dir.path)
+    const output = await runShellCommand(command.command, [`'${dir.path}'`], dir.path)
     if (output.code !== 0) {
       const err = new Error(trans('Project export failed: %s', output.stderr))
       task.endTask('error', err)
