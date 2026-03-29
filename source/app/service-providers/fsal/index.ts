@@ -98,7 +98,17 @@ export default class FSAL extends ProviderContract {
         return await this.readDirectory(payload)
       } else if (command === 'get-descriptor' && (typeof payload === 'string' || Array.isArray(payload) && payload.every(p => typeof p === 'string'))) {
         if (Array.isArray(payload)) {
-          return await Promise.all(payload.map(absPath => this.getDescriptorFor(absPath)))
+          const descriptors: AnyDescriptor[] = []
+          for (const absPath of payload) {
+            // Check every path for existence to ensure an array lookup does not
+            // fail.
+            if (await this.isFile(absPath) || await this.isDir(absPath)) {
+              descriptors.push(await this.getDescriptorFor(absPath))
+            } else {
+              this._logger.error(`[FSAL] Could not provide descriptor for requested path ${absPath}: Neither file nor directory.`)
+            }
+          }
+          return descriptors
         } else {
           return await this.getDescriptorFor(payload)
         }
