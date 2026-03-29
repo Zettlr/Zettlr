@@ -43,7 +43,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-      - name: Create new branch `i18n-update-${{ github.run_id }}`
+      - name: "[Optional] Create new branch `i18n-update-${{ github.run_id }}`"
         run: |
           git checkout -b i18n-update-${{ github.run_id }}
       # Update translations
@@ -53,8 +53,8 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "chore(i18n): Update translations ($(date))"
           git diff-index --quiet HEAD || git push -u origin i18n-update-${{ github.run_id }}
-      - name: Open PR
+      - name: "[Optional] Open PR"
         run: |
-          gh pr create -B develop -H i18n-update-${{ github.run_id }} --title "chore(i18n): Update translations ($(date))" --body "This PR updates all translation PO-files. CAUTION: Do not merge this PR if there are unmerged translation updates, since those will otherwise become unmergeable. This PR will be recreated every week, so it's better to close it rather than have contributors rebase their changes."
+          git diff-index --quiet HEAD || gh pr create -B develop -H i18n-update-${{ github.run_id }} --title "chore(i18n): Update translations ($(date))" --body "This PR updates all translation PO-files. CAUTION: Do not merge this PR if there are unmerged translation updates, since those will otherwise become unmergeable. This PR will be recreated every week, so it's better to close it rather than have contributors rebase their changes."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
