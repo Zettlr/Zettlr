@@ -7,6 +7,7 @@
 
 ## Under the Hood
 
+- Update Pandoc to `v3.9.0.2`.
 - Updated some dependencies.
 - Removed duplicate FSAL descriptor fetching.
 - Improved resiliency of the descriptor fetching; now if a renderer requests an
