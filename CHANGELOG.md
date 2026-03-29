@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Update `pt-PT` translations (#6262).
 
 ## Under the Hood
 
