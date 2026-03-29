@@ -163,6 +163,7 @@ export default class DirProjectExport extends ZettlrCommand {
         }
         this._app.log.info(`[Project] Exported ${dir.name} as ${result.targetFile}`)
       } catch (err: unknown) {
+        nErrors++
         this._app.log.error(err instanceof Error ? err.message : 'unknown error', err)
         if (err instanceof Error) {
           this._app.windows.showErrorMessage(
