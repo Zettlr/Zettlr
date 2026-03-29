@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Update `pt-PT` translations (#6262).
+- Translated the tutorial to Japanese (#6260).
 
 ## Under the Hood
 
