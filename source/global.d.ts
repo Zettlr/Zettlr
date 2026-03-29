@@ -38,6 +38,10 @@ declare module '*.wav' {
   const filePath: string
   export default filePath
 }
+declare module '*.glsl' {
+  const content: string
+  export default content
+}
 
 declare module 'vue-virtual-scroller'
 declare module '@joplin/turndown'
