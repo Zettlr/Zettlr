@@ -116,6 +116,11 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
+  <PopoverLRT
+    v-if="showTasksPopover && tasksButton !== null"
+    v-bind:target="tasksButton"
+    v-on:close="showTasksPopover = false"
+  ></PopoverLRT>
   <PopoverPandoc
     v-if="showPandocPopover && pandocButton !== null"
     v-bind:target="pandocButton"
@@ -173,16 +178,19 @@ import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import { useConfigStore, useDocumentTreeStore, useLRTStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { TaskStatus } from 'source/pinia/lrt-store'
+import PopoverLRT from './PopoverLRT.vue'
 
 const ipcRenderer = window.ipc
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()
+const LRTStore = useLRTStore()
 
 const SOUND_EFFECTS = [
   {
@@ -198,6 +206,9 @@ const SOUND_EFFECTS = [
     label: 'Chime'
   }
 ]
+
+// Feature detection: WebGL (will be false if, e.g., hardware accel is off)
+const hasWebGL = document.createElement('canvas').getContext('webgl2') !== null
 
 const searchParams = new URLSearchParams(window.location.search)
 // The window number indicates which main window this one here is. This is only
@@ -230,6 +241,8 @@ const docInfoButton = ref<HTMLElement|null>(null)
 const showDocInfoPopover = ref<boolean>(false)
 const pomodoroButton = ref<HTMLElement|null>(null)
 const showPomodoroPopover = ref<boolean>(false)
+const tasksButton = ref<HTMLElement|null>(null)
+const showTasksPopover = ref(false)
 const pandocButton = ref<HTMLElement|null>(null)
 const showPandocPopover = ref<boolean>(false)
 
@@ -410,7 +423,37 @@ const parsedDocumentInfo = computed<string>(() => {
   return cnt
 })
 
+// Long-Running-Task setup
+const hasTasks = computed(() => LRTStore.tasks.length > 0)
+const hasRunningTasks = computed(() => LRTStore.tasks.some(t => t.status !== TaskStatus.finished))
+const taskSuccess = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.finished).length)
+const taskAborted = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.aborted).length)
+const taskError = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.error).length)
+const taskOngoing = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.ongoing).length)
+
 const toolbarControls = computed<ToolbarControl[]>(() => {
+  // Depending on whether we have WebGL available, we either need to show a
+  // button, or we can show the full indicator.
+  const iris: ToolbarControl = {
+    type: 'iris-indicator',
+    id: 'long-running-tasks',
+    title: trans('Show tasks'),
+    segmentCounts: [ taskError.value, taskSuccess.value, taskOngoing.value, taskAborted.value ],
+    visible: hasTasks.value
+  }
+
+  const fallback: ToolbarControl = {
+    type: 'button',
+    id: 'long-running-tasks',
+    title: trans('Show tasks'),
+    icon: 'tasks',
+    badge: hasRunningTasks.value,
+    visible: hasTasks.value
+  }
+
+  const indicator: ToolbarControl = hasWebGL ? iris : fallback
+  // End long running task indicator mount
+
   return [
     {
       type: 'three-way-toggle',
@@ -561,6 +604,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       colour: pomodoro.value.colour[pomodoro.value.phase.type],
       visible: getToolbarButtonDisplay('showPomodoroButton')
     },
+    indicator,
     {
       type: 'toggle',
       id: 'toggle-sidebar',
@@ -577,7 +621,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       icon: 'download',
       visible: isUpdateAvailable.value
     }
-  ]
+  ] satisfies ToolbarControl[]
 })
 
 const editorSidebarSplitComponent = ref<typeof SplitView|null>(null)
@@ -647,6 +691,7 @@ onMounted(() => {
   tableButton.value = document.querySelector('#toolbar-insert-table')
   docInfoButton.value = document.querySelector('#toolbar-document-info')
   pomodoroButton.value = document.querySelector('#toolbar-pomodoro')
+  tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
   pandocButton.value = document.querySelector('#toolbar-pandocDivOrSpan')
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -886,6 +931,10 @@ function handleClick (clickedID?: string): void {
   } else if (clickedID === 'insert-table') {
     // Display the insertion popover
     showTablePopover.value = !showTablePopover.value
+  } else if (clickedID === 'long-running-tasks') {
+    // The tasks button is only mounted conditionally
+    tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
+    showTasksPopover.value = !showTasksPopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
   } else if (clickedID === 'pandocDivOrSpan') {
