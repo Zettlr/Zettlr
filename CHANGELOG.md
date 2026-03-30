@@ -7,7 +7,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- Security: Disallow any and all inline-JavaScript across all browser windows.
+- Security: Enforce loading remote resources using HTTPS.
 
 # 4.3.1
 

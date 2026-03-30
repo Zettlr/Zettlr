@@ -2,9 +2,21 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <!-- Allow script execution only from the app itself or inline stuff to
-         supress the Electron default warning (and also make it safer here) -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+    <!--
+      Define a CSP that consists of the following directives:
+      * Scripts may only be loaded if they share the same origin as the document
+      * Any resource (not just scripts) loaded via HTTP must be upgraded to
+        HTTPS or fail.
+      
+      See further:
+
+      * https://www.electronjs.org/docs/latest/tutorial/security#7-define-a-content-security-policy
+      * https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self'; upgrade-insecure-requests"
+    >
     <title>Zettlr</title>
 </head>
 <body>
