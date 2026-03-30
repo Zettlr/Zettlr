@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: The app now remembers if the file manager was open or closed
+  across restarts and applies this setting on each start (#3679).
 
 ## Under the Hood
 
