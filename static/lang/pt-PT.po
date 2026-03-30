@@ -6560,7 +6560,7 @@ msgstr "Áreas de trabalho"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:66
 msgid "No open files or folders"
-: msgstr "Nenhuns ficheiros ou pastas abertos"
+msgstr "Nenhuns ficheiros ou pastas abertos"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:67
 #: source/tmp/win-main/file-manager/FileList.vue.ts:71
@@ -6718,7 +6718,7 @@ msgstr "Atribuir a cor de destaque azul"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "Assign a purple accent color"
-: msgstr "Atribuir a cor de destaque roxa"
+msgstr "Atribuir a cor de destaque roxa"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:39
 msgid "Assign a rose accent color"
