@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.3.1
+
+## GUI and Functionality
+
 - Update `pt-PT` translations (#6262).
 - Translated the tutorial to Japanese (#6260).
 
