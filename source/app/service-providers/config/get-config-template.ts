@@ -220,6 +220,7 @@ export interface ConfigOptions {
     nativeAppearance: boolean
     vibrancy: boolean
     sidebarVisible: boolean
+    fileManagerVisible: boolean
     currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
     recentGlobalSearches: string[]
   }
@@ -287,6 +288,7 @@ export function getConfigTemplate (): ConfigOptions {
       nativeAppearance: process.platform === 'darwin', // Linux only
       vibrancy: process.platform === 'darwin' && !nativeTheme.prefersReducedTransparency,
       // Store a few GUI related settings here as well
+      fileManagerVisible: true,
       sidebarVisible: false,
       currentSidebarTab: 'toc',
       recentGlobalSearches: []

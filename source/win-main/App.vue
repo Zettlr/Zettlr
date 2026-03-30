@@ -204,7 +204,7 @@ const searchParams = new URLSearchParams(window.location.search)
 // necessary for the documents and split views to show up.
 const windowId = searchParams.get('window_id')!
 
-const fileManagerVisible = ref(true)
+const fileManagerVisible = computed<boolean>(() => configStore.config.window.fileManagerVisible)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
 const isUpdateAvailable = ref(false)
 const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
@@ -632,11 +632,11 @@ watch(distractionFree, (newValue) => {
       sidebar: sidebarVisible.value
     }
     configStore.setConfigValue('window.sidebarVisible', false)
-    fileManagerVisible.value = false
+    configStore.setConfigValue('window.fileManagerVisible', false)
   } else {
     // Leave distraction free mode
     configStore.setConfigValue('window.sidebarVisible', sidebarsBeforeDistractionfree.value.sidebar)
-    fileManagerVisible.value = sidebarsBeforeDistractionfree.value.fileManager
+    configStore.setConfigValue('window.fileManagerVisible', sidebarsBeforeDistractionfree.value.fileManager)
   }
 })
 
@@ -667,7 +667,7 @@ onMounted(() => {
         })
         .catch(err => console.error(err))
     } else if (shortcut === 'global-search') {
-      fileManagerVisible.value = true
+      configStore.setConfigValue('window.fileManagerVisible', true)
       mainSplitViewVisibleComponent.value = 'globalSearch'
       // Focus input
       nextTick()
@@ -675,9 +675,9 @@ onMounted(() => {
         .catch(err => console.error(err))
     } else if (shortcut === 'toggle-file-manager') {
       if (fileManagerVisible.value && mainSplitViewVisibleComponent.value === 'fileManager') {
-        fileManagerVisible.value = false
+        configStore.setConfigValue('window.fileManagerVisible', false)
       } else if (!fileManagerVisible.value) {
-        fileManagerVisible.value = true
+        configStore.setConfigValue('window.fileManagerVisible', true)
         mainSplitViewVisibleComponent.value = 'fileManager'
       } else if (mainSplitViewVisibleComponent.value === 'globalSearch') {
         mainSplitViewVisibleComponent.value = 'fileManager'
@@ -685,7 +685,7 @@ onMounted(() => {
     } else if (shortcut === 'filter-files') {
       // We need to immediately make the file manager visible, which will
       // -- in the next tick -- focus its filter input.
-      fileManagerVisible.value = true
+      configStore.setConfigValue('window.fileManagerVisible', true)
       mainSplitViewVisibleComponent.value = 'fileManager'
     } else if (shortcut === 'export') {
       showExportPopover.value = true
@@ -717,6 +717,11 @@ onMounted(() => {
   // by default.
   if (!sidebarVisible.value) {
     editorSidebarSplitComponent.value?.hideView(2)
+  }
+
+  // Similarly, if the file manager is set to hidden, do that, too.
+  if (!fileManagerVisible.value) {
+    fileManagerSplitComponent.value?.hideView(1)
   }
 
   // Check if there is an update available.
@@ -830,7 +835,7 @@ function moveSection (data: { from: number, to: number }): void {
 
 function startGlobalSearch (terms: string): void {
   mainSplitViewVisibleComponent.value = 'globalSearch'
-  fileManagerVisible.value = true
+  configStore.setConfigValue('window.fileManagerVisible', true)
   nextTick()
     .then(() => {
       globalSearchComponent.value?.startSearch(terms)
@@ -937,7 +942,7 @@ function handleToggle (controlState: { id?: string, state?: string | boolean }):
     configStore.setConfigValue('window.sidebarVisible', state)
   } else if (id === 'toggle-file-manager') {
     // Since this is a three-way-toggle, we have to inspect the state.
-    fileManagerVisible.value = state !== undefined
+    configStore.setConfigValue('window.fileManagerVisible', state !== undefined)
     if (typeof state === 'string' && (state === 'fileManager' || state === 'globalSearch')) {
       // Set the shown component to the correct one
       mainSplitViewVisibleComponent.value = state
