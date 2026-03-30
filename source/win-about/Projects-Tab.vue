@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-html="projectsIntro"></p>
+    <p>{{ projectsIntro }}</p>
 
     <div id="project-container">
       <div class="project-box" onclick="window.location = 'https://github.com/dsifford/astrocite'">

@@ -18,6 +18,7 @@ import { type EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils'
+import DOMPurify from 'dompurify'
 
 /**
  * Given fn in the format [^some-identifier], this function attempts to find a
@@ -97,14 +98,11 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
           : fnBody.text,
         {
           onCitation: window.getCitationCallback(library),
-          sanitizeHTML: true,
           zknLinkFormat
         }
       )
         .then(tooltipContent => {
-          console.log(tooltipContent)
-          console.log({ content })
-          content.innerHTML = tooltipContent
+          content.innerHTML = DOMPurify.sanitize(tooltipContent)
         })
         .catch(err => console.error(err))
 

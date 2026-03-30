@@ -4,8 +4,9 @@
       v-if="label"
       v-bind:for="fieldID"
       v-bind:class="{ disabled: disabled === true }"
-      v-html="label"
-    ></label>
+    >
+      {{ label }}
+    </label>
     <input
       v-bind:id="fieldID"
       ref="input"

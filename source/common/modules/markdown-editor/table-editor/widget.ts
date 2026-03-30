@@ -29,6 +29,7 @@ import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import { configField } from '../util/configuration'
 import { interceptAnchorClicks } from './util/anchor-callbacks'
 import openMarkdownLink from '../util/open-markdown-link'
+import DOMPurify from 'dompurify'
 
 /**
  * This holds the last measured height of each rendered table to provide
@@ -373,9 +374,8 @@ function updateRow (
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, {
         onCitation, zknLinkFormat,
-        sanitizeHTML: true
       }, 0).trim()
-      contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+      contentWrapper.innerHTML = html.length > 0 ? DOMPurify.sanitize(html) : '&nbsp;'
       interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
 
       // NOTE: This handle gets attached once and then remains on the TD for
@@ -451,9 +451,8 @@ function updateRow (
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, {
         onCitation, zknLinkFormat,
-        sanitizeHTML: true
       }, 0).trim()
-      contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+      contentWrapper.innerHTML = html.length > 0 ? DOMPurify.sanitize(html) : '&nbsp;'
       interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
     } else if (subview === null && selectionInCell) {
       // Before we mount a subview, we need to normalize the selection if
@@ -496,10 +495,9 @@ function updateRow (
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, {
         onCitation, zknLinkFormat,
-        sanitizeHTML: true
       }, 0).trim()
       if (html !== contentWrapper.innerHTML) {
-        contentWrapper.innerHTML = html.length > 0 ? html : '&nbsp;'
+        contentWrapper.innerHTML = html.length > 0 ? DOMPurify.sanitize(html) : '&nbsp;'
         interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
       }
     } else if ((subviewFrom !== cell.from || subviewTo !== cell.to) && (columnsChanged || rowsChanged)) {

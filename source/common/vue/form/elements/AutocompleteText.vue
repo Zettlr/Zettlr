@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{ inline: inline === true, 'form-control': true }">
-    <label v-if="label" v-bind:for="fieldId" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldId">{{ label }}</label>
     <!-- AutocompleteText is being implemented as a search for easy emptying of the field -->
     <input
       v-bind:id="fieldId"

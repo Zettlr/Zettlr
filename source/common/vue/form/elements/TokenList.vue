@@ -1,7 +1,7 @@
 <template>
   <!-- Token lists cannot be inline -->
   <div class="form-control">
-    <label v-if="label !== undefined" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label !== undefined" v-bind:for="fieldID">{{ label }}</label>
     <!-- Else: Normal input w/o reset button -->
     <div class="token-list" v-on:click="input?.focus()">
       <span

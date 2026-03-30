@@ -15,7 +15,7 @@
 import { renderBlockWidgets } from './base-renderer'
 import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
 import { WidgetType, type EditorView } from '@codemirror/view'
-
+import DOMPurify from 'dompurify'
 import mermaid from 'mermaid'
 import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
@@ -55,7 +55,7 @@ class MermaidWidget extends WidgetType {
     const id = `graphDiv${Date.now()}`
     elem.innerText = trans('Rendering mermaid graph …')
     mermaid.render(id, this.graph)
-      .then(result => { elem.innerHTML = result.svg })
+      .then(result => { elem.innerHTML = DOMPurify.sanitize(result.svg) })
       .catch(err => {
         elem.classList.add('error')
         const msg = trans('Could not render Graph:')
@@ -74,7 +74,7 @@ class MermaidWidget extends WidgetType {
     const id = `graphDiv${Date.now()}`
     dom.innerText = trans('Rendering mermaid graph …')
     mermaid.render(id, this.graph)
-      .then(result => { dom.innerHTML = result.svg })
+      .then(result => { dom.innerHTML = DOMPurify.sanitize(result.svg) })
       .catch(err => {
         dom.classList.add('error')
         const msg = trans('Could not render Graph:')

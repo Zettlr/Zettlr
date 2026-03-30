@@ -69,7 +69,8 @@
         </template>
         <!-- If there's a new update, always display the changelog -->
         <hr>
-        <div id="changelog" v-html="updateState.changelog"></div>
+        <!-- eslint-disable-next-line vue/no-v-html NOTE we can only disable this error here since the changelog is run through DOMPurify -->
+        <div id="changelog" v-html="sanitizedChangelog"></div>
       </template>
     </div>
   </WindowChrome>
@@ -100,6 +101,7 @@ import { computed, onUnmounted, ref } from 'vue'
 import { type UpdateState } from 'source/app/service-providers/updates'
 import { DateTime } from 'luxon'
 import { useConfigStore } from 'source/pinia'
+import DOMPurify from 'dompurify'
 
 const ipcRenderer = window.ipc
 
@@ -115,6 +117,8 @@ const checkForUpdateLabel = trans('Check for updates')
 
 const vibrancyEnabled = configStore.config.window.vibrancy
 const currentVersion = PACKAGE_JSON.version
+
+const sanitizedChangelog = computed(() => DOMPurify.sanitize(updateState.value.changelog))
 
 const startButtonLabel = ref(trans('Click to start update'))
 const lastCheckedMessage = computed(() => {
