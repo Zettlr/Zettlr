@@ -214,6 +214,5 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less">
-//
+<style lang="css" scoped>
 </style>
