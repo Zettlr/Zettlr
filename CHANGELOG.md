@@ -4,6 +4,7 @@
 
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
+- Add strikethrough to the Markdown AST parser (#6263).
 
 ## Under the Hood
 

@@ -74,5 +74,5 @@ watch(leaveRunningInNotificationArea, () => {
 
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 </style>

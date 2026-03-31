@@ -44,6 +44,7 @@ const EMPTY_NODES = new Set([
   'QuoteMark',
   'SubscriptMark',
   'SuperscriptMark',
+  'StrikethroughMark',
   'TaskMarker',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',

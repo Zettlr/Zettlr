@@ -1022,6 +1022,5 @@ function getToolbarButtonDisplay (configName: keyof ConfigOptions['displayToolba
 }
 </script>
 
-<style lang="less">
-//
+<style lang="css" scoped>
 </style>

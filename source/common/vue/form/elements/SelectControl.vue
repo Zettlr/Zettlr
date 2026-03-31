@@ -61,5 +61,5 @@ watch(inputValue, () => {
 const fieldID = computed<string>(() => 'form-select-' + (props.name ?? ''))
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 </style>

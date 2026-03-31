@@ -68,5 +68,5 @@ const fieldID = computed<string>(() => {
 const resetLabel = trans('Reset')
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 </style>

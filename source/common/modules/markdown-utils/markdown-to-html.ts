@@ -285,6 +285,10 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
       case 'italic':
         return `${node.whitespaceBefore}<em${attr}>${body}</em>`
     }
+  } else if (node.type === 'Strikethrough') {
+    const body = nodeToHTML(node.children, options, indent)
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<s${attr}>${body}</s>`
   } else if (node.type === 'Table') {
     const rows: string[] = []
     for (const row of node.rows) {
