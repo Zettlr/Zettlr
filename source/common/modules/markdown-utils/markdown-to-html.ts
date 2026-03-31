@@ -310,7 +310,6 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'Emphasis') {
     const body = nodeToHTML(node.children, options, indent)
     const attr = renderNodeAttributes(node)
-    console.log({ attr })
 
     switch (node.which) {
       case 'bold':
