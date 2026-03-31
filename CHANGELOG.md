@@ -8,6 +8,8 @@
 - Fixed Markdown-to-HTML output to generate more valid HTML. This makes
   comparisons with DOM-inserted HTML deterministic and should reduce the amount
   of updates especially for complex widgets such as tables by a lot.
+- Reduced amount of image updates in the editor. This may increase performance
+  especially for long documents with many images.
 
 ## Under the Hood
 
