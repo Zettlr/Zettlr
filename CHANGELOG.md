@@ -12,6 +12,12 @@
   especially for long documents with many images.
 - Fixed containing directories not uncollapsing when a containing file was made
   active.
+- Upon switching between files, the file tree now consistently scrolls to the
+  affected file, making working with larger workspaces easier.
+- The scroll-behavior for scrolling files into view has changed from instant to
+  `smooth`.
+- Fixed a small bug that could throw off switching between different file
+  manager modes.
 
 ## Under the Hood
 

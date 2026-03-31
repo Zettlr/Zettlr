@@ -17,6 +17,7 @@ import { DP_EVENTS, type BranchNodeJSON, type LeafNodeJSON, type OpenDocument } 
 import { ref, type Ref } from 'vue'
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from '@providers/documents'
 import { useWindowStateStore } from 'source/pinia'
+import { useWorkspaceStore } from 'source/pinia'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
@@ -127,6 +128,35 @@ function copyDelta (paneData: Ref<LeafNodeJSON[]>, treedata: DocumentTree, conte
   localLeaf.openFiles = remoteLeaf.openFiles
 }
 
+/**
+ * If applicable, this function uncollapses all directories between the file's
+ * containing workspace root and the file. This is not applicable for, e.g.,
+ * root files since there are no folders in the UI in need of uncollapsing.
+ *
+ * @param   {string}  filePath  The file path
+ */
+function maybeUncollapseDirectories (filePath: string): void {
+  const windowStateStore = useWindowStateStore()
+  const workspaceStore = useWorkspaceStore()
+
+  const containingWs = workspaceStore.pathList.find(p => filePath.startsWith(p))
+
+  if (containingWs === undefined) {
+    return // File path is not part of a workspace, uncollapsing not applicable
+  }
+
+  // Extract all intermediary directories between the workspace root and the file
+
+  let dir = filePath
+
+  while (dir.startsWith(containingWs)) {
+    dir = pathDirname(dir)
+    if (!windowStateStore.uncollapsedDirectories.includes(dir)) {
+      windowStateStore.uncollapsedDirectories.push(dir)
+    }
+  }
+}
+
 export const useDocumentTreeStore = defineStore('document-tree', () => {
   const windowStateStore = useWindowStateStore()
   const searchParams = new URLSearchParams(window.location.search)
@@ -215,11 +245,8 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
             const leaf = paneData.value.find(leaf => leaf.id === lastLeafId.value)
             if (leaf?.activeFile != null) {
               lastLeafActiveFile.value = leaf.activeFile
-              // If applicable, uncollapse the parent directory.
-              const dir = pathDirname(leaf.activeFile.path)
-              if (!windowStateStore.uncollapsedDirectories.includes(dir)) {
-                windowStateStore.uncollapsedDirectories.push(dir)
-              }
+              // If applicable, uncollapse the parent directory(s).
+              maybeUncollapseDirectories(leaf.activeFile.path)
             } else {
               lastLeafActiveFile.value = undefined
             }

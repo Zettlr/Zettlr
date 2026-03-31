@@ -142,8 +142,8 @@ watch(fileManagerMode, () => {
   // Reset all properties from the resize operations.
   const fileTree = fileTreeComponent.value?.$el
   const fileList = fileListComponent.value?.$el
-  fileTree.style.removeProperty('width')
-  fileTree.style.removeProperty('left')
+  fileTree.style?.removeProperty('width')
+  fileTree.style?.removeProperty('left')
   fileList.style.removeProperty('width')
   fileList.style.removeProperty('left')
   fileTreeVisible.value = true
