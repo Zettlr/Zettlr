@@ -78,9 +78,9 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
           const options = bibliography[0]
 
           content.innerHTML = [
-            options.bibstart,
+            DOMPurify.sanitize(options.bibstart),
             ...bibliography[1].map(item => DOMPurify.sanitize(item)),
-            options.bibend
+            DOMPurify.sanitize(options.bibend)
           ].join('\n')
 
           // Adjust styling depending on options
