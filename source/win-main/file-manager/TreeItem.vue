@@ -476,6 +476,23 @@ const isSelected = computed(() => {
   }
 })
 
+watch(isSelected, (value, oldValue) => {
+  // Scrolls this item into view, but only if it has just been selected and is
+  // not yet visible.
+  if (value === oldValue || !value) {
+    return
+  }
+
+  // We need to wait, so that the app can render the displayText element.
+  nextTick().then(() => {
+    if (displayText.value === null) {
+      return
+    }
+
+    displayText.value.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }).catch(err => console.error(err))
+})
+
 // We need to reset the scroll position when exiting editing mode
 // so that the filename is displayed within the element correctly.
 // It would otherwise be offset to the left edge of the container.
