@@ -133,11 +133,11 @@ export class TableWidget extends WidgetType {
       })
 
       return wrapper
-    } catch (err: any) {
-      console.log('Could not create table', err)
+    } catch (err: unknown) {
+      console.error(err)
       const error = document.createElement('div')
       error.classList.add('error')
-      error.textContent = `Could not render table: ${err.message}`
+      error.textContent = `Could not render table: ${err instanceof Error ? err.message : 'Unknown error'}`
       return error
     }
   }
