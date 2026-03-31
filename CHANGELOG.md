@@ -10,6 +10,8 @@
   of updates especially for complex widgets such as tables by a lot.
 - Reduced amount of image updates in the editor. This may increase performance
   especially for long documents with many images.
+- Fixed containing directories not uncollapsing when a containing file was made
+  active.
 
 ## Under the Hood
 
