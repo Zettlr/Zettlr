@@ -173,13 +173,14 @@ function sanitize (html: string): string {
  * @return  {string}         The attribute string. Includes leading space if necessary.
  */
 function renderNodeAttributes (node: ASTNode): string {
-  if (node.attributes === undefined) {
+  const rawAttributes = Object.entries(node.attributes)
+  if (rawAttributes.length === 0) {
     return ''
   }
 
   const attr: string[] = []
 
-  for (const [ key, value ] of Object.entries(node.attributes)) {
+  for (const [ key, value ] of rawAttributes) {
     let sanitizedValue = value
     if (Array.isArray(sanitizedValue)) {
       switch (key) {
@@ -309,6 +310,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'Emphasis') {
     const body = nodeToHTML(node.children, options, indent)
     const attr = renderNodeAttributes(node)
+    console.log({ attr })
 
     switch (node.which) {
       case 'bold':

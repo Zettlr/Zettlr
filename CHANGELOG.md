@@ -5,6 +5,9 @@
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
 - Add strikethrough to the Markdown AST parser (#6263).
+- Fixed Markdown-to-HTML output to generate more valid HTML. This makes
+  comparisons with DOM-inserted HTML deterministic and should reduce the amount
+  of updates especially for complex widgets such as tables by a lot.
 
 ## Under the Hood
 
