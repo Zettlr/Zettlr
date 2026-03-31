@@ -17,6 +17,7 @@ import { DP_EVENTS, type BranchNodeJSON, type LeafNodeJSON, type OpenDocument } 
 import { ref, type Ref } from 'vue'
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from '@providers/documents'
 import { useWindowStateStore } from 'source/pinia'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 
 const ipcRenderer = window.ipc
 type DocumentTree = BranchNodeJSON|LeafNodeJSON
@@ -214,6 +215,11 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
             const leaf = paneData.value.find(leaf => leaf.id === lastLeafId.value)
             if (leaf?.activeFile != null) {
               lastLeafActiveFile.value = leaf.activeFile
+              // If applicable, uncollapse the parent directory.
+              const dir = pathDirname(leaf.activeFile.path)
+              if (!windowStateStore.uncollapsedDirectories.includes(dir)) {
+                windowStateStore.uncollapsedDirectories.push(dir)
+              }
             } else {
               lastLeafActiveFile.value = undefined
             }
