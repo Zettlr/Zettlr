@@ -8,7 +8,7 @@
       <name>Stian Øby Johansen</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-01-20T10:24:00+00:00</updated>
+    <updated>2026-02-04T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -368,8 +368,8 @@
       <multiple>utgave</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>referanse</single>
-      <multiple>referanser</multiple>
+      <single>note</single>
+      <multiple>note</multiple>
     </term>
     <term name="number">
       <single>nummer</single>
@@ -404,10 +404,6 @@
     </term>
     <term name="collection-number" form="short">nr.</term>
     <term name="edition" form="short">utg.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
     <term name="number" form="short">
       <single>nr.</single>
       <multiple>nr.</multiple>

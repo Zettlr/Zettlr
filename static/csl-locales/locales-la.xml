@@ -3,9 +3,10 @@
   <info>
     <translator>
       <name>Andrew Dunning</name>
+      <uri>https://orcid.org/0000-0003-0464-5036</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-01-10T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -327,8 +328,14 @@
     <term name="figure" form="short">fig.</term>
     <term name="folio" form="short">fol.</term>
     <term name="issue" form="short">n.</term>
-    <term name="line" form="short">l.</term>
-    <term name="note" form="short">n.</term>
+    <term name="line" form="short">
+      <single>l.</single>
+      <multiple>ll.</multiple>
+    </term>
+    <term name="note" form="short">
+      <single>n.</single>
+      <multiple>nn.</multiple>
+    </term>
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>p.</single>
@@ -402,8 +409,8 @@
       <multiple>editiones</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>nota</single>
+      <multiple>notae</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -438,10 +445,7 @@
     </term>
     <term name="collection-number" form="short">n.</term>
     <term name="edition" form="short">ed.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">n.</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>
