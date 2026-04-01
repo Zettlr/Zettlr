@@ -17,7 +17,7 @@
       <name>Kacper Kłosowski</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-12-22T12:57:08+00:00</updated>
+    <updated>2026-01-10T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -414,8 +414,8 @@
       <multiple>wydania</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>notatka</single>
+      <multiple>notatki</multiple>
     </term>
     <term name="number">
       <single>numer</single>
@@ -453,10 +453,7 @@
       <multiple>nr.</multiple>
     </term>
     <term name="edition" form="short">wyd.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>cyt.</single>
-      <multiple>cyt.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">n.</term>
     <term name="number" form="short">
       <single>nr</single>
       <multiple>nr.</multiple>
