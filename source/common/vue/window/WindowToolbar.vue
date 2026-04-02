@@ -75,7 +75,10 @@
           v-if="item.type === 'iris-indicator' && item.visible !== false"
           v-bind:id="item.id"
           v-bind:key="idx"
-          v-bind:segment-counts="item.segmentCounts"
+          v-bind:tasks-aborted="item.tasksAborted"
+          v-bind:tasks-failed="item.tasksFailed"
+          v-bind:tasks-in-progress="item.tasksInProgress"
+          v-bind:tasks-success="item.tasksSuccess"
           v-on:click="emit('click', item.id)"
         >
         </IrisIndicator>

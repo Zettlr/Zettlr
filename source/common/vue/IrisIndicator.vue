@@ -1,13 +1,28 @@
 <template>
-  <button v-bind:id="`toolbar-${props.id}`" class="iris-indicator">
+  <button
+    v-if="hasWebGLIndicator"
+    v-bind:id="`toolbar-${props.id}`"
+    class="iris-indicator"
+    v-on:click="emit('click')"
+  >
     <canvas ref="indicatorCanvas"></canvas>
   </button>
+  <ButtonControl
+    v-else
+    v-bind:control="fallbackButtonItem"
+    v-bind:show-label="false"
+    v-bind:button-text="''"
+    v-on:click="emit('click')"
+  ></ButtonControl>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, toRef, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { IrisIndicator, type BuiltInColor, type Vec4 } from './iris-indicator-utils/iris-indicator'
+import ButtonControl, { type ToolbarButtonControl } from './window/toolbar-controls/ButtonControl.vue'
+import { trans } from '../i18n-renderer'
 
+// Should correspond to the indices of the semantic task meanings
 const DEFAULT_COLORS: Vec4<BuiltInColor> = [ 'red', 'green', 'blue', 'purple' ]
 
 export interface IrisIndicatorControl {
@@ -22,13 +37,32 @@ export interface IrisIndicatorControl {
    * 3. `blue`
    * 4. `purple`
    */
-  segmentCounts: Vec4
+  tasksInProgress: number
+  tasksFailed: number
+  tasksSuccess: number
+  tasksAborted: number
   // Allow arbitrary properties that we ignore
   [key: string]: unknown
 }
 
+const emit = defineEmits<{ (e: 'click'): void }>()
+
 const indicatorCanvas = ref<HTMLCanvasElement|null>(null)
 let indicator: IrisIndicator|undefined
+
+const hasWebGLIndicator = ref(true) // Necessary to make the canvas render initially
+
+// Fallback button Item that will be shown if we have no indicator
+const fallbackButtonItem: ToolbarButtonControl = {
+  type: 'button',
+  title: trans('Show tasks'),
+  icon: 'tasks',
+  badge: true
+}
+
+const segmentCounts = computed<Vec4>(() => ([
+  props.tasksFailed, props.tasksSuccess, props.tasksInProgress, props.tasksAborted
+]))
 
 // All settings optional, EXCEPT the segment counts.
 const props = defineProps<{
@@ -36,32 +70,29 @@ const props = defineProps<{
    * The control ID
    */
   id: string
-  fpsLimit?: number
-  enableFpsLimit?: boolean,
-  segmentColors?: Vec4<BuiltInColor>
-  segmentCounts: Vec4
-  segmentAdjustmentStepDuration?: number
-  rotationSpeed?: number
-  raySpeed?: number
-  bloomEnabled?: boolean
-  bloomIntensity?: 1|2|4|8
-  enableMSAA?: boolean
-  renderingResolution?: number
+  tasksInProgress: number
+  tasksFailed: number
+  tasksSuccess: number
+  tasksAborted: number
 }>()
 
-watch(toRef(props, 'segmentCounts'), () => {
+watch(segmentCounts, () => {
   if (indicator !== undefined) {
-    indicator.setSegmentCounts(props.segmentCounts)
+    indicator.setSegmentCounts(segmentCounts.value)
   }
 })
 
 onMounted(() => {
   if (indicatorCanvas.value === null) {
-    console.log('Canvas null')
     return
   }
 
-  indicator = setupIrisIndicator(indicatorCanvas.value)
+  try {
+    indicator = setupIrisIndicator(indicatorCanvas.value)
+  } catch (err: unknown) {
+    console.error('Could not instantiate WebGL indicator. Falling back to regular.')
+    hasWebGLIndicator.value = false
+  }
 })
 
 onBeforeUnmount(() => {
@@ -69,28 +100,6 @@ onBeforeUnmount(() => {
     indicator.pauseRendering()
   }
 })
-
-// We derive the rendering resolution from the device pixel ratio (which often
-// is either 1 or 2). To make it a bit simpler to see, we only allow powers of
-// two.
-function normalizedDPR (): 1|2|4|8|16 {
-  let dpr = Math.ceil(window.devicePixelRatio)
-  if ([ 1, 2, 4, 8, 16 ].includes(dpr)) {
-    return dpr as 1|2|4|8|16
-  }
-
-  if (dpr > 16) {
-    return 16
-  } else if (dpr > 8) {
-    return 8
-  } else if (dpr > 4) {
-    return 4
-  } else if (dpr > 2) {
-    return 2
-  } else {
-    return 1
-  }
-}
 
 /**
  * Creates a new iris indicator to render within the provided Canvas element.
@@ -107,17 +116,17 @@ function setupIrisIndicator (canvas: HTMLCanvasElement) {
   const indicator = new IrisIndicator(gl)
 
   // Initialize state
-  indicator.setBloomEnabled(props.bloomEnabled ?? true)
-  indicator.setBloomIntensity(props.bloomIntensity ?? 2)
-  indicator.setFpsLimitEnabled(props.enableFpsLimit ?? true)
-  indicator.setMSAAEnabled(props.enableMSAA ?? true)
-  indicator.setFpsLimit(props.fpsLimit ?? 30)
-  indicator.setRayMovementSpeed(props.raySpeed ?? 5)
-  indicator.setTextureSizeModifier(props.renderingResolution ?? normalizedDPR())
-  indicator.setRotationSpeed(props.rotationSpeed ?? 240)
-  indicator.setColors(props.segmentColors ?? DEFAULT_COLORS)
-  indicator.setSegmentCounts(props.segmentCounts)
-  indicator.setSegmentAdjustmentStepDuration(props.segmentAdjustmentStepDuration ?? 200)
+  indicator.setBloomEnabled(true)
+  indicator.setBloomIntensity(2)
+  indicator.setMSAAEnabled(true)
+  indicator.setFpsLimitEnabled(true)
+  indicator.setFpsLimit(30)
+  indicator.setRayMovementSpeed(5)
+  indicator.setTextureSizeModifier(window.devicePixelRatio)
+  indicator.setRotationSpeed(240)
+  indicator.setColors(DEFAULT_COLORS)
+  indicator.setSegmentCounts(segmentCounts.value)
+  indicator.setSegmentAdjustmentStepDuration(200)
 
   // Start the rendering
   indicator.enterRenderingLoop()

@@ -207,9 +207,6 @@ const SOUND_EFFECTS = [
   }
 ]
 
-// Feature detection: WebGL (will be false if, e.g., hardware accel is off)
-const hasWebGL = document.createElement('canvas').getContext('webgl2') !== null
-
 const searchParams = new URLSearchParams(window.location.search)
 // The window number indicates which main window this one here is. This is only
 // necessary for the documents and split views to show up.
@@ -425,35 +422,12 @@ const parsedDocumentInfo = computed<string>(() => {
 
 // Long-Running-Task setup
 const hasTasks = computed(() => LRTStore.tasks.length > 0)
-const hasRunningTasks = computed(() => LRTStore.tasks.some(t => t.status !== TaskStatus.finished))
 const taskSuccess = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.finished).length)
 const taskAborted = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.aborted).length)
 const taskError = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.error).length)
 const taskOngoing = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.ongoing).length)
 
 const toolbarControls = computed<ToolbarControl[]>(() => {
-  // Depending on whether we have WebGL available, we either need to show a
-  // button, or we can show the full indicator.
-  const iris: ToolbarControl = {
-    type: 'iris-indicator',
-    id: 'long-running-tasks',
-    title: trans('Show tasks'),
-    segmentCounts: [ taskError.value, taskSuccess.value, taskOngoing.value, taskAborted.value ],
-    visible: hasTasks.value
-  }
-
-  const fallback: ToolbarControl = {
-    type: 'button',
-    id: 'long-running-tasks',
-    title: trans('Show tasks'),
-    icon: 'tasks',
-    badge: hasRunningTasks.value,
-    visible: hasTasks.value
-  }
-
-  const indicator: ToolbarControl = hasWebGL ? iris : fallback
-  // End long running task indicator mount
-
   return [
     {
       type: 'three-way-toggle',
@@ -604,7 +578,16 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       colour: pomodoro.value.colour[pomodoro.value.phase.type],
       visible: getToolbarButtonDisplay('showPomodoroButton')
     },
-    indicator,
+    {
+      type: 'iris-indicator',
+      id: 'long-running-tasks',
+      title: trans('Show tasks'),
+      tasksInProgress: taskOngoing.value,
+      tasksSuccess: taskSuccess.value,
+      tasksFailed: taskError.value,
+      tasksAborted: taskAborted.value,
+      visible: hasTasks.value
+    },
     {
       type: 'toggle',
       id: 'toggle-sidebar',
