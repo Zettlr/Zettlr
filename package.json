@@ -180,7 +180,7 @@
     "@types/semver": "^7.7.1",
     "@types/showdown": "^2.0.6",
     "@types/underscore": "^1.13.0",
-    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.57.2",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "copy-webpack-plugin": "^14.0.0",
