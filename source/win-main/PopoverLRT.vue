@@ -175,24 +175,31 @@ function formatPercentage (perc: number, roundTo = 2): string {
 <style lang="css" scoped>
 #lrt-wrapper {
   padding: 10px;
-
-  .lrt:not(:last-child) {
-    border-bottom: 1px solid rgb(100, 100, 100);
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 
   .lrt {
     min-width: 200px;
     display: grid;
+    padding: 5px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 5px;
     grid-template-areas: "title title" "info info" "metadata status";
     grid-template-columns: auto 24px;
     gap: 5px;
+    background-color: rgb(235, 255, 235);
 
-    &.error { 
-      color: #e41818;
+    &.error {
+      background-color: rgb(255, 235, 245);
+    }
 
-      .info { color: inherit; }
+    &.in-progress {
+      background-color: rgb(225, 235, 255);
+    }
+
+    &.aborted {
+      background-color: rgb(230, 230, 230);
     }
 
     .title {
@@ -225,7 +232,20 @@ function formatPercentage (perc: number, roundTo = 2): string {
       color: rgb(142 142 142);
     }
 
-    &.error { color: #ff1212; }
+    background-color: rgb(25, 65, 0);
+    border-color: rgb(15, 15, 15);
+
+    &.error {
+      background-color: rgb(65, 10, 25);
+    }
+
+    &.in-progress {
+      background-color: rgb(10, 45, 65);
+    }
+
+    &.aborted {
+      background-color: rgb(45, 45, 45);
+    }
   }
 }
 </style>
