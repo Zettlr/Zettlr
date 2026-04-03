@@ -16058,6 +16058,7 @@ __metadata:
     css-loader: "npm:^7.1.4"
     csso: "npm:^5.0.5"
     d3: "npm:^7.9.0"
+    dompurify: "npm:^3.3.3"
     electron: "npm:^41.1.1"
     electron-builder: "npm:^26.8.2"
     electron-devtools-installer: "npm:^4.0.0"
