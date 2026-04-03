@@ -21,6 +21,7 @@
 
 ## Under the Hood
 
+- Updated Electron to `v41.1.1`.
 - Security: Disallow any and all inline-JavaScript across all browser windows.
 - Security: Enforce loading remote resources using HTTPS.
 
