@@ -165,6 +165,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
   const themes = getMainEditorThemes()
 
   return [
+    EditorView.cursorScrollMargin.of({ x: 50, y: 50 }), // Corresponds to the padding set to the MainEditor.vue for now
     // Both vim and emacs modes need to be included first, before any other
     // keymap.
     inputModeCompartment.of(inputMode),

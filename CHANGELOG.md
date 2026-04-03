@@ -18,6 +18,10 @@
   `smooth`.
 - Fixed a small bug that could throw off switching between different file
   manager modes.
+- Fixed the cursor scroll margin again. This means that, after years of it not
+  working, as you type there will now be some margin towards the top or bottom
+  of the editor window, preventing the cursor to "stick" to the edge of the
+  editor.
 
 ## Under the Hood
 
