@@ -14,7 +14,7 @@
         {{ buttonText }}
       </template>
     </button>
-    <span v-if="showLabel === true" class="toolbar-label" v-html="labelWithFallback"></span>
+    <span v-if="showLabel === true" class="toolbar-label">{{ labelWithFallback }}</span>
   </div>
 </template>
 

@@ -31,7 +31,7 @@
         disabled: disabled === true
       }"
     >
-      <span v-html="label"></span>
+      <span>{{ label }}</span>
       <div v-if="info" class="info">
         {{ info }}
       </div>

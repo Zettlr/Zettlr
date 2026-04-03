@@ -1,6 +1,6 @@
 <template>
   <div class="form-control">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <div class="input-button-group">
       <TextControl
         v-bind:id="fieldID"

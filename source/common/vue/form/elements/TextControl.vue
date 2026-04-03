@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{ inline: inline === true, 'form-control': true }">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <div
       v-bind:class="{
         'input-text-button-group': true,
@@ -33,7 +33,7 @@
         <cds-icon shape="times"></cds-icon>
       </button>
     </div>
-    <p v-if="info !== undefined" class="info" v-html="info"></p>
+    <p v-if="info !== undefined" class="info">{{ info }}</p>
   </div>
 </template>
 

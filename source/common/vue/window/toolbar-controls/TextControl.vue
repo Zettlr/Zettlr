@@ -7,9 +7,9 @@
       textAlign: props.control.align
     }"
   >
-    <strong v-if="props.control.style === 'strong'" v-html="props.control.content"></strong>
-    <em v-else-if="props.control.style === 'emphasis'" v-html="props.control.content"></em>
-    <span v-else v-html="props.control.content"></span>
+    <strong v-if="props.control.style === 'strong'">{{ props.control.content }}</strong>
+    <em v-else-if="props.control.style === 'emphasis'">{{ props.control.content }}</em>
+    <span v-else>{{ props.control.content }}</span>
   </div>
 </template>
 

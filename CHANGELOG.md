@@ -21,9 +21,25 @@
 
 ## Under the Hood
 
+- Switch from `sanitize-html` to `DOMPurify` for HTML sanitization, since the
+  latter has much, much less issues with various types of exotic XML-type tags
+  such as MathML.
 - Updated Electron to `v41.1.1`.
 - Security: Disallow any and all inline-JavaScript across all browser windows.
 - Security: Enforce loading remote resources using HTTPS.
+- Security: Generously spread HTML sanitization across the application. The
+  following changes have been made:
+  - Moved HTML sanitization to the edge (directly to the injection sinks)
+  - Removed HTML sanitization from the translation helpers. The reason is that
+    DOMPurify does not work out of the box in the main process, so we also
+    removed the sanitization from the renderer-translation helper. However, this
+    is safe since we do not insert the translations into HTML injection sinks.
+    Also, this way we can apply DOM sanitization at the edge, and no longer at
+    the beginning of the chain.
+  - This also means that HTML is no longer allowed in translation strings.
+  - Armed the `v-html`-rule again, and removed all `v-html` directives, and in
+    instances where this was not possible, explicitly disable this with a
+    reason.
 
 # 4.3.1
 

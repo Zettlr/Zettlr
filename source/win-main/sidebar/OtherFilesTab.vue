@@ -33,6 +33,7 @@
           v-on:dragstart="handleDragStart($event, attachment.path)"
         >
           <img v-if="hasPreview(attachment.path)" v-bind:src="getPreviewImageData(attachment.path)">
+          <!-- eslint-disable-next-line vue/no-v-html We can disable this one error, since getIcon runs DOMPurify over the HTML -->
           <span v-else v-html="getIcon(attachment.ext)"></span>
 
           <span class="attachment-name">{{ attachment.name }}</span>
@@ -55,6 +56,7 @@ import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { hasImageExt } from 'source/common/util/file-extention-checks'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import DOMPurify from 'dompurify'
 
 const ipcRenderer = window.ipc
 
@@ -112,7 +114,7 @@ function getIcon (ext: string): string {
   // @ts-expect-error We know that this thing has an outline, because we assign it in load-icons.ts
   const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
   if (typeof fileExtIcon === 'string') {
-    return fileExtIcon.replace('EXT', ext.slice(1, 4))
+    return DOMPurify.sanitize(fileExtIcon.replace('EXT', ext.slice(1, 4)))
   } else {
     return ''
   }

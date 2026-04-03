@@ -10,7 +10,7 @@
         v-bind:ratio="props.control.progressPercent / 100"
         v-bind:color="props.control.trackColour"
       ></RingProgress>
-      <span v-html="props.control.label"></span>
+      <span>{{ props.control.label }}</span>
     </button>
   </div>
 </template>

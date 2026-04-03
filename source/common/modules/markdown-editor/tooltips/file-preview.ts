@@ -17,6 +17,7 @@ import { syntaxTree } from '@codemirror/language'
 import { hoverTooltip, EditorView, type Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils/markdown-to-html'
+import DOMPurify from 'dompurify'
 import formatDate from '@common/util/format-date'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { configField } from '../util/configuration'
@@ -100,7 +101,6 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
     metadata.previewMarkdown,
     {
       zknLinkFormat,
-      sanitizeHTML: true,
       onCitation: window.getCitationCallback(CITEPROC_MAIN_DB),
       // Convert the image links to absolute (if necessary)
       onImageSrc (src) {
@@ -115,7 +115,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   )
     .then(html => {
       // ... and then apply it to the content element.
-      content.innerHTML = html
+      content.innerHTML = DOMPurify.sanitize(html)
     })
     .catch(err => console.error(err))
 
