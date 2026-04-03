@@ -422,8 +422,8 @@
       <multiple>الطبعات</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>ملاحظة</single>
+      <multiple>ملاحظات</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -463,10 +463,7 @@
     </term>
     <term name="collection-number" form="short">عدد</term>
     <term name="edition" form="short">ط</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">ملاحظة</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>

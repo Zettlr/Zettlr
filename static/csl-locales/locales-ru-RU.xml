@@ -6,7 +6,7 @@
       <email>alexei.kouprianov@gmail.com</email>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-01-10T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -430,8 +430,8 @@
       <multiple>издания</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>примечание</single>
+      <multiple>примечания</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -467,10 +467,7 @@
     </term>
     <term name="collection-number" form="short">вып.</term>
     <term name="edition" form="short">изд.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">прим.</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>

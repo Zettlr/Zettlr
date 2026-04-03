@@ -476,6 +476,14 @@ const isSelected = computed(() => {
   }
 })
 
+watch(isSelected, (value, oldValue) => {
+  // Scrolls this item into view, but only if it has just been selected and is
+  // not yet visible.
+  if (value !== oldValue && value) {
+    scrollIntoView()
+  }
+})
+
 // We need to reset the scroll position when exiting editing mode
 // so that the filename is displayed within the element correctly.
 // It would otherwise be offset to the left edge of the container.
@@ -563,7 +571,26 @@ onMounted(async () => {
     // of children.
     fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
   })
+
+  // Initially scroll into view if this item is selected
+  if (isSelected.value) {
+    scrollIntoView()
+  }
 })
+
+/**
+ * Scrolls this item into view
+ */
+function scrollIntoView () {
+  // We need to wait, so that the app can render the displayText element.
+  nextTick().then(() => {
+    if (displayText.value === null) {
+      return
+    }
+
+    displayText.value.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }).catch(err => console.error(err))
+}
 
 async function fetchChildren (): Promise<void> {
   children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })

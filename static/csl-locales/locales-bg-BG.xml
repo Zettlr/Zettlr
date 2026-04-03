@@ -2,7 +2,7 @@
 <locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="bg-BG">
   <info>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:08:07+00:00</updated>
+    <updated>2026-01-10T00:00:00+00:00</updated>
     <translator>
       <name>Valeriya Simeonova</name>
       <email>simeonova@fmi.uni-sofia.bg</email>
@@ -435,8 +435,8 @@
       <multiple>издания</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>бележка</single>
+      <multiple>бележки</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -467,10 +467,7 @@
       <multiple>cits.</multiple>
     </term>
     <term name="edition" form="short">изд.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">бел.</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>

@@ -144,13 +144,14 @@ function getTagInfo (node: GenericNode): HTMLTag {
  * @return  {string}         The attribute string. Includes leading space if necessary.
  */
 function renderNodeAttributes (node: ASTNode): string {
-  if (node.attributes === undefined) {
+  const rawAttributes = Object.entries(node.attributes)
+  if (rawAttributes.length === 0) {
     return ''
   }
 
   const attr: string[] = []
 
-  for (const [ key, value ] of Object.entries(node.attributes)) {
+  for (const [ key, value ] of rawAttributes) {
     let sanitizedValue = value
     if (Array.isArray(sanitizedValue)) {
       switch (key) {

@@ -5,12 +5,26 @@
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
 - Add strikethrough to the Markdown AST parser (#6263).
+- Fixed Markdown-to-HTML output to generate more valid HTML. This makes
+  comparisons with DOM-inserted HTML deterministic and should reduce the amount
+  of updates especially for complex widgets such as tables by a lot.
+- Reduced amount of image updates in the editor. This may increase performance
+  especially for long documents with many images.
+- Fixed containing directories not uncollapsing when a containing file was made
+  active.
+- Upon switching between files, the file tree now consistently scrolls to the
+  affected file, making working with larger workspaces easier.
+- The scroll-behavior for scrolling files into view has changed from instant to
+  `smooth`.
+- Fixed a small bug that could throw off switching between different file
+  manager modes.
 
 ## Under the Hood
 
 - Switch from `sanitize-html` to `DOMPurify` for HTML sanitization, since the
   latter has much, much less issues with various types of exotic XML-type tags
   such as MathML.
+- Updated Electron to `v41.1.1`.
 - Security: Disallow any and all inline-JavaScript across all browser windows.
 - Security: Enforce loading remote resources using HTTPS.
 - Security: Generously spread HTML sanitization across the application. The

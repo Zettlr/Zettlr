@@ -426,9 +426,10 @@ function scrollIntoView (): void {
   const quickFilterModifier = 40 // Height of the quick filter
 
   if (position < scrollTop) {
-    rootElement.value.scrollTop = position
+    rootElement.value.scrollTo({ top: position, behavior: 'smooth' })
   } else if (position > scrollTop + rootElement.value.offsetHeight - modifier) {
-    rootElement.value.scrollTop = position - rootElement.value.offsetHeight + modifier + quickFilterModifier
+    const top = position - rootElement.value.offsetHeight + modifier + quickFilterModifier
+    rootElement.value.scrollTo({ top, behavior: 'smooth' })
   }
 }
 
