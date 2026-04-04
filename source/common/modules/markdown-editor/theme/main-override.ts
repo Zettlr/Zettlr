@@ -33,25 +33,11 @@ export const mainOverride = EditorView.baseTheme({
   // Hide overflowing text in autocompletion info panels
   '.cm-completionInfo': { overflow: 'hidden' },
   // PANELS
-  '.cm-panels .cm-button': {
-    backgroundImage: 'none',
-    backgroundColor: 'inherit',
-    borderRadius: '6px',
-    fontSize: '13px'
-  },
-  '&light .cm-panels .cm-button': {
-    backgroundColor: 'white',
-    borderColor: '#aaa'
-  },
   '.cm-panel.cm-search label input[type=checkbox]': {
     marginRight: '10px'
   },
   '.cm-panel.cm-search': {
     userSelect: 'none' // prevent search panel text elements from being selected
-  },
-  '&dark .cm-panel.cm-panel-lint ul [aria-selected]': {
-    // Fixes highlighting of unfocused selected lint panel items in dark mode.
-    backgroundColor: '#787878'
   },
   // TOOLTIPS
   '.cm-tooltip': {

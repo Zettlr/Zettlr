@@ -131,6 +131,7 @@
     border-radius: 3px;
     padding: 0 4px;
 
+
     span {
       font-size: 20px;
       font-weight: normal;
@@ -168,6 +169,36 @@
     margin: 0 auto; /* (Re-)center */
   }
 
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
+  .cm-panels, .cm-tooltip, .cm-statusbar {
+    color: black;
+    background-color: #f5f5f5;
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: #000000;
+  }
+
+  .cm-panel .cm-button {
+    background-image: none;
+    background-color: inherit;
+    border-color: #aaa;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .cm-formatting-bar {
+    background-color: #f5f5f5;
+    border-color: #f5f5f5;
+
+    .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+      border-top-color: #f5f5f5;
+      border-bottom-color: #f5f5f5;
+    }
+  }
+  /* END */
+
   /* The underlying gfm mode is funny. For top level task items, it applies the
   class cm-variable-2 for the full text. For second-level task items, it
   applies cm-variable-3, and for the third level it applies cm-keyword. And
@@ -203,7 +234,43 @@
   }
 }
 
-body.dark .tippy-content .editor-fn-textarea {
-  background-color: transparent;
-  border: none;
+body.dark {
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
+  .cm-panels, .cm-tooltip, .cm-statusbar {
+    color: white;
+    background-color: #333333;
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: #d7d7d7;
+  }
+
+  .cm-panel.cm-panel-lint ul [aria-selected] {
+    background-color: #787878;
+  }
+
+  .cm-panel .cm-button {
+    border-color: #646464;
+  }
+
+  .cm-formatting-bar {
+    background-color: #333333;
+    border-color: #333333;
+
+    button.formatting-toolbar-button {
+      color: #c8c8c8;
+    }
+
+    .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+      border-top-color: #333333;
+      border-bottom-color: #333333;
+    }
+  }
+  /* END */
+
+  .tippy-content .editor-fn-textarea {
+    background-color: transparent;
+    border: none;
+  }
 }

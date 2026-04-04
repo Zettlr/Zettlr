@@ -14,6 +14,8 @@
 import { EditorView } from '@codemirror/view'
 
 const primaryColor = '#1bd4e9'
+const backgroundLight = '#fffff8'
+const backgroundDark = '#002b36'
 const selectionLight = '#b8f0f6cc'
 const selectionDark = '#0c616acc'
 
@@ -30,7 +32,7 @@ const commonRules: Record<string, any> = {
 export const themeBordeauxLight = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
-    backgroundColor: '#fffff8',
+    backgroundColor: backgroundLight,
     color: 'var(--grey-5)',
     fontFamily: 'Inconsolata, monospace'
   },
@@ -70,7 +72,7 @@ export const themeBordeauxLight = EditorView.theme({
 export const themeBordeauxDark = EditorView.theme({
   ...commonRules,
   '.cm-scroller': {
-    backgroundColor: '#002b36',
+    backgroundColor: backgroundDark,
     color: '#839496',
     // color: 'var(--grey-0)',
     fontFamily: 'Inconsolata, monospace'
