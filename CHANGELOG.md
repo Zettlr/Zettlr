@@ -22,6 +22,7 @@
   working, as you type there will now be some margin towards the top or bottom
   of the editor window, preventing the cursor to "stick" to the edge of the
   editor.
+- Update `pt-PT` translations (#6282).
 
 ## Under the Hood
 
