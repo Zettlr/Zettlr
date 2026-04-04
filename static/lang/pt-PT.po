@@ -2970,9 +2970,7 @@ msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
-msgstr "Um ou mais ficheiros especificados nas definições do projecto não foram "
-"encontrados. Podem ter sido movidos ou apagados. Por favor, verifica se "
-"todos os ficheiros que desejas exportar estão incluídos.""
+msgstr "Um ou mais ficheiros especificados nas definições do projecto não foram encontrados. Podem ter sido movidos ou apagados. Por favor, verifica se todos os ficheiros que desejas exportar estão incluídos.""
 
 #: source/app/service-providers/commands/dir-project-export.ts:172
 #, javascript-format
