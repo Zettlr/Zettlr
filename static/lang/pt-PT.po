@@ -42,7 +42,7 @@ msgstr "Bretão"
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl-clica para seguir esta ligação"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:15
@@ -2958,23 +2958,24 @@ msgstr "Exportar Projecto"
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
-msgstr ""
+msgstr "Não existem ficheiros seleccionados para exportação. Por favor, selecciona "
+"os ficheiros a incluir nas definições do projecto."
 
 #: source/app/service-providers/commands/dir-project-export.ts:90
 msgid "Project File Mismatch"
-msgstr ""
+msgstr "Incompatibilidade de Ficheiros do Projecto"
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
-msgstr ""
+msgstr "Um ou mais ficheiros especificados nas definições do projecto não foram encontrados. Podem ter sido movidos ou apagados. Por favor, verifica se todos os ficheiros que desejas exportar estão incluídos."
 
 #: source/app/service-providers/commands/dir-project-export.ts:172
 #, javascript-format
-msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgid "Project %s successfully exported. Click to show."
+msgstr "Projecto %s exportado com sucesso. Clica para mostrar."
 
 #: source/app/service-providers/commands/dir-project-export.ts:173
 #, fuzzy
@@ -7854,14 +7855,14 @@ msgstr "Formato da ligação"
 #: source/tmp/win-assets/FilterTab.vue.ts:134
 #: source/tmp/win-assets/CustomCSS.vue.ts:58
 msgid "Saving …"
-msgstr "A gravar …"
+msgstr "A guardar …"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:188
 #: source/tmp/win-assets/SnippetsTab.vue.ts:118
 #: source/tmp/win-assets/FilterTab.vue.ts:145
 #: source/tmp/win-assets/CustomCSS.vue.ts:65
 msgid "Saved!"
-msgstr "Gravado!"
+msgstr "Guardado!"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:193
 #: source/tmp/win-assets/SnippetsTab.vue.ts:122
