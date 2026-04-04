@@ -164,9 +164,6 @@ export const formattingToolbar = [
       padding: '0',
       width: '30px'
     },
-    '&dark .cm-tooltip.cm-formatting-bar button.formatting-toolbar-button': {
-      color: 'rgb(200, 200, 200)'
-    },
     '.cm-tooltip.cm-formatting-bar button.formatting-toolbar-button:first-child': {
       borderTopLeftRadius: '8px',
       borderBottomLeftRadius: '8px'
