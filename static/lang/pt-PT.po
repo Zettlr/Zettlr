@@ -2974,8 +2974,8 @@ msgstr "Um ou mais ficheiros especificados nas definições do projecto não for
 
 #: source/app/service-providers/commands/dir-project-export.ts:172
 #, javascript-format
-msgid "Project \"%s\" successfully exported. Click to show."
-msgstr "Projecto \"%s\" exportado com sucesso. Clica para mostrar."
+msgid "Project %s successfully exported. Click to show."
+msgstr "Projecto %s exportado com sucesso. Clica para mostrar."
 
 #: source/app/service-providers/commands/dir-project-export.ts:173
 #, fuzzy
