@@ -137,6 +137,14 @@ jobs:
           ref: ${{ github.ref_name }}
       - name: Enable Yarn 4.x
         run: corepack enable
+      # Somehow, even if we run corepack enable, this does not seem to affect
+      # the `yarn.cmd` that the SetupNode action is calling. Specifically, the
+      # scrippt calls `C:\Windows\system32\cmd.exe /D /S /C "C:\npm\prefix\yarn.cmd --version"``
+      # Here, we just rerun the same stuff, but on CMD.exe. Maybe that fixes it.
+      # Maybe not.
+      - name: Enable Yarn 4.x (extra-sausage for Windows and/or actions/setup-node)
+        shell: cmd
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
