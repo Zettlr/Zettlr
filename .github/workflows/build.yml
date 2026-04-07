@@ -101,6 +101,8 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0 # Required for the tag verification step.
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
@@ -133,13 +135,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-      - name: Enable Yarn 4.x
-        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -190,13 +192,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-      - name: Enable Yarn 4.x
-        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -243,13 +245,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-      - name: Enable Yarn 4.x
-        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -304,13 +306,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-      - name: Enable Yarn 4.x
-        run: corepack enable
       # Replicate PR #4910 on the x86_64 runner as this compiler appears
       # still to be supported by node-gyp even after the most recent update.
       # (NOTE: See added CC/CCX variables, found from output under 'zig targets'
@@ -357,13 +359,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-      - name: Enable Yarn 4.x
-        run: corepack enable
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
       - name: Set up build environment
@@ -417,13 +419,13 @@ jobs:
     steps:
       - name: Checkout branch ${{ github.ref_name }}
         uses: actions/checkout@v6
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
-      - name: Enable Yarn 4.x
-        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
