@@ -138,6 +138,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -193,6 +195,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -244,6 +248,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
@@ -303,6 +309,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Enable Yarn 4.x
+        run: corepack enable
       # Replicate PR #4910 on the x86_64 runner as this compiler appears
       # still to be supported by node-gyp even after the most recent update.
       # (NOTE: See added CC/CCX variables, found from output under 'zig targets'
@@ -354,6 +362,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
       - name: Set up build environment
@@ -412,6 +422,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
