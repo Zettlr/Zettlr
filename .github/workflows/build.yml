@@ -143,7 +143,7 @@ jobs:
       - name: Enable Yarn 4.x
         run: corepack enable
       - name: Activate Yarn from package.json (Windows)
-        run: corepack prepare "$(jq -r '.packageManager | split("+") | .[0]' package.json)" --activate
+        run: corepack prepare "$(jq -r '.packageManager' package.json)" --activate
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
