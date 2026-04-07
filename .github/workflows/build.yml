@@ -135,13 +135,15 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
-      - name: Enable Yarn 4.x
-        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           # cache: 'yarn' Disable to enable Windows builds, context: https://github.com/actions/setup-node/issues/1027
+      - name: Enable Yarn 4.x
+        run: corepack enable
+      - name: Activate Yarn 4.11.0 (Windows)
+        run: corepack prepare yarn@4.11.0 --activate
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
