@@ -142,8 +142,8 @@ jobs:
           # cache: 'yarn' Disable to enable Windows builds, context: https://github.com/actions/setup-node/issues/1027
       - name: Enable Yarn 4.x
         run: corepack enable
-      - name: Activate Yarn 4.11.0 (Windows)
-        run: corepack prepare yarn@4.11.0 --activate
+      - name: Activate Yarn from package.json (Windows)
+        run: corepack prepare "$(jq -r '.packageManager | split("+") | .[0]' package.json)" --activate
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
