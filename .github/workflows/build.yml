@@ -145,6 +145,9 @@ jobs:
       - name: Enable Yarn 4.x (extra-sausage for Windows and/or actions/setup-node)
         shell: cmd
         run: corepack enable
+      - name: Enable Yarn 4.x (for good measure with pwsh)
+        shell: pwsh
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
