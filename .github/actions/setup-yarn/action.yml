@@ -1,0 +1,56 @@
+name: Setup Node and Yarn
+description: >-
+  Install Node.js, enable Corepack, activate Yarn, and install dependencies.
+
+inputs:
+  node-version:
+    description: Node.js version (major, semver, or version file).
+    required: false
+    default: '22'
+  cache-yarn:
+    description: Whether to use setup-node's built-in Yarn cache.
+    required: false
+    default: 'true'
+  corepack-prepare:
+    description: Run corepack prepare from package.json packageManager.
+    required: false
+    default: 'true'
+  install-mode:
+    description: 'immutable (yarn install --immutable), mutable (yarn install), or skip'
+    required: false
+    default: immutable
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      if: inputs.cache-yarn == 'true'
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: yarn
+
+    - name: Setup Node.js (no Yarn cache)
+      if: inputs.cache-yarn != 'true'
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
+    - name: Activate Yarn from package.json
+      if: inputs.corepack-prepare == 'true'
+      run: corepack prepare "$(jq -r '.packageManager' package.json)" --activate
+      shell: bash
+
+    - name: Install dependencies (immutable)
+      if: inputs.install-mode == 'immutable'
+      run: yarn install --immutable
+      shell: bash
+
+    - name: Install dependencies (mutable)
+      if: inputs.install-mode == 'mutable'
+      run: yarn install
+      shell: bash
