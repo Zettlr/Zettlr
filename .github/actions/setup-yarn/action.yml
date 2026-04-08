@@ -8,7 +8,8 @@ inputs:
     required: false
     default: '22'
   cache-yarn:
-    description: Whether to use setup-node's built-in Yarn cache.
+    description: >-
+      Restore/save .yarn/cache between runs.
     required: false
     default: 'true'
   corepack-prepare:
@@ -24,14 +25,6 @@ runs:
   using: composite
   steps:
     - name: Setup Node.js
-      if: inputs.cache-yarn == 'true'
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ inputs.node-version }}
-        cache: yarn
-
-    - name: Setup Node.js (no Yarn cache)
-      if: inputs.cache-yarn != 'true'
       uses: actions/setup-node@v6
       with:
         node-version: ${{ inputs.node-version }}
@@ -44,6 +37,15 @@ runs:
       if: inputs.corepack-prepare == 'true'
       run: corepack prepare "$(jq -r '.packageManager' package.json)" --activate
       shell: bash
+
+    - name: Yarn Cache
+      if: inputs.cache-yarn == 'true'
+      uses: actions/cache@v5
+      with:
+        path: .yarn/cache
+        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: Install dependencies (immutable)
       if: inputs.install-mode == 'immutable'
