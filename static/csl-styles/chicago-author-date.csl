@@ -524,7 +524,7 @@
               </if>
               <else-if match="any" type="entry entry-dictionary entry-encyclopedia">
                 <!-- contributors fall after the title of unsigned reference entries (CMOS18 14.130) -->
-                <text macro="author-title-substitute-container"/>
+                <text macro="author-title-substitute-container-short"/>
               </else-if>
             </choose>
             <names variable="illustrator"/>
