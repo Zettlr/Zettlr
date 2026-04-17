@@ -263,7 +263,7 @@ function handleDoubleClick (origin: 'titlebar'|'toolbar'): void {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
+  font-family: system-ui, sans-serif;
   // macOS OPERATING SYSTEM STYLES
   // NOTE: On macOS, Zettlr uses vibrancy which means we must make the
   // background-color of all elements transparent which should have this
