@@ -23,6 +23,10 @@
   of the editor window, preventing the cursor to "stick" to the edge of the
   editor.
 - Update `pt-PT` translations (#6282).
+- Fixed an issue that would lead to unexpected navigation behavior across the
+  file manager (#4329).
+- Fixed an issue where the file list would follow slightly different filtering
+  rules than the file tree due to different function implementations.
 
 ## Under the Hood
 

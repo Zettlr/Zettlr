@@ -180,13 +180,13 @@ import {
   hasMSOfficeExt,
   hasOpenOfficeExt,
   hasPDFExt,
-  hasExt,
-  hasMdOrCodeExt
+  hasExt
 } from 'source/common/util/file-extention-checks'
 import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 import type { WritingTarget } from 'source/app/service-providers/targets'
+import { filterDescriptorChildren } from './util/filter-children'
 
 const ipcRenderer = window.ipc
 
@@ -360,7 +360,8 @@ const filteredChildren = computed(() => {
     return []
   }
 
-  const { files, attachmentExtensions } = configStore.config
+  const { files } = configStore.config
+  const filter = filterDescriptorChildren()
 
   return children.value
     // Ensure we only consider filtered files
@@ -377,30 +378,7 @@ const filteredChildren = computed(() => {
         return child.type === 'directory' && (files.dotFiles.showInFilemanager || !isDotFile(child.name))
       }
 
-      // Filter files based on our settings
-      if (child.type === 'directory') {
-        return files.dotFiles.showInFilemanager || !isDotFile(child.name)
-      }
-
-      // We have to check for hidden files first so they are not
-      // included if they end in one of the accepted extensions
-      if (isDotFile(child.name)) {
-        return files.dotFiles.showInFilemanager
-      } else if (hasImageExt(child.path)) {
-        return files.images.showInFilemanager
-      } else if (hasPDFExt(child.path)) {
-        return files.pdf.showInFilemanager
-      } else if (hasMSOfficeExt(child.path)) {
-        return files.msoffice.showInFilemanager
-      } else if (hasOpenOfficeExt(child.path)) {
-        return files.openOffice.showInFilemanager
-      } else if (hasDataExt(child.path)) {
-        return files.dataFiles.showInFilemanager
-      } else if (hasMdOrCodeExt(child.path)) {
-        return true
-      } else {
-        return hasExt(child.path, attachmentExtensions) // Any other "other" file should be excluded
-      }
+      return filter(child)
     })
 })
 
