@@ -38,12 +38,13 @@ import { computed } from 'vue'
 export interface ToolbarButtonControl {
   type: 'button'
   id?: string
+  buttonText?: string
   title?: string
   label?: string
   icon: string
   direction?: 'up'|'down'|'left'|'right'
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{

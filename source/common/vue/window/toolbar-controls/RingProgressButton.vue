@@ -43,7 +43,7 @@ export interface RingProgressButtonControl {
   trackColour?: string
   label?: string
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{

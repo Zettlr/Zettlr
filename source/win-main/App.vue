@@ -573,7 +573,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       icon: 'download',
       visible: isUpdateAvailable.value
     }
-  ]
+  ] satisfies ToolbarControl[]
 })
 
 const editorSidebarSplitComponent = ref<typeof SplitView|null>(null)
