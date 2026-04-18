@@ -7,9 +7,36 @@
       textAlign: props.control.align
     }"
   >
-    <strong v-if="props.control.style === 'strong'">{{ props.control.content }}</strong>
-    <em v-else-if="props.control.style === 'emphasis'">{{ props.control.content }}</em>
-    <span v-else>{{ props.control.content }}</span>
+    <strong v-if="props.control.style === 'strong'">
+      <template v-if="Array.isArray(props.control.content)">
+        <template v-for="line in props.control.content" v-bind:key="line">
+          {{ line }}<br />
+        </template>
+      </template>
+      <template v-else>
+        {{ props.control.content }}
+      </template>
+    </strong>
+    <em v-else-if="props.control.style === 'emphasis'">
+      <template v-if="Array.isArray(props.control.content)">
+        <template v-for="line in props.control.content" v-bind:key="line">
+          {{ line }}<br />
+        </template>
+      </template>
+      <template v-else>
+        {{ props.control.content }}
+      </template>
+    </em>
+    <span v-else>
+      <template v-if="Array.isArray(props.control.content)">
+        <template v-for="line in props.control.content" v-bind:key="line">
+          {{ line }}<br />
+        </template>
+      </template>
+      <template v-else>
+        {{ props.control.content }}
+      </template>
+    </span>
   </div>
 </template>
 
@@ -33,7 +60,7 @@ export interface ToolbarTextControl {
   type: 'text'
   style?: 'strong'|'emphasis'
   align: 'left'|'center'|'right'
-  content: string
+  content: string|string[]
   // Allow arbitrary properties that we ignore
   [key: string]: any
 }

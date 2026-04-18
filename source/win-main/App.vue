@@ -372,13 +372,13 @@ const shouldShowMenubar = computed<boolean>(() => process.platform === 'win32' |
 // Hide Toolbar is True and DistractionFree is True
 const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 
-const parsedDocumentInfo = computed<string>(() => {
+const parsedDocumentInfo = computed<string[]>(() => {
   const info = windowStateStore.activeDocumentInfo
   if (info == null) {
-    return ''
+    return []
   }
 
-  let cnt = ''
+  const lines: string[] = []
 
   if (info.selections.length > 0) {
     // We have selections to display.
@@ -387,27 +387,23 @@ const parsedDocumentInfo = computed<string>(() => {
       length += shouldCountChars.value ? sel.chars : sel.words
     })
 
-    cnt = trans('%s selected', localiseNumber(length))
-    cnt += '<br>'
+    lines.push(trans('%s selected', localiseNumber(length)))
     if (info.selections.length === 1) {
-      cnt += (info.selections[0].anchor.line) + ':'
-      cnt += (info.selections[0].anchor.ch) + ' &ndash; '
-      cnt += (info.selections[0].head.line) + ':'
-      cnt += (info.selections[0].head.ch)
+      const { head, anchor } = info.selections[0]
+      lines.push(`${anchor.line}:${anchor.ch} – ${head.line}:${head.ch}`)
     } else {
       // Multiple selections --> indicate
-      cnt += trans('%s selections', info.selections.length)
+      lines.push(trans('%s selections', info.selections.length))
     }
   } else {
     // No selection.
-    cnt = shouldCountChars.value
+    lines.push(shouldCountChars.value
       ? trans('%s characters', localiseNumber(info.chars))
-      : trans('%s words', localiseNumber(info.words))
-    cnt += '<br>'
-    cnt += info.cursor.line + ':' + info.cursor.ch
+      : trans('%s words', localiseNumber(info.words)))
+    lines.push(`${info.cursor.line}:${info.cursor.ch}`)
   }
 
-  return cnt
+  return lines
 })
 
 const toolbarControls = computed<ToolbarControl[]>(() => {
