@@ -431,7 +431,7 @@ function updateDynamics (): void {
   }
 }
 
-async function handleOperation (type: string, idx: number): Promise<void> {
+async function handleOperation (type: 'dir-new'|'file-new', idx: number): Promise<void> {
   // Creates files and directories, or duplicates a file.
   const source = getDirectoryContents.value.find(item => item.id === idx)?.props
   if (source === undefined) {

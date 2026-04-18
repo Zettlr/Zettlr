@@ -3,6 +3,7 @@
     <div
       v-bind:class="{
         'tree-item': true,
+        'collapsed': collapsed && item.type === 'directory',
         [item.type]: true,
         [item.type === 'directory' ? item.settings.color ?? '' : '']: true,
         selected: isSelected,
@@ -741,6 +742,15 @@ body {
       display: flex;
       margin: 8px 0px;
 
+      // If a directory is open, ensure the containing folder remains sticked to
+      // the top as the user scrolls through its (possibly long) contents.
+      &.directory:not(.collapsed) {
+        position: sticky;
+        top: 0px;
+        z-index: 1;
+        background-color: rgb(229, 229, 229);
+      }
+
       // Available directory colors (the colors are CSS variables specified
       // in WindowChrome.vue and string-values defined in PopoverDirProps.vue)
       &.blue { color: var(--accent-blue); }
@@ -811,6 +821,10 @@ body {
 
   &.dark div.tree-item-container {
     .tree-item {
+      &.directory:not(.collapsed) {
+        background-color: rgb(68, 68, 68);
+      }
+
       &.project {
         color: rgb(240, 98, 98);
       }

@@ -4,6 +4,11 @@
 
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
+- **Feature**: The names of open folders in the file manager tree will now
+  remain sticked to the top of the file manager as you scroll through its list
+  of children. This is especially helpful in the "combined" file manager mode
+  with folders containing many files and subfolders (such as reading notes or
+  Zettelkasten folders).
 - Add strikethrough to the Markdown AST parser (#6263).
 - Fixed Markdown-to-HTML output to generate more valid HTML. This makes
   comparisons with DOM-inserted HTML deterministic and should reduce the amount
