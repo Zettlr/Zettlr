@@ -28,6 +28,7 @@
 - Fixed an issue where the file list would follow slightly different filtering
   rules than the file tree due to different function implementations.
 - Harmonized font usage to System fonts across the app (#5125).
+- Improve Mermaid chart error reporting (#6291).
 
 ## Under the Hood
 
