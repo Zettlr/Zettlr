@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2024",
     "allowJs": true,
-    "module": "commonjs",
+    "module": "nodenext",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,
@@ -15,7 +15,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "paths": {
       "source/*": ["./source/*"],
