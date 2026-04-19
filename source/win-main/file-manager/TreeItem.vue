@@ -748,7 +748,6 @@ body {
         position: sticky;
         top: 0px;
         z-index: 1;
-        background-color: rgb(229, 229, 229);
       }
 
       // Available directory colors (the colors are CSS variables specified
@@ -821,10 +820,6 @@ body {
 
   &.dark div.tree-item-container {
     .tree-item {
-      &.directory:not(.collapsed) {
-        background-color: rgb(68, 68, 68);
-      }
-
       &.project {
         color: rgb(240, 98, 98);
       }
@@ -840,6 +835,10 @@ body {
 body.darwin {
   .tree-item {
     color: rgb(53, 53, 53);
+
+    &.directory:not(.collapsed) {
+      background-color: #f5f5f5;
+    }
 
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
@@ -866,13 +865,16 @@ body.darwin {
   &.dark {
     .tree-item {
       color: rgb(240, 240, 240);
+
+      &.directory:not(.collapsed) {
+        background-color: #1e1e1e;
+      }
     }
   }
 }
 
 body.win32 {
   .tree-item {
-
     .display-text {
       &.highlight {
         // This class is applied on drag & drop
@@ -880,12 +882,19 @@ body.win32 {
         color: var(--system-accent-color-contrast, --c-primary-contrast);
       }
     }
+
+    &.directory:not(.collapsed) {
+      background-color: #fafafa;
+    }
+  }
+
+  &.dark .tree-item.directory:not(.collapsed) {
+    background-color: #1e1e28;
   }
 }
 
 body.linux {
   .tree-item {
-
     .display-text {
       &.highlight {
         // This class is applied on drag & drop
@@ -893,6 +902,14 @@ body.linux {
         color: var(--system-accent-color-contrast, --c-primary-contrast);
       }
     }
+
+    &.directory:not(.collapsed) {
+      background-color: #fafafa;
+    }
+  }
+
+  &.dark .tree-item.directory:not(.collapsed) {
+    background-color: #282832;
   }
 }
 </style>
