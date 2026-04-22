@@ -46,7 +46,7 @@ import { vue } from '@codemirror/lang-vue'
 import { wast } from '@codemirror/lang-wast'
 import { xml } from '@codemirror/lang-xml'
 import { yaml } from '@codemirror/lang-yaml'
-import { hcl } from "codemirror-lang-hcl"
+import { hcl } from 'codemirror-lang-hcl'
 
 // Now from the legacy modes package
 import { c, csharp, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
