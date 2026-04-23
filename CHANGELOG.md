@@ -35,6 +35,7 @@
 - Harmonized font usage to System fonts across the app (#5125).
 - Improve Mermaid chart error reporting (#6291).
 - Add HCL/Terraform fenced code block support via CodeMirror language mapping.
+
 ## Under the Hood
 
 - Switch from `sanitize-html` to `DOMPurify` for HTML sanitization, since the
