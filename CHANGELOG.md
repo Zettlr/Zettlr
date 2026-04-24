@@ -45,7 +45,7 @@
 - Security: Enforce loading remote resources using HTTPS.
 - Security: Generously spread HTML sanitization across the application. The
   following changes have been made:
-  - Moved HTML sanitization to the edge (directly to the injection sinks)
+  - Moved HTML sanitization to the edge (directly to the injection sinks).
   - Removed HTML sanitization from the translation helpers. The reason is that
     DOMPurify does not work out of the box in the main process, so we also
     removed the sanitization from the renderer-translation helper. However, this
