@@ -2,6 +2,17 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+
+# 4.4.0
+
+## GUI and Functionality
+
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
 - **Feature**: The names of open folders in the file manager tree will now
