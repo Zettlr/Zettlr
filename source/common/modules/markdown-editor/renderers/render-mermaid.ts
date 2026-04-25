@@ -15,11 +15,18 @@
 import { renderBlockWidgets } from './base-renderer'
 import { type SyntaxNode, type SyntaxNodeRef } from '@lezer/common'
 import { WidgetType, type EditorView } from '@codemirror/view'
-
-import mermaid from 'mermaid'
+import DOMPurify from 'dompurify'
+import mermaid, { type MermaidConfig } from 'mermaid'
 import { type EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import { trans } from '@common/i18n-renderer'
+
+// Define some default options
+const DEFAULT_MERMAID_OPTIONS: MermaidConfig = {
+  theme: 'default',
+  startOnLoad: false, // Do not immediately scan the document
+  suppressErrorRendering: true // Never render unasked error codes
+}
 
 // Always re-initialize mermaid as soon as the darkMode changes
 const ipcRenderer = window.ipc
@@ -27,12 +34,22 @@ ipcRenderer.on('config-provider', (event, { command, payload }) => {
   if (command === 'update' && payload === 'darkMode') {
     const isDarkMode = window.config.get('darkMode') as boolean
     const theme = isDarkMode ? 'dark' : 'default'
-    mermaid.initialize({ startOnLoad: false, theme })
+    mermaid.initialize({ ...DEFAULT_MERMAID_OPTIONS, theme })
   }
 })
 
 // Initially, set the dark theme
-mermaid.initialize({ startOnLoad: false, theme: 'default' })
+mermaid.initialize(DEFAULT_MERMAID_OPTIONS)
+
+function onError (err: unknown, container: HTMLElement) {
+  container.classList.add('error')
+  if (err instanceof Error) {
+    console.error(err)
+    container.innerText = `${trans('Could not render Graph:')}\n\n${err.message}`
+  } else {
+    container.innerText = trans('Could not render Graph.')
+  }
+}
 
 class MermaidWidget extends WidgetType {
   constructor (readonly graph: string, readonly node: SyntaxNode, readonly darkMode: boolean) {
@@ -55,12 +72,8 @@ class MermaidWidget extends WidgetType {
     const id = `graphDiv${Date.now()}`
     elem.innerText = trans('Rendering mermaid graph …')
     mermaid.render(id, this.graph)
-      .then(result => { elem.innerHTML = result.svg })
-      .catch(err => {
-        elem.classList.add('error')
-        const msg = trans('Could not render Graph:')
-        elem.innerText = `${msg}\n\n${err.str as string}`
-      })
+      .then(result => { elem.innerHTML = DOMPurify.sanitize(result.svg) })
+      .catch((err: unknown) => onError(err, elem))
 
     elem.addEventListener('click', clickAndSelect(view))
     return elem
@@ -74,12 +87,8 @@ class MermaidWidget extends WidgetType {
     const id = `graphDiv${Date.now()}`
     dom.innerText = trans('Rendering mermaid graph …')
     mermaid.render(id, this.graph)
-      .then(result => { dom.innerHTML = result.svg })
-      .catch(err => {
-        dom.classList.add('error')
-        const msg = trans('Could not render Graph:')
-        dom.innerText = `${msg}\n\n${err.str as string}`
-      })
+      .then(result => { dom.innerHTML = DOMPurify.sanitize(result.svg) })
+      .catch((err: unknown) => onError(err, dom))
 
     return true
   }

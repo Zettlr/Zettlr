@@ -26,7 +26,6 @@ import type { CitationNode, ASTNode, GenericNode, FootnoteRef } from './markdown
 import { type MarkdownParserConfig } from '../markdown-editor/parser/markdown-parser'
 import _ from 'underscore'
 import { katexToHTML } from '@common/util/mathtex-to-html'
-import sanitizeHtml from 'sanitize-html'
 
 /**
  * Represents an HTML tag. This is a purposefully shallow representation
@@ -64,13 +63,6 @@ export interface MD2HTMLOptions {
    * there is a bibliography to render.
    */
   referenceSectionTitle?: string
-  /**
-   * If provided, the function will sanitize potentially unsafe HTML so that you
-   * can plug the returned HTML string directly into a DOM tree. This option is
-   * preferred to sanitizing the HTML after the fact, since that can eliminate
-   * safe but exotic HTML elements such as MathML.
-   */
-  sanitizeHTML?: boolean
   /**
    * This is called whenever the parser finds a citation.
    *
@@ -145,27 +137,6 @@ function getTagInfo (node: GenericNode): HTMLTag {
 }
 
 /**
- * Sanitizes a provided HTML string for safe use within the DOM.
- *
- * @param   {string}  html  The dirty HTML
- *
- * @return  {string}        The sane HTML
- */
-function sanitize (html: string): string {
-  return sanitizeHtml(html, {
-    // These options basically translate into: Allow nothing but bare metal tags
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-    disallowedTagsMode: 'escape',
-    allowedIframeDomains: [],
-    allowedIframeHostnames: [],
-    allowedScriptDomains: [],
-    allowedSchemes: sanitizeHtml.defaults.allowedSchemes.concat(['safe-file']),
-    allowedScriptHostnames: [],
-    allowVulnerableTags: false
-  })
-}
-
-/**
  * Returns a ready-to-use HTML attribute string for the provided node.
  *
  * @param   {ASTNode}  node  The node.
@@ -230,8 +201,6 @@ function addAttribute (node: ASTNode, attributeName: string, ...values: string[]
  */
 export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0): string {
   const HIDDEN_GENERIC_NODES = ['Document']
-
-  const maybeSanitize = options.sanitizeHTML === true ? sanitize : (x: string) => x
 
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
@@ -368,7 +337,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
     const tagInfo = getTagInfo(node)
 
     if (tagInfo.containsHTML) {
-      return maybeSanitize(nodeToHTML(node.children, options, indent))
+      return nodeToHTML(node.children, options, indent)
     }
 
     if ([ 'div', 'span' ].includes(tagInfo.tagName) && node.children.length === 0) {

@@ -12,6 +12,12 @@
 
       * https://www.electronjs.org/docs/latest/tutorial/security#7-define-a-content-security-policy
       * https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
+
+      NOTE (March 30, 2026): We unfortunately cannot enforce trusted types,
+      since it is still in its early days, and if we enforce trusted types, the
+      entire app will light up like a Christmas tree. So for now, we can
+      continue relying on HTML sanitizers (now DOMPurify), but we cannot enforce
+      this.
     -->
     <meta
       http-equiv="Content-Security-Policy"

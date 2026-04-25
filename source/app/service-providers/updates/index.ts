@@ -455,9 +455,11 @@ export default class UpdateProvider extends ProviderContract {
 
     // Adapt the rest of the state
     state.tagName = parsedResponse.tag_name
+    // NOTE: We do not sanitize the HTML here. Instead we sanitize it in the
+    // update window directly.
     state.changelog = await md2html(parsedResponse.body, {
       onCitation: (_c1, _c2) => undefined,
-      zknLinkFormat: 'link|title', sanitizeHTML: true
+      zknLinkFormat: 'link|title'
     })
     state.prerelease = parsedResponse.prerelease
     state.releasePage = parsedResponse.html_url

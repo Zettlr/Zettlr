@@ -13,7 +13,6 @@
  * END HEADER
  */
 
-import sanitizeHtml from 'sanitize-html'
 const ipcRenderer = window.ipc
 
 let i18nData: any
@@ -65,12 +64,5 @@ export function trans (msgid: string, ...args: any[]): string {
     transString = transString.replace('%s', String(a)) // Always replace one %s with an arg
   }
 
-  // Finally, before returning the translation, sanitize it. As these are only
-  // translation strings, we can basically only allow a VERY small subset of all
-  // tags.
-  const safeString = sanitizeHtml(transString, {
-    allowedTags: [ 'em', 'strong', 'kbd' ]
-  })
-
-  return safeString
+  return transString
 }

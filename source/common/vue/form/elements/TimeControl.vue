@@ -4,8 +4,9 @@
       v-if="label"
       v-bind:for="fieldID"
       v-bind:class="{ disabled: disabled === true }"
-      v-html="label"
-    ></label>
+    >
+      {{ label }}
+    </label>
     <input
       v-bind:id="fieldID"
       ref="input"
@@ -50,12 +51,12 @@ const fieldID = computed<string>(() => 'field-input-' + (props.name ?? ''))
 
 <style lang="less">
 input[type="time"] {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, sans-serif;
 }
 
 body.darwin {
   label {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, sans-serif;
 
     &.disabled {
       color: rgb(190, 190, 190);

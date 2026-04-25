@@ -15,7 +15,7 @@
         {{ buttonText }}
       </template>
     </button>
-    <span v-if="showLabel === true" class="toolbar-label" v-html="labelWithFallback"></span>
+    <span v-if="showLabel === true" class="toolbar-label">{{ labelWithFallback }}</span>
   </div>
 </template>
 
@@ -39,13 +39,14 @@ import { computed } from 'vue'
 export interface ToolbarButtonControl {
   type: 'button'
   id?: string
+  buttonText?: string
   title?: string
   label?: string
   icon: string
   badge?: boolean
   direction?: 'up'|'down'|'left'|'right'
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{

@@ -40,6 +40,7 @@ import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { md2html } from 'source/common/modules/markdown-utils'
 import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
+import DOMPurify from 'dompurify'
 
 const ipcRenderer = window.ipc
 
@@ -88,7 +89,6 @@ onMounted(async () => {
   md2html(fileContents, {
     referenceSectionTitle: trans('References'),
     onCitation: window.getCitationCallback(library),
-    sanitizeHTML: true,
     onBibliography: async (citations) => {
       return await ipcRenderer.invoke('citeproc-provider', {
         command: 'get-bibliography',
@@ -101,7 +101,7 @@ onMounted(async () => {
     }
   })
     .then(html => {
-      printContainer.value!.innerHTML = html
+      printContainer.value!.innerHTML = DOMPurify.sanitize(html)
     })
     .catch(err => console.error(err))
 })

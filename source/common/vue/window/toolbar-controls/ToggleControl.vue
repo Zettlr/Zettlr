@@ -12,7 +12,7 @@
       v-on:click="toggle"
     >
       <cds-icon v-if="control.icon" v-bind:shape="control.icon"></cds-icon>
-      <span v-if="showLabel === true" class="toolbar-label" v-html="labelWithFallback"></span>
+      <span v-if="showLabel === true" class="toolbar-label">{{ labelWithFallback }}</span>
     </button>
   </div>
 </template>
@@ -42,7 +42,7 @@ export interface ToolbarToggleControl {
   label?: string
   initialState: boolean
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{ control: ToolbarToggleControl, showLabel?: boolean }>()

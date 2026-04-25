@@ -7,7 +7,7 @@
         {{ wordCountLabel }}
       </small>
     </h1>
-    <!-- Will contain the actual HTML -->
+    <!-- eslint-disable-next-line vue/no-v-html NOTE: We can only disable this rule here since the referenceHTML will pass everything through DOMPurify -->
     <div v-html="referenceHTML"></div>
   </div>
 </template>
@@ -25,6 +25,7 @@ import { useDocumentTreeStore } from 'source/pinia'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import localiseNumber from 'source/common/util/localise-number'
 import { hasMarkdownExt } from 'source/common/util/file-extention-checks'
+import DOMPurify from 'dompurify'
 
 const ipcRenderer = window.ipc
 const documentTreeStore = useDocumentTreeStore()
@@ -55,13 +56,13 @@ const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
  */
 const referenceHTML = computed(() => {
   if (bibliography.value === undefined || bibliography.value[1].length === 0) {
-    return `<p>${trans('There are no citations in this document.')}</p>`
+    return DOMPurify.sanitize(`<p>${trans('There are no citations in this document.')}</p>`)
   }
 
   return [
-    bibliography.value[0].bibstart,
-    ...bibliography.value[1],
-    bibliography.value[0].bibend
+    DOMPurify.sanitize(bibliography.value[0].bibstart),
+    ...bibliography.value[1].map(item => DOMPurify.sanitize(item)),
+    DOMPurify.sanitize(bibliography.value[0].bibend)
   ].join('\n')
 })
 

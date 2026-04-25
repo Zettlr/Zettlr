@@ -53,7 +53,7 @@
         ></ButtonControl>
       </p>
       <p style="font-size: 14px; padding: 5px 0; text-align: center;">
-        <span v-html="resultsMessage"></span>
+        {{ resultsMessage }}
       </p>
       <hr>
     </template>
@@ -117,6 +117,7 @@
           >
             <!-- NOTE how we have to increase the line number from zero-based to 1-based -->
             <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line + 1 }}</strong>: </span>
+            <!-- eslint-disable-next-line vue/no-v-html NOTE: We can disable the v-html error here, since markText runs DOMPurify over the data, and we have to allow HTML tags to mark the elements. -->
             <span v-html="markText(singleRes)"></span>
           </div>
         </div>
@@ -151,6 +152,7 @@ import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@d
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathDirname, relativePath } from 'source/common/util/renderer-path-polyfill'
+import DOMPurify from 'dompurify'
 
 const ipcRenderer = window.ipc
 
@@ -496,7 +498,7 @@ function markText (resultObject: SearchResult): string {
     marked = marked.substring(0, range.from) + startTag + marked.substring(range.from)
   }
 
-  return marked
+  return DOMPurify.sanitize(marked)
 }
 
 function focusQueryInput (): void {

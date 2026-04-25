@@ -2,8 +2,24 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+
+# 4.4.0
+
+## GUI and Functionality
+
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
+- **Feature**: The names of open folders in the file manager tree will now
+  remain sticked to the top of the file manager as you scroll through its list
+  of children. This is especially helpful in the "combined" file manager mode
+  with folders containing many files and subfolders (such as reading notes or
+  Zettelkasten folders).
 - Add strikethrough to the Markdown AST parser (#6263).
 - Fixed Markdown-to-HTML output to generate more valid HTML. This makes
   comparisons with DOM-inserted HTML deterministic and should reduce the amount
@@ -18,11 +34,39 @@
   `smooth`.
 - Fixed a small bug that could throw off switching between different file
   manager modes.
+- Fixed the cursor scroll margin again. This means that, after years of it not
+  working, as you type there will now be some margin towards the top or bottom
+  of the editor window, preventing the cursor to "stick" to the edge of the
+  editor.
+- Update `pt-PT` translations (#6282).
+- Fixed an issue that would lead to unexpected navigation behavior across the
+  file manager (#4329).
+- Fixed an issue where the file list would follow slightly different filtering
+  rules than the file tree due to different function implementations.
+- Harmonized font usage to System fonts across the app (#5125).
+- Improve Mermaid chart error reporting (#6291).
 
 ## Under the Hood
 
+- Switch from `sanitize-html` to `DOMPurify` for HTML sanitization, since the
+  latter has much, much less issues with various types of exotic XML-type tags
+  such as MathML.
+- Updated Electron to `v41.1.1`.
 - Security: Disallow any and all inline-JavaScript across all browser windows.
 - Security: Enforce loading remote resources using HTTPS.
+- Security: Generously spread HTML sanitization across the application. The
+  following changes have been made:
+  - Moved HTML sanitization to the edge (directly to the injection sinks).
+  - Removed HTML sanitization from the translation helpers. The reason is that
+    DOMPurify does not work out of the box in the main process, so we also
+    removed the sanitization from the renderer-translation helper. However, this
+    is safe since we do not insert the translations into HTML injection sinks.
+    Also, this way we can apply DOM sanitization at the edge, and no longer at
+    the beginning of the chain.
+  - This also means that HTML is no longer allowed in translation strings.
+  - Armed the `v-html`-rule again, and removed all `v-html` directives, and in
+    instances where this was not possible, explicitly disable this with a
+    reason.
 
 # 4.3.1
 

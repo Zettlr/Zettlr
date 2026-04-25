@@ -1031,7 +1031,7 @@ body.darwin {
 
     div[role="tab"] {
       text-align: center;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: system-ui, sans-serif;
       font-size: 11px;
       background-color: rgb(230, 230, 230);
       border-right: 1px solid rgb(200, 200, 200);

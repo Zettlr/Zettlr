@@ -20,8 +20,10 @@
       <div
         v-bind:class="{ 'toc-entry': true, 'toc-entry-active': tocEntryIsActive(entry.line, idx) }"
         v-bind:data-line="entry.line"
-        v-html="tocEntryHTML[idx]"
-      ></div>
+      >
+        <!-- eslint-disable-next-line vue/no-v-html NOTE we can only disable this error here since the entries are run through DOMPurify. -->
+        <span v-html="tocEntryHTML[idx]"></span>
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +31,7 @@
 <script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
 import { ref, computed, watch, toRef, onMounted } from 'vue'
-import sanitizeHtml from 'sanitize-html'
+import DOMPurify from 'dompurify'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { type AnyDescriptor } from '@dts/common/fsal'
 import { md2html } from '@common/modules/markdown-utils'
@@ -144,21 +146,14 @@ function updateToCHTML () {
     promises.push(
       md2html(entry.text, {
         onCitation: window.getCitationCallback(library.value),
-        zknLinkFormat: configStore.config.zkn.linkFormat,
-        sanitizeHTML: true
+        zknLinkFormat: configStore.config.zkn.linkFormat
       })
     )
   }
 
   Promise.all(promises)
     .then(values => {
-      values = values.map(html => {
-        return sanitizeHtml(html, {
-          // Headings may be emphasised and contain code
-          allowedTags: [ 'em', 'kbd', 'code' ]
-        })
-      })
-
+      values = values.map(html => DOMPurify.sanitize(html))
       tocEntryHTML.value = values
     })
     .catch(err => console.error(err))
