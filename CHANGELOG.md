@@ -2,10 +2,11 @@
 
 ## GUI and Functionality
 
-* **Feature**: Long-running background tasks are now visually indicated with a
+- **Feature**: Long-running background tasks are now visually indicated with a
   toolbar icon. This allows users to check on longer-running tasks such as
   project exports or the re-indexing of new workspaces and observe the progress
   as it happens.
+- Add HCL/Terraform fenced code block support (#6302).
 
 ## Under the Hood
 
@@ -47,7 +48,6 @@
   rules than the file tree due to different function implementations.
 - Harmonized font usage to System fonts across the app (#5125).
 - Improve Mermaid chart error reporting (#6291).
-- Add HCL/Terraform fenced code block support via CodeMirror language mapping.
 
 ## Under the Hood
 
