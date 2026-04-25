@@ -98,7 +98,7 @@
     "gemoji": "^8.1.0",
     "gettext-parser": "^9.0.2",
     "got": "^11.8.6",
-    "katex": "^0.16.44",
+    "katex": "^0.16.45",
     "ky": "^1.14.3",
     "lang-criticmarkup": "^0.3.0",
     "luxon": "^3.7.2",
