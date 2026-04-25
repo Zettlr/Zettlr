@@ -28,25 +28,25 @@ import type LogProvider from '../../log'
  *
  * @return  {Promise<DatabaseRecord>}                The DatabaseRecord.
  */
-export async function loadDatabase (databasePath: string, logger: LogProvider): Promise<DatabaseRecord> {
+export async function loadDatabase (databasePath: string, logger?: LogProvider): Promise<DatabaseRecord> {
   const filenameExtension = path.extname(databasePath).toLowerCase()
   switch (filenameExtension) {
     case '.json':
-      logger.info(`Loading database ${path.basename(databasePath)} as CSL JSON.`)
+      logger?.info(`Loading database ${path.basename(databasePath)} as CSL JSON.`)
       return await loadJSON(databasePath, logger)
     case '.yml':
     case '.yaml':
-      logger.info(`Loading database ${path.basename(databasePath)} as CSL YAML.`)
+      logger?.info(`Loading database ${path.basename(databasePath)} as CSL YAML.`)
       return await loadYAML(databasePath, logger)
     case '.bib':
       // NOTE: ASSUMPTION: Since BibTeX and BibLaTeX share the same file
       // endings, we first attempt to load it as BibLaTeX and if it throws we
       // fall back to BibTeX.
       try {
-        logger.info(`Loading database ${path.basename(databasePath)} as BibLaTeX.`)
+        logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX.`)
         return await loadBibLaTeX(databasePath, logger)
       } catch (err) {
-        logger.info(`Loading database ${path.basename(databasePath)} as BibLaTeX failed. Falling back to loading as BibTeX.`)
+        logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX failed. Falling back to loading as BibTeX.`)
         return await loadBibTeX(databasePath, logger)
       }
     default:
@@ -61,7 +61,7 @@ export async function loadDatabase (databasePath: string, logger: LogProvider): 
  *
  * @return  {Promise<DatabaseRecord>}                The record
  */
-async function loadJSON (databasePath: string, logger: LogProvider): Promise<DatabaseRecord> {
+async function loadJSON (databasePath: string, logger?: LogProvider): Promise<DatabaseRecord> {
   const record: DatabaseRecord = {
     path: databasePath,
     type: 'csl',
@@ -92,19 +92,19 @@ async function loadJSON (databasePath: string, logger: LogProvider): Promise<Dat
   // in producing this fix.
   for (const item of parsedData as unknown[]) {
     if (!(item instanceof Object)) {
-      logger.error('[Citeproc] Refusing to load CSL item: Not an object.', item)
+      logger?.error('[Citeproc] Refusing to load CSL item: Not an object.', item)
       continue
     }
 
     if (!('id' in item) || !('type' in item) || (typeof item.id !== 'string') || (typeof item.type !== 'string')) {
-      logger.error('[Citeproc] Refusing to load CSL item: Required properties id or type were either not present, or the wrong type.', item)
+      logger?.error('[Citeproc] Refusing to load CSL item: Required properties id or type were either not present, or the wrong type.', item)
       continue
     }
 
     record.cslData[item.id] = item as CSLItem
   }
 
-  logger.info(`CSL JSON database loaded, ${Object.keys(record.cslData).length} items.`)
+  logger?.info(`CSL JSON database loaded, ${Object.keys(record.cslData).length} items.`)
 
   return record
 }
@@ -116,7 +116,7 @@ async function loadJSON (databasePath: string, logger: LogProvider): Promise<Dat
  *
  * @return  {Promise<DatabaseRecord>}                The record
  */
-async function loadYAML (databasePath: string, logger: LogProvider): Promise<DatabaseRecord> {
+async function loadYAML (databasePath: string, logger?: LogProvider): Promise<DatabaseRecord> {
   const record: DatabaseRecord = {
     path: databasePath,
     type: 'csl',
@@ -138,7 +138,7 @@ async function loadYAML (databasePath: string, logger: LogProvider): Promise<Dat
     record.cslData[item.id] = item
   }
 
-  logger.info(`CSL JSON database loaded, ${Object.keys(record.cslData).length} items.`)
+  logger?.info(`CSL JSON database loaded, ${Object.keys(record.cslData).length} items.`)
 
   return record
 }
@@ -150,7 +150,7 @@ async function loadYAML (databasePath: string, logger: LogProvider): Promise<Dat
  *
  * @return  {Promise<DatabaseRecord>}                The record
  */
-async function loadBibTeX (databasePath: string, logger: LogProvider): Promise<DatabaseRecord> {
+async function loadBibTeX (databasePath: string, logger?: LogProvider): Promise<DatabaseRecord> {
   const record: DatabaseRecord = {
     path: databasePath,
     type: 'bibtex',
@@ -169,7 +169,7 @@ async function loadBibTeX (databasePath: string, logger: LogProvider): Promise<D
   const attachments = extractBibTexAttachments(data, path.dirname(databasePath))
   record.bibtexAttachments = attachments
 
-  logger.info(`BibTeX database loaded, ${Object.keys(record.cslData).length} items; ${record.bibtexAttachments.length} attachments found.`)
+  logger?.info(`BibTeX database loaded, ${Object.keys(record.cslData).length} items; ${record.bibtexAttachments.length} attachments found.`)
 
   return record
 }
@@ -181,7 +181,7 @@ async function loadBibTeX (databasePath: string, logger: LogProvider): Promise<D
  *
  * @return  {Promise<DatabaseRecord>}                The record
  */
-async function loadBibLaTeX (databasePath: string, logger: LogProvider): Promise<DatabaseRecord> {
+async function loadBibLaTeX (databasePath: string, logger?: LogProvider): Promise<DatabaseRecord> {
   const record: DatabaseRecord = {
     path: databasePath,
     type: 'biblatex',
@@ -222,14 +222,14 @@ async function loadBibLaTeX (databasePath: string, logger: LogProvider): Promise
     record.bibtexAttachments[key] = [item.unexpected_fields.file]
   }
 
-  logger.info(`BibLaTeX database loaded, ${Object.keys(record.cslData).length} items.`)
+  logger?.info(`BibLaTeX database loaded, ${Object.keys(record.cslData).length} items.`)
   
   // NOTE: The bib parser will encounter strange data and define them as errors.
   // HOWEVER this does NOT mean that the entries are invalid; just that some
   // input data is not as expected. We log them here.
   if (bib.errors.length > 0) {
     for (const error of bib.errors) {
-      logger.error(`BibLaTeX Parsing error on line ${error.line} (entry: ${error.entry}): ${error.type} (${error.value})`)
+      logger?.error(`BibLaTeX Parsing error on line ${error.line} (entry: ${error.entry}): ${error.type} (${error.value})`)
     }
   }
 
