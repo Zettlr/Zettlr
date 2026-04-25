@@ -12,9 +12,6 @@ on:
 permissions:
   contents: read
 
-env:
-  NODE_VERSION: '22'
-
 concurrency:
   group: 'audit'
   cancel-in-progress: true
@@ -28,15 +25,8 @@ jobs:
     - uses: actions/checkout@v6
       with:
         ref: ${{ github.ref }}
-    - name: Enable Yarn 4.x
-      run: corepack enable
-    - name: Setup NodeJS ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'yarn'
-    - name: Install packages
-      run: yarn install --immutable
+    - name: Setup Node and Yarn
+      uses: ./.github/actions/setup-yarn
     # Run the actual audit
     - name: Audit
       run: |
