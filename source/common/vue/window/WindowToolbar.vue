@@ -71,6 +71,17 @@
           v-bind:control="item"
           v-on:click="emit('click', item.id)"
         ></TextControl>
+        <IrisIndicator
+          v-if="item.type === 'iris-indicator' && item.visible !== false"
+          v-bind:id="item.id"
+          v-bind:key="idx"
+          v-bind:tasks-aborted="item.tasksAborted"
+          v-bind:tasks-failed="item.tasksFailed"
+          v-bind:tasks-in-progress="item.tasksInProgress"
+          v-bind:tasks-success="item.tasksSuccess"
+          v-on:click="emit('click', item.id)"
+        >
+        </IrisIndicator>
       </template>
     </div>
     <button
@@ -106,10 +117,11 @@ import SearchControl, { type ToolbarSearchControl } from './toolbar-controls/Sea
 import SpacerControl, { type ToolbarSpacerControl } from './toolbar-controls/SpacerControl.vue'
 import TextControl, { type ToolbarTextControl } from './toolbar-controls/TextControl.vue'
 import { onMounted, onBeforeUnmount, ref } from 'vue'
+import IrisIndicator, { type IrisIndicatorControl } from '../IrisIndicator.vue'
 
 export type ToolbarControl = ToolbarButtonControl|RingProgressButtonControl|
 ToolbarSearchControl|ToolbarSpacerControl|ToolbarTextControl|
-ToolbarThreeWayControl|ToolbarToggleControl
+ToolbarThreeWayControl|ToolbarToggleControl|IrisIndicatorControl
 
 const ipcRenderer = window.ipc
 
