@@ -5180,6 +5180,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"codemirror-lang-hcl@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "codemirror-lang-hcl@npm:0.1.0"
+  dependencies:
+    "@codemirror/language": "npm:^6.0.0"
+    "@lezer/highlight": "npm:^1.0.0"
+    "@lezer/lr": "npm:^1.0.0"
+  checksum: 10/4368d77f9c967239645e681eab124800a08a3e9f6da95f92231ab71f95048feabba8e34b5500e51e0a54a006d624ad2223a4fc285b6e7ab111cba351cf75b98d
+  languageName: node
+  linkType: hard
+
 "color-convert@npm:^2.0.1":
   version: 2.0.1
   resolution: "color-convert@npm:2.0.1"
@@ -12276,13 +12287,13 @@ __metadata:
   linkType: hard
 
 "postcss@npm:^8.4.40, postcss@npm:^8.5.8":
-  version: 8.5.8
-  resolution: "postcss@npm:8.5.8"
+  version: 8.5.10
+  resolution: "postcss@npm:8.5.10"
   dependencies:
     nanoid: "npm:^3.3.11"
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
-  checksum: 10/cbacbfd7f767e2c820d4bf09a3a744834dd7d14f69ff08d1f57b1a7defce9ae5efcf31981890d9697a972a64e9965de677932ef28e4c8ba23a87aad45b82c459
+  checksum: 10/7eac6169e535b63c8412e94d4f6047fc23efa3e9dde804b541940043c831b25f1cd867d83cd2c4371ad2450c8abcb42c208aa25668c1f0f3650d7f72faf711a8
   languageName: node
   linkType: hard
 
@@ -16065,6 +16076,7 @@ __metadata:
     chalk: "npm:^5.6.2"
     chokidar: "npm:^5.0.0"
     citeproc: "npm:^2.4.63"
+    codemirror-lang-hcl: "npm:^0.1.0"
     copy-webpack-plugin: "npm:^14.0.0"
     cross-env: "npm:^10.1.0"
     css-loader: "npm:^7.1.4"
