@@ -28,7 +28,8 @@ layout (location = 0) out vec4 fragColor;
 // Courtesy of https://learnopengl.com/Advanced-Lighting/Bloom
 uniform bool u_blur_horizontal; // If true, blur horizontally
 float blur_weight[7] = float[7] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216, 0.007, 0.002); // Weights for blurring
-const int repeats = 7; // How many of the weights should we use?
+// How many of the weights should we use?
+const int repeats = 7;
 
 uniform sampler2D u_texture; // Main texture
 uniform sampler2D u_blurTexture; // Blur texture

@@ -116,7 +116,7 @@ function setupIrisIndicator (canvas: HTMLCanvasElement) {
   const indicator = new IrisIndicator(gl)
 
   // Initialize state
-  indicator.setBloomEnabled(true)
+  indicator.setBloomEnabled(false)
   indicator.setBloomIntensity(2)
   indicator.setMSAAEnabled(true)
   indicator.setFpsLimitEnabled(true)
