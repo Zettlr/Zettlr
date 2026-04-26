@@ -7,8 +7,8 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This module defines the syntax highlighting "themes" for
- *                  code and Markdown files.
+ * Description:     This module assigns CSS classes to syntax tags to customize
+ *                  synax highlighting
  *
  * END HEADER
  */

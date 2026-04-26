@@ -2,27 +2,28 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Karl-Marx-Stadt Theme
+ * Contains:        Frankfurt Theme
  * CVM-Role:        BaseTheme
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file contains the Karl-Marx-Stadt theme styles
+ * Description:     This file contains the Frankfurt theme styles
  *
  * END HEADER
  */
+
 import { EditorView } from '@codemirror/view'
-import { type ThemeVars, defaultVarsDark, defaultVarsLight } from './main-override'
+import { type ThemeVars, defaultVarsDark, defaultVarsLight } from '../editor'
 
-const primaryColor = '#dc2d2d'
+const primaryColor = '#1d75b3'
 
-const selectionLight = '#fbceb1'
-const selectionDark = '#a32323b3'
+const selectionLight = '#c8dcf0cc'
+const selectionDark = '#1d3786cc'
 
-const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
+const fontFamily = 'Crimson, serif'
 const codeFont = 'Inconsolata, monospace'
 
-export const karlMarxStadtVarsLight: ThemeVars = {
+export const frankfurtVarsLight: ThemeVars = {
   ...defaultVarsLight,
   '--zettlr-editor-primary-color': primaryColor,
   '--zettlr-editor-secondary-color': primaryColor,
@@ -31,7 +32,7 @@ export const karlMarxStadtVarsLight: ThemeVars = {
   '--zettlr-editor-code-font': codeFont,
 }
 
-export const karlMarxStadtVarsDark: ThemeVars = {
+export const frankfurtVarsDark: ThemeVars = {
   ...defaultVarsDark,
   '--zettlr-editor-primary-color': primaryColor,
   '--zettlr-editor-secondary-color': primaryColor,
@@ -40,10 +41,10 @@ export const karlMarxStadtVarsDark: ThemeVars = {
   '--zettlr-editor-code-font': codeFont,
 }
 
-export const themeKarlMarxStadtLight = EditorView.theme({
-  '&': karlMarxStadtVarsLight
+export const themeFrankfurtLight = EditorView.theme({
+  '&': frankfurtVarsLight
 }, { dark: false })
 
-export const themeKarlMarxStadtDark = EditorView.theme({
-  '&': karlMarxStadtVarsDark
+export const themeFrankfurtDark = EditorView.theme({
+  '&': frankfurtVarsDark
 }, { dark: true })

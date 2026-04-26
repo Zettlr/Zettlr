@@ -59,13 +59,14 @@ import { renderers } from './renderers'
 import { mdPasteDropHandlers } from './plugins/md-paste-drop-handlers'
 import { footnoteGutter } from './plugins/footnote-gutter'
 import { yamlFrontmatterLint } from './linters/yaml-frontmatter-lint'
-import { darkMode } from './theme/dark-mode'
-import { themeBerlinLight, themeBerlinDark } from './theme/berlin'
-import { themeBielefeldLight, themeBielefeldDark } from './theme/bielefeld'
-import { themeBordeauxLight, themeBordeauxDark } from './theme/bordeaux'
-import { themeFrankfurtLight, themeFrankfurtDark } from './theme/frankfurt'
-import { themeKarlMarxStadtLight, themeKarlMarxStadtDark } from './theme/karl-marx-stadt'
-import { mainOverride } from './theme/main-override'
+import {
+  mainThemes, darkMode,
+  themeBerlinLight, themeBerlinDark,
+  themeBielefeldLight, themeBielefeldDark,
+  themeBordeauxLight, themeBordeauxDark,
+  themeFrankfurtLight, themeFrankfurtDark,
+  themeKarlMarxStadtLight, themeKarlMarxStadtDark
+} from './theme'
 import { highlightWhitespace } from './plugins/highlight-whitespace'
 import { showLineNumbers } from './plugins/line-numbers'
 import { tagClasses } from './plugins/tag-classes'
@@ -104,24 +105,24 @@ export const inputModeCompartment = new Compartment()
 export function getMainEditorThemes (): Record<EditorConfiguration['theme'], { lightThemes: Extension[], darkThemes: Extension[] }> {
   return {
     berlin: {
-      lightThemes: [ mainOverride, themeBerlinLight ],
-      darkThemes: [ mainOverride, themeBerlinDark ]
+      lightThemes: [ mainThemes, themeBerlinLight ],
+      darkThemes: [ mainThemes, themeBerlinDark ]
     },
     bielefeld: {
-      lightThemes: [ mainOverride, themeBielefeldLight ],
-      darkThemes: [ mainOverride, themeBielefeldDark ]
+      lightThemes: [ mainThemes, themeBielefeldLight ],
+      darkThemes: [ mainThemes, themeBielefeldDark ]
     },
     bordeaux: {
-      lightThemes: [ mainOverride, themeBordeauxLight ],
-      darkThemes: [ mainOverride, themeBordeauxDark ]
+      lightThemes: [ mainThemes, themeBordeauxLight ],
+      darkThemes: [ mainThemes, themeBordeauxDark ]
     },
     frankfurt: {
-      lightThemes: [ mainOverride, themeFrankfurtLight ],
-      darkThemes: [ mainOverride, themeFrankfurtDark ]
+      lightThemes: [ mainThemes, themeFrankfurtLight ],
+      darkThemes: [ mainThemes, themeFrankfurtDark ]
     },
     'karl-marx-stadt': {
-      lightThemes: [ mainOverride, themeKarlMarxStadtLight ],
-      darkThemes: [ mainOverride, themeKarlMarxStadtDark ]
+      lightThemes: [ mainThemes, themeKarlMarxStadtLight ],
+      darkThemes: [ mainThemes, themeKarlMarxStadtDark ]
     }
   }
 }

@@ -2,28 +2,28 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Frankfurt Theme
+ * Contains:        Berlin Theme
  * CVM-Role:        BaseTheme
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file contains the Frankfurt theme styles
+ * Description:     This file contains the Berlin theme styles
  *
  * END HEADER
  */
 
 import { EditorView } from '@codemirror/view'
-import { type ThemeVars, defaultVarsDark, defaultVarsLight } from './main-override'
+import { defaultVarsDark, defaultVarsLight, type ThemeVars } from '../editor'
 
-const primaryColor = '#1d75b3'
+const primaryColor = '#1cb27e'
 
-const selectionLight = '#c8dcf0cc'
-const selectionDark = '#1d3786cc'
+const selectionLight = '#b4f0aacc'
+const selectionDark = '#5aaa50cc'
 
-const fontFamily = 'Crimson, serif'
+const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
 const codeFont = 'Inconsolata, monospace'
 
-export const frankfurtVarsLight: ThemeVars = {
+const berlinVarsLight: ThemeVars = {
   ...defaultVarsLight,
   '--zettlr-editor-primary-color': primaryColor,
   '--zettlr-editor-secondary-color': primaryColor,
@@ -32,7 +32,7 @@ export const frankfurtVarsLight: ThemeVars = {
   '--zettlr-editor-code-font': codeFont,
 }
 
-export const frankfurtVarsDark: ThemeVars = {
+const berlinVarsDark: ThemeVars = {
   ...defaultVarsDark,
   '--zettlr-editor-primary-color': primaryColor,
   '--zettlr-editor-secondary-color': primaryColor,
@@ -41,10 +41,10 @@ export const frankfurtVarsDark: ThemeVars = {
   '--zettlr-editor-code-font': codeFont,
 }
 
-export const themeFrankfurtLight = EditorView.theme({
-  '&': frankfurtVarsLight
+export const themeBerlinLight = EditorView.theme({
+  '&': berlinVarsLight
 }, { dark: false })
 
-export const themeFrankfurtDark = EditorView.theme({
-  '&': frankfurtVarsDark
+export const themeBerlinDark = EditorView.theme({
+  '&': berlinVarsDark
 }, { dark: true })

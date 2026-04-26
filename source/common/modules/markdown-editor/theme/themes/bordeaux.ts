@@ -13,7 +13,7 @@
  */
 
 import { EditorView } from '@codemirror/view'
-import { defaultVarsDark, defaultVarsLight, type ThemeVars } from './main-override'
+import { defaultVarsDark, defaultVarsLight, type ThemeVars } from '../editor'
 
 const primaryColor = '#1bd4e9'
 const secondaryColor = '#d02325'
