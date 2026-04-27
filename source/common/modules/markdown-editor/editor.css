@@ -114,7 +114,7 @@
     75% { opacity: 1; }
     100% { opacity: 1; }
   }
-  &.cm-focused > .cm-scroller > .cm-cursorLayer {
+  .cm-focused > .cm-scroller > .cm-cursorLayer {
     animation: cm-blink 1.2s infinite;
   }
 
