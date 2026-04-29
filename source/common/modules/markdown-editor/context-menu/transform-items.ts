@@ -25,6 +25,7 @@ import { removeLineBreaks } from '../commands/transforms/remove-line-breaks'
 import { removeSpacesAroundEmdashes } from '../commands/transforms/remove-spaces-around-emdashes'
 import { singleQuotesToDouble } from '../commands/transforms/single-quotes-to-double-quotes'
 import { straightenQuotes } from '../commands/transforms/straighten-quotes'
+import { curlQuotes } from '../commands/transforms/curl-quotes'
 import { toDoubleQuotes } from '../commands/transforms/to-double-quotes'
 import { toSentenceCase } from '../commands/transforms/to-sentence-case'
 import { toTitleCase } from '../commands/transforms/to-title-case'
@@ -68,6 +69,14 @@ export function getTransformSubmenu (view: EditorView): SubmenuItem {
         label: trans('Straighten quotes'),
         type: 'normal',
         action () { straightenQuotes(view) }
+      },
+      {
+        label: trans('Curl quotes'),
+        type: 'normal',
+        action () {
+          const { magicQuotes } = view.state.field(configField).autocorrect
+          curlQuotes(magicQuotes.primary, magicQuotes.secondary)(view)
+        }
       },
       {
         label: trans('Ensure double quotes'),
