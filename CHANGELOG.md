@@ -11,7 +11,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- Fixed an issue where the config provider would not emit the old version
+  correctly (context: #6311).
 
 # 4.4.0
 
