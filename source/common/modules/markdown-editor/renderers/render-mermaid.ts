@@ -23,6 +23,8 @@ import { trans } from '@common/i18n-renderer'
 
 // Define some default options
 const DEFAULT_MERMAID_OPTIONS: MermaidConfig = {
+  securityLevel: 'strict',
+  htmlLabels: false,
   theme: 'default',
   startOnLoad: false, // Do not immediately scan the document
   suppressErrorRendering: true // Never render unasked error codes

@@ -7,6 +7,7 @@
   project exports or the re-indexing of new workspaces and observe the progress
   as it happens.
 - Add HCL/Terraform fenced code block support (#6302).
+- Fixed Mermaid Chart labels not showing up (#6313).
 
 ## Under the Hood
 
