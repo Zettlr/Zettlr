@@ -30,8 +30,8 @@ const startChars = ' ([{-\u2013\u2014\n\r\t\v\f/\\'
  * @return  {StateCommand}       A `StateCommand` that curls straight quotes.
  */
 export function curlQuotes (primary: string, secondary: string): StateCommand {
-  const [primaryOpen, primaryClose] = primary.split('\u2026')
-  const [secondaryOpen, secondaryClose] = secondary.split('\u2026')
+  const [ primaryOpen, primaryClose ] = primary.split('\u2026')
+  const [ secondaryOpen, secondaryClose ] = secondary.split('\u2026')
 
   return transformSelectedText((text) => {
     let result = ''
