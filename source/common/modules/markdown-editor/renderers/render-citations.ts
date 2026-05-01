@@ -21,7 +21,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { citationMenu } from '../context-menu/citation-menu'
 import { configField } from '../util/configuration'
 import { type Citation, NODES, nodeToCiteItem } from '../parser/citation-parser'
-import DOMPurify from 'dompurify'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 class CitationWidget extends WidgetType {
   constructor (readonly citation: Citation, readonly rawCitation: string, readonly node: SyntaxNode) {
@@ -68,7 +68,7 @@ class CitationWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.classList.add('citeproc-citation')
     if (renderedCitation !== undefined) {
-      elem.innerHTML = DOMPurify.sanitize(renderedCitation)
+      elem.innerHTML = sanitizeHTML(renderedCitation)
     } else {
       elem.innerText = this.rawCitation
       elem.classList.add('error')

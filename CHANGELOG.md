@@ -8,6 +8,7 @@
   as it happens.
 - Add HCL/Terraform fenced code block support (#6302).
 - Fixed Mermaid Chart labels not showing up (#6313).
+- Fixed icons in the statusbar not working.
 
 ## Under the Hood
 
@@ -18,6 +19,8 @@
   many CSS variables that you can peruse to adjust groups of elements at once.
   **Note that this change might break your Custom CSS**. Make sure to check
   anything after setup, and adjust it according to your liking.
+- Centralized DOMPurify functionality and default configuration in a new utility
+  function, that also allows icons using `cds-icon`.
 
 # 4.4.0
 
