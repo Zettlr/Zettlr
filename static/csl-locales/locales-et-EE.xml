@@ -6,7 +6,7 @@
       <uri>https://orcid.org/0000-0003-0464-5036</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-01-10T00:00:00+00:00</updated>
+    <updated>2026-04-29T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -63,7 +63,7 @@
       <single>viide</single>
       <multiple>viited</multiple>
     </term>
-    <term name="retrieved">salvestatud</term>
+    <term name="retrieved">vaadatud</term>
     <term name="review-of">review of</term>
     <term name="scale">scale</term>
     <term name="special-issue">special issue</term>
