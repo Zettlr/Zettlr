@@ -21,6 +21,8 @@
   anything after setup, and adjust it according to your liking.
 - Centralized DOMPurify functionality and default configuration in a new utility
   function, that also allows icons using `cds-icon`.
+- Switch from `ts-node` to `tsx` for running unit tests.
+- Explicitly declare Zettlr as a `CommonJS` project.
 
 # 4.4.0
 
