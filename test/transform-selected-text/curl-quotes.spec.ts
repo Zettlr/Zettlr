@@ -4,7 +4,7 @@
  *
  * Contains:        Tests for the curlQuotes function
  * CVM-Role:        TESTING
- * Maintainers:     Wang Yile
+ * Maintainers:     Wang Zilu
  * License:         GNU GPL v3
  *
  * Description:     This file tests the curlQuotes function.
@@ -64,9 +64,39 @@ describe('MarkdownEditor#curlQuotes()', function () {
     strictEqual(wasDispatched, true, 'A transaction must have been dispatched')
   })
 
+  it('given a partial selection, converts quotes only inside the selection', function () {
+    const input = '"Hi" and "bye"'
+    const expectedOutput = '\u201cHi\u201d and "bye"'
+
+    let state = EditorState.create({
+      doc: input,
+      selection: { anchor: 0, head: 4 }
+    })
+
+    const dispatch = (tx: any) => {
+      state = state.update(tx).state
+    }
+
+    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+
+    strictEqual(handled, true)
+    strictEqual(state.doc.toString(), expectedOutput)
+  })
+
   it('given no quotes and no selection then no transaction is dispatched', function () {
     const state = EditorState.create({
       doc: 'There are no quotes in this text'
+      // nothing selected
+    })
+
+    const dispatch = () => fail('No transaction must be dispatched')
+
+    curlQuotes(primary, secondary)({ state, dispatch })
+  })
+
+  it('given quotes but no selection then no transaction is dispatched', function () {
+    const state = EditorState.create({
+      doc: 'He said "hello"'
       // nothing selected
     })
 
@@ -207,6 +237,25 @@ describe('MarkdownEditor#curlQuotes()', function () {
     strictEqual(wasDispatched, true, 'A transaction must have been dispatched')
   })
 
+  it('given mixed straight and curly quotes, converts only straight quotes', function () {
+    const input = '\u201cHi\u201d and "bye"'
+    const expectedOutput = '\u201cHi\u201d and \u201cbye\u201d'
+
+    let state = EditorState.create({
+      doc: input,
+      selection: selectAll(input),
+    })
+
+    const dispatch = (tx: any) => {
+      state = state.update(tx).state
+    }
+
+    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+
+    strictEqual(handled, true)
+    strictEqual(state.doc.toString(), expectedOutput)
+  })
+
   it('given mixed single and double quotes, converts both correctly', function () {
     const input = '"It\'s here," he said'
     const expectedOutput = '\u201cIt\u2019s here,\u201d he said'
@@ -238,6 +287,57 @@ describe('MarkdownEditor#curlQuotes()', function () {
     curlQuotes(primary, secondary)({ state, dispatch })
 
     strictEqual(wasDispatched, true, 'A transaction must have been dispatched')
+  })
+
+  it('given a contraction, converts apostrophe to closing single quote', function () {
+    const input = "don't"
+    const expectedOutput = 'don\u2019t'
+
+    let state = EditorState.create({
+      doc: input,
+      selection: selectAll(input),
+    })
+
+    const dispatch = (tx: any) => {
+      state = state.update(tx).state
+    }
+
+    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+
+    strictEqual(handled, true)
+    strictEqual(state.doc.toString(), expectedOutput)
+  })
+
+  it('given a quote after newline, uses opening quote', function () {
+    const input = 'He said:\n"hello"'
+    const expectedOutput = 'He said:\n\u201chello\u201d'
+
+    let state = EditorState.create({
+      doc: input,
+      selection: selectAll(input),
+    })
+
+    const dispatch = (tx: any) => {
+      state = state.update(tx).state
+    }
+
+    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+
+    strictEqual(handled, true)
+    strictEqual(state.doc.toString(), expectedOutput)
+  })
+
+  it('given only curly quotes, no transaction is dispatched', function () {
+    const input = '\u201cHello\u201d and \u2018world\u2019'
+
+    const state = EditorState.create({
+      doc: input,
+      selection: selectAll(input),
+    })
+
+    const dispatch = () => fail('No transaction must be dispatched')
+
+    curlQuotes(primary, secondary)({ state, dispatch })
   })
 
   it('given quotes separated by letters, uses closing quote after letter', function () {
