@@ -4,8 +4,8 @@
  *
  * Contains:        Tests for quote autocorrect commands
  * CVM-Role:        TESTING
- * Maintainers:     Rich Douglas
- * License:         Zilu Wang
+ * Maintainers:     Zilu Wang
+ * License:         GNU GPL v3
  *
  * Description:     This file tests the autocorrect commands that turn straight
  *                  quotes into curly quotes and back again.
