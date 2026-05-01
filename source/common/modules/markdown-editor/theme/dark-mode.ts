@@ -3,11 +3,11 @@
  * BEGIN HEADER
  *
  * Contains:        CodeMirror Extension
- * CVM-Role:        View
+ * CVM-Role:        Extension
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     A Dark mode extension for the CodeMirror editor.
+ * Description:     A dark mode extension for the CodeMirror editor.
  *
  * END HEADER
  */
@@ -24,7 +24,7 @@ import {
   StateEffect,
   EditorState
 } from '@codemirror/state'
-import { defaultLight, defaultDark } from './main-override'
+import { defaultLight, defaultDark } from './editor'
 
 const darkModeCompartment = new Compartment()
 

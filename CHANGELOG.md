@@ -7,10 +7,17 @@
   project exports or the re-indexing of new workspaces and observe the progress
   as it happens.
 - Add HCL/Terraform fenced code block support (#6302).
+- Fixed Mermaid Chart labels not showing up (#6313).
 
 ## Under the Hood
 
-(nothing here)
+- Fixed an issue where the config provider would not emit the old version
+  correctly (context: #6311).
+- **Breaking**: Refactored the editor themes (#6229). Now styling the app with
+  Custom CSS is easier and should work more straight forward, since there are
+  many CSS variables that you can peruse to adjust groups of elements at once.
+  **Note that this change might break your Custom CSS**. Make sure to check
+  anything after setup, and adjust it according to your liking.
 
 # 4.4.0
 
