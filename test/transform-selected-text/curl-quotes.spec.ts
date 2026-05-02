@@ -18,9 +18,9 @@ import { curlQuotes } from 'source/common/modules/markdown-editor/commands/trans
 import { selectAll } from '../codemirror-test-utils/select-all'
 
 describe('MarkdownEditor#curlQuotes()', function () {
-  // Using en-US magic quotes: "…" and '…'
-  const primary = '\u201c\u2026\u201d'
-  const secondary = '\u2018\u2026\u2019'
+  // Using en-US magic quotes: "\u201c\u201d" and "\u2018\u2019"
+  const primary: [string, string] = ['\u201c', '\u201d']
+  const secondary: [string, string] = ['\u2018', '\u2019']
 
   // Test cases cover:
   // 1. Double quote conversion (opening and closing)
