@@ -13,6 +13,7 @@
 ## Under the Hood
 
 - Updated Electron to `v41.3.0`.
+- Update `vue-virtual-scroller` to `v3.0.0`.
 - Fixed an issue where the config provider would not emit the old version
   correctly (context: #6311).
 - **Breaking**: Refactored the editor themes (#6229). Now styling the app with

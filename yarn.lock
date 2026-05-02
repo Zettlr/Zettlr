@@ -15176,14 +15176,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-virtual-scroller@npm:^2.0.0-beta.8":
-  version: 2.0.1
-  resolution: "vue-virtual-scroller@npm:2.0.1"
+"vue-virtual-scroller@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "vue-virtual-scroller@npm:3.0.0"
   dependencies:
     mitt: "npm:^2.1.0"
   peerDependencies:
     vue: ^3.3.0
-  checksum: 10/53cda36d4dfb53a30665df538577c2dea64faf3b8251f9cfb85a9d11425410252ea29474f87eb999bcf6c67af8cd334b312f93f92b7a7a406c18de2b9f47c7f7
+  checksum: 10/229aedadeceb6b4877c80dfcd3cc887c59c0bdab6b1940f557ad4d32f9dd17e234583a5b07bb4d1793c868baa9c88ceb2e7492c4c628d6c0a0c48f75df729aca
   languageName: node
   linkType: hard
 
@@ -16025,7 +16025,7 @@ __metadata:
     vue-eslint-parser: "npm:^10.4.0"
     vue-loader: "npm:^17.4.2"
     vue-tsc: "npm:^3.2.7"
-    vue-virtual-scroller: "npm:^2.0.0-beta.8"
+    vue-virtual-scroller: "npm:^3.0.0"
     w3c-keyname: "npm:^2.2.8"
     webpack: "npm:^5.106.2"
     yaml: "npm:^2.8.3"
