@@ -75,7 +75,9 @@ export function getTransformSubmenu (view: EditorView): SubmenuItem {
         type: 'normal',
         action () {
           const { magicQuotes } = view.state.field(configField).autocorrect
-          curlQuotes(magicQuotes.primary, magicQuotes.secondary)(view)
+          const primary = magicQuotes.primary.split('\u2026') as [string, string]
+          const secondary = magicQuotes.secondary.split('\u2026') as [string, string]
+          curlQuotes(primary, secondary)(view)
         }
       },
       {
