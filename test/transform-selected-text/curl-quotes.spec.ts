@@ -21,7 +21,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
   // Using en-US magic quotes: "\u201c\u201d" and "\u2018\u2019"
   const primary: [string, string] = ['\u201c', '\u201d']
   const secondary: [string, string] = ['\u2018', '\u2019']
-  
+
   const createState = (
     doc: string,
     selection?: 'all' | { anchor: number, head: number }
