@@ -49,6 +49,8 @@ export interface ThemeVars {
   '--zettlr-editor-code-font': string
   /** CSS `font-size` value */
   '--zettlr-editor-font-size': string,
+  /** CSS `line-height` value */
+  '--zettlr-editor-line-height': string,
   /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-code-style': string,
   /** CSS `font-weight` or `font-style` value */
@@ -108,6 +110,7 @@ const highlightDark = '#ffff0060'
 
 const fontFamily = '-apple-system, BlinkMacSystemFont, "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Ubuntu, Roboto, Noto, "Segoe UI", Arial, sans-serif'
 const fontSize = '1em'
+const lineHeight = '1.4'
 
 const codeFont = 'Inconsolata, monospace'
 const codeStyle = 'normal'
@@ -159,6 +162,7 @@ export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-highlight-color': highlightLight,
   '--zettlr-editor-font': fontFamily,
   '--zettlr-editor-font-size': fontSize,
+  '--zettlr-editor-line-height': lineHeight,
   '--zettlr-editor-code-font': codeFont,
   '--zettlr-editor-code-style': codeStyle,
   '--zettlr-editor-emphasis-style': emphasisStyle,
@@ -191,6 +195,7 @@ export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-highlight-color': highlightDark,
   '--zettlr-editor-font': fontFamily,
   '--zettlr-editor-font-size': fontSize,
+  '--zettlr-editor-line-height': lineHeight,
   '--zettlr-editor-code-font': codeFont,
   '--zettlr-editor-code-style': codeStyle,
   '--zettlr-editor-emphasis-style': emphasisStyle,
@@ -225,6 +230,7 @@ export const defaultDark = EditorView.theme({
 export const editorTheme = EditorView.baseTheme({
   '.cm-scroller': {
     font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
+    lineHeight: 'var(--zettlr-editor-line-height)',
     color: 'var(--zettlr-editor-scroller-color)',
     backgroundColor: 'var(--zettlr-editor-scroller-bg)',
   },

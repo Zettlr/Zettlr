@@ -10,9 +10,11 @@
 - Fixed Mermaid Chart labels not showing up (#6313).
 - Add "Curl quotes" text transform to convert straight quotes to curly (smart)
   quotes, the inverse of the existing "Straighten quotes" transform (#6259).
+- Fixed icons in the statusbar not working.
 
 ## Under the Hood
 
+- Updated Electron to `v41.3.0`.
 - Fixed an issue where the config provider would not emit the old version
   correctly (context: #6311).
 - **Breaking**: Refactored the editor themes (#6229). Now styling the app with
@@ -20,6 +22,10 @@
   many CSS variables that you can peruse to adjust groups of elements at once.
   **Note that this change might break your Custom CSS**. Make sure to check
   anything after setup, and adjust it according to your liking.
+- Centralized DOMPurify functionality and default configuration in a new utility
+  function, that also allows icons using `cds-icon`.
+- Switch from `ts-node` to `tsx` for running unit tests.
+- Explicitly declare Zettlr as a `CommonJS` project.
 
 # 4.4.0
 

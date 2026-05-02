@@ -56,7 +56,7 @@ import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { hasImageExt } from 'source/common/util/file-extention-checks'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
-import DOMPurify from 'dompurify'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -114,7 +114,7 @@ function getIcon (ext: string): string {
   // @ts-expect-error We know that this thing has an outline, because we assign it in load-icons.ts
   const fileExtIcon = ClarityIcons.registry['file-ext'].outline!
   if (typeof fileExtIcon === 'string') {
-    return DOMPurify.sanitize(fileExtIcon.replace('EXT', ext.slice(1, 4)))
+    return sanitizeHTML(fileExtIcon.replace('EXT', ext.slice(1, 4)))
   } else {
     return ''
   }
