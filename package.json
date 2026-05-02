@@ -89,7 +89,7 @@
     "archiver": "^7.0.1",
     "astrocite": "^0.16.4",
     "bcp-47": "^2.1.0",
-    "biblatex-csl-converter": "^3.5.5",
+    "biblatex-csl-converter": "^3.5.6",
     "chalk": "^5.6.2",
     "chokidar": "^5.0.0",
     "citeproc": "^2.4.63",
