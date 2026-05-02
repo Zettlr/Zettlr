@@ -35,7 +35,7 @@ export default function extractBibtexAttachments (
 ): BibTexAttachments {
   const ast = AstrociteAST.parse(fileContents)
   // Return value will be a fast-access dictionary
-  const files = Object.create(null)
+  const files: BibTexAttachments = {}
 
   // First we search for the jabref comments containing the files' root directories
   const comments = ast.children.filter(item => item.kind === 'BracedComment') as BracedComment[]

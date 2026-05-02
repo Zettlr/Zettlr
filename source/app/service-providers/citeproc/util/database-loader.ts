@@ -66,7 +66,7 @@ async function loadJSON (databasePath: string, logger?: LogProvider): Promise<Da
     path: databasePath,
     type: 'csl',
     cslData: {},
-    bibtexAttachments: Object.create(null)
+    bibtexAttachments: {}
   }
 
   const data = await fs.readFile(databasePath, 'utf8')
@@ -121,7 +121,7 @@ async function loadYAML (databasePath: string, logger?: LogProvider): Promise<Da
     path: databasePath,
     type: 'csl',
     cslData: {},
-    bibtexAttachments: Object.create(null)
+    bibtexAttachments: {}
   }
 
   // First read in the database file
@@ -155,7 +155,7 @@ async function loadBibTeX (databasePath: string, logger?: LogProvider): Promise<
     path: databasePath,
     type: 'bibtex',
     cslData: {},
-    bibtexAttachments: Object.create(null)
+    bibtexAttachments: {}
   }
 
   // First read in the database file
@@ -186,7 +186,7 @@ async function loadBibLaTeX (databasePath: string, logger?: LogProvider): Promis
     path: databasePath,
     type: 'biblatex',
     cslData: {},
-    bibtexAttachments: Object.create(null)
+    bibtexAttachments: {}
   }
 
   const data = await fs.readFile(databasePath, 'utf8')

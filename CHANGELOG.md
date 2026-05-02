@@ -24,6 +24,8 @@
   function, that also allows icons using `cds-icon`.
 - Switch from `ts-node` to `tsx` for running unit tests.
 - Explicitly declare Zettlr as a `CommonJS` project.
+- Change the `Object.create(null)` contraption to hold BibTeX attachments to a
+  regular object to simplify the structure and unit tests.
 
 # 4.4.0
 
