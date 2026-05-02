@@ -24,14 +24,14 @@ const startChars = ' ([{-\u2013\u2014\n\r\t\v\f/\\'
  * Convert straight quotes to curly (smart) quotes, using the user's configured
  * Magic Quotes characters. This is the inverse of `straightenQuotes`.
  *
- * @param   {string}  primary    The primary (double) Magic Quotes config, e.g. `\u201c\u2026\u201d`
- * @param   {string}  secondary  The secondary (single) Magic Quotes config, e.g. `\u2018\u2026\u2019`
+ * @param   {[string, string]}  primary    The primary (double) quote pair `[open, close]`, e.g. `['\u201c', '\u201d']`
+ * @param   {[string, string]}  secondary  The secondary (single) quote pair `[open, close]`, e.g. `['\u2018', '\u2019']`
  *
  * @return  {StateCommand}       A `StateCommand` that curls straight quotes.
  */
-export function curlQuotes (primary: string, secondary: string): StateCommand {
-  const [ primaryOpen, primaryClose ] = primary.split('\u2026')
-  const [ secondaryOpen, secondaryClose ] = secondary.split('\u2026')
+export function curlQuotes (primary: [string, string], secondary: [string, string]): StateCommand {
+  const [ primaryOpen, primaryClose ] = primary
+  const [ secondaryOpen, secondaryClose ] = secondary
 
   return transformSelectedText((text) => {
     let result = ''
