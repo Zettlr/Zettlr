@@ -26,6 +26,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     doc: string,
     selection?: 'all' | { anchor: number, head: number }
   ): EditorState => {
+     
     if (selection === 'all') {
       return EditorState.create({
         doc,
