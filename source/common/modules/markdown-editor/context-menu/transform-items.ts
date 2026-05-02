@@ -71,7 +71,7 @@ export function getTransformSubmenu (view: EditorView): SubmenuItem {
         action () { straightenQuotes(view) }
       },
       {
-        label: trans('Curl quotes'),
+        label: trans('Convert quotes to Magic Quotes'),
         type: 'normal',
         action () {
           const { magicQuotes } = view.state.field(configField).autocorrect
