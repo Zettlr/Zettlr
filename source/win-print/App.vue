@@ -40,7 +40,7 @@ import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
 import { md2html } from 'source/common/modules/markdown-utils'
 import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
-import DOMPurify from 'dompurify'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -101,7 +101,7 @@ onMounted(async () => {
     }
   })
     .then(html => {
-      printContainer.value!.innerHTML = DOMPurify.sanitize(html)
+      printContainer.value!.innerHTML = sanitizeHTML(html)
     })
     .catch(err => console.error(err))
 })

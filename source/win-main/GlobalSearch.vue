@@ -152,7 +152,7 @@ import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@d
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathDirname, relativePath } from 'source/common/util/renderer-path-polyfill'
-import DOMPurify from 'dompurify'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -498,7 +498,7 @@ function markText (resultObject: SearchResult): string {
     marked = marked.substring(0, range.from) + startTag + marked.substring(range.from)
   }
 
-  return DOMPurify.sanitize(marked)
+  return sanitizeHTML(marked)
 }
 
 function focusQueryInput (): void {
