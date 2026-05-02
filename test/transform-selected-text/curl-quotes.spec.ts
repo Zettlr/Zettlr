@@ -4,7 +4,7 @@
  *
  * Contains:        Tests for the curlQuotes function
  * CVM-Role:        TESTING
- * Maintainers:     Wang Zilu
+ * Maintainers:     Wang Zilu and Jinyi Chen
  * License:         GNU GPL v3
  *
  * Description:     This file tests the curlQuotes function.
@@ -21,6 +21,27 @@ describe('MarkdownEditor#curlQuotes()', function () {
   // Using en-US magic quotes: "\u201c\u201d" and "\u2018\u2019"
   const primary: [string, string] = ['\u201c', '\u201d']
   const secondary: [string, string] = ['\u2018', '\u2019']
+  
+  const createState = (
+    doc: string,
+    selection?: 'all' | { anchor: number, head: number }
+  ): EditorState => {
+    if (selection === 'all') {
+      return EditorState.create({
+        doc,
+        selection: selectAll(doc),
+      })
+    }
+
+    if (selection != null) {
+      return EditorState.create({
+        doc,
+        selection,
+      })
+    }
+
+    return EditorState.create({ doc })
+  }
 
   // Test cases cover:
   // 1. Double quote conversion (opening and closing)
@@ -35,10 +56,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = 'He said "hello" to her'
     const expectedOutput = 'He said \u201chello\u201d to her'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
@@ -68,10 +86,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = '"Hi" and "bye"'
     const expectedOutput = '\u201cHi\u201d and "bye"'
 
-    let state = EditorState.create({
-      doc: input,
-      selection: { anchor: 0, head: 4 }
-    })
+    let state = createState(input, { anchor: 0, head: 4 })
 
     const dispatch = (tx: any) => {
       state = state.update(tx).state
@@ -84,10 +99,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
   })
 
   it('given no quotes and no selection then no transaction is dispatched', function () {
-    const state = EditorState.create({
-      doc: 'There are no quotes in this text'
-      // nothing selected
-    })
+    const state = createState('There are no quotes in this text')
 
     const dispatch = () => fail('No transaction must be dispatched')
 
@@ -95,10 +107,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
   })
 
   it('given quotes but no selection then no transaction is dispatched', function () {
-    const state = EditorState.create({
-      doc: 'He said "hello"'
-      // nothing selected
-    })
+    const state = createState('He said "hello"')
 
     const dispatch = () => fail('No transaction must be dispatched')
 
@@ -109,10 +118,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = "He said 'hello' to her"
     const expectedOutput = 'He said \u2018hello\u2019 to her'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
@@ -142,10 +148,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = '"Hello'
     const expectedOutput = '\u201cHello'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
@@ -175,10 +178,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = 'He said ("hello")'
     const expectedOutput = 'He said (\u201chello\u201d)'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
@@ -208,10 +208,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = 'He said-"hello"'
     const expectedOutput = 'He said-\u201chello\u201d'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
@@ -241,10 +238,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = '\u201cHi\u201d and "bye"'
     const expectedOutput = '\u201cHi\u201d and \u201cbye\u201d'
 
-    let state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    let state = createState(input, 'all')
 
     const dispatch = (tx: any) => {
       state = state.update(tx).state
@@ -260,10 +254,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = '"It\'s here," he said'
     const expectedOutput = '\u201cIt\u2019s here,\u201d he said'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
@@ -293,10 +284,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = "don't"
     const expectedOutput = 'don\u2019t'
 
-    let state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    let state = createState(input, 'all')
 
     const dispatch = (tx: any) => {
       state = state.update(tx).state
@@ -312,10 +300,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = 'He said:\n"hello"'
     const expectedOutput = 'He said:\n\u201chello\u201d'
 
-    let state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    let state = createState(input, 'all')
 
     const dispatch = (tx: any) => {
       state = state.update(tx).state
@@ -330,10 +315,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
   it('given only curly quotes, no transaction is dispatched', function () {
     const input = '\u201cHello\u201d and \u2018world\u2019'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     const dispatch = () => fail('No transaction must be dispatched')
 
@@ -344,10 +326,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const input = 'He said"hello"to her'
     const expectedOutput = 'He said\u201dhello\u201dto her'
 
-    const state = EditorState.create({
-      doc: input,
-      selection: selectAll(input),
-    })
+    const state = createState(input, 'all')
 
     let wasDispatched = false
 
