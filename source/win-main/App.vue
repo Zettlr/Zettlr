@@ -331,7 +331,7 @@ const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebar
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
 const windowTitle = computed<string>(() => {
-  if (!configStore.config.window.showActiveTabInWindowTitle || activeFile.value === undefined) {
+  if (activeFile.value === undefined) {
     return 'Zettlr'
   }
 

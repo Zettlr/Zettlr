@@ -219,7 +219,6 @@ export interface ConfigOptions {
   window: {
     nativeAppearance: boolean
     vibrancy: boolean
-    showActiveTabInWindowTitle: boolean
     sidebarVisible: boolean
     fileManagerVisible: boolean
     currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
@@ -288,7 +287,6 @@ export function getConfigTemplate (): ConfigOptions {
       // controls as defined in the HTML.
       nativeAppearance: process.platform === 'darwin', // Linux only
       vibrancy: process.platform === 'darwin' && !nativeTheme.prefersReducedTransparency,
-      showActiveTabInWindowTitle: false,
       // Store a few GUI related settings here as well
       fileManagerVisible: true,
       sidebarVisible: false,

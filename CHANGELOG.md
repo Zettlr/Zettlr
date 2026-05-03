@@ -23,7 +23,7 @@
   of the editor window, preventing the cursor to "stick" to the edge of the
   editor.
 - Update `pt-PT` translations (#6282).
-- Add tab name to window title and setting option to enable or disable this.
+- Add tab name to window title.
 
 ## Under the Hood
 

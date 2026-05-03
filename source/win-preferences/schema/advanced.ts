@@ -84,12 +84,6 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
         },
         {
           type: 'checkbox',
-          label: trans('Show active tab name in the window title'),
-          info: trans('Formats the title as "Zettlr - %s".', 'Tab name'),
-          model: 'window.showActiveTabInWindowTitle'
-        },
-        {
-          type: 'checkbox',
           label: process.platform === 'darwin'
             ? trans('Show app in the notification area')
             : trans('Leave app running in the notification area'),
