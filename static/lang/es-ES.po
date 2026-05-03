@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-03-28 03:19+0000\n"
-"PO-Revision-Date: 2026-05-03 16:19+0200\n"
+"PO-Revision-Date: 2026-05-03 16:53+0200\n"
 "Last-Translator: lridalc\n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -93,7 +93,7 @@ msgstr "El archivo %s no existe."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Generating preview…"
-msgstr "Generando previsualización…"
+msgstr "Generando vista previa…"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:124
 msgid "Word count"
