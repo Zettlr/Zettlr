@@ -64,6 +64,7 @@
   rules than the file tree due to different function implementations.
 - Harmonized font usage to System fonts across the app (#5125).
 - Improve Mermaid chart error reporting (#6291).
+- Add tab name to window title.
 
 ## Under the Hood
 

@@ -1,6 +1,6 @@
 <template>
   <WindowChrome
-    v-bind:title="'Zettlr'"
+    v-bind:title="windowTitle"
     v-bind:titlebar="shouldShowTitlebar"
     v-bind:menubar="shouldShowMenubar"
     v-bind:show-toolbar="shouldShowToolbar"
@@ -178,6 +178,8 @@ import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
+import { useWorkspaceStore } from 'source/pinia/workspace-store'
+import getTabText from './util/get-tab-text'
 import { useConfigStore, useDocumentTreeStore, useLRTStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
@@ -190,6 +192,7 @@ const ipcRenderer = window.ipc
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()
+const workspaceStore = useWorkspaceStore()
 const LRTStore = useLRTStore()
 
 const SOUND_EFFECTS = [
@@ -337,6 +340,13 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
 const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
+const windowTitle = computed<string>(() => {
+  if (activeFile.value === undefined) {
+    return 'Zettlr'
+  }
+
+  return `Zettlr - ${getTabText(activeFile.value, configStore.config, workspaceStore)}`
+})
 
 // Simple state machine to trigger which of the three shows up when. Below's the
 // corresponding truth table, which is relatively large, but by spotting some

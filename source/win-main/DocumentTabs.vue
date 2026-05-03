@@ -46,7 +46,7 @@
           role="button"
         >
           <cds-icon v-if="file.pinned" shape="pin"></cds-icon>
-          {{ getTabText(file) }}
+          {{ getTabTextForDocument(file) }}
         </span>
         <span v-if="hasDuplicate(file)" class="deduplicate">{{ getDirBasename(file) }}</span>
         <span
@@ -101,6 +101,7 @@ import type { AnyMenuItem } from 'source/common/modules/window-register/applicat
 import { trans } from 'source/common/i18n-renderer'
 import showPopupMenu from 'source/common/modules/window-register/application-menu-helper'
 import { closeFile } from './file-manager/util/item-composable'
+import getTabText from './util/get-tab-text'
 
 const ipcRenderer = window.ipc
 
@@ -126,9 +127,6 @@ const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 
-const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
-const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
-const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
 const container = ref<HTMLDivElement|null>(null)
 const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
 const openFiles = computed(() => node.value?.openFiles ?? [])
@@ -351,30 +349,14 @@ function scrollRight (): void {
   }
 }
 
-function getTabText (doc: OpenDocument): string {
-  // Returns a more appropriate tab text based on the user settings
-  const file = workspaceStore.descriptorMap.get(doc.path)
-  if (file === undefined) {
-    return pathBasename(doc.path)
-  }
-
-  if (file.type !== 'file') {
-    return file.name
-  } else if (useTitle.value && file.yamlTitle !== undefined) {
-    return file.yamlTitle
-  } else if (useH1.value && file.firstHeading != null) {
-    return file.firstHeading
-  } else if (displayMdExtensions.value) {
-    return file.name
-  } else {
-    return file.name.replace(file.ext, '')
-  }
+function getTabTextForDocument (doc: OpenDocument): string {
+  return getTabText(doc, configStore.config, workspaceStore)
 }
 
 function hasDuplicate (doc: OpenDocument): boolean {
-  const focalTabname = getTabText(doc).toLowerCase()
+  const focalTabname = getTabTextForDocument(doc).toLowerCase()
   const duplicates = openFiles.value.filter(doc => {
-    return getTabText(doc).toLowerCase() === focalTabname
+    return getTabTextForDocument(doc).toLowerCase() === focalTabname
   })
 
   // NOTE that `doc` is also contained in `openFiles`, i.e. we should have 1
