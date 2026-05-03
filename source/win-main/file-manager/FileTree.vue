@@ -173,6 +173,7 @@ import showPopupMenu, { type AnyMenuItem } from 'source/common/modules/window-re
 import type { CloseAllIPCAPI } from 'source/app/service-providers/windows'
 import PopoverWrapper from 'source/common/vue/PopoverWrapper.vue'
 import ButtonControl from 'source/common/vue/form/elements/ButtonControl.vue'
+import { filterDescriptorChildren } from './util/filter-children'
 
 const ipcRenderer = window.ipc
 
@@ -288,11 +289,19 @@ const flatSortedAndFilteredVisualFileDescriptors = computed<Array<[string, strin
 
   const { sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime } = configStore.config
   const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
+  const filter = filterDescriptorChildren()
 
   for (const descriptor of getDirectories.value) {
     retValue.push(...retrieveChildrenAndSort(descriptor, visibleDescriptors, sorter))
   }
-  return retValue.map(descriptor => ([ descriptor.path, descriptor.type ]))
+
+  return retValue
+    // Filter out any files and folders that should not be displayed such that
+    // this "global" list of files and folders corresponds exactly to how they
+    // will be displayed to the user. This is especially important for the
+    // navigation with the arrow keys.
+    .filter(filter)
+    .map(descriptor => ([ descriptor.path, descriptor.type ]))
 })
 
 /**

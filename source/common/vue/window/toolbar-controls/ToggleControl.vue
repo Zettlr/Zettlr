@@ -42,7 +42,7 @@ export interface ToolbarToggleControl {
   label?: string
   initialState: boolean
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{ control: ToolbarToggleControl, showLabel?: boolean }>()

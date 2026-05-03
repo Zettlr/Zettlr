@@ -2,8 +2,43 @@
 
 ## GUI and Functionality
 
+- **Feature**: Long-running background tasks are now visually indicated with a
+  toolbar icon. This allows users to check on longer-running tasks such as
+  project exports or the re-indexing of new workspaces and observe the progress
+  as it happens.
+- Add HCL/Terraform fenced code block support (#6302).
+- Fixed Mermaid Chart labels not showing up (#6313).
+- Fixed icons in the statusbar not working.
+
+## Under the Hood
+
+- Updated Electron to `v41.3.0`.
+- Update `vue-virtual-scroller` to `v3.0.0`.
+- Fixed an issue where the config provider would not emit the old version
+  correctly (context: #6311).
+- **Breaking**: Refactored the editor themes (#6229). Now styling the app with
+  Custom CSS is easier and should work more straight forward, since there are
+  many CSS variables that you can peruse to adjust groups of elements at once.
+  **Note that this change might break your Custom CSS**. Make sure to check
+  anything after setup, and adjust it according to your liking.
+- Centralized DOMPurify functionality and default configuration in a new utility
+  function, that also allows icons using `cds-icon`.
+- Switch from `ts-node` to `tsx` for running unit tests.
+- Explicitly declare Zettlr as a `CommonJS` project.
+- Change the `Object.create(null)` contraption to hold BibTeX attachments to a
+  regular object to simplify the structure and unit tests.
+
+# 4.4.0
+
+## GUI and Functionality
+
 - **Feature**: The app now remembers if the file manager was open or closed
   across restarts and applies this setting on each start (#3679).
+- **Feature**: The names of open folders in the file manager tree will now
+  remain sticked to the top of the file manager as you scroll through its list
+  of children. This is especially helpful in the "combined" file manager mode
+  with folders containing many files and subfolders (such as reading notes or
+  Zettelkasten folders).
 - Add strikethrough to the Markdown AST parser (#6263).
 - Fixed Markdown-to-HTML output to generate more valid HTML. This makes
   comparisons with DOM-inserted HTML deterministic and should reduce the amount
@@ -23,6 +58,12 @@
   of the editor window, preventing the cursor to "stick" to the edge of the
   editor.
 - Update `pt-PT` translations (#6282).
+- Fixed an issue that would lead to unexpected navigation behavior across the
+  file manager (#4329).
+- Fixed an issue where the file list would follow slightly different filtering
+  rules than the file tree due to different function implementations.
+- Harmonized font usage to System fonts across the app (#5125).
+- Improve Mermaid chart error reporting (#6291).
 - Add tab name to window title.
 
 ## Under the Hood
@@ -35,7 +76,7 @@
 - Security: Enforce loading remote resources using HTTPS.
 - Security: Generously spread HTML sanitization across the application. The
   following changes have been made:
-  - Moved HTML sanitization to the edge (directly to the injection sinks)
+  - Moved HTML sanitization to the edge (directly to the injection sinks).
   - Removed HTML sanitization from the translation helpers. The reason is that
     DOMPurify does not work out of the box in the main process, so we also
     removed the sanitization from the renderer-translation helper. However, this

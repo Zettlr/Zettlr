@@ -100,20 +100,11 @@ import matchQuery from './util/match-query'
 import { nextTick, ref, computed, watch, onUpdated } from 'vue'
 import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
 import type { AnyDescriptor } from '@dts/common/fsal'
-import {
-  hasDataExt,
-  hasExt,
-  hasImageExt,
-  hasMdOrCodeExt,
-  hasMSOfficeExt,
-  hasOpenOfficeExt,
-  hasPDFExt,
-} from 'source/common/util/file-extention-checks'
-import { isDotFile } from 'source/common/util/ignore-path'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { getSorter } from 'source/common/util/directory-sorter'
 import { retrieveChildrenAndSort } from './util/retrieve-children-and-sort'
+import { filterDescriptorChildren } from './util/filter-children'
 
 interface RecycleScrollerData {
   id: number
@@ -172,42 +163,14 @@ const getDirectoryContents = computed<RecycleScrollerData[]>(() => {
     fileNameDisplay,
     appLang,
     fileMetaTime,
-    files,
-    attachmentExtensions
   } = configStore.config
 
   const sorter = getSorter(sorting, sortFoldersFirst, fileNameDisplay, appLang, fileMetaTime)
 
   // ... and add them to our RecycleScroller.
+  const filter = filterDescriptorChildren()
   const sortedDescendants = retrieveChildrenAndSort(dir, allDescriptors, sorter)
-    .filter((desc) => {
-      // We have to check for hidden files first so they are not
-      // included if they end in one of the accepted extensions
-      if (isDotFile(desc.name)) {
-        return files.dotFiles.showInFilemanager
-      }
-
-      // Directories are not filtered based on extension
-      if (desc.type === 'directory') {
-        return true
-      } else if (hasMdOrCodeExt(desc.path)) {
-        return true
-      } else if (hasExt(desc.path, attachmentExtensions)) {
-        return true
-      } else if (hasImageExt(desc.path)) {
-        return files.images.showInFilemanager
-      } else if (hasPDFExt(desc.path)) {
-        return files.pdf.showInFilemanager
-      } else if (hasMSOfficeExt(desc.path)) {
-        return files.msoffice.showInFilemanager
-      } else if (hasOpenOfficeExt(desc.path)) {
-        return files.openOffice.showInFilemanager
-      } else if (hasDataExt(desc.path)) {
-        return files.dataFiles.showInFilemanager
-      }
-
-      return false
-    })
+    .filter(filter)
     .map((props, id) => {
       return {
         id, // This helps the virtual scroller to adequately position the items
@@ -468,7 +431,7 @@ function updateDynamics (): void {
   }
 }
 
-async function handleOperation (type: string, idx: number): Promise<void> {
+async function handleOperation (type: 'dir-new'|'file-new', idx: number): Promise<void> {
   // Creates files and directories, or duplicates a file.
   const source = getDirectoryContents.value.find(item => item.id === idx)?.props
   if (source === undefined) {

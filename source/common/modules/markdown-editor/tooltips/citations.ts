@@ -21,7 +21,7 @@ import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import { trans } from 'source/common/i18n-renderer'
 import type { SyntaxNode } from '@lezer/common'
-import DOMPurify from 'dompurify'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -78,9 +78,9 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
           const options = bibliography[0]
 
           content.innerHTML = [
-            DOMPurify.sanitize(options.bibstart),
-            ...bibliography[1].map(item => DOMPurify.sanitize(item)),
-            DOMPurify.sanitize(options.bibend)
+            sanitizeHTML(options.bibstart),
+            ...bibliography[1].map(item => sanitizeHTML(item)),
+            sanitizeHTML(options.bibend)
           ].join('\n')
 
           // Adjust styling depending on options

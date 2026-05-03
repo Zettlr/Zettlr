@@ -17,7 +17,6 @@ import { syntaxTree } from '@codemirror/language'
 import { hoverTooltip, EditorView, type Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import { md2html } from '@common/modules/markdown-utils/markdown-to-html'
-import DOMPurify from 'dompurify'
 import formatDate from '@common/util/format-date'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { configField } from '../util/configuration'
@@ -25,6 +24,7 @@ import type { FindFileAndReturnMetadataResult } from 'source/app/service-provide
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import type { ForceOpenAPI } from 'source/app/service-providers/commands/force-open'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -115,7 +115,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   )
     .then(html => {
       // ... and then apply it to the content element.
-      content.innerHTML = DOMPurify.sanitize(html)
+      content.innerHTML = sanitizeHTML(html)
     })
     .catch(err => console.error(err))
 

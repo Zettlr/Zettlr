@@ -28,6 +28,8 @@ jobs:
         with:
           ref: 'develop'
           fetch-depth: 0
+      - name: Enable Yarn 4.x
+        run: corepack enable
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:

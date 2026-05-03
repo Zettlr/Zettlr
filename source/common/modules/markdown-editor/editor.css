@@ -27,13 +27,96 @@
   }
 }
 
+.cm-scroller {
+  flex-grow: 1; /* Ensure the content pushes possible panels towards the edge */
+  outline: 0;
+}
+
 .cm-editor {
   outline: 0 !important;
+  height: 100%;
   font-size: 1em;
   line-height: 1.4375;
   user-select: text;
   background-color: inherit;
-  cursor: text;
+  cursor: auto;
+
+  /* Provide the default YAML frontmatter indicator */
+  .cm-yaml-frontmatter-start::after {
+    content: "YAML Frontmatter";
+    display: inline-block;
+    margin-left: 10px;
+    padding: 0px 5px;
+    font-size: 60%;
+    font-weight: normal;
+    vertical-align: middle;
+  }
+
+  /* Hide overflowing text in autocompletion info panels */
+  .cm-completionInfo {
+    overflow: hidden;
+  }
+
+  .cm-panel.cm-search label input[type=checkbox] {
+    margin-right: 10px
+  }
+
+  .cm-panel.cm-search {
+    user-select: none; /* prevent search panel text elements from being selected */
+  }
+
+  /* TOOLTIPS */
+  .cm-tooltip {
+    padding: 4px;
+    max-width: 800px;
+  }
+
+  /* Footnotes */
+  .footnote, .footnote-ref-label {
+    vertical-align: super;
+    font-size: 0.8rem;
+  }
+
+  /* NOTE: Disabling because pre-rendered elements will not inherit this font size (see #5999) */
+  /* footnote-ref {
+    font-size: 0.8rem;
+  } */
+  /**
+   * Cursor blink animation.
+   *
+   * NOTE: We need to precisely override the way CodeMirror implements its
+   * blink-animation.
+   *
+   * 1.) CodeMirror switches between "cm-blink" and "cm-blink2" classes:
+   *     https://discuss.codemirror.net/t/custom-cursor-like-in-monaco-editor/5705/5
+   * 2.) It uses two identical animations for that.
+   * 3.) It uses a "step" animation to make the transition "harsh"
+   * 4.) For the animation source code, see:
+   *     https://github.com/codemirror/view/blob/main/src/theme.ts
+   *
+   * Our changes:
+   * * Remove the steps(1)-function to remove the harsh transitions.
+   * * Make the transition more smooth with a 15% opacity transition period.
+   */
+  @keyframes cm-blink {
+    0% { opacity: 1; }
+    10% { opacity: 1; }
+    25% { opacity: 0; }
+    60% { opacity: 0; }
+    75% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  @keyframes cm-blink2 {
+    0% { opacity: 1; }
+    10% { opacity: 1; }
+    25% { opacity: 0; }
+    60% { opacity: 0; }
+    75% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  .cm-focused > .cm-scroller > .cm-cursorLayer {
+    animation: cm-blink 1.2s infinite;
+  }
 
   /* STYLING FOR THE COMMON WRAPPER ELEMENTS
    * ======================================================================== */
@@ -65,9 +148,6 @@
     border-radius: 3px;
   }
 
-  /* Search results */
-  .cm-selectionMatch { background-color: #99ff7780; }
-
   /* SYNTAX-HIGHLIGHTING CLASSES */
   /* ======================================================================== */
 
@@ -78,39 +158,6 @@
     margin: 0.2em;
     min-width: auto; /* Reset the min-width property that applies to other checkboxes */
     vertical-align: middle;
-  }
-
-  .cm-table,
-  .cm-zkn-tag,
-  .cm-strong {
-    font-weight: bold;
-  }
-
-  .cm-strikethrough {
-    text-decoration: line-through;
-  }
-
-  /* Make the formatting characters and escape sequences nearly invisible */
-  .cm-formatting-code,
-  .cm-formatting-code-block,
-  .cm-formatting-quote,
-  .cm-formatting-strong,
-  .cm-formatting-em,
-  .cm-zkn-link-formatting,
-  .cm-escape-char {
-    opacity: 0.65;
-  }
-
-  /* A few elements always need to be displayed monospaced */
-  .cm-comment,
-  .cm-block-comment,
-  .cm-fenced-code,
-  .cm-table
-  .cm-formatting-task,
-  .cm-formatting-quote,
-  .cm-formatting-list-ul,
-  .cm-formatting-list-ol {
-    font-family: Inconsolata, monospace;
   }
 
   /* ZETTLR-SPECIFIC CLASSES */
@@ -201,9 +248,71 @@
     height: 270px;
     margin: 0 auto;
   }
+
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
+  .cm-panels, .cm-tooltip, .cm-statusbar {
+    color: black;
+    background-color: #f5f5f5;
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: #000000;
+  }
+
+  .cm-panel .cm-button {
+    background-image: none;
+    background-color: inherit;
+    border-color: #aaa;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  .cm-formatting-bar {
+    background-color: #f5f5f5;
+    border-color: #f5f5f5;
+
+    .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+      border-top-color: #f5f5f5;
+      border-bottom-color: #f5f5f5;
+    }
+  }
+  /* END */
 }
 
-body.dark .tippy-content .editor-fn-textarea {
-  background-color: transparent;
-  border: none;
+body.dark {
+  /* Style the following elements so they adopt
+   * the main ui theme, not the editor theme */
+  .cm-panels, .cm-tooltip, .cm-statusbar {
+    color: white;
+    background-color: #333333;
+  }
+
+  .cm-panel.cm-panel-lint button[aria-label="close"] {
+    color: #d7d7d7;
+  }
+
+  .cm-panel .cm-button {
+    border-color: #646464;
+  }
+
+  .cm-formatting-bar {
+    background-color: #333333;
+    border-color: #333333;
+
+    button.formatting-toolbar-button {
+      color: #c8c8c8;
+    }
+
+    .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+      border-top-color: #333333;
+      border-bottom-color: #333333;
+    }
+  }
+  /* END */
+
+  .tippy-content .editor-fn-textarea {
+    background-color: transparent;
+    border: none;
+  }
 }
