@@ -211,8 +211,10 @@ body .split-pane-container {
   }
 }
 
-body.dark .split-pane-container .editor-pane {
-  &.border-right { border-color: #505050; }
+body.dark .split-pane-container {
+  .editor-pane, & {
+    &.border-right { border-color: #505050; }
     &.border-bottom { border-color: #505050; }
+  }
 }
 </style>
