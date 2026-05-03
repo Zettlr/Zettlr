@@ -238,6 +238,43 @@ export const editorTheme = EditorView.baseTheme({
   '&.cm-focused .cm-scroller .cm-layer.cm-selectionLayer .cm-selectionBackground, ::selection': {
     background: 'var(--zettlr-editor-selection-color)',
   },
+  /**
+   * Cursor blink animation.
+   *
+   * NOTE: We need to precisely override the way CodeMirror implements its
+   * blink-animation.
+   *
+   * 1.) CodeMirror switches between "cm-blink" and "cm-blink2" classes:
+   *     https://discuss.codemirror.net/t/custom-cursor-like-in-monaco-editor/5705/5
+   * 2.) It uses two identical animations for that.
+   * 3.) It uses a "step" animation to make the transition "harsh"
+   * 4.) For the animation source code, see:
+   *     https://github.com/codemirror/view/blob/main/src/theme.ts
+   *
+   * Our changes:
+   * * Remove the steps(1)-function to remove the harsh transitions.
+   * * Make the transition more smooth with a 15% opacity transition period.
+   */
+  '&.cm-focused > .cm-scroller > .cm-cursorLayer': {
+    animation: 'cm-blink 1.2s infinite'
+  },
+  '@keyframes cm-blink': {
+    '0%': { opacity: 1 },
+    '10%': { opacity: 1 },
+    '25%': { opacity: 0 },
+    '60%': { opacity: 0 },
+    '75%': { opacity: 1 },
+    '100%': { opacity: 1 }
+  },
+  '@keyframes cm-blink2': {
+    '0%': { opacity: 1 },
+    '10%': { opacity: 1 },
+    '25%': { opacity: 0 },
+    '60%': { opacity: 0 },
+    '75%': { opacity: 1 },
+    '100%': { opacity: 1 }
+  },
+
   '.cm-monospace': {
     color: 'var(--zettlr-editor-code-color)',
     backgroundColor: 'var(--zettlr-editor-code-bg)',
