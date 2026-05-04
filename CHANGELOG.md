@@ -9,6 +9,7 @@
 - Add HCL/Terraform fenced code block support (#6302).
 - Fixed Mermaid Chart labels not showing up (#6313).
 - Fixed icons in the statusbar not working.
+- Update Spanish (`es-ES`) translations (#6320).
 
 ## Under the Hood
 
