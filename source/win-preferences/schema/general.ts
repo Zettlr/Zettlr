@@ -101,6 +101,11 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
           type: 'checkbox',
           label: trans('Avoid opening files in new tabs if possible'),
           model: 'system.avoidNewTabs'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Always open new tabs at the end of the tab bar'),
+          model: 'system.openTabsAtEnd'
         }
       ]
     },

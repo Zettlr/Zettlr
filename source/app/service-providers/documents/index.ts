@@ -893,7 +893,8 @@ current contents from the editor somewhere else, and restart the application.`
     // (previously) active file *before* opening the new one. See bug #5065 for
     // context.
     const activeFile = leaf.tabMan.activeFile
-    const ret = leaf.tabMan.openFile(filePath)
+    const { openTabsAtEnd } = this._app.config.get().system
+    const ret = leaf.tabMan.openFile(filePath, undefined, openTabsAtEnd)
     if (ret) {
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
     }

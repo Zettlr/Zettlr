@@ -233,6 +233,7 @@ export interface ConfigOptions {
     deleteOnFail: boolean
     leaveAppRunning: boolean
     avoidNewTabs: boolean
+    openTabsAtEnd: boolean
     iframeWhitelist: string[]
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
@@ -498,6 +499,7 @@ export function getConfigTemplate (): ConfigOptions {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
+      openTabsAtEnd: false, // Whether to always open new tabs at the end of the tab bar
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
       checkForUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
