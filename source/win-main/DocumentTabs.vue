@@ -46,7 +46,7 @@
           role="button"
         >
           <cds-icon v-if="file.pinned" shape="pin"></cds-icon>
-          {{ getTabTextForDocument(file) }}
+          {{ getDocumentTitle(file) }}
         </span>
         <span v-if="hasDuplicate(file)" class="deduplicate">{{ getDirBasename(file) }}</span>
         <span
@@ -101,7 +101,7 @@ import type { AnyMenuItem } from 'source/common/modules/window-register/applicat
 import { trans } from 'source/common/i18n-renderer'
 import showPopupMenu from 'source/common/modules/window-register/application-menu-helper'
 import { closeFile } from './file-manager/util/item-composable'
-import getTabText from './util/get-tab-text'
+import getDocumentTitle from './util/get-document-title'
 
 const ipcRenderer = window.ipc
 
@@ -349,14 +349,10 @@ function scrollRight (): void {
   }
 }
 
-function getTabTextForDocument (doc: OpenDocument): string {
-  return getTabText(doc, configStore.config, workspaceStore)
-}
-
 function hasDuplicate (doc: OpenDocument): boolean {
-  const focalTabname = getTabTextForDocument(doc).toLowerCase()
+  const focalTabname = getDocumentTitle(doc).toLowerCase()
   const duplicates = openFiles.value.filter(doc => {
-    return getTabTextForDocument(doc).toLowerCase() === focalTabname
+    return getDocumentTitle(doc).toLowerCase() === focalTabname
   })
 
   // NOTE that `doc` is also contained in `openFiles`, i.e. we should have 1

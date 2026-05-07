@@ -178,8 +178,7 @@ import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
-import { useWorkspaceStore } from 'source/pinia/workspace-store'
-import getTabText from './util/get-tab-text'
+import getDocumentTitle from './util/get-document-title'
 import { useConfigStore, useDocumentTreeStore, useLRTStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
@@ -192,7 +191,6 @@ const ipcRenderer = window.ipc
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()
-const workspaceStore = useWorkspaceStore()
 const LRTStore = useLRTStore()
 
 const SOUND_EFFECTS = [
@@ -345,7 +343,7 @@ const windowTitle = computed<string>(() => {
     return 'Zettlr'
   }
 
-  return `Zettlr - ${getTabText(activeFile.value, configStore.config, workspaceStore)}`
+  return `Zettlr - ${getDocumentTitle(activeFile.value)}`
 })
 
 // Simple state machine to trigger which of the three shows up when. Below's the
