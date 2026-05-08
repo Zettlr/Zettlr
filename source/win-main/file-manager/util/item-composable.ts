@@ -99,6 +99,8 @@ export function useItemComposable (
   const obj = ref(object)
   const nameEditing = ref<boolean>(false)
   const showPopover = ref<boolean>(false)
+  const showFolderPicker = ref<boolean>(false)
+  const folderPickerVerb = ref<'Copy' | 'Move'>('Copy')
   const operationType = ref<'createFile'|'createDir'|undefined>(undefined)
 
   const configStore = useConfigStore()
@@ -272,6 +274,12 @@ export function useItemComposable (
             }
           })
             .catch(err => console.error(err))
+        } else if (clickedID === 'menu.copy_to') {
+          folderPickerVerb.value = 'Copy'
+          showFolderPicker.value = true
+        } else if (clickedID === 'menu.move_file') {
+          folderPickerVerb.value = 'Move'
+          showFolderPicker.value = true
         } else if (clickedID === 'menu.delete_file') {
           ipcRenderer.invoke('application', {
             command: 'file-delete',
@@ -339,6 +347,15 @@ export function useItemComposable (
       .finally(() => { nameEditing.value = false })
   }
 
+  function handleFolderPick (targetDir: string): void {
+    const command = folderPickerVerb.value === 'Copy' ? 'file-copy-to' : 'file-move-to'
+    ipcRenderer.invoke('application', {
+      command,
+      payload: { path: obj.value.path, targetDir }
+    }).catch(err => console.error(err))
+    showFolderPicker.value = false
+  }
+
   function updateObject (newObject: AnyDescriptor): void {
     obj.value = newObject
   }
@@ -346,6 +363,9 @@ export function useItemComposable (
   return {
     nameEditing,
     showPopover,
+    showFolderPicker,
+    folderPickerVerb,
+    handleFolderPick,
     operationType,
     onDragHandler,
     handleContextMenu,
