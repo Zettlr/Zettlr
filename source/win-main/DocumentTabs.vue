@@ -91,7 +91,7 @@
 import { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, computed, ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
-import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
+import { useDocumentTreeStore } from 'source/pinia'
 import type { LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 import { pathBasename, pathDirname } from '@common/util/renderer-path-polyfill'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
@@ -124,7 +124,6 @@ const documentTabDragOver = ref<boolean>(false)
 const documentTabDragOverOrigin = ref<boolean>(false)
 
 const workspaceStore = useWorkspaceStore()
-const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 
 const container = ref<HTMLDivElement|null>(null)
