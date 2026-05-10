@@ -112,6 +112,6 @@ export function getCitationTooltips (enabled: boolean, delay: number) {
     return []
   }
   const seconds = delay * 1000 //Turns the seconds input into milliseconds for the hoverTime. 
-  //registers the tooltip with users chosen delay time
+  //registers the tooltip with users chosen delay time.
   return hoverTooltip(citationTooltip, { hoverTime: seconds })
 }
