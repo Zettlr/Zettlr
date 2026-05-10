@@ -77,9 +77,13 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
 
   let newSelection = tr.selection
   if (tr.selection !== undefined) {
-    const { from, to } = tr.selection.main
+    // Check if ANY range (not just the main selection) exceeds the cell
+    // boundaries. If so, clamp all ranges to the cell's bounds.
+    const anyOutOfBounds = tr.selection.ranges.some(
+      range => range.from < mappedFrom || range.to > mappedTo
+    )
 
-    if (from < mappedFrom || to > mappedTo) {
+    if (anyOutOfBounds) {
       const clampedRanges = tr.selection.ranges.map(range => {
         const clampedAnchor = Math.max(mappedFrom, Math.min(mappedTo, range.anchor))
         const clampedHead = Math.max(mappedFrom, Math.min(mappedTo, range.head))
