@@ -256,7 +256,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     idGen: zkn.idGen,
     previewModeShowSyntaxWhenCursorIsAdjacent: display.previewModeShowSyntaxWhenCursorIsAdjacent,
     renderCitations: display.renderCitations,
-    citationTooltipEnabled: display.citationTooltipEnabled, //Passing Tooltip fields from main to be configured 
+    citationTooltipEnabled: display.citationTooltipEnabled, //Passing tooltip hover citations fields from main to be configured 
     citationTooltipDelay: display.citationTooltipDelay,
     renderingMode: display.renderingMode,
     renderIframes: display.renderIframes,

@@ -106,14 +106,12 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
   }
 }
 
-//export const citationTooltips = hoverTooltip(citationTooltip, { hoverTime: 500 })
-//Switching from  a const function to allow for configuration.
 
 export function getCitationTooltips (enabled: boolean, delay: number) {
   if(!enabled) { //if not enabled the citation will not be displayed with the hover feature.
     return []
   }
   const seconds = delay * 1000 //Turns the seconds input into milliseconds for the hoverTime. 
-
+  //registers the tooltip with users chosen delay time
   return hoverTooltip(citationTooltip, { hoverTime: seconds })
 }

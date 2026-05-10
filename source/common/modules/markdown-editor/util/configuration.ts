@@ -35,7 +35,7 @@ export interface EditorConfiguration {
   renderingMode: 'preview'|'raw'
   previewModeShowSyntaxWhenCursorIsAdjacent: boolean
   renderCitations: boolean
-  citationTooltipEnabled: boolean //tool tip
+  citationTooltipEnabled: boolean //tooltip hover citation editor fields
   citationTooltipDelay: number
   renderIframes: boolean
   renderImages: boolean
@@ -101,8 +101,8 @@ export function getDefaultConfig (): EditorConfiguration {
     renderingMode: 'preview',
     previewModeShowSyntaxWhenCursorIsAdjacent: true,
     renderCitations: true,
-    citationTooltipEnabled: true, //tooltip default
-    citationTooltipDelay: 0.5,    //default was originally 500 milliseconds but this is converted into milliseconds in citations.cs default is still 500 milliseconds but represented as 0.5
+    citationTooltipEnabled: true, //tooltip default for editor
+    citationTooltipDelay: 0.5,    
     renderIframes: true,
     renderImages: true,
     renderLinks: true,

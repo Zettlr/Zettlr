@@ -347,7 +347,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     footnoteGutter, // Should be after markdownFolding
     urlHover,
     filePreview,
-    getCitationTooltips(options.initialConfig.citationTooltipEnabled, options.initialConfig.citationTooltipDelay), // Updated from citationToolTips to include Enabled and delay variables.
+    getCitationTooltips(options.initialConfig.citationTooltipEnabled, options.initialConfig.citationTooltipDelay), // getting the config options, if it should load and how long it should wait to load.
     backgroundLayers, // Add a background behind inline code and code blocks
     defaultContextMenu, // A default context menu
     softwrapVisualIndent, // Always indent visually
