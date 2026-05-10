@@ -101,7 +101,7 @@ import { computed, onUnmounted, ref } from 'vue'
 import { type UpdateState } from 'source/app/service-providers/updates'
 import { DateTime } from 'luxon'
 import { useConfigStore } from 'source/pinia'
-import DOMPurify from 'dompurify'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -118,7 +118,7 @@ const checkForUpdateLabel = trans('Check for updates')
 const vibrancyEnabled = configStore.config.window.vibrancy
 const currentVersion = PACKAGE_JSON.version
 
-const sanitizedChangelog = computed(() => DOMPurify.sanitize(updateState.value.changelog))
+const sanitizedChangelog = computed(() => sanitizeHTML(updateState.value.changelog))
 
 const startButtonLabel = ref(trans('Click to start update'))
 const lastCheckedMessage = computed(() => {

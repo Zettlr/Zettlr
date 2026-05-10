@@ -1,73 +1,141 @@
 # Contributing to Zettlr
 
-Zettlr lives through contributions from the community. You do not have to know any code to help out – for the most part, a (free) GitHub account suffices. In this document, you can find information on how to get started.
+Zettlr lives through contributions from the community. You do not have to know
+coding to help out. For the most part, a (free) GitHub account suffices. In this
+document, you can find information on how to get started.
+
+> [!TIP]
+> Also see our [Code of Conduct](./CODE_OF_CONDUCT.md) to know how you can
+> interact with our community and maintainers.
 
 **Table of Contents**
 
-- [Contributing to Zettlr](#contributing-to-zettlr)
-  - [Where to Get Help](#where-to-get-help)
-    - [All Communication Channels](#all-communication-channels)
-  - [How to Help](#how-to-help)
-    - [Translation](#translation)
-    - [Documentation](#documentation)
-    - [Development](#development)
-      - [Our Stack (with linked documentation)](#our-stack-with-linked-documentation)
-      - [Issue Labels](#issue-labels)
-  - [Final Remarks](#final-remarks)
+- [Community (Discussions/Support)](#community-discussionssupport)
+- [Report Issues \& Request Features](#report-issues--request-features)
+- [Contributing to Zettlr](#contributing-to-zettlr-1)
+  - [Code Contributions](#code-contributions)
+  - [Translations](#translations)
+  - [Documentation](#documentation)
+  - [Support Others](#support-others)
+- [AI Usage Policy](#ai-usage-policy)
 
-## Where to Get Help
+## Community (Discussions/Support)
 
-An active community forms the backbone of every major Open Source project. The community of Zettlr is present on various platforms on the internet, where they actively help each other out – not just with regard to using the application. Each platform yields a specific thematic focus. GitHub is the most tech-focused part of the Zettlr community, albeit [discussing here](https://github.com/Zettlr/Zettlr/discussions) is the way to go for more theoretical discussions. Furthermore, we have a [Discord-server](https://discord.gg/PcfS3DM9Xj) where we discuss the app and help each other out.
+An active community forms the backbone of every major Open Source project. You
+can get help from the community, and discuss any changes before you start
+implementing them.
 
-**Please note: Do NOT open issues on GitHub if you have questions on how to help/with your PR. Please ask these questions on any other platform!**
+There are pockets of Zettlr users all around the world, but the center of the
+community are our forum and Discord server. Some of our channels can be found
+here:
 
-### All Communication Channels
+* [Community Forum](https://forum.zettlr.com/)
+* [Discord](https://go.zettlr.com/discord/)
+* [Reddit](https://www.reddit.com/r/Zettlr/)
 
-- [Discord](https://discord.gg/PcfS3DM9Xj)
-- [Reddit](https://www.reddit.com/r/Zettlr/)
-- [GitHub](https://github.com/Zettlr/Zettlr)
+> [!TIP]
+> Both forum and Discord have their own benefits and drawbacks. The forum is
+> publicly visible and works for longer discussions. Discord is a private space,
+> but works well for real-time communication.
 
-## How to Help
+> [!IMPORTANT]
+> Do not open GitHub issues to ask questions or for help. We are happy to
+> answer questions on the community forum and/or Discord. Only use issues for
+> bug reports and feature requests.
 
-As mentioned above, there are numerous ways in which you can help Zettlr. Choose one where you feel the most comfortable. You can always help in other areas as well, but choosing something where you know your ways helps to get started.
+## Report Issues & Request Features
 
-### Translation
+Every app has bugs, and every app can be improved. If you find a bug, please
+report it as soon as possible. We provide a user-friendly issue form that helps
+you give us the right information that we need.
 
-Our aim is to support as many languages as possible, making Zettlr a truly international application. As of now, more than a dozen languages are already available, but even the most popular languages have room for improvement. Translating does not at all require technical knowledge.
+Sometimes, you find that there is something that the app lacks. In that case,
+use the appropriate form to request a new feature. We will do our best to
+implement it.
 
-Zettlr utilizes the `gettext` system for translating content. All translations reside in the folder `static/lang`. Inside, you will find a set of `*.po` files, named with their corresponding language codes (e.g. `fr-FR` for French and `pt-BR` for Brazilian Portuguese).
+> [!IMPORTANT]
+> Keep your GitHub notifications active. We often have to ask follow-up
+> questions. If you do not answer them, we cannot proceed with helping you.
 
-To improve upon a translation, simply edit the corresponding `*.po` file using a method of your choice. This can be done either with a text editor, or, if you would like to have a graphical user interface, the application POedit. After you have modified the translation file, open a Pull Request to add your changes to the application.
+## Contributing to Zettlr
+
+You can contribute broadly among four dimensions (there are certainly other ways
+in which you can help!):
+
+1. **Code Contributions**: Fix bugs or implement new features.
+2. **Translations**: Improve the existing translations of the app, or provide
+   new ones.
+3. **Documentation**: Improve the user manual.
+4. **Support**: Help other users get started and answer questions.
+
+### Code Contributions
+
+We welcome PRs that fix bugs, improve behavior, or implement new features.
+Zettlr is an Electron project and as such uses a standard Node.js stack. You can
+find all information to get started in the [README.md](./README.md) file.
+
+### Translations
+
+Zettlr utilizes the `gettext` system for translating content. All translations
+reside in the folder `static/lang`. Inside, you will find a set of `*.po` files,
+named with their corresponding language codes (e.g. `fr-FR` for French and
+`pt-BR` for Brazilian Portuguese).
+
+To improve upon a translation, simply edit the corresponding `*.po` file using a
+method of your choice. This can be done either with a text editor, or a
+graphical application, such as POedit. After you have modified the translation
+file, open a Pull Request to add your changes to the application.
+
+You can find more info in the
+[documentation](https://docs.zettlr.com/en/getting-started/get-involved/), or
+you can ask our community if you need help!
 
 ### Documentation
 
-The documentation always changes with every new feature we ship, so keeping it up to date is of utmost importance. To help with our documentation, [see its repository](https://github.com/Zettlr/zettlr-docs). Just fork it and edit everything where you spot mistakes. You can also add feature explanations if something is missing. Trust your gut: If you are sure something is ill-explained, you are probably right. Then, open a Pull Request and we will make sure to merge it as soon as possible. **Please remember to check your notifications afterwards, as we might have some remarks and comment on your PR!**
+We constantly change how the app works, so keeping the documentation up to date
+is important. To help with improving our documentation,
+[see its repository](https://github.com/Zettlr/zettlr-docs). Just fork it and
+edit any page. Trust your gut: If you feel something is ill-explained, you are
+probably right. Then, open a Pull Request and we will make sure to merge it as
+soon as possible.
 
-### Development
+Please don't hesitate to ask our community if you have any questions.
 
-If you have some experiences with developing, we would gladly welcome your help in fixing issues and adding features. Even if you just start: There are tons of smaller things and chores to do, so by cleaning up code here and there you can improve your skills and also help the project. Even if it's a minor fix, it is still a fix!
+### Support Others
 
-#### Our Stack (with linked documentation)
+Zettlr has a large, global community. Many people -- both old and new users
+alike -- come to our community hubs to ask for help. The more users are present
+on both the Community Forum and Discord, the better. Any question you can answer
+will help the maintainers focus more on improving the app.
 
-- [Electron.js](https://www.electronjs.org/docs) based on [Node.js](https://nodejs.org/api/) for backend
-- [Webpack](https://webpack.js.org/concepts/), and [Less](http://lesscss.org/features/) for frontend
+## AI Usage Policy
 
-#### Issue Labels
+Zettlr does not prohibit the use of generative pre-trained transformers (GPT
+models; simply "LLMs" or "chat bots") per se. GPT-models/LLMs are great and
+valuable tools for getting certain tasks done faster than without. However, we
+require anyone who contributes to the app to be transparent about the use of AI
+and keep a few limits in mind.
 
-There are – broadly speaking – three categories of issues on the Zettlr GitHub issue tracker, which you can distinguish with their associated labels.
+By contributing to the repository, **you agree to abide by our AI Usage Policy**:
 
-1. **Bugs** come in two flavours: non-critical and critical. Non-critical bugs are those that sometimes can mean a nuisance but that do not seriously affect working with the app. Critical bugs, however, make Zettlr barely or un-usable, and fixes need to be addressed urgently. Normally, the latter is taken on by the core-team.
-2. **Enhancements** are some small additions that require adding some more functionality to a feature, but that should not evolve into an own distinct feature. Even if the issue description reads like a full feature to you, the "enhancement" label means there is already said functionality, which just needs to be amended. Please ask if you are unsure.
-3. **Features** are bigger additions to the application that require a completely new feature. These can take some time, but could also prove to be a nice winter project.
-
-If you want to help, make sure to _communicate your intent_, that is:
-
-1. If you want to tackle an issue, comment and say that you want to develop a PR. In the PR, please link the issue.
-2. If you want to tackle an issue, but along the way realize that you ran out of time and can't finish it: _communicate it_! This is an Open Source project, and retracting is no shame, but not communicating that you cannot finish something will hinder all other people involved.
-3. If you have a PR and are not completely sure about whether it's right, or not, just open the PR and outline your questions there. It is much easier to work with something we can see and improve the PR than if you ask without something concrete.
-
-In any case, just remember to just open PRs and dive in. The worst that could happen is that we ask you to rewrite some file, but that has never happened and is pretty unlikely to happen in the future.
-
-## Final Remarks
-
-If something is missing here, or you feel something is not well described, either directly open a PR or ask one of the community places.
+* Wherever you have consulted GPT models (ChatGPT, Claude, Gemini, Apple
+  Intelligence, or local models), you disclose the extend of the usage. "Usage"
+  in the context of this policy refers to you letting it write code or (docs)
+  text that you use in your contribution. This also includes letting it improve
+  a paragraph of text or block of code that you have written. A coarse statement
+  provided when you open a PR is sufficient ("AI was used to improve this
+  text/code"). We may ask you to specify further, but by default, we only expect
+  general disclosure.
+* You agree to check and proof-read any text/code that AI has generated to
+  ensure you understand it. We do not require you to provide perfect code; but
+  we do require you to understand everything you wish to contribute to Zettlr
+  and its ecosystem.
+* You acknowledge that you are the sole author and solely responsible for any
+  contribution you make. GPT-models cannot make contributions on their own. You
+  may never acknowledge GPT models as co-authors, especially not in commit-
+  messages.
+* You agree to follow ethical principles in whatever you do. This especially
+  holds true for "Respect for persons": You are interacting with humans here,
+  and we expect you to respect them. This means that nobody wishes to talk to a
+  GPT-model. Communicate on your own, regardless of how much AI you use to help
+  you contribute.

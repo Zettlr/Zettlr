@@ -150,7 +150,7 @@ export const backgroundLayers: Extension[] = [
       backgroundColor: 'var(--grey-0)'
     },
     '&dark .inline-code-background, &dark .code-block-line-background': {
-      backgroundColor: 'var(--grey-4)'
+      backgroundColor: 'var(--grey-7)'
     }
   })
 ]

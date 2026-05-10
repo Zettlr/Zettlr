@@ -67,6 +67,11 @@ module.exports = [
     include: svgIconFolders
   },
   {
+    // Load the shaders as simple source strings
+    test: /\.glsl$/,
+    type: 'asset/source'
+  },
+  {
     test: /(.ts|.tsx)$/,
     exclude: /(node_modules|\.webpack)/,
     use: {

@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="tl-PH">
+  <!-- Mainly referred to the following for translations:
+        1. Komisyon sa Wikang Filipino, Manwal sa Masinop na Pagsulat, pp. 116-132
+        2. Komisyon ng Wikang Filipino, Diksiyonaryo ng Wikang Filipino, https://www.kwfdiksiyonaryo.ph/
+        3. Sentro ng Wikang Filipino, Glosaring English-Filipino, https://sentrofilipino.upd.edu.ph/glosaring-english-filipino/
+  -->  
+  <info>
+    <translator>
+      <name>leen p</name>
+    </translator>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    <updated>2026-02-01T00:00:00+00:00</updated> 
+  </info>
+  <style-options punctuation-in-quote="true"/>
+  <date form="text">
+    <date-part name="day" prefix="ika-" suffix=" ng "/>
+	<date-part name="month" suffix=" "/>
+    <date-part name="year"/>
+  </date>
+  <date form="numeric">
+    <date-part name="month" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="day" form="numeric-leading-zeros" suffix="/"/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <!-- LONG GENERAL TERMS -->
+    <term name="accessed">inakses noong</term>
+    <term name="advance-online-publication">advance online publication</term>
+    <term name="album">album</term>
+    <term name="and">at</term>
+    <term name="and others">at iba pa</term>
+    <term name="anonymous">anonymous</term>
+    <term name="at">sa</term>
+    <term name="audio-recording">audio recording</term>
+    <term name="available at">available sa</term>
+    <term name="by">
+	  <single>ni</single>
+	  <multiple>nina</multiple>
+	</term>
+    <term name="circa">circa</term>
+    <term name="cited">sinipi</term>
+    <term name="et-al">et al.</term>
+    <term name="film">pelikula</term>
+    <term name="forthcoming">forthcoming</term>
+    <term name="from">mula sa</term>
+    <term name="henceforth">henceforth</term>
+    <term name="ibid">ibid.</term>
+    <term name="in">nasa</term>
+    <term name="in press">in press</term>
+    <term name="internet">internet</term>
+    <term name="letter">liham</term>
+    <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no date">walang petsa</term>
+    <term name="no-place">no place</term>
+    <term name="no-publisher">walang tagalimbag</term>
+    <term name="on">sa</term>
+    <term name="online">online</term>
+    <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="original-work-published">original work published</term>
+    <term name="personal-communication">personal communication</term>
+    <term name="podcast">podcast</term>
+    <term name="podcast-episode">podcast episode</term>
+    <term name="preprint">preprint</term>
+    <term name="presented at">iprinisenta sa</term>
+    <term name="radio-broadcast">radio broadcast</term>
+    <term name="radio-series">radyo serye</term>
+    <term name="radio-series-episode">episode ng radyo serye</term>
+    <term name="reference">
+      <single>reference</single>
+      <multiple>references</multiple>
+    </term>
+    <term name="retrieved">retrieved</term>
+    <term name="review-of">review ng</term>
+    <term name="scale">scale</term>
+    <term name="special-issue">special issue</term>
+    <term name="special-section">special section</term>
+    <term name="television-broadcast">television broadcast</term>
+    <term name="television-series">teleserye</term>
+    <term name="television-series-episode">episode ng teleserye</term>
+    <term name="video">video</term>
+    <term name="working-paper">working paper</term>
+
+    <!-- SHORT GENERAL TERMS -->
+    <!-- Omitted short forms: accessed, album, and (symbol), and others, at (symbol), forthcoming, henceforth, ibid, in, in press, internet, loc-cit, on, online, op-cit, podcast, preprint, presented at -->
+    <term name="advance-online-publication" form="short">adv. online pub.</term> <!-- ODA -->
+    <term name="anonymous" form="short">anon.</term>
+    <term name="audio-recording" form="short">au. rec.</term> <!-- ODA -->
+    <term name="available at" form="short">avail. sa</term> <!-- ODA -->
+    <term name="circa" form="short">c.</term>
+    <!-- CMOS 10.48 recommends "ca." for "circa" but also allows "c.", which CSL has used historically -->
+    <term name="cited" form="short">cit.</term> <!-- ODA -->
+    <term name="film" form="short">flm.</term> <!-- ODA -->
+    <term name="from" form="short">fr.</term>
+    <term name="letter" form="short">let.</term> <!-- ODA -->
+    <term name="no date" form="short">w.p.</term>
+    <term name="no-place" form="short">n.p.</term>
+    <term name="no-publisher" form="short">w.l.</term>
+    <term name="original-work-published" form="short">orig. pub.</term> <!-- Oxford Guide to Style -->
+    <term name="personal-communication" form="short">pers. comm.</term>
+    <term name="podcast-episode" form="short">podcast ep.</term>
+    <term name="radio-broadcast" form="short">radio bdcst.</term> <!-- ODA -->
+    <term name="radio-series" form="short">radio ser.</term> <!-- ODA -->
+    <term name="radio-series-episode" form="short">radio ser. ep.</term> <!-- ODA -->
+    <term name="reference" form="short">
+      <single>ref.</single>
+      <multiple>refs.</multiple>
+    </term>
+    <term name="retrieved" form="short">rtvd.</term> <!-- ODA -->
+    <term name="review-of" form="short">rev. of</term>
+    <term name="scale" form="short">sc.</term> <!-- ODA -->
+    <term name="special-issue" form="short">spec. iss.</term> <!-- ODA -->
+    <term name="special-section" form="short">spec. sec.</term> <!-- ODA/CMOS -->
+    <term name="television-broadcast" form="short">TV bdcst.</term> <!-- ODA -->
+    <term name="television-series" form="short">TV ser.</term> <!-- ODA -->
+    <term name="television-series-episode" form="short">TV ser. ep.</term> <!-- ODA -->
+    <term name="video" form="short">vid.</term> <!-- ODA -->
+    <term name="working-paper" form="short">wkg. paper</term> <!-- ODA -->
+
+    <!-- SYMBOLIC GENERAL FORMS -->
+    <term name="and" form="symbol">&amp;</term>
+    <term name="at" form="symbol">@</term>
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="article">preprint</term>
+    <term name="article-journal">artikulo sa journal</term>
+    <term name="article-magazine">artikulo sa magasin</term>
+    <term name="article-newspaper">artikulo sa pahayagan</term>
+    <term name="bill">bill</term>
+    <!-- book is in the list of locator terms -->
+    <term name="broadcast">brodkast</term>
+    <!-- chapter is in the list of locator terms -->
+    <term name="classic">classical work</term>
+    <term name="collection">archival collection</term>
+    <term name="dataset">dataset</term>
+    <term name="document">dokumento</term>
+    <term name="entry">entry</term>
+    <term name="entry-dictionary">entry sa diksiyonaryo</term>
+    <term name="entry-encyclopedia">entry sa ensayklopidya</term>
+    <term name="event">event</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic">graphic</term>
+    <term name="hearing">pagdinig</term>
+    <term name="interview">interbiyu</term>
+    <term name="legal_case">kaso</term>
+    <term name="legislation">batas</term>
+    <term name="manuscript">manuskrito</term>
+    <term name="map">mapa</term>
+    <term name="motion_picture">video recording</term>
+    <term name="musical_score">musical score</term>
+    <term name="pamphlet">pamphlet</term>
+    <term name="paper-conference">conference paper</term>
+    <term name="patent">patent</term>
+    <term name="performance">performance</term>
+    <term name="periodical">peryodiko</term>
+    <term name="personal_communication">personal na komunikasyon</term>
+    <term name="post">post</term>
+    <term name="post-weblog">blog post</term>
+    <term name="regulation">regulation</term>
+    <term name="report">ulat</term>
+    <term name="review">review</term>
+    <term name="review-book">book review</term>
+    <term name="software">software</term>
+    <term name="song">audio recording</term>
+    <term name="speech">talumpati</term>
+    <term name="standard">standard</term>
+    <term name="thesis">tesis</term>
+    <term name="treaty">treaty</term>
+    <term name="webpage">webpage</term>
+
+    <!-- SHORT ITEM TYPE FORMS -->
+    <!-- Omitted short forms: article, bill, entry, event, hearing, map, periodical, speech, treaty -->
+    <term name="article-journal" form="short">jour. art.</term> <!-- ODWE -->
+    <term name="article-magazine" form="short">mag. art.</term> <!-- ODWE -->
+    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="broadcast" form="short">bdcst.</term> <!-- ODA -->
+    <!-- book is in the list of locator terms -->
+    <!-- chapter is in the list of locator terms -->
+    <term name="classic" form="short">class. wk.</term> <!-- ODWE -->
+    <term name="collection" form="short">arch. coll.</term> <!-- ODA -->
+    <term name="document" form="short">doc.</term>
+    <term name="entry-dictionary" form="short">dict. entry</term>
+    <term name="entry-encyclopedia" form="short">ency. entry</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic" form="short">gr.</term> <!-- ODA -->
+    <term name="interview" form="short">int.</term> <!-- ODA -->
+    <term name="legal_case" form="short">leg. case</term> <!-- ODA -->
+    <term name="legislation" form="short">legis.</term> <!-- ODA -->
+    <term name="manuscript" form="short">
+      <single>MS</single>
+      <multiple>MSS</multiple>
+    </term>
+    <term name="motion_picture" form="short">vid. rec.</term> <!-- ODA -->
+    <term name="musical_score" form="short">mus. score</term> <!-- ODWE -->
+    <term name="pamphlet" form="short">pam.</term> <!-- ODWE -->
+    <term name="paper-conference" form="short">conf. paper</term> <!-- ODA -->
+    <term name="patent" form="short">pat.</term> <!-- ODWE -->
+    <term name="performance" form="short">prfm.</term> <!-- ODA -->
+    <term name="personal_communication" form="short">pers. comm.</term>
+    <term name="regulation" form="short">reg.</term> <!-- ODA -->
+    <term name="report" form="short">rep.</term> <!-- ODWE -->
+    <term name="review" form="short">rev.</term>
+    <term name="review-book" form="short">bk. rev.</term>
+    <term name="software" form="short">sftw.</term> <!-- ODA -->
+    <term name="song" form="short">au. rec.</term> <!-- ODA -->
+    <term name="standard" form="short">std.</term> <!-- ODA -->
+    <term name="thesis" form="short">thes.</term> <!-- ODA -->
+    <term name="webpage" form="short">webpg.</term> <!-- ODA -->
+
+    <!-- LONG VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb">testimonyo ni</term>
+    <term name="review" form="verb">review ng</term>
+    <term name="review-book" form="verb">review ng librong</term>
+
+    <!-- SHORT VERB ITEM TYPE FORMS -->
+    <!-- Only where applicable -->
+    <term name="hearing" form="verb-short">test. of</term> <!-- ODA -->
+    <term name="review" form="verb-short">rev. of</term>
+    <term name="review-book" form="verb-short">rev. of the bk.</term>
+
+    <!-- HISTORICAL ERA TERMS -->
+    <term name="ad"> AD</term>
+    <term name="bc"> BC</term>
+    <term name="bce"> BCE</term>
+    <term name="ce"> CE</term>
+
+    <!-- PUNCTUATION -->
+    <term name="open-quote">“</term>
+    <term name="close-quote">”</term>
+    <term name="open-inner-quote">‘</term>
+    <term name="close-inner-quote">’</term>
+    <term name="page-range-delimiter">–</term>
+    <term name="colon">:</term>
+    <term name="comma">,</term>
+    <term name="semicolon">;</term>
+
+    <!-- ORDINALS -->
+	<!-- Tagalog uses the prefix ika- followed by 'na'(e.g. ika-1 na edisyon) for all numeric ordinals.-->
+    <term name="ordinal">th</term>
+    <term name="ordinal-01">st</term>
+    <term name="ordinal-02">nd</term>
+    <term name="ordinal-03">rd</term>
+    <term name="ordinal-11">th</term>
+    <term name="ordinal-12">th</term>
+    <term name="ordinal-13">th</term>
+
+    <!-- LONG ORDINALS -->
+    <term name="long-ordinal-01">unang</term>
+    <term name="long-ordinal-02">ikalawang</term>
+    <term name="long-ordinal-03">ikatlong</term>
+    <term name="long-ordinal-04">ikaapat na</term>
+    <term name="long-ordinal-05">ikalimang</term>
+    <term name="long-ordinal-06">ikaanim na</term>
+    <term name="long-ordinal-07">ikapitong</term>
+    <term name="long-ordinal-08">ikawalong</term>
+    <term name="long-ordinal-09">ikasiyam na</term>
+    <term name="long-ordinal-10">ikasampung</term>
+
+    <!-- LONG LOCATOR FORMS -->
+    <term name="act">
+	  <single>yugto</single>
+	  <multiple>mga yugto</multiple>
+	</term>
+    <term name="appendix">
+      <single>apendiks</single>
+      <multiple>mga apendiks</multiple>
+    </term>
+    <term name="article-locator">
+	  <single>artikulo</single>
+	  <multiple>mga artikulo</multiple>
+	</term>
+    <term name="book">
+	  <single>tomo</single>
+	  <multiple>mga tomo</multiple>
+	</term>
+    <term name="canon">
+      <single>canon</single>
+      <multiple>canons</multiple>
+    </term>
+    <term name="chapter">
+	  <single>kabanata</single>
+	  <multiple>mga kabanata</multiple>
+	</term>
+    <term name="column">
+	  <single>kolum</single>
+	  <multiple>mga kolum</multiple>
+	</term>
+    <term name="elocation">
+      <single>location</single>
+      <multiple>locations</multiple>
+    </term>
+    <term name="equation">
+      <single>equation</single>
+      <multiple>equations</multiple>
+    </term>
+    <term name="figure">
+	  <single>pigura</single>
+	  <multiple>mga pigura</multiple>	
+	</term>
+    <term name="folio">
+      <single>folio</single>
+      <multiple>folios</multiple>
+    </term>
+    <term name="issue">
+	  <single>isyu</single>
+	  <multiple>mga isyu</multiple>	
+	</term>
+    <term name="line">
+	  <single>linya</single>
+	  <multiple>mga linya</multiple>	
+	</term>
+    <term name="note">
+      <single>talâ</single>
+      <multiple>mga talâ</multiple>
+    </term>
+    <term name="opus">
+      <single>opus</single>
+      <multiple>opera</multiple>
+    </term>
+    <term name="page">
+	  <single>pahina</single>
+	  <multiple>mga pahina</multiple>	
+	</term>
+    <term name="paragraph">
+	  <single>talata</single>
+	  <multiple>mga talata</multiple>	
+	</term>
+    <term name="part">
+      <single>bahagi</single>
+      <multiple>mga bahagi</multiple>
+    </term>
+    <term name="rule">
+      <single>rule</single>
+      <multiple>rules</multiple>
+    </term>
+    <term name="scene">
+	  <single>eksena</single>
+	  <multiple>mga eksena</multiple>	
+	</term>
+    <term name="section">
+	  <single>seksiyon</single>
+	  <multiple>mga seksiyon</multiple>	
+	</term>
+    <term name="sub-verbo">
+      <single>sub verbo</single>
+      <multiple>sub verbis</multiple>
+    </term>
+    <term name="supplement">
+      <single>supplement</single>
+      <multiple>supplements</multiple>
+    </term>
+    <term name="table">talahanayan</term>
+    <!-- A timestamp is a composite of hours, minutes, etc. and therefore has no default label. -->
+    <term name="timestamp"/>
+    <term name="title-locator">
+      <single>pamagat</single>
+      <multiple>mga pamagat</multiple>
+    </term>
+    <term name="verse">
+	  <single>berso</single>
+	  <multiple>mga berso</multiple>	
+	</term>
+    <term name="volume">
+	  <single>tomo</single>
+	  <multiple>mga tomo</multiple>	
+	</term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <!-- Omitted short forms: act, timestamp -->
+    <term name="appendix" form="short">
+      <single>app.</single>
+      <multiple>apps.</multiple>
+    </term>
+    <term name="article-locator" form="short">
+      <single>art.</single>
+      <multiple>arts.</multiple>
+    </term>
+    <term name="book" form="short">
+      <single>bk.</single>
+      <multiple>bks.</multiple>
+    </term>
+    <term name="canon" form="short">
+      <!-- Oxford Dictionary for Writers and Editors -->
+      <single>can.</single>
+      <multiple>cann.</multiple>
+    </term>
+    <term name="chapter" form="short">
+      <single>chap.</single>
+      <multiple>chaps.</multiple>
+    </term>
+    <term name="column" form="short">
+      <single>col.</single>
+      <multiple>cols.</multiple>
+    </term>
+    <term name="elocation" form="short">
+      <single>loc.</single>
+      <multiple>locs.</multiple>
+    </term>
+    <term name="equation" form="short">
+      <single>eq.</single>
+      <multiple>eqq.</multiple>
+    </term>
+    <term name="figure" form="short">
+      <single>pig.</single>
+      <multiple>figs.</multiple>
+    </term>
+    <term name="folio" form="short">
+      <single>fol.</single>
+      <multiple>fols.</multiple>
+    </term>
+    <term name="issue" form="short">
+      <single>blg.</single>
+      <multiple>nos.</multiple>
+    </term>
+    <term name="line" form="short">
+      <single>l.</single>
+      <multiple>ll.</multiple>
+    </term>
+    <term name="note" form="short">
+      <single>n.</single>
+      <multiple>nn.</multiple>
+    </term>
+    <term name="opus" form="short">
+      <single>op.</single>
+      <multiple>opp.</multiple>
+    </term>
+    <term name="page" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="paragraph" form="short">
+      <single>para.</single>
+      <multiple>paras.</multiple>
+    </term>
+    <term name="part" form="short">
+      <single>pt.</single>
+      <multiple>pts.</multiple>
+    </term>
+    <term name="rule" form="short">
+      <!-- legal abbreviations in the Oxford Guide to Style, sec. 13.2.1 -->
+      <single>r.</single>
+      <multiple>rr.</multiple>
+    </term>
+    <term name="scene" form="short">
+      <single>sc.</single>
+      <multiple>scs.</multiple>
+    </term>
+    <term name="section" form="short">
+      <single>sek.</single>
+      <multiple>secs.</multiple>
+    </term>
+    <term name="sub-verbo" form="short">
+      <single>s.v.</single>
+      <multiple>s.vv.</multiple>
+    </term>
+    <term name="supplement" form="short">
+      <single>supp.</single>
+      <multiple>supps.</multiple>
+    </term>
+    <term name="table" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>tbl.</single>
+      <multiple>tbls.</multiple>
+    </term>
+    <term name="title-locator" form="short">
+      <!-- Oxford Dictionary for Writers and Editors -->
+      <single>tit.</single>
+      <multiple>titt.</multiple>
+    </term>
+    <term name="verse" form="short">
+      <single>v.</single>
+      <multiple>vv.</multiple>
+    </term>
+    <term name="volume" form="short">
+      <single>vol.</single>
+      <multiple>vols.</multiple>
+    </term>
+
+    <!-- SYMBOLIC LOCATOR FORMS -->
+    <term name="chapter" form="symbol">
+      <!-- caput/capita, esp. in legal works; cf. CMOS 14.196 -->
+      <single>c.</single>
+      <multiple>cc.</multiple>
+    </term>
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG NUMBER VARIABLE FORMS -->
+    <term name="chapter-number">kabanata</term>
+    <term name="citation-number">
+      <single>citation</single>
+      <multiple>citations</multiple>
+    </term>
+    <term name="collection-number">
+      <single>bilang</single>
+      <multiple>mga bilang</multiple>
+    </term>
+    <term name="edition">edisyon</term>
+    <term name="first-reference-note-number">
+      <single>reference</single>
+      <multiple>references</multiple>
+    </term>
+    <term name="number">bilang</term>
+    <term name="number-of-pages">pahina</term>
+    <term name="number-of-volumes">tomo</term>
+    <term name="page-first">pahina</term>
+    <term name="printing">limbag</term>
+    <term name="version">bersiyon</term>
+
+    <!-- SHORT NUMBER VARIABLE FORMS -->
+    <term name="chapter-number" form="short">
+      <single>chap.</single>
+      <multiple>chaps.</multiple>
+    </term>
+    <term name="citation-number" form="short">
+      <single>cit.</single>
+      <multiple>cits.</multiple>
+    </term>
+    <term name="collection-number" form="short">
+      <single>no.</single>
+      <multiple>nos.</multiple>
+    </term>
+    <term name="edition" form="short">
+      <single>ed.</single>
+      <multiple>eds.</multiple>
+    </term>
+    <term name="first-reference-note-number" form="short">
+      <single>ref.</single>
+      <multiple>refs.</multiple>
+    </term>
+    <term name="number" form="short">
+      <single>no.</single>
+      <multiple>nos.</multiple>
+    </term>
+    <term name="number-of-pages" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="number-of-volumes" form="short">
+      <single>vol.</single>
+      <multiple>vols.</multiple>
+    </term>
+    <term name="page-first" form="short">
+      <single>p.</single>
+      <multiple>pp.</multiple>
+    </term>
+    <term name="printing" form="short">
+      <!-- Oxford Dictionary for Writers and Editors -->
+      <single>ptg.</single>
+      <multiple>ptgs.</multiple>
+    </term>
+    <term name="version" form="short">v.</term> <!-- no plural -->
+
+    <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
+    <term name="chair">
+      <single>tagapangulo</single>
+      <multiple>mga tagapangulo</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>editor</single>
+      <multiple>mga editor</multiple>
+    </term>
+    <term name="compiler">
+      <single>tagatipon</single>
+      <multiple>mga tagatipon</multiple>
+    </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
+    <term name="contributor">
+      <single>kontributor</single>
+      <multiple>mga kontributor</multiple>
+    </term>
+    <term name="curator">
+      <single>curator</single>
+      <multiple>mga curator</multiple>
+    </term>
+    <term name="director">
+      <single>direktor</single>
+      <multiple>mga direktor</multiple>
+    </term>
+    <term name="editor">
+      <single>editor</single>
+      <multiple>mga editor</multiple>
+    </term>
+    <term name="editor-translator">
+      <single>editor at tagasalin</single>
+      <multiple>mga editor at tagasalin</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>editor at tagasalin</single>
+      <multiple>mga editor at tagasalin</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>editor</single>
+      <multiple>mga editor</multiple>
+    </term>
+    <term name="executive-producer">
+      <single>ehekutibong prodyuser</single>
+      <multiple>mga ehekutibong prodyuser</multiple>
+    </term>
+    <term name="guest">
+      <single>panauhin</single>
+      <multiple>mga panauhin</multiple>
+    </term>
+    <term name="host">
+      <single>tagapangasiwa</single>
+      <multiple>mga tagapangasiwa</multiple>
+    </term>
+    <term name="illustrator">
+      <single>illustrator</single>
+      <multiple>mga illustrator</multiple>
+    </term>
+    <term name="interviewer"/> <!-- generally blank -->
+    <term name="narrator">
+      <single>tagapagsalaysay</single>
+      <multiple>mga tagapagsalaysay</multiple>
+    </term>
+    <term name="organizer">
+      <single>organisador</single>
+      <multiple>mga organisador</multiple>
+    </term>
+    <term name="original-author"/> <!-- generally blank -->
+    <term name="performer">
+      <single>performer</single>
+      <multiple>mga performer</multiple>
+    </term>
+    <term name="producer">
+      <single>prodyuser</single>
+      <multiple>mga prodyuser</multiple>
+    </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
+    <term name="script-writer">
+      <single>manunulat</single>
+      <multiple>mga manunulat</multiple>
+    </term>
+    <term name="series-creator">
+      <single>series creator</single>
+      <multiple>mga series creator</multiple>
+    </term>
+    <term name="translator">
+      <single>tagasalin</single>
+      <multiple>mga tagasalin</multiple>
+    </term>
+
+    <!-- SHORT ROLE FORMS -->
+    <!-- Omitted roles:
+         author, chair, composer, container-author, guest, host, interviewer, original-author, recipient, reviewed-author
+    -->
+    <term name="collection-editor" form="short">
+	  <single>ed.</single>
+	  <multiple>mga ed.</multiple>
+	</term>
+    <term name="compiler" form="short">
+      <single>comp.</single>
+      <multiple>comps.</multiple>
+    </term>
+    <term name="contributor" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>contrib.</single>
+      <multiple>contribs.</multiple>
+    </term>
+    <term name="curator" form="short">
+      <!-- Oxford Art Online <https://www.oxfordartonline.com/page/1661> -->
+      <single>cur.</single>
+      <multiple>curs.</multiple>
+    </term>
+    <term name="director" form="short">
+      <single>dir.</single>
+      <multiple>mga dir.</multiple>
+    </term>
+    <term name="editor" form="short">pat.</term>
+    <term name="editor-translator" form="short">
+      <single>ed. at salin</single>
+      <multiple>mga ed. at salin</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>ed. at salin</single>
+      <multiple>mga ed. at salin</multiple>
+    </term>
+    <term name="editorial-director" form="short">pat.</term>
+    <term name="executive-producer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>exec. prod.</single>
+      <multiple>exec. prods.</multiple>
+    </term>
+    <term name="illustrator" form="short">
+      <single>ill.</single>
+      <multiple>ills.</multiple>
+    </term>
+    <term name="narrator" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>narr.</single>
+      <multiple>narrs.</multiple>
+    </term>
+    <term name="organizer" form="short">
+      <!-- possibly misleading: Oxford Dictionary of Abbreviations only defines this as organization or organized -->
+      <single>org.</single>
+      <multiple>orgs.</multiple>
+    </term>
+    <term name="performer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>perf.</single>
+      <multiple>perfs.</multiple>
+    </term>
+    <term name="producer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>prod.</single>
+      <multiple>mga prod.</multiple>
+    </term>
+    <term name="script-writer" form="short">
+      <!-- Oxford Dictionary of Abbreviations -->
+      <single>wrtr.</single>
+      <multiple>wrtrs.</multiple>
+    </term>
+    <term name="series-creator" form="short">
+      <single>ser. creator</single>
+      <multiple>ser. creators</multiple>
+    </term>
+    <term name="translator" form="short">trans.</term> <!-- no plural -->
+
+    <!-- VERB ROLE FORMS -->
+    <term name="chair" form="verb">chaired by</term>
+    <term name="collection-editor" form="verb">
+	  <single>inedit ni</single>
+	  <multiple>inedit nina</multiple>
+	</term>
+    <term name="compiler" form="verb">compiled by</term>
+    <term name="composer" form="verb">composed by</term>
+    <term name="container-author" form="verb">
+	  <single>ni</single>
+	  <multiple>nina</multiple>
+	</term>
+    <term name="contributor" form="verb">
+	  <single>kasama si</single>
+	  <multiple>kasama sina</multiple>
+	</term>
+    <term name="curator" form="verb">curated by</term>
+    <term name="director" form="verb">
+	  <single>sa direksyon ni</single>
+	  <multiple>sa direksyon nina</multiple>
+	</term>
+    <term name="editor" form="verb">
+	  <single>inedit ni</single>
+	  <multiple>inedit nina</multiple>
+	</term>
+    <term name="editor-translator" form="verb">
+	  <single>edit at salin ni</single>
+	  <multiple>edit at salin nina</multiple>
+	</term>
+    <term name="editortranslator" form="verb">
+	  <single>edit at salin ni</single>
+	  <multiple>edit at salin nina</multiple>
+	</term>
+    <term name="editorial-director" form="verb">
+	  <single>inedit ni</single>
+	  <multiple>inedit nina</multiple>
+	</term>
+    <term name="executive-producer" form="verb">executive produced by</term>
+    <term form="verb" name="guest">
+      <single>kasama si</single>
+      <multiple>kasama sina</multiple>
+    </term>
+    <term name="host" form="verb">hosted by</term>
+    <term name="illustrator" form="verb">
+	  <single>guhit ni</single>
+	  <multiple>guhit nina</multiple>
+	</term>
+    <term name="interviewer" form="verb">
+	  <single>panayam ni</single>
+	  <multiple>panayam nina</multiple>
+	</term>
+    <term name="narrator" form="verb">
+	  <single>isinalaysay ni</single>
+	  <multiple>isinalaysay nina</multiple>
+	</term>
+    <term name="organizer" form="verb">
+	  <single>inorganisa ni</single>
+	  <multiple>inorganisa nina</multiple>
+	</term>
+    <term name="original-author" form="verb">
+	  <single>ni</single>
+	  <multiple>nina</multiple>
+	</term>
+    <term name="performer" form="verb">
+	  <single>itinanghal ni</single>
+	  <multiple>itinanghal nina</multiple>
+	</term>
+    <term name="producer" form="verb">produced by</term>
+    <term name="recipient" form="verb">para kay</term>
+    <term name="reviewed-author" form="verb">
+	  <single>ni</single>
+	  <multiple>nina</multiple></term>
+    <term name="script-writer" form="verb">
+	  <single>isinulat ni</single>
+	  <multiple>isinulat nina</multiple>
+	</term>
+    <term name="series-creator" form="verb">
+	  <single>katha ni</single>
+	  <multiple>katha nina</multiple>
+	</term>
+    <term name="translator" form="verb">
+	  <single>salin ni</single>
+	  <multiple>salin nina</multiple>
+	</term>
+
+    <!-- SHORT VERB ROLE FORMS -->
+    <!-- Omitted roles:
+         author, chair, container-author, contributor, guest, host, interviewer, original-author, recipient, reviewed-author, series-creator
+    -->
+    <term name="collection-editor" form="verb-short">
+	  <single>ed. ni</single>
+	  <multiple>ed. nina</multiple>
+	</term>
+    <term name="compiler" form="verb-short">comp. by</term>
+    <term name="composer" form="verb-short">comp. by</term> <!-- ODWE -->
+    <term name="curator" form="verb-short">cur. by</term> <!-- Oxford Art Online -->
+    <term name="director" form="verb-short">
+	  <single>dir. ni</single>
+	  <multiple>dir. nina</multiple>	
+	</term>
+    <term name="editor" form="verb-short">
+	  <single>ed. ni</single>
+	  <multiple>ed. nina</multiple>		
+	</term>
+    <term name="editor-translator" form="verb-short">
+	  <single>ed. at salin ni</single>
+	  <multiple>ed. at salin nina</multiple>		
+	</term>
+    <term name="editortranslator" form="verb-short">
+	  <single>ed. at salin ni</single>
+	  <multiple>ed. at salin nina</multiple>		
+	</term>
+    <term name="editorial-director" form="verb-short">
+	  <single>ed. ni</single>
+	  <multiple>ed. nina</multiple>		
+	</term>
+    <term name="executive-producer" form="verb-short">exec. prod. by</term> <!-- ODA -->
+    <term name="illustrator" form="verb-short">ill. by</term>
+    <term name="narrator" form="verb-short">narr. by</term> <!-- ODA -->
+    <term name="organizer" form="verb-short">org. by</term> <!-- ODA -->
+    <term name="performer" form="verb-short">perf. by</term> <!-- ODA -->
+    <term name="producer" form="verb-short">prod. by</term> <!-- ODA -->
+    <term name="script-writer" form="verb-short">writ. by</term> <!-- ODA -->
+    <term name="translator" form="verb-short">
+	  <single>salin ni</single>
+	  <multiple>salin nina</multiple>		
+	</term>
+
+    <!-- LONG MONTH FORMS -->
+    <term name="month-01">Enero</term>
+    <term name="month-02">Pebrero</term>
+    <term name="month-03">Marso</term>
+    <term name="month-04">Abril</term>
+    <term name="month-05">Mayo</term>
+    <term name="month-06">Hunyo</term>
+    <term name="month-07">Hulyo</term>
+    <term name="month-08">Agosto</term>
+    <term name="month-09">Setyembre</term>
+    <term name="month-10">Oktubre</term>
+    <term name="month-11">Nobyembre</term>
+    <term name="month-12">Disyembre</term>
+
+    <!-- SHORT MONTH FORMS -->
+    <!-- Chicago Manual of Style, 18th ed., sec. 10.44 (identical to New Hart's Rules, 2nd ed., sec. 10.2.6) -->
+    <term name="month-01" form="short">Ene.</term>
+    <term name="month-02" form="short">Peb.</term>
+    <term name="month-03" form="short">Mar.</term>
+    <term name="month-04" form="short">Abr.</term>
+    <term name="month-05" form="short">May.</term>
+    <term name="month-06" form="short">Hun.</term>
+    <term name="month-07" form="short">Hul.</term>
+    <term name="month-08" form="short">Ago.</term>
+    <term name="month-09" form="short">Set.</term>
+    <term name="month-10" form="short">Okt.</term>
+    <term name="month-11" form="short">Nob.</term>
+    <term name="month-12" form="short">Dis.</term>
+
+    <!-- SEASONS -->
+    <term name="season-01">Tagsibol</term>
+    <term name="season-02">Tag-araw</term>
+    <term name="season-03">Taglagas</term>
+    <term name="season-04">Taglamig</term>
+  </terms>
+</locale>

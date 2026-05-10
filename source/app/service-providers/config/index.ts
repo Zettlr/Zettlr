@@ -186,6 +186,7 @@ export default class ConfigProvider extends ProviderContract {
 
       // Determine if this is a different version
       this._newVersion = readConfig.version !== this.config.version
+      const oldVersion = readConfig.version
 
       // Additional check for nightlies, because these do not differ in terms of
       // build version, but rather in terms of build date.
@@ -210,7 +211,7 @@ export default class ConfigProvider extends ProviderContract {
 
       // Don't forget to update the version
       if (this._newVersion) {
-        this._logger.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
+        this._logger.info(`Migrating from ${oldVersion} to ${String(this.config.version)}!`)
         this.config.version = ZETTLR_VERSION // We should not emit events here, so manually set the value
         this.config.buildDate = __BUILD_DATE__
       }
