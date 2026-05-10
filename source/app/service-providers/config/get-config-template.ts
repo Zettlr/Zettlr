@@ -188,6 +188,8 @@ export interface ConfigOptions {
     imageHeight: number
     renderingMode: 'preview'|'raw'
     renderCitations: boolean
+    citationTooltipEnabled: boolean //tooltip display added
+    citationTooltipDelay: number
     renderIframes: boolean
     renderImages: boolean
     renderLinks: boolean
@@ -465,7 +467,9 @@ export function getConfigTemplate (): ConfigOptions {
       imageHeight: 50, // Maximum preview image height
       renderingMode: 'preview',
       renderCitations: true,
-      renderIframes: true,
+      citationTooltipEnabled: true, //tool tip
+      citationTooltipDelay: 500,
+      renderIframes: true, 
       renderImages: true,
       renderLinks: true,
       renderMath: true,
