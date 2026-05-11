@@ -4,7 +4,7 @@
  *
  * Contains:        General Preferences Schema
  * CVM-Role:        Model
- * Maintainer:      Hendrik Erz
+ * Maintainer:      Zilu Wang
  * License:         GNU GPL v3
  *
  * Description:     Exports the general tab schema.
