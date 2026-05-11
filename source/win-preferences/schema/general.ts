@@ -98,14 +98,18 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
           model: 'alwaysReloadFiles'
         },
         {
-          type: 'checkbox',
-          label: trans('Avoid opening files in new tabs if possible'),
-          model: 'system.avoidNewTabs'
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Opening Files Behavior')
         },
         {
-          type: 'checkbox',
-          label: trans('Always open new tabs at the end of the tab bar'),
-          model: 'system.openTabsAtEnd'
+          type: 'radio',
+          model: 'system.tabOpeningBehavior',
+          options: {
+            next_to_current: trans('Open next to the current tab'),
+            replace_current: trans('Replace the current tab if possible'),
+            end_of_bar: trans('Open at the end of the tab bar')
+          }
         }
       ]
     },
