@@ -205,7 +205,7 @@
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.7",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vue-eslint-parser": "^10.4.0",
     "vue-loader": "^17.4.2",
     "vue-tsc": "^3.2.7",
