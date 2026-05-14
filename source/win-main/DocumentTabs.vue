@@ -166,7 +166,12 @@ onMounted(() => {
         selectFile(openFiles.value[0])
       }
     } else if (shortcut === 'reopen-closed-tab') {
-      console.log('WORKING sdwd')
+      // Store the recently closed file to a const variable.
+      // Opens and displays the file if the file exist when the shortcut pressed.
+      const closedFile = recentlyClosedFiles.value.pop()
+      if (closedFile) {
+        selectFile(closedFile)
+      }
     } else if (shortcut === 'close-window') {
       if (documentTreeStore.lastLeafId !== props.leafId) {
         return // Otherwise all document tabs would close one file at the same
