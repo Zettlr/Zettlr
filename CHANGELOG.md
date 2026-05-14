@@ -2,11 +2,35 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: Allow changing the trigger character for snippet (and emoji)
+  autocomplete. Until now, this was hard-coded to `:` (which is still the
+  default). However, since that interferes with the way French speakers use the
+  colon character (`Pour exemple : cette.`), we now allow different trigger
+  characters, relieving the colon where necessary. Currently supported are `/`
+  and `%` as alternatives (#5185; #6325).
+- Fixed missing click handlers for clicking links in tables (#4694).
+- Fixed an issue that would sometimes open the same link twice.
+- The file manager now uses tabular digits for displaying numbers in filenames.
+- Fixed an issue where code elements had a background color that overlaid the
+  selection (#6328).
+- Fixed a wrong font selection for comments.
+- Fixed strikethrough-elements no longer being stricken-through (#6330).
+- Add "Curl quotes" text transform to convert straight quotes to curly (smart)
+  quotes, the inverse of the existing "Straighten quotes" transform (#6259).
+- The main window's title now includes the current active file's title. This
+  allows automation that depends on the window title (#6283).
+- The table of contents now clears out when the last file of the editor is
+  closed (#6251).
+- Allow `Escape` to close the search panel regardless of whether it is currently
+  focused (#2970).
+- Moved the editor "Indentation," "Font size," and "Autocomplete" settings into
+  their own preferences groups.
 
 ## Under the Hood
 
-(nothing here)
+- Upgrade Electron to `v42.0.0`
+- Migrate the `openAttachment` utility from `got` to `ky`.
+- Migrate the LanguageTool API utility from `got` to `ky`.
 
 # 4.5.0
 

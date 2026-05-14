@@ -25,14 +25,12 @@ export function interceptAnchorClicks (content: HTMLElement, cb: (href: string) 
   const anchors = content.querySelectorAll('a')
 
   for (const anchor of anchors) {
-    const override = (event: MouseEvent) => {
+    anchor.addEventListener('mousedown', (event: MouseEvent) => {
       event.preventDefault()
       event.stopPropagation()
       // NOTE: `anchor.href` already returns a *resolved* link.
       cb(anchor.getAttribute('href') ?? '')
       return false
-    }
-
-    anchor.addEventListener('click', override)
+    })
   }
 }

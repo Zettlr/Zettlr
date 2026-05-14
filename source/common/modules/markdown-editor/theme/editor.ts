@@ -277,7 +277,9 @@ export const editorTheme = EditorView.baseTheme({
 
   '.cm-monospace': {
     color: 'var(--zettlr-editor-code-color)',
-    backgroundColor: 'var(--zettlr-editor-code-bg)',
+  },
+  '.cm-block-comment': {
+    font: 'var(--zettlr-editor-font-size) var(--zettlr-editor-code-font)',
   },
   '.cm-inline-math': {
     color: 'var(--zettlr-editor-code-color)',
@@ -351,6 +353,10 @@ export const editorTheme = EditorView.baseTheme({
   },
   '.cm-highlight': {
     backgroundColor: 'var(--zettlr-editor-highlight-color)',
+  },
+  '.cm-strikethrough:not(.cm-code-mark)': {
+    textDecoration: 'line-through',
+    textDecorationThickness: '2px'
   },
   '.cm-hr':  {
     font: 'var(--zettlr-editor-strong-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',

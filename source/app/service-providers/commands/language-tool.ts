@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import got, { HTTPError, RequestError } from 'got'
+import ky, { HTTPError } from 'ky'
 import { URLSearchParams } from 'url'
 import { app } from 'electron'
 import { trans } from '@common/i18n-main'
@@ -200,8 +200,8 @@ async function fetchSupportedLanguages (server: string): Promise<string[]> {
   }
 
   // Otherwise, fetch the languages from the server
-  const result = await got(`${server}/v2/languages`)
-  const languages: Array<{ name: string, code: string, longCode: string }> = JSON.parse(result.body)
+  const result = await ky(`${server}/v2/languages`)
+  const languages: Array<{ name: string, code: string, longCode: string }> = await result.json()
   const shortCodes = languages.map(l => l.code)
   const longCodes = languages.map(l => l.longCode)
 
@@ -307,25 +307,38 @@ export default class LanguageTool extends ZettlrCommand {
       this._app.log.verbose(`[Application] Contacting LanguageTool at ${server} (using credentials: ${String(useCredentials)}); payload: ${numCharacters} characters`)
       const languages = await fetchSupportedLanguages(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
-      const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
-      return [ JSON.parse(result.body), languages ]
-    } catch (err: any) {
-      // Always report errors
-      this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
-      if (err instanceof HTTPError && err.code === 'ERR_NON_2XX_3XX_RESPONSE') {
-        // The API complained. There are a few things that can happen, and here
-        // we only translate them into error messages the users can understand.
-        switch (err.message) {
-          case 'Response code 413 (Request Entity Too Large)':
+      const result = await ky(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
+      // Check the status codes. 2xx and 3xx codes are not treated as errors,
+      // while 4xx and 5xx cause an HTTPError to be thrown.
+      if (result.status === 200) {
+        return [ await result.json<LanguageToolAPIResponse>(), languages ]
+      } else {
+        throw new Error(`Received response with status ${result.status}: ${result.statusText}`)
+      }
+    } catch (err: unknown) {
+      if (err instanceof HTTPError) {
+        // We have an exact error
+        this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
+        switch (err.response.status) {
+          case 403:
+            return trans('Forbidden (are your credentials correct?)')
+          case 413:
             return trans('Document too long')
-          default:
-            return err.message // This allows us to detect other error messages we need to translate
         }
-      } else if (err instanceof RequestError) {
+        if (err.response.status >= 500) {
+          return trans('Server error')
+        } else if (err.response.status >= 400) {
+          return trans('Client error')
+        }
+      } else if (err instanceof Error) {
+        // Still an error, but not caused by the response
+        this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
         return trans('offline') // Maybe very coarse, but remember it needs to be concise and user-readable
+      } else {
+        this._app.log.error('[Application] Error running LanguageTool: Unknown error', err)
       }
 
-      return undefined // Silently swallow errors
+      return undefined // Silently swallow unknown errors
     }
   }
 

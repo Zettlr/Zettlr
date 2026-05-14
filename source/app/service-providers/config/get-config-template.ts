@@ -130,6 +130,7 @@ export interface ConfigOptions {
   }
   editor: {
     autocompleteSuggestEmojis: boolean
+    snippetAutocompleteTriggerCharacter: ':'
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
@@ -348,6 +349,7 @@ export function getConfigTemplate (): ConfigOptions {
     editor: {
       autoSave: 'off',
       autocompleteSuggestEmojis: true,
+      snippetAutocompleteTriggerCharacter: ':',
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
       showWhitespace: false,

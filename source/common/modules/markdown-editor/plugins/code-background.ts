@@ -144,13 +144,6 @@ export const backgroundLayers: Extension[] = [
     '.code-block-line-background.bottom': {
       borderBottomLeftRadius: '4px',
       borderBottomRightRadius: '4px'
-    },
-    // Colors
-    '.inline-code-background, .code-block-line-background': {
-      backgroundColor: 'var(--grey-0)'
-    },
-    '&dark .inline-code-background, &dark .code-block-line-background': {
-      backgroundColor: 'var(--grey-7)'
     }
   })
 ]

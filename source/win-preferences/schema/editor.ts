@@ -294,18 +294,24 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
       ]
     },
     {
-      title: trans('Other settings'),
+      title: trans('Font size'),
       group: PreferencesGroups.Editor,
       help: undefined, // TODO
       fields: [
-        { type: 'separator' },
         {
           type: 'number',
-          label: trans('Editor font size'),
+          label: trans('Font size in pixels:'),
           inline: true,
           model: 'editor.fontSize'
-        },
-        { type: 'separator' },
+        }
+      ]
+    },
+    {
+      title: trans('Indentation'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      infoString: trans('Adjust your editor indentation settings'),
+      fields: [
         {
           type: 'number',
           label: trans('Tab size (in number of spaces)'),
@@ -314,7 +320,6 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           model: 'editor.indentUnit'
         },
         {
-          // TODO: number+checkbox on the same line
           type: 'checkbox',
           label: trans('Indent using tabs instead of spaces'),
           model: 'editor.indentWithTabs'
@@ -324,8 +329,38 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           label: trans('Always indent the current line when pressing Tab'),
           info: trans('Zettlr always indents the line for list items. Turn this setting on to always indent any line.'),
           model: 'editor.alwaysIndentLineOnTab'
+        }
+      ]
+    },
+    {
+      title: trans('Snippet Autocompletion'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      infoString: trans('Control the snippet autocompletion functionality'),
+      fields: [
+        {
+          type: 'select',
+          inline: true,
+          label: trans('Autocomplete trigger character:'),
+          model: 'editor.snippetAutocompleteTriggerCharacter',
+          options: {
+            ':': ':',
+            '/': '/',
+            '%': '%',
+          }
         },
-        { type: 'separator' },
+        {
+          type: 'checkbox',
+          label: trans('Suggest emojis during autocompletion'),
+          model: 'editor.autocompleteSuggestEmojis'
+        }
+      ]
+    },
+    {
+      title: trans('Other settings'),
+      group: PreferencesGroups.Editor,
+      help: undefined, // TODO
+      fields: [
         {
           type: 'checkbox',
           label: trans('Show formatting toolbar when text is selected'),
@@ -340,12 +375,6 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           type: 'checkbox',
           label: trans('Highlight whitespace'),
           model: 'editor.showWhitespace'
-        },
-        {
-          // TODO: Where to move this new setting???
-          type: 'checkbox',
-          label: trans('Suggest emojis during autocompletion'),
-          model: 'editor.autocompleteSuggestEmojis'
         },
         {
           type: 'checkbox',
