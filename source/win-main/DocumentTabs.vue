@@ -132,6 +132,7 @@ const displayMdExtensions = computed(() => configStore.config.display.markdownFi
 const container = ref<HTMLDivElement|null>(null)
 const node = computed<LeafNodeJSON|undefined>(() => documentTreeStore.paneData.find((leaf: LeafNodeJSON) => leaf.id === props.leafId))
 const openFiles = computed(() => node.value?.openFiles ?? [])
+const recentlyClosedFiles = ref<OpenDocument[]>([])
 const activeFile = computed(() => node.value?.activeFile ?? null)
 const modifiedPaths = computed(() => documentTreeStore.modifiedDocuments)
 
@@ -175,6 +176,15 @@ onMounted(() => {
       // there is one. If there is none, it should send a request to close
       // this window as if the user had clicked on the close-button.
       if (currentIdx > -1) {
+
+        // Append the file to the end of recentlyClosedFiles list if
+        // there is a duplicate remove the old file.
+        const file = openFiles.value[currentIdx]
+        recentlyClosedFiles.value = [
+          ...recentlyClosedFiles.value.filter(f => f.path !== file.path),
+          file
+        ]
+
         // There's an active file, so request the closure
         ipcRenderer.invoke('documents-provider', {
           command: 'close-file',
@@ -406,6 +416,13 @@ function handleClickClose (event: MouseEvent, file: OpenDocument): void {
   } else {
     return // We don't handle this event here.
   }
+
+  // Append the file to the end of recentlyClosedFiles list if
+  // there is a duplicate remove the old file.
+  recentlyClosedFiles.value = [
+    ...recentlyClosedFiles.value.filter(f => f.path !== file.path),
+    file
+  ]
 
   ipcRenderer.invoke('documents-provider', {
     command: 'close-file',
