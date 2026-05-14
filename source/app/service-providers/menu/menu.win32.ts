@@ -583,6 +583,15 @@ export default function getMenu (
           }
         },
         {
+          id: 'menu.tab_reopen',
+          label: trans('Reopen Tab'),
+          accelerator: 'Ctrl+Shift+T',
+          click: function(_menuitem, focusedWindow) {
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'reopen-closed-tab')
+          }
+        },
+        
+        {
           id: 'menu.tab_previous',
           label: trans('Previous Tab'),
           accelerator: 'Ctrl+Shift+Tab',
