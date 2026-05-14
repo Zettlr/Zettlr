@@ -75,7 +75,7 @@ import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
-import { getCitationTooltips } from './tooltips/citations' //changed to getCitationTooltips
+import { getCitationTooltips } from './tooltips/citations' 
 
 /**
  * This interface describes the required properties which the extension sets
