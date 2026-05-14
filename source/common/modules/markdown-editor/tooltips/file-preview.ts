@@ -145,10 +145,9 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   openButton.addEventListener('click', openFunc)
   actions.appendChild(openButton)
 
-  // Only if preference "Avoid New Tabs" is set,
-  // offer an additional button on preview tooltip
-  // to open the file in a new tab
-  if (window.config.get('system.avoidNewTabs') === true) {
+  // In "replace current tab" mode, offer an extra button to force opening
+  // in a dedicated new tab.
+  if (window.config.get('system.tabOpeningBehavior') === 'replace_current') {
     const openFuncNewTab = function (): void {
       ipcRenderer.invoke('application', {
         command: 'force-open',

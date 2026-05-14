@@ -100,15 +100,15 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
         {
           type: 'form-text',
           display: 'sub-heading',
-          contents: trans('Opening Files Behavior')
+          contents: trans('Opening files behavior')
         },
         {
           type: 'radio',
           model: 'system.tabOpeningBehavior',
           options: {
-            next_to_current: trans('Open next to the current tab'),
-            replace_current: trans('Replace the current tab if possible'),
-            end_of_bar: trans('Open at the end of the tab bar')
+            next_to_current: trans('Open next to the current file'),
+            replace_current: trans('Replace the current tab'),
+            end_of_bar: trans('Open at the end')
           }
         }
       ]

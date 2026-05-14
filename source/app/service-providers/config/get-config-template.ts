@@ -18,6 +18,7 @@ import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
+export type TabOpeningBehavior = 'next_to_current'|'replace_current'|'end_of_bar'
 
 // This is a handy interface to add groups of file types to the settings in
 // order to allow users to display them in filemanager and/or sidebar, and open
@@ -232,8 +233,7 @@ export interface ConfigOptions {
   system: {
     deleteOnFail: boolean
     leaveAppRunning: boolean
-    avoidNewTabs: boolean
-    openTabsAtEnd: boolean
+    tabOpeningBehavior: TabOpeningBehavior
     iframeWhitelist: string[]
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
@@ -498,8 +498,7 @@ export function getConfigTemplate (): ConfigOptions {
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
-      avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
-      openTabsAtEnd: false, // Whether to always open new tabs at the end of the tab bar
+      tabOpeningBehavior: 'next_to_current',
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
       checkForUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
