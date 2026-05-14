@@ -22,8 +22,14 @@ import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citepr
 import { trans } from 'source/common/i18n-renderer'
 import type { SyntaxNode } from '@lezer/common'
 import { sanitizeHTML } from 'source/common/util/sanitize-html'
+import { Compartment, EditorState } from '@codemirror/state'
+import { configUpdateEffect } from '../util/configuration'
+
+
 
 const ipcRenderer = window.ipc
+
+const extensionCompartment = new Compartment()
 
 /**
  * Fetches a bibliography for the provided citekeys from main
@@ -42,6 +48,7 @@ async function fetchBibliography (citekeys: string[], database: string): Promise
     }
   } as CiteprocProviderIPCAPI)
 }
+
 
 /**
  * If the user currently hovers over a footnote, this function returns the specs
@@ -105,13 +112,40 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
     }
   }
 }
+//A transactionExtender allows the compartment to be reconfigured live when a preference is changed, avoiding the need to reload the file for the change to take effect. 
+const modeSwitcher = EditorState.transactionExtender.of(transaction => {
+  let enabled:  boolean|undefined
+  let delay: number|undefined
 
-
-export function getCitationTooltips (enabled: boolean, delay: number) {
-  if(!enabled) { //if not enabled the citation will not be displayed with the hover feature.
-    return []
+  for(const effect of transaction.effects) {
+    if(effect.is(configUpdateEffect)) {
+      if(effect.value.citationTooltipEnabled !== undefined) {
+        enabled = effect.value.citationTooltipEnabled
+      }
+      if(effect.value.citationTooltipDelay !== undefined) {
+        delay = effect.value.citationTooltipDelay
+      }
+    }
   }
-  const seconds = delay * 1000 //Turns the seconds input into milliseconds for the hoverTime. 
-  //registers the tooltip with users chosen delay time.
-  return hoverTooltip(citationTooltip, { hoverTime: seconds })
+
+  if(enabled === undefined && delay === undefined) {
+    return null
+  }
+
+  if(enabled === false) {
+    return { effects: extensionCompartment.reconfigure([]) }
+  } else {
+    const ms = (delay ?? 500)
+    return { effects: extensionCompartment.reconfigure(hoverTooltip(citationTooltip, { hoverTime: ms })) }
+  }
+})
+
+//First initial load both the initial compartment state and modeSwitcher must be returned. modeSwitcher alone is not enough as it only responds to changes made in preferences,
+//not the first initial load.
+export function getCitationTooltips (enabled: boolean, delay: number) {
+  const initial = extensionCompartment.of(
+    enabled ? hoverTooltip(citationTooltip, { hoverTime: delay }) : []
+  )
+
+  return [ initial, modeSwitcher ]
 }

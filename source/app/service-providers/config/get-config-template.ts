@@ -188,7 +188,7 @@ export interface ConfigOptions {
     imageHeight: number
     renderingMode: 'preview'|'raw'
     renderCitations: boolean
-    citationTooltipEnabled: boolean //type definitions for tooltip citation hover display
+    citationTooltipEnabled: boolean 
     citationTooltipDelay: number
     renderIframes: boolean
     renderImages: boolean
@@ -467,8 +467,8 @@ export function getConfigTemplate (): ConfigOptions {
       imageHeight: 50, // Maximum preview image height
       renderingMode: 'preview',
       renderCitations: true,
-      citationTooltipEnabled: true, //tooltip citation hover enabled by default
-      citationTooltipDelay: 0.5, //tooltip citation hover half a second delay by default 
+      citationTooltipEnabled: true, 
+      citationTooltipDelay: 500, //Milliseconds 
       renderIframes: true, 
       renderImages: true,
       renderLinks: true,

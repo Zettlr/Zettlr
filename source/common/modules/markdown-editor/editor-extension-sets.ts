@@ -75,7 +75,6 @@ import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
-import { codeTheme } from './renderers/render-code'
 import { getCitationTooltips } from './tooltips/citations' //changed to getCitationTooltips
 
 /**

@@ -79,19 +79,6 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
             },
             {
               type: 'checkbox',
-              label: trans('Enable citation tooltip'),
-              model: 'display.citationTooltipEnabled',
-              disabled: config.display.renderingMode === 'raw'
-            },
-            {
-              type: 'number',
-              label: trans('Citation tooltip delay (seconds)'),
-              model: 'display.citationTooltipDelay',
-              min: 0, //Added a min so users cannot set a delay of negative seconds.
-              disabled: !config.display.citationTooltipEnabled
-            },
-            {
-              type: 'checkbox',
               label: trans('Render iframes'),
               model: 'display.renderIframes',
               disabled: config.display.renderingMode === 'raw'

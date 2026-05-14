@@ -15,8 +15,9 @@
 import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
+import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 
-export function getCitationFields (): PreferencesFieldset[] {
+export function getCitationFields (config: ConfigOptions): PreferencesFieldset[] {
   return [
     {
       title: trans('Citations'),
@@ -53,6 +54,22 @@ export function getCitationFields (): PreferencesFieldset[] {
           placeholder: trans('Path to file'),
           reset: '',
           filter: [{ extensions: ['csl'], name: 'CSL Style' }]
+        },
+        { type: 'separator' },
+        {
+          type: 'checkbox',
+          label: trans('Enable citation tooltip'),
+          model: 'display.citationTooltipEnabled',
+          disabled: config.display.renderingMode === 'raw'
+        },
+        {
+          type: 'slider',
+          label: trans('Citation tooltip delay: %s ms', config.display.citationTooltipDelay),
+          model: 'display.citationTooltipDelay',
+          min: 0,
+          max: 5000, 
+          step: 500,
+          disabled: !config.display.citationTooltipEnabled
         }
       ]
     }
