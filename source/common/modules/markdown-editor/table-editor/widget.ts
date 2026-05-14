@@ -133,6 +133,8 @@ export class TableWidget extends WidgetType {
         key: cacheKey
       })
 
+      interceptAnchorClicks(wrapper, href => openMarkdownLink(href, view))
+
       return wrapper
     } catch (err: unknown) {
       console.error(err)
@@ -376,7 +378,6 @@ function updateRow (
         onCitation, zknLinkFormat,
       }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? sanitizeHTML(html) : '&nbsp;'
-      interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
 
       // NOTE: This handle gets attached once and then remains on the TD for
       // the existence of the table. Since the `view` will always be the same,

@@ -18,7 +18,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
-import got from 'got'
+import ky from 'ky'
 import { shell } from 'electron'
 import { getBibliographyForDescriptor as getBibliography } from '@common/util/get-bibliography-for-descriptor'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
@@ -97,7 +97,7 @@ export default class OpenAttachment extends ZettlrCommand {
       // NOTE: We have replaced localhost with 127.0.0.1 since at some point
       // either got or Electron stopped resolving localhost there, resulting in
       // ECONNREFUSED errors. I have no idea how that happened, but it works now.
-      const res = await got.post('http://127.0.0.1:23119/better-bibtex/json-rpc', {
+      const res = await ky.post('http://127.0.0.1:23119/better-bibtex/json-rpc', {
         json: {
           jsonrpc: '2.0',
           method: 'item.attachments',
