@@ -164,6 +164,8 @@ onMounted(() => {
       } else {
         selectFile(openFiles.value[0])
       }
+    } else if (shortcut === 'reopen-closed-tab') {
+      console.log('WORKING sdwd')
     } else if (shortcut === 'close-window') {
       if (documentTreeStore.lastLeafId !== props.leafId) {
         return // Otherwise all document tabs would close one file at the same
