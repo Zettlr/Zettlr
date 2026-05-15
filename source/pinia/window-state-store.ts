@@ -18,9 +18,9 @@ import { defineStore } from 'pinia'
 import type { DocumentInfo } from 'source/common/modules/markdown-editor'
 import type { ToCEntry } from 'source/common/modules/markdown-editor/plugins/toc-field'
 import { ref, type Ref } from 'vue'
-import type { SearchResultWrapper } from 'source/types/common/search'
 import { type WritingTarget } from '@providers/targets'
 import type { AssetsProviderIPCAPI } from 'source/app/service-providers/assets'
+import type { SearchResultWrapper } from 'source/win-main/GlobalSearch.vue'
 
 const ipcRenderer = window.ipc
 

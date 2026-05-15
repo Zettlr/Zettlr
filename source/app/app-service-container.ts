@@ -39,6 +39,7 @@ import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/
 import path from 'path'
 import { trans } from 'source/common/i18n-main'
 import LongRunningTaskProvider from './service-providers/long-running-tasks'
+import { SearchProvider } from './service-providers/search'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -92,6 +93,7 @@ export class AppServiceContainer {
   private readonly _fsal: FSAL
   private readonly _documentManager: DocumentManager
   private readonly _lrtProvider: LongRunningTaskProvider
+  private readonly _searchProvider: SearchProvider
   private _isBooted: boolean
 
   constructor () {
@@ -116,6 +118,7 @@ export class AppServiceContainer {
 
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._configProvider, this._fsal)
+    this._searchProvider = new SearchProvider(this._logProvider, this._fsal, this._configProvider)
     
     // The document provider accesses only the FSAL in its constructor
     this._documentManager = new DocumentManager(this)
@@ -179,6 +182,7 @@ export class AppServiceContainer {
 
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
+    await this._informativeBoot(this._searchProvider, 'SearchProvider')
 
     // Boot the commands before the window provider to ensure the handler for
     // application requests from windows is registered before any window opens
@@ -256,6 +260,7 @@ export class AppServiceContainer {
     await this._safeShutdown(this._targetProvider, 'TargetProvider')
     await this._safeShutdown(this._linkProvider, 'LinkProvider')
     await this._safeShutdown(this._tagProvider, 'TagProvider')
+    await this._safeShutdown(this._searchProvider, 'SearchProvider')
     await this._safeShutdown(this._menuProvider, 'MenuProvider')
     await this._safeShutdown(this._recentDocsProvider, 'RecentDocsProvider')
     await this._safeShutdown(this._dictionaryProvider, 'DictionaryProvider')
