@@ -11,6 +11,14 @@
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
+
+    <CheckboxControl
+      v-model="caseInsensitive"
+      v-bind:label="caseInsensitiveLabel"
+      v-bind:name="'full-text-search-case-toggle'"
+      style="margin: 0px"
+    ></CheckboxControl>
+
     <AutocompleteText
       ref="restrict-to-dir-input"
       v-model="restrictToDir"
@@ -20,10 +28,6 @@
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
-    <CheckboxControl
-      v-model="caseInsensitive"
-      v-bind:label="caseInsensitiveLabel"
-    ></CheckboxControl>
     <!-- Then an always-visible search button ... -->
     <p>
       <ButtonControl
@@ -40,9 +44,9 @@
       ></ButtonControl>
     </p>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
-    <template v-if="searchResults.length > 0">
+    <template v-if="windowStateStore.searchResults.length > 0">
       <hr>
-      <p v-if="!searchIsRunning && searchResults.length > 0" style="text-align: center;">
+      <p v-if="!searchIsRunning && windowStateStore.searchResults.length > 0" style="text-align: center;">
         <ButtonControl
           v-bind:label="clearButtonLabel"
           v-bind:inline="true"
@@ -63,11 +67,11 @@
       During searching, display a progress bar that indicates how far we are and
       that allows to interrupt the search, if it takes too long.
     -->
-    <template v-if="searchIsRunning || true">
+    <template v-if="searchIsRunning">
       <div>
         <ProgressControl
-          v-bind:max="sumFilesToSearch"
-          v-bind:value="searchResults.length"
+          v-bind:max="1"
+          v-bind:value="searchProgress"
           v-bind:interruptible="true"
           v-on:interrupt="cancelSearch()"
         ></ProgressControl>
@@ -75,7 +79,7 @@
       <hr>
     </template>
     <!-- Finally, display all search results, per file and line. -->
-    <template v-if="filteredSearchResults.length > 0 && !searchIsRunning">
+    <template v-if="filteredSearchResults.length > 0">
       <!-- First, display a filter ... -->
       <TextControl
         v-model="filter"
@@ -95,8 +99,8 @@
             while the collapse icon is floated to the right.
           -->
           <div class="overflow-hidden">
-            <cds-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></cds-icon>
-            <cds-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></cds-icon>
+            <cds-icon v-if="result.weight / windowStateStore.maxSearchResultWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></cds-icon>
+            <cds-icon v-else-if="result.weight / windowStateStore.maxSearchResultWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></cds-icon>
             <cds-icon v-else shape="dot-circle" style="fill: #33aa33"></cds-icon>
             {{ result.file.displayName }}
           </div>
@@ -120,9 +124,9 @@
               v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line, singleRes.excerpt)"
               v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
             >
-              <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line + 1 }}</strong>: </span>
+              <span class="line-number"><strong>{{ singleRes.line }}</strong>: </span>
               <!-- eslint-disable-next-line vue/no-v-html NOTE: We can disable the v-html error here, since markText runs DOMPurify over the data, and we have to allow HTML tags to mark the elements. -->
-              <span v-html="markText(singleRes)"></span>
+              <span class="excerpt" v-html="markText(singleRes)"></span>
             </div>
             <div
               v-else
@@ -239,13 +243,10 @@ const filter = ref<string>('')
 const restrictToDir = ref<string>('')
 // Whether this search should be case insensitive
 const caseInsensitive = ref<boolean>(true)
-// The number of files the search started with (for progress bar)
-const sumFilesToSearch = ref<number>(0)
+const searchProgress = ref(0)
 // A global trigger for the result set trigger. This will determine what
 // the toggle will do to all result sets -- either hide or display them.
-const toggleState = ref<boolean>(true)
-// Contains the current search's maximum (combined) weight across the results
-const maxWeight = ref<number>(0)
+const toggleState = ref<boolean>(false)
 // The file list index of the most recently clicked search result.
 const activeFileIdx = ref<undefined|number>(undefined)
 // The result line index of the most recently clicked search result.
@@ -287,18 +288,11 @@ const directorySuggestions = computed<string[]>(() => {
   return suggestedDirectories
 })
 
-const searchResults = computed(() => {
-  // NOTE: Vue's reactivity can be tricky, and one thing is to sort arrays.
-  // This is why we first clone them, sort the cloned array and return that one.
-  const results = [...windowStateStore.searchResults]
-  return results.sort((a, b) => b.weight - a.weight)
-})
-
 const resultsMessage = computed<string>(() => {
-  const nMatches = searchResults.value
+  const nMatches = windowStateStore.searchResults
     .map(x => x.result.length)
     .reduce((prev, cur) => prev + cur, 0)
-  const nFiles = searchResults.value.filter(r => r.result.length > 0).length
+  const nFiles = windowStateStore.searchResults.length
   return trans('%s matches across %s files', nMatches, nFiles)
 })
 
@@ -306,7 +300,7 @@ const resultsMessage = computed<string>(() => {
  * Allows search results to be further filtered
  */
 const filteredSearchResults = computed<SearchResultWrapper[]>(() => {
-  const matchedResults = searchResults.value.filter(r => r.result.length > 0)
+  const matchedResults = windowStateStore.searchResults.filter(r => r.result.length > 0)
   if (filter.value === '') {
     return matchedResults
   }
@@ -347,7 +341,7 @@ onMounted(() => {
     if (message.type === 'search-end') {
       searchIsRunning.value = false
     } else if (message.type === 'search-result') {
-      processSearchResult(message.file as string, message.result as SearchResult)
+      processSearchResult(message.file as string, message.result as SearchResult, message.progress as number)
         .catch(err => console.error(err))
     }
   })
@@ -377,8 +371,7 @@ function startSearch (overrideQuery?: string): void {
 
   // Now we're good to go!
   searchIsRunning.value = true
-  maxWeight.value = 0
-  toggleState.value = true
+  toggleState.value = false
   emptySearchResults()
   blurQueryInput()
   filter.value = ''
@@ -390,37 +383,31 @@ function startSearch (overrideQuery?: string): void {
       caseInsensitive: caseInsensitive.value
     }
   } satisfies SearchProviderIPCAPI)
-    .then((numberOfFiles: number) => {
-      console.log(numberOfFiles)
-      sumFilesToSearch.value = numberOfFiles
-    })
     .catch(err => {
       console.error(err)
     })
 }
 
-async function processSearchResult (absPath: string, result: SearchResult): Promise<void> {
-  // TODO: Find root for absPath
-  const root = ''
+async function processSearchResult (absPath: string, result: SearchResult, progress: number): Promise<void> {
+  const filename = pathBasename(absPath)
+  const root = configStore.config.app.openWorkspaces.find(r => absPath.startsWith(r))
+  const relativeDirectoryPath = root !== undefined
+    ? relativePath(pathDirname(root), absPath)
+    : filename
+
   const newResult: SearchResultWrapper = {
     file: {
-      filename: pathBasename(absPath),
-      relativeDirectoryPath: relativePath(pathDirname(root), absPath),
-      displayName: pathBasename(absPath), // TODO
-      path: absPath
+      path: absPath, filename,
+      relativeDirectoryPath,
+      displayName: filename // TODO
     },
     result,
-    hideResultSet: true, // If true, the individual results won't be displayed
+    hideResultSet: toggleState.value,
     weight: result.reduce((acc, cur) => acc + cur.weight, 0)
   }
+  searchProgress.value = progress
 
-  windowStateStore.searchResults.push(newResult)
-
-  if (newResult.weight > maxWeight.value) {
-    maxWeight.value = newResult.weight
-  }
-
-  // finaliseSearch()
+  windowStateStore.addSearchResult(newResult)
 }
 
 function cancelSearch (startNewSearch: boolean = false): void {
@@ -432,8 +419,7 @@ function cancelSearch (startNewSearch: boolean = false): void {
 
 function emptySearchResults (): void {
   windowStateStore.searchResults = []
-  maxWeight.value = 0
-  toggleState.value = true
+  toggleState.value = false
 
   // Clear indices of active search result
   activeFileIdx.value = -1
@@ -446,7 +432,7 @@ function emptySearchResults (): void {
 
 function toggleIndividualResults (): void {
   toggleState.value = !toggleState.value
-  for (const result of searchResults.value) {
+  for (const result of windowStateStore.searchResults) {
     result.hideResultSet = toggleState.value
   }
 }
@@ -572,6 +558,18 @@ body div#global-search-pane {
     div.result-line {
       padding: 5px;
       font-size: 12px;
+      display: grid;
+      grid-template-areas: "line-number excerpt";
+      grid-template-columns: 35px auto;
+
+      .line-number {
+        grid-area: line-number;
+        text-align: right;
+      }
+
+      .excerpt {
+        grid-area: excerpt;
+      }
 
       &:hover {
         background-color: rgb(180, 180, 180);

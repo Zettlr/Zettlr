@@ -31,21 +31,46 @@ export type SearchProviderIPCAPI = IPCAPI<{
 }>
 
 export class SearchProvider implements ProviderContract {
+  /**
+   * Keeps a count of all files that will be searched during a search-in-
+   * progress. Used to calculate an overall progress.
+   *
+   * @var {number}
+   */
+  private sumFilesToSearch: number
+  /**
+   * Contains the absolute paths of all files that will be searched during the
+   * ongoing search.
+   *
+   * @var {string[]}
+   */
   private fileSearchQueue: string[]
+  /**
+   * Contains the current search query.
+   *
+   * @var {SearchQueryBoolean|undefined}
+   */
   private currentQuery: SearchQueryBoolean|undefined
 
   constructor (private readonly _logger: LogProvider, private readonly _fsal: FSAL, private readonly _config: ConfigProvider) {
+    this.currentQuery = undefined
     this.fileSearchQueue = []
+    this.sumFilesToSearch = 0
 
     ipcMain.handle('search-provider', async (event, message: SearchProviderIPCAPI) => {
       const { command, payload } = message
 
       if (command === 'start-full-text-search') {
-        return await this.startFullTextSearch(payload.query, payload.restrictToDirectory, payload.caseInsensitive)
+        return await this.startFullTextSearch(
+          payload.query, payload.restrictToDirectory, payload.caseInsensitive
+        )
       } else if (command === 'cancel-search') {
-        console.log('Aborting search!')
+        // By simply removing all remaining files, we can let the search agent
+        // finish its current search and then just stop (& emit the correct
+        // events).
         this.currentQuery = undefined
         this.fileSearchQueue = []
+        this.sumFilesToSearch = 0
       }
     })
   }
@@ -64,7 +89,7 @@ export class SearchProvider implements ProviderContract {
    *
    * @return  {number}                        The number of files that will be searched.
    */
-  private async startFullTextSearch (query: string, restrictToDirectory: string, caseInsensitive: boolean, type: 'boolean' = 'boolean') {
+  private async startFullTextSearch (query: string, restrictToDirectory: string, caseInsensitive: boolean, type: 'boolean' = 'boolean'): Promise<number> {
     if (type !== 'boolean') {
       throw new Error(`Cannot start search: Type ${type} unrecognized.`)
     }
@@ -84,6 +109,8 @@ export class SearchProvider implements ProviderContract {
       // The user only wants to search a single directory.
       this.fileSearchQueue = await this._fsal.readDirectoryRecursively(restrictToDirectory)
     }
+
+    this.sumFilesToSearch = this.fileSearchQueue.length
 
     // Start the search
     this.searchNextFile()
@@ -107,11 +134,18 @@ export class SearchProvider implements ProviderContract {
 
     this.searchFileBoolean(nextFile, this.currentQuery)
       .then(result => {
-        broadcastIPCMessage('search-provider', { type: 'search-result', file: nextFile, result })
+        if (result.length === 0) {
+          // Save some resources both in the IPC and the renderer by not
+          // reporting empty results
+          return
+        }
+        const total = this.sumFilesToSearch
+        const remaining = this.fileSearchQueue.length
+        const progress = (total - remaining) / total
+        broadcastIPCMessage('search-provider', { type: 'search-result', file: nextFile, result, progress })
       })
       .catch(err => {
         this._logger.error(`[Search Provider] Could not search file ${nextFile}: ${err}`, err)
-        broadcastIPCMessage('search-provider', { type: 'search-result', file: nextFile, result: [] })
       })
       .finally(() => {
         // Do the next search
