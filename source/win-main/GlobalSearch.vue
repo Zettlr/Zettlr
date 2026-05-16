@@ -316,19 +316,19 @@ const filteredSearchResults = computed<SearchResultWrapper[]>(() => {
   return matchedResults
     .filter(result => {
       for (const r of result.result) {
-        if (r.type === 'content' && r.excerpt.toLowerCase().includes(lowercase)) {
+        if (r.type === 'content' && r.excerpt.toLowerCase().includes(lowercase) === true) {
           return true
         }
       }
 
       // Next, try the different variations on filename and displayName
-      if (result.file.filename.toLowerCase().includes(lowercase)) {
+      if (result.file.filename.toLowerCase().includes(lowercase) === true) {
         return true
       }
-      if (result.file.displayName.toLowerCase().includes(lowercase)) {
+      if (result.file.displayName.toLowerCase().includes(lowercase) === true) {
         return true
       }
-      if (result.file.path.toLowerCase().includes(lowercase)) {
+      if (result.file.path.toLowerCase().includes(lowercase) === true) {
         return true
       }
 
