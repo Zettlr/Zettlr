@@ -24,7 +24,7 @@
       v-model="restrictToDir"
       name="restrict-to-dir-input"
       v-bind:label="restrictDirLabel"
-      v-bind:autocomplete-values="directorySuggestions"
+      v-bind:autocomplete-values="directorySuggestions.map(s => s.displayValue)"
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
@@ -269,8 +269,8 @@ const queryInputElement = ref<HTMLInputElement|null>(null)
 // which contains two folders "assets" and "My Project". This function will
 // return a list with "my-workspace", "my-workspace/assets" and
 // "my-workspace/My Project".
-const directorySuggestions = computed<string[]>(() => {
-  const suggestedDirectories: string[] = []
+const directorySuggestions = computed<Array<{ absPath: string, displayValue: string }>>(() => {
+  const suggestedDirectories: Array<{ absPath: string, displayValue: string }> = []
   for (const [ rootPath, dirPaths ] of workspaceStore.workspaceMap.entries()) {
     const rootDir = pathDirname(rootPath)
     const wsRelativePaths = dirPaths
@@ -279,9 +279,9 @@ const directorySuggestions = computed<string[]>(() => {
       // Only retain directories
       .filter(d => d !== undefined && d.type === 'directory')
       // Map from absolute to workspace-relative paths
-      .map(d => d.path.slice(rootDir.length + 1))
+      .map(d => ({ absPath: d.path, displayValue: d.path.slice(rootDir.length + 1) }))
       // Filter empty ones
-      .filter(p => p.length > 0)
+      .filter(p => p.displayValue.length > 0)
     
     suggestedDirectories.push(...wsRelativePaths)
   }
@@ -375,11 +375,17 @@ function startSearch (overrideQuery?: string): void {
   emptySearchResults()
   blurQueryInput()
   filter.value = ''
+
+  const restrictDirEntry = directorySuggestions.value.find(s => s.displayValue === restrictToDir.value)
+  const restrictToDirectory = restrictDirEntry === undefined
+    ? ''
+    : restrictDirEntry.absPath
+
   ipcRenderer.invoke('search-provider', {
     command: 'start-full-text-search',
     payload: {
       query: query.value,
-      restrictToDirectory: restrictToDir.value,
+      restrictToDirectory,
       caseInsensitive: caseInsensitive.value
     }
   } satisfies SearchProviderIPCAPI)
