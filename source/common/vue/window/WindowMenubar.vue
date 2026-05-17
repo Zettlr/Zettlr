@@ -142,6 +142,8 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
   height: env(titlebar-area-height, var(--fallback-title-bar-height));
   line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
   width: 100%;
+  background-color: var(--grey-0);
+  color: var(--grey-6);
   // Use the system font with a somewhat smaller font-size
   font-family: inherit;
   font-size: 12px;
@@ -164,18 +166,15 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
     padding: 0 10px;
     // Don't drag the top-level menubar items
     -webkit-app-region: no-drag;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .2);
+    }
   }
 }
 
-body.win32, body.linux {
-  #menubar {
-    background-color: var(--system-accent-color, --c-primary);
-    color: var(--system-accent-color-contrast);
-
-    span.top-level-item:hover {
-      // Since we can't be sure which colour the menu bar will have, simply add a transparent overlay
-      background-color: rgba(0, 0, 0, .3);
-    }
-  }
+body.dark #menubar {
+  background-color: var(--grey-6);
+  color: var(--grey-0);
 }
 </style>

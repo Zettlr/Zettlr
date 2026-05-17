@@ -25,6 +25,8 @@
   focused (#2970).
 - Moved the editor "Indentation," "Font size," and "Autocomplete" settings into
   their own preferences groups.
+- The menubar on Windows is no longer styled using the system's accent color to
+  reduce potential distractions for users.
 
 ## Under the Hood
 
