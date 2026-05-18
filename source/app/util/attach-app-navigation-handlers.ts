@@ -57,11 +57,10 @@ function maybeOpenExternal (url: string): void {
 export function attachAppNavigationHandlers (log: LogProvider): void {
   app.on('web-contents-created', (event, webContents) => {
     webContents.setWindowOpenHandler(({ url }) => {
-      log.info(`[Navigation Handler] New webContents created with URL ${url}`)
+      log.info(`[Navigation Handler] Preventing opening a new window to <${url}>`)
       // NOTE: This is only called when a *renderer* wants to open a new window.
       // We always disallow this since we only create our windows from the main
-      // process. However, we may want to open whatever this is externally.
-      maybeOpenExternal(url)
+      // process.
       return { action: 'deny' }
     })
 

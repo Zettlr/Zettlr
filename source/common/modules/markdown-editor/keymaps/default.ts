@@ -125,6 +125,7 @@ export function defaultKeymap (): Extension {
     { key: 'Backspace', run: handleBackspace },
 
     { key: 'Escape', run: abortSnippet },
+    { key: 'Escape', run: closeSearchPanel },
     { key: 'Space', run: handleAutocorrectSpace },
 
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },

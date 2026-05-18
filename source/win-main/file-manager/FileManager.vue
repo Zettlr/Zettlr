@@ -369,6 +369,9 @@ body #file-manager {
   width: 100%;
   height: 100%;
   position: relative; // Necessary so that the arrow button isn't misplaced
+  // Use tabular numbers so that people who use date-based file naming schemes
+  // can faster parse the filenames
+  font-variant-numeric: tabular-nums;
 
   #component-container {
     overflow-x: hidden;

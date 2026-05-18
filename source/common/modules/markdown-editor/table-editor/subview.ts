@@ -27,6 +27,7 @@ import { getMainEditorThemes } from '../editor-extension-sets'
 import { darkMode } from '../theme/dark-mode'
 import { markdownSyntaxHighlighter } from '../theme/syntax'
 import { defaultKeymap } from '../keymaps/default'
+import { clickListeners } from '../plugins/click-listeners'
 
 /**
  * A transaction filter that ensures that any changes made to the view that
@@ -232,7 +233,8 @@ export function createSubviewForCell (
           cellRange: [ cellRange.from, cellRange.to ]
         }
       }),
-      ensureBoundariesFilter
+      ensureBoundariesFilter,
+      EditorView.domEventHandlers(clickListeners())
     ]
   })
 

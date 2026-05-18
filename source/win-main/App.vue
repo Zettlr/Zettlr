@@ -1,6 +1,6 @@
 <template>
   <WindowChrome
-    v-bind:title="'Zettlr'"
+    v-bind:title="windowTitle"
     v-bind:titlebar="shouldShowTitlebar"
     v-bind:menubar="shouldShowMenubar"
     v-bind:show-toolbar="shouldShowToolbar"
@@ -116,6 +116,11 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
+  <PopoverLRT
+    v-if="showTasksPopover && tasksButton !== null"
+    v-bind:target="tasksButton"
+    v-on:close="showTasksPopover = false"
+  ></PopoverLRT>
   <PopoverPandoc
     v-if="showPandocPopover && pandocButton !== null"
     v-bind:target="pandocButton"
@@ -173,16 +178,20 @@ import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import getDocumentTitle from './util/get-document-title'
+import { useConfigStore, useDocumentTreeStore, useLRTStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { TaskStatus } from 'source/pinia/lrt-store'
+import PopoverLRT from './PopoverLRT.vue'
 
 const ipcRenderer = window.ipc
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()
+const LRTStore = useLRTStore()
 
 const SOUND_EFFECTS = [
   {
@@ -230,6 +239,8 @@ const docInfoButton = ref<HTMLElement|null>(null)
 const showDocInfoPopover = ref<boolean>(false)
 const pomodoroButton = ref<HTMLElement|null>(null)
 const showPomodoroPopover = ref<boolean>(false)
+const tasksButton = ref<HTMLElement|null>(null)
+const showTasksPopover = ref(false)
 const pandocButton = ref<HTMLElement|null>(null)
 const showPandocPopover = ref<boolean>(false)
 
@@ -327,6 +338,13 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
 const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
+const windowTitle = computed<string>(() => {
+  if (activeFile.value === undefined) {
+    return 'Zettlr'
+  }
+
+  return `Zettlr - ${getDocumentTitle(activeFile.value)}`
+})
 
 // Simple state machine to trigger which of the three shows up when. Below's the
 // corresponding truth table, which is relatively large, but by spotting some
@@ -405,6 +423,13 @@ const parsedDocumentInfo = computed<string[]>(() => {
 
   return lines
 })
+
+// Long-Running-Task setup
+const hasTasks = computed(() => LRTStore.tasks.length > 0)
+const taskSuccess = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.finished).length)
+const taskAborted = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.aborted).length)
+const taskError = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.error).length)
+const taskOngoing = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.ongoing).length)
 
 const toolbarControls = computed<ToolbarControl[]>(() => {
   return [
@@ -558,6 +583,16 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       visible: getToolbarButtonDisplay('showPomodoroButton')
     },
     {
+      type: 'iris-indicator',
+      id: 'long-running-tasks',
+      title: trans('Show tasks'),
+      tasksInProgress: taskOngoing.value,
+      tasksSuccess: taskSuccess.value,
+      tasksFailed: taskError.value,
+      tasksAborted: taskAborted.value,
+      visible: hasTasks.value
+    },
+    {
       type: 'toggle',
       id: 'toggle-sidebar',
       title: trans('Toggle Sidebar'),
@@ -643,6 +678,7 @@ onMounted(() => {
   tableButton.value = document.querySelector('#toolbar-insert-table')
   docInfoButton.value = document.querySelector('#toolbar-document-info')
   pomodoroButton.value = document.querySelector('#toolbar-pomodoro')
+  tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
   pandocButton.value = document.querySelector('#toolbar-pandocDivOrSpan')
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -887,6 +923,10 @@ function handleClick (clickedID?: string): void {
   } else if (clickedID === 'insert-table') {
     // Display the insertion popover
     showTablePopover.value = !showTablePopover.value
+  } else if (clickedID === 'long-running-tasks') {
+    // The tasks button is only mounted conditionally
+    tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
+    showTasksPopover.value = !showTasksPopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
   } else if (clickedID === 'pandocDivOrSpan') {

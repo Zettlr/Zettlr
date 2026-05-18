@@ -49,6 +49,7 @@
         "sr":  "sr-Latn-RS",
         "sv":  "sv-SE",
         "th":  "th-TH",
+        "tl":  "tl-PH",
         "tr":  "tr-TR",
         "uk":  "uk-UA",
         "vi":  "vi-VN",
@@ -282,6 +283,10 @@
         "th-TH": [
             "ไทย",
             "Thai"
+        ],
+        "tl-PH": [
+            "Tagalog",
+            "Tagalog"
         ],
         "tr-TR": [
             "Türkçe",
