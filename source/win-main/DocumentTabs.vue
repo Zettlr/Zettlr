@@ -163,8 +163,8 @@ onMounted(() => {
         selectFile(openFiles.value[0])
       }
     } else if (shortcut === 'reopen-closed-tab') {
-      // Store the recently closed file to a const variable.
-      // Opens and displays the file if the file exist when the shortcut pressed.
+      // Make sure closed files can be reopened in view while only maintaining closed files
+      // so that no redundant opened files are stored.
       const closedFile = recentlyClosedFiles.value.pop()
       if (closedFile) {
         selectFile(closedFile)
@@ -179,8 +179,7 @@ onMounted(() => {
       // this window as if the user had clicked on the close-button.
       if (currentIdx > -1) {
 
-        // Append the file to the end of recentlyClosedFiles list if
-        // there is a duplicate remove the old file.
+        // Make sure that there are no duplicated files to open to prevent incorrect reopen logic.
         const file = openFiles.value[currentIdx]
         recentlyClosedFiles.value = [
           ...recentlyClosedFiles.value.filter(f => f.path !== file.path),
@@ -399,8 +398,7 @@ function handleClickClose (event: MouseEvent, file: OpenDocument): void {
     return // We don't handle this event here.
   }
 
-  // Append the file to the end of recentlyClosedFiles list if
-  // there is a duplicate remove the old file.
+  // Make sure that there are no duplicated files to open to prevent incorrect reopen logic.
   recentlyClosedFiles.value = [
     ...recentlyClosedFiles.value.filter(f => f.path !== file.path),
     file
