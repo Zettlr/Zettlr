@@ -68,6 +68,9 @@ export default [
       // Enforce proper spacing in objects ({ a: 1 } instead of {a:1})
       '@stylistic/object-curly-spacing': [ 'error', 'always' ],
       '@stylistic/space-before-function-paren': [ 'error', 'always' ],
+      '@stylistic/spaced-comment': [
+        'error', 'always', { exceptions: ['/'], markers: ['/'] }
+      ],
 
       /////////////////////// END STYLISTIC RULES //////////////////////////////
 
