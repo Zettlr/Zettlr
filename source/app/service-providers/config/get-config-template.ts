@@ -470,7 +470,7 @@ export function getConfigTemplate (): ConfigOptions {
       renderingMode: 'preview',
       renderCitations: true,
       citationTooltipEnabled: true, 
-      citationTooltipDelay: 500, //Milliseconds 
+      citationTooltipDelay: 500, // Milliseconds 
       renderIframes: true, 
       renderImages: true,
       renderLinks: true,
