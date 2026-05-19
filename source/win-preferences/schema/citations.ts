@@ -58,13 +58,12 @@ export function getCitationFields (config: ConfigOptions): PreferencesFieldset[]
         { type: 'separator' },
         {
           type: 'checkbox',
-          label: trans('Enable citation tooltip'),
+          label: trans('Show a rendered bibliography when hovering over citations'),
           model: 'display.citationTooltipEnabled',
-          disabled: config.display.renderingMode === 'raw'
         },
         {
           type: 'slider',
-          label: trans('Citation tooltip delay: %s ms', config.display.citationTooltipDelay),
+          label: trans('Bibliography tooltip delay: %s ms', config.display.citationTooltipDelay),
           model: 'display.citationTooltipDelay',
           min: 0,
           max: 5000, 

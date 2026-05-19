@@ -135,13 +135,13 @@ const modeSwitcher = EditorState.transactionExtender.of(transaction => {
   if(enabled === false) {
     return { effects: extensionCompartment.reconfigure([]) }
   } else {
-    const ms = (delay ?? 500)
-    return { effects: extensionCompartment.reconfigure(hoverTooltip(citationTooltip, { hoverTime: ms })) }
+    return { effects: extensionCompartment.reconfigure(hoverTooltip(citationTooltip, { hoverTime: delay ?? 500 })) }
   }
 })
 
-//First initial load both the initial compartment state and modeSwitcher must be returned. modeSwitcher alone is not enough as it only responds to changes made in preferences,
-//not the first initial load.
+// First initial load: both the initial compartment state and modeSwitcher
+// must be returned. modeSwitcher alone is not enough as it only responds
+// to changes made in preferences, not the first initial load.
 export function getCitationTooltips (enabled: boolean, delay: number) {
   const initial = extensionCompartment.of(
     enabled ? hoverTooltip(citationTooltip, { hoverTime: delay }) : []
