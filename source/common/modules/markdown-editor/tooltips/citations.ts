@@ -49,7 +49,6 @@ async function fetchBibliography (citekeys: string[], database: string): Promise
   } as CiteprocProviderIPCAPI)
 }
 
-
 /**
  * If the user currently hovers over a footnote, this function returns the specs
  * to create a tooltip with the footnote ref's contents, else null.
