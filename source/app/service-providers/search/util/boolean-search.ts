@@ -32,7 +32,7 @@ export interface SearchQueryBoolean {
 
 type FoundRange = { from: number, to: number, line: number }
 
-interface MetadataSearchResult {
+export interface MetadataSearchResult {
   type: 'metadata'
   /**
    * The weight is a relevancy score: The higher, the better was this match.

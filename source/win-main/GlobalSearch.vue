@@ -79,67 +79,55 @@
       <hr>
     </template>
     <!-- Finally, display all search results, per file and line. -->
-    <template v-if="filteredSearchResults.length > 0">
+    <template v-if="filteredSearchResults.length > 0 && !searchIsRunning">
       <!-- First, display a filter ... -->
       <TextControl
         v-model="filter"
         v-bind:placeholder="filterPlaceholder"
         v-bind:label="filterLabel"
       ></TextControl>
-      <!-- ... then the search results. -->
-      <div
-        v-for="result, idx in filteredSearchResults"
-        v-bind:key="idx"
+      <!-- ... then the search results. NOTE: The 34px minimum size are purely empirical, and will be overridden with the actually measured size. -->
+      <DynamicScroller
+        v-bind:items="filteredSearchResults"
+        v-bind:min-item-size="34"
+        v-bind:key-field="'key'"
+        v-bind:disable-transform="true"
+        v-bind:page-mode="true"
         class="search-result-container"
       >
-        <div class="filename" v-on:click="result.hideResultSet = !result.hideResultSet">
-          <!--
-            NOTE: This DIV is just here due to the parent item's "display: flex",
-            such that the filename plus indicator icon are floated to the left,
-            while the collapse icon is floated to the right.
-          -->
-          <div class="overflow-hidden">
-            <cds-icon v-if="result.weight / windowStateStore.maxSearchResultWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></cds-icon>
-            <cds-icon v-else-if="result.weight / windowStateStore.maxSearchResultWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></cds-icon>
-            <cds-icon v-else shape="dot-circle" style="fill: #33aa33"></cds-icon>
-            {{ result.file.displayName }}
-          </div>
-
-          <div class="collapse-icon">
-            <cds-icon shape="angle" v-bind:direction="(result.hideResultSet) ? 'left' : 'down'"></cds-icon>
-          </div>
-        </div>
-        <div class="filepath">
-          {{ result.file.relativeDirectoryPath }}
-        </div>
-        <div v-if="!result.hideResultSet" class="results-container">
-          <template
-            v-for="singleRes, idx2 in result.result"
-            v-bind:key="idx2"
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            v-bind:item="item"
+            v-bind:active="active"
+            class="single-search-result"
           >
-            <div
-              v-if="singleRes.type === 'content'"
-              class="result-line"
-              v-bind:class="{ active: idx === activeFileIdx && idx2 === activeLineIdx }"
-              v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line, singleRes.excerpt)"
-              v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
-            >
-              <span class="line-number"><strong>{{ singleRes.line }}</strong>: </span>
-              <!-- eslint-disable-next-line vue/no-v-html NOTE: We can disable the v-html error here, since markText runs DOMPurify over the data, and we have to allow HTML tags to mark the elements. -->
-              <span class="excerpt" v-html="markText(singleRes)"></span>
+            <div class="result-header" v-on:click="item.hideResultSet = !item.hideResultSet">
+              <cds-icon shape="dot-circle" v-bind:style="`fill: ${getRelevancyColor(item)}`" class="relevancy-icon"></cds-icon>
+              <span class="filename">{{ item.file.displayName }}</span>
+              <cds-icon class="collapse-indicator" shape="angle" v-bind:direction="(item.hideResultSet) ? 'left' : 'down'"></cds-icon>
+              <span class="filepath">{{ item.file.relativeDirectoryPath }}</span>
             </div>
-            <div
-              v-else
-              class="result-line"
-              v-bind:class="{ active: idx === activeFileIdx && idx2 === activeLineIdx }"
-              v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, 1)"
-              v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, 1)"
-            >
-              <span><strong>Metadata</strong>: </span>
+
+            <div v-if="!item.hideResultSet" class="results-container">
+              <template
+                v-for="singleRes, idx2 in item.result"
+                v-bind:key="idx2"
+              >
+                <div
+                  class="result-line"
+                  v-bind:class="{ active: index === activeFileIdx && idx2 === activeLineIdx }"
+                  v-on:contextmenu.stop.prevent="fileContextMenu($event, item.file.path, singleRes)"
+                  v-on:mousedown.stop.prevent="onResultClick($event, index, idx2, item.file.path, singleRes.type === 'content' ? singleRes.line : 1)"
+                >
+                  <span class="line-number"><strong>{{ singleRes.type === 'content' ? singleRes.line : 1 }}</strong>: </span>
+                  <!-- eslint-disable-next-line vue/no-v-html NOTE: We can disable the v-html error here, since markText runs DOMPurify over the data, and we have to allow HTML tags to mark the elements. -->
+                  <span v-if="singleRes.type === 'content'" class="excerpt" v-html="markText(singleRes)"></span>
+                </div>
+              </template>
             </div>
-          </template>
-        </div>
-      </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
     </template>
   </div>
 </template>
@@ -171,6 +159,8 @@ import { pathBasename, pathDirname, relativePath } from 'source/common/util/rend
 import { sanitizeHTML } from 'source/common/util/sanitize-html'
 import type { SearchProviderIPCAPI, SearchResult, FileContentSearchResult } from 'source/app/service-providers/search'
 import CheckboxControl from 'source/common/vue/form/elements/CheckboxControl.vue'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import type { MetadataSearchResult } from 'source/app/service-providers/search/util/boolean-search'
 
 /**
  * This interface describes a specific descriptor for use during file searches
@@ -187,6 +177,7 @@ interface FileSearchDescriptor {
  * on the file the results describe
  */
 export interface SearchResultWrapper {
+  key: string
   file: FileSearchDescriptor
   result: SearchResult
   hideResultSet: boolean
@@ -227,6 +218,16 @@ function getContextMenu (canCopyText = true): AnyMenuItem[] {
       enabled: canCopyText
     }
   ]
+}
+
+function getRelevancyColor (item: SearchResultWrapper): string {
+  if (item.weight / windowStateStore.maxSearchResultWeight < 0.3) {
+    return '#aaaaaa'
+  } else if(item.weight / windowStateStore.maxSearchResultWeight < 0.7) {
+    return '#2975d9'
+  } else {
+    return '#33aa33'
+  }
 }
 
 defineProps<{
@@ -402,6 +403,7 @@ async function processSearchResult (absPath: string, result: SearchResult, progr
     : filename
 
   const newResult: SearchResultWrapper = {
+    key: absPath,
     file: {
       path: absPath, filename,
       relativeDirectoryPath,
@@ -443,21 +445,21 @@ function toggleIndividualResults (): void {
   }
 }
 
-function fileContextMenu (event: MouseEvent, filePath: string, lineNumber: number, restext?: string): void {
+function fileContextMenu (event: MouseEvent, filePath: string, result: MetadataSearchResult|FileContentSearchResult): void {
   const point = { x: event.clientX, y: event.clientY }
-  showPopupMenu(point, getContextMenu(restext !== undefined), (clickedID: string) => {
+  showPopupMenu(point, getContextMenu(result.type === 'content'), (clickedID: string) => {
     switch (clickedID) {
       case 'new-tab':
-        jumpToLine(filePath, lineNumber, true)
+        jumpToLine(filePath, result.type === 'content' ? result.line : 1, true)
         break
       case 'copy':
-        navigator.clipboard.writeText(restext ?? '').catch(err => console.error(err))
+        navigator.clipboard.writeText(result.type === 'content' ? result.excerpt : '').catch(err => console.error(err))
         break
     }
   })
 }
 
-function onResultClick (event: MouseEvent, idx: number, idx2: number, filePath: string, lineNumber: number): void {
+function onResultClick (event: MouseEvent, fileIndex: number, lineIndex: number, filePath: string, lineNumber: number): void {
   // This intermediary function is needed to make sure that jumpToLine can
   // also be called from within the context menu (see above).
   if (event.button === 2) {
@@ -466,8 +468,8 @@ function onResultClick (event: MouseEvent, idx: number, idx2: number, filePath: 
 
   // Update indices so we can keep track of the most recently clicked
   // search result.
-  activeFileIdx.value = idx
-  activeLineIdx.value = idx2
+  activeFileIdx.value = fileIndex
+  activeLineIdx.value = lineIndex
 
   const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
   jumpToLine(filePath, lineNumber, isMiddleClick)
@@ -537,36 +539,51 @@ body div#global-search-pane {
 
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
-    padding: 10px;
     overflow: hidden;
     font-size: 14px;
 
-    div.filename {
-      white-space: nowrap;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-
-      div.overflow-hidden {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-
-    div.filepath {
-      color: rgb(131, 131, 131);
-      font-size: 10px;
-      white-space: nowrap;
-      overflow: hidden;
+    div.single-search-result {
       margin-bottom: 5px;
     }
 
+    div.result-header {
+      white-space: nowrap;
+      display: grid;
+      width: 100%;
+      grid-template-areas: "relevancy filename collapse" "path path path";
+      grid-template-columns: 20px auto 20px;
+      grid-template-rows: 1fr 1fr;
+
+      .relevancy-icon { grid-area: relevancy; }
+
+      .filename {
+        grid-area: filename;
+        font-weight: bold;
+      }
+
+      .filename, .filepath {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .collapse-indicator { grid-area: collapse; }
+
+      .filepath {
+        color: rgb(131, 131, 131);
+        font-size: 10px;
+        margin-bottom: 5px;
+        grid-area: path;
+      }
+    }
+
     div.result-line {
-      padding: 5px;
+      padding: 5px 0px;
       font-size: 12px;
       display: grid;
+      gap: 4px;
       grid-template-areas: "line-number excerpt";
-      grid-template-columns: 35px auto;
+      grid-template-columns: 25px auto;
 
       .line-number {
         grid-area: line-number;
