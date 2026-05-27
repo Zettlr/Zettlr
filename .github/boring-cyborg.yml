@@ -29,7 +29,8 @@ firstIssueWelcomeComment: |
   implement a feature request, and cannot provide any ETA on when we are able to
   get to your issue.
 
-  > NOTE: Please do not share screen captures of buggy behavior on YouTube. If
+  > [!NOTE]
+  > Please do not share screen captures of buggy behavior on YouTube. If
   > you have uploaded a video on YouTube and linked it already, don't worry!
   > But we would like to ask you to remove the video from YouTube, and upload it
   > directly to GitHub instead, by editing your comment.
