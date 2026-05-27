@@ -106,7 +106,9 @@ All other [platforms that Electron supports](https://www.electronjs.org/docs/lat
 
 ## Getting Started
 
-After you have installed Zettlr, [head over to our documentation](https://docs.zettlr.com/) to get to know Zettlr. Refer to the [Quick Start Guide](https://docs.zettlr.com/en/5-minutes/), if you prefer to use software heads-on.
+After you have installed Zettlr, [head over to our documentation](https://docs.zettlr.com/) to get to know Zettlr. The app ships with a small tutorial which covers the basics.
+
+If you are new to Zettlr, refer to our [first time users guide](https://docs.zettlr.com/en/first-time-users/first-steps/). You might also want to consider [installing LaTeX](https://docs.zettlr.com/en/getting-started/installing-latex/) to unlock all export profiles of the app.
 
 ![The central window of Zettlr using the dark theme](/resources/screenshots/zettlr_view_dark.png)
 
