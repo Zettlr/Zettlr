@@ -544,9 +544,23 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
     {
       type: 'button',
       id: 'markdownMakeTaskList',
-      title: trans('Insert task list'),
+      title: trans('Toggle task list'),
       icon: 'checkbox-list',
       visible: getToolbarButtonDisplay('showMarkdownMakeTaskListButton')
+    },
+    {
+      type: 'button',
+      id: 'markdownMakeOrderedList',
+      title: trans('Toggle numbered list'),
+      icon: 'number-list',
+      visible: getToolbarButtonDisplay('showMarkdownMakeOrderedListButton')
+    },
+    {
+      type: 'button',
+      id: 'markdownMakeBulletList',
+      title: trans('Toggle unordered list'),
+      icon: 'bullet-list',
+      visible: getToolbarButtonDisplay('showMarkdownMakeBulletListButton')
     },
     {
       type: 'button',

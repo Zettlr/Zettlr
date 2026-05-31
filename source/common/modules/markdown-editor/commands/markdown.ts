@@ -132,6 +132,24 @@ function insertPandocDiv (target: EditorView, attributes: string): void {
 }
 
 /**
+ * Helper function that removes only heading and blockquote markup from a line,
+ * leaving list markers intact.
+ *
+ * @param   {string}  line  The line text
+ *
+ * @return  {string}        The line text without heading/blockquote markup
+ */
+function removeHeadingAndBlockquoteMarkup (line: string): string {
+  let match
+  if ((match = /^#{1,6}\s+/.exec(line)) !== null) {
+    return line.substring(match[0].length)
+  } else if ((match = /^(\s{,3})>\s/.exec(line)) !== null) {
+    return match[1] + line.substring(match[0].length)
+  }
+  return line
+}
+
+/**
  * Helper function that removes block level markup from the provided line
  *
  * @param   {string}  line  The line text
@@ -140,9 +158,18 @@ function insertPandocDiv (target: EditorView, attributes: string): void {
  */
 function removeBlockMarkup (line: string): string {
   let match
-  if ((match = /^#{1,6}\s+/.exec(line)) !== null) {
-    return line.substring(match[0].length)
-  } else if ((match = /^(\s{,3})>\s/.exec(line)) !== null) {
+  const withoutHeading = removeHeadingAndBlockquoteMarkup(line)
+  if (withoutHeading !== line) {
+    return withoutHeading
+  } else if ((match = /^(\s*)- \[.\] /.exec(line)) !== null) {
+    return match[1] + line.substring(match[0].length)
+  } else if ((match = /^(\s*)\* /.exec(line)) !== null) {
+    return match[1] + line.substring(match[0].length)
+  } else if ((match = /^(\s*)- /.exec(line)) !== null) {
+    return match[1] + line.substring(match[0].length)
+  } else if ((match = /^(\s*)\+ /.exec(line)) !== null) {
+    return match[1] + line.substring(match[0].length)
+  } else if ((match = /^(\s*)\d+\. /.exec(line)) !== null) {
     return match[1] + line.substring(match[0].length)
   }
   return line
@@ -167,12 +194,15 @@ function applyBlockMarkup (target: EditorView, formatting: string): void {
     for (let i = startLine; i <= endLine; i++) {
       // TODO: Test if this does what it should do
       const line = target.state.doc.line(i)
-      const withoutBlocks = removeBlockMarkup(line.text)
+      const withoutBlocks = removeHeadingAndBlockquoteMarkup(line.text)
       offsetCharacters += line.text.length - withoutBlocks.length + formatting.length + 1
       changes.push({ from: line.from, to: line.to, insert: formatting + ' ' + withoutBlocks })
     }
 
-    return { changes, range: EditorSelection.range(range.from, range.to + offsetCharacters) }
+    const newDocLength = target.state.doc.length + changes.reduce((acc, c: any) => acc + (c.insert?.length ?? 0) - (c.to - c.from), 0)
+    const newTo = Math.min(Math.max(0, range.to + offsetCharacters), newDocLength)
+    const newFrom = Math.min(range.from, newTo)
+    return { changes, range: EditorSelection.range(newFrom, newTo) }
   })
 
   target.dispatch(transaction)
@@ -238,8 +268,28 @@ function applyInlineMarkup (target: EditorView, start: string, end: string): voi
 }
 
 /**
+ * Returns true if the given line text already matches the specified list type.
+ *
+ * @param   {string}            text  The line text
+ * @param   {'ul'|'ol'|'task'}  type  The list type to check for
+ */
+function lineMatchesType (text: string, type: 'ul'|'ol'|'task'): boolean {
+  // Strip leading blockquote markers before checking list type
+  const stripped = text.replace(/^([ ]{0,3}>[ \t])+/, '')
+  if (type === 'task') {
+    return /^\s*- \[.\] /.test(stripped)
+  } else if (type === 'ul') {
+    return /^\s*[*\-+] /.test(stripped) && !/^\s*- \[.\] /.test(stripped)
+  } else {
+    return /^\s*\d+\. /.test(stripped)
+  }
+}
+
+/**
  * Helper function that turns the selection ranges into the provided type of
- * list type.
+ * list type. If the lines are already formatted as the given list type, the
+ * formatting is removed. If they are formatted as a different list type, the
+ * formatting is replaced.
  *
  * @param   {EditorView}        target  The target view
  * @param   {'ul'|'ol'|'task'}  type    The list type
@@ -248,22 +298,56 @@ function applyList (target: EditorView, type: 'ul'|'ol'|'task'): void {
   const transaction = target.state.changeByRange(range => {
     const startLine = target.state.doc.lineAt(range.from).number
     const endLine = target.state.doc.lineAt(range.to).number
-
     const changes: ChangeSpec[] = []
-
     let offsetCharacters = 0
 
+    const nonBlankLines = Array.from({ length: endLine - startLine + 1 }, (_, i) => {
+      return target.state.doc.line(startLine + i)
+    }).filter(line => line.text.trim() !== '')
+
+    const allMatch = nonBlankLines.length > 0 && nonBlankLines.every(line => lineMatchesType(line.text, type))
+
+    const olCounters = new Map<string, number>()
     for (let i = startLine; i <= endLine; i++) {
       const line = target.state.doc.line(i)
-      const withoutBlocks = removeBlockMarkup(line.text)
-      const formatting = (type === 'ol') ? `${i - startLine + 1}.` : (type === 'ul') ? '*' : '- [ ]'
-      offsetCharacters += line.text.length - withoutBlocks.length + formatting.length + 1
-      changes.push({ from: line.from, to: line.to, insert: formatting + ' ' + withoutBlocks })
+
+      if (nonBlankLines.length > 0 && line.text.trim() === '') {
+        continue
+      }
+
+      const blockquotePrefix = /^([ ]{0,3}>[ \t])+/.exec(line.text)?.[0] ?? ''
+      const afterBlockquote = line.text.substring(blockquotePrefix.length)
+      const indent = /^(\s*)/.exec(afterBlockquote)![1]
+      const withoutBlocks = removeBlockMarkup(afterBlockquote)
+      const withoutIndent = withoutBlocks.substring(indent.length)
+
+      if (allMatch) {
+        offsetCharacters += (blockquotePrefix + withoutBlocks).length - line.text.length
+        changes.push({ from: line.from, to: line.to, insert: blockquotePrefix + withoutBlocks })
+      } else {
+        let formatting: string
+        if (type === 'ol') {
+          const count = olCounters.get(indent) ?? 0
+          olCounters.set(indent, count + 1)
+          for (const key of olCounters.keys()) {
+            if (key.length > indent.length) {
+              olCounters.delete(key)
+            }
+          }
+          formatting = `${count + 1}.`
+        } else {
+          formatting = type === 'ul' ? '*' : '- [ ]'
+        }
+        const insert = blockquotePrefix + indent + formatting + ' ' + withoutIndent
+        offsetCharacters += insert.length - line.text.length
+        changes.push({ from: line.from, to: line.to, insert: insert })
+      }
     }
 
-    return { changes, range: EditorSelection.cursor(range.to + offsetCharacters) }
+    const newDocLength = target.state.doc.length + changes.reduce((acc, c: any) => acc + (c.insert?.length ?? 0) - (c.to - c.from), 0)
+    const cursorPos = Math.min(Math.max(0, range.to + offsetCharacters), newDocLength)
+    return { changes, range: EditorSelection.cursor(cursorPos) }
   })
-
   target.dispatch(transaction)
 }
 
