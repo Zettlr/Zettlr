@@ -344,9 +344,11 @@ function findAll (searchString: string, text: string): FoundRange[] {
 
   let startIndex = 0
   let index = -1
+  let lineNo = 1
 
   while ((index = text.indexOf(searchString, startIndex)) > -1) {
-    results.push({ from: index, to: index + searchString.length, line: lineOf(index, text) })
+    lineNo += lineOf(startIndex, index, text)
+    results.push({ from: index, to: index + searchString.length, line: lineNo })
     startIndex = index + 1
   }
 
@@ -361,8 +363,8 @@ function findAll (searchString: string, text: string): FoundRange[] {
  *
  * @return  {number}         The line number
  */
-function lineOf (index: number, text: string): number {
-  return [...text.slice(0, index).matchAll(/\n/g)].length + 1
+function lineOf (from: number, to: number, text: string): number {
+  return [...text.slice(from, to).matchAll(/\n/g)].length
 }
 
 /**
