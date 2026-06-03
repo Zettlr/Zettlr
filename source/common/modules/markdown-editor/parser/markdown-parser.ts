@@ -47,7 +47,7 @@ import { wast } from '@codemirror/lang-wast'
 import { xml } from '@codemirror/lang-xml'
 import { yaml } from '@codemirror/lang-yaml'
 import { hcl } from 'codemirror-lang-hcl'
-
+import { elixirLanguage } from 'codemirror-lang-elixir'
 // Now from the legacy modes package
 import { c, csharp, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
 import { clojure } from '@codemirror/legacy-modes/mode/clojure'
@@ -139,6 +139,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: StreamLanguage.define(dart), selectors: [ 'dart', 'dt' ] },
   { mode: StreamLanguage.define(diff), selectors: ['diff'] },
   { mode: StreamLanguage.define(dockerFile), selectors: [ 'docker', 'dockerfile' ] },
+  { mode: elixirLanguage, selectors: [ 'elixir', 'ex', 'exs' ] },
   { mode: StreamLanguage.define(elm), selectors: ['elm'] },
   { mode: StreamLanguage.define(fortran), selectors: ['fortran'] },
   { mode: StreamLanguage.define(fSharp), selectors: [ 'f#', 'fsharp' ] },
