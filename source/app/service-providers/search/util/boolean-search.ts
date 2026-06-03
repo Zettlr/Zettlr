@@ -198,7 +198,7 @@ export function searchFileBoolean (descriptor: MDFileDescriptor|CodeFileDescript
   const notOperators = query.terms.filter(elem => elem.operator === 'NOT')
   const notWords = notOperators.reduce<string[]>((acc, curr) => acc.concat(curr.words), [])
   for (const term of notWords) {
-    if (content.includes(term) || fileName.includes(term)) {
+    if (fileName.includes(term) || content.includes(term)) {
       return []
     }
   }
