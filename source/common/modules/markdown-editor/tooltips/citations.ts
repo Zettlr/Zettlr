@@ -111,7 +111,7 @@ function citationTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|
     }
   }
 }
-//A transactionExtender allows the compartment to be reconfigured live when a preference is changed, avoiding the need to reload the file for the change to take effect. 
+// A transactionExtender allows the compartment to be reconfigured live when a preference is changed, avoiding the need to reload the file for the change to take effect. 
 const modeSwitcher = EditorState.transactionExtender.of(transaction => {
   let enabled:  boolean|undefined
   let delay: number|undefined
