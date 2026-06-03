@@ -27,10 +27,11 @@
   their own preferences groups.
 - The menubar on Windows is no longer styled using the system's accent color to
   reduce potential distractions for users.
+- Update Brazilian (`pt-BR`) translations (#6348).
 
 ## Under the Hood
 
-- Upgrade Electron to `v42.0.0`
+- Upgrade Electron to `v42.0.0`.
 - Migrate the `openAttachment` utility from `got` to `ky`.
 - Migrate the LanguageTool API utility from `got` to `ky`.
 - Enforce proper comment styling.
