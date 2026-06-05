@@ -29,6 +29,20 @@ chars =
     String.cons 'C' <| String.cons 'h' <| "ars"
 ```
 
+## Elixir
+
+```elixir
+defmodule Counter do
+  @moduledoc false
+
+  def count(items) when is_list(items) do
+    items
+    |> Enum.filter(&match?({:ok, _}, &1))
+    |> Enum.map(fn {:ok, value} -> value end)
+  end
+end
+```
+
 ## F#
 
 ```fsharp
