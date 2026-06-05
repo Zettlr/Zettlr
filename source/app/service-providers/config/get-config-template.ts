@@ -18,7 +18,7 @@ import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
-export type TabOpeningBehavior = 'next_to_current'|'replace_current'|'end_of_bar'
+export type TabOpeningBehavior = 'next-to-current'|'replace-current'|'end'
 
 // This is a handy interface to add groups of file types to the settings in
 // order to allow users to display them in filemanager and/or sidebar, and open
