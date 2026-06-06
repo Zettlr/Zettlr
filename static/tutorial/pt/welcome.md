@@ -75,11 +75,11 @@ Até agora, você já aprendeu muito sobre o Zettlr. Você consegue marcar todas
 
 Alguns elementos no editor são interativos, assim como as caixas de seleção. Tabelas são outra coisa que é altamente interativa. Dê uma olhada na tabela a seguir: passe o mouse sobre ela e verá alguns botões aparecerem que permitem interagir com a tabela!
 
-| File                        | Purpose                                                          | Filename        |
+| Arquivo                     | Objetivo                                                         | Nome do arquivo |
 |-----------------------------|------------------------------------------------------------------|-----------------|
-| Welcome to Zettlr!          | Gives a basic overview over the abilities of Zettlr              | welcome.md      |
-| Working with a Zettelkasten | Introduces the various Zettelkasten-features of Zettlr           | zettelkasten.md |
-| Citing with Zettlr          | Highlights the capabilities of working with references databases | citing.md       |
+| Bem-vindo ao Zettlr!        | Dá uma visão geral básica das funcionalidades do Zettlr          | welcome.md      |
+| Trabalhando com Zettelkasten| Introduz as várias funcionalidades de Zettelkasten no Zettlr     | zettelkasten.md |
+| Citando com Zettlr          | Destaca as capacidades de trabalhar com bancos de referências      citing.md       |
 
 Você pode alinhar colunas, além de adicionar e remover linhas e colunas na tabela. O editor de tabela sempre trabalhará na coluna ou linha que estiver ativa no momento. Então, para remover uma linha específica, certifique-se de que uma célula dessa linha esteja selecionada. Sinta-se à vontade para brincar um pouco com a tabela para se acostumar com seu funcionamento!
 

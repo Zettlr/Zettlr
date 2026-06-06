@@ -1,4 +1,4 @@
-# Links Utéis
+# Links Úteis
 
 Se você precisar de qualquer ajuda, ou quiser se aprofundar no Zettlr, os seguintes links proverão muita informação útil. Acesse-os pressionando `Command` (macOS) ou `Control` (Windows/Linux) enquanto clica neles.
 
