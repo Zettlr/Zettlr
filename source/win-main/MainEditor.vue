@@ -1,10 +1,11 @@
 <template>
-  <div
+    <div
     ref="mainEditorWrapper"
     class="main-editor-wrapper"
     role="region"
     v-bind:aria-label="`Markdown Editor: Currently editing file ${pathBasename(props.file.path)}`"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
+    v-bind:dir="textDirection"
     v-bind:class="{
       'code-file': !isMarkdown,
       fullscreen: distractionFree
@@ -219,6 +220,9 @@ const mainEditorWrapper = ref<HTMLDivElement|null>(null)
 const useH1 = computed<boolean>(() => configStore.config.fileNameDisplay.includes('heading'))
 const useTitle = computed<boolean>(() => configStore.config.fileNameDisplay.includes('title'))
 const fontSize = computed<number>(() => configStore.config.editor.fontSize)
+const textDirection = computed<string>(() => {
+  return configStore.config.editor.textDirection
+})
 const globalSearchResults = computed(() => windowStateStore.searchResults)
 const snippets = computed(() => windowStateStore.snippets)
 const tags = computed(() => tagStore.tags)
@@ -253,6 +257,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     boldFormatting: editor.boldFormatting,
     italicFormatting: editor.italicFormatting,
     highlightFormatting: editor.highlightFormatting,
+    textDirection: editor.textDirection,
     muteLines: configStore.config.muteLines,
     citeStyle: editor.citeStyle,
     readabilityAlgorithm: editor.readabilityAlgorithm,
