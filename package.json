@@ -153,6 +153,7 @@
     "fsevents": "^2.3.3"
   },
   "resolutions": {
+    "@electron/rebuild": "4.0.4",
     "node-gyp": "^12.1.0",
     "node-abi": "^3.74.0",
     "katex": "^0.16.21",
