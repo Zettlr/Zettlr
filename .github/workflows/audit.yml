@@ -68,14 +68,14 @@ jobs:
             "For the full results (\($chars) characters), please see the summary of the run: \($url).\n\n" +
             "**Disclaimer**: Many results are not relevant for the app\u2019s security, and the pure number of results cannot be used to infer whether there exists a security risk for Zettlr and its users. The maintainers are able to infer whether a result indicates a critical issue that needs fixing."
           )}')" -H "Content-Type: application/json" -X POST "$WEBHOOK"
-        {
-          echo '## Full Audit results'
-          echo
-          echo "Below follow the full results from the audit report (${#AUDIT_CONTENT} characters)."
-          echo
-          echo '~~~'
-          cat audit_result.txt
-          echo '~~~'
-          echo
-          echo 'End of audit.'
-        } >> "$GITHUB_STEP_SUMMARY"
+        jq -rn \
+          --arg chars "${#AUDIT_CONTENT}" \
+          --rawfile audit audit_result.txt \
+          '(
+            "## Full Audit results\n\n" +
+            "Below follow the full results from the audit report (\($chars) characters).\n\n" +
+            "~~~\n" +
+            $audit +
+            "\n~~~\n\n" +
+            "End of audit."
+          )' >> "$GITHUB_STEP_SUMMARY"
