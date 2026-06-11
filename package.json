@@ -105,7 +105,7 @@
     "lang-criticmarkup": "^0.3.0",
     "luxon": "^3.7.2",
     "md5": "^2.3.0",
-    "mermaid": "^11.14.0",
+    "mermaid": "^11.15.0",
     "nodehun": "^3.0.2",
     "pinia": "^3.0.4",
     "rehype-parse": "^9.0.1",
