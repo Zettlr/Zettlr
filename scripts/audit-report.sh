@@ -6,8 +6,8 @@ set -euo pipefail
 cd "$(dirname "$0")"
 cd ..
 
-AUDIT_JSON="${AUDIT_JSON:-audit_result.json}"
-AUDIT_FILE="${AUDIT_FILE:-audit_result.txt}"
+AUDIT_JSON=audit_result.json
+AUDIT_FILE=audit_result.txt
 
 load_audit_content() {
   AUDIT_CONTENT=$(<"$AUDIT_FILE")
