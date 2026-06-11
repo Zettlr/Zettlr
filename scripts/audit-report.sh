@@ -3,8 +3,7 @@
 # Usage: ./scripts/audit-report.sh format|discord|summary
 set -euo pipefail
 
-cd "$(dirname "$0")"
-cd ..
+cd "$(dirname "$0")/.."
 
 AUDIT_JSON=audit_result.json
 AUDIT_FILE=audit_result.txt
