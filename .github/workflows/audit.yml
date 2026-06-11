@@ -23,6 +23,8 @@ jobs:
   audit:
     name: Run audit
     runs-on: ubuntu-latest
+    env:
+      WEBHOOK: ${{ secrets.DISCORD_AUDIT_WEBHOOK }}
     steps:
     # Setup
     - uses: actions/checkout@v6
@@ -44,9 +46,8 @@ jobs:
     - name: Format results
       run: ./scripts/audit-report.sh format
     - name: Report to Discord
-      if: secrets.DISCORD_AUDIT_WEBHOOK != ''
+      if: env.WEBHOOK != ''
       env:
-        WEBHOOK: ${{ secrets.DISCORD_AUDIT_WEBHOOK }}
         RUN_URL: https://github.com/Zettlr/Zettlr/actions/runs/${{ github.run_id }}
       run: ./scripts/audit-report.sh discord
     - name: Report results in summary
