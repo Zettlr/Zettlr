@@ -147,17 +147,15 @@ export function alignTables (target: EditorView, pos?: number): boolean {
         const cell = cellContents[i][j]
         const pad = targetColumnSizes[j] - cell.length
         switch (ctx.tableAST.alignment[j]) {
-          case 'left':
-            newContents[i].push(' ' + cell.padEnd(targetColumnSizes[j] - 1, ' '))
-            break
           case 'right':
             newContents[i].push(cell.padStart(targetColumnSizes[j] - 1, ' ') + ' ')
             break
           case 'center':
             newContents[i].push(' '.repeat(Math.floor(pad/2)) + cell + ' '.repeat(Math.ceil(pad/2)))
             break
+          case 'left':
           default:
-            newContents[i].push(' ')
+            newContents[i].push(' ' + cell.padEnd(targetColumnSizes[j] - 1, ' '))
             break
         }
       }
@@ -184,6 +182,8 @@ export function alignTables (target: EditorView, pos?: number): boolean {
 
     const newRows = newContents.map(row => '|' + row.join('|') + '|')
     newRows.splice(1, 0, '|' + delimRow.join('|') + '|')
+
+    console.log({ cellContents, newRows, newContents, cellSizes, targetColumnSizes })
 
     return {
       changes: {

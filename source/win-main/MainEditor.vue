@@ -50,6 +50,7 @@ import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
+import type { FileContentSearchResult } from 'source/app/service-providers/search'
 
 const ipcRenderer = window.ipc
 
@@ -666,7 +667,7 @@ function maybeHighlightSearchResults (): void {
   // Construct CodeMirror.Ranges from the results
   const rangesToHighlight = []
   // NOTE: We have to filter out "whole-file" results
-  for (const res of result.result.filter(res => res.line > -1)) {
+  for (const res of result.result.filter((res): res is FileContentSearchResult => res.type === 'content' && res.line > -1)) {
     const startIdx = currentEditor.instance.state.doc.line(res.line + 1).from
     for (const range of res.ranges) {
       const { from, to } = range

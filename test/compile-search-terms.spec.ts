@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
 /**
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        compileSearchTerms tester
+ * Contains:        compileBooleanQuery tester
  * CVM-Role:        TESTING
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -13,25 +12,25 @@
  * END HEADER
  */
 
-import compileSearchTerms from '../source/common/util/compile-search-terms'
+import { compileBooleanQuery, type BooleanTerm } from '../source/app/service-providers/search/util/boolean-search'
 import assert from 'assert'
 
-const testSearches = [
+const testSearches: Array<{ query: string, expected: BooleanTerm[] }> = [
   // First the searches from the docs
   {
-    'terms': 'boat ship',
-    'expected': [{ words: ['boat'], operator: 'AND' }, { words: ['ship'], operator: 'AND' }]
+    query: 'boat ship',
+    expected: [{ words: ['boat'], operator: 'AND' }, { words: ['ship'], operator: 'AND' }]
   },
   {
-    'terms': 'boat | ship',
-    'expected': [{ words: [ 'boat', 'ship' ], operator: 'OR' }]
+    query: 'boat | ship',
+    expected: [{ words: [ 'boat', 'ship' ], operator: 'OR' }]
   },
   {
-    'terms': '"boat ship"',
-    'expected': [{ words: ['boat ship'], operator: 'AND' }]
+    query: '"boat ship"',
+    expected: [{ words: ['boat ship'], operator: 'AND' }]
   },
   {
-    'terms': 'test | done rendering',
+    query: 'test | done rendering',
     expected: [
       { words: [ 'test', 'done' ], operator: 'OR' },
       { words: ['rendering'], operator: 'AND' }
@@ -39,22 +38,22 @@ const testSearches = [
   },
   // Now some fancy ones!
   {
-    'terms': 'sovereignty | "state of exception" Agamben',
-    'expected': [
+    query: 'sovereignty | "state of exception" Agamben',
+    expected: [
       { words: [ 'sovereignty', 'state of exception' ], operator: 'OR' },
-      { words: ['Agamben'], operator: 'AND' }
+      { words: ['agamben'], operator: 'AND' }
     ]
   },
   {
-    'terms': '"sovereign decision" !"Carl Schmitt"',
-    'expected': [
+    query: '"sovereign decision" !"Carl Schmitt"',
+    expected: [
       { words: ['sovereign decision'], operator: 'AND' },
-      { words: ['Carl Schmitt'], operator: 'NOT' }
+      { words: ['carl schmitt'], operator: 'NOT' }
     ]
   },
   {
-    'terms': 'this should turn out "really" boring!',
-    'expected': [
+    query: 'this should turn out "really" boring!',
+    expected: [
       { words: ['this'], operator: 'AND' },
       { words: ['should'], operator: 'AND' },
       { words: ['turn'], operator: 'AND' },
@@ -64,16 +63,16 @@ const testSearches = [
     ]
   },
   {
-    'terms': '',
-    'expected': []
+    query: '',
+    expected: []
   }
 ]
 
-describe('Utility#compileSearchTerms()', function () {
+describe('SearchProvider#compileBooleanQuery()', function () {
   for (let test of testSearches) {
-    it(`should compile »${test.terms}« correctly.`, function () {
-      let result = compileSearchTerms(test.terms)
-      assert.deepStrictEqual(test.expected, result)
+    it(`should compile "${test.query}" correctly.`, function () {
+      const result = compileBooleanQuery(test.query)
+      assert.deepStrictEqual(test.expected, result.terms)
     })
   }
 })

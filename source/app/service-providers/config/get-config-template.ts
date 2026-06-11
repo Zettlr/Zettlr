@@ -287,7 +287,7 @@ export function getConfigTemplate (): ConfigOptions {
       // is false, this means that Zettlr will display the menu bar and window
       // controls as defined in the HTML.
       nativeAppearance: process.platform === 'darwin', // Linux only
-      vibrancy: process.platform === 'darwin' && !nativeTheme.prefersReducedTransparency,
+      vibrancy: false,
       // Store a few GUI related settings here as well
       fileManagerVisible: true,
       sidebarVisible: false,

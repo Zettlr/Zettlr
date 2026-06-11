@@ -1,5 +1,5 @@
 <template>
-  <div role="tabpanel">
+  <div id="references-panel" role="tabpanel">
     <!-- References -->
     <h1>
       {{ referencesLabel }}
@@ -8,7 +8,7 @@
       </small>
     </h1>
     <!-- eslint-disable-next-line vue/no-v-html NOTE: We can only disable this rule here since the referenceHTML will pass everything through DOMPurify -->
-    <div v-html="referenceHTML"></div>
+    <div id="references-list" v-html="referenceHTML"></div>
   </div>
 </template>
 
@@ -59,11 +59,13 @@ const referenceHTML = computed(() => {
     return sanitizeHTML(`<p>${trans('There are no citations in this document.')}</p>`)
   }
 
-  return [
-    sanitizeHTML(bibliography.value[0].bibstart),
-    ...bibliography.value[1].map(item => sanitizeHTML(item)),
-    sanitizeHTML(bibliography.value[0].bibend)
+  const bibHTML = [
+    bibliography.value[0].bibstart,
+    ...bibliography.value[1],
+    bibliography.value[0].bibend
   ].join('\n')
+
+  return sanitizeHTML(bibHTML)
 })
 
 // Provides an approximate word count. This can be used to, e.g., gauge how many
@@ -151,10 +153,31 @@ async function updateBibliography (): Promise<void> {
 }
 </script>
 
-<style lang="css" scoped>
-small.word-count {
-  font-size: 70%;
-  font-style: italic;
-  float: right;
+<style lang="css">
+div#references-panel h1 {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
+
+  small.word-count {
+    font-size: 70%;
+    font-style: italic;
+    text-align: right;
+  }
+}
+
+div#references-list div.csl-bib-body {
+  div.csl-entry {
+    display: list-item;
+    list-style-type: square;
+    margin: 1em 0.2em 1em 1.8em;
+    font-size: 80%;
+    user-select: text;
+    cursor: text;
+
+    a { color: var(--blue-0); }
+  }
+  
 }
 </style>

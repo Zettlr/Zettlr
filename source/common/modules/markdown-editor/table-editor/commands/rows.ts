@@ -258,7 +258,7 @@ export function addRowAfter (target: EditorView): boolean {
         },
         changes: {
           from: isHeader && nextLine !== undefined ? nextLine.to : thisLine.to,
-          insert: '\n' + thisLine.text.replace(/[^\s\|]/g, ' ')
+          insert: '\n' + thisLine.text.replace(/[^\s\|]/g, '')
         }
       }
     } else {
@@ -270,7 +270,7 @@ export function addRowAfter (target: EditorView): boolean {
       const nextLine = target.state.doc.line(thisLine.number + 1)
       return {
         from: nextLine.number === target.state.doc.lines ? nextLine.to : nextLine.to + 1,
-        insert: thisLine.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+        insert: thisLine.text.replace(/[^\s|+=]/g, '') + '\n' + nextLine.text + '\n'
       }
     }
   })
@@ -319,7 +319,7 @@ export function addRowBefore (target: EditorView): boolean {
         selection: { anchor: focusRange.anchor, head: focusRange.head },
         changes: {
           from: thisLine.from,
-          insert: thisLine.text.replace(/[^\s\|]/g, ' ') + '\n'
+          insert: thisLine.text.replace(/[^\s\|]/g, '') + '\n'
         }
       }
     } else {
@@ -332,7 +332,7 @@ export function addRowBefore (target: EditorView): boolean {
       return {
         changes: {
           from: thisLine.from,
-          insert: thisLine.text.replace(/[^\s|+=]/g, ' ') + '\n' + nextLine.text + '\n'
+          insert: thisLine.text.replace(/[^\s|+=]/g, '') + '\n' + nextLine.text + '\n'
         }
       }
     }

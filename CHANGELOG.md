@@ -8,6 +8,21 @@
   colon character (`Pour exemple : cette.`), we now allow different trigger
   characters, relieving the colon where necessary. Currently supported are `/`
   and `%` as alternatives (#5185; #6325).
+- **Feature**: The tutorial is now also available in Portuguese for new users
+  (#6373).
+- **Feature**: The "Remove line breaks" transformation in the editor is now also
+  available via the keyboard shortcut `Cmd/Ctrl-Alt-J` (#5913).
+- **Change**: This release brings many improvements to the full text search
+  (#6339):
+  - The full text search was completely rewritten to improve performance by 50%
+    to 100%.
+  - The autocompletes for both previous searches and the restrict-to-folder
+    functionalities have been drastically improved and work reliably (#5686).
+  - Ability to switch between case-insensitive and case-sensitive searches.
+  - Improvements in the presentation and layout of search results.
+- **Change**: On macOS, the default setting for window vibrancy is now off. This
+  makes the file manager opaque, but improves visual design with the new sticky
+  folder headers.
 - Fixed missing click handlers for clicking links in tables (#4694).
 - Fixed an issue that would sometimes open the same link twice.
 - The file manager now uses tabular digits for displaying numbers in filenames.
@@ -15,6 +30,7 @@
   selection (#6328).
 - Fixed a wrong font selection for comments.
 - Fixed strikethrough-elements no longer being stricken-through (#6330).
+- Fixed triple-clicks within tables to select entire table cells (#6344; #6100).
 - Add "Curl quotes" text transform to convert straight quotes to curly (smart)
   quotes, the inverse of the existing "Straighten quotes" transform (#6259).
 - The main window's title now includes the current active file's title. This
@@ -28,13 +44,27 @@
 - The menubar on Windows is no longer styled using the system's accent color to
   reduce potential distractions for users.
 - Update Brazilian (`pt-BR`) translations (#6348).
+- Fixed TableEditor swap rows/columns commands on macOS. Until now, they were
+  mapped to `Ctrl+Shift+Arrow`, which was misaligned with the main keymap.
+- Fixed an issue in the TableEditor where adding new rows could increase the
+  amount of surrounding whitespace in the newly inserted rows (#6369).
+- Fixed the alignment command for the TableEditor which previously would clear
+  out the entire column, if the column had no alignment set.
+- Fixed a regression from the previous version that disabled the references list
+  CSS (#6380).
 
 ## Under the Hood
 
-- Upgrade Electron to `v42.0.0`.
+- Upgrade Electron to `v42.3.3`.
+- Upgrade Pandoc to `v3.10`.
+- Pinned a transitive dependency of electron forge, `yauzl` to fix a bug on
+  newer Node versions (context: https://github.com/electron/forge/issues/4277).
 - Migrate the `openAttachment` utility from `got` to `ky`.
 - Migrate the LanguageTool API utility from `got` to `ky`.
 - Enforce proper comment styling.
+- The `StartupWMClass` has been switched back to lowercase, since apparently the
+  build step has correctly reverted the binary name to lowercase on Linux.
+- Handle symbolic links in chokidar watcher explicitly.
 
 # 4.5.0
 

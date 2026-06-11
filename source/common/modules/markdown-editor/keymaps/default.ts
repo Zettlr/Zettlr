@@ -69,6 +69,7 @@ import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
 import { alignTables } from '../table-editor/commands/tables'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
+import { removeLineBreaks } from '../commands/transforms/remove-line-breaks'
 
 // Includes:
 // * defaultKeymap
@@ -251,5 +252,6 @@ export function defaultKeymap (): Extension {
     { key: 'Alt-ArrowDown', run: swapNextRow, shift: addRowAfter },
     { key: 'Alt-ArrowRight', run: swapNextCol, shift: addColAfter },
     { key: 'Alt-ArrowLeft', run: swapPrevCol, shift: addColBefore },
+    { key: 'Mod-Alt-j', run: removeLineBreaks }
   ])
 }
