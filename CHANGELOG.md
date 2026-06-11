@@ -20,6 +20,9 @@
     functionalities have been drastically improved and work reliably (#5686).
   - Ability to switch between case-insensitive and case-sensitive searches.
   - Improvements in the presentation and layout of search results.
+- **Change**: On macOS, the default setting for window vibrancy is now off. This
+  makes the file manager opaque, but improves visual design with the new sticky
+  folder headers.
 - Fixed missing click handlers for clicking links in tables (#4694).
 - Fixed an issue that would sometimes open the same link twice.
 - The file manager now uses tabular digits for displaying numbers in filenames.
@@ -47,10 +50,15 @@
   amount of surrounding whitespace in the newly inserted rows (#6369).
 - Fixed the alignment command for the TableEditor which previously would clear
   out the entire column, if the column had no alignment set.
+- Fixed a regression from the previous version that disabled the references list
+  CSS (#6380).
 
 ## Under the Hood
 
-- Upgrade Electron to `v42.0.0`.
+- Upgrade Electron to `v42.3.3`.
+- Upgrade Pandoc to `v3.10`.
+- Pinned a transitive dependency of electron forge, `yauzl` to fix a bug on
+  newer Node versions (context: https://github.com/electron/forge/issues/4277).
 - Migrate the `openAttachment` utility from `got` to `ky`.
 - Migrate the LanguageTool API utility from `got` to `ky`.
 - Enforce proper comment styling.

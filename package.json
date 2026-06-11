@@ -153,9 +153,10 @@
     "fsevents": "^2.3.3"
   },
   "resolutions": {
-    "node-gyp": "10.x.x",
+    "node-gyp": "^12.1.0",
     "node-abi": "^3.74.0",
-    "katex": "^0.16.21"
+    "katex": "^0.16.21",
+    "yauzl": "^3.3.2"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.11.2",
@@ -188,8 +189,8 @@
     "cross-env": "^10.1.0",
     "css-loader": "^7.1.4",
     "csso": "^5.0.5",
-    "electron": "^42.0.0",
-    "electron-builder": "^26.11.1",
+    "electron": "^42.3.3",
+    "electron-builder": "^26.14.0",
     "electron-devtools-installer": "^4.0.0",
     "eslint": "^10.3.0",
     "eslint-plugin-import": "^2.32.0",

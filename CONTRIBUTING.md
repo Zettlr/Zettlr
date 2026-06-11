@@ -73,9 +73,42 @@ in which you can help!):
 
 ### Code Contributions
 
-We welcome PRs that fix bugs, improve behavior, or implement new features.
-Zettlr is an Electron project and as such uses a standard Node.js stack. You can
-find all information to get started in the [README.md](./README.md) file.
+We welcome PRs that fix bugs, improve behavior, or implement new features. You
+can find all information to get started in the [README.md](./README.md) file.
+
+### Test Preview Versions
+
+Every new feature or change to the app can introduce bugs or other unwanted
+behavior. It is hard for just the developers to cover every single edge case. As
+such, we rely on the community to test out new versions and report any new bugs.
+
+It is a win-win situation: By testing preview versions, you trade in some
+stability for the privilege of experiencing brand new features before anybody
+else, and at the same time help us fix remaining bugs before we can do a public
+release.
+
+There are two ways to test out new versions: Beta releases, and nightly
+releases.
+
+A relatively safe way is to test out beta releases. We usually only release them
+before larger updates. You can tell Zettlr that you wish to test beta releases
+by enabling the corresponding setting in your app preferences. Beta releases are
+relatively stable but may have the odd annoying bug.
+
+The second way to test preview versions is to install
+[nightly releases](https://nightly.zettlr.com). Nightly releases are called this
+way because they are built "over night." They are typically released
+automatically, and come directly off of the current development state. While
+those are often quite stable, there can be instances where there is a serious
+bug in the code that we did not spot. Testing out nightly releases is immensely
+helpful to the developer team, but they can be risky.
+
+> [!TIP]
+> Especially for smaller updates, it is typically easier for the developers to
+> ask the community to test out a nightly release rather than publishing a beta.
+> If you join our Discord, you will typically see us asking to test a nightly
+> release shortly before a new update. In those instances, you can expect
+> nightly releases to be stable and mostly risk-free, like a beta release.
 
 ### Translations
 
