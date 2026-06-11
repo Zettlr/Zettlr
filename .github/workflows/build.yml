@@ -129,7 +129,8 @@ jobs:
     env:
       npm_config_arch: x64
     needs: [preflight, verify_version]
-    runs-on: windows-latest
+    # Pin to windows-2022 until @electron/rebuild used by Forge supports VS 2026 on windows-latest.
+    runs-on: windows-2022
     steps:
       - name: Checkout branch ${{ github.ref_name }}
         uses: actions/checkout@v6
