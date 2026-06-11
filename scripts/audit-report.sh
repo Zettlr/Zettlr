@@ -51,7 +51,7 @@ Below follow the full results from the audit report (${AUDIT_CHARS} characters).
 ~~~
 EOF
     cat "$AUDIT_FILE"
-    cat <<'EOF'
+    cat <<EOF
 ~~~
 
 End of audit.
