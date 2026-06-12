@@ -10,7 +10,7 @@
         v-bind:ratio="props.control.progressPercent / 100"
         v-bind:color="props.control.trackColour"
       ></RingProgress>
-      <span v-html="props.control.label"></span>
+      <span>{{ props.control.label }}</span>
     </button>
   </div>
 </template>
@@ -43,7 +43,7 @@ export interface RingProgressButtonControl {
   trackColour?: string
   label?: string
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{

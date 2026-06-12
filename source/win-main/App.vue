@@ -1,6 +1,6 @@
 <template>
   <WindowChrome
-    v-bind:title="'Zettlr'"
+    v-bind:title="windowTitle"
     v-bind:titlebar="shouldShowTitlebar"
     v-bind:menubar="shouldShowMenubar"
     v-bind:show-toolbar="shouldShowToolbar"
@@ -116,6 +116,11 @@
     v-on:start="startPomodoro()"
     v-on:stop="stopPomodoro()"
   ></PopoverPomodoro>
+  <PopoverLRT
+    v-if="showTasksPopover && tasksButton !== null"
+    v-bind:target="tasksButton"
+    v-on:close="showTasksPopover = false"
+  ></PopoverLRT>
   <PopoverPandoc
     v-if="showPandocPopover && pandocButton !== null"
     v-bind:target="pandocButton"
@@ -173,16 +178,20 @@ import { DocumentType, type LeafNodeJSON } from '@dts/common/documents'
 import { buildPipeMarkdownTable } from '@common/util/build-pipe-markdown-table'
 import { type UpdateState } from '@providers/updates'
 import { type ToolbarControl } from '@common/vue/window/WindowToolbar.vue'
-import { useConfigStore, useDocumentTreeStore, useWindowStateStore } from 'source/pinia'
+import getDocumentTitle from './util/get-document-title'
+import { useConfigStore, useDocumentTreeStore, useLRTStore, useWindowStateStore } from 'source/pinia'
 import type { ConfigOptions } from 'source/app/service-providers/config/get-config-template'
 import { type AnyDescriptor } from 'source/types/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import { TaskStatus } from 'source/pinia/lrt-store'
+import PopoverLRT from './PopoverLRT.vue'
 
 const ipcRenderer = window.ipc
 
 const configStore = useConfigStore()
 const documentTreeStore = useDocumentTreeStore()
 const windowStateStore = useWindowStateStore()
+const LRTStore = useLRTStore()
 
 const SOUND_EFFECTS = [
   {
@@ -204,7 +213,7 @@ const searchParams = new URLSearchParams(window.location.search)
 // necessary for the documents and split views to show up.
 const windowId = searchParams.get('window_id')!
 
-const fileManagerVisible = ref(true)
+const fileManagerVisible = computed<boolean>(() => configStore.config.window.fileManagerVisible)
 const mainSplitViewVisibleComponent = ref<'fileManager'|'globalSearch'>('fileManager')
 const isUpdateAvailable = ref(false)
 const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
@@ -230,6 +239,8 @@ const docInfoButton = ref<HTMLElement|null>(null)
 const showDocInfoPopover = ref<boolean>(false)
 const pomodoroButton = ref<HTMLElement|null>(null)
 const showPomodoroPopover = ref<boolean>(false)
+const tasksButton = ref<HTMLElement|null>(null)
+const showTasksPopover = ref(false)
 const pandocButton = ref<HTMLElement|null>(null)
 const showPandocPopover = ref<boolean>(false)
 
@@ -327,6 +338,13 @@ const sidebarsBeforeDistractionfree = ref<{ fileManager: boolean, sidebar: boole
 const sidebarVisible = computed<boolean>(() => configStore.config.window.sidebarVisible)
 const activeFile = computed(() => documentTreeStore.lastLeafActiveFile)
 const shouldCountChars = computed<boolean>(() => configStore.config.editor.countChars)
+const windowTitle = computed<string>(() => {
+  if (activeFile.value === undefined) {
+    return 'Zettlr'
+  }
+
+  return `Zettlr - ${getDocumentTitle(activeFile.value)}`
+})
 
 // Simple state machine to trigger which of the three shows up when. Below's the
 // corresponding truth table, which is relatively large, but by spotting some
@@ -372,13 +390,13 @@ const shouldShowMenubar = computed<boolean>(() => process.platform === 'win32' |
 // Hide Toolbar is True and DistractionFree is True
 const shouldShowToolbar = computed<boolean>(() => !distractionFree.value || !configStore.config.display.hideToolbarInDistractionFree)
 
-const parsedDocumentInfo = computed<string>(() => {
+const parsedDocumentInfo = computed<string[]>(() => {
   const info = windowStateStore.activeDocumentInfo
   if (info == null) {
-    return ''
+    return []
   }
 
-  let cnt = ''
+  const lines: string[] = []
 
   if (info.selections.length > 0) {
     // We have selections to display.
@@ -387,28 +405,31 @@ const parsedDocumentInfo = computed<string>(() => {
       length += shouldCountChars.value ? sel.chars : sel.words
     })
 
-    cnt = trans('%s selected', localiseNumber(length))
-    cnt += '<br>'
+    lines.push(trans('%s selected', localiseNumber(length)))
     if (info.selections.length === 1) {
-      cnt += (info.selections[0].anchor.line) + ':'
-      cnt += (info.selections[0].anchor.ch) + ' &ndash; '
-      cnt += (info.selections[0].head.line) + ':'
-      cnt += (info.selections[0].head.ch)
+      const { head, anchor } = info.selections[0]
+      lines.push(`${anchor.line}:${anchor.ch} – ${head.line}:${head.ch}`)
     } else {
       // Multiple selections --> indicate
-      cnt += trans('%s selections', info.selections.length)
+      lines.push(trans('%s selections', info.selections.length))
     }
   } else {
     // No selection.
-    cnt = shouldCountChars.value
+    lines.push(shouldCountChars.value
       ? trans('%s characters', localiseNumber(info.chars))
-      : trans('%s words', localiseNumber(info.words))
-    cnt += '<br>'
-    cnt += info.cursor.line + ':' + info.cursor.ch
+      : trans('%s words', localiseNumber(info.words)))
+    lines.push(`${info.cursor.line}:${info.cursor.ch}`)
   }
 
-  return cnt
+  return lines
 })
+
+// Long-Running-Task setup
+const hasTasks = computed(() => LRTStore.tasks.length > 0)
+const taskSuccess = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.finished).length)
+const taskAborted = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.aborted).length)
+const taskError = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.error).length)
+const taskOngoing = computed(() => LRTStore.tasks.filter(t => t.status === TaskStatus.ongoing).length)
 
 const toolbarControls = computed<ToolbarControl[]>(() => {
   return [
@@ -562,6 +583,16 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       visible: getToolbarButtonDisplay('showPomodoroButton')
     },
     {
+      type: 'iris-indicator',
+      id: 'long-running-tasks',
+      title: trans('Show tasks'),
+      tasksInProgress: taskOngoing.value,
+      tasksSuccess: taskSuccess.value,
+      tasksFailed: taskError.value,
+      tasksAborted: taskAborted.value,
+      visible: hasTasks.value
+    },
+    {
       type: 'toggle',
       id: 'toggle-sidebar',
       title: trans('Toggle Sidebar'),
@@ -577,7 +608,7 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       icon: 'download',
       visible: isUpdateAvailable.value
     }
-  ]
+  ] satisfies ToolbarControl[]
 })
 
 const editorSidebarSplitComponent = ref<typeof SplitView|null>(null)
@@ -632,11 +663,11 @@ watch(distractionFree, (newValue) => {
       sidebar: sidebarVisible.value
     }
     configStore.setConfigValue('window.sidebarVisible', false)
-    fileManagerVisible.value = false
+    configStore.setConfigValue('window.fileManagerVisible', false)
   } else {
     // Leave distraction free mode
     configStore.setConfigValue('window.sidebarVisible', sidebarsBeforeDistractionfree.value.sidebar)
-    fileManagerVisible.value = sidebarsBeforeDistractionfree.value.fileManager
+    configStore.setConfigValue('window.fileManagerVisible', sidebarsBeforeDistractionfree.value.fileManager)
   }
 })
 
@@ -647,6 +678,7 @@ onMounted(() => {
   tableButton.value = document.querySelector('#toolbar-insert-table')
   docInfoButton.value = document.querySelector('#toolbar-document-info')
   pomodoroButton.value = document.querySelector('#toolbar-pomodoro')
+  tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
   pandocButton.value = document.querySelector('#toolbar-pandocDivOrSpan')
 
   ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -656,7 +688,7 @@ onMounted(() => {
       editorCommands.value.data = generateId(configStore.config.zkn.idGen)
       editorCommands.value.replaceSelection = !editorCommands.value.replaceSelection
     } else if (shortcut === 'copy-current-id' && documentTreeStore.lastLeafActiveFile !== undefined) {
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('fsal', {
         command: 'get-descriptor',
         payload: documentTreeStore.lastLeafActiveFile.path
       })
@@ -667,7 +699,7 @@ onMounted(() => {
         })
         .catch(err => console.error(err))
     } else if (shortcut === 'global-search') {
-      fileManagerVisible.value = true
+      configStore.setConfigValue('window.fileManagerVisible', true)
       mainSplitViewVisibleComponent.value = 'globalSearch'
       // Focus input
       nextTick()
@@ -675,9 +707,9 @@ onMounted(() => {
         .catch(err => console.error(err))
     } else if (shortcut === 'toggle-file-manager') {
       if (fileManagerVisible.value && mainSplitViewVisibleComponent.value === 'fileManager') {
-        fileManagerVisible.value = false
+        configStore.setConfigValue('window.fileManagerVisible', false)
       } else if (!fileManagerVisible.value) {
-        fileManagerVisible.value = true
+        configStore.setConfigValue('window.fileManagerVisible', true)
         mainSplitViewVisibleComponent.value = 'fileManager'
       } else if (mainSplitViewVisibleComponent.value === 'globalSearch') {
         mainSplitViewVisibleComponent.value = 'fileManager'
@@ -685,7 +717,7 @@ onMounted(() => {
     } else if (shortcut === 'filter-files') {
       // We need to immediately make the file manager visible, which will
       // -- in the next tick -- focus its filter input.
-      fileManagerVisible.value = true
+      configStore.setConfigValue('window.fileManagerVisible', true)
       mainSplitViewVisibleComponent.value = 'fileManager'
     } else if (shortcut === 'export') {
       showExportPopover.value = true
@@ -717,6 +749,11 @@ onMounted(() => {
   // by default.
   if (!sidebarVisible.value) {
     editorSidebarSplitComponent.value?.hideView(2)
+  }
+
+  // Similarly, if the file manager is set to hidden, do that, too.
+  if (!fileManagerVisible.value) {
+    fileManagerSplitComponent.value?.hideView(1)
   }
 
   // Check if there is an update available.
@@ -830,7 +867,7 @@ function moveSection (data: { from: number, to: number }): void {
 
 function startGlobalSearch (terms: string): void {
   mainSplitViewVisibleComponent.value = 'globalSearch'
-  fileManagerVisible.value = true
+  configStore.setConfigValue('window.fileManagerVisible', true)
   nextTick()
     .then(() => {
       globalSearchComponent.value?.startSearch(terms)
@@ -886,6 +923,10 @@ function handleClick (clickedID?: string): void {
   } else if (clickedID === 'insert-table') {
     // Display the insertion popover
     showTablePopover.value = !showTablePopover.value
+  } else if (clickedID === 'long-running-tasks') {
+    // The tasks button is only mounted conditionally
+    tasksButton.value = document.querySelector('#toolbar-long-running-tasks')
+    showTasksPopover.value = !showTasksPopover.value
   } else if (clickedID === 'document-info') {
     showDocInfoPopover.value = !showDocInfoPopover.value
   } else if (clickedID === 'pandocDivOrSpan') {
@@ -937,7 +978,7 @@ function handleToggle (controlState: { id?: string, state?: string | boolean }):
     configStore.setConfigValue('window.sidebarVisible', state)
   } else if (id === 'toggle-file-manager') {
     // Since this is a three-way-toggle, we have to inspect the state.
-    fileManagerVisible.value = state !== undefined
+    configStore.setConfigValue('window.fileManagerVisible', state !== undefined)
     if (typeof state === 'string' && (state === 'fileManager' || state === 'globalSearch')) {
       // Set the shown component to the correct one
       mainSplitViewVisibleComponent.value = state
@@ -1017,6 +1058,5 @@ function getToolbarButtonDisplay (configName: keyof ConfigOptions['displayToolba
 }
 </script>
 
-<style lang="less">
-//
+<style lang="css" scoped>
 </style>

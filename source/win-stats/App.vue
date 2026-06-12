@@ -97,6 +97,5 @@ const windowTitle = computed<string>(() => {
 })
 </script>
 
-<style lang="less">
-//
+<style lang="css" scoped>
 </style>

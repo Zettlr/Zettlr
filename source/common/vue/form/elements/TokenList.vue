@@ -1,7 +1,7 @@
 <template>
   <!-- Token lists cannot be inline -->
   <div class="form-control">
-    <label v-if="label !== undefined" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label !== undefined" v-bind:for="fieldID">{{ label }}</label>
     <!-- Else: Normal input w/o reset button -->
     <div class="token-list" v-on:click="input?.focus()">
       <span
@@ -84,7 +84,7 @@ function removeToken (idx: number): void {
 <style lang="less">
 body {
   div.token-list {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, sans-serif;
     font-size: 12px;
     padding: 6px 0px;
     display: flex;

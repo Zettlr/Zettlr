@@ -15,15 +15,12 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "downlevelIteration": true,
-    "baseUrl": ".",
     "paths": {
-      "source/*": ["source/*"],
-      "@common/*": ["source/common/*"],
-      "@providers/*": ["source/app/service-providers/*"],
-      "@dts/*": ["source/types/*"]
+      "source/*": ["./source/*"],
+      "@common/*": ["./source/common/*"],
+      "@providers/*": ["./source/app/service-providers/*"],
+      "@dts/*": ["./source/types/*"]
     }
   },
   "include": [

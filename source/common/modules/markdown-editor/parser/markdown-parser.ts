@@ -46,6 +46,7 @@ import { vue } from '@codemirror/lang-vue'
 import { wast } from '@codemirror/lang-wast'
 import { xml } from '@codemirror/lang-xml'
 import { yaml } from '@codemirror/lang-yaml'
+import { hcl } from 'codemirror-lang-hcl'
 
 // Now from the legacy modes package
 import { c, csharp, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
@@ -121,6 +122,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: wast().language, selectors: ['wast'] },
   { mode: xml().language, selectors: ['xml'] },
   { mode: yaml().language, selectors: [ 'yaml', 'yml' ] },
+  { mode: hcl().language, selectors: [ 'hcl', 'terraform' ] },
   {
     // Hear me out: There may be no mermaid syntax highlighting, BUT we need it
     // to be inside a 'FencedCode' Syntax node so that our renderer can pick it

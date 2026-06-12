@@ -68,6 +68,9 @@ export default [
       // Enforce proper spacing in objects ({ a: 1 } instead of {a:1})
       '@stylistic/object-curly-spacing': [ 'error', 'always' ],
       '@stylistic/space-before-function-paren': [ 'error', 'always' ],
+      '@stylistic/spaced-comment': [
+        'error', 'always', { exceptions: ['/'], markers: ['/'] }
+      ],
 
       /////////////////////// END STYLISTIC RULES //////////////////////////////
 
@@ -189,7 +192,7 @@ export default [
       // provided HTML to only contain safe tags. The only stuff we currently
       // put in there is translation strings, which we sanitise in the trans()
       // function. NOTE to keep this on my mind!
-      'vue/no-v-html': 'off'
+      'vue/no-v-html': 'error'
 
       ////////////////////////// END VUE RULES /////////////////////////////////
     }

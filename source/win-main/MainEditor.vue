@@ -50,6 +50,7 @@ import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
+import type { FileContentSearchResult } from 'source/app/service-providers/search'
 
 const ipcRenderer = window.ipc
 
@@ -140,7 +141,7 @@ ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: Doc
   } else if (event === DP_EVENTS.FILE_SAVED && context.filePath === props.file.path) {
     // The file has been saved to disk. This means we should probably update the
     // descriptor to know of, e.g., library changes.
-    ipcRenderer.invoke('application', { command: 'get-descriptor', payload: props.file.path })
+    ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: props.file.path })
       .then((descriptor: MDFileDescriptor|CodeFileDescriptor|undefined) => {
         if (descriptor === undefined) {
           throw new Error(`Could not swap document: Could not retrieve descriptor for path ${props.file.path}!`)
@@ -182,6 +183,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (currentEditor !== null) {
     props.persistentStateMap.set(props.file.path, currentEditor.persistentState)
+    // Clear out the table of contents before unmounting the component.
+    windowStateStore.tableOfContents = undefined
     currentEditor.unmount()
   }
 })
@@ -244,6 +247,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
       replacements: editor.autoCorrect.replacements
     },
     autocompleteSuggestEmojis: editor.autocompleteSuggestEmojis,
+    snippetAutocompleteTriggerCharacter: editor.snippetAutocompleteTriggerCharacter,
     imagePreviewWidth: display.imageWidth,
     imagePreviewHeight: display.imageHeight,
     boldFormatting: editor.boldFormatting,
@@ -531,7 +535,7 @@ async function loadDocument (): Promise<void> {
 
   maybeHighlightSearchResults()
 
-  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: props.file.path })
+  const descriptor: MDFileDescriptor|CodeFileDescriptor|undefined = await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: props.file.path })
   if (descriptor === undefined) {
     throw new Error(`Could not swap document: Could not retrieve descriptor for path ${props.file.path}!`)
   }
@@ -663,7 +667,7 @@ function maybeHighlightSearchResults (): void {
   // Construct CodeMirror.Ranges from the results
   const rangesToHighlight = []
   // NOTE: We have to filter out "whole-file" results
-  for (const res of result.result.filter(res => res.line > -1)) {
+  for (const res of result.result.filter((res): res is FileContentSearchResult => res.type === 'content' && res.line > -1)) {
     const startIdx = currentEditor.instance.state.doc.line(res.line + 1).from
     for (const range of res.ranges) {
       const { from, to } = range

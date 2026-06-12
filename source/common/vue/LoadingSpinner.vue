@@ -100,5 +100,5 @@ const ticks = computed(() => {
 const duration = computed(() => ticks.value.length * ANIMATION_FPS)
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 </style>

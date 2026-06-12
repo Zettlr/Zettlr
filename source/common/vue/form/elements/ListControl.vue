@@ -3,7 +3,7 @@
     On macOS Big Sur, this represents a TableView
   -->
   <div class="table-view form-control">
-    <label v-if="label !== ''" v-html="label"></label>
+    <label v-if="label !== ''">{{ label }}</label>
     <TextControl
       v-if="searchable"
       v-model="query"

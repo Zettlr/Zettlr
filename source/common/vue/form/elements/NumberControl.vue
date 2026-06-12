@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{ inline: inline === true, 'form-control': true }">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <div v-if="reset" class="input-button-group">
       <input
         v-bind:id="fieldID"
@@ -122,7 +122,7 @@ function sanitizeValue (newValue: number|''): number {
 <style lang="less">
 body.darwin {
   label {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, sans-serif;
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{ 'switch-group': true, stretch }">
-    <label v-if="labelPosition === 'before' && label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="labelPosition === 'before' && label" v-bind:for="fieldID">{{ label }}</label>
     <label class="switch">
       <input
         v-bind:id="fieldID"
@@ -10,7 +10,7 @@
       >
       <div class="toggle"></div>
     </label>
-    <label v-if="labelPosition !== 'before' && label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="labelPosition !== 'before' && label" v-bind:for="fieldID">{{ label }}</label>
   </div>
 </template>
 
@@ -78,7 +78,7 @@ body {
 
     label {
       line-height: @input-size;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: system-ui, sans-serif;
     }
 
     label.switch {

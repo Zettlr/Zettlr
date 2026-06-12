@@ -123,20 +123,6 @@ body {
       margin: 10px 0;
     }
 
-    // Bibliography entries
-    div.csl-bib-body {
-      div.csl-entry {
-        display: list-item;
-        list-style-type: square;
-        margin: 1em 0.2em 1em 1.8em;
-        font-size: 80%;
-        user-select: text;
-        cursor: text;
-      }
-
-      a { color: var(--blue-0); }
-    }
-
     // Table of Contents entries
     div.toc-entry-container {
       // Clever calculation based on the data-level property

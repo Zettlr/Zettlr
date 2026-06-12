@@ -17,7 +17,7 @@
  */
 
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language'
-import { EditorState, MapMode, Prec, StateField, type ChangeSpec, type Range } from '@codemirror/state'
+import { EditorState, MapMode, Prec, StateField, EditorSelection, type ChangeSpec, type Range } from '@codemirror/state'
 import { EditorView, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 import markdownParser from '../parser/markdown-parser'
 import { tableEditorKeymap } from '../keymaps/table-editor'
@@ -27,6 +27,7 @@ import { getMainEditorThemes } from '../editor-extension-sets'
 import { darkMode } from '../theme/dark-mode'
 import { markdownSyntaxHighlighter } from '../theme/syntax'
 import { defaultKeymap } from '../keymaps/default'
+import { clickListeners } from '../plugins/click-listeners'
 
 /**
  * A transaction filter that ensures that any changes made to the view that
@@ -65,21 +66,37 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
   // proper boundaries (they include any whitespace that was in the cell
   // before the view got instantiated, but exclude any whitespace added to the
   // cell after the fact.)
+  const mappedFrom = tr.changes.mapPos(cellFrom, -1, MapMode.TrackBefore)
+  const mappedTo =  tr.changes.mapPos(cellTo, 1, MapMode.TrackAfter)
+
+  const wasDeleted = mappedFrom === null || mappedTo === null
+
+  if (wasDeleted) {
+    return [] // Disallow this transaction
+  }
+
+  let newSelection = tr.selection
   if (tr.selection !== undefined) {
-    const { from, to } = tr.selection.main
+    // Check if ANY range (not just the main selection) exceeds the cell
+    // boundaries. If so, clamp all ranges to the cell's bounds.
+    const anyOutOfBounds = tr.selection.ranges.some(
+      range => range.from < mappedFrom || range.to > mappedTo
+    )
 
-    const mappedFrom = tr.changes.mapPos(cellFrom, -1, MapMode.TrackBefore)
-    const mappedTo =  tr.changes.mapPos(cellTo, 1, MapMode.TrackAfter)
-
-    const wasDeleted = mappedFrom === null || mappedTo === null
-
-    if (wasDeleted || from < mappedFrom || to > mappedTo) {
-      console.log(`Disallowing transaction: Selection: ${from} - ${to} | Cell: ${cellFrom} - ${cellTo} | Mapped: ${mappedFrom} - ${mappedTo}`)
-      return [] // Disallow this transaction
+    if (anyOutOfBounds) {
+      const clampedRanges = tr.selection.ranges.map(range => {
+        const clampedAnchor = Math.max(mappedFrom, Math.min(mappedTo, range.anchor))
+        const clampedHead = Math.max(mappedFrom, Math.min(mappedTo, range.head))
+        return EditorSelection.range(clampedAnchor, clampedHead)
+      })
+      newSelection = EditorSelection.create(clampedRanges, tr.selection.mainIndex)
     }
   }
 
   if (!tr.docChanged) {
+    if (newSelection !== tr.selection) {
+      return { ...tr, selection: newSelection }
+    }
     return tr
   }
 
@@ -96,7 +113,7 @@ const ensureBoundariesFilter = EditorState.transactionFilter.of((tr) => {
     }
   })
 
-  return { ...tr, changes: safeChanges }
+  return { ...tr, changes: safeChanges, selection: newSelection }
 })
 
 interface hiddenSpanState {
@@ -232,7 +249,8 @@ export function createSubviewForCell (
           cellRange: [ cellRange.from, cellRange.to ]
         }
       }),
-      ensureBoundariesFilter
+      ensureBoundariesFilter,
+      EditorView.domEventHandlers(clickListeners())
     ]
   })
 

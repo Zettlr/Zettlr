@@ -3,6 +3,7 @@
     <div
       v-bind:class="{
         'tree-item': true,
+        'collapsed': collapsed && item.type === 'directory',
         [item.type]: true,
         [item.type === 'directory' ? item.settings.color ?? '' : '']: true,
         selected: isSelected,
@@ -180,13 +181,13 @@ import {
   hasMSOfficeExt,
   hasOpenOfficeExt,
   hasPDFExt,
-  hasExt,
-  hasMdOrCodeExt
+  hasExt
 } from 'source/common/util/file-extention-checks'
 import { isDotFile } from 'source/common/util/ignore-path'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { getSorter } from 'source/common/util/directory-sorter'
 import type { WritingTarget } from 'source/app/service-providers/targets'
+import { filterDescriptorChildren } from './util/filter-children'
 
 const ipcRenderer = window.ipc
 
@@ -360,7 +361,8 @@ const filteredChildren = computed(() => {
     return []
   }
 
-  const { files, attachmentExtensions } = configStore.config
+  const { files } = configStore.config
+  const filter = filterDescriptorChildren()
 
   return children.value
     // Ensure we only consider filtered files
@@ -377,30 +379,7 @@ const filteredChildren = computed(() => {
         return child.type === 'directory' && (files.dotFiles.showInFilemanager || !isDotFile(child.name))
       }
 
-      // Filter files based on our settings
-      if (child.type === 'directory') {
-        return files.dotFiles.showInFilemanager || !isDotFile(child.name)
-      }
-
-      // We have to check for hidden files first so they are not
-      // included if they end in one of the accepted extensions
-      if (isDotFile(child.name)) {
-        return files.dotFiles.showInFilemanager
-      } else if (hasImageExt(child.path)) {
-        return files.images.showInFilemanager
-      } else if (hasPDFExt(child.path)) {
-        return files.pdf.showInFilemanager
-      } else if (hasMSOfficeExt(child.path)) {
-        return files.msoffice.showInFilemanager
-      } else if (hasOpenOfficeExt(child.path)) {
-        return files.openOffice.showInFilemanager
-      } else if (hasDataExt(child.path)) {
-        return files.dataFiles.showInFilemanager
-      } else if (hasMdOrCodeExt(child.path)) {
-        return true
-      } else {
-        return hasExt(child.path, attachmentExtensions) // Any other "other" file should be excluded
-      }
+      return filter(child)
     })
 })
 
@@ -473,6 +452,14 @@ const isSelected = computed(() => {
     return selectedDir.value === props.item.path
   } else {
     return selectedFile.value?.path === props.item.path
+  }
+})
+
+watch(isSelected, (value, oldValue) => {
+  // Scrolls this item into view, but only if it has just been selected and is
+  // not yet visible.
+  if (value !== oldValue && value) {
+    scrollIntoView()
   }
 })
 
@@ -563,7 +550,26 @@ onMounted(async () => {
     // of children.
     fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
   })
+
+  // Initially scroll into view if this item is selected
+  if (isSelected.value) {
+    scrollIntoView()
+  }
 })
+
+/**
+ * Scrolls this item into view
+ */
+function scrollIntoView () {
+  // We need to wait, so that the app can render the displayText element.
+  nextTick().then(() => {
+    if (displayText.value === null) {
+      return
+    }
+
+    displayText.value.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }).catch(err => console.error(err))
+}
 
 async function fetchChildren (): Promise<void> {
   children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
@@ -736,6 +742,14 @@ body {
       display: flex;
       margin: 8px 0px;
 
+      // If a directory is open, ensure the containing folder remains sticked to
+      // the top as the user scrolls through its (possibly long) contents.
+      &.directory:not(.collapsed) {
+        position: sticky;
+        top: 0px;
+        z-index: 1;
+      }
+
       // Available directory colors (the colors are CSS variables specified
       // in WindowChrome.vue and string-values defined in PopoverDirProps.vue)
       &.blue { color: var(--accent-blue); }
@@ -822,6 +836,10 @@ body.darwin {
   .tree-item {
     color: rgb(53, 53, 53);
 
+    &.directory:not(.collapsed) {
+      background-color: #f5f5f5;
+    }
+
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
 
@@ -847,13 +865,16 @@ body.darwin {
   &.dark {
     .tree-item {
       color: rgb(240, 240, 240);
+
+      &.directory:not(.collapsed) {
+        background-color: #1e1e1e;
+      }
     }
   }
 }
 
 body.win32 {
   .tree-item {
-
     .display-text {
       &.highlight {
         // This class is applied on drag & drop
@@ -861,12 +882,19 @@ body.win32 {
         color: var(--system-accent-color-contrast, --c-primary-contrast);
       }
     }
+
+    &.directory:not(.collapsed) {
+      background-color: #fafafa;
+    }
+  }
+
+  &.dark .tree-item.directory:not(.collapsed) {
+    background-color: #1e1e28;
   }
 }
 
 body.linux {
   .tree-item {
-
     .display-text {
       &.highlight {
         // This class is applied on drag & drop
@@ -874,6 +902,14 @@ body.linux {
         color: var(--system-accent-color-contrast, --c-primary-contrast);
       }
     }
+
+    &.directory:not(.collapsed) {
+      background-color: #fafafa;
+    }
+  }
+
+  &.dark .tree-item.directory:not(.collapsed) {
+    background-color: #282832;
   }
 }
 </style>

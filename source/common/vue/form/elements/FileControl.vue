@@ -1,6 +1,6 @@
 <template>
   <div class="form-control">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <div class="input-button-group">
       <TextControl
         v-bind:id="fieldID"
@@ -129,7 +129,7 @@ body {
 }
 body.darwin {
   label {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, sans-serif;
   }
 }
 </style>

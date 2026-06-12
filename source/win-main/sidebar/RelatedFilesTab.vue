@@ -134,7 +134,7 @@ async function recomputeRelatedFiles (): Promise<void> {
     return
   }
 
-  const descriptor: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor|undefined = await ipcRenderer.invoke('application', {
+  const descriptor: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor|undefined = await ipcRenderer.invoke('fsal', {
     command: 'get-descriptor',
     payload: lastActiveFile.value.path
   })

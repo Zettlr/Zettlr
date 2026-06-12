@@ -38,10 +38,22 @@ declare module '*.wav' {
   const filePath: string
   export default filePath
 }
+declare module '*.glsl' {
+  const content: string
+  export default content
+}
+declare module '*.css' {
+  const filePath: string
+  export default filePath
+}
 
-declare module 'vue-virtual-scroller'
+// Declare modules which don't offer types
 declare module '@joplin/turndown'
 declare module 'joplin-turndown-plugin-gfm'
+declare module '@replit/codemirror-emacs'
+declare module '@replit/codemirror-lang-nix'
+// Declare all legacy-modes plugins at once
+declare module '@codemirror/legacy-modes/*'
 
 /**
  * DECLARE ELECTRON-FORGE INSERTION VARIABLES

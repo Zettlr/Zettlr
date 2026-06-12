@@ -38,6 +38,8 @@ import { dialog } from 'electron'
 import { closeSplashScreen, showSplashScreen, updateSplashScreen } from './util/splash-screen'
 import path from 'path'
 import { trans } from 'source/common/i18n-main'
+import LongRunningTaskProvider from './service-providers/long-running-tasks'
+import { SearchProvider } from './service-providers/search'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -90,6 +92,8 @@ export class AppServiceContainer {
   private readonly _windowProvider: WindowProvider
   private readonly _fsal: FSAL
   private readonly _documentManager: DocumentManager
+  private readonly _lrtProvider: LongRunningTaskProvider
+  private readonly _searchProvider: SearchProvider
   private _isBooted: boolean
 
   constructor () {
@@ -100,7 +104,8 @@ export class AppServiceContainer {
     // First section: Crucial providers
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
-    this._fsal = new FSAL(this._logProvider, this._configProvider)
+    this._lrtProvider = new LongRunningTaskProvider(this._logProvider) // Not really crucial, but the FSAL needs access
+    this._fsal = new FSAL(this._logProvider, this._configProvider, this._lrtProvider)
 
     // Now according to their dependencies
     this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
@@ -113,6 +118,7 @@ export class AppServiceContainer {
 
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._configProvider, this._fsal)
+    this._searchProvider = new SearchProvider(this._logProvider, this._fsal, this._configProvider)
     
     // The document provider accesses only the FSAL in its constructor
     this._documentManager = new DocumentManager(this)
@@ -176,6 +182,7 @@ export class AppServiceContainer {
 
     await this._informativeBoot(this._targetProvider, 'TargetProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
+    await this._informativeBoot(this._searchProvider, 'SearchProvider')
 
     // Boot the commands before the window provider to ensure the handler for
     // application requests from windows is registered before any window opens
@@ -189,6 +196,8 @@ export class AppServiceContainer {
     await this._informativeBoot(this._documentManager, 'DocumentManager')
     await this._informativeBoot(this._menuProvider, 'MenuProvider')
     await this._informativeBoot(this._updateProvider, 'UpdateProvider')
+
+    await this._informativeBoot(this._lrtProvider, 'Long-Running Tasks Provider')
 
     this._menuProvider.set() // TODO
 
@@ -212,105 +221,33 @@ export class AppServiceContainer {
 
   public get isBooted () { return this._isBooted }
 
-  /**
-   * Returns the appearance provider
-   */
+  // Getters for the various providers
   public get appearance (): AppearanceProvider { return this._appearanceProvider }
-
-  /**
-   * Returns the assets provider
-   */
   public get assets (): AssetsProvider { return this._assetsProvider }
-
-  /**
-   * Returns the citeproc provider
-   */
   public get citeproc (): CiteprocProvider { return this._citeprocProvider }
-
-  /**
-   * Returns the config provider
-   */
   public get config (): ConfigProvider { return this._configProvider }
-
-  /**
-   * Returns the CSS provider
-   */
   public get css (): CssProvider { return this._cssProvider }
-
-  /**
-   * Returns the dictionary provider
-   */
   public get dictionary (): DictionaryProvider { return this._dictionaryProvider }
-
-  /**
-   * Returns the link provider
-   */
   public get links (): LinkProvider { return this._linkProvider }
-
-  /**
-   * Returns the log provider
-   */
   public get log (): LogProvider { return this._logProvider }
-
-  /**
-   * Returns the menu provider
-   */
   public get menu (): MenuProvider { return this._menuProvider }
-
-  /**
-   * Returns the recent docs provider
-   */
   public get recentDocs (): RecentDocumentsProvider { return this._recentDocsProvider }
-
-  /**
-   * Returns the stats provider
-   */
   public get stats (): StatsProvider { return this._statsProvider }
-
-  /**
-   * Returns the tags provider
-   */
   public get tags (): TagProvider { return this._tagProvider }
-
-  /**
-   * Returns the target provider
-   */
   public get targets (): TargetProvider { return this._targetProvider }
-
-  /**
-   * Returns the tray provider
-   */
   public get tray (): TrayProvider { return this._trayProvider }
-
-  /**
-   * Returns the update provider
-   */
   public get updates (): UpdateProvider { return this._updateProvider }
-
-  /**
-   * Returns the window manager
-   */
   public get windows (): WindowProvider { return this._windowProvider }
-
-  /**
-   * Returns the FSAL
-   */
   public get fsal (): FSAL { return this._fsal }
-
-  /**
-   * Returns the DocumentManager
-   */
   public get documents (): DocumentManager { return this._documentManager }
-
-  /**
-   * Returns the command provider
-   */
   public get commands (): CommandProvider { return this._commandProvider }
+  public get lrt (): LongRunningTaskProvider { return this._lrtProvider }
 
   /**
    * Prepares quitting the app by shutting down the service providers
    */
   async shutdown (): Promise<void> {
+    await this._safeShutdown(this._lrtProvider, 'Long-running Task Provider')
     await this._safeShutdown(this._commandProvider, 'CommandProvider')
     await this._safeShutdown(this._documentManager, 'DocumentManager')
     await this._safeShutdown(this._fsal, 'FSAL')
@@ -323,6 +260,7 @@ export class AppServiceContainer {
     await this._safeShutdown(this._targetProvider, 'TargetProvider')
     await this._safeShutdown(this._linkProvider, 'LinkProvider')
     await this._safeShutdown(this._tagProvider, 'TagProvider')
+    await this._safeShutdown(this._searchProvider, 'SearchProvider')
     await this._safeShutdown(this._menuProvider, 'MenuProvider')
     await this._safeShutdown(this._recentDocsProvider, 'RecentDocsProvider')
     await this._safeShutdown(this._dictionaryProvider, 'DictionaryProvider')

@@ -11,7 +11,7 @@
       v-bind:aria-pressed="isStateOneActive"
       v-bind:class="{
         'active': isStateOneActive,
-        [control.activeClass]: control.activeClass !== undefined && isStateOneActive
+        [control.activeClass ?? '']: control.activeClass !== undefined && isStateOneActive
       }"
       v-bind:title="control.stateOne.title"
       v-on:click="toggle('stateOne')"
@@ -24,7 +24,7 @@
       v-bind:aria-pressed="isStateTwoActive"
       v-bind:class="{
         'active': isStateTwoActive,
-        [control.activeClass]: control.activeClass !== undefined && isStateTwoActive
+        [control.activeClass ?? '']: control.activeClass !== undefined && isStateTwoActive
       }"
       v-bind:title="control.stateTwo.title"
       v-on:click="toggle('stateTwo')"
@@ -57,6 +57,7 @@ import { ref, computed, watch } from 'vue'
 export interface ToolbarThreeWayControl {
   type: 'three-way-toggle'
   id?: string
+  activeClass?: string
   stateOne: {
     id: string
     title: string
@@ -69,7 +70,7 @@ export interface ToolbarThreeWayControl {
   }
   initialState: string|undefined
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 const props = defineProps< { control: ToolbarThreeWayControl }>()
 const emit = defineEmits<(e: 'toggle', value: string|undefined) => void>() // TODO

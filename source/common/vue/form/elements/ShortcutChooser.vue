@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{ 'inline': inline, 'form-control': true }">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <div v-if="reset !== false" class="input-button-group">
       <input
         v-bind:id="fieldID"
@@ -214,6 +214,5 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less">
-//
+<style lang="css" scoped>
 </style>

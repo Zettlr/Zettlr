@@ -31,6 +31,8 @@ jobs:
       with:
         # Always fetch the branch that triggered the event (develop or master)
         ref: ${{ github.ref }}
+    - name: Enable Yarn 4.x
+      run: corepack enable
     - name: Setup NodeJS ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v6
       with:

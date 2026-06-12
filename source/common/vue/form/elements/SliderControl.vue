@@ -1,6 +1,6 @@
 <template>
   <div class="slider-group">
-    <label v-if="label !== ''" v-html="label"></label>
+    <label v-if="label !== ''">{{ label }}</label>
     <input
       v-model.number="internalModel"
       type="range"

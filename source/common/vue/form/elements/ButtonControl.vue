@@ -47,5 +47,5 @@ const props = defineProps<{
 const fieldId = computed<string>(() => `form-button${props.name}`)
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 </style>

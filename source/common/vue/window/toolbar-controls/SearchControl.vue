@@ -39,8 +39,9 @@ const ipcRenderer = window.ipc
 export interface ToolbarSearchControl {
   type: 'search'
   id?: string
+  placeholder?: string
   // Allow arbitrary properties that we ignore
-  [key: string]: any
+  [key: string]: unknown
 }
 
 const props = defineProps<{ control: ToolbarSearchControl }>()

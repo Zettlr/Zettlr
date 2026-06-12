@@ -265,7 +265,7 @@ function loadUrl (url: string) {
 
 <style lang="less">
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, sans-serif;
   color: #333;
   background-color: white;
   -webkit-app-region: drag;

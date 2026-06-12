@@ -341,6 +341,17 @@ export interface Emphasis extends MDNode {
 }
 
 /**
+ * Strikethrough text
+ */
+export interface Strikethrough extends MDNode {
+  type: 'Strikethrough'
+  /**
+   * The children of this node
+   */
+  children: ASTNode[]
+}
+
+/**
  * This node represents a YAML frontmatter. It shares a lot with the FencedCode
  * type, i.e. the YAML code will not be parsed into an object.
  */
@@ -510,7 +521,7 @@ export interface GenericNode extends MDNode {
 export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefLabel
 | LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
 | Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
-| InlineCode | YAMLFrontmatter | Emphasis | Table | TableCell | TableRow
+| InlineCode | YAMLFrontmatter | Emphasis | Strikethrough | Table | TableCell | TableRow
 | ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
@@ -983,6 +994,19 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Superscript = {
         type: 'Superscript',
         name: 'Superscript',
+        attributes: {},
+        from: node.from,
+        to: node.to,
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
+        children: []
+      }
+
+      return parseChildren(astNode, node, markdown)
+    }
+    case 'Strikethrough': {
+      const astNode: Strikethrough = {
+        type: 'Strikethrough',
+        name: 'Strikethrough',
         attributes: {},
         from: node.from,
         to: node.to,

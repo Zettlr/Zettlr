@@ -6,7 +6,7 @@
       <email>ivahnenko.bohdana@knu.ua</email>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-01-10T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -401,8 +401,8 @@
     <term name="collection-number">випуск</term>
     <term name="edition">видання</term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>примітка</single>
+      <multiple>примітки</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -437,10 +437,7 @@
     </term>
     <term name="collection-number" form="short">вип.</term>
     <term name="edition" form="short">вид.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">прим.</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>

@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{ inline: inline === true, 'form-control': true }">
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <select
       v-bind:id="fieldID"
       v-model="inputValue"
@@ -61,5 +61,5 @@ watch(inputValue, () => {
 const fieldID = computed<string>(() => 'form-select-' + (props.name ?? ''))
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 </style>

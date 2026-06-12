@@ -87,6 +87,10 @@ class ImageWidget extends WidgetType {
     super()
   }
 
+  eq (other: ImageWidget) {
+    return this.imageTitle === other.imageTitle && this.imageUrl === other.imageUrl && this.altText === other.altText
+  }
+
   get estimatedHeight (): number {
     return IMAGE_HEIGHT_CACHE.get(this.resolvedImageUrl) ?? -1
   }

@@ -109,8 +109,9 @@ body:
     attributes:
       label: Additional Information
       description: |
-        If applicable, feel free to include more info, such as log outputs or
-        error messages you are seeing.
+        Use this field to provide log output and screenshots, if applicable. If
+        the bug can be seen visually, providing a screenshot will drastically
+        reduce the time it takes before we understand what the issue is.
   - type: markdown
     attributes:
       value: |

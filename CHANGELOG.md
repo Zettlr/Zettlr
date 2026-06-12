@@ -2,11 +2,176 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- **Feature**: Allow changing the trigger character for snippet (and emoji)
+  autocomplete. Until now, this was hard-coded to `:` (which is still the
+  default). However, since that interferes with the way French speakers use the
+  colon character (`Pour exemple : cette.`), we now allow different trigger
+  characters, relieving the colon where necessary. Currently supported are `/`
+  and `%` as alternatives (#5185; #6325).
+- **Feature**: The tutorial is now also available in Portuguese for new users
+  (#6373).
+- **Feature**: The "Remove line breaks" transformation in the editor is now also
+  available via the keyboard shortcut `Cmd/Ctrl-Alt-J` (#5913).
+- **Change**: This release brings many improvements to the full text search
+  (#6339):
+  - The full text search was completely rewritten to improve performance by 50%
+    to 100%.
+  - The autocompletes for both previous searches and the restrict-to-folder
+    functionalities have been drastically improved and work reliably (#5686).
+  - Ability to switch between case-insensitive and case-sensitive searches.
+  - Improvements in the presentation and layout of search results.
+- **Change**: On macOS, the default setting for window vibrancy is now off. This
+  makes the file manager opaque, but improves visual design with the new sticky
+  folder headers.
+- Fixed missing click handlers for clicking links in tables (#4694).
+- Fixed an issue that would sometimes open the same link twice.
+- The file manager now uses tabular digits for displaying numbers in filenames.
+- Fixed an issue where code elements had a background color that overlaid the
+  selection (#6328).
+- Fixed a wrong font selection for comments.
+- Fixed strikethrough-elements no longer being stricken-through (#6330).
+- Fixed triple-clicks within tables to select entire table cells (#6344; #6100).
+- Add "Curl quotes" text transform to convert straight quotes to curly (smart)
+  quotes, the inverse of the existing "Straighten quotes" transform (#6259).
+- The main window's title now includes the current active file's title. This
+  allows automation that depends on the window title (#6283).
+- The table of contents now clears out when the last file of the editor is
+  closed (#6251).
+- Allow `Escape` to close the search panel regardless of whether it is currently
+  focused (#2970).
+- Moved the editor "Indentation," "Font size," and "Autocomplete" settings into
+  their own preferences groups.
+- The menubar on Windows is no longer styled using the system's accent color to
+  reduce potential distractions for users.
+- Update Brazilian (`pt-BR`) translations (#6348).
+- Fixed TableEditor swap rows/columns commands on macOS. Until now, they were
+  mapped to `Ctrl+Shift+Arrow`, which was misaligned with the main keymap.
+- Fixed an issue in the TableEditor where adding new rows could increase the
+  amount of surrounding whitespace in the newly inserted rows (#6369).
+- Fixed the alignment command for the TableEditor which previously would clear
+  out the entire column, if the column had no alignment set.
+- Fixed a regression from the previous version that disabled the references list
+  CSS (#6380).
 
 ## Under the Hood
 
-(nothing here)
+- Upgrade Electron to `v42.3.3`.
+- Upgrade Pandoc to `v3.10`.
+- Pinned a transitive dependency of electron forge, `yauzl` to fix a bug on
+  newer Node versions (context: https://github.com/electron/forge/issues/4277).
+- Migrate the `openAttachment` utility from `got` to `ky`.
+- Migrate the LanguageTool API utility from `got` to `ky`.
+- Enforce proper comment styling.
+- The `StartupWMClass` has been switched back to lowercase, since apparently the
+  build step has correctly reverted the binary name to lowercase on Linux.
+- Handle symbolic links in chokidar watcher explicitly.
+
+# 4.5.0
+
+## GUI and Functionality
+
+- **Feature**: Long-running background tasks are now visually indicated with a
+  toolbar icon. This allows users to check on longer-running tasks such as
+  project exports or the re-indexing of new workspaces and observe the progress
+  as it happens.
+- Add HCL/Terraform fenced code block support (#6302).
+- Fixed Mermaid Chart labels not showing up (#6313).
+- Fixed icons in the statusbar not working.
+- Update Spanish (`es-ES`) translations (#6320).
+
+## Under the Hood
+
+- Updated Electron to `v41.3.0`.
+- Update `vue-virtual-scroller` to `v3.0.0`.
+- Fixed an issue where the config provider would not emit the old version
+  correctly (context: #6311).
+- **Breaking**: Refactored the editor themes (#6229). Now styling the app with
+  Custom CSS is easier and should work more straight forward, since there are
+  many CSS variables that you can peruse to adjust groups of elements at once.
+  **Note that this change might break your Custom CSS**. Make sure to check
+  anything after setup, and adjust it according to your liking.
+- Centralized DOMPurify functionality and default configuration in a new utility
+  function, that also allows icons using `cds-icon`.
+- Switch from `ts-node` to `tsx` for running unit tests.
+- Explicitly declare Zettlr as a `CommonJS` project.
+- Change the `Object.create(null)` contraption to hold BibTeX attachments to a
+  regular object to simplify the structure and unit tests.
+
+# 4.4.0
+
+## GUI and Functionality
+
+- **Feature**: The app now remembers if the file manager was open or closed
+  across restarts and applies this setting on each start (#3679).
+- **Feature**: The names of open folders in the file manager tree will now
+  remain sticked to the top of the file manager as you scroll through its list
+  of children. This is especially helpful in the "combined" file manager mode
+  with folders containing many files and subfolders (such as reading notes or
+  Zettelkasten folders).
+- Add strikethrough to the Markdown AST parser (#6263).
+- Fixed Markdown-to-HTML output to generate more valid HTML. This makes
+  comparisons with DOM-inserted HTML deterministic and should reduce the amount
+  of updates especially for complex widgets such as tables by a lot.
+- Reduced amount of image updates in the editor. This may increase performance
+  especially for long documents with many images.
+- Fixed containing directories not uncollapsing when a containing file was made
+  active.
+- Upon switching between files, the file tree now consistently scrolls to the
+  affected file, making working with larger workspaces easier.
+- The scroll-behavior for scrolling files into view has changed from instant to
+  `smooth`.
+- Fixed a small bug that could throw off switching between different file
+  manager modes.
+- Fixed the cursor scroll margin again. This means that, after years of it not
+  working, as you type there will now be some margin towards the top or bottom
+  of the editor window, preventing the cursor to "stick" to the edge of the
+  editor.
+- Update `pt-PT` translations (#6282).
+- Fixed an issue that would lead to unexpected navigation behavior across the
+  file manager (#4329).
+- Fixed an issue where the file list would follow slightly different filtering
+  rules than the file tree due to different function implementations.
+- Harmonized font usage to System fonts across the app (#5125).
+- Improve Mermaid chart error reporting (#6291).
+
+## Under the Hood
+
+- Switch from `sanitize-html` to `DOMPurify` for HTML sanitization, since the
+  latter has much, much less issues with various types of exotic XML-type tags
+  such as MathML.
+- Updated Electron to `v41.1.1`.
+- Security: Disallow any and all inline-JavaScript across all browser windows.
+- Security: Enforce loading remote resources using HTTPS.
+- Security: Generously spread HTML sanitization across the application. The
+  following changes have been made:
+  - Moved HTML sanitization to the edge (directly to the injection sinks).
+  - Removed HTML sanitization from the translation helpers. The reason is that
+    DOMPurify does not work out of the box in the main process, so we also
+    removed the sanitization from the renderer-translation helper. However, this
+    is safe since we do not insert the translations into HTML injection sinks.
+    Also, this way we can apply DOM sanitization at the edge, and no longer at
+    the beginning of the chain.
+  - This also means that HTML is no longer allowed in translation strings.
+  - Armed the `v-html`-rule again, and removed all `v-html` directives, and in
+    instances where this was not possible, explicitly disable this with a
+    reason.
+
+# 4.3.1
+
+## GUI and Functionality
+
+- Update `pt-PT` translations (#6262).
+- Translated the tutorial to Japanese (#6260).
+
+## Under the Hood
+
+- Escape file and directory paths passed to `runShellCommand`.
+- Update Pandoc to `v3.9.0.2`.
+- Updated some dependencies.
+- Removed duplicate FSAL descriptor fetching.
+- Improved resiliency of the descriptor fetching; now if a renderer requests an
+  array of paths, the FSAL does not fail. Instead, it simply omits those
+  descriptors from the return array and logs an error (context: #6272).
 
 # 4.3.0
 

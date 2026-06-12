@@ -24,6 +24,7 @@ import type { FindFileAndReturnMetadataResult } from 'source/app/service-provide
 import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import makeValidUri from 'source/common/util/make-valid-uri'
 import type { ForceOpenAPI } from 'source/app/service-providers/commands/force-open'
+import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 const ipcRenderer = window.ipc
 
@@ -100,7 +101,6 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
     metadata.previewMarkdown,
     {
       zknLinkFormat,
-      sanitizeHTML: true,
       onCitation: window.getCitationCallback(CITEPROC_MAIN_DB),
       // Convert the image links to absolute (if necessary)
       onImageSrc (src) {
@@ -115,7 +115,7 @@ function getPreviewElement (metadata: FindFileAndReturnMetadataResult, linkConte
   )
     .then(html => {
       // ... and then apply it to the content element.
-      content.innerHTML = html
+      content.innerHTML = sanitizeHTML(html)
     })
     .catch(err => console.error(err))
 

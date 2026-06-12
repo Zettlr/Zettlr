@@ -15,7 +15,7 @@
       <name>Michal Hoftich</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-01-10T00:00:07+00:00</updated>
+    <updated>2026-02-04T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -413,8 +413,8 @@
       <multiple>vydání</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>poznámka</single>
+      <multiple>poznámky</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -449,10 +449,7 @@
     </term>
     <term name="collection-number" form="short">č.</term>
     <term name="edition" form="short">vyd.</term>
-    <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs.</multiple>
-    </term>
+    <term name="first-reference-note-number" form="short">pozn.</term>
     <term name="number" form="short">
       <single>no.</single>
       <multiple>nos.</multiple>
