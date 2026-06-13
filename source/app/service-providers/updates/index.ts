@@ -357,7 +357,7 @@ export default class UpdateProvider extends ProviderContract {
           this._windows.showUpdateWindow()
         }
       } else {
-        this._logger.info(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
+        this._logger.verbose(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
       }
     } catch (err: unknown) {
       if (err instanceof UpdateError) {

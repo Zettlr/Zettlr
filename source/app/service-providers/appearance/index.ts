@@ -14,7 +14,7 @@
  */
 
 import type ConfigProvider from '@providers/config'
-import { ipcMain, nativeTheme } from 'electron'
+import { ipcMain, nativeTheme, systemPreferences } from 'electron'
 import type LogProvider from '../log'
 import ProviderContract from '../provider-contract'
 import { getSystemColors } from '@common/util/get-system-colors'
@@ -55,6 +55,27 @@ export default class AppearanceProvider extends ProviderContract {
     this._endHour = 0
     this._endMin = 0
 
+    if (process.platform === 'darwin') {
+      // This listener is necessary for macOS to allow users to change the app
+      // theme at will without losing the benefit of having their app honor the
+      // "system" mode setting. Essentially, this is a "more truthful"
+      // notification when not the app, but the operating system switches its
+      // theme, since when we set the nativeTheme.themeSource to anything other
+      // than system, we lose the connection to the OS, and cannot otherwise
+      // infer what the OS theme currently is.
+      systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', (event) => {
+        // When we're here, this means that the OS has switched its interface
+        // theme from light or dark. If the user wants to stay in sync with the
+        // OS, we have to reset the themeSource to system, since this will then
+        // ensure that the auto-switching logic works again.
+        if (this._mode === 'system' && nativeTheme.themeSource !== 'system') {
+          this._logger.info('[Appearance Provider] Received an AppleInterfaceThemeChangedNotification, and detected that the themeSource was forcefully overridden. Switching back to system.')
+          // This will trigger a nativeTheme update.
+          nativeTheme.themeSource = 'system'
+        }
+      })
+    }
+
     /**
      * Subscribe to the updated-event in order to determine when the underlying
      * state has changed.
@@ -66,7 +87,7 @@ export default class AppearanceProvider extends ProviderContract {
       }
 
       const isDark = nativeTheme.shouldUseDarkColors
-      this._logger.info(`Switching to ${isDark ? 'dark' : 'light'} mode.`)
+      this._logger.info(`[Appearance Provider] Switching to ${isDark ? 'dark' : 'light'} mode.`)
       this._config.set('darkMode', isDark)
     })
 
@@ -78,6 +99,21 @@ export default class AppearanceProvider extends ProviderContract {
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
         this.recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
+        // Special handling for macOS: On Windows and Linux, setting the config
+        // value suffices, as the UI is entirely written in CSS and peruses the
+        // custom `.dark` body class. On macOS, however, there are plenty of
+        // native UI elements that would look off if we just set the UI to dark
+        // while the app itself would still be in light mode. Therefore, if the
+        // theme change has caused the nativeTheme setting to change (because of
+        // the 'system' mode), we have to forcefully override Chrome's internal
+        // UI theming as well.
+        // NOTE however that this means that we can never get out of this
+        // ourselves, as this will cause `shouldUseDarkColors` to always be in
+        // sync with the darkMode setting. To remedify this, we further
+        // subscribe to native macOS level notifications that will indicate to
+        // us as soon as the global theme has changed. This will be used to
+        // reset the themeSource back to system and bring the app back into
+        // sync.
         const shouldBeDark = nativeTheme.shouldUseDarkColors
         if (shouldBeDark !== darkMode) {
           // Explicitly set the appLevelAppearance in case the internal theme

@@ -301,7 +301,7 @@ You can pass additional [command-line switches](#command-line-switches) such as
 `--clear-cache` as well. They will be passed to the child process.
 
 Additionally, have a look at our
-[full development documentation](https://docs.zettlr.com/en/get-involved).
+[full development documentation](https://docs.zettlr.com/en/getting-started/get-involved/).
 
 #### `package`
 

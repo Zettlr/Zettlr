@@ -52,6 +52,15 @@
   out the entire column, if the column had no alignment set.
 - Fixed a regression from the previous version that disabled the references list
   CSS (#6380).
+- Fixed a regression from the previous version that could lead to visual
+  artifacts in the thin and expanded file manager modes when switching files
+  (#6385).
+- Fixed a long-standing bug that would cause the application to go out of sync
+  with the operating system's UI theme on macOS when the application is set to
+  "follow the OS" in terms of UI theme, but the user has manually changed the
+  theme to light or dark. In that case, the app would lose synchronization with
+  the macOS theme source, causing the auto-switching mechanism to fail when the
+  operating system's UI theme changes.
 
 ## Under the Hood
 
