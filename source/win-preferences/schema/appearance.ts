@@ -74,7 +74,7 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         model: 'darkModeEditor',
         inline: true,
         options: {
-          match: trans('Automatic'),
+          match: trans('Follow App'),
           light: trans('Light Theme'),
           dark: trans('Dark Theme')
         }
