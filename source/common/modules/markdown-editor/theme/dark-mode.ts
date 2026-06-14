@@ -131,12 +131,15 @@ const darkModeSwitcher = EditorState.transactionExtender.of(transaction => {
  *
  * @return  {boolean}                  Whether to use a dark theme
  */
-export function useDarkModeEditor (darkMode: boolean, editorTheme: 'match'|'dark'|'light' = 'match'): boolean {
-  return {
-    match: darkMode,
-    light: false,
-    dark: true,
-  }[editorTheme]
+export function useDarkModeEditor (appDarkMode: boolean, editorTheme: 'match'|'dark'|'light' = 'match'): boolean {
+  switch(editorTheme) {
+    case 'match':
+      return appDarkMode
+    case 'light':
+      return false
+    case 'dark':
+      return true
+  }
 }
 
 /**
