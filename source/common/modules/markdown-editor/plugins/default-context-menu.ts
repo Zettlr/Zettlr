@@ -19,6 +19,8 @@ import { EditorView } from '@codemirror/view'
 import { defaultMenu } from '../context-menu/default-menu'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import { posInNode } from '../util/node-in-selection'
+import { NODES } from '../parser/citation-parser'
+import { citationMenu } from '../context-menu/citation-menu'
 
 export const defaultContextMenu = EditorView.domEventHandlers({
   contextmenu (event, view) {
@@ -39,7 +41,7 @@ export const defaultContextMenu = EditorView.domEventHandlers({
       return true
     }
 
-    const citationNode = getCitationNodeFromPos(view, pos)
+    const citationNode = posInNode(pos, tree, [NODES.CITATION])
 
     if (citationNode !== null) {
       // We can show a citation menu

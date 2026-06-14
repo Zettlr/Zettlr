@@ -51,7 +51,7 @@ export function nodeInSelection (
  * @param   {-1|0|1}            side              How nodes shoud be entered.
  *                                                Passed to `SyntaxTree.resolveInner`
  *
- * @return  {boolean}                             `true` if the position touches a node.
+ * @return  {SyntaxNode|null}                     The inner-most node that the position touches.
  */
 export function posInNode (
   pos: number,
