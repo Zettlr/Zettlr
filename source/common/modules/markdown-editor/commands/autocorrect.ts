@@ -15,49 +15,24 @@
 
 // The autocorrect plugin is basically just a keymap that listens to spaces and enters
 import { syntaxTree } from '@codemirror/language'
-import { EditorSelection, type ChangeSpec, type EditorState } from '@codemirror/state'
+import { EditorSelection, type ChangeSpec } from '@codemirror/state'
 import { type Command, type EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 import { insertNewlineAndIndent, isolateHistory } from '@codemirror/commands'
 import { insertNewlineContinueMarkup } from '@codemirror/lang-markdown'
+import { posInNode } from '../util/node-in-selection'
 
 // These characters can be directly followed by a starting magic quote
 const startChars = ' ([{-–—\n\r\t\v\f/\\'
 
-/**
- * Given the editor state and a position, this function returns whether the
- * position sits within a node that is protected from autocorrect. In those
- * cases, no autocorrection will be applied, regardless of whether there is a
- * suitable candidate.
- *
- * @param   {EditorState}  state  The state
- * @param   {number}       pos    The position to check
- *
- * @return  {boolean}             True if the position touches a protected node.
- */
-function posInProtectedNode (state: EditorState, pos: number): boolean {
-  const PROTECTED_NODES = [
-    'InlineCode', // `code`
-    'Comment', 'CommentBlock', // <!-- comment -->
-    'FencedCode', 'CodeText', // Code block
-    'HorizontalRule', // --- and ***
-    'YAMLFrontmatter',
-    'HTMLTag', 'HTMLBlock' // HTML elements
-  ]
-
-  let node = syntaxTree(state).resolveInner(pos, -1)
-
-  while (node.parent !== null) {
-    if (PROTECTED_NODES.includes(node.type.name)) {
-      return true
-    }
-
-    node = node.parent
-  }
-
-  // Neither the node itself, nor any of its parents, are protected.
-  return false
-}
+const PROTECTED_NODES = [
+  'InlineCode', // `code`
+  'Comment', 'CommentBlock', // <!-- comment -->
+  'FencedCode', 'CodeText', // Code block
+  'HorizontalRule', // --- and ***
+  'YAMLFrontmatter',
+  'HTMLTag', 'HTMLBlock' // HTML elements
+]
 
 // If Autocorrect is active, handles the potential text replacement
 export const handleReplacement: Command = (target: EditorView): boolean => {
@@ -81,6 +56,7 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
   const maxKeyLength = replacements[0].key.length
   const changes: ChangeSpec[] = []
 
+  const tree = syntaxTree(target.state)
   for (const range of target.state.selection.ranges) {
     // Ignore selections (only cursors)
     if (!range.empty) {
@@ -92,7 +68,7 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
     let pos = range.from - 1
 
     // Ignore those cursors that are inside protected nodes
-    if (posInProtectedNode(target.state, pos)) {
+    if (posInNode(range.from, tree, PROTECTED_NODES, -1)) {
       continue
     }
 
@@ -109,8 +85,8 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
 
     for (const { key, value } of replacements) {
       if (slice.endsWith(key)) {
-        const startOfReplacement = pos - key.length
-        if (posInProtectedNode(target.state, startOfReplacement)) {
+        const startOfReplacement = range.from - key.length
+        if (posInNode(startOfReplacement, tree, PROTECTED_NODES, -1)) {
           break // `range.from` is not in a protected area, but start is.
         }
 
@@ -246,12 +222,14 @@ export function handleQuote (quote: string): Command {
     const secondary = autocorrect.magicQuotes.secondary.split('…')
     const quotes = (quote === '"') ? primary : secondary
 
+    const tree = syntaxTree(view.state)
+
     const transaction = view.state.changeByRange((range) => {
       // NOTE we're running through the hassle of definitely inserting quotes as
       // otherwise the quote character would be swallowed, even in "protected"
       // areas of the document.
-      const isFromProtected = posInProtectedNode(view.state, range.from)
-      const isToProtected = posInProtectedNode(view.state, range.to)
+      const isFromProtected = posInNode(range.from, tree, PROTECTED_NODES, -1)
+      const isToProtected = posInNode(range.to, tree, PROTECTED_NODES, -1)
 
       if (range.empty) {
         // Check the character before and insert an appropriate quote
