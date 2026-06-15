@@ -2,6 +2,17 @@
 
 ## GUI and Functionality
 
+- Fixed a regression from 4.6.1 where the full-text search would not search any
+  open standalone files (#6387).
+
+## Under the Hood
+
+(nothing here)
+
+# 4.6.0
+
+## GUI and Functionality
+
 - **Feature**: Allow changing the trigger character for snippet (and emoji)
   autocomplete. Until now, this was hard-coded to `:` (which is still the
   default). However, since that interferes with the way French speakers use the
@@ -23,6 +34,8 @@
 - **Change**: On macOS, the default setting for window vibrancy is now off. This
   makes the file manager opaque, but improves visual design with the new sticky
   folder headers.
+- Add Elixir syntax highlighting for code blocks; identifiers: `elixir`, `ex`,
+  or `exs` (#6368).
 - Fixed missing click handlers for clicking links in tables (#4694).
 - Fixed an issue that would sometimes open the same link twice.
 - The file manager now uses tabular digits for displaying numbers in filenames.
@@ -52,6 +65,15 @@
   out the entire column, if the column had no alignment set.
 - Fixed a regression from the previous version that disabled the references list
   CSS (#6380).
+- Fixed a regression from the previous version that could lead to visual
+  artifacts in the thin and expanded file manager modes when switching files
+  (#6385).
+- Fixed a long-standing bug that would cause the application to go out of sync
+  with the operating system's UI theme on macOS when the application is set to
+  "follow the OS" in terms of UI theme, but the user has manually changed the
+  theme to light or dark. In that case, the app would lose synchronization with
+  the macOS theme source, causing the auto-switching mechanism to fail when the
+  operating system's UI theme changes.
 
 ## Under the Hood
 

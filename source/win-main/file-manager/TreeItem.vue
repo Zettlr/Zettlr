@@ -1,5 +1,5 @@
 <template>
-  <div class="tree-item-container">
+  <div ref="rootElement" class="tree-item-container">
     <div
       v-bind:class="{
         'tree-item': true,
@@ -209,6 +209,7 @@ const canAcceptDraggable = ref<boolean>(false) // Helper var set to true while s
 const uncollapseTimeout = ref<undefined|ReturnType<typeof setTimeout>>(undefined) // Used to uncollapse directories during drag&drop ops
 const nameEditingInput = ref<HTMLInputElement|null>(null)
 const displayText = ref<HTMLDivElement|null>(null)
+const rootElement = ref<HTMLDivElement|null>(null)
 const newObjectInput = ref<HTMLInputElement|null>(null)
 
 const children = ref<AnyDescriptor[]>([])
@@ -567,7 +568,30 @@ function scrollIntoView () {
       return
     }
 
-    displayText.value.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    const fileTreeRoot = document.querySelector<HTMLDivElement>('#file-tree')
+
+    if (fileTreeRoot === null) {
+      return
+    }
+
+    const safetyMargin = 100 // Height of the quick filter + the sticky elements
+
+    const treeHeight = fileTreeRoot.clientHeight
+    const topEdge = fileTreeRoot.scrollTop + safetyMargin
+    const bottomEdge = fileTreeRoot.scrollTop + treeHeight
+
+    // Top and bottom are dynamically calculated from the top edge of the scroll
+    // element.
+    const { top, bottom } = displayText.value.getBoundingClientRect()
+    const absTop = fileTreeRoot.scrollTop + top
+    const absBottom = fileTreeRoot.scrollTop + bottom
+
+    if (absTop < topEdge) {
+      fileTreeRoot.scrollTo({ top: absTop - safetyMargin, behavior: 'smooth' })
+    } else if (absBottom > bottomEdge) {
+      const pos = absBottom - treeHeight
+      fileTreeRoot.scrollTo({ top: pos, behavior: 'smooth' })
+    }
   }).catch(err => console.error(err))
 }
 

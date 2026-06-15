@@ -50,6 +50,7 @@ function getEntries (): Completion[] {
     { apply: generate('dart'), label: 'Dart' },
     { apply: generate('diff'), label: 'Diff' },
     { apply: generate('docker'), label: 'Dockerfile' },
+    { apply: generate('elixir'), label: 'Elixir' },
     { apply: generate('elm'), label: 'Elm' },
     { apply: generate('fortran'), label: 'Fortran' },
     { apply: generate('fsharp'), label: 'F#' },

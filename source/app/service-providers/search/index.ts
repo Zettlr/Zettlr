@@ -96,10 +96,17 @@ export class SearchProvider implements ProviderContract {
 
     this.currentQuery = compileBooleanQuery(query, caseInsensitive)
     if (restrictToDirectory.trim() === '') {
-      // The user wants to search all workspaces
-      const promises = this._config.get().app.openWorkspaces
-        .map(ws => this._fsal.readDirectoryRecursively(ws))
-      const allPaths = (await Promise.all(promises)).flat()
+      // The user wants to search all workspaces and files
+      const { openWorkspaces, openFiles } = this._config.get().app
+
+      // First, await all paths within all our workspaces to generate a list of
+      // files recursively.
+      const promises = openWorkspaces.map(ws => this._fsal.readDirectoryRecursively(ws))
+      const workspacePaths = (await Promise.all(promises)).flat()
+
+      // Then, use that list plus all open files to create a file search queue.
+      const allPaths = workspacePaths.concat(openFiles)
+
       for (const p of allPaths) {
         if (await this._fsal.isFile(p)) {
           this.fileSearchQueue.push(p)
