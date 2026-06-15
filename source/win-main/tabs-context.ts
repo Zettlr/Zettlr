@@ -20,6 +20,11 @@ export function displayTabbarContext (event: MouseEvent, callback: (clickedID: s
       label: 'Close leaf',
       id: 'close-leaf',
       type: 'normal'
+    },
+    {
+      label: 'Reopen tab',
+      id: 'reopen-recently-closed-file',
+      type: 'normal'
     }
   ]
 

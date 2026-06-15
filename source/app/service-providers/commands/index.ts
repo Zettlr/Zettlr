@@ -41,6 +41,7 @@ import Print from './print'
 import RequestMove from './request-move'
 import RootClose from './root-close'
 import RootOpen from './root-open'
+import ReopenFile from './reopen-recently-closed-file'
 import SaveImageFromClipboard from './save-image-from-clipboard'
 import TutorialOpen from './tutorial-open'
 import UpdateProjectProperties from './update-project-properties'
@@ -81,6 +82,7 @@ export const commands = [
   OpenAuxWindow,
   Print,
   RenameTag,
+  ReopenFile,
   RequestMove,
   RootClose,
   RootOpen,

@@ -119,9 +119,8 @@ export class AppServiceContainer {
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._linkProvider = new LinkProvider(this._logProvider, this._configProvider, this._fsal)
     this._searchProvider = new SearchProvider(this._logProvider, this._fsal, this._configProvider)
-    
-    // The document provider accesses only the FSAL in its constructor
-    this._documentManager = new DocumentManager(this)
+
+    this._documentManager = new DocumentManager(this, this._recentDocsProvider)
     this._tagProvider = new TagProvider(this._logProvider, this._documentManager, this._configProvider, this._fsal)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
 
@@ -192,7 +191,7 @@ export class AppServiceContainer {
     await this._informativeBoot(this._tagProvider, 'TagProvider')
     await this._informativeBoot(this._trayProvider, 'TrayProvider')
     await this._informativeBoot(this._citeprocProvider, 'CiteprocProvider')
-    
+
     await this._informativeBoot(this._documentManager, 'DocumentManager')
     await this._informativeBoot(this._menuProvider, 'MenuProvider')
     await this._informativeBoot(this._updateProvider, 'UpdateProvider')

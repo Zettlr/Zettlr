@@ -37,6 +37,7 @@ import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 import { getDocumentTypeForExtension, hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import isDir from 'source/common/util/is-dir'
+import type RecentDocumentsProvider from '../recent-docs'
 
 type DocumentWindows = Record<string, DocumentTree>
 type DocumentWindowsJSON = Record<string, BranchNodeJSON|LeafNodeJSON>
@@ -141,6 +142,7 @@ export type DocumentManagerIPCAPI = IPCAPI<{
   'open-file': LeafLoc & { path: string, newTab: boolean }
   'close-file': LeafLoc & { path: string }
   'close-file-everywhere': { path: string }
+  'reopen-recently-closed-file': LeafLoc
   'get-open-workspace-files': { path: string }
   'sort-open-files': LeafLoc & { newOrder: string[] }
   'get-file-modification-status': unknown
@@ -225,7 +227,10 @@ export default class DocumentManager extends ProviderContract {
     leafId: string|undefined
   }
 
-  constructor (private readonly _app: AppServiceContainer) {
+  constructor (
+    private readonly _app: AppServiceContainer,
+    private readonly _recentDocs: RecentDocumentsProvider
+  ) {
     super()
 
     const containerPath = path.join(app.getPath('userData'), 'documents.yaml')
@@ -307,6 +312,10 @@ export default class DocumentManager extends ProviderContract {
         case 'close-file-everywhere': {
           const { path } = payload
           return this.closeFileEverywhere(path)
+        }
+        case 'reopen-recently-closed-file': {
+          const { windowId, leafId } = payload
+          return await this.reopenRecentlyClosedFile(windowId, leafId)
         }
         case 'get-open-workspace-files':
           const { path } = payload
@@ -1021,6 +1030,22 @@ current contents from the editor somewhere else, and restart the application.`
     }
 
     this.syncWatchedFilePaths()
+  }
+
+  /**
+   * Reopens the most recently closed file, if possible.
+   *
+   * If there are no such closed files then this is a no-op.
+   *
+   * @returns {boolean}            `true` iff the most recently closed file was reopened.
+   */
+  public async reopenRecentlyClosedFile (windowId: string, leafId: string): Promise<boolean> {
+    const filePath = this._recentDocs.getMostRecentlyClosedDocument(this.documents.map((doc) => doc.filePath))
+    if (filePath === undefined) {
+      return false
+    }
+
+    return this.openFile(windowId, leafId, filePath, true)
   }
 
   /**

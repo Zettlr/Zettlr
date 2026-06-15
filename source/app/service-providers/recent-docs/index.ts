@@ -95,6 +95,41 @@ export default class RecentDocumentsProvider extends ProviderContract {
   }
 
   /**
+   * Get the most recently-closed document's filepath, if any.
+   *
+   * **Implementation note**
+   *
+   * This attempts to _derive_ the most recently-closed document by comparing
+   * the list of recent docs with the list of docs that are currently open in
+   * the app; if a doc is in the list of recent docs but _not_ in the list of
+   * currently open docs then it must have been recently closed and so that's
+   * the doc that is returned.
+   *
+   * This isn't perfect: if a user closes a document (tab) and then opens more
+   * than `n` docs &mdash; where `n` is the maximum number of recent docs that
+   * are remembered &mdash; then it's no longer possible to derive the most
+   * recently-closed document because the list of currently open docs and the
+   * most recent docs will be the same.
+   *
+   * This derivation-based approach holds for the usual case where a user closes
+   * a document (in error) and reopens it shortly thereafter.
+   *
+   * @param {string[]} currentlyOpenDocs the documents currently open in the app
+   *
+   * @returns the filepath to the most recently-closed document or `undefined`
+   */
+  getMostRecentlyClosedDocument (currentlyOpenDocs: string[]): string | undefined {
+    for (const recentDoc of this._recentDocs) {
+      const isCurrentlyOpen = currentlyOpenDocs.indexOf(recentDoc) >= 0
+      if (!isCurrentlyOpen) {
+        return recentDoc
+      }
+    }
+
+    return undefined
+  }
+
+  /**
   * Shuts down the provider
   * @return {Boolean} Always returns true
   */
