@@ -6197,15 +6197,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.4.2":
-  version: 3.4.2
-  resolution: "dompurify@npm:3.4.2"
+"dompurify@npm:^3.4.9":
+  version: 3.4.9
+  resolution: "dompurify@npm:3.4.9"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/8681a27f17412e754b38d080e39abb36fb14dbf58194d520eedd45b47986323966a0391df540a2011bce72dd37d67f2a015246a58f39d48e3e8f6051274fb974
+  checksum: 10/2d651dcf413646e4a66202b424eade1f2a793fb22fe83dcb5a0800349ad879344fd92e76fd494ef06fb10ecb051660207844e7900156cef3e61942fdac405aa0
   languageName: node
   linkType: hard
 
@@ -15419,7 +15419,7 @@ __metadata:
     css-loader: "npm:^7.1.4"
     csso: "npm:^5.0.5"
     d3: "npm:^7.9.0"
-    dompurify: "npm:^3.4.2"
+    dompurify: "npm:^3.4.9"
     electron: "npm:^42.3.3"
     electron-builder: "npm:^26.14.0"
     electron-devtools-installer: "npm:^4.0.0"
