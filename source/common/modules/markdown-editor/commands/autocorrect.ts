@@ -68,7 +68,7 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
     let pos = range.from - 1
 
     // Ignore those cursors that are inside protected nodes
-    if (posInNode(range.from, tree, PROTECTED_NODES, -1)) {
+    if (posInNode(pos, tree, PROTECTED_NODES, -1)) {
       continue
     }
 
@@ -85,7 +85,7 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
 
     for (const { key, value } of replacements) {
       if (slice.endsWith(key)) {
-        const startOfReplacement = range.from - key.length
+        const startOfReplacement = pos - key.length
         if (posInNode(startOfReplacement, tree, PROTECTED_NODES, -1)) {
           break // `range.from` is not in a protected area, but start is.
         }
