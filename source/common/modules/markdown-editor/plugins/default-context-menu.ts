@@ -18,7 +18,7 @@ import { syntaxTree } from '@codemirror/language'
 import { EditorView } from '@codemirror/view'
 import { defaultMenu } from '../context-menu/default-menu'
 import { linkImageMenu } from '../context-menu/link-image-menu'
-import { posInNode } from '../util/node-in-selection'
+import { nodeAtPos } from '../util/node-in-selection'
 import { NODES } from '../parser/citation-parser'
 import { citationMenu } from '../context-menu/citation-menu'
 
@@ -34,14 +34,14 @@ export const defaultContextMenu = EditorView.domEventHandlers({
 
     const tree = syntaxTree(view.state)
 
-    const maybeLinkNode = posInNode(pos, tree, [ 'URL', 'Link', 'Image', 'LinkReference' ])
+    const maybeLinkNode = nodeAtPos(pos, tree, [ 'URL', 'Link', 'Image', 'LinkReference' ])
     if (maybeLinkNode !== null) {
       // We can show a Link/Image context menu!
       linkImageMenu(view, maybeLinkNode, coords)
       return true
     }
 
-    const citationNode = posInNode(pos, tree, [NODES.CITATION])
+    const citationNode = nodeAtPos(pos, tree, [NODES.CITATION])
 
     if (citationNode !== null) {
       // We can show a citation menu

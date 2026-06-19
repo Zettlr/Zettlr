@@ -21,7 +21,7 @@ import { trans } from '@common/i18n-renderer'
 import { pathDirname } from '@common/util/renderer-path-polyfill'
 import _ from 'underscore'
 import { findReferenceForLinkLabel } from '../util/links'
-import { posInNode } from '../util/node-in-selection'
+import { nodeAtPos } from '../util/node-in-selection'
 
 const ipcRenderer = window.ipc
 
@@ -35,7 +35,7 @@ function unescape (text: string): string {
  */
 export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|null {
   const tree = syntaxTree(view.state)
-  let node = posInNode(pos, tree, [ 'URL', 'Link', 'LinkReference' ], side)
+  let node = nodeAtPos(pos, tree, [ 'URL', 'Link', 'LinkReference' ], side)
 
   if (node === null) {
     return null
