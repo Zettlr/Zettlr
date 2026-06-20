@@ -137,8 +137,6 @@ export class SearchProvider implements ProviderContract {
       return
     }
 
-    this._logger.verbose(`[Search Provider] Searching file ${path.basename(nextFile)}...`)
-
     this.searchFileBoolean(nextFile, this.currentQuery)
       .then(rawResult => {
         // Save some resources both in the IPC and the renderer by not
@@ -171,6 +169,8 @@ export class SearchProvider implements ProviderContract {
     if (descriptor.type === 'other') {
       return []
     }
+
+    this._logger.verbose(`[Search Provider] Searching file ${path.basename(absPath)}...`)
 
     const fileContent = await this._fsal.loadAnySupportedFile(absPath)
     return searchFileBoolean(descriptor, fileContent, query)
