@@ -68,7 +68,7 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
     let pos = range.from - 1
 
     // Ignore those cursors that are inside protected nodes
-    if (nodeAtPos(pos, tree, PROTECTED_NODES, -1)) {
+    if (nodeAtPos(pos, tree, PROTECTED_NODES, -1) != null) {
       continue
     }
 
@@ -86,7 +86,7 @@ export const handleReplacement: Command = (target: EditorView): boolean => {
     for (const { key, value } of replacements) {
       if (slice.endsWith(key)) {
         const startOfReplacement = pos - key.length
-        if (nodeAtPos(startOfReplacement, tree, PROTECTED_NODES, -1)) {
+        if (nodeAtPos(startOfReplacement, tree, PROTECTED_NODES, -1) != null) {
           break // `range.from` is not in a protected area, but start is.
         }
 
@@ -228,8 +228,8 @@ export function handleQuote (quote: string): Command {
       // NOTE we're running through the hassle of definitely inserting quotes as
       // otherwise the quote character would be swallowed, even in "protected"
       // areas of the document.
-      const isFromProtected = nodeAtPos(range.from, tree, PROTECTED_NODES, -1)
-      const isToProtected = nodeAtPos(range.to, tree, PROTECTED_NODES, -1)
+      const isFromProtected = nodeAtPos(range.from, tree, PROTECTED_NODES, -1) != null
+      const isToProtected = nodeAtPos(range.to, tree, PROTECTED_NODES, -1) != null
 
       if (range.empty) {
         // Check the character before and insert an appropriate quote
