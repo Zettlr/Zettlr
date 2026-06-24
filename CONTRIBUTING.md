@@ -159,7 +159,7 @@ and keep a few limits in mind.
 By contributing to the repository, **you agree to abide by our AI Usage Policy**:
 
 * Wherever you have consulted GPT models (ChatGPT, Claude, Gemini, Apple
-  Intelligence, or local models), you disclose the extend of the usage. "Usage"
+  Intelligence, or local models), you disclose the extent of the usage. "Usage"
   in the context of this policy refers to you letting it write code or (docs)
   text that you use in your contribution. This also includes letting it improve
   a paragraph of text or block of code that you have written. A coarse statement
