@@ -43,11 +43,10 @@ import {
   openSearchPanel, findNext, findPrevious, closeSearchPanel,
   selectSelectionMatches, gotoLine, selectNextOccurrence
 } from '@codemirror/search'
-import { keymap } from '@codemirror/view'
+import { type KeyBinding } from '@codemirror/view'
 import {
   insertNewlineContinueMarkup, deleteMarkupBackward
 } from '@codemirror/lang-markdown'
-import { type Extension } from '@codemirror/state'
 
 import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
 import {
@@ -67,42 +66,51 @@ import {
 } from '../commands/markdown'
 import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
-import { alignTables } from '../table-editor/commands/tables'
+import { alignTables, setAlignment } from '../table-editor/commands/tables'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
 import { removeLineBreaks } from '../commands/transforms/remove-line-breaks'
+import {
+  type EditorShortcutName, getCustomShortcut, type CustomEditorShortcut
+} from './shortcuts'
 
-// Includes:
-// * defaultKeymap
-// * historyKeymap
-// * closeBracketsKeymap
-// * searchKeymap
-export function defaultKeymap (): Extension {
-  // TODO: Disable alignment commands until custom keymapping is implemented
-  // const alignLeft = setAlignment('left')
-  // const alignCenter = setAlignment('center')
-  // const alignRight = setAlignment('right')
-  return keymap.of([
+/**
+ * Returns the main editor keybindings, taking into account any custom editor
+ * shortcuts the user may have set. This keymap is a mixture of many of the
+ * keymaps Codemirror ships with, plus some others that we personally need.
+ *
+ * @return  {Keybinding[]}  The keybindings. Must be passed to `keymap.of()`
+ */
+export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]): KeyBinding[] {
+  // Utility function to make retrieval much easier
+  const sc = (name: EditorShortcutName) => {
+    return getCustomShortcut(name, customShortcutMap)
+  }
+
+  const alignLeft = setAlignment('left')
+  const alignCenter = setAlignment('center')
+  const alignRight = setAlignment('right')
+  return [
     // completionKeymap
-    { key: 'Ctrl-Space', run: startCompletion },
+    { key: sc('autocomplete-invoke'), run: startCompletion },
     { key: 'Escape', run: closeCompletion },
     { key: 'ArrowDown', run: moveCompletionSelection(true) },
     { key: 'ArrowUp', run: moveCompletionSelection(false) },
     { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
     { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
-    { key: 'Enter', run: acceptCompletion },
+    { key: sc('autocomplete-accept'), run: acceptCompletion },
 
     // markdownKeymap
 
     // Adding Markdown syntax elements
     { key: 'Mod-b', run: applyBold },
     { key: 'Mod-i', run: applyItalic },
-    { key: 'Mod-k', run: insertLink },
-    { key: 'Ctrl-Shift-h', run: applyHighlight },
+    { key: sc('md-insert-link'), run: insertLink },
+    { key: sc('md-highlight'), run: applyHighlight },
     // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
     // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
-    { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
+    { key: sc('md-insert-image'), run: insertImage },
     { key: 'Mod-C', run: applyComment },
-    { key: 'Mod-Alt-f', mac: 'Mod-Alt-r', run: addNewFootnote },
+    { key: sc('md-insert-footnote'), run: addNewFootnote },
 
     // Overload Tab, depending on context (priority high->low)
     { key: 'Tab', run: acceptCompletion },
@@ -145,23 +153,23 @@ export function defaultKeymap (): Extension {
     // historyKeymap, but with our own keyboard shortcuts
     { key: 'Mod-z', run: undo, preventDefault: true },
     { key: 'Mod-Shift-z', run: redo, preventDefault: true },
-    { key: 'Mod-u', run: undoSelection, preventDefault: true },
-    { key: 'Alt-u', mac: 'Mod-Shift-u', run: redoSelection, preventDefault: true },
+    { key: sc('selection-undo'), run: undoSelection, preventDefault: true },
+    { key: sc('selection-redo'), run: redoSelection, preventDefault: true },
 
     // searchKeymap
     { key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' },
-    { key: 'F3', run: findNext, shift: findPrevious, scope: 'editor search-panel', preventDefault: true },
-    { key: 'Mod-g', run: findNext, shift: findPrevious, scope: 'editor search-panel', preventDefault: true },
+    { key: sc('search-find-next'), run: findNext, scope: 'editor search-panel', preventDefault: true },
+    { key: sc('search-find-previous'), run: findPrevious, scope: 'editor search-panel', preventDefault: true },
     { key: 'Escape', run: closeSearchPanel, scope: 'editor search-panel' },
-    { key: 'Mod-Shift-l', run: selectSelectionMatches },
-    { key: 'Mod-Alt-g', run: gotoLine },
-    { key: 'Mod-d', run: selectNextOccurrence, preventDefault: true },
+    { key: sc('search-select-matches'), run: selectSelectionMatches },
+    { key: sc('search-go-to-line'), run: gotoLine },
+    { key: sc('search-select-next'), run: selectNextOccurrence, preventDefault: true },
 
     // foldKeymap
-    { key: 'Ctrl-Shift-[', mac: 'Cmd-Alt-[', run: foldCode },
-    { key: 'Ctrl-Shift-]', mac: 'Cmd-Alt-]', run: unfoldCode },
-    { key: 'Ctrl-Alt-[', run: foldAll },
-    { key: 'Ctrl-Alt-]', run: unfoldAll },
+    { key: sc('folding-fold-at-cursor'), run: foldCode },
+    { key: sc('folding-unfold-at-cursor'), run: unfoldCode },
+    { key: sc('folding-fold-all'), run: foldAll },
+    { key: sc('folding-unfold-all'), run: unfoldAll },
 
     // defaultKeymap
     { key: 'Alt-ArrowLeft', mac: 'Ctrl-ArrowLeft', run: cursorSyntaxLeft, shift: selectSyntaxLeft },
@@ -176,21 +184,21 @@ export function defaultKeymap (): Extension {
     { key: 'Escape', run: simplifySelection },
     { key: 'Mod-Enter', run: insertBlankLine },
 
-    { key: 'Alt-l', mac: 'Ctrl-l', run: selectLine },
-    { key: 'Mod-i', run: selectParentSyntax, preventDefault: true },
+    { key: sc('selection-line'), run: selectLine },
+    { key: sc('selection-parent-syntax'), run: selectParentSyntax, preventDefault: true },
 
     { key: 'Mod-[', run: indentLess },
     { key: 'Mod-]', run: indentMore },
-    { key: 'Mod-Alt-\\', run: indentSelection },
+    { key: sc('selection-indent'), run: indentSelection },
 
     { key: 'Shift-Mod-k', run: deleteLine },
 
     { key: 'Shift-Mod-\\', run: cursorMatchingBracket },
 
-    { key: 'Mod-/', run: toggleComment },
-    { key: 'Mod-C', run: toggleBlockComment },
+    { key: sc('edit-toggle-comment'), run: toggleComment },
+    { key: sc('edit-toggle-block-comment'), run: toggleBlockComment },
 
-    { key: 'Ctrl-m', mac: 'Shift-Alt-m', run: toggleTabFocusMode },
+    { key: sc('misc-toggle-tab-focus'), run: toggleTabFocusMode },
 
     // Modified emacs style keymap as taken from CodeMirror
     { mac: 'Ctrl-b', run: cursorCharLeft, shift: selectCharLeft, preventDefault: true },
@@ -243,15 +251,18 @@ export function defaultKeymap (): Extension {
     // Table Editor Keys. These need to be the last, since they override some
     // commands and need to only run if nothing equivalently mapped can be run
     // within the corresponding cells.
-    // TODO: Disable alignment commands until custom keymapping is implemented
-    // { key: 'Ctrl-l', run: alignLeft, preventDefault: true },
-    // { key: 'Ctrl-c', run: alignCenter, preventDefault: true },
-    // { key: 'Ctrl-r', run: alignRight, preventDefault: true },
-    { key: 'Mod-Shift-a', run: v => alignTables(v, v.state.selection.main.head) },
-    { key: 'Alt-ArrowUp', run: swapPrevRow, shift: addRowBefore },
-    { key: 'Alt-ArrowDown', run: swapNextRow, shift: addRowAfter },
-    { key: 'Alt-ArrowRight', run: swapNextCol, shift: addColAfter },
-    { key: 'Alt-ArrowLeft', run: swapPrevCol, shift: addColBefore },
+    { key: sc('table-align-col-left'), run: alignLeft, preventDefault: true },
+    { key: sc('table-align-col-center'), run: alignCenter, preventDefault: true },
+    { key: sc('table-align-col-right'), run: alignRight, preventDefault: true },
+    { key: sc('table-align'), run: v => alignTables(v, v.state.selection.main.head) },
+    { key: 'Alt-ArrowUp', run: swapPrevRow },
+    { key: 'Alt-Shift-ArrowUp', run: addRowBefore },
+    { key: 'Alt-ArrowDown', run: swapNextRow },
+    { key: 'Alt-Shift-ArrowDown', run: addRowAfter },
+    { key: 'Alt-ArrowRight', run: swapNextCol },
+    { key: 'Alt-Shift-ArrowRight', run: addColAfter },
+    { key: 'Alt-ArrowLeft', run: swapPrevCol },
+    { key: 'Alt-Shift-ArrowLeft', run: addColBefore },
     { key: 'Mod-Alt-j', run: removeLineBreaks }
-  ])
+  ]
 }
