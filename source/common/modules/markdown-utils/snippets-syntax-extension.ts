@@ -73,6 +73,15 @@ const tabstopDecorator = new MatchDecorator({
       return
     }
 
+    // Note: `from` is a document-relative position corresponding to the
+    // beginning of the matched text, while `start` and `end` are relative
+    // to whatever text was provided to the regex engine. In this case,
+    // codemirror matches per-line, so `start` and `end` are line-relative.
+    // i.e., a `start` of 0 corresponds to `view.state.doc.lineAt(from).from`.
+    //
+    // Furthermore, `from` cannot be used to get document-relative  positions
+    // for `start` and `end`, as `from` could refer to a position anywhere in the
+    // line. It would only work as an offset if `from` was at the start of a line.
     const line = view.state.doc.lineAt(from)
     const [ start, end ] = match.indices.groups.num
 
@@ -89,6 +98,15 @@ const variableDecorator = new MatchDecorator({
       return
     }
 
+    // Note: `from` is a document-relative position corresponding to the
+    // beginning of the matched text, while `start` and `end` are relative
+    // to whatever text was provided to the regex engine. In this case,
+    // codemirror matches per-line, so `start` and `end` are line-relative.
+    // i.e., a `start` of 0 corresponds to `view.state.doc.lineAt(from).from`.
+    //
+    // Furthermore, `from` cannot be used to get document-relative  positions
+    // for `start` and `end`, as `from` could refer to a position anywhere in the
+    // line. It would only work as an offset if `from` was at the start of a line.
     const line = view.state.doc.lineAt(from)
     const [ start, end ] = match.indices.groups.var
 
@@ -142,8 +160,14 @@ function getNestedRanges (state: EditorState, pos: number, text: string): Snippe
   return ranges
 }
 
-// Generates a `DecorationSet` for snippet placeholders with default values,
-// handling arbitrarily nested placeholders.
+/**
+ * Generates a `DecorationSet` for snippet placeholders with default values,
+ * handling arbitrarily nested placeholders.
+ *
+ * @param   {EditorView}    view  The editor view
+ *
+ * @returns {DecorationSet}       The generated decorations.
+ */
 function renderPlaceholders (view: EditorView): DecorationSet {
   const decos: Range<Decoration>[] = []
 
@@ -151,7 +175,7 @@ function renderPlaceholders (view: EditorView): DecorationSet {
     const text = view.state.sliceDoc(range.from, range.to)
     const nested = getNestedRanges(view.state, range.from, text)
 
-    for (const { id, from: start, to: end } of nested) {
+    for (const { id, from, to } of nested) {
       let idDeco = tabstopDeco
       let defaultDeco = placeholderDeco
 
@@ -170,12 +194,12 @@ function renderPlaceholders (view: EditorView): DecorationSet {
       decos.push(snippetMarkDeco.range(id.to, id.to + 1))
 
       // Only add a text decoration if not empty to avoid crashing the plugin
-      if (start !== end) {
-        decos.push(defaultDeco.range(start, end))
+      if (from !== to) {
+        decos.push(defaultDeco.range(from, to))
       }
 
       // The closing mark, `}`
-      decos.push(snippetMarkDeco.range(end, end + 1))
+      decos.push(snippetMarkDeco.range(to, to + 1))
     }
   }
 
