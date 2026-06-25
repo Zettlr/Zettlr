@@ -2,38 +2,38 @@
   <label v-bind:for="props.name">{{ props.label }}</label>
   <div
     v-bind:id="props.name"
-    class="shortcut-input"
+    v-bind:class="{
+      'shortcut-input': true,
+      'is-set': modelValue !== undefined
+    }"
     tabindex="0"
     role="input"
     v-on:keydown.prevent.stop="handleKeydown"
-    v-on:focus="isCurrentlyRecording = true"
-    v-on:blur="isCurrentlyRecording = false"
+    v-on:focus="startRecording"
+    v-on:blur="stopRecording"
   >
-    <span v-if="isCurrentlyRecording && isExplodedShortcutEmpty">
+    <span v-if="isCurrentlyRecording && isNewShortcutEmpty">
       {{ recordingLabel }}
     </span>
 
+    <!-- We are currently recording -->
     <template v-if="isCurrentlyRecording">
-      <template v-if="explodedShortcut.altKey">
-        <kbd>{{ altKeySymbol }}</kbd>
-      </template>
-      <template v-if="explodedShortcut.ctrlKey">
-        <kbd>{{ ctrlKeySymbol }}</kbd>
-      </template>
-      <template v-if="explodedShortcut.modKey">
-        <kbd>{{ modKeySymbol }}</kbd>
-      </template>
-      <template v-if="explodedShortcut.shiftKey">
-        <kbd>⇧</kbd>
-      </template>
-      <template v-if="explodedShortcut.key">
-        <kbd>{{ explodedShortcut.key }}</kbd>
-      </template>
+      <ShortcutDisplay v-bind:shortcut="newShortcut"></ShortcutDisplay>
     </template>
 
-    <span v-else>
-      {{ placeholderLabel }}
-    </span>
+    <!-- We are not recording, but the shortcut is present -->
+    <template v-else-if="modelValue !== undefined">
+      <ShortcutDisplay v-bind:shortcut="explodeShortcut(modelValue)"></ShortcutDisplay>
+    </template>
+
+    <!-- We are not recording, and the shortcut is not set -->
+    <template v-else>
+      <span>{{ placeholderLabel }}</span>
+      <!-- The placeholder will show something like "Default: " if there is a default shortcut -->
+      <ShortcutDisplay
+        v-if="props.defaultShortcut !== undefined" v-bind:shortcut="explodeShortcut(props.defaultShortcut)"
+      ></ShortcutDisplay>
+    </template>
   </div>
 </template>
 
@@ -53,8 +53,9 @@
  * END HEADER
  */
 import { trans } from 'source/common/i18n-renderer'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { keyName, base } from 'w3c-keyname'
+import ShortcutDisplay from '../../ShortcutDisplay.vue'
 
 interface ExplodedShortcut {
   altKey: boolean
@@ -64,7 +65,7 @@ interface ExplodedShortcut {
   key: string
 }
 
-const model = defineModel<string>({ required: true })
+const model = defineModel<string|undefined>({ required: true })
 
 const isCurrentlyRecording = ref(false)
 
@@ -74,26 +75,51 @@ const props = defineProps<{
   defaultShortcut?: string
 }>()
 
-// Determine the mod key based on the platform
-const modKeySymbol = process.platform === 'darwin' ? '⌘' : '⊞'
-const altKeySymbol = process.platform === 'darwin' ? '⎇' : 'Alt'
-const ctrlKeySymbol = process.platform === 'darwin' ? '⌃' : 'Ctrl'
+const placeholderLabel = computed(() => {
+  const text = props.defaultShortcut === undefined ? trans('unassigned') : ''
+  const message = trans('Default: %s', text)
+  return message
+})
 
-const placeholderLabel = props.defaultShortcut !== undefined
-  ? trans('Default: %s', props.defaultShortcut)
-  : trans('Default: unassigned')
 const recordingLabel = trans('Recording…')
 
 // This is the "exploded" shortcut, so that we can display it
-const explodedShortcut = ref(explodeShortcut(model.value ?? ''))
-const isExplodedShortcutEmpty = computed(() => {
-  const e = explodedShortcut.value
+const newShortcut = ref<ExplodedShortcut>({
+  altKey: false,
+  shiftKey: false,
+  modKey: false,
+  ctrlKey: false,
+  key: ''
+})
+
+const isNewShortcutEmpty = computed(() => {
+  const e = newShortcut.value
   return !e.altKey && !e.ctrlKey && !e.modKey && !e.shiftKey && !e.key
 })
 
-watch(model, () => {
-  explodedShortcut.value = explodeShortcut(model.value ?? '')
-})
+function startRecording () {
+  isCurrentlyRecording.value = true
+  const e = newShortcut.value
+  e.altKey = false
+  e.ctrlKey = false
+  e.modKey = false
+  e.shiftKey = false
+  e.key = ''
+}
+
+function stopRecording (event: KeyboardEvent|FocusEvent) {
+  isCurrentlyRecording.value = false
+  const e = newShortcut.value
+  e.altKey = false
+  e.ctrlKey = false
+  e.modKey = false
+  e.shiftKey = false
+  e.key = ''
+
+  if (event !== undefined && event.target !== null && event.target instanceof HTMLElement) {
+    event.target.blur()
+  }
+}
 
 function handleKeydown (event: KeyboardEvent): void {
   if (event.key === 'Unidentified') {
@@ -114,20 +140,18 @@ function handleKeydown (event: KeyboardEvent): void {
 
   // The order of these is determined by `normalizeKeyName` in
   // https://github.com/codemirror/view/blob/main/src/keymap.ts
-  explodedShortcut.value.altKey = event.altKey
-  explodedShortcut.value.shiftKey = event.shiftKey
-  explodedShortcut.value.modKey = event.metaKey
-  explodedShortcut.value.ctrlKey = event.ctrlKey
-  explodedShortcut.value.key = key
+  newShortcut.value.altKey = event.altKey
+  newShortcut.value.shiftKey = event.shiftKey
+  newShortcut.value.modKey = event.metaKey
+  newShortcut.value.ctrlKey = event.ctrlKey
+  newShortcut.value.key = key
 
   // The first non-terminal key is our sign that the recording can be stopped.
   if (!isNonTerminalKey) {
     isCurrentlyRecording.value = false
-    model.value = implodeShortcut(explodedShortcut.value)
-    console.log('Finished shortcut:', implodeShortcut(explodedShortcut.value))
-    if (event.target !== null && event.target instanceof HTMLElement) {
-      event.target.blur()
-    }
+    model.value = implodeShortcut(newShortcut.value)
+    console.log('Finished shortcut:', implodeShortcut(newShortcut.value))
+    stopRecording(event)
   }
 }
 
@@ -182,19 +206,12 @@ function implodeShortcut (shortcut: ExplodedShortcut): string {
   align-items: center;
   cursor: text;
 
-  &:focus {
-    outline: 2px solid var(--system-accent-color);
+  &.is-set {
+    color: rgb(30, 30, 30);
   }
 
-  kbd {
-    font-family: inherit;
-    text-transform: uppercase;
-    font-size: 10px;
-    border: 1px solid rgb(180, 180, 180);
-    border-radius: 4px;
-    border-top-width: 2px;
-    border-left-width: 2px;
-    padding: 2px 4px;
+  &:focus {
+    outline: 2px solid var(--system-accent-color);
   }
 }
 </style>
