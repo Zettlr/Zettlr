@@ -16,6 +16,7 @@ import { app, nativeTheme } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
+import type { EditorShortcutName } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 
@@ -236,6 +237,9 @@ export interface ConfigOptions {
     iframeWhitelist: string[]
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
+  }
+  shortcuts: {
+    editor: Record<EditorShortcutName, string|undefined>
   }
   displayToolbarButtons: {
     showOpenPreferencesButton: boolean
@@ -517,6 +521,40 @@ export function getConfigTemplate (): ConfigOptions {
       showInsertFootnoteButton: true,
       showDocumentInfoText: true,
       showPomodoroButton: true
+    },
+    shortcuts: {
+      // NOTE: These shortcuts will not be present in the configuration file if
+      // they are not set, since undefines get removed upon saving.
+      editor: {
+        'autocomplete-invoke': undefined,
+        'autocomplete-accept': undefined,
+        'md-insert-link': undefined,
+        'md-insert-image': undefined,
+        'md-insert-footnote': undefined,
+        'md-highlight': undefined,
+        'search-find-next': undefined,
+        'search-find-previous': undefined,
+        'search-select-matches': undefined,
+        'search-go-to-line': undefined,
+        'search-select-next': undefined,
+        'folding-fold-at-cursor': undefined,
+        'folding-unfold-at-cursor': undefined,
+        'folding-fold-all': undefined,
+        'folding-unfold-all': undefined,
+        'table-align': undefined,
+        'table-align-col-left': undefined,
+        'table-align-col-center': undefined,
+        'table-align-col-right': undefined,
+        'selection-undo': undefined,
+        'selection-redo': undefined,
+        'selection-line': undefined,
+        'selection-parent-syntax': undefined,
+        'selection-indent': undefined,
+        'selection-all': undefined,
+        'edit-toggle-comment': undefined,
+        'edit-toggle-block-comment': undefined,
+        'misc-toggle-tab-focus': undefined
+      }
     },
     uuid: uuid4() // The app's unique anonymous identifier
   }
