@@ -25,14 +25,17 @@ export type EditorShortcutName = 'autocomplete-invoke'|'autocomplete-accept'|
   'folding-fold-at-cursor'|'folding-unfold-at-cursor'|'folding-fold-all'|'folding-unfold-all'|
   // Tables
   'table-align'|
-  // TODO: Allow customizing table col alignment
   'table-align-col-left'|'table-align-col-center'|'table-align-col-right'|
   // Selection
   'selection-undo'|'selection-redo'|'selection-line'|'selection-parent-syntax'|'selection-indent'|'selection-all'|
   // Editing commands
   'edit-toggle-comment'|'edit-toggle-block-comment'|
   // Transformations
-  // TODO - allow assigning shortcuts to all transformations
+  'tr-zap-gremlins'|'tr-strip-duplicate-spaces'|
+  'tr-italics-to-quotes'|'tr-quotes-to-italics'|'tr-remove-line-breaks'|
+  'tr-straighten-quotes'|'tr-quotes-to-magic'|'tr-ensure-double-quotes'|
+  'tr-double-quotes-to-single'|'tr-single-quotes-to-double'|'tr-emdash-add-spaces'|'tr-emdash-remove-spaces'|
+  'tr-sentence-case'|'tr-title-case'|
   // Miscellaneous
   'misc-toggle-tab-focus'
 
@@ -86,6 +89,20 @@ export const defaultKeybindings: Record<EditorShortcutName, DefaultShortcut> = {
   'selection-all': {},
   'edit-toggle-comment': { key: 'Mod-/' },
   'edit-toggle-block-comment': { key: 'Mod-C' },
+  'tr-double-quotes-to-single': {},
+  'tr-single-quotes-to-double': {},
+  'tr-emdash-add-spaces': {},
+  'tr-emdash-remove-spaces': {},
+  'tr-ensure-double-quotes': {},
+  'tr-italics-to-quotes': {},
+  'tr-quotes-to-italics': {},
+  'tr-quotes-to-magic': {},
+  'tr-remove-line-breaks': {},
+  'tr-sentence-case': {},
+  'tr-straighten-quotes': {},
+  'tr-strip-duplicate-spaces': {},
+  'tr-title-case': {},
+  'tr-zap-gremlins': {},
   'misc-toggle-tab-focus': { key: 'Ctrl-m', mac: 'Shift-Alt-m' }
 }
 

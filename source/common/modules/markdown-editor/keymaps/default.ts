@@ -72,6 +72,20 @@ import { removeLineBreaks } from '../commands/transforms/remove-line-breaks'
 import {
   type EditorShortcutName, getCustomShortcut, type CustomEditorShortcut
 } from './shortcuts'
+import { zapGremlins } from '../commands/transforms/zap-gremlins'
+import { stripDuplicateSpaces } from '../commands/transforms/strip-duplicate-spaces'
+import { italicsToQuotes } from '../commands/transforms/italics-to-quotes'
+import { quotesToItalics } from '../commands/transforms/quotes-to-italics'
+import { configField } from '../util/configuration'
+import { straightenQuotes } from '../commands/transforms/straighten-quotes'
+import { curlQuotes } from '../commands/transforms/curl-quotes'
+import { toDoubleQuotes } from '../commands/transforms/to-double-quotes'
+import { doubleQuotesToSingle } from '../commands/transforms/double-quotes-to-single-quotes'
+import { singleQuotesToDouble } from '../commands/transforms/single-quotes-to-double-quotes'
+import { addSpacesAroundEmdashes } from '../commands/transforms/add-spaces-around-emdashes'
+import { removeSpacesAroundEmdashes } from '../commands/transforms/remove-spaces-around-emdashes'
+import { toSentenceCase } from '../commands/transforms/to-sentence-case'
+import { toTitleCase } from '../commands/transforms/to-title-case'
 
 /**
  * Returns the main editor keybindings, taking into account any custom editor
@@ -90,6 +104,28 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
   const alignCenter = setAlignment('center')
   const alignRight = setAlignment('right')
   return [
+    // Transformations keymap
+    { key: sc('tr-zap-gremlins'), run: zapGremlins },
+    { key: sc('tr-strip-duplicate-spaces'), run: stripDuplicateSpaces },
+    { key: sc('tr-italics-to-quotes'), run: italicsToQuotes },
+    { key: sc('tr-quotes-to-italics'), run: view => quotesToItalics(view.state.field(configField).italicFormatting)(view) },
+    { key: sc('tr-remove-line-breaks'), run: removeLineBreaks },
+    { key: sc('tr-straighten-quotes'), run: straightenQuotes },
+    { key: sc('tr-quotes-to-magic'), run: view => {
+      const { magicQuotes } = view.state.field(configField).autocorrect
+      const primary = magicQuotes.primary.split('\u2026') as [string, string]
+      const secondary = magicQuotes.secondary.split('\u2026') as [string, string]
+      return curlQuotes(primary, secondary)(view)
+    }
+    },
+    { key: sc('tr-ensure-double-quotes'), run: toDoubleQuotes },
+    { key: sc('tr-double-quotes-to-single'), run: doubleQuotesToSingle },
+    { key: sc('tr-single-quotes-to-double'), run: singleQuotesToDouble },
+    { key: sc('tr-emdash-add-spaces'), run: addSpacesAroundEmdashes },
+    { key: sc('tr-emdash-remove-spaces'), run: removeSpacesAroundEmdashes },
+    { key: sc('tr-sentence-case'), run: toSentenceCase(String(window.config.get('appLang'))) },
+    { key: sc('tr-title-case'), run: toTitleCase(String(window.config.get('appLang'))) },
+
     // completionKeymap
     { key: sc('autocomplete-invoke'), run: startCompletion },
     { key: 'Escape', run: closeCompletion },
