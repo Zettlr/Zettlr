@@ -239,7 +239,7 @@ export interface ConfigOptions {
     zoomBehavior: 'gui'|'editor'
   }
   shortcuts: {
-    editor: Record<EditorShortcutName, string|undefined>
+    editor: Record<EditorShortcutName, string>
   }
   displayToolbarButtons: {
     showOpenPreferencesButton: boolean
@@ -523,37 +523,35 @@ export function getConfigTemplate (): ConfigOptions {
       showPomodoroButton: true
     },
     shortcuts: {
-      // NOTE: These shortcuts will not be present in the configuration file if
-      // they are not set, since undefines get removed upon saving.
       editor: {
-        'autocomplete-invoke': undefined,
-        'autocomplete-accept': undefined,
-        'md-insert-link': undefined,
-        'md-insert-image': undefined,
-        'md-insert-footnote': undefined,
-        'md-highlight': undefined,
-        'search-find-next': undefined,
-        'search-find-previous': undefined,
-        'search-select-matches': undefined,
-        'search-go-to-line': undefined,
-        'search-select-next': undefined,
-        'folding-fold-at-cursor': undefined,
-        'folding-unfold-at-cursor': undefined,
-        'folding-fold-all': undefined,
-        'folding-unfold-all': undefined,
-        'table-align': undefined,
-        'table-align-col-left': undefined,
-        'table-align-col-center': undefined,
-        'table-align-col-right': undefined,
-        'selection-undo': undefined,
-        'selection-redo': undefined,
-        'selection-line': undefined,
-        'selection-parent-syntax': undefined,
-        'selection-indent': undefined,
-        'selection-all': undefined,
-        'edit-toggle-comment': undefined,
-        'edit-toggle-block-comment': undefined,
-        'misc-toggle-tab-focus': undefined
+        'autocomplete-invoke': '',
+        'autocomplete-accept': '',
+        'md-insert-link': '',
+        'md-insert-image': '',
+        'md-insert-footnote': '',
+        'md-highlight': '',
+        'search-find-next': '',
+        'search-find-previous': '',
+        'search-select-matches': '',
+        'search-go-to-line': '',
+        'search-select-next': '',
+        'folding-fold-at-cursor': '',
+        'folding-unfold-at-cursor': '',
+        'folding-fold-all': '',
+        'folding-unfold-all': '',
+        'table-align': '',
+        'table-align-col-left': '',
+        'table-align-col-center': '',
+        'table-align-col-right': '',
+        'selection-undo': '',
+        'selection-redo': '',
+        'selection-line': '',
+        'selection-parent-syntax': '',
+        'selection-indent': '',
+        'selection-all': '',
+        'edit-toggle-comment': '',
+        'edit-toggle-block-comment': '',
+        'misc-toggle-tab-focus': ''
       }
     },
     uuid: uuid4() // The app's unique anonymous identifier

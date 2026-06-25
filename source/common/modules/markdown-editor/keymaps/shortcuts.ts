@@ -126,5 +126,9 @@ export function getDefaultKeybinding (name: EditorShortcutName): string|undefine
  */
 export function getCustomShortcut (name: EditorShortcutName, map: CustomEditorShortcut[]): string|undefined {
   const candidate = map.find(s => s.name === name)
-  return candidate?.shortcut ?? getDefaultKeybinding(name)
+  if (candidate === undefined || candidate.shortcut.trim() === '') {
+    return getDefaultKeybinding(name)
+  } else {
+    return candidate.shortcut
+  }
 }

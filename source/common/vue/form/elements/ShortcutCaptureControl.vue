@@ -1,39 +1,47 @@
 <template>
   <label v-bind:for="props.name">{{ props.label }}</label>
-  <div
-    v-bind:id="props.name"
-    v-bind:class="{
-      'shortcut-input': true,
-      'is-set': modelValue !== undefined
-    }"
-    tabindex="0"
-    role="input"
-    v-on:keydown.prevent.stop="handleKeydown"
-    v-on:focus="startRecording"
-    v-on:blur="stopRecording"
-  >
-    <span v-if="isCurrentlyRecording && isNewShortcutEmpty">
-      {{ recordingLabel }}
-    </span>
+  <div class="shortcut-control-wrapper">
+    <div
+      v-bind:id="props.name"
+      v-bind:class="{
+        'shortcut-input': true,
+        'is-set': modelValue !== ''
+      }"
+      tabindex="0"
+      role="input"
+      v-on:keydown.prevent.stop="handleKeydown"
+      v-on:focus="startRecording"
+      v-on:blur="stopRecording"
+    >
+      <span v-if="isCurrentlyRecording && isNewShortcutEmpty">
+        {{ recordingLabel }}
+      </span>
+  
+      <!-- We are currently recording -->
+      <template v-if="isCurrentlyRecording">
+        <ShortcutDisplay v-bind:shortcut="newShortcut"></ShortcutDisplay>
+      </template>
+  
+      <!-- We are not recording, but the shortcut is present -->
+      <template v-else-if="modelValue !== ''">
+        <ShortcutDisplay v-bind:shortcut="explodeShortcut(modelValue)"></ShortcutDisplay>
+      </template>
+  
+      <!-- We are not recording, and the shortcut is not set -->
+      <template v-else>
+        <span>{{ placeholderLabel }}</span>
+        <!-- The placeholder will show something like "Default: " if there is a default shortcut -->
+        <ShortcutDisplay
+          v-if="props.defaultShortcut !== undefined" v-bind:shortcut="explodeShortcut(props.defaultShortcut)"
+        ></ShortcutDisplay>
+      </template>
+    </div>
 
-    <!-- We are currently recording -->
-    <template v-if="isCurrentlyRecording">
-      <ShortcutDisplay v-bind:shortcut="newShortcut"></ShortcutDisplay>
-    </template>
-
-    <!-- We are not recording, but the shortcut is present -->
-    <template v-else-if="modelValue !== undefined">
-      <ShortcutDisplay v-bind:shortcut="explodeShortcut(modelValue)"></ShortcutDisplay>
-    </template>
-
-    <!-- We are not recording, and the shortcut is not set -->
-    <template v-else>
-      <span>{{ placeholderLabel }}</span>
-      <!-- The placeholder will show something like "Default: " if there is a default shortcut -->
-      <ShortcutDisplay
-        v-if="props.defaultShortcut !== undefined" v-bind:shortcut="explodeShortcut(props.defaultShortcut)"
-      ></ShortcutDisplay>
-    </template>
+    <!-- Show the reset button -->
+    <ButtonControl
+      v-bind:label="resetLabel"
+      v-on:click="resetShortcut"
+    ></ButtonControl>
   </div>
 </template>
 
@@ -56,6 +64,7 @@ import { trans } from 'source/common/i18n-renderer'
 import { computed, ref } from 'vue'
 import { keyName, base } from 'w3c-keyname'
 import ShortcutDisplay from '../../ShortcutDisplay.vue'
+import ButtonControl from './ButtonControl.vue'
 
 interface ExplodedShortcut {
   altKey: boolean
@@ -65,7 +74,7 @@ interface ExplodedShortcut {
   key: string
 }
 
-const model = defineModel<string|undefined>({ required: true })
+const model = defineModel<string>({ required: true })
 
 const isCurrentlyRecording = ref(false)
 
@@ -73,6 +82,7 @@ const props = defineProps<{
   name?: string
   label?: string
   defaultShortcut?: string
+  reset?: boolean|string
 }>()
 
 const placeholderLabel = computed(() => {
@@ -82,6 +92,7 @@ const placeholderLabel = computed(() => {
 })
 
 const recordingLabel = trans('Recording…')
+const resetLabel = trans('Reset')
 
 // This is the "exploded" shortcut, so that we can display it
 const newShortcut = ref<ExplodedShortcut>({
@@ -96,6 +107,10 @@ const isNewShortcutEmpty = computed(() => {
   const e = newShortcut.value
   return !e.altKey && !e.ctrlKey && !e.modKey && !e.shiftKey && !e.key
 })
+
+function resetShortcut () {
+  model.value = ''
+}
 
 function startRecording () {
   isCurrentlyRecording.value = true
@@ -191,27 +206,36 @@ function implodeShortcut (shortcut: ExplodedShortcut): string {
 </script>
 
 <style lang="css" scoped>
-.shortcut-input {
-  /* Broadly mimics the inputs */
-  font-family: system-ui, sans-serif;
-  color: rgb(180, 180, 180);
-  font-size: 13px;
-  height: 26px; /* Fixed calculation of the paddings and font size */
-  border: 1px solid rgb(180, 180, 180);
-  border-radius: 6px;
-  padding: 2px;
+.shortcut-control-wrapper {
+  margin: 2px 0 8px 0;
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
   align-items: center;
-  cursor: text;
+  justify-content: space-between;
 
-  &.is-set {
-    color: rgb(30, 30, 30);
-  }
-
-  &:focus {
-    outline: 2px solid var(--system-accent-color);
+  .shortcut-input {
+    flex-grow: 1;
+    /* Broadly mimics the inputs */
+    font-family: system-ui, sans-serif;
+    color: rgb(180, 180, 180);
+    font-size: 13px;
+    height: 26px; /* Fixed calculation of the paddings and font size */
+    border: 1px solid rgb(180, 180, 180);
+    border-radius: 6px;
+    padding: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    cursor: text;
+  
+    &.is-set {
+      color: rgb(30, 30, 30);
+    }
+  
+    &:focus {
+      outline: 2px solid var(--system-accent-color);
+    }
   }
 }
 </style>
