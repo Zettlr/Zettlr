@@ -17,7 +17,7 @@ import {
   createWriteStream as writeStream
 } from 'fs'
 import path from 'path'
-import archiver from 'archiver'
+import { ZipArchive } from 'archiver'
 import { rimraf } from 'rimraf'
 import isFile from '@common/util/is-file'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
@@ -143,7 +143,7 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
       const packFile = targetFile.replace('.textbundle', '.textpack')
       const stream = writeStream(packFile)
       // Create a Zip file with compression 9
-      const archive = archiver('zip', { zlib: { level: 9 } })
+      const archive = new ZipArchive({ zlib: { level: 9 } })
       // Throw the error for the engine to capture
       archive.on('error', (err) => {
         reject(err)

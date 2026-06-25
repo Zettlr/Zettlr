@@ -95,7 +95,7 @@ export function delimit (delimiter: string) {
         })
 
         // and then change the working text to everything after the match
-        workingText = workingText.substring(match.indices[0][1])
+        workingText = workingText.substring(match.indices[0]![1])
       }
     } while (!exhausted)
 

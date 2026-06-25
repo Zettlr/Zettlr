@@ -11,6 +11,12 @@
 ## Under the Hood
 
 - Improve performance of the editor (#6388).
+- Remove superfluous search logging (#6401).
+- Refactor `posInNode` utility to `nodeAtPos` and align documentation with
+  behavior (#6399).
+- Update various (incl. transitive) dependencies.
+- Remove fix for an old `archiver` dependency.
+- Refactor TextPack export to match new `archiver` API.
 
 # 4.6.0
 

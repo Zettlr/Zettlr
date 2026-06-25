@@ -34,7 +34,7 @@ export function nodeInSelection (
   side: -1 | 0 | 1 = 0
 ): boolean {
   for (const range of selection.ranges) {
-    if (posInNode(range.from, tree, nodes, side) !== null) {
+    if (nodeAtPos(range.from, tree, nodes, side) !== null) {
       return true
     }
   }
@@ -42,28 +42,29 @@ export function nodeInSelection (
 }
 
 /**
- * Given a syntax tree and a position, this function returns whether the
- * position sits within a node matching those provided through `nodes`.
+ * Given a syntax tree and a position, this function returns the innermost
+ * SyntaxNode touching the position. If `filters` is provided, only a node
+ * with a name matching one in `filters` is returned.
  *
  * @param   {number}            pos               The position to check
  * @param   {Tree}              tree              The syntax tree to search
- * @param   {string[]}          nodes             The names of nodes to search
+ * @param   {string[]}          filters           The names of nodes to match
  * @param   {-1|0|1}            side              How nodes shoud be entered.
  *                                                Passed to `SyntaxTree.resolveInner`
  *
- * @return  {SyntaxNode|null}                     The inner-most node that the position touches.
+ * @return  {SyntaxNode|null}                     The innermost node that the position touches, or `null` if there is no match.
  */
-export function posInNode (
+export function nodeAtPos (
   pos: number,
   tree: Tree,
-  nodes: string[],
+  filters: string[],
   side: -1|0|1 = 0
 ): SyntaxNode | null {
   let node: SyntaxNode | null = tree.resolveInner(pos, side)
 
   // Walk up the parent tree
   while (node) {
-    if (nodes.includes(node.name)) {
+    if (filters.includes(node.name)) {
       break
     }
 
