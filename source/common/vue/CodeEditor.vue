@@ -43,7 +43,8 @@ import { plainLinkHighlighter } from '@common/modules/markdown-utils/plain-link-
 import { useConfigStore } from 'source/pinia'
 import { darkMode, darkModeEffect } from '../modules/markdown-editor/theme/dark-mode'
 import { highlightWhitespace, highlightWhitespaceEffect } from '../modules/markdown-editor/plugins/highlight-whitespace'
-import { defaultKeymap } from '../modules/markdown-editor/keymaps/default'
+import { zettlrKeymap } from '../modules/markdown-editor/keymaps'
+import { type CustomEditorShortcut } from '../modules/markdown-editor/keymaps/shortcuts'
 
 const configStore = useConfigStore()
 
@@ -64,7 +65,11 @@ const wrapperId = ref<string>('code-editor')
 const cleanFlag = ref<boolean>(true)
 
 function getExtensions (mode: SupportedLanguage): Extension[] {
-  const { editor } = configStore.config
+  const { editor, shortcuts } = configStore.config
+
+  const shortcutList = Object.entries(shortcuts.editor)
+    .map(([ name, shortcut ]) => ({ name, shortcut }))
+    .filter((shortcut): shortcut is CustomEditorShortcut => shortcut.shortcut !== undefined)
 
   let numSpaces = editor.indentUnit
   let useTabs = editor.indentWithTabs
@@ -74,7 +79,7 @@ function getExtensions (mode: SupportedLanguage): Extension[] {
   }
 
   const extensions = [
-    defaultKeymap(),
+    zettlrKeymap(shortcutList),
     search({ top: true }),
     codeFolding(),
     foldGutter(),
