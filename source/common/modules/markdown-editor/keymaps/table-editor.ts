@@ -22,11 +22,7 @@ import { type EditorView, keymap } from '@codemirror/view'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
 import { hiddenSpanField } from '../table-editor/subview'
-import { deleteBracketPair } from '@codemirror/autocomplete'
-import { applyBold, applyItalic, insertLink, insertImage, applyComment } from '../commands/markdown'
-import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
 import { zettlrKeymap } from '.'
-import { handleBackspace, handleQuote } from '../commands/autocorrect'
 import { type CustomEditorShortcut, type EditorShortcutName, getCustomShortcut } from './shortcuts'
 import { setAlignment } from '../table-editor/commands/tables'
 
@@ -71,6 +67,8 @@ export function tableEditorKeymap (mainView: EditorView, customShortcutMap: Cust
   const alignRight = setAlignment('right')
 
   return [
+    // This is a custom keymap that overrides some of the commands of the Zettlr
+    // keymap to make them work within table editors.
     keymap.of([
       // Prevent programmatic insertion of newlines by disabling some
       // keybindings (except Enter which should move the cursor to the next
@@ -94,23 +92,6 @@ export function tableEditorKeymap (mainView: EditorView, customShortcutMap: Cust
       { key: sc('table-align-col-left'), run: _v => alignLeft(mainView), preventDefault: true },
       { key: sc('table-align-col-center'), run: _v => alignCenter(mainView), preventDefault: true },
       { key: sc('table-align-col-right'), run: _v => alignRight(mainView), preventDefault: true },
-      // Further (relevant) keyboard commands (taken from the `markdownKeymap`).
-      // NOTE: This is a subset of all commands, because block-based actions won't
-      // work in the editor.
-      { key: 'Mod-b', run: applyBold },
-      { key: 'Mod-i', run: applyItalic },
-      { key: sc('md-insert-link'), run: insertLink },
-      { key: sc('md-insert-image'), run: insertImage },
-      { key: 'Mod-C', run: applyComment },
-
-      { key: 'Backspace', run: handleBackspace },
-      { key: 'Backspace', run: deleteBracketPair },
-
-      { key: '"', run: handleQuote('"') },
-      { key: "'", run: handleQuote("'") },
-
-      { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
-      { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
 
       // These commands strictly speaking are block-based (or, rather, they go
       // beyond the current cell), but because they are very useful, we support
