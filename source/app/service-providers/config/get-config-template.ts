@@ -17,6 +17,7 @@ import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
 import type { EditorShortcutName } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
+import { type MenuShortcutName } from '../menu/shortcuts'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 
@@ -240,6 +241,7 @@ export interface ConfigOptions {
   }
   shortcuts: {
     editor: Record<EditorShortcutName, string>
+    ui: Record<MenuShortcutName, string>
   }
   displayToolbarButtons: {
     showOpenPreferencesButton: boolean
@@ -523,6 +525,10 @@ export function getConfigTemplate (): ConfigOptions {
       showPomodoroButton: true
     },
     shortcuts: {
+      ui: {
+        'next-tab': '',
+        'previous-tab': ''
+      },
       editor: {
         'autocomplete-invoke': '',
         'autocomplete-accept': '',
