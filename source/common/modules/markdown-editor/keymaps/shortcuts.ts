@@ -12,6 +12,8 @@
  * END HEADER
  */
 
+import { type DefaultShortcut, getDefaultKeybinding } from 'source/common/util/shortcuts'
+
 /**
  * An enum of names that are available for custom shortcuts. Name schema:
  * `group.what-action-it-performs`, e.g., `table.align` aligns a table.
@@ -45,16 +47,6 @@ export type EditorShortcutName = 'autocomplete-invoke'|'autocomplete-accept'|
 export interface CustomEditorShortcut {
   name: EditorShortcutName
   shortcut: string
-}
-
-/**
- * Interface that mimicks the configurability of CodeMirror's commands.
- */
-interface DefaultShortcut {
-  mac?: string
-  win?: string
-  linux?: string
-  key?: string
 }
 
 /**
@@ -107,30 +99,6 @@ export const defaultKeybindings: Record<EditorShortcutName, DefaultShortcut> = {
 }
 
 /**
- * Returns the assigned default keyboard shortcut for the provided action. NOTE
- * that these default keybindings can be custom per platform. The function
- * checks the platform for that.
- *
- * @param   {EditorShortcutName}  name  The name of the shortcut
- *
- * @return  {string|undefined}          The (platform-specific) default
- *                                      keybinding, if available.
- */
-export function getDefaultKeybinding (name: EditorShortcutName): string|undefined {
-  const candidate = defaultKeybindings[name]
-
-  if (process.platform === 'darwin' && 'mac' in candidate) {
-    return candidate.mac
-  } else if (process.platform === 'win32' && 'win' in candidate) {
-    return candidate.win
-  } else if (process.platform === 'linux' && 'linux' in candidate) {
-    return candidate.linux
-  } else {
-    return candidate.key
-  }
-}
-
-/**
  * Retrieves a custom shortcut based on the shortcut name, the available map of
  * existing custom shortcuts, and an optional default key. This function returns
  * undefined as a fallback, which means you can use it to retrieve the `key`
@@ -144,7 +112,7 @@ export function getDefaultKeybinding (name: EditorShortcutName): string|undefine
 export function getCustomShortcut (name: EditorShortcutName, map: CustomEditorShortcut[]): string|undefined {
   const candidate = map.find(s => s.name === name)
   if (candidate === undefined || candidate.shortcut.trim() === '') {
-    return getDefaultKeybinding(name)
+    return getDefaultKeybinding(name, defaultKeybindings)
   } else {
     return candidate.shortcut
   }
