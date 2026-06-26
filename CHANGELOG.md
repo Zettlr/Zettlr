@@ -7,6 +7,10 @@
 - Fixed an issue on macOS where opening a file from Finder with no open main
   window would not automatically open one (#6391).
 - Update Japanese translations (#6390).
+- Fix snippets syntax and improve nested support (#6389).
+- Fixed a bug that would cause Zettlr to replace a magic quote with a regular
+  quote instead of deleting the text if some text was selected that happened to
+  be adjacent to a magic quote.
 
 ## Under the Hood
 
@@ -17,6 +21,7 @@
 - Update various (incl. transitive) dependencies.
 - Remove fix for an old `archiver` dependency.
 - Refactor TextPack export to match new `archiver` API.
+- Remove remnant `.tern-project` file.
 
 # 4.6.0
 

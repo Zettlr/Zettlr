@@ -15,8 +15,25 @@
  */
 
 import { autocompletion, type CompletionContext, type CompletionResult } from '@codemirror/autocomplete'
-import { Decoration, EditorView, MatchDecorator, ViewPlugin, type ViewUpdate } from '@codemirror/view'
+import { matchBrackets } from '@codemirror/language'
+import { RangeSet, type EditorState, type Range } from '@codemirror/state'
+import { Decoration, type DecorationSet, EditorView, MatchDecorator, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 
+// Helper interface for nested snippet ranges
+interface SnippetRange {
+  id: {
+    type: 'var'|'num', // Whether the placeholder is a variable or numbered tabstop
+    from: number,
+    to: number
+  },
+  from: number,
+  to: number
+}
+
+// The `s` flag is important for multi-line snippets
+const placeholderRe = /(?<placeholder>\$\{(?:(?<var>[A-Z_]+)|(?<num>\d+)):).+\}/ds
+
+const snippetMarkDeco = Decoration.mark({ class: 'cm-tm-snippet-mark' })
 const tabstopDeco = Decoration.mark({ class: 'cm-tm-tabstop' })
 const placeholderDeco = Decoration.mark({ class: 'cm-tm-placeholder' })
 const varDeco = Decoration.mark({ class: 'cm-tm-variable' })
@@ -48,38 +65,146 @@ const SUPPORTED_VARIABLES = [
   'EXTENSION'
 ]
 
-/**
- * This is the match decorator that can highlight snippet variables.
- *
- * @return  {MatchDecorator}  The snippets match decorator
- */
-const snippetsDecorator = new MatchDecorator({
-  // tabstops|tabstops with default|variables|variable with default
-  regexp: /(?<tabstop>\$\d+)|(?<tabstopDefault>\$\{\d+:.+?\})|\$(?<var>[A-Z_]+)|\$\{(?<varDefault>[A-Z_]+):.+?\}/g,
-  // tabstop and tabstopDefault -> valid tabstop
-  // var and varDefault --> check the corresponding group if variable is correct
-  decoration: m => {
-    if (m.groups?.tabstop !== undefined) {
-      return tabstopDeco
-    } else if (m.groups?.tabstopDefault !== undefined) {
-      return placeholderDeco
-    } else if (m.groups?.var !== undefined) {
-      if (SUPPORTED_VARIABLES.includes(m.groups.var)) {
-        return varDeco
-      } else {
-        return invalidVarDeco
-      }
-    } else if (m.groups?.varDefault !== undefined) {
-      if (SUPPORTED_VARIABLES.includes(m.groups.varDefault)) {
-        return varPlaceholderDeco
-      } else {
-        return invalidVarDeco
-      }
-    } else {
-      return invalidVarDeco // Default: invalid
+// Handles tabstops without default values: `$1`
+const tabstopDecorator = new MatchDecorator({
+  regexp: /\$(?<num>\d+)/dg,
+  decorate: (add, from, _, match, view) => {
+    if (match.indices?.groups?.num === undefined) {
+      return
     }
+
+    // Note: `from` is a document-relative position corresponding to the
+    // beginning of the matched text, while `start` and `end` are relative
+    // to whatever text was provided to the regex engine. In this case,
+    // codemirror matches per-line, so `start` and `end` are line-relative.
+    // i.e., a `start` of 0 corresponds to `view.state.doc.lineAt(from).from`.
+    //
+    // Furthermore, `from` cannot be used to get document-relative  positions
+    // for `start` and `end`, as `from` could refer to a position anywhere in the
+    // line. It would only work as an offset if `from` was at the start of a line.
+    const line = view.state.doc.lineAt(from)
+    const [ start, end ] = match.indices.groups.num
+
+    add(from, from + 1, snippetMarkDeco)
+    add(line.from + start, line.from + end, tabstopDeco)
   }
 })
+
+// Handles variables without default values: `$CURRENT_YEAR`
+const variableDecorator = new MatchDecorator({
+  regexp: /\$(?<var>[A-Z_]+)/dg,
+  decorate: (add, from, _, match, view) => {
+    if (match.indices?.groups?.var === undefined) {
+      return
+    }
+
+    // Note: `from` is a document-relative position corresponding to the
+    // beginning of the matched text, while `start` and `end` are relative
+    // to whatever text was provided to the regex engine. In this case,
+    // codemirror matches per-line, so `start` and `end` are line-relative.
+    // i.e., a `start` of 0 corresponds to `view.state.doc.lineAt(from).from`.
+    //
+    // Furthermore, `from` cannot be used to get document-relative  positions
+    // for `start` and `end`, as `from` could refer to a position anywhere in the
+    // line. It would only work as an offset if `from` was at the start of a line.
+    const line = view.state.doc.lineAt(from)
+    const [ start, end ] = match.indices.groups.var
+
+    add(from, from + 1, snippetMarkDeco)
+    add(line.from + start, line.from + end, SUPPORTED_VARIABLES.includes(match.groups!.var) ? varDeco : invalidVarDeco)
+  }
+})
+
+/**
+ * Parse nested snippet placeholder ranges from a string
+ *
+ * @param {EditorState}   state   The editor state
+ * @param {number}        pos     The document-relative start position of `text`
+ * @param {string}        text    The text to parse
+ *
+ * @returns {SnippetRange[]}      A list of parsed snippet placeholder ranges
+ */
+function getNestedRanges (state: EditorState, pos: number, text: string): SnippetRange[] {
+  const ranges: SnippetRange[] = []
+
+  const match = placeholderRe.exec(text)
+  if (!match?.indices?.groups?.placeholder) {
+    return ranges
+  }
+
+  const [ start, end ] = match.indices.groups.placeholder
+
+  // We can limit the search distance to the length of the match
+  // since it encompasses the maximum number of brackets
+  const brackets = matchBrackets(state, pos + start + 1, 1, { maxScanDistance: match[0].length })
+
+  // No matching bracket was found
+  if (!brackets || !brackets.matched || !brackets.end) {
+    return ranges
+  }
+
+  ranges.push({
+    id: {
+      type: match?.groups?.num !== undefined ? 'num' : 'var',
+      from: pos + start + 2,
+      to: pos + end - 1,
+    },
+    from: pos + end,
+    to: brackets.end.from
+  })
+
+  // Recurse on the interior text of the match. This is everything after the
+  // colon and before the final brace.
+  ranges.push(...getNestedRanges(state, pos + end, text.slice(end)))
+
+  return ranges
+}
+
+/**
+ * Generates a `DecorationSet` for snippet placeholders with default values,
+ * handling arbitrarily nested placeholders.
+ *
+ * @param   {EditorView}    view  The editor view
+ *
+ * @returns {DecorationSet}       The generated decorations.
+ */
+function renderPlaceholders (view: EditorView): DecorationSet {
+  const decos: Range<Decoration>[] = []
+
+  for (const range of view.visibleRanges) {
+    const text = view.state.sliceDoc(range.from, range.to)
+    const nested = getNestedRanges(view.state, range.from, text)
+
+    for (const { id, from, to } of nested) {
+      let idDeco = tabstopDeco
+      let defaultDeco = placeholderDeco
+
+      if (id.type === 'var') {
+        idDeco = SUPPORTED_VARIABLES.includes(view.state.sliceDoc(id.from, id.to)) ? varDeco : invalidVarDeco
+        defaultDeco = varPlaceholderDeco
+      }
+
+      // The opening mark, `${`
+      decos.push(snippetMarkDeco.range(id.from - 2, id.from))
+
+      // Placeholder id, either the variable or number
+      decos.push(idDeco.range(id.from, id.to))
+
+      // The colon, `:`
+      decos.push(snippetMarkDeco.range(id.to, id.to + 1))
+
+      // Only add a text decoration if not empty to avoid crashing the plugin
+      if (from !== to) {
+        decos.push(defaultDeco.range(from, to))
+      }
+
+      // The closing mark, `}`
+      decos.push(snippetMarkDeco.range(to, to + 1))
+    }
+  }
+
+  return Decoration.set(decos, true)
+}
 
 /**
  * This plugin uses the snippets match decorator to highlight snippet variables.
@@ -89,11 +214,18 @@ const snippetsDecorator = new MatchDecorator({
  * @return  {ViewPlugin}        The finished view plugin
  */
 const snippetsHighlight = ViewPlugin.define(view => ({
-  decorations: snippetsDecorator.createDeco(view),
+  tabstops: tabstopDecorator.createDeco(view),
+  variables: variableDecorator.createDeco(view),
+  placeholders: renderPlaceholders(view),
   update (u: ViewUpdate) {
-    this.decorations = snippetsDecorator.updateDeco(u, this.decorations)
+    this.tabstops = tabstopDecorator.updateDeco(u, this.tabstops)
+    this.variables = variableDecorator.updateDeco(u, this.variables)
+
+    if (u.docChanged || u.viewportChanged) {
+      this.placeholders = renderPlaceholders(view)
+    }
   }
-}), { decorations: v => v.decorations })
+}), { decorations: v => RangeSet.join([ v.tabstops, v.variables, v.placeholders ]) })
 
 /**
  * This function attempts to return a set of possible autocompletion results.
@@ -122,11 +254,16 @@ function snippetsAutocomplete (context: CompletionContext): CompletionResult|nul
  */
 const snippetsTheme = EditorView.theme({
   // We're using this solarized theme here: https://ethanschoonover.com/solarized/
-  '.cm-tm-tabstop': { color: '#2aa198' }, // cyan
-  '.cm-tm-placeholder': { color: '#2aa198' }, // cyan
-  '.cm-tm-variable': { color: '#b58900' }, // yellow
-  '.cm-tm-variable-placeholder': { color: '#6c71c4' }, // violet
-  '.cm-tm-false-variable': { color: '#dc322f' } // red
+  //
+  // The selectors here are a little verbose so that the syntax highlighting from
+  // the markdown parser is overridden. `cm-content-span` and `cm-pandoc-attribute`
+  // nodes particularly conflict with the snippet styling.
+  '.cm-tm-snippet-mark, .cm-tm-snippet-mark > *': { color: '#859900 !important' },
+  '.cm-tm-tabstop, .cm-tm-tabstop > *': { color: '#2aa198 !important' }, // cyan
+  '.cm-tm-placeholder, .cm-tm-placeholder > *': { color: '#2aa198 !important' }, // cyan
+  '.cm-tm-variable, .cm-tm-variable > *': { color: '#b58900 !important' }, // yellow
+  '.cm-tm-variable-placeholder, .cm-tm-variable-placeholder > *': { color: '#6c71c4 !important' }, // violet
+  '.cm-tm-false-variable, .cm-tm-false-variable > *': { color: '#dc322f !important' } // red
 })
 
 /**

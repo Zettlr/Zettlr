@@ -48,7 +48,7 @@ import {
   insertNewlineContinueMarkup, deleteMarkupBackward
 } from '@codemirror/lang-markdown'
 
-import { nextSnippet, abortSnippet } from '../autocomplete/snippets'
+import { nextSnippet, abortSnippet, abortSnippetRemoveContent } from '../autocomplete/snippets'
 import {
   handleBackspace,
   handleQuote,
@@ -169,7 +169,7 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: 'Backspace', run: deleteBracketPair },
     { key: 'Backspace', run: handleBackspace },
 
-    { key: 'Escape', run: abortSnippet },
+    { key: 'Escape', run: abortSnippet, shift: abortSnippetRemoveContent },
     { key: 'Escape', run: closeSearchPanel },
     { key: 'Space', run: handleAutocorrectSpace },
 

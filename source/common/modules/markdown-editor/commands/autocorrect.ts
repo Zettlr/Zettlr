@@ -178,7 +178,7 @@ export function handleBackspace (view: EditorView): boolean {
   const changes: ChangeSpec[] = []
 
   for (const range of view.state.selection.ranges) {
-    if (range.from === 0) {
+    if (range.from === 0 || !range.empty) {
       continue
     }
 

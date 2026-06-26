@@ -24,7 +24,7 @@ import type ConfigProvider from '@providers/config'
  * @param   {'in'|'out'}      dir     The direction of zoom
  */
 function fontZoom (config: ConfigProvider, dir: 'in'|'out'): void {
-  const fontSize = config.get('editor.fontSize') as number
+  const { fontSize } = config.get().editor
   if (dir === 'in') {
     config.set('editor.fontSize', fontSize + 1)
   } else {
