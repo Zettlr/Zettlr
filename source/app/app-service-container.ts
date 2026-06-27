@@ -40,6 +40,7 @@ import path from 'path'
 import { trans } from 'source/common/i18n-main'
 import LongRunningTaskProvider from './service-providers/long-running-tasks'
 import { SearchProvider } from './service-providers/search'
+import GitProvider from './service-providers/git'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -94,6 +95,7 @@ export class AppServiceContainer {
   private readonly _documentManager: DocumentManager
   private readonly _lrtProvider: LongRunningTaskProvider
   private readonly _searchProvider: SearchProvider
+  private readonly _gitProvider: GitProvider
   private _isBooted: boolean
 
   constructor () {
@@ -133,6 +135,7 @@ export class AppServiceContainer {
     this._commandProvider = new CommandProvider(this)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider, this._documentManager)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._commandProvider, this._windowProvider)
+    this._gitProvider = new GitProvider(this._logProvider)
   }
 
   /**
@@ -196,6 +199,7 @@ export class AppServiceContainer {
     await this._informativeBoot(this._documentManager, 'DocumentManager')
     await this._informativeBoot(this._menuProvider, 'MenuProvider')
     await this._informativeBoot(this._updateProvider, 'UpdateProvider')
+    await this._informativeBoot(this._gitProvider, 'GitProvider')
 
     await this._informativeBoot(this._lrtProvider, 'Long-Running Tasks Provider')
 
@@ -227,6 +231,7 @@ export class AppServiceContainer {
   public get citeproc (): CiteprocProvider { return this._citeprocProvider }
   public get config (): ConfigProvider { return this._configProvider }
   public get css (): CssProvider { return this._cssProvider }
+  public get git (): GitProvider { return this._gitProvider }
   public get dictionary (): DictionaryProvider { return this._dictionaryProvider }
   public get links (): LinkProvider { return this._linkProvider }
   public get log (): LogProvider { return this._logProvider }
@@ -252,6 +257,7 @@ export class AppServiceContainer {
     await this._safeShutdown(this._documentManager, 'DocumentManager')
     await this._safeShutdown(this._fsal, 'FSAL')
 
+    await this._safeShutdown(this._gitProvider, 'GitProvider')
     await this._safeShutdown(this._windowProvider, 'WindowManager')
     await this._safeShutdown(this._trayProvider, 'TrayProvider')
     await this._safeShutdown(this._statsProvider, 'StatsProvider')
