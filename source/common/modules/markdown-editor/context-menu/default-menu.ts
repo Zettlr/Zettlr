@@ -20,7 +20,6 @@ import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { extractLTSpellcheckSuggestionsFrom, isLanguageToolMisspelling } from '../linters/language-tool'
 import { getFormatMenuItems } from './format-items'
-import { getInsertSubmenu } from './insert-items'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
