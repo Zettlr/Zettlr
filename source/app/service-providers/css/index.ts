@@ -46,13 +46,12 @@ export default class CssProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    this._logger.verbose('CSS provider booting up ...')
 
     // Check for the existence of the custom CSS file. If it is not existent,
     // create an empty one.
     try {
       await fs.lstat(this._filePath)
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Create an empty file with a nice initial comment in it.
       await fs.writeFile(this._filePath, '/* Enter your custom CSS here */\n\n', { encoding: 'utf8' })
     }
@@ -63,7 +62,6 @@ export default class CssProvider extends ProviderContract {
    * @return {boolean} Whether or not the shutdown was successful
    */
   async shutdown (): Promise<void> {
-    this._logger.verbose('CSS provider shutting down ...')
   }
 
   /**
