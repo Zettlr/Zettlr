@@ -21,6 +21,7 @@ import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
+import normalizePath from 'source/common/util/normalize-path'
 
 export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
   // First file determines the name of the output path, EXCEPT a title is
@@ -53,21 +54,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // changed, normalize the path based on the PDF and set `output-file` to
   // the updated `htmlFilePath`.
   if (defaults['output-file'] !== htmlFilePath) {
-    // Remove any internal `..` and `.` paths
-    pdfFilePath = path.normalize(defaults['output-file'] as string)
-
-    // If the target is a relative path, resolve it to the target directory
-    // and sanitize any potential path traversals.
-    if (!path.isAbsolute(pdfFilePath)) {
-      pdfFilePath = path.resolve(options.targetDirectory, pdfFilePath)
-
-      // Make sure that the resolved path still falls under `targetDirectory`
-      // to prevent potentially insecure path traversals.
-      if (!pdfFilePath.startsWith(options.targetDirectory)) {
-        const parsed = path.parse(pdfFilePath)
-        pdfFilePath = path.join(options.targetDirectory, parsed.base)
-      }
-    }
+    pdfFilePath = normalizePath(defaults['output-file'] as string, options.targetDirectory)
 
     // This is a temporary file, so potentially duplicating the extension as
     // `.pdf.html` doesn't really matter. We probably could disregard updating
