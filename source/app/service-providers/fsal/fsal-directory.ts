@@ -71,9 +71,12 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
     // remove a possible .ztr-directory-file
     try {
       await fs.unlink(settingsFile)
-    } catch (err: any) {
-      err.message = `Error removing default .ztr-directory: ${err.message as string}`
-      throw err
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw new Error(`Error removing default .ztr-directory: ${err.message as string}`)
+      } else {
+        throw new Error('Error removing default .ztr-directory')
+      }
     }
   }
   await fs.writeFile(settingsFile, JSON.stringify(dir.settings))
@@ -147,7 +150,7 @@ export async function parse (currentPath: string): Promise<DirDescriptor> {
 
   try {
     dir.isGitRepository = (await fs.lstat(path.join(dir.path, '.git'))).isDirectory()
-  } catch (err: any) {}
+  } catch (err: unknown) {}
 
   // Retrieve the metadata
   try {
@@ -155,10 +158,8 @@ export async function parse (currentPath: string): Promise<DirDescriptor> {
     dir.modtime = metadata.modtime
     dir.creationtime = metadata.birthtime
     await parseSettings(dir)
-  } catch (err: any) {
-    err.message = `Error reading metadata for directory ${dir.path}!`
-    // Re-throw so that the caller knows something's afoul
-    throw err
+  } catch (err: unknown) {
+    throw new Error(`Error reading metadata for directory ${dir.path}!`)
   }
 
   return dir
