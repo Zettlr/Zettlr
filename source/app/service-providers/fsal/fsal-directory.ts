@@ -18,7 +18,7 @@ import assert, { AssertionError } from 'assert'
 import isFile from '@common/util/is-file'
 import safeAssign from '@common/util/safe-assign'
 
-import type { DirDescriptor, SortMethod, ProjectSettings, DirectorySettings } from '@dts/common/fsal'
+import type { DirDescriptor, SortMethod, ProjectSettings, DirectorySettings, GitBackupSettings } from '@dts/common/fsal'
 import { getFilesystemMetadata } from './util/get-fs-metadata'
 
 /**
@@ -27,6 +27,7 @@ import { getFilesystemMetadata } from './util/get-fs-metadata'
 const SETTINGS_TEMPLATE: DirectorySettings = {
   sorting: 'name-up',
   project: null, // Default: no project
+  gitBackup: null, // Default: No git backup
   icon: null, // Default: no icon
   color: null // Default: no color
 }
@@ -44,6 +45,13 @@ const PROJECT_TEMPLATE: ProjectSettings = {
     tex: '', // An optional tex template
     html: '' // An optional HTML template
   }
+}
+
+/**
+ * Holds default settings for a git backup
+ */
+const GIT_BACKUP_TEMPLATE: GitBackupSettings = {
+  backupFrequency: 'hourly'
 }
 
 /**
@@ -96,11 +104,14 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 
     dir.settings = safeAssign(settings, SETTINGS_TEMPLATE)
 
+    // If the directory has a project or git backup strategy defined, safely
+    // assign the config options here.
     if (settings.project !== null) {
-      // We have a project, so we need to sanitize the values (in case
-      // that there have been changes to the config). We'll just use
-      // the code from the config provider.
       dir.settings.project = safeAssign(settings.project, PROJECT_TEMPLATE)
+    }
+
+    if (settings.gitBackup !== null) {
+      dir.settings.gitBackup = safeAssign(settings.gitBackup, GIT_BACKUP_TEMPLATE)
     }
 
     try {
@@ -109,7 +120,7 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
       await fs.unlink(configPath)
     } catch (err: unknown) {
       if (err instanceof AssertionError) {
-        // Settings are non-default -> do nothing with the file.
+        // Settings are non-default -> all good, and expected.
       } else {
         throw err // Something else went wrong
       }
@@ -234,8 +245,6 @@ export async function makeProject (dirObject: DirDescriptor, properties: Partial
  *
  * @param   {DirDescriptor}  dirObject   The directory descriptor
  * @param   {any}            properties  The properties to set
- *
- * @return {boolean}                     Returns false if no properties changed
  */
 export async function updateProjectProperties (dirObject: DirDescriptor, properties: ProjectSettings): Promise<void> {
   if (dirObject.settings.project === null) {
@@ -247,7 +256,6 @@ export async function updateProjectProperties (dirObject: DirDescriptor, propert
   await persistSettings(dirObject)
 }
 
-// Removes a project
 /**
  * Removes an existing project from the dirObject.
  *
@@ -255,5 +263,43 @@ export async function updateProjectProperties (dirObject: DirDescriptor, propert
  */
 export async function removeProject (dirObject: DirDescriptor): Promise<void> {
   dirObject.settings.project = null
+  await persistSettings(dirObject)
+}
+
+/**
+ * Creates a new git backup strategy for the directory
+ *
+ * @param   {DirDescriptor}  dirObject   The directory descriptor
+ * @param   {any}            properties  Initial properties to set
+ */
+export async function createGitBackupStrategy (dirObject: DirDescriptor, properties: Partial<GitBackupSettings>): Promise<void> {
+  dirObject.settings.gitBackup = safeAssign(properties, GIT_BACKUP_TEMPLATE)
+  await persistSettings(dirObject)
+}
+
+/**
+ * Updates the git backup settings of the given directory and immediately
+ * persists them to disk.
+ *
+ * @param   {DirDescriptor}  dirObject   The directory descriptor
+ * @param   {any}            properties  The properties to set
+ */
+export async function updateGitBackupSettings (dirObject: DirDescriptor, properties: GitBackupSettings): Promise<void> {
+  if (dirObject.settings.gitBackup === null) {
+    throw new Error(`[FSAL Dir] Attempted to update git backup settings on dir ${dirObject.path}, but git backups are not defined!`)
+  }
+
+  dirObject.settings.gitBackup = safeAssign(properties, dirObject.settings.gitBackup)
+  // Immediately reflect on disk
+  await persistSettings(dirObject)
+}
+
+/**
+ * Removes an existing git backup strategy from the dirObject.
+ *
+ * @param   {DirDescriptor}  dirObject  The directory descriptor
+ */
+export async function removeGitBackup (dirObject: DirDescriptor): Promise<void> {
+  dirObject.settings.gitBackup = null
   await persistSettings(dirObject)
 }

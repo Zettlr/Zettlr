@@ -32,6 +32,13 @@ export interface ProjectSettings {
 }
 
 /**
+ * Allows configuring a git backup strategy for directories.
+ */
+export interface GitBackupSettings {
+  backupFrequency: 'manual'|'hourly'|'daily'|'weekly'
+}
+
+/**
  * An interface containing meta information all
  * descriptors should provide.
  */
@@ -60,6 +67,10 @@ export interface DirectorySettings {
    * Holds the project settings if it's a project.
    */
   project: ProjectSettings|null
+  /**
+   * Holds settings for git backups, if enabled.
+   */
+  gitBackup: GitBackupSettings|null
   /**
    * Holds an optional color for the directory.
    */

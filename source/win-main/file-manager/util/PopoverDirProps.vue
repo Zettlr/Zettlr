@@ -57,6 +57,12 @@
           v-on:click="openProjectPreferences"
         ></ButtonControl>
       </div>
+      <template v-if="isGitAvailable">
+        <hr />
+        <div v-if="!props.directory.isGitRepository">
+          <ButtonControl v-bind:label="setupGitBackupLabel"></ButtonControl>
+        </div>
+      </template>
       <hr style="clear: both;">
       <!-- Color selector -->
       <div class="color-selector">
@@ -151,6 +157,9 @@ const sortByNameLabel = trans('Sort by name')
 const sortByTimeLabel = trans('Sort by time')
 const ascendingLabel = trans('ascending')
 const descendingLabel = trans('descending')
+const setupGitBackupLabel = trans('Set up Git backup…')
+
+const isGitAvailable = process.env.GIT_SUPPORT === '1'
 
 const icons = [
   { shape: null, title: trans('Reset') },
