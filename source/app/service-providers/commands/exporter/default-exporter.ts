@@ -42,7 +42,8 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
 
   // Update `target` if the defaults profile changed`output-file`
   if (defaults['output-file'] !== target) {
-    defaults['output-file'] = normalizePath(defaults['output-file'] as string, options.targetDirectory)
+    target = normalizePath(defaults['output-file'] as string, options.targetDirectory)
+    defaults['output-file'] = target
   }
 
   // Run Pandoc
