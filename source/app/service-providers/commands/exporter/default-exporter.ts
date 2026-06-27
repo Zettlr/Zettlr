@@ -17,6 +17,7 @@ import sanitize from 'sanitize-filename'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/pandoc-util/pandoc-maps'
 import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
+import normalizePath from 'source/common/util/normalize-path'
 
 export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
   if (typeof options.profile === 'string') {
@@ -41,23 +42,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
 
   // Update `target` if the defaults profile changed`output-file`
   if (defaults['output-file'] !== target) {
-    // Remove any internal `..` and `.` paths
-    target = path.normalize(defaults['output-file'] as string)
-
-    // If the target is a relative path, resolve it to the target directory
-    // and sanitize any potential path traversals.
-    if (!path.isAbsolute(target)) {
-      target = path.resolve(options.targetDirectory, target)
-
-      // Make sure that the resolved path still falls under `targetDirectory`
-      // to prevent potentially insecure path traversals.
-      if (!target.startsWith(options.targetDirectory)) {
-        const parsed = path.parse(target)
-        target = path.join(options.targetDirectory, parsed.base)
-      }
-    }
-
-    defaults['output-file'] = target
+    defaults['output-file'] = normalizePath(defaults['output-file'] as string, options.targetDirectory)
   }
 
   // Run Pandoc
