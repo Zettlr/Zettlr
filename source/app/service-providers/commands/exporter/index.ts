@@ -48,19 +48,22 @@ export function getCustomProfiles (): PandocProfileMetadata[] {
       name: 'Textbundle.yaml', // Fake name
       reader: 'markdown', // Not completely the truth
       writer: 'textbundle', // Not even supported by Pandoc
-      isInvalid: false // IT'S ALL FAKE!
+      isInvalid: false, // IT'S ALL FAKE!
+      outputFile: '',
     },
     {
       name: 'Textpack.yaml',
       reader: 'markdown',
       writer: 'textpack',
-      isInvalid: false
+      isInvalid: false,
+      outputFile: '',
     },
     {
       name: 'Simple PDF.yaml',
       reader: 'markdown',
       writer: 'simple-pdf',
-      isInvalid: false
+      isInvalid: false,
+      outputFile: '',
     }
   ]
 }
