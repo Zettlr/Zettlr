@@ -183,10 +183,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     { type: 'separator' }
   )
 
-  const tpl: AnyMenuItem[] = [
-    ...getFormatMenuItems(view),
-    getInsertSubmenu(view),
-  ]
+  const tpl: AnyMenuItem[] = getFormatMenuItems(view)
 
   // If we found a diagnostic earlier and a word, add the suggestion items
   if (diagnostic !== undefined && misspelledWord !== undefined) {
