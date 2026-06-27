@@ -14,7 +14,23 @@
 
 import { spawn } from 'child_process'
 
-export type CMD_OUT = { code: number, stdout: string, stderr: string }
+/**
+ * The return of running a command.
+ */
+export interface CMD_OUT {
+  /**
+   * The exit code. Typically, 0 = success. Other exit codes depend on the program.
+   */
+  code: number,
+  /**
+   * A single string with all output (typically delimited with newlines).
+   */
+  stdout: string,
+  /**
+   * A single string with all error output (typically delimited with newlines).
+   */
+  stderr: string
+}
 
 /**
  * A simple wrapper around Node's `spawn` utility. Provide a command, optional
@@ -30,7 +46,7 @@ export type CMD_OUT = { code: number, stdout: string, stderr: string }
  *                               may be harmful to the user, thus this param is
  *                               set to `false` by default.
  *
- * @return  {CMD_OUT}           Either a version string, or undefined.
+ * @return  {CMD_OUT}           The exit code, stdout and stderr.
  * @throws                      if spawning the process fails, or on any other
  *                              error. Does not throw if the return code is != 0
  */
@@ -49,8 +65,12 @@ export async function runCommand (command: string, argv?: string[], shell: boole
       stdout += String(data)
     })
 
-    process.on('close', (code: number, _signal) => {
-      resolve(code)
+    process.on('close', (code) => {
+      if (code !== null) {
+        resolve(code)
+      } else {
+        reject(new Error('The command has terminated, but there was no exit code.'))
+      }
     })
 
     process.on('error', (err) => {
@@ -58,6 +78,5 @@ export async function runCommand (command: string, argv?: string[], shell: boole
     })
   })
 
-  // First line is the "pandoc 2.19.2" or any other version string
   return { code, stdout, stderr }
 }
