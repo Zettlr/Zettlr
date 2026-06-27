@@ -8,6 +8,9 @@
         v-bind:label="formatLabel"
         v-bind:options="availableFormats"
       ></SelectControl>
+      <ZtrAdmonition v-if="outputFilename" type="info" class="outputfile-admonition">
+        {{ outputFileLabel }}: {{ outputFilename }}
+      </ZtrAdmonition>
       <!-- The choice of working directory vs. temporary applies to all exporters -->
       <hr>
       <RadioControl
@@ -54,6 +57,7 @@ import PopoverWrapper from '@common/vue/PopoverWrapper.vue'
 import RadioControl from '@common/vue/form/elements/RadioControl.vue'
 import SelectControl from '@common/vue/form/elements/SelectControl.vue'
 import CheckboxControl from '@common/vue/form/elements/CheckboxControl.vue'
+import ZtrAdmonition from '@common/vue/ZtrAdmonition.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
@@ -70,6 +74,8 @@ const autoOpenLabel = trans('Open after export')
 const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
+const outputFileLabel = trans('Output file')
+
 
 // This is used to limit the number of selected
 // profile to filename mappings in the config
@@ -121,6 +127,8 @@ const lastUsedProfile = computed(() => configStore.config.export.lastUsedProfile
 
 const exportButtonLabel = computed(() => isExporting.value ? trans('Exporting…') : trans('Export'))
 const filename = computed(() => pathBasename(props.filePath))
+const outputFilename = ref('')
+
 const availableFormats = computed(() => {
   const selectOptions: Record<string, string> = {}
 
@@ -160,6 +168,8 @@ watch(format, function (value) {
 
   const profile: string  = prof?.name ?? cmd?.command ?? lastUsedProfile.value
   const filePath: string = props.filePath
+
+  outputFilename.value = prof?.outputFile ?? ''
 
   const newProfiles = selectedProfiles.value
     // Remove any previous items with the same path
@@ -238,6 +248,10 @@ body {
       select {
           margin-top: 5px;
         }
+    }
+
+    .outputfile-admonition {
+      margin: 5px;
     }
 
     .radio-group-container {

@@ -54,8 +54,8 @@
         v-bind:label="exportFormatLabel"
         v-bind:value-type="'record'"
         v-bind:model-value="(exportFormatList as any[])"
-        v-bind:column-labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
-        v-bind:key-names="['selected', 'name', 'conversion']"
+        v-bind:column-labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel, outputLabel]"
+        v-bind:key-names="['selected', 'name', 'conversion', 'outputFile']"
         v-bind:editable="[0]"
         v-bind:striped="true"
         v-on:update:model-value="selectExportProfile($event)"
@@ -185,6 +185,7 @@ const exportFormatLabel = trans('Export project to:')
 const exportFormatUseLabel = trans('Use')
 const exportFormatNameLabel = trans('Format')
 const conversionLabel = trans('Conversion')
+const outputLabel = trans('Output File')
 const exportFilesLabel = trans('Files to be included in the export')
 const projectBuildWarning = trans('Please select at least one profile to build this project.')
 const projectTitleLabel = trans('Project Title')
@@ -328,19 +329,23 @@ const exportFormatList = computed<ExportProfile[]>(() => {
     const readerFull = hasReaderExtensions ? reader + ` (${e.reader})` : reader
     const writerFull = hasWriterExtensions ? writer + ` (${e.writer})` : writer
 
+    const outputFile = e.outputFile
+
     const conversionString = (e.isInvalid) ? 'Invalid' : [ readerFull, writerFull ].join(' → ')
 
     return {
       selected: projectSettings.value.profiles.includes(e.name),
       name: getDisplayText(e.name),
-      conversion: conversionString
+      conversion: conversionString,
+      outputFile: outputFile,
     }
   }).concat(
     customCommands.map(c => {
       return {
         selected: projectSettings.value.profiles.includes(c.command),
         name: c.displayName,
-        conversion: c.command
+        conversion: c.command,
+        outputFile: '',
       }
     })
   )

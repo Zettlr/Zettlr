@@ -38,6 +38,10 @@ export interface PandocProfileMetadata {
    */
   reader: string
   /**
+   * The output file, can be an empty string
+   */
+  outputFile: string
+  /**
    * Since Zettlr has a few requirements, we must have writers and readers.
    * While we strive to even support unknown readers and writers, those fields
    * at least have to have a value. If any hasn't, isInvalid will be true.
@@ -536,10 +540,13 @@ export default class AssetsProvider extends ProviderContract {
         const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writer as string).name)
         const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader as string).name)
 
+        const outputFile = yaml['output-file'] ?? ''
+
         profiles.push({
           name: file,
           writer: yaml.writer,
           reader: yaml.reader,
+          outputFile: outputFile,
           isInvalid: !(hasWriter && hasReader && (validWriter || validReader)),
           isProtected: this._protectedDefaults.includes(file)
         })
@@ -549,6 +556,7 @@ export default class AssetsProvider extends ProviderContract {
           name: file,
           writer: '',
           reader: '',
+          outputFile: '',
           isInvalid: true,
           isProtected: this._protectedDefaults.includes(file)
         })
