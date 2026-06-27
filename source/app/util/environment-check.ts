@@ -14,6 +14,7 @@
 
 import path from 'path'
 import { app } from 'electron'
+import tls from 'tls'
 import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
@@ -24,38 +25,18 @@ import { runCommand } from './run-command'
 export default async function environmentCheck (): Promise<void> {
   console.log('[Application] Performing environment check ...')
 
+  // Ensure that the Node process trusts both its own bundled certificates
+  // (= the default) as well as any system store certificates when making
+  // connections.
+  const bundled = tls.getCACertificates('bundled')
+  const system = tls.getCACertificates('system')
+  tls.setDefaultCACertificates([ ...bundled, ...system ])
+  console.log('[Application] Info: The main process now uses both the bundled Mozilla CA as well as the system CA.')
+
   // This is necessary on macOS and Linux, because GUI applications may not
   // inherit the same PATH environment variable as terminal programs. This is
   // necessary, however, to detect additional helper programs, such as quarto.
   fixPath()
-
-  /**
-   * Contains custom paths that should be present on the process.env.PATH
-   * property for the given operating system as reported by process.platform.
-   *
-   * @deprecated With the addition of `fixPath`, it is highly likely that we do
-   * not need this contraption anymore.
-   */
-  const CUSTOM_PATHS: { [key in NodeJS.Platform]: string[] } = {
-    win32: [],
-    linux: ['/usr/bin'],
-    darwin: [
-      // LaTeX binary directory
-      '/Library/TeX/texbin',
-      // Homebrew default for Intel Macs
-      '/usr/local/bin',
-      // Homebrew default for M1 Macs
-      '/opt/homebrew/bin'
-    ],
-    aix: [],
-    android: [],
-    freebsd: [],
-    openbsd: [],
-    sunos: [],
-    cygwin: [],
-    netbsd: [],
-    haiku: []
-  }
 
   /**
    * Required directories that must exist on the system in order for certain
@@ -72,13 +53,6 @@ export default async function environmentCheck (): Promise<void> {
     path.join(app.getPath('userData'), 'snippets'), // Snippets files
     path.join(app.getPath('userData'), 'lua-filter') // Lua filters
   ]
-
-  /**
-   * Platform specific delimiter (; on Windows, : everywhere else)
-   *
-   * @var {string}
-   */
-  const DELIM = (process.platform === 'win32') ? ';' : ':'
 
   const is64Bit = process.arch === 'x64'
   const isARM64 = process.arch === 'arm64'
@@ -159,25 +133,6 @@ export default async function environmentCheck (): Promise<void> {
     process.env.PATH = ''
   }
 
-  // First integrate the additional paths that we need.
-  let tempPATH = process.env.PATH.split(DELIM)
-
-  for (const customPath of CUSTOM_PATHS[process.platform]) {
-    // Check for both trailing and non-trailing slashes (to not add any
-    // directory more than once)
-    let customPathAlt = customPath + '/'
-    if (customPath.endsWith('/')) {
-      customPathAlt = customPath.substring(0, customPath.length - 1)
-    }
-
-    if (!tempPATH.includes(customPath) && !tempPATH.includes(customPathAlt)) {
-      tempPATH.push(customPath)
-    }
-  }
-
-  // Make sure to remove accidental empty strings
-  process.env.PATH = tempPATH.filter(e => e.trim() !== '').join(DELIM)
-
   // Then ensure all required directories exist
   for (const directory of REQUIRED_DIRECTORIES) {
     try {
@@ -191,10 +146,12 @@ export default async function environmentCheck (): Promise<void> {
   // Determine if the platform as Tray support
   try {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
-  } catch (err: any) {
+  } catch (err: unknown) {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
-    process.env.ZETTLR_TRAY_ERROR = err.message
-    console.warn(err.message)
+    if (err instanceof Error) {
+      process.env.ZETTLR_TRAY_ERROR = err.message
+      console.warn(err.message)
+    }
   }
 
   // Finally, remember whether the updates have been disabled at build time.

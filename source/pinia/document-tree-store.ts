@@ -238,12 +238,13 @@ export const useDocumentTreeStore = defineStore('document-tree', () => {
               break
           }
 
-          // NOTE: We must ensure the paneData is correct before we (potentially set the leaf IDs)
+          // NOTE: We must ensure the paneData is correct before we potentially
+          // set the leaf IDs
           if (event === DP_EVENTS.ACTIVE_FILE) {
-            const { leafId } = context
+            const { leafId, filePath } = context
             lastLeafId.value = leafId
             const leaf = paneData.value.find(leaf => leaf.id === lastLeafId.value)
-            if (leaf?.activeFile != null) {
+            if (leaf?.activeFile != null && filePath !== undefined) {
               lastLeafActiveFile.value = leaf.activeFile
               // If applicable, uncollapse the parent directory(s).
               maybeUncollapseDirectories(leaf.activeFile.path)

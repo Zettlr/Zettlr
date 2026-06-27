@@ -1,5 +1,7 @@
 <template>
-  <p v-if="label !== undefined" class="radio-group-outside-label">{{ label }}</p>
+  <p v-if="label !== undefined" class="radio-group-outside-label">
+    {{ label }}
+  </p>
   <div
     v-bind:class="{
       'radio-group-container': true,

@@ -260,8 +260,12 @@ export default class WindowProvider extends ProviderContract {
       this.syncMainWindows()
     })
 
-    this._documents.on(DP_EVENTS.WINDOW_CLOSED, ({ windowId }) => {
-      const win = this._mainWindows[windowId]
+    this._documents.on(DP_EVENTS.WINDOW_CLOSED, (args) => {
+      if (args == null || typeof args != 'object' || !('windowId' in args) || typeof args.windowId !== 'string') {
+        return
+      }
+
+      const win = this._mainWindows[args.windowId]
       if (win !== undefined) {
         win.close()
       }

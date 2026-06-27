@@ -586,16 +586,16 @@ export default class DocumentManager extends ProviderContract {
   }
 
   // Enable global event listening to updates of the config
-  on (evt: string, callback: (...args: any[]) => void): void {
+  on (evt: string, callback: (...args: unknown[]) => void): void {
     this._emitter.on(evt, callback)
   }
 
-  once (evt: string, callback: (...args: any[]) => void): void {
+  once (evt: string, callback: (...args: unknown[]) => void): void {
     this._emitter.once(evt, callback)
   }
 
   // Also do the same for the removal of listeners
-  off (evt: string, callback: (...args: any[]) => void): void {
+  off (evt: string, callback: (...args: unknown[]) => void): void {
     this._emitter.off(evt, callback)
   }
 

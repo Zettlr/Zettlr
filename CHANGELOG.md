@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+- **Feature**: You can now set the editor theme to use a light or dark
+  appearance independent of the app appearance (#5851).
 - Fixed a regression from 4.6.1 where the full-text search would not search any
   open standalone files (#6387).
 - Fixed an issue on macOS where opening a file from Finder with no open main
@@ -11,9 +13,14 @@
 - Fixed a bug that would cause Zettlr to replace a magic quote with a regular
   quote instead of deleting the text if some text was selected that happened to
   be adjacent to a magic quote.
+- The Table of Contents title in the sidebar is now properly reset (#6397).
 
 ## Under the Hood
 
+- Zettlr now additionally trusts system certificates when making network
+  connections, meaning that custom TLS certificates can be used, e.g., for
+  corporate firewalls (#6006; #5271).
+- Removed deprecated path check for the app.
 - Improve performance of the editor (#6388).
 - Remove superfluous search logging (#6401).
 - Refactor `posInNode` utility to `nodeAtPos` and align documentation with

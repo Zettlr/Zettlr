@@ -68,13 +68,13 @@ function getTranslation (msgid: string): string {
 /**
  * Translates the given message ID
  *
- * @param   {string}  msgid  The message ID to translate
- * @param   {any[]}   args   Provide optional arguments to replace in the
- *                           translation. One argument replaces one %s, in order.
+ * @param   {string}     msgid  The message ID to translate
+ * @param   {unknown[]}  args   Provide optional arguments to replace in the
+ *                              translation. One argument replaces one %s, in order.
  *
- * @return  {string}         The translated and replaced string.
+ * @return  {string}            The translated and replaced string.
  */
-export function trans (msgid: string, ...args: any[]): string {
+export function trans (msgid: string, ...args: unknown[]): string {
   let transString = getTranslation(msgid)
 
   for (const a of args) {
