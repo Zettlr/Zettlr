@@ -18,6 +18,7 @@ import { applyBold, applyItalic } from '../commands/markdown'
 import { copyAsHTML, copyAsPlain, cut, paste, pasteAsPlain } from '../util/copy-paste-cut'
 import { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { getTransformSubmenu } from './transform-items'
+import { getInsertSubmenu } from './insert-items'
 
 export function getFormatMenuItems (view: EditorView): AnyMenuItem[] {
   return [
@@ -78,6 +79,7 @@ export function getFormatMenuItems (view: EditorView): AnyMenuItem[] {
     {
       type: 'separator'
     },
-    getTransformSubmenu(view)
+    getInsertSubmenu(view),
+    getTransformSubmenu(view),
   ]
 }
