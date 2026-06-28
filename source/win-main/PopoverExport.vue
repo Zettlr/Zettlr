@@ -11,7 +11,7 @@
       <ZtrAdmonition v-if="outputFilename" type="info" class="outputfile-admonition">
         {{ outputFileLabel }}: <strong>{{ outputFilename }}</strong>
       </ZtrAdmonition>
-      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="warning" class="outputfile-admonition">
+      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="warning" class="disable-directory-admonition">
         {{ outputFileIsAbsoluteLable }}
       </ZtrAdmonition>
       <!-- The choice of working directory vs. temporary applies to all exporters -->
@@ -259,6 +259,11 @@ body {
       margin: 5px;
       font-size: 100%;
       word-break: break-all;
+    }
+
+    .disable-directory-admonition {
+      margin: 5px;
+      font-size: 100%;
     }
 
     .radio-group-container {
