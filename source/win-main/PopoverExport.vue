@@ -9,12 +9,16 @@
         v-bind:options="availableFormats"
       ></SelectControl>
       <ZtrAdmonition v-if="outputFilename" type="info" class="outputfile-admonition">
-        {{ outputFileLabel }}: {{ outputFilename }}
+        {{ outputFileLabel }}: <strong>{{ outputFilename }}</strong>
+      </ZtrAdmonition>
+      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="warning" class="outputfile-admonition">
+        {{ outputFileIsAbsoluteLable }}
       </ZtrAdmonition>
       <!-- The choice of working directory vs. temporary applies to all exporters -->
       <hr>
       <RadioControl
         v-model="exportDirectory"
+        v-bind:disabled="outputFilenameIsAbsolute"
         v-bind:options="{
           'temp': tempDirLabel,
           'cwd': cwdLabel,
@@ -61,7 +65,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/assets'
 import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import { trans } from '@common/i18n-renderer'
-import { pathBasename } from '@common/util/renderer-path-polyfill'
+import { pathBasename, isAbsolutePath } from '@common/util/renderer-path-polyfill'
 import { useConfigStore } from 'source/pinia'
 import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
 import type { CustomExportIPCAPI, ExportIPCAPI } from 'source/app/service-providers/commands/export'
@@ -73,8 +77,8 @@ const autoOpenLabel = trans('Open after export')
 const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
-const outputFileLabel = trans('Output file')
-
+const outputFileLabel = trans('Output set by profile')
+const outputFileIsAbsoluteLable = trans('Directory selection is disabled because the output is an absolute path')
 
 // This is used to limit the number of selected
 // profile to filename mappings in the config
@@ -127,6 +131,7 @@ const lastUsedProfile = computed(() => configStore.config.export.lastUsedProfile
 const exportButtonLabel = computed(() => isExporting.value ? trans('Exporting…') : trans('Export'))
 const filename = computed(() => pathBasename(props.filePath))
 const outputFilename = ref('')
+const outputFilenameIsAbsolute = ref(false)
 
 const availableFormats = computed(() => {
   const selectOptions: Record<string, string> = {}
@@ -169,6 +174,7 @@ watch(format, function (value) {
   const filePath: string = props.filePath
 
   outputFilename.value = prof?.outputFile ?? ''
+  outputFilenameIsAbsolute.value = isAbsolutePath(outputFilename.value)
 
   const newProfiles = selectedProfiles.value
     // Remove any previous items with the same path
