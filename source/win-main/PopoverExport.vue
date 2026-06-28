@@ -11,9 +11,6 @@
       <ZtrAdmonition v-if="outputFilename" type="info" class="outputfile-admonition">
         {{ outputFileLabel }}: <strong>{{ outputFilename }}</strong>
       </ZtrAdmonition>
-      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="warning" class="disable-directory-admonition">
-        {{ outputFileIsAbsoluteLable }}
-      </ZtrAdmonition>
       <!-- The choice of working directory vs. temporary applies to all exporters -->
       <hr>
       <RadioControl
@@ -25,6 +22,9 @@
           'ask': askLabel
         }"
       ></RadioControl>
+      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="warning" class="disable-directory-admonition">
+        {{ outputFileIsAbsoluteLable }}
+      </ZtrAdmonition>
       <hr>
       <CheckboxControl
         v-model="autoOpenExport"
