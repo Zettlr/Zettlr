@@ -259,6 +259,7 @@ body {
     .outputfile-admonition {
       margin: 5px;
       font-size: 100%;
+      word-break: break-all;
     }
 
     .radio-group-container {
