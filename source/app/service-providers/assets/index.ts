@@ -545,8 +545,8 @@ export default class AssetsProvider extends ProviderContract {
 
         profiles.push({
           name: file,
-          writer: yaml.writer,
-          reader: yaml.reader,
+          writer: yaml.writer ?? '',
+          reader: yaml.reader ?? '',
           outputFile: outputFile,
           isInvalid: !(validWriter && validReader),
           isProtected: this._protectedDefaults.includes(file)
