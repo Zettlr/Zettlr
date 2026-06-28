@@ -535,10 +535,11 @@ export default class AssetsProvider extends ProviderContract {
         // A defaults file needs to fulfill three conditions in order to be
         // considered valid: (1) has a writer, (2) has a reader, (3) either
         // reader or writer must be a supported Markdown format.
-        const hasWriter = yaml.writer !== undefined
-        const hasReader = yaml.reader !== undefined
-        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writer as string).name)
-        const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader as string).name)
+        const writer = yaml.writer !== undefined ? parseReaderWriter(yaml.writer as string) : parseReaderWriter('')
+        const reader = yaml.reader !== undefined ? parseReaderWriter(yaml.reader as string) : parseReaderWriter('')
+
+        const validWriter = writer.isCustom || SUPPORTED_READERS.includes(writer.name)
+        const validReader = reader.isCustom || SUPPORTED_READERS.includes(reader.name)
 
         const outputFile = yaml['output-file'] ?? ''
 
@@ -547,7 +548,7 @@ export default class AssetsProvider extends ProviderContract {
           writer: yaml.writer,
           reader: yaml.reader,
           outputFile: outputFile,
-          isInvalid: !(hasWriter && hasReader && (validWriter || validReader)),
+          isInvalid: !(validWriter && validReader),
           isProtected: this._protectedDefaults.includes(file)
         })
       } catch (err) {
