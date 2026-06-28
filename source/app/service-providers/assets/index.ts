@@ -394,7 +394,7 @@ export default class AssetsProvider extends ProviderContract {
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
-  async getDefaultsFile (filename: string, verbatim: boolean = false): Promise<any|string> {
+  async getDefaultsFile (filename: string, verbatim: boolean = false): Promise<unknown|string> {
     const absPath = path.join(this._defaultsPath, filename)
     const yaml = await fs.readFile(absPath, { encoding: 'utf-8' })
     // Either return the string contents or a JavaScript object
