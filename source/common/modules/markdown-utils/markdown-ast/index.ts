@@ -147,6 +147,12 @@ export interface LinkOrImage extends MDNode {
    * Optional title text (i.e. what can be added after the URL in quotes)
    */
   title?: TextNode
+  /**
+   * For links, the parsed inline contents between the brackets (text, emphasis,
+   * images, etc.), so consumers can recurse into the real inline structure
+   * instead of treating `alt` as a flat string. See #6093.
+   */
+  children?: ASTNode[]
 }
 
 /**
@@ -538,6 +544,33 @@ export type ASTNodeType = ASTNode['type']
  *
  * @return  {ASTNode}               The root node of a Markdown AST
  */
+/**
+ * Parses the inline contents of a link found between its opening and closing
+ * brackets into child AST nodes, so nested formatting (emphasis, images, etc.)
+ * is represented structurally rather than flattened into the raw `alt` string.
+ * Only children whose range lies within [from, to) are included, which naturally
+ * excludes the link marks, URL, and title. See #6093.
+ */
+function parseLinkInterior (node: SyntaxNode, from: number, to: number, markdown: string): ASTNode[] {
+  const children: ASTNode[] = []
+  let index = from
+  let child: SyntaxNode|null = node.firstChild
+  while (child !== null) {
+    if (child.from >= from && child.to <= to) {
+      if (child.from > index) {
+        children.push(genericTextNode(index, child.from, markdown.substring(index, child.from)))
+      }
+      children.push(parseNode(child, markdown))
+      index = child.to
+    }
+    child = child.nextSibling
+  }
+  if (index < to) {
+    children.push(genericTextNode(index, to, markdown.substring(index, to)))
+  }
+  return children
+}
+
 export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
   switch (node.name) {
     case 'Document':
@@ -583,6 +616,13 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         alt: marks.length >= 2
           ? genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
           : genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
+      }
+
+      // For links, parse the bracketed interior into child nodes so nested
+      // inline content (emphasis, images, ...) is counted/spellchecked by its
+      // visible text only — not the raw image Markdown or URLs. See #6093.
+      if (node.name === 'Link' && marks.length >= 2) {
+        astNode.children = parseLinkInterior(node, marks[0].to, marks[1].from, markdown)
       }
 
       return astNode

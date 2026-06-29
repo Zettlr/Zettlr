@@ -93,6 +93,29 @@ const countWordsTesters = [
     locale: 'ja',
     expectedWords: 6,
     expectedChars: 22
+  },
+  {
+    // A link whose visible text is an image counts the image's alt, not the raw
+    // image Markdown/URL. Same as the bare image `![alt text](…)`. See #6093.
+    input: '[![alt text](https://example.com/img.png)](https://example.com)',
+    locale: 'en',
+    expectedWords: 2,
+    expectedChars: 8
+  },
+  {
+    // A link title (the quoted tooltip after the URL) is metadata, not counted.
+    input: '[Wikipedia test](https://en.wikipedia.org/wiki/Function "Math article")',
+    locale: 'en',
+    expectedWords: 2,
+    expectedChars: 14
+  },
+  {
+    // Mixed inline content inside a link: count every visible piece (text,
+    // emphasis, each image's alt) but never the URLs. See #6093.
+    input: '[some alt text, *an image*, ![alt text](https://example.com/img.png), and another image ![alt text](https://example.com/img.png)](https://example.com)',
+    locale: 'en',
+    expectedWords: 12,
+    expectedChars: 61
   }
 ]
 

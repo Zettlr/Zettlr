@@ -152,9 +152,17 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
 
     case 'Image':
     case 'Link': {
-      textNodes.push(ast.alt)
-      if (ast.title !== undefined) {
-        textNodes.push(ast.title)
+      // Count only the visible text. For a link with parsed inline children
+      // (text, emphasis, nested images) recurse so each contributes its own
+      // visible text — an image contributes its alt, never its URL. The title,
+      // the quoted tooltip after the URL, is metadata and must not be counted.
+      // See #6093.
+      if (ast.type === 'Link' && ast.children !== undefined && ast.children.length > 0) {
+        for (const child of ast.children) {
+          textNodes = textNodes.concat(extractTextnodes(child, filter))
+        }
+      } else {
+        textNodes.push(ast.alt)
       }
       break
     }
