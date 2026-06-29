@@ -8,9 +8,6 @@
         v-bind:label="formatLabel"
         v-bind:options="availableFormats"
       ></SelectControl>
-      <ZtrAdmonition v-if="outputFilename" type="info" class="outputfile-admonition">
-        {{ outputFileLabel }}: <strong>{{ outputFilename }}</strong>
-      </ZtrAdmonition>
       <!-- The choice of working directory vs. temporary applies to all exporters -->
       <hr>
       <RadioControl
@@ -22,8 +19,8 @@
           'ask': askLabel
         }"
       ></RadioControl>
-      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="warning" class="disable-directory-admonition">
-        {{ outputFileIsAbsoluteLable }}
+      <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="info" class="disable-directory-admonition">
+        {{ outputFileIsAbsoluteLable }}: <strong>{{ outputFilename }}</strong>
       </ZtrAdmonition>
       <hr>
       <CheckboxControl
@@ -77,8 +74,7 @@ const autoOpenLabel = trans('Open after export')
 const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
-const outputFileLabel = trans('Output set by profile')
-const outputFileIsAbsoluteLable = trans('Directory selection is disabled because the output is an absolute path')
+const outputFileIsAbsoluteLable = trans('Directory selection is disabled because the profile specifies an absolute path')
 
 // This is used to limit the number of selected
 // profile to filename mappings in the config
@@ -255,15 +251,10 @@ body {
         }
     }
 
-    .outputfile-admonition {
-      margin: 5px;
-      font-size: 100%;
-      word-break: break-all;
-    }
-
     .disable-directory-admonition {
       margin: 5px;
       font-size: 100%;
+      overflow-wrap: anywhere;
     }
 
     .radio-group-container {
