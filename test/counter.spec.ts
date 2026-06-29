@@ -93,6 +93,15 @@ const countWordsTesters = [
     locale: 'ja',
     expectedWords: 6,
     expectedChars: 22
+  },
+  {
+    // A link whose visible text is an image (e.g. a clickable banner) must count
+    // only the image's alt text, not the raw image Markdown/URL between the link
+    // marks. Same count as the bare image `![alt text](…)`. See #6093.
+    input: '[![alt text](https://example.com/img.png)](https://example.com)',
+    locale: 'en',
+    expectedWords: 2,
+    expectedChars: 8
   }
 ]
 

@@ -571,6 +571,21 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         }
       }
 
+      // A link whose visible text is itself an image — e.g. a clickable banner,
+      // `[![alt](img.png)](url)` — stores the raw image Markdown, including the
+      // image URL, between its link marks. Counting that raw text inflates the
+      // word/character statistics, so when the link text is exactly an image,
+      // count that image's alt text instead. See #6093.
+      const innerImage = node.name === 'Link' ? node.getChild('Image') : null
+      const linkWrapsImage = innerImage !== null && marks.length >= 2 &&
+        markdown.substring(marks[0].to, marks[1].from).trim() === markdown.substring(innerImage.from, innerImage.to).trim()
+
+      const alt = linkWrapsImage
+        ? (parseNode(innerImage as SyntaxNode, markdown) as LinkOrImage).alt
+        : marks.length >= 2
+          ? genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
+          : genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
+
       const astNode: LinkOrImage = {
         type: node.name,
         name: node.name,
@@ -580,9 +595,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         title: title === null ? undefined : genericTextNode(title.from, title.to, markdown.substring(title.from, title.to)),
         url: markdown.substring(url.from, url.to),
-        alt: marks.length >= 2
-          ? genericTextNode(marks[0].to, marks[1].from, markdown.substring(marks[0].to, marks[1].from))
-          : genericTextNode(url.from, url.to, markdown.substring(url.from, url.to))
+        alt
       }
 
       return astNode
