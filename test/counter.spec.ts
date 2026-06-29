@@ -93,6 +93,14 @@ const countWordsTesters = [
     locale: 'ja',
     expectedWords: 6,
     expectedChars: 22
+  },
+  {
+    // Regression for #6093: a link's title (the quoted tooltip) must not be
+    // counted toward word/char stats — only the visible link text.
+    input: '[Wikipedia test](https://en.wikipedia.org/wiki/Function_(mathematics) "Math article")',
+    locale: 'en',
+    expectedWords: 2,
+    expectedChars: 14
   }
 ]
 
