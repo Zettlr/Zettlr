@@ -206,7 +206,7 @@
     "node-loader": "^2.1.0",
     "nyc": "^18.0.0",
     "style-loader": "^4.0.0",
-    "ts-loader": "^9.6.1",
+    "ts-loader": "^9.6.2",
     "tsx": "^4.22.4",
     "typescript": "^5.9.3",
     "vue-eslint-parser": "^10.4.1",
