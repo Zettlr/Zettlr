@@ -157,7 +157,7 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
       // visible text — an image contributes its alt, never its URL. The title,
       // the quoted tooltip after the URL, is metadata and must not be counted.
       // See #6093.
-      if (ast.type === 'Link' && ast.children !== undefined && ast.children.length > 0) {
+      if (ast.type === 'Link' && ast.children.length > 0) {
         for (const child of ast.children) {
           textNodes = textNodes.concat(extractTextnodes(child, filter))
         }
