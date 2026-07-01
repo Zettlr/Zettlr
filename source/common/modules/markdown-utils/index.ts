@@ -152,12 +152,8 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
 
     case 'Image':
     case 'Link': {
-      // Count only the visible text. Both links and images (per the CommonMark
-      // image-description rules) count the visible text of their bracketed
-      // description: recurse into the parsed inline children so each contributes
-      // its own visible text — nested emphasis by its text, a nested image by
-      // its alt, never the raw Markdown, URL, or title. Fall back to `alt` for
-      // the degenerate case of no parsed children. See #6093.
+      // Links and images count the visible text of their bracketed description
+      // via their parsed children; fall back to `alt` when there are none.
       if (ast.children.length > 0) {
         for (const child of ast.children) {
           textNodes = textNodes.concat(extractTextnodes(child, filter))

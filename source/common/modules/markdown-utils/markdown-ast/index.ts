@@ -591,15 +591,10 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         children: []
       }
 
-      // Parse the bracketed description into child nodes so nested inline
-      // content (emphasis, a nested image, ...) contributes only its visible
-      // text — never the raw Markdown, the URL, or the title. Everything after
-      // the closing bracket (the `](url "title")` part) is metadata: keep only
-      // children that fall inside the description brackets. A range check is
-      // required rather than EMPTY_NODES alone, because the target region also
-      // contains bare characters (the quotes around the title, the parens) that
-      // are gap text with no node of their own, and because the URL has its own
-      // parseNode case that emits it as text. See #6093.
+      // Keep only children inside the description brackets. A positional bound
+      // is needed rather than EMPTY_NODES alone: the metadata after `]` (the
+      // URL, and the quote characters around the title) is partly gap text with
+      // no node of its own, so it cannot be excluded by node name. See #6093.
       if (marks.length >= 2) {
         astNode.children = parseChildren({ ...astNode }, node, markdown).children
           .filter(child => child.from >= marks[0].to && child.to <= marks[1].from)
