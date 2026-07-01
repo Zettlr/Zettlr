@@ -152,10 +152,10 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
 
     case 'Image':
     case 'Link': {
+      // Only the visible link text (alt) is document text. The title — the
+      // quoted tooltip after the URL — is metadata and must not be counted
+      // (nor spellchecked), otherwise it inflates word/char statistics. See #6093.
       textNodes.push(ast.alt)
-      if (ast.title !== undefined) {
-        textNodes.push(ast.title)
-      }
       break
     }
 
