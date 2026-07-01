@@ -116,6 +116,24 @@ const countWordsTesters = [
     locale: 'en',
     expectedWords: 12,
     expectedChars: 61
+  },
+  {
+    // A standalone image counts the visible text of its description, not the
+    // raw Markdown or URL: 'alt text' -> 2 words / 8 chars. See #6093.
+    input: '![alt text](https://example.com/img.png)',
+    locale: 'en',
+    expectedWords: 2,
+    expectedChars: 8
+  },
+  {
+    // Per the CommonMark image-description rules, formatting inside an image
+    // description counts by its visible text only: '*styled* alt' -> 'styled'
+    // (6) + 'alt' (3) = 9 chars, never the emphasis marks; the title is
+    // metadata and is not counted. See #6093 and the review on #6427.
+    input: '![*styled* alt](http://x.com "tip")',
+    locale: 'en',
+    expectedWords: 2,
+    expectedChars: 9
   }
 ]
 
