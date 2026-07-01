@@ -623,6 +623,14 @@ export default function getMenu (
           }
         },
         {
+          id: 'menu.tab_reopen',
+          label: trans('Reopen Tab'),
+          click: function () {
+            commands.run('reopen-recently-closed-file', {})
+              .catch(e => logger.error(String(e.message), e))
+          }
+        },
+        {
           id: 'menu.new_window',
           label: trans('New window'),
           accelerator: 'CmdOrCtrl+Shift+N',

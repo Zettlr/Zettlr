@@ -448,6 +448,14 @@ function handleTabbarContext (event: MouseEvent): void {
           windowId: props.windowId
         }
       } as DocumentManagerIPCAPI).catch(e => console.error(e))
+    } else if (clickedID === 'reopen-recently-closed-file') {
+      ipcRenderer.invoke('documents-provider', {
+        command: 'reopen-recently-closed-file',
+        payload: {
+          leafId: props.leafId,
+          windowId: props.windowId
+        }
+      } as DocumentManagerIPCAPI).catch(e => console.error(e))
     }
   })
 }
