@@ -29,6 +29,7 @@
   corporate firewalls (#6006; #5271).
 - Removed deprecated path check for the app.
 - Improve performance of the editor (#6388).
+- Improved handling of invalid dates in the statistics provider (#6433).
 - Remove superfluous search logging (#6401).
 - Refactor `posInNode` utility to `nodeAtPos` and align documentation with
   behavior (#6399).
