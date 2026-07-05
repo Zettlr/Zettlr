@@ -104,6 +104,141 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
   const alignCenter = setAlignment('center')
   const alignRight = setAlignment('right')
   return [
+    // NOTE: This keymap is SORTED by two factors:
+    // 1. The key name
+    // 2. Specificity/context.
+    // Since previous shortcuts override later ones, the more specific they are
+    // the further atop they need to be.
+
+    // Tabulator
+    { key: 'Tab', run: acceptCompletion },
+    { key: 'Tab', run: nextSnippet },
+    { key: 'Tab', run: moveNextCell },
+    { key: 'Tab', run: maybeIndentList },
+    { key: 'Tab', run: insertTabOrSpace },
+    { key: 'Tab', run: indentMore },
+    { key: 'Shift-Tab', run: movePrevCell },
+    { key: 'Shift-Tab', run: maybeUnindentList },
+    { key: 'Shift-Tab', run: indentLess },
+    
+    // Enter
+    { key: 'Enter', run: handleAutocorrectEnter },
+    { key: 'Enter', run: moveNextRow },
+    { key: 'Enter', run: insertNewlineContinueMarkup },
+    { key: 'Enter', run: insertNewlineAndIndent },
+    { key: 'Mod-Enter', run: insertBlankLine },
+    { key: 'Shift-Enter', run: movePrevRow },
+    { key: 'Shift-Enter', run: insertNewlineAndIndent },
+
+    // Backspace
+    { key: 'Backspace', run: selectFootnoteBeforeDelete },
+    { key: 'Backspace', run: handleBackspace },
+    { key: 'Backspace', run: deleteMarkupBackward },
+    { key: 'Backspace', run: deleteBracketPair },
+    { key: 'Backspace', run: deleteCharBackward },
+    { key: 'Shift-Backspace', run: deleteCharBackward },
+    { key: 'Mod-Backspace', mac: 'Alt-Backspace', run: deleteGroupBackward },
+    { mac: 'Mod-Backspace', run: deleteLineBoundaryBackward },
+    
+    // Delete
+    { key: 'Delete', run: deleteCharForward },
+    { key: 'Mod-Delete', mac: 'Alt-Delete', run: deleteGroupForward },
+    { mac: 'Mod-Delete', run: deleteLineBoundaryForward },
+
+    // Escape
+    { key: 'Escape', run: abortSnippet },
+    { key: 'Escape', run: closeCompletion },
+    { key: 'Escape', run: closeSearchPanel },
+    { key: 'Escape', run: simplifySelection },
+    { key: 'Shift-Escape', run: abortSnippetRemoveContent },
+    
+    // Arrow Up
+    { key: 'ArrowUp', run: moveCompletionSelection(false) },
+    { key: 'ArrowUp', run: cursorLineUp, preventDefault: true },
+    { key: 'Alt-ArrowUp', run: swapPrevRow },
+    { key: 'Alt-ArrowUp', run: customMoveLineUp },
+    { key: 'Alt-ArrowUp', run: moveLineUp },
+    { key: 'Alt-Shift-ArrowUp', run: addRowBefore },
+    { key: 'Alt-Shift-ArrowUp', run: copyLineUp },
+    { key: 'Shift-ArrowUp', run: selectLineUp, preventDefault: true },
+    // Mac-only
+    { mac: 'Cmd-ArrowUp', run: cursorDocStart },
+    { mac: 'Cmd-Shift-ArrowUp', run: selectDocStart },
+    { mac: 'Ctrl-ArrowUp', run: cursorPageUp },
+    { mac: 'Ctrl-Shift-ArrowUp', run: selectPageUp },
+
+    // Arrow Right
+    { key: 'ArrowRight', run: cursorCharRight, preventDefault: true },
+    { key: 'Alt-ArrowRight', run: swapNextCol },
+    { key: 'Alt-ArrowRight', mac: 'Ctrl-ArrowRight', run: cursorSyntaxRight },
+    { key: 'Alt-Shift-ArrowRight', run: addColAfter },
+    { key: 'Alt-Shift-ArrowRight', mac: 'Ctrl-Shift-ArrowRight', run: selectSyntaxRight },
+    { key: 'Shift-ArrowRight', run: selectCharRight, preventDefault: true },
+    { key: 'Mod-ArrowRight', mac: 'Alt-ArrowRight', run: cursorGroupRight, preventDefault: true },
+    { key: 'Mod-Shift-ArrowRight', mac: 'Alt-Shift-ArrowRight', run: selectGroupRight, preventDefault: true },
+    // Mac-only
+    { mac: 'Cmd-ArrowRight', run: cursorLineBoundaryRight, preventDefault: true },
+    { mac: 'Cmd-Shift-ArrowRight', run: selectLineBoundaryRight, preventDefault: true },
+
+    // Arrow Down
+    { key: 'ArrowDown', run: moveCompletionSelection(true) },
+    { key: 'ArrowDown', run: cursorLineDown, preventDefault: true },
+    { key: 'Alt-ArrowDown', run: swapNextRow },
+    { key: 'Alt-ArrowDown', run: customMoveLineDown },
+    { key: 'Alt-ArrowDown', run: moveLineDown },
+    { key: 'Shift-ArrowDown', run: selectLineDown, preventDefault: true },
+    { key: 'Alt-Shift-ArrowDown', run: addRowAfter },
+    { key: 'Alt-Shift-ArrowDown', run: copyLineDown },
+    // Mac-only
+    { mac: 'Cmd-ArrowDown', run: cursorDocEnd },
+    { mac: 'Cmd-Shift-ArrowDown', run: selectDocEnd },
+    { mac: 'Ctrl-ArrowDown', run: cursorPageDown },
+    { mac: 'Ctrl-Shift-ArrowDown', run: selectPageDown },
+
+    // Arrow Left
+    { key: 'ArrowLeft', run: cursorCharLeft, preventDefault: true },
+    { key: 'Alt-ArrowLeft', run: swapPrevCol },
+    { key: 'Alt-ArrowLeft', mac: 'Ctrl-ArrowLeft', run: cursorSyntaxLeft },
+    { key: 'Shift-ArrowLeft', run: selectCharLeft, preventDefault: true },
+    { key: 'Alt-Shift-ArrowLeft', run: addColBefore },
+    { key: 'Alt-Shift-ArrowLeft', mac: 'Ctrl-Shift-ArrowLeft', run: selectSyntaxLeft },
+    { key: 'Mod-ArrowLeft', mac: 'Alt-ArrowLeft', run: cursorGroupLeft, preventDefault: true },
+    { key: 'Mod-Shift-ArrowLeft', mac: 'Alt-Shift-ArrowLeft', run: selectGroupLeft, preventDefault: true },
+    // Mac-only
+    { mac: 'Cmd-ArrowLeft', run: cursorLineBoundaryLeft, preventDefault: true },
+    { mac: 'Cmd-Shift-ArrowLeft', run: selectLineBoundaryLeft, preventDefault: true },
+
+    // Home
+    { key: 'Home', run: cursorLineBoundaryBackward, preventDefault: true },
+    { key: 'Mod-Home', run: cursorDocStart },
+    { key: 'Shift-Home', run: selectLineBoundaryBackward, preventDefault: true },
+    { key: 'Mod-Shift-Home', run: selectDocStart },
+    
+    // End
+    { key: 'End', run: cursorLineBoundaryForward, preventDefault: true },
+    { key: 'Mod-End', run: cursorDocEnd },
+    { key: 'Shift-End', run: selectLineBoundaryForward, preventDefault: true },
+    { key: 'Mod-Shift-End', run: selectDocEnd },
+    
+    // Page down
+    { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
+    { key: 'PageDown', run: cursorPageDown },
+    { key: 'Shift-PageDown', run: selectPageDown },
+    
+    // Page up
+    { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
+    { key: 'PageUp', run: cursorPageUp },
+    { key: 'Shift-PageUp', run: selectPageUp },
+    
+    // Some keybindings that should work even in case of conflicts
+    { key: 'Space', run: handleAutocorrectSpace },
+    { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
+    { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
+    { key: '"', run: handleQuote('"') },
+    { key: "'", run: handleQuote("'") },
+
+    { key: 'Mod-a', run: selectAll },
+
     // Transformations keymap
     { key: sc('tr-zap-gremlins'), run: zapGremlins },
     { key: sc('tr-strip-duplicate-spaces'), run: stripDuplicateSpaces },
@@ -126,65 +261,17 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: sc('tr-sentence-case'), run: toSentenceCase(String(window.config.get('appLang'))) },
     { key: sc('tr-title-case'), run: toTitleCase(String(window.config.get('appLang'))) },
 
-    // completionKeymap
     { key: sc('autocomplete-invoke'), run: startCompletion },
-    { key: 'Escape', run: closeCompletion },
-    { key: 'ArrowDown', run: moveCompletionSelection(true) },
-    { key: 'ArrowUp', run: moveCompletionSelection(false) },
-    { key: 'PageDown', run: moveCompletionSelection(true, 'page') },
-    { key: 'PageUp', run: moveCompletionSelection(false, 'page') },
     { key: sc('autocomplete-accept'), run: acceptCompletion },
 
-    // markdownKeymap
-
-    // Adding Markdown syntax elements
     { key: 'Mod-b', run: applyBold },
     { key: 'Mod-i', run: applyItalic },
+    { key: 'Mod-t', run: applyTaskList },
     { key: sc('md-insert-link'), run: insertLink },
     { key: sc('md-highlight'), run: applyHighlight },
-    // NOTE: We have to do it like this, because the Mod-Shift-i is occupied on
-    // Windows/Linux by the DevTools shortcut, and Mod-Alt-i is the same for Mac.
     { key: sc('md-insert-image'), run: insertImage },
-    { key: 'Mod-C', run: applyComment },
+    { key: 'Mod-Shift-c', run: applyComment },
     { key: sc('md-insert-footnote'), run: addNewFootnote },
-
-    // Overload Tab, depending on context (priority high->low)
-    { key: 'Tab', run: acceptCompletion },
-    { key: 'Tab', run: nextSnippet },
-    { key: 'Tab', run: moveNextCell, shift: movePrevCell },
-    { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
-    { key: 'Tab', run: insertTabOrSpace },
-
-    // Overload Enter
-    { key: 'Enter', run: handleAutocorrectEnter },
-    { key: 'Enter', run: moveNextRow, shift: movePrevRow },
-    // If no replacement can be handled, the default should be newlineAndIndent
-    { key: 'Enter', run: insertNewlineContinueMarkup },
-    { key: 'Enter', run: insertNewlineAndIndent },
-
-    // Overload Backspace
-    { key: 'Backspace', run: selectFootnoteBeforeDelete },
-    { key: 'Backspace', run: deleteMarkupBackward },
-    // closeBracketsKeymap
-    { key: 'Backspace', run: deleteBracketPair },
-    { key: 'Backspace', run: handleBackspace },
-
-    { key: 'Escape', run: abortSnippet, shift: abortSnippetRemoveContent },
-    { key: 'Escape', run: closeSearchPanel },
-    { key: 'Space', run: handleAutocorrectSpace },
-
-    { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
-    { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
-    { key: 'Mod-t', run: applyTaskList },
-    { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
-    { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
-    { key: '"', run: handleQuote('"') },
-    { key: "'", run: handleQuote("'") },
-
-    // Now follows the original sharedKeymap to make the defaults available, but
-    // with a lower priority, so that we can override anything in this keymap.
-    // Custom key bindings for Zettlr
-    { key: 'Tab', run: indentMore, shift: indentLess },
 
     // historyKeymap, but with our own keyboard shortcuts
     { key: 'Mod-z', run: undo, preventDefault: true },
@@ -196,7 +283,6 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' },
     { key: sc('search-find-next'), run: findNext, scope: 'editor search-panel', preventDefault: true },
     { key: sc('search-find-previous'), run: findPrevious, scope: 'editor search-panel', preventDefault: true },
-    { key: 'Escape', run: closeSearchPanel, scope: 'editor search-panel' },
     { key: sc('search-select-matches'), run: selectSelectionMatches },
     { key: sc('search-go-to-line'), run: gotoLine },
     { key: sc('search-select-next'), run: selectNextOccurrence, preventDefault: true },
@@ -206,19 +292,6 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: sc('folding-unfold-at-cursor'), run: unfoldCode },
     { key: sc('folding-fold-all'), run: foldAll },
     { key: sc('folding-unfold-all'), run: unfoldAll },
-
-    // defaultKeymap
-    { key: 'Alt-ArrowLeft', mac: 'Ctrl-ArrowLeft', run: cursorSyntaxLeft, shift: selectSyntaxLeft },
-    { key: 'Alt-ArrowRight', mac: 'Ctrl-ArrowRight', run: cursorSyntaxRight, shift: selectSyntaxRight },
-
-    { key: 'Alt-ArrowUp', run: moveLineUp },
-    { key: 'Shift-Alt-ArrowUp', run: copyLineUp },
-
-    { key: 'Alt-ArrowDown', run: moveLineDown },
-    { key: 'Shift-Alt-ArrowDown', run: copyLineDown },
-
-    { key: 'Escape', run: simplifySelection },
-    { key: 'Mod-Enter', run: insertBlankLine },
 
     { key: sc('selection-line'), run: selectLine },
     { key: sc('selection-parent-syntax'), run: selectParentSyntax, preventDefault: true },
@@ -256,49 +329,12 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
 
     { mac: 'Ctrl-v', run: cursorPageDown },
 
-    // Standard keymap
-    { key: 'ArrowLeft', run: cursorCharLeft, shift: selectCharLeft, preventDefault: true },
-    { key: 'Mod-ArrowLeft', mac: 'Alt-ArrowLeft', run: cursorGroupLeft, shift: selectGroupLeft, preventDefault: true },
-    { mac: 'Cmd-ArrowLeft', run: cursorLineBoundaryLeft, shift: selectLineBoundaryLeft, preventDefault: true },
-    { key: 'ArrowRight', run: cursorCharRight, shift: selectCharRight, preventDefault: true },
-    { key: 'Mod-ArrowRight', mac: 'Alt-ArrowRight', run: cursorGroupRight, shift: selectGroupRight, preventDefault: true },
-    { mac: 'Cmd-ArrowRight', run: cursorLineBoundaryRight, shift: selectLineBoundaryRight, preventDefault: true },
-    { key: 'ArrowUp', run: cursorLineUp, shift: selectLineUp, preventDefault: true },
-    { mac: 'Cmd-ArrowUp', run: cursorDocStart, shift: selectDocStart },
-    { mac: 'Ctrl-ArrowUp', run: cursorPageUp, shift: selectPageUp },
-    { key: 'ArrowDown', run: cursorLineDown, shift: selectLineDown, preventDefault: true },
-    { mac: 'Cmd-ArrowDown', run: cursorDocEnd, shift: selectDocEnd },
-    { mac: 'Ctrl-ArrowDown', run: cursorPageDown, shift: selectPageDown },
-    { key: 'PageUp', run: cursorPageUp, shift: selectPageUp },
-    { key: 'PageDown', run: cursorPageDown, shift: selectPageDown },
-    { key: 'Home', run: cursorLineBoundaryBackward, shift: selectLineBoundaryBackward, preventDefault: true },
-    { key: 'Mod-Home', run: cursorDocStart, shift: selectDocStart },
-    { key: 'End', run: cursorLineBoundaryForward, shift: selectLineBoundaryForward, preventDefault: true },
-    { key: 'Mod-End', run: cursorDocEnd, shift: selectDocEnd },
-    { key: 'Enter', run: insertNewlineAndIndent, shift: insertNewlineAndIndent },
-    { key: 'Mod-a', run: selectAll },
-    { key: 'Backspace', run: deleteCharBackward, shift: deleteCharBackward },
-    { key: 'Delete', run: deleteCharForward },
-    { key: 'Mod-Backspace', mac: 'Alt-Backspace', run: deleteGroupBackward },
-    { key: 'Mod-Delete', mac: 'Alt-Delete', run: deleteGroupForward },
-    { mac: 'Mod-Backspace', run: deleteLineBoundaryBackward },
-    { mac: 'Mod-Delete', run: deleteLineBoundaryForward },
-
     // Table Editor Keys. These need to be the last, since they override some
     // commands and need to only run if nothing equivalently mapped can be run
     // within the corresponding cells.
     { key: sc('table-align-col-left'), run: alignLeft, preventDefault: true },
     { key: sc('table-align-col-center'), run: alignCenter, preventDefault: true },
     { key: sc('table-align-col-right'), run: alignRight, preventDefault: true },
-    { key: sc('table-align'), run: v => alignTables(v, v.state.selection.main.head) },
-    { key: 'Alt-ArrowUp', run: swapPrevRow },
-    { key: 'Alt-Shift-ArrowUp', run: addRowBefore },
-    { key: 'Alt-ArrowDown', run: swapNextRow },
-    { key: 'Alt-Shift-ArrowDown', run: addRowAfter },
-    { key: 'Alt-ArrowRight', run: swapNextCol },
-    { key: 'Alt-Shift-ArrowRight', run: addColAfter },
-    { key: 'Alt-ArrowLeft', run: swapPrevCol },
-    { key: 'Alt-Shift-ArrowLeft', run: addColBefore },
-    { key: 'Mod-Alt-j', run: removeLineBreaks }
+    { key: sc('table-align'), run: v => alignTables(v, v.state.selection.main.head) }
   ]
 }
