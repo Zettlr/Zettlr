@@ -20,6 +20,7 @@
 - The Table of Contents title in the sidebar is now properly reset (#6397).
 - Improve toolbar styling (#6418).
 - Fixed a linter warning for footnotes without spaces (#6434).
+- Updated French translations (#6430).
 
 ## Under the Hood
 
