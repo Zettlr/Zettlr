@@ -15,29 +15,31 @@
 import { type DefaultShortcut, getDefaultKeybinding } from 'source/common/util/shortcuts'
 
 /**
- * An enum of names that are available for custom shortcuts. Name schema:
- * `group.what-action-it-performs`, e.g., `table.align` aligns a table.
+ * An enum of names that are available for custom shortcuts.
  */
 export type EditorShortcutName = 'autocomplete-invoke'|'autocomplete-accept'|
   // Markdown
   'md-insert-link'|'md-insert-image'|'md-insert-footnote'|'md-highlight'|
   // Search
-  'search-find-next'|'search-find-previous'|'search-select-matches'|'search-go-to-line'|'search-select-next'|
+  'search-find-next'|'search-find-previous'|'search-select-matches'|
+  'search-go-to-line'|'search-select-next'|
   // Folding
-  'folding-fold-at-cursor'|'folding-unfold-at-cursor'|'folding-fold-all'|'folding-unfold-all'|
+  'folding-fold-at-cursor'|'folding-unfold-at-cursor'|'folding-fold-all'|
+  'folding-unfold-all'|
   // Tables
   'table-align'|
   'table-align-col-left'|'table-align-col-center'|'table-align-col-right'|
   // Selection
-  'selection-undo'|'selection-redo'|'selection-line'|'selection-parent-syntax'|'selection-indent'|'selection-all'|
+  'selection-undo'|'selection-redo'|'selection-line'|'selection-parent-syntax'|
+  'selection-indent'|'selection-all'|
   // Editing commands
   'edit-toggle-comment'|'edit-toggle-block-comment'|
   // Transformations
-  'tr-zap-gremlins'|'tr-strip-duplicate-spaces'|
+  'tr-zap-gremlins'|'tr-strip-duplicate-spaces'|'tr-sentence-case'|
   'tr-italics-to-quotes'|'tr-quotes-to-italics'|'tr-remove-line-breaks'|
   'tr-straighten-quotes'|'tr-quotes-to-magic'|'tr-ensure-double-quotes'|
-  'tr-double-quotes-to-single'|'tr-single-quotes-to-double'|'tr-emdash-add-spaces'|'tr-emdash-remove-spaces'|
-  'tr-sentence-case'|'tr-title-case'|
+  'tr-double-quotes-to-single'|'tr-single-quotes-to-double'|'tr-title-case'|
+  'tr-emdash-add-spaces'|'tr-emdash-remove-spaces'|
   // Miscellaneous
   'misc-toggle-tab-focus'
 
@@ -51,7 +53,8 @@ export interface CustomEditorShortcut {
 
 /**
  * Default keybindings for all commands. May be empty (in which case there is no
- * default shortcut assigned.)
+ * default shortcut assigned.) This is used to collect all keybindings at a
+ * central place and allow configuration of a subset of them.
  */
 export const defaultKeybindings: Record<EditorShortcutName, DefaultShortcut> = {
   'autocomplete-invoke': { key: 'Ctrl-Space' },

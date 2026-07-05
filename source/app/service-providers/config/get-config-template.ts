@@ -33,6 +33,22 @@ interface FileTypeSettings<F = boolean, S = boolean, O = 'zettlr'|'system'> {
   openWith: O
 }
 
+// The following lines make a subset of all available editor/UI shortcuts
+// configurable. This way, we do not have to specify *all* shortcuts, but only
+// those that are actually configurable.
+type Extends<T, U extends T> = U // Helper type to allow for autocomplete
+export type ConfigurableEditorShortcuts = Extends<
+  EditorShortcutName,
+  'table-align'|'table-align-col-center'|'table-align-col-left'|
+  'table-align-col-right'|'tr-zap-gremlins'|'tr-emdash-add-spaces'|
+  'tr-double-quotes-to-single'|'tr-emdash-remove-spaces'|
+  'tr-ensure-double-quotes'|'tr-italics-to-quotes'|'tr-quotes-to-italics'|
+  'tr-quotes-to-magic'|'tr-remove-line-breaks'|'tr-sentence-case'|
+  'tr-single-quotes-to-double'|'tr-straighten-quotes'|
+  'tr-strip-duplicate-spaces'|'tr-title-case'
+>
+export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'>
+
 /**
  * This type describes an entry of the ignored rules array in the config. We
  * define this type here, and not in the LanguageTool command, because if we
@@ -241,7 +257,7 @@ export interface ConfigOptions {
     zoomBehavior: 'gui'|'editor'
   }
   shortcuts: {
-    editor: Record<EditorShortcutName, string>
+    editor: Record<ConfigurableEditorShortcuts, string>
     ui: Record<MenuShortcutName, string>
   }
   displayToolbarButtons: {
@@ -532,33 +548,10 @@ export function getConfigTemplate (): ConfigOptions {
         'previous-tab': ''
       },
       editor: {
-        'autocomplete-invoke': '',
-        'autocomplete-accept': '',
-        'md-insert-link': '',
-        'md-insert-image': '',
-        'md-insert-footnote': '',
-        'md-highlight': '',
-        'search-find-next': '',
-        'search-find-previous': '',
-        'search-select-matches': '',
-        'search-go-to-line': '',
-        'search-select-next': '',
-        'folding-fold-at-cursor': '',
-        'folding-unfold-at-cursor': '',
-        'folding-fold-all': '',
-        'folding-unfold-all': '',
         'table-align': '',
         'table-align-col-left': '',
         'table-align-col-center': '',
         'table-align-col-right': '',
-        'selection-undo': '',
-        'selection-redo': '',
-        'selection-line': '',
-        'selection-parent-syntax': '',
-        'selection-indent': '',
-        'selection-all': '',
-        'edit-toggle-comment': '',
-        'edit-toggle-block-comment': '',
         'tr-double-quotes-to-single': '',
         'tr-single-quotes-to-double': '',
         'tr-emdash-add-spaces': '',
@@ -572,8 +565,7 @@ export function getConfigTemplate (): ConfigOptions {
         'tr-straighten-quotes': '',
         'tr-strip-duplicate-spaces': '',
         'tr-title-case': '',
-        'tr-zap-gremlins': '',
-        'misc-toggle-tab-focus': ''
+        'tr-zap-gremlins': ''
       }
     },
     uuid: uuid4() // The app's unique anonymous identifier

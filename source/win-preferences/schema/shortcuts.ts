@@ -16,8 +16,9 @@ import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 import { getDefaultKeybinding } from '@common/util/shortcuts'
-import { defaultKeybindings as editorDefaults, type EditorShortcutName } from '@common/modules/markdown-editor/keymaps/shortcuts'
-import { type MenuShortcutName, defaultKeybindings as menuDefaults } from 'source/app/service-providers/menu/shortcuts'
+import { defaultKeybindings as editorDefaults } from '@common/modules/markdown-editor/keymaps/shortcuts'
+import { defaultKeybindings as menuDefaults } from 'source/app/service-providers/menu/shortcuts'
+import type { ConfigurableEditorShortcuts, ConfigurableUIShortcuts } from 'source/app/service-providers/config/get-config-template.js'
 
 export function getShortcutFields (): PreferencesFieldset[] {
   // For the time being, we'll declare this feature as experimental to ensure we
@@ -25,11 +26,11 @@ export function getShortcutFields (): PreferencesFieldset[] {
   const disclaimer = ' WARNING: EXPERIMENTAL FEATURE. This feature may still change at any time without prior communication.'
 
   // Utility functions to retrieve the default keybindings
-  const defaultEditorShortcut = (name: EditorShortcutName) => {
+  const defaultEditorShortcut = (name: ConfigurableEditorShortcuts) => {
     return getDefaultKeybinding(name, editorDefaults)
   }
 
-  const defaultUIShortcut = (name: MenuShortcutName) => {
+  const defaultUIShortcut = (name: ConfigurableUIShortcuts) => {
     return getDefaultKeybinding(name, menuDefaults)
   }
 
