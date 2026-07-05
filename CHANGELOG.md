@@ -21,6 +21,8 @@
 - Improve toolbar styling (#6418).
 - Fixed a linter warning for footnotes without spaces (#6434).
 - Updated French translations (#6430).
+- Fixed a regression that causes windows to briefly flash white when macOS
+  vibrancy is disabled and the app is set to dark mode (#6438).
 
 ## Under the Hood
 
