@@ -21,6 +21,8 @@
 - Improve toolbar styling (#6418).
 - Fixed a linter warning for footnotes without spaces (#6434).
 - Updated French translations (#6430).
+- Fixed a regression that causes windows to briefly flash white when macOS
+  vibrancy is disabled and the app is set to dark mode (#6438).
 
 ## Under the Hood
 
@@ -29,6 +31,7 @@
   corporate firewalls (#6006; #5271).
 - Removed deprecated path check for the app.
 - Improve performance of the editor (#6388).
+- Improved handling of invalid dates in the statistics provider (#6433).
 - Remove superfluous search logging (#6401).
 - Refactor `posInNode` utility to `nodeAtPos` and align documentation with
   behavior (#6399).

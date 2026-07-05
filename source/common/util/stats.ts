@@ -13,6 +13,8 @@
  * END HEADER
  */
 
+import { DateTime } from 'luxon'
+
 /**
  * Returns today's date as an ISO string (YYYY-MM-DD)
  *
@@ -25,6 +27,20 @@ export function today (): string {
   const dd = d.getDate().toString().padStart(2, '0')
 
   return `${yyyy}-${mm}-${dd}`
+}
+
+/**
+ * Checks if the provided date, which must be in ISO 8601 format.
+ *
+ * @param   {string}   date  The date in question
+ *
+ * @return  {boolean}        True if the date is tomorrow or further into the
+ *                           future.
+ */
+export function isDateInTheFuture (date: string): boolean {
+  const today = DateTime.now()
+  const dateToCheck = DateTime.fromISO(date)
+  return today.diff(dateToCheck, 'days').days < 0
 }
 
 /**
