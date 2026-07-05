@@ -114,6 +114,7 @@
     "rehype-remove-comments": "^6.1.1",
     "remark": "^15.0.1",
     "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
     "remark-lint": "^10.0.1",
     "remark-lint-blockquote-indentation": "^4.0.1",
     "remark-lint-checkbox-character-style": "^5.0.1",
