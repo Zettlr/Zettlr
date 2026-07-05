@@ -171,7 +171,6 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     inputModeCompartment.of(inputMode),
     // Then, include the default keymap
     zettlrKeymap(options.initialConfig.shortcuts),
-    darkMode({ darkMode: options.initialConfig.darkMode, ...themes[options.initialConfig.theme] }),
     darkMode({ darkMode: useDarkModeEditor(options.initialConfig.darkMode, options.initialConfig.darkModeEditor), ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),
