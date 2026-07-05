@@ -19,6 +19,7 @@
   be adjacent to a magic quote.
 - The Table of Contents title in the sidebar is now properly reset (#6397).
 - Improve toolbar styling (#6418).
+- Fixed a linter warning for footnotes without spaces (#6434).
 
 ## Under the Hood
 
