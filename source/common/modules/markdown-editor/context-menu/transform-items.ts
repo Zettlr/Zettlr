@@ -89,13 +89,7 @@ export function getTransformSubmenu (view: EditorView): SubmenuItem {
         label: trans('Convert quotes to Magic Quotes'),
         accelerator: sc('tr-quotes-to-magic'),
         type: 'normal',
-        action () {
-          // TODO: I just realized what this is. Screams for an improvement.
-          const { magicQuotes } = view.state.field(configField).autocorrect
-          const primary = magicQuotes.primary.split('\u2026') as [string, string]
-          const secondary = magicQuotes.secondary.split('\u2026') as [string, string]
-          curlQuotes(primary, secondary)(view)
-        }
+        action () { curlQuotes(view) }
       },
       {
         label: trans('Ensure double quotes'),

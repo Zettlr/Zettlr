@@ -246,13 +246,7 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: sc('tr-quotes-to-italics'), run: view => quotesToItalics(view.state.field(configField).italicFormatting)(view) },
     { key: sc('tr-remove-line-breaks'), run: removeLineBreaks },
     { key: sc('tr-straighten-quotes'), run: straightenQuotes },
-    { key: sc('tr-quotes-to-magic'), run: view => {
-      const { magicQuotes } = view.state.field(configField).autocorrect
-      const primary = magicQuotes.primary.split('\u2026') as [string, string]
-      const secondary = magicQuotes.secondary.split('\u2026') as [string, string]
-      return curlQuotes(primary, secondary)(view)
-    }
-    },
+    { key: sc('tr-quotes-to-magic'), run: curlQuotes },
     { key: sc('tr-ensure-double-quotes'), run: toDoubleQuotes },
     { key: sc('tr-double-quotes-to-single'), run: doubleQuotesToSingle },
     { key: sc('tr-single-quotes-to-double'), run: singleQuotesToDouble },

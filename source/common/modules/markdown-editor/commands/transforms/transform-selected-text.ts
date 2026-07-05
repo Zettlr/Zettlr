@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { ChangeSet, type StateCommand } from '@codemirror/state'
+import { ChangeSet, type EditorState, type StateCommand } from '@codemirror/state'
 
 /**
  * Transform the supplied `text`.
@@ -22,11 +22,12 @@ import { ChangeSet, type StateCommand } from '@codemirror/state'
  * * change the casing
  * * etc.
  *
- * @param   {string}  text  The text to be transformed.
+ * @param   {string}       text   The text to be transformed.
+ * @param   {EditorState}  state  The editor state.
  *
- * @return  {string}        The transformed text.
+ * @return  {string}              The transformed text.
  */
-export type TransformText = (text: string) => string
+export type TransformText = (text: string, state: EditorState) => string
 
 /**
  * Return a `Command` to transform selected text.
@@ -46,7 +47,7 @@ export function transformSelectedText (transform: TransformText): StateCommand {
     const changes = state.selection.ranges.reduce((change, { from, to }) => {
       const text = state.sliceDoc(from, to)
 
-      const transformedText = transform(text)
+      const transformedText = transform(text, state)
 
       if (transformedText === text) {
         // when there's no change just return the existing change (if any)
