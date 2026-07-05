@@ -143,7 +143,7 @@ const fieldsets = computed<Fieldset[]>(() => {
     ...getFileManagerFields(configStore.config),
     ...getGeneralFields(appLangOptions.value),
     ...getImportExportFields(),
-    ...getShortcutFields(),
+    ...getShortcutFields(configStore.config),
     ...getSnippetsFields(),
     ...getSpellcheckingFields(configStore.config),
     ...getZettelkastenFields(configStore.config)

@@ -43,6 +43,9 @@
       v-on:click="resetShortcut"
     ></ButtonControl>
   </div>
+  <ZtrAdmonition v-if="props.conflicts && props.conflicts.length > 0" v-bind:type="'warning'">
+    {{ conflictsWarning }}
+  </ZtrAdmonition>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +68,7 @@ import { computed, ref } from 'vue'
 import { keyName, base } from 'w3c-keyname'
 import ShortcutDisplay from '../../ShortcutDisplay.vue'
 import ButtonControl from './ButtonControl.vue'
+import ZtrAdmonition from '../../ZtrAdmonition.vue'
 
 interface ExplodedShortcut {
   altKey: boolean
@@ -82,6 +86,7 @@ const props = defineProps<{
   name?: string
   label?: string
   defaultShortcut?: string
+  conflicts?: string[]
   reset?: boolean|string
 }>()
 
@@ -93,6 +98,11 @@ const placeholderLabel = computed(() => {
 
 const recordingLabel = trans('Recording…')
 const resetLabel = trans('Reset')
+
+const conflictsWarning = computed(() => {
+  const conflicts = props.conflicts ?? []
+  return trans('This shortcut conflicts with: %s', conflicts.join(', '))
+})
 
 // This is the "exploded" shortcut, so that we can display it
 const newShortcut = ref<ExplodedShortcut>({
@@ -160,6 +170,11 @@ function handleKeydown (event: KeyboardEvent): void {
   newShortcut.value.modKey = event.metaKey
   newShortcut.value.ctrlKey = event.ctrlKey
   newShortcut.value.key = key
+
+  // If the user presses `Cmd+Shift+a`, the key will be A, but we want a.
+  if (event.shiftKey && key !== key.toLowerCase()) {
+    newShortcut.value.key = key.toLowerCase()
+  }
 
   // The first non-terminal key is our sign that the recording can be stopped.
   if (!isNonTerminalKey) {

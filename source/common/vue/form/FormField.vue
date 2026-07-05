@@ -168,6 +168,7 @@
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
     v-bind:default-shortcut="props.field.defaultShortcut"
+    v-bind:conflicts="props.field.conflicts"
     v-bind:reset="props.field.reset"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></ShortcutCaptureControl>

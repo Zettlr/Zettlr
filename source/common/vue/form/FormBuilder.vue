@@ -211,6 +211,7 @@ interface TextField extends TextOrShortcutField {
 interface ShortcutField extends TextOrShortcutField {
   type: 'shortcut'
   defaultShortcut?: string
+  conflicts?: string[]
 }
 
 interface NumberField extends BasicInfo {
