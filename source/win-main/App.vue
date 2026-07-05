@@ -574,6 +574,10 @@ const toolbarControls = computed<ToolbarControl[]>(() => {
       visible: getToolbarButtonDisplay('showDocumentInfoText')
     },
     {
+      type: 'spacer',
+      size: '1x'
+    },
+    {
       type: 'ring',
       id: 'pomodoro',
       title: trans('Pomodoro timer'),

@@ -4,6 +4,10 @@
 
 - **Feature**: You can now set the editor theme to use a light or dark
   appearance independent of the app appearance (#5851).
+- **Change**: Changed the layout of the project properties. Now the custom
+  templates and CSL section are placed on the general tab, while the export
+  profile picker has moved to its own tab. This gives the custom options more
+  visibility and provides a better grouping of the options.
 - Fixed a regression from 4.6.1 where the full-text search would not search any
   open standalone files (#6387).
 - Fixed an issue on macOS where opening a file from Finder with no open main
@@ -14,6 +18,7 @@
   quote instead of deleting the text if some text was selected that happened to
   be adjacent to a magic quote.
 - The Table of Contents title in the sidebar is now properly reset (#6397).
+- Improve toolbar styling (#6418).
 
 ## Under the Hood
 
