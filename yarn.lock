@@ -6944,9 +6944,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^18.1.0":
-  version: 18.1.0
-  resolution: "eslint-plugin-n@npm:18.1.0"
+"eslint-plugin-n@npm:^18.2.1":
+  version: 18.2.1
+  resolution: "eslint-plugin-n@npm:18.2.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.5.0"
     enhanced-resolve: "npm:^5.17.1"
@@ -6965,7 +6965,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10/3557362ce4935bf133e89ed901b9aa70db42d266c06d3ffe9f40d019900d9a9776ea6e226f45840371768f43e23ebe4152e7dd80b7f7de859be03039ff9ca5e3
+  checksum: 10/96547dc958abeaa6cbdf2b768cb72ff3b03b44107db50304ae1b5e55e9c7bbe4d93444b425ee2427309c8fe9feddafc49b857d860e0cf7e4a95edb67c2b49854
   languageName: node
   linkType: hard
 
@@ -15750,7 +15750,7 @@ __metadata:
     electron-devtools-installer: "npm:^4.0.0"
     eslint: "npm:^10.5.0"
     eslint-plugin-import: "npm:^2.32.0"
-    eslint-plugin-n: "npm:^18.1.0"
+    eslint-plugin-n: "npm:^18.2.1"
     eslint-plugin-promise: "npm:^7.3.0"
     eslint-plugin-vue: "npm:^10.9.2"
     fix-path: "npm:^5.0.0"
