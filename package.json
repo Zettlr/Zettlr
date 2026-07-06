@@ -146,7 +146,7 @@
     "underscore": "^1.13.8",
     "unified": "^11.0.5",
     "uuid": "^14.0.0",
-    "vue": "^3.5.38",
+    "vue": "^3.5.39",
     "vue-virtual-scroller": "^3.0.4",
     "w3c-keyname": "^2.2.8",
     "yaml": "^2.9.0"
