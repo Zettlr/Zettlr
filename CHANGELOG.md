@@ -4,6 +4,8 @@
 
 - **Feature**: You can now set the editor theme to use a light or dark
   appearance independent of the app appearance (#5851).
+- **Feature**: You can now click a long-running-task notification for both
+  projects and single files to directly open the corresponding file.
 - **Change**: Changed the layout of the project properties. Now the custom
   templates and CSL section are placed on the general tab, while the export
   profile picker has moved to its own tab. This gives the custom options more

@@ -77,15 +77,24 @@ import { ipcMain } from 'electron'
 import { type LRT_JSON, LongRunningTask, TaskStatus } from './task'
 
 export type LRTIPCSyncMessage = IPCAPI<{
+  // Retrieve all tasks from main
   'get-tasks': unknown
+  // Abort the provided task
   'abort-task': { id: string }
+  // Add a new task
   'new-task': { task: LRT_JSON }
+  // Updates an existing task
   'update-task': { task: LRT_JSON }
+  // Deletes a task
   'delete-task': { id: string }
+  // The user initiates an interaction with the task
+  'interact-task': { id: string }
 }>
 
 export type LRTIPCAsyncMessage = IPCAPI<{
+  // Retrieve all tasks from main
   'get-tasks': unknown
+  // Deletes a task
   'delete-task': { id: string }
 }>
 
@@ -114,6 +123,14 @@ export default class LongRunningTaskProvider extends ProviderContract {
         }
 
         task.endTask('abort')
+      } else if (message.command === 'interact-task') {
+        const task = this.tasks.find(t => t.id === message.payload.id)
+
+        if (task === undefined) {
+          throw new Error(`Cannot interact with task ${message.payload.id}: Not found.`)
+        }
+
+        task.interactWith()
       }
     })
 
@@ -146,26 +163,26 @@ export default class LongRunningTaskProvider extends ProviderContract {
     }
   }
 
-  // NOTE: "abortable" says whether the USER can abort this task. Tasks can always be aborted programmatically.
   /**
    * Registers a new task and returns it, to be managed by the caller.
    *
-   * @param   {string}           title      The title for the task
-   * @param   {string}           info       An infostring for the task
-   * @param   {boolean}          abortable  Whether the task is abortable. Note
-   *                                        that this only affects whether the
-   *                                        user can manually abort the task.
-   *                                        The caller can always abort a task.
+   * @param   {string}           title               The title for the task
+   * @param   {string}           info                An infostring for the task
+   * @param   {string}           successInteraction  Optional callback for when the user clicks a successful task in the GUI
+   * @param   {boolean}          abortable           Whether the task is
+   *                                                 abortable. Note that this
+   *                                                 only affects whether the
+   *                                                 user can manually abort the
+   *                                                 task. The caller can always
+   *                                                 programmatically abort a
+   *                                                 task.
    *
-   * @return  {LongRunningTask}             The new task
+   * @return  {LongRunningTask}                      The new task
    */
-  public registerTask (title: string, info?: string, abortable: boolean = true): LongRunningTask {
-    const task = new LongRunningTask(uuid(), title, info, abortable)
-
+  public registerTask (title: string, info?: string, successInteraction?: () => void, abortable: boolean = true): LongRunningTask {
+    const task = new LongRunningTask(uuid(), title, info, successInteraction, abortable)
     this.tasks.push(task)
-
     broadcastIPCMessage('lrt-provider', { command: 'new-task', payload: { task: task.toJSON() } } as LRTIPCSyncMessage)
-
     return task
   }
 

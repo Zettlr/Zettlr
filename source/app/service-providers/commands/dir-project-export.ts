@@ -24,6 +24,7 @@ import path from 'path'
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import { type PandocProfileMetadata } from '../assets'
 import type { DirDescriptor, ProjectSettings } from 'source/types/common/fsal'
+import { PANDOC_WRITERS } from 'source/common/pandoc-util/pandoc-maps'
 
 /**
  * Converts a path fragment to use Windows path separators by replacing / with \
@@ -250,9 +251,15 @@ async function exportUsingProfile (app: AppServiceContainer, dir: DirDescriptor,
       task.endTask('error', err)
       throw err
     } else {
+      const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
       task.update({
         title: trans('Project "%s" has been exported.', config.title),
-        info: trans('Exported project using profile %s.', profile.name)
+        info: trans('Project has been exported to %s.', readableFormat),
+        successInteraction: () => {
+          shell.openPath(result.targetFile).catch(err => {
+            app.log.error(`[Project] Could not open file '${result.targetFile}'`, err)
+          })
+        }
       })
       task.endTask('success')
     }

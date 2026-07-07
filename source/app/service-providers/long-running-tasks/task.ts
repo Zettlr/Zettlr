@@ -55,6 +55,7 @@ export interface LRT_JSON {
   info?: string
   currentTaskPercentage?: number
   abortable: boolean
+  interactable: boolean
 }
 
 // Events the LRT can emit
@@ -132,6 +133,14 @@ export class LongRunningTask extends EventEmitter<LRT_EventMap> {
   private currentTaskPercentage: number|undefined
 
   /**
+   * An optional function that will perform an action when the user clicks this
+   * task in the GUI.
+   *
+   * @var  {Function}
+   */
+  private successInteraction: (() => void)|undefined
+
+  /**
    * This variable is used to hold a debounce promise to ensure the provider
    * does not flood the IPC pipe with messages in case a task is updated
    * extremely often.
@@ -149,13 +158,14 @@ export class LongRunningTask extends EventEmitter<LRT_EventMap> {
    * @param {string}   info       Optional longer description/info-string.
    * @param {boolean}  abortable  Whether this task is user-abortable (default: true)
    */
-  constructor (public readonly id: string, title: string, info?: string, abortable: boolean = true) {
+  constructor (public readonly id: string, title: string, info?: string, successInteraction?: () => void, abortable: boolean = true) {
     super()
     this.title = title
     this.info = info
     this.startTime = DateTime.now()
     this.status = TaskStatus.ongoing
     this.abortable = abortable
+    this.successInteraction = successInteraction
     this.debounceFlag = false
   }
 
@@ -188,11 +198,12 @@ export class LongRunningTask extends EventEmitter<LRT_EventMap> {
    *
    * @param  {any}  data  The data to update.
    */
-  public update (data: Partial<{ title: string, info: string, percentage: number, abortable: boolean }>) {
+  public update (data: Partial<{ title: string, info: string, percentage: number, abortable: boolean, successInteraction: () => void }>) {
     this.title = data.title ?? this.title
     this.info = data.info ?? this.info
     this.currentTaskPercentage = data.percentage ?? this.currentTaskPercentage
     this.abortable = data.abortable ?? this.abortable
+    this.successInteraction = data.successInteraction ?? this.successInteraction
     this.broadcastChange()
   }
 
@@ -203,6 +214,13 @@ export class LongRunningTask extends EventEmitter<LRT_EventMap> {
    */
   public get isAbortable (): boolean {
     return this.abortable
+  }
+
+  /**
+   * Calls the interaction for the task (if applicable)
+   */
+  public interactWith () {
+    this.successInteraction?.()
   }
 
   /**
@@ -260,7 +278,8 @@ export class LongRunningTask extends EventEmitter<LRT_EventMap> {
       error: this.error !== undefined ? { name: this.error.name, message: this.error.message } : undefined,
       status: this.status, startTime: this.startTime.toISO(), endTime: this.endTime?.toISO() ?? undefined,
       currentTaskPercentage: this.currentTaskPercentage,
-      abortable: this.abortable
+      abortable: this.abortable,
+      interactable: this.successInteraction !== undefined
     }
   }
 }
