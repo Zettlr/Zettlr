@@ -174,7 +174,6 @@ function formatPercentage (perc: number, roundTo = 2): string {
 
 <style lang="css" scoped>
 #lrt-wrapper {
-  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 5px;

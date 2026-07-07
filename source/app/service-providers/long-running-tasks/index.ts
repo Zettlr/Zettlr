@@ -69,53 +69,44 @@
  * END HEADER
  */
 
-import ProviderContract from '../provider-contract'
+import ProviderContract, { type IPCAPI } from '../provider-contract'
 import { v4 as uuid } from 'uuid'
 import type LogProvider from '../log'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import { ipcMain } from 'electron'
 import { type LRT_JSON, LongRunningTask, TaskStatus } from './task'
 
-export interface LRTIPCGetMessage {
-  command: 'get-tasks'
-}
+export type LRTIPCSyncMessage = IPCAPI<{
+  'get-tasks': unknown
+  'abort-task': { id: string }
+  'new-task': { task: LRT_JSON }
+  'update-task': { task: LRT_JSON }
+  'delete-task': { id: string }
+}>
 
-export interface LRTIPCAbortMessage {
-  command: 'abort-task'
-  payload: { id: string }
-}
-
-export interface LRTIPCDeleteMessage {
-  command: 'delete-task'
-  payload: { id: string }
-}
-
-export interface LRTIPCUpdateMessage {
-  command: 'update-task',
-  payload: { task: LRT_JSON }
-}
-
-export interface LRTIPCNewTaskMessage {
-  command: 'new-task'
-  payload: { task: LRT_JSON }
-}
-
-export type LRTIPCSyncMessage = LRTIPCAbortMessage|LRTIPCNewTaskMessage|LRTIPCUpdateMessage|LRTIPCDeleteMessage
-export type LRTIPCAsyncMessage = LRTIPCGetMessage|LRTIPCDeleteMessage
+export type LRTIPCAsyncMessage = IPCAPI<{
+  'get-tasks': unknown
+  'delete-task': { id: string }
+}>
 
 export default class LongRunningTaskProvider extends ProviderContract {
   private tasks: LongRunningTask[]
 
+  /**
+   * This provider manages long running tasks.
+   *
+   * @param   {LogProvider}  logger    The log provider
+   */
   constructor (private readonly logger: LogProvider) {
     super()
     this.tasks = []
 
-    ipcMain.on('lrt-provider', (event, args: LRTIPCSyncMessage) => {
-      if (args.command === 'abort-task') {
-        const task = this.tasks.find(t => t.id === args.payload.id)
+    ipcMain.on('lrt-provider', (event, message: LRTIPCSyncMessage) => {
+      if (message.command === 'abort-task') {
+        const task = this.tasks.find(t => t.id === message.payload.id)
 
         if (task === undefined) {
-          throw new Error(`Cannot abort task with ID ${args.payload.id}: Not found.`)
+          throw new Error(`Cannot abort task with ID ${message.payload.id}: Not found.`)
         }
 
         if (!task.isAbortable) {
@@ -135,8 +126,14 @@ export default class LongRunningTaskProvider extends ProviderContract {
     })
   }
 
+  /**
+   * Boots the provider
+   */
   public async boot () {}
 
+  /**
+   * Shuts down the provider
+   */
   public async shutdown () {
     const stillRunning = this.tasks.filter(t => t.getStatus() === TaskStatus.ongoing)
 
@@ -150,6 +147,18 @@ export default class LongRunningTaskProvider extends ProviderContract {
   }
 
   // NOTE: "abortable" says whether the USER can abort this task. Tasks can always be aborted programmatically.
+  /**
+   * Registers a new task and returns it, to be managed by the caller.
+   *
+   * @param   {string}           title      The title for the task
+   * @param   {string}           info       An infostring for the task
+   * @param   {boolean}          abortable  Whether the task is abortable. Note
+   *                                        that this only affects whether the
+   *                                        user can manually abort the task.
+   *                                        The caller can always abort a task.
+   *
+   * @return  {LongRunningTask}             The new task
+   */
   public registerTask (title: string, info?: string, abortable: boolean = true): LongRunningTask {
     const task = new LongRunningTask(uuid(), title, info, abortable)
 
@@ -160,6 +169,11 @@ export default class LongRunningTaskProvider extends ProviderContract {
     return task
   }
 
+  /**
+   * Deletes a task from the provider.
+   *
+   * @param   {string}  id  The ID for the task to be deleted
+   */
   public deleteTask (id: string) {
     const idx = this.tasks.findIndex(t => t.id === id)
     if (idx > -1) {
