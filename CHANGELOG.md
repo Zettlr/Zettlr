@@ -23,6 +23,7 @@
 - Updated French translations (#6430).
 - Fixed a regression that causes windows to briefly flash white when macOS
   vibrancy is disabled and the app is set to dark mode (#6438).
+- Fixed `s`/`S` shortcuts in vim mode (#6445).
 
 ## Under the Hood
 
