@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import type { LRT_JSON } from 'source/app/service-providers/long-running-tasks'
+import type { LRT_JSON } from 'source/app/service-providers/long-running-tasks/task'
 import { trans } from 'source/common/i18n-renderer'
 import LoadingSpinner from 'source/common/vue/LoadingSpinner.vue'
 import PopoverWrapper from 'source/common/vue/PopoverWrapper.vue'
