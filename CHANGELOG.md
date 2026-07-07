@@ -24,6 +24,9 @@
 - Fixed a regression that causes windows to briefly flash white when macOS
   vibrancy is disabled and the app is set to dark mode (#6438).
 - Fixed `s`/`S` shortcuts in vim mode (#6445).
+- Fixed a regression from the previous version that caused timeouts when using a
+  local LanguageTool integration with very long texts after the switch from
+  `got` to `ky`.
 
 ## Under the Hood
 
