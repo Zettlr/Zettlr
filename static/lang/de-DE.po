@@ -84,7 +84,7 @@ msgstr "Lade…"
 
 #: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
-msgstr ""
+msgstr "Die Literaturangabe für das Zitat konnte nicht geladen werden."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
@@ -1087,25 +1087,25 @@ msgstr "Projektverzeichnis öffnen"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:30
 msgid "Close all"
-msgstr ""
+msgstr "Alle schließen"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:190
 msgid "Close all files"
-msgstr ""
+msgstr "Alle Dateien schließen"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 msgid "Close all workspaces"
-msgstr ""
+msgstr "Alle Arbeitsverzeichnisse schließen"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:33
 msgid "Do you really want to close all files?"
-msgstr ""
+msgstr "Möchtest du wirklich alle Dateien schließen?"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:34
 msgid "Do you really want to close all workspaces?"
-msgstr ""
+msgstr "Möchtest du wirklich alle Arbeitsverzeichnisse schließen?"
 
 #. 1: Omit all changes
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
@@ -1228,7 +1228,7 @@ msgstr "Die Datei enthält ungesicherte Änderungen. Speichern oder verwerfen?"
 #: source/app/service-providers/documents/index.ts:948
 #, javascript-format
 msgid "File: %s"
-msgstr ""
+msgstr "Datei: %s"
 
 #: source/app/service-providers/documents/index.ts:1111
 msgid "File changed on disk"
@@ -1944,22 +1944,22 @@ msgstr "Es gab einen Fehler beim Umbenennen der Datei."
 
 #: source/app/service-providers/commands/file-rename.ts:62
 msgid "Change file extension"
-msgstr ""
+msgstr "Dateiendung ändern"
 
 #: source/app/service-providers/commands/file-rename.ts:63
 #, javascript-format
 msgid "Do you want to change the file extension from %s to %s?"
-msgstr ""
+msgstr "Möchtest du die Dateiendung von %s zu %s ändern?"
 
 #: source/app/service-providers/commands/file-rename.ts:65
 #, javascript-format
 msgid "Use %s"
-msgstr ""
+msgstr "%s verwenden"
 
 #: source/app/service-providers/commands/file-rename.ts:66
 #, javascript-format
 msgid "Keep %s"
-msgstr ""
+msgstr "%s behalten"
 
 #: source/app/service-providers/commands/file-rename.ts:160
 #, javascript-format
@@ -2527,41 +2527,48 @@ msgstr "Nutze die ASCII-Reihenfolge (2 kommt nach 10)"
 
 #: source/win-preferences/schema/file-manager.ts:115
 msgid "Workspace sorting"
-msgstr ""
+msgstr "Sortierung der Arbeitsverzeichnisse"
 
 #: source/win-preferences/schema/file-manager.ts:116
 msgid "Zettlr automatically sorts your workspaces by name."
-msgstr ""
+msgstr "Zettlr sortiert deine Arbeitsverzeichnisse automatisch nach Namen."
 
 #: source/win-preferences/schema/file-manager.ts:122
 msgid "Sort workspaces manually"
-msgstr ""
+msgstr "Arbeitsverzeichnisse manuell sortieren"
 
 #: source/win-preferences/schema/file-manager.ts:123
 msgid ""
 "This will be active as soon as you manually change the sort order. Disable "
 "this to reinstate automatic sorting."
 msgstr ""
+"Dies wird aktiv, sobald du die Sortierreihenfolge manuell änderst. "
+"Deaktiviere es, um die automatische Sortierung wiederherzustellen."
 
 #: source/win-preferences/schema/file-manager.ts:129
 msgid "Collapse Workspaces Behavior"
-msgstr ""
+msgstr "Verhalten beim Einklappen von Arbeitsverzeichnissen"
 
 #: source/win-preferences/schema/file-manager.ts:131
 msgid ""
 "Determine how the context menu item to collapse workspaces in the file "
 "manager behaves. You can choose single-step or two-step."
 msgstr ""
+"Lege fest, wie sich der Kontextmenü-Eintrag zum Einklappen von "
+"Arbeitsverzeichnissen im Dateimanager verhält. Du kannst zwischen ein- und "
+"zweistufig wählen."
 
 #: source/win-preferences/schema/file-manager.ts:136
 msgid "Require two steps to collapse workspaces"
-msgstr ""
+msgstr "Zwei Schritte zum Einklappen von Arbeitsverzeichnissen erfordern"
 
 #: source/win-preferences/schema/file-manager.ts:137
 msgid ""
 "When this is active, the first collapse workspace will only collapse "
 "subfolders, the second the workspaces."
 msgstr ""
+"Wenn dies aktiv ist, klappt der erste Schritt nur die Unterordner ein, der "
+"zweite die Arbeitsverzeichnisse."
 
 #: source/win-preferences/schema/general.ts:21
 #: source/win-preferences/schema/general.ts:35
@@ -4088,35 +4095,35 @@ msgstr "Keine Ergebnisse"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
-msgstr ""
+msgstr "Dateien ausblenden"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
-msgstr ""
+msgstr "Dateien anzeigen"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
-msgstr ""
+msgstr "Arbeitsverzeichnisse ausblenden"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
-msgstr ""
+msgstr "Arbeitsverzeichnisse anzeigen"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
-msgstr ""
+msgstr "Zur automatischen Sortierung wechseln"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:255
 msgid "Collapse workspaces"
-msgstr ""
+msgstr "Arbeitsverzeichnisse einklappen"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:255
 msgid "Collapse subfolders"
-msgstr ""
+msgstr "Unterordner einklappen"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:260
 msgid "Sort workspaces…"
-msgstr ""
+msgstr "Arbeitsverzeichnisse sortieren…"
 
 #: source/tmp/win-main/file-manager/TreeItem.vue.ts:83
 msgid "Enter a name"
@@ -4140,35 +4147,35 @@ msgstr "Wörter"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
 msgid "Remove the custom color"
-msgstr ""
+msgstr "Benutzerdefinierte Farbe entfernen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
 msgid "Assign a blue accent color"
-msgstr ""
+msgstr "Blaue Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "Assign a purple accent color"
-msgstr ""
+msgstr "Violette Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:39
 msgid "Assign a rose accent color"
-msgstr ""
+msgstr "Rosa Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:40
 msgid "Assign a red accent color"
-msgstr ""
+msgstr "Rote Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 msgid "Assign a orange accent color"
-msgstr ""
+msgstr "Orange Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Assign a yellow accent color"
-msgstr ""
+msgstr "Gelbe Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
 msgid "Assign a green accent color"
-msgstr ""
+msgstr "Grüne Akzentfarbe zuweisen"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
