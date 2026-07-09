@@ -4,6 +4,8 @@
 
 - **Feature**: You can now set the editor theme to use a light or dark
   appearance independent of the app appearance (#5851).
+- **Feature**: You can now click a long-running-task notification for both
+  projects and single files to directly open the corresponding file.
 - **Change**: Changed the layout of the project properties. Now the custom
   templates and CSL section are placed on the general tab, while the export
   profile picker has moved to its own tab. This gives the custom options more
@@ -12,7 +14,10 @@
   open standalone files (#6387).
 - Fixed an issue on macOS where opening a file from Finder with no open main
   window would not automatically open one (#6391).
-- Update Japanese translations (#6390).
+- Update translations:
+  - `ja-JP` (#6390).
+  - `de-DE` (#6449).
+  - `tr-TR` (#6450).
 - Fix snippets syntax and improve nested support (#6389).
 - Fixed a bug that would cause Zettlr to replace a magic quote with a regular
   quote instead of deleting the text if some text was selected that happened to
@@ -23,6 +28,11 @@
 - Updated French translations (#6430).
 - Fixed a regression that causes windows to briefly flash white when macOS
   vibrancy is disabled and the app is set to dark mode (#6438).
+- Fixed `s`/`S` shortcuts in vim mode (#6445).
+- Fixed a regression from the previous version that caused timeouts when using a
+  local LanguageTool integration with very long texts after the switch from
+  `got` to `ky`.
+- Fixed an issue where empty Pandoc spans would crash the span renderer (#6448)
 
 ## Under the Hood
 

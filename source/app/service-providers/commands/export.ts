@@ -180,7 +180,15 @@ export default class Export extends ZettlrCommand {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
         showNativeNotification(trans('Exported to %s', readableFormat))
-        task.update({ info: trans('Exported to %s', readableFormat) })
+        task.update({
+          title: trans('File %s has been exported', path.basename(file)),
+          info: trans('File has been exported to %s', readableFormat),
+          successInteraction: () => {
+            shell.openPath(output.targetFile).catch(err => {
+              this._app.log.error(`[Project] Could not open file '${output.targetFile}'`, err)
+            })
+          }
+        })
         task.endTask('success')
 
         // In case of a textbundle/pack it's a folder, else it's a file

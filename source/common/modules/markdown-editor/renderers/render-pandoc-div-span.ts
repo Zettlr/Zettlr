@@ -52,6 +52,15 @@ function createSpanDecorations (view: EditorView): RangeSet<Decoration> {
           return
         }
 
+        // Only style the text within the marks
+        const from = marks[0].to
+        const to = marks[1].from
+
+        // Do not apply styling to empty spans
+        if (from === to) {
+          return
+        }
+
         // Parse the classes and other attributes to render in the decoration.
         const attributes = parsePandocAttributes(view.state.sliceDoc(attrs.from, attrs.to))
         const classes = attributes.classes ?? []
@@ -64,10 +73,6 @@ function createSpanDecorations (view: EditorView): RangeSet<Decoration> {
             ...attributes.properties,
           },
         })
-
-        // Only style the text within the marks
-        const from = marks[0].to
-        const to = marks[1].from
 
         ranges.push(deco.range(from, to))
       }
