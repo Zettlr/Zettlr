@@ -14,7 +14,10 @@
   open standalone files (#6387).
 - Fixed an issue on macOS where opening a file from Finder with no open main
   window would not automatically open one (#6391).
-- Update Japanese translations (#6390).
+- Update translations:
+  - `ja-JP` (#6390).
+  - `de-DE` (#6449).
+  - `tr-TR` (#6450).
 - Fix snippets syntax and improve nested support (#6389).
 - Fixed a bug that would cause Zettlr to replace a magic quote with a regular
   quote instead of deleting the text if some text was selected that happened to
