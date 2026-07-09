@@ -120,38 +120,3 @@ export function getCustomShortcut (name: EditorShortcutName, map: CustomEditorSh
     return candidate.shortcut
   }
 }
-
-/**
- * Utility function that checks the shortcut list for conflicts. For this,
- * provide the shortcut to search for conflicts as well as the list of custom
- * shortcuts. It then checks the entire list of available shortcuts and returns
- * all those shortcut names which have the same shortcut assigned (both by
- * default and from the custom shortcut map).
- *
- * @param   {EditorShortcutName}      name  The shortcut in question
- * @param   {CustomEditorShortcut[]}  map   A list of custom shortcuts
- *
- * @return  {EditorShortcutName[]}          All conflicting shortcut names.
- */
-export function getConflicts (name: EditorShortcutName, map: CustomEditorShortcut[]): EditorShortcutName[] {
-  const thisShortcut = getCustomShortcut(name, map)
-  if (thisShortcut === undefined) {
-    return []
-  }
-
-  const conflicts: EditorShortcutName[] = []
-
-  for (const shortcutName of Object.keys(defaultKeybindings) as EditorShortcutName[]) {
-    if (shortcutName === name) {
-      continue
-    }
-
-    const shortcut = getCustomShortcut(shortcutName, map)
-
-    if (shortcut !== undefined && shortcut === thisShortcut) {
-      conflicts.push(shortcutName)
-    }
-  }
-
-  return conflicts
-}

@@ -16,22 +16,100 @@ import { trans } from '@common/i18n-renderer'
 import { type PreferencesFieldset } from '../App.vue'
 import { PreferencesGroups } from './_preferences-groups'
 import { getDefaultKeybinding } from '@common/util/shortcuts'
-import { type CustomEditorShortcut, defaultKeybindings as editorDefaults, getConflicts } from '@common/modules/markdown-editor/keymaps/shortcuts'
-import { defaultKeybindings as menuDefaults } from 'source/app/service-providers/menu/shortcuts'
-import type { ConfigOptions, ConfigurableEditorShortcuts, ConfigurableUIShortcuts } from 'source/app/service-providers/config/get-config-template.js'
+import {
+  type CustomEditorShortcut,
+  type EditorShortcutName,
+  defaultKeybindings as editorDefaults,
+  getCustomShortcut as customEditorShortcut,
+} from '@common/modules/markdown-editor/keymaps/shortcuts'
+import {
+  type MenuShortcutName,
+  defaultKeybindings as menuDefaults,
+  getCustomShortcut as customMenuShortcut
+} from 'source/app/service-providers/menu/shortcuts'
+import type {
+  ConfigOptions,
+  ConfigurableEditorShortcuts,
+  ConfigurableUIShortcuts
+} from 'source/app/service-providers/config/get-config-template.js'
+
+/**
+ * Utility function that checks the shortcut list for conflicts. For this,
+ * provide the shortcut to search for conflicts as well as the lists of custom
+ * shortcuts. It then checks all lists of available shortcuts and returns
+ * all those shortcut names which have the same shortcut assigned (both by
+ * default and from the custom shortcut maps).
+ *
+ * @param   {EditorShortcutName|MenuShortcutName}  name       The shortcut ID in question
+ * @param   {CustomEditorShortcut[]}               editorMap  A list of custom editor shortcuts
+ * @param   {ConfigOptions["shortcuts"]["ui"]}     menuMap    A list of custom menu shortcuts
+ *
+ * @return  {string[]}                                        All conflicting shortcut names.
+ */
+export function getConflicts (
+  name: EditorShortcutName|MenuShortcutName,
+  editorMap: CustomEditorShortcut[],
+  menuMap: ConfigOptions['shortcuts']['ui']
+): string[] {
+  let thisShortcut: string|undefined
+  if (Object.keys(editorDefaults).includes(name)) {
+    thisShortcut = customEditorShortcut(name as EditorShortcutName, editorMap)
+  } else {
+    thisShortcut = customMenuShortcut(name as MenuShortcutName, menuMap)
+  }
+
+  if (thisShortcut === undefined) {
+    return []
+  }
+
+  const editorConflicts: EditorShortcutName[] = []
+
+  for (const shortcutName of Object.keys(editorDefaults) as EditorShortcutName[]) {
+    if (shortcutName === name) {
+      continue
+    }
+
+    const shortcut = customEditorShortcut(shortcutName, editorMap)
+
+    if (shortcut !== undefined && shortcut === thisShortcut) {
+      editorConflicts.push(shortcutName)
+    }
+  }
+
+  const menuConflicts: MenuShortcutName[] = []
+
+  for (const shortcutName of Object.keys(menuDefaults) as MenuShortcutName[]) {
+    if (shortcutName === name) {
+      continue
+    }
+
+    const shortcut = customMenuShortcut(shortcutName, menuMap)
+    if (shortcut !== undefined && shortcut === thisShortcut) {
+      menuConflicts.push(shortcutName)
+    }
+  }
+
+  return (editorConflicts as string[]).concat(menuConflicts)
+}
 
 export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[] {
   // For the time being, we'll declare this feature as experimental to ensure we
   // can tweak that accordingly.
   const disclaimer = ' WARNING: EXPERIMENTAL FEATURE. This feature may still change at any time without prior communication.'
 
-  // Utility functions to retrieve the default keybindings
+  // Returns the default for the provided editor shortcut
   const defaultEditorShortcut = (name: ConfigurableEditorShortcuts) => {
     return getDefaultKeybinding(name, editorDefaults)
   }
 
+  // Returns the default for the provided menu/UI shortcut
   const defaultUIShortcut = (name: ConfigurableUIShortcuts) => {
     return getDefaultKeybinding(name, menuDefaults)
+  }
+
+  // Third utility function to determine conflicts across the maps
+  const conflicts = (name: EditorShortcutName|MenuShortcutName) => {
+    return getConflicts(name, editorMap, config.shortcuts.ui)
   }
 
   // Necessary for conflict detection
@@ -51,28 +129,28 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
           label: trans('Align Markdown table under cursor'),
           model: 'shortcuts.editor.table-align',
           defaultShortcut: defaultEditorShortcut('table-align'),
-          conflicts: getConflicts('table-align', editorMap)
+          conflicts: conflicts('table-align')
         },
         {
           type: 'shortcut',
           label: trans('Align table column left'),
           model: 'shortcuts.editor.table-align-col-left',
           defaultShortcut: defaultEditorShortcut('table-align-col-left'),
-          conflicts: getConflicts('table-align-col-left', editorMap)
+          conflicts: conflicts('table-align-col-left')
         },
         {
           type: 'shortcut',
           label: trans('Align table column center'),
           model: 'shortcuts.editor.table-align-col-center',
           defaultShortcut: defaultEditorShortcut('table-align-col-center'),
-          conflicts: getConflicts('table-align-col-center', editorMap)
+          conflicts: conflicts('table-align-col-center')
         },
         {
           type: 'shortcut',
           label: trans('Align table column right'),
           model: 'shortcuts.editor.table-align-col-right',
           defaultShortcut: defaultEditorShortcut('table-align-col-right'),
-          conflicts: getConflicts('table-align-col-right', editorMap)
+          conflicts: conflicts('table-align-col-right')
         }
       ]
     },
@@ -87,98 +165,98 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
           label: trans('Zap Gremlins'),
           model: 'shortcuts.editor.tr-zap-gremlins',
           defaultShortcut: defaultEditorShortcut('tr-zap-gremlins'),
-          conflicts: getConflicts('tr-zap-gremlins', editorMap)
+          conflicts: conflicts('tr-zap-gremlins')
         },
         {
           type: 'shortcut',
           label: trans('Strip duplicate spaces'),
           model: 'shortcuts.editor.tr-strip-duplicate-spaces',
           defaultShortcut: defaultEditorShortcut('tr-strip-duplicate-spaces'),
-          conflicts: getConflicts('tr-strip-duplicate-spaces', editorMap)
+          conflicts: conflicts('tr-strip-duplicate-spaces')
         },
         {
           type: 'shortcut',
           label: trans('Italics to quotes'),
           model: 'shortcuts.editor.tr-italics-to-quotes',
           defaultShortcut: defaultEditorShortcut('tr-italics-to-quotes'),
-          conflicts: getConflicts('tr-italics-to-quotes', editorMap)
+          conflicts: conflicts('tr-italics-to-quotes')
         },
         {
           type: 'shortcut',
           label: trans('Quotes to italics'),
           model: 'shortcuts.editor.tr-quotes-to-italics',
           defaultShortcut: defaultEditorShortcut('tr-quotes-to-italics'),
-          conflicts: getConflicts('tr-quotes-to-italics', editorMap)
+          conflicts: conflicts('tr-quotes-to-italics')
         },
         {
           type: 'shortcut',
           label: trans('Remove line breaks'),
           model: 'shortcuts.editor.tr-remove-line-breaks',
           defaultShortcut: defaultEditorShortcut('tr-remove-line-breaks'),
-          conflicts: getConflicts('tr-remove-line-breaks', editorMap)
+          conflicts: conflicts('tr-remove-line-breaks')
         },
         {
           type: 'shortcut',
           label: trans('Straighten quotes'),
           model: 'shortcuts.editor.tr-straighten-quotes',
           defaultShortcut: defaultEditorShortcut('tr-straighten-quotes'),
-          conflicts: getConflicts('tr-straighten-quotes', editorMap)
+          conflicts: conflicts('tr-straighten-quotes')
         },
         {
           type: 'shortcut',
           label: trans('Convert quotes to Magic Quotes'),
           model: 'shortcuts.editor.tr-quotes-to-magic',
           defaultShortcut: defaultEditorShortcut('tr-quotes-to-magic'),
-          conflicts: getConflicts('tr-quotes-to-magic', editorMap)
+          conflicts: conflicts('tr-quotes-to-magic')
         },
         {
           type: 'shortcut',
           label: trans('Ensure double quotes'),
           model: 'shortcuts.editor.tr-ensure-double-quotes',
           defaultShortcut: defaultEditorShortcut('tr-ensure-double-quotes'),
-          conflicts: getConflicts('tr-ensure-double-quotes', editorMap)
+          conflicts: conflicts('tr-ensure-double-quotes')
         },
         {
           type: 'shortcut',
           label: trans('Double quotes to single'),
           model: 'shortcuts.editor.tr-double-quotes-to-single',
           defaultShortcut: defaultEditorShortcut('tr-double-quotes-to-single'),
-          conflicts: getConflicts('tr-double-quotes-to-single', editorMap)
+          conflicts: conflicts('tr-double-quotes-to-single')
         },
         {
           type: 'shortcut',
           label: trans('Single quotes to double'),
           model: 'shortcuts.editor.tr-single-quotes-to-double',
           defaultShortcut: defaultEditorShortcut('tr-single-quotes-to-double'),
-          conflicts: getConflicts('tr-single-quotes-to-double', editorMap)
+          conflicts: conflicts('tr-single-quotes-to-double')
         },
         {
           type: 'shortcut',
           label: trans('Emdash — Add spaces around'),
           model: 'shortcuts.editor.tr-emdash-add-spaces',
           defaultShortcut: defaultEditorShortcut('tr-emdash-add-spaces'),
-          conflicts: getConflicts('tr-emdash-add-spaces', editorMap)
+          conflicts: conflicts('tr-emdash-add-spaces')
         },
         {
           type: 'shortcut',
           label: trans('Emdash — Remove spaces around'),
           model: 'shortcuts.editor.tr-emdash-remove-spaces',
           defaultShortcut: defaultEditorShortcut('tr-emdash-remove-spaces'),
-          conflicts: getConflicts('tr-emdash-remove-spaces', editorMap)
+          conflicts: conflicts('tr-emdash-remove-spaces')
         },
         {
           type: 'shortcut',
           label: trans('To sentence case'),
           model: 'shortcuts.editor.tr-sentence-case',
           defaultShortcut: defaultEditorShortcut('tr-sentence-case'),
-          conflicts: getConflicts('tr-sentence-case', editorMap)
+          conflicts: conflicts('tr-sentence-case')
         },
         {
           type: 'shortcut',
           label: trans('To title case'),
           model: 'shortcuts.editor.tr-title-case',
           defaultShortcut: defaultEditorShortcut('tr-title-case'),
-          conflicts: getConflicts('tr-title-case', editorMap)
+          conflicts: conflicts('tr-title-case')
         }
       ]
     },
@@ -192,13 +270,15 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
           type: 'shortcut',
           label: trans('Switch to next tab'),
           model: 'shortcuts.ui.next-tab',
-          defaultShortcut: defaultUIShortcut('next-tab')
+          defaultShortcut: defaultUIShortcut('next-tab'),
+          conflicts: conflicts('next-tab')
         },
         {
           type: 'shortcut',
           label: trans('Switch to previous tab'),
           model: 'shortcuts.ui.previous-tab',
-          defaultShortcut: defaultUIShortcut('previous-tab')
+          defaultShortcut: defaultUIShortcut('previous-tab'),
+          conflicts: conflicts('previous-tab')
         }
       ]
     }
