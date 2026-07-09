@@ -15,7 +15,17 @@
 import { getDefaultKeybinding, type DefaultShortcut } from 'source/common/util/shortcuts'
 import { type ConfigOptions } from '../config/get-config-template'
 
-export type MenuShortcutName = 'previous-tab'|'next-tab'
+/**
+ * INSTRUCTIONS FOR MAKING A NEW CUSTOMIZABLE MENU SHORTCUT
+ *
+ * 1. Think of a descriptive name that only contains ASCII letters and hyphens.
+ * 2. Add this name to the MenuShortcutName type and defaultKeybindings below.
+ * 3. Add it to the corresponding section in the config provider.
+ * 4. Make the menu use the custom shortcut (see existing examples).
+ * 5. Add it to a section in the preferences.
+ */
+
+export type MenuShortcutName = 'previous-tab'|'next-tab'|'filter-files'
 
 /**
  * Default keybindings for all commands. May be empty (in which case there is no
@@ -23,7 +33,8 @@ export type MenuShortcutName = 'previous-tab'|'next-tab'
  */
 export const defaultKeybindings: Record<MenuShortcutName, DefaultShortcut> = {
   'previous-tab': { key: 'Ctrl-Shift-Tab' },
-  'next-tab': { key: 'Ctrl-Tab' }
+  'next-tab': { key: 'Ctrl-Tab' },
+  'filter-files': { key: 'Mod-Shift-t' }
 }
 
 /**

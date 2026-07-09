@@ -407,7 +407,7 @@ export default function getMenu (
         {
           id: 'menu.filter_files',
           label: trans('Filter files'),
-          accelerator: 'Ctrl+Shift+T',
+          accelerator: sc('filter-files'),
           click: function (_menuitem, focusedWindow) {
             (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'filter-files')
           }

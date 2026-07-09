@@ -47,7 +47,7 @@ export type ConfigurableEditorShortcuts = Extends<
   'tr-single-quotes-to-double'|'tr-straighten-quotes'|
   'tr-strip-duplicate-spaces'|'tr-title-case'
 >
-export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'>
+export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'|'filter-files'>
 
 /**
  * This type describes an entry of the ignored rules array in the config. We
@@ -545,7 +545,8 @@ export function getConfigTemplate (): ConfigOptions {
     shortcuts: {
       ui: {
         'next-tab': '',
-        'previous-tab': ''
+        'previous-tab': '',
+        'filter-files': ''
       },
       editor: {
         'table-align': '',

@@ -279,6 +279,13 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
           model: 'shortcuts.ui.previous-tab',
           defaultShortcut: defaultUIShortcut('previous-tab'),
           conflicts: conflicts('previous-tab')
+        },
+        {
+          type: 'shortcut',
+          label: trans('Filter files'),
+          model: 'shortcuts.ui.filter-files',
+          defaultShortcut: defaultUIShortcut('filter-files'),
+          conflicts: conflicts('filter-files')
         }
       ]
     }
