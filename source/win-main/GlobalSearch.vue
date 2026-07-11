@@ -161,7 +161,7 @@ import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
 import { pathBasename, pathDirname, relativePath } from 'source/common/util/renderer-path-polyfill'
@@ -351,19 +351,23 @@ const filteredSearchResults = computed<SearchResultWrapper[]>(() => {
 // Changing the query should reset the no-results message
 watch(query, () => { hadNoResult.value = false })
 
+const stopListeningForSearchResults = ipcRenderer.on('search-provider', (event, message) => {
+  if (message.type === 'search-end') {
+    searchIsRunning.value = false
+    hadNoResult.value = filteredSearchResults.value.length === 0
+    searchProgress.value = 0
+  } else if (message.type === 'search-result') {
+    processSearchResult(message.progress as number, message.file as string, message.result as SearchResult|undefined)
+      .catch(err => console.error(err))
+  }
+})
+
 onMounted(() => {
   queryInputElement.value?.focus()
+})
 
-  ipcRenderer.on('search-provider', (event, message) => {
-    if (message.type === 'search-end') {
-      searchIsRunning.value = false
-      hadNoResult.value = filteredSearchResults.value.length === 0
-      searchProgress.value = 0
-    } else if (message.type === 'search-result') {
-      processSearchResult(message.progress as number, message.file as string, message.result as SearchResult|undefined)
-        .catch(err => console.error(err))
-    }
-  })
+onBeforeUnmount(() => {
+  stopListeningForSearchResults()
 })
 
 /**
