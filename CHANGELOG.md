@@ -32,7 +32,9 @@
 - Fixed a regression from the previous version that caused timeouts when using a
   local LanguageTool integration with very long texts after the switch from
   `got` to `ky`.
-- Fixed an issue where empty Pandoc spans would crash the span renderer (#6448)
+- Fixed an issue where empty Pandoc spans would crash the span renderer (#6448).
+- Fixed an issue where the label of the "open automatically" checkbox in the
+  export popover would not be clickable.
 
 ## Under the Hood
 
