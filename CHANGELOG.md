@@ -41,6 +41,9 @@
 - Zettlr now additionally trusts system certificates when making network
   connections, meaning that custom TLS certificates can be used, e.g., for
   corporate firewalls (#6006; #5271).
+- Added a new Vue directive, `v-focus` that can be applied to any element in a
+  Vue component and that will focus the element as soon as it is mounted to the
+  DOM.
 - Removed deprecated path check for the app.
 - Improve performance of the editor (#6388).
 - Improved handling of invalid dates in the statistics provider (#6433).
