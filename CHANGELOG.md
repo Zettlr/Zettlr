@@ -36,6 +36,8 @@
 - Fixed an issue where empty Pandoc spans would crash the span renderer (#6448).
 - Fixed an issue where the label of the "open automatically" checkbox in the
   export popover would not be clickable.
+- Fixed a visual glitch when running multiple full-text searches in between
+  showing and hiding the search pane (#6454).
 
 ## Under the Hood
 
