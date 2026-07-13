@@ -24,6 +24,7 @@ import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { configField } from '../util/configuration'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { findReferenceForLinkLabel, removeMarkdownLink } from '../util/links'
+import { getMacOSLookupItem } from './macos-lookup-item'
 
 const ipcRenderer = window.ipc
 
@@ -156,5 +157,11 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     }
   ]
 
-  showPopupMenu(coords, isLink ? linkTpl : imgTpl)
+  const template = isLink ? linkTpl : imgTpl
+  const lookupItem = getMacOSLookupItem(view)
+  if (lookupItem !== undefined) {
+    template.unshift(lookupItem, { type: 'separator' })
+  }
+
+  showPopupMenu(coords, template)
 }
