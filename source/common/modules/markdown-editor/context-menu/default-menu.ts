@@ -283,7 +283,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
 
   const lookupItem = getMacOSLookupItem(view)
   if (lookupItem !== undefined) {
-    tpl.unshift(lookupItem, { type: 'separator' })
+    tpl.push({ type: 'separator' }, lookupItem)
   }
 
   // If we found a diagnostic earlier and a word, add the suggestion items

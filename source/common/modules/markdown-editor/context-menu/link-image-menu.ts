@@ -160,7 +160,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
   const template = isLink ? linkTpl : imgTpl
   const lookupItem = getMacOSLookupItem(view)
   if (lookupItem !== undefined) {
-    template.unshift(lookupItem, { type: 'separator' })
+    template.push({ type: 'separator' }, lookupItem)
   }
 
   showPopupMenu(coords, template)

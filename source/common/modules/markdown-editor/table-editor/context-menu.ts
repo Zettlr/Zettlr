@@ -217,7 +217,7 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
 
   const lookupItem = getMacOSLookupItem(subviewOrView)
   if (lookupItem !== undefined) {
-    template.unshift(lookupItem, { type: 'separator' })
+    template.push({ type: 'separator' }, lookupItem)
   }
 
   const point = { x: event.clientX, y: event.clientY }
