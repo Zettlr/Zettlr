@@ -1,5 +1,10 @@
 <template>
-  <div class="shortcut-wrapper">
+  <div
+    v-bind:class="{
+      'shortcut-wrapper': true,
+      'muted': props.display === 'muted'
+    }"
+  >
     <template v-if="props.shortcut.altKey">
       <kbd>{{ altKeySymbol }}</kbd>
     </template>
@@ -33,7 +38,10 @@ const modKeySymbol = process.platform === 'darwin' ? '⌘' : '⊞'
 const altKeySymbol = process.platform === 'darwin' ? '⎇' : 'Alt'
 const ctrlKeySymbol = process.platform === 'darwin' ? '⌃' : 'Ctrl'
 
-const props = defineProps<{ shortcut: ExplodedShortcut }>()
+const props = defineProps<{
+  shortcut: ExplodedShortcut
+  display: 'muted'|'full'
+}>()
 
 </script>
 
@@ -48,11 +56,32 @@ div.shortcut-wrapper {
     font-family: inherit;
     text-transform: uppercase;
     font-size: 10px;
-    border: 1px solid rgb(180, 180, 180);
+    border: 1px solid #666;
+    color: #666;
+    background-color: #ffe;
     border-radius: 4px;
-    border-top-width: 2px;
-    border-left-width: 2px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
     padding: 2px 4px;
+  }
+
+  &.muted kbd {
+    border-color: rgb(180, 180, 180);
+    color: rgb(180, 180, 180);
+  }
+}
+
+body.dark div.shortcut-wrapper {
+  kbd {
+    border-color: white;
+    color: white;
+    background-color: rgb(124, 124, 90);
+  }
+
+  &.muted kbd {
+    border-color: rgb(180, 180, 180);
+    color: rgb(180, 180, 180);
+    background-color: rgb(114, 114, 104);
   }
 }
 </style>

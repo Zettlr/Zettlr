@@ -3,10 +3,7 @@
   <div class="shortcut-control-wrapper">
     <div
       v-bind:id="props.name"
-      v-bind:class="{
-        'shortcut-input': true,
-        'is-set': modelValue !== ''
-      }"
+      class="shortcut-input"
       tabindex="0"
       role="input"
       v-on:keydown.prevent.stop="handleKeydown"
@@ -19,12 +16,12 @@
   
       <!-- We are currently recording -->
       <template v-if="isCurrentlyRecording">
-        <ShortcutDisplay v-bind:shortcut="newShortcut"></ShortcutDisplay>
+        <ShortcutDisplay v-bind:shortcut="newShortcut" display="full"></ShortcutDisplay>
       </template>
   
       <!-- We are not recording, but the shortcut is present -->
       <template v-else-if="modelValue !== ''">
-        <ShortcutDisplay v-bind:shortcut="explodeShortcut(modelValue)"></ShortcutDisplay>
+        <ShortcutDisplay v-bind:shortcut="explodeShortcut(modelValue)" display="full"></ShortcutDisplay>
       </template>
   
       <!-- We are not recording, and the shortcut is not set -->
@@ -32,7 +29,9 @@
         <span>{{ placeholderLabel }}</span>
         <!-- The placeholder will show something like "Default: " if there is a default shortcut -->
         <ShortcutDisplay
-          v-if="props.defaultShortcut !== undefined" v-bind:shortcut="explodeShortcut(props.defaultShortcut)"
+          v-if="props.defaultShortcut !== undefined"
+          v-bind:shortcut="explodeShortcut(props.defaultShortcut)"
+          display="muted"
         ></ShortcutDisplay>
       </template>
     </div>
@@ -243,10 +242,6 @@ function implodeShortcut (shortcut: ExplodedShortcut): string {
     gap: 6px;
     align-items: center;
     cursor: text;
-  
-    &.is-set {
-      color: inherit;
-    }
   
     &:focus {
       outline: 2px solid var(--system-accent-color);
