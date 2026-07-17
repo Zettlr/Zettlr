@@ -245,7 +245,7 @@ function implodeShortcut (shortcut: ExplodedShortcut): string {
     cursor: text;
   
     &.is-set {
-      color: rgb(30, 30, 30);
+      color: inherit;
     }
   
     &:focus {
