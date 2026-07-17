@@ -6,6 +6,7 @@
   appearance independent of the app appearance (#5851).
 - **Feature**: You can now click a long-running-task notification for both
   projects and single files to directly open the corresponding file.
+- **Feature**: Popovers can now be closed with a quick press on `Escape`.
 - **Change**: Changed the layout of the project properties. Now the custom
   templates and CSL section are placed on the general tab, while the export
   profile picker has moved to its own tab. This gives the custom options more
@@ -32,13 +33,20 @@
 - Fixed a regression from the previous version that caused timeouts when using a
   local LanguageTool integration with very long texts after the switch from
   `got` to `ky`.
-- Fixed an issue where empty Pandoc spans would crash the span renderer (#6448)
+- Fixed an issue where empty Pandoc spans would crash the span renderer (#6448).
+- Fixed an issue where the label of the "open automatically" checkbox in the
+  export popover would not be clickable.
+- Fixed a visual glitch when running multiple full-text searches in between
+  showing and hiding the search pane (#6454).
 
 ## Under the Hood
 
 - Zettlr now additionally trusts system certificates when making network
   connections, meaning that custom TLS certificates can be used, e.g., for
   corporate firewalls (#6006; #5271).
+- Added a new Vue directive, `v-focus` that can be applied to any element in a
+  Vue component and that will focus the element as soon as it is mounted to the
+  DOM.
 - Removed deprecated path check for the app.
 - Improve performance of the editor (#6388).
 - Improved handling of invalid dates in the statistics provider (#6433).
