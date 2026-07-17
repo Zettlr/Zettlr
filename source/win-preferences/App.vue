@@ -99,7 +99,7 @@ const hasVibrancy = computed(() => configStore.config.window.vibrancy && process
 const currentGroup = ref(0)
 const query = ref('')
 // Will be populated afterwards, contains the user dict
-const userDictionaryContents = ref<any[]>([]) // TODO
+const userDictionaryContents = ref<string[]>([])
 // Will be populated afterwards, contains all dictionaries
 const availableDictionaries = ref<Array<{ selected: boolean, value: string, key: string }>>([])
 // Will be populated afterwards, contains the available languages
@@ -311,7 +311,7 @@ onBeforeMount(() => {
  * @param   {string}  prop  The property that has changed
  * @param   {any}     val   The value of that property.
  */
-function handleInput (prop: string, val: any): void {
+function handleInput (prop: string, val: unknown): void {
   // We do have an easy time here
   if (prop === 'userDictionaryContents') {
     // The user dictionary is not handled by the config
@@ -322,7 +322,8 @@ function handleInput (prop: string, val: any): void {
       .catch(err => console.error(err))
   } else if (prop === 'availableDictionaries') {
     // We have to extract the selected dictionaries and send their keys only
-    const enabled = val.filter((elem: any) => elem.selected).map((elem: any) => elem.key)
+    const enabled = (val as Array<{ selected: boolean, value: string, key: string }>)
+      .filter(elem => elem.selected).map(elem => elem.key)
     configStore.setConfigValue('selectedDicts', enabled)
     // Additionally, we have to backpropagate the new stuff down the pipe
     // so that the list view has them again

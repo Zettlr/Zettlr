@@ -50,6 +50,7 @@ import { isAbsolutePath, pathBasename, pathDirname, resolvePath } from '@common/
 import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/service-providers/documents'
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
+import type { FileContentSearchResult } from 'source/app/service-providers/search'
 
 const ipcRenderer = window.ipc
 
@@ -230,7 +231,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // right after setting the new configurations. Plus, the user won't update
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
-  const { editor, display, zkn, darkMode } = configStore.config
+  const { editor, display, zkn, darkMode, darkModeEditor } = configStore.config
   return {
     indentUnit: editor.indentUnit,
     indentWithTabs: editor.indentWithTabs,
@@ -283,6 +284,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     showStatusbar: editor.showStatusbar,
     showFormattingToolbar: editor.showFormattingToolbar,
     darkMode,
+    darkModeEditor,
     theme: display.theme,
     highlightWhitespace: editor.showWhitespace,
     showMarkdownLineNumbers: editor.showMarkdownLineNumbers,
@@ -668,7 +670,7 @@ function maybeHighlightSearchResults (): void {
   // Construct CodeMirror.Ranges from the results
   const rangesToHighlight = []
   // NOTE: We have to filter out "whole-file" results
-  for (const res of result.result.filter(res => res.line > -1)) {
+  for (const res of result.result.filter((res): res is FileContentSearchResult => res.type === 'content' && res.line > -1)) {
     const startIdx = currentEditor.instance.state.doc.line(res.line + 1).from
     for (const range of res.ranges) {
       const { from, to } = range

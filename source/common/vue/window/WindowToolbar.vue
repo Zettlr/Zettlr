@@ -140,11 +140,15 @@ const hasRTLTrafficLights = ref<boolean>(false)
 
 const scrollArea = ref<HTMLDivElement|null>(null)
 const canScroll = ref(false)
+// To account for really small differences between `scrollWidth` and `clientWidth`
+// (sometimes only fractions of a pixel), add a small additional tolerance to
+// `clientWidth` to prevent erroneously displaying of the scroll buttons.
+const clientWidthTolerance = 5
 
 function checkOverflow () {
   if (scrollArea.value) {
     const sa = scrollArea.value
-    canScroll.value = sa.scrollWidth > sa.clientWidth
+    canScroll.value = sa.scrollWidth > (sa.clientWidth + clientWidthTolerance)
   }
 }
 

@@ -121,6 +121,28 @@ const darkModeSwitcher = EditorState.transactionExtender.of(transaction => {
 })
 
 /**
+ * This public helper function returns a boolean depending
+ * on whether the editor should use a light theme, dark theme,
+ * or match the main UI.
+ *
+ * @param   {boolean}   darkMode      The main UI dark mode setting
+ * @param   {string}    editorTheme   The theme of the editor. 'match' will
+ *                                    match the value of darkMode
+ *
+ * @return  {boolean}                  Whether to use a dark theme
+ */
+export function useDarkModeEditor (appDarkMode: boolean, editorTheme: 'match'|'dark'|'light' = 'match'): boolean {
+  switch(editorTheme) {
+    case 'match':
+      return appDarkMode
+    case 'light':
+      return false
+    case 'dark':
+      return true
+  }
+}
+
+/**
  * An extension that enables a CodeMirror editor to quickly switch between light
  * and dark themes. Pass an initial configuration to the function, and continue
  * to configure the extension with the darkModeEffect.

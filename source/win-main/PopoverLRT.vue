@@ -13,8 +13,10 @@
           lrt: true,
           'in-progress': task.status === TaskStatus.ongoing,
           error: task.status === TaskStatus.error,
-          aborted: task.status === TaskStatus.aborted
+          aborted: task.status === TaskStatus.aborted,
+          interactable: task.interactable
         }"
+        v-on:click="interactTask(task.id)"
       >
         <h4 class="title">
           {{ task.title }}
@@ -59,7 +61,8 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import type { LRT_JSON } from 'source/app/service-providers/long-running-tasks'
+import type { LRTIPCSyncMessage } from 'source/app/service-providers/long-running-tasks'
+import type { LRT_JSON } from 'source/app/service-providers/long-running-tasks/task'
 import { trans } from 'source/common/i18n-renderer'
 import LoadingSpinner from 'source/common/vue/LoadingSpinner.vue'
 import PopoverWrapper from 'source/common/vue/PopoverWrapper.vue'
@@ -67,6 +70,8 @@ import ButtonControl from 'source/common/vue/form/elements/ButtonControl.vue'
 import { useLRTStore } from 'source/pinia'
 import { TaskStatus } from 'source/pinia/lrt-store'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+
+const ipcRenderer = window.ipc
 
 // Time in ms when running tasks should be updating
 const REFRESH_INTERVAL = 100
@@ -127,6 +132,12 @@ function clearFinishedTasks () {
   }
 }
 
+function interactTask (id: string) {
+  ipcRenderer.send('lrt-provider', {
+    command: 'interact-task', payload: { id }
+  } as LRTIPCSyncMessage)
+}
+
 /**
  * Should return a human-readable version of the difference between start and end.
  *
@@ -174,7 +185,6 @@ function formatPercentage (perc: number, roundTo = 2): string {
 
 <style lang="css" scoped>
 #lrt-wrapper {
-  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -189,6 +199,8 @@ function formatPercentage (perc: number, roundTo = 2): string {
     grid-template-columns: auto 24px;
     gap: 5px;
     background-color: rgb(235, 255, 235);
+
+    &.interactable { cursor: pointer; }
 
     &.error {
       background-color: rgb(255, 235, 245);

@@ -79,6 +79,7 @@ export interface EditorConfiguration {
   showStatusbar: boolean
   showFormattingToolbar: boolean
   darkMode: boolean
+  darkModeEditor: 'match'|'light'|'dark'
   theme: MarkdownTheme
   margins: 'S'|'M'|'L'
   highlightWhitespace: boolean
@@ -146,6 +147,7 @@ export function getDefaultConfig (): EditorConfiguration {
     showStatusbar: false,
     showFormattingToolbar: true,
     darkMode: false,
+    darkModeEditor: 'match',
     theme: 'berlin',
     margins: 'M',
     highlightWhitespace: false,

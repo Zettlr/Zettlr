@@ -33,7 +33,9 @@
         <cds-icon shape="times"></cds-icon>
       </button>
     </div>
-    <p v-if="info !== undefined" class="info">{{ info }}</p>
+    <p v-if="info !== undefined" class="info">
+      {{ info }}
+    </p>
   </div>
 </template>
 

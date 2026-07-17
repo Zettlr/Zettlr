@@ -58,7 +58,7 @@ export function moveNextCell (target: EditorView): boolean {
           changes: {
             from: line.to,
             // Taken from rows.ts
-            insert: '\n' + line.text.replace(/[^\s\|]/g, ' ')
+            insert: '\n' + line.text.replace(/[^\s\|]/g, '')
           },
           // Move the new cursor to the beginning of the new line.
           selection: { anchor: line.to + 2 }

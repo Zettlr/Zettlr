@@ -37,7 +37,7 @@ import type LogProvider from '@providers/log'
 import { hasMarkdownExt, hasCodeExt } from '@common/util/file-extention-checks'
 import getMarkdownFileParser from './util/file-parser'
 import type ConfigProvider from '@providers/config'
-import { promises as fs, constants as FS_CONSTANTS } from 'fs'
+import { promises as fs, constants as FS_CONSTANTS, type Stats } from 'fs'
 import { safeDelete } from './util/safe-delete'
 import { type FilesystemMetadata, getFilesystemMetadata } from './util/get-fs-metadata'
 import { ignorePath } from 'source/common/util/ignore-path'
@@ -174,7 +174,7 @@ export default class FSAL extends ProviderContract {
    * @param   {EventName}  event    The event name
    * @param   {string}     absPath  The absolute path for this event
    */
-  private emitChokidarEvent (event: EventName, absPath: string): void {
+  private emitChokidarEvent (event: EventName, absPath: string, stats?: Stats): void {
     if (event === 'all' || event === 'raw') {
       return this._logger.error('[FSAL] Cannot emit events "all" or "raw" -- wrong chokidar setup!')
     }
@@ -185,6 +185,10 @@ export default class FSAL extends ProviderContract {
 
     if (event === 'error') {
       return this._logger.error(`[FSAL] Chokidar reported an error for path "${absPath}"`)
+    }
+
+    if (stats?.isSymbolicLink() === true) {
+      return this._logger.error(`[FSAL] Ignoring event "${event}" for path "${absPath}" because it is a symbolic link.`)
     }
 
     // Regardless of the event, it will invalidate that particular cache entry.
@@ -252,8 +256,8 @@ export default class FSAL extends ProviderContract {
         } else {
           // Start watching the root path.
           const watcher = new FSALWatchdog(this._logger, this._config)
-          watcher.on('change', (event, absPath) => {
-            this.emitChokidarEvent(event, absPath)
+          watcher.on('change', (event, absPath, stats) => {
+            this.emitChokidarEvent(event, absPath, stats)
           })
           watcher.watchPath(rootPath)
           this.watchers.set(rootPath, watcher)
@@ -935,7 +939,7 @@ export default class FSAL extends ProviderContract {
     } catch (err: unknown) {
       const code = err instanceof Error ? (err as NodeJS.ErrnoException).code : undefined
       if (code === 'EACCES' || code === 'EPERM') {
-        this._logger.error(`[FSAL] Could not read directiroy ${directoryPath}: Could not read/access the directory (code: ${code})`)
+        this._logger.error(`[FSAL] Could not read directory ${directoryPath}: Could not read/access the directory (code: ${code})`)
       } else if (err instanceof Error) {
         this._logger.error(`[FSAL] Could not read directory: ${directoryPath}`, err)
       }

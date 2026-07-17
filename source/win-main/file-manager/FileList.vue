@@ -92,7 +92,7 @@
  */
 
 import { trans } from '@common/i18n-renderer'
-import tippy from 'tippy.js'
+import tippy, { type Instance } from 'tippy.js'
 import FileItem from './FileItem.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import matchQuery from './util/match-query'
@@ -419,7 +419,7 @@ function updateDynamics (): void {
     // Either there's already an instance on the element,
     // then only update its contents ...
     if ('_tippy' in elem) {
-      (elem._tippy as any).setContent(elem.dataset.tippyContent)
+      (elem._tippy as Instance).setContent(elem.dataset.tippyContent ?? '')
     } else {
       // ... or there is none, so let's add a tippy instance.
       tippy(elem, {

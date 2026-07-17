@@ -213,25 +213,39 @@ function handleToggle (event: { id?: string, state?: string|boolean }): void {
 
 <style lang="less">
 // This is bad style, but let's add the toolbar button classes here
-body div#toolbar button {
-  &.verbose-control-active {
-    background-color: #d8d8d8;
-    color: rgb(131, 131, 131);
-  }
+body div#toolbar {
+  // Make space for the traffic lights, either on the left side or the right.
+  button {
+    &.verbose-control-active {
+      background-color: #d8d8d8;
+      color: rgb(131, 131, 131);
+    }
 
-  &.warning-control-active {
-    background-color: rgb(236, 238, 97);
-    color: rgb(139, 139, 24);
-  }
+    &.warning-control-active {
+      background-color: rgb(236, 238, 97);
+      color: rgb(139, 139, 24);
+    }
 
-  &.info-control-active {
-    background-color: rgb(165, 204, 255);
-    color: rgb(61, 136, 233);
-  }
+    &.info-control-active {
+      background-color: rgb(165, 204, 255);
+      color: rgb(61, 136, 233);
+    }
 
-  &.error-control-active {
-    background-color: rgb(255, 130, 130);
-    color: rgb(139, 27, 27);
+    &.error-control-active {
+      background-color: rgb(255, 130, 130);
+      color: rgb(139, 27, 27);
+    }
+  }
+}
+
+body.darwin div#toolbar {
+  // Remove traffic light padding on macOS since
+  // the toolbar is displayed with a titlebar
+  &:not(.has-rtl-traffic-lights) {
+    padding-left: 10px;
+  }
+  &.has-rtl-traffic-lights {
+    padding-right: 10px;
   }
 }
 

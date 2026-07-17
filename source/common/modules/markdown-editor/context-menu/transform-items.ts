@@ -60,6 +60,7 @@ export function getTransformSubmenu (view: EditorView): SubmenuItem {
       {
         label: trans('Remove line breaks'),
         type: 'normal',
+        accelerator: 'CmdOrCtrl+Alt+J',
         action () { removeLineBreaks(view) }
       },
       {

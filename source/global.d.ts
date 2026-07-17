@@ -95,21 +95,6 @@ declare const __GIT_COMMIT_HASH__: string
 declare const __BUILD_DATE__: string
 declare const __UPDATES_DISABLED__: '1'|'0'
 
-/**
- * Declare and extend the global NodeJS object to enable the globals
- * for the service providers.
- *
- * NOTE: Most service providers define these interfaces in the corresponding
- * types files in ./source/app/service-providers/assets
- */
-declare namespace global {
-  // Translation data necessary to facilitate internationalisation
-  var i18n: any
-  var i18nRawData: any
-  var i18nFallback: any
-  var i18nFallbackRawData: any
-}
-
 declare interface Window {
   /**
    * The config API provides methods to read and set configuration values
@@ -130,7 +115,7 @@ declare interface Window {
      * @param   {string}  key    The key to set
      * @param   {any}     value  The value to set the key to
      */
-    set: (key: string, value: any) => void
+    set: (key: string, value: unknown) => void
   }
   /**
    * Takes citation items and returns a rendered citation from main

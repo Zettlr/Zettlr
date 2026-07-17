@@ -32,16 +32,15 @@ const CUSTOM_WINDOW_CONTROLS_HEIGHT = 35
  * @param  {boolean}                          [modal=false]  If set to true, will assign a modal chrome
  */
 export default function setWindowChrome (config: ConfigProvider, winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
-  const shouldUseNativeAppearance = config.get().window.nativeAppearance
-  const shouldUseVibrancy = config.get().window.vibrancy
+  const { nativeAppearance, vibrancy } = config.get().window
 
-  const macOSVibrancyEnabled = process.platform === 'darwin' && shouldUseNativeAppearance && !nativeTheme.prefersReducedTransparency
+  const macOSVibrancyEnabled = process.platform === 'darwin' && vibrancy && !nativeTheme.prefersReducedTransparency
 
   if (!macOSVibrancyEnabled || modal) {
     // It is recommended to set a background color for the windows, however, on
     // macOS we can only do so if vibrancy is off, because that would render nil
     // the vibrancy.
-    winConf.backgroundColor = config.get().darkMode ? '#000' : '#fff'
+    winConf.backgroundColor = config.get().darkMode ? '#333' : '#fff'
   }
 
   if (process.platform === 'darwin' && !modal) {
@@ -49,12 +48,12 @@ export default function setWindowChrome (config: ConfigProvider, winConf: Browse
     // chrome. Additionally, we'll be setting the window's vibrancy so that the
     // app looks even more native.
     winConf.titleBarStyle = 'hiddenInset'
-    if (shouldUseVibrancy && !nativeTheme.prefersReducedTransparency) {
+    if (vibrancy && !nativeTheme.prefersReducedTransparency) {
       // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
       winConf.vibrancy = 'under-window'
       winConf.visualEffectState = 'followWindow'
     }
-  } else if ((process.platform === 'linux' && !shouldUseNativeAppearance) || process.platform === 'win32') {
+  } else if ((process.platform === 'linux' && !nativeAppearance) || process.platform === 'win32') {
     // On Windows, we need a frameless window. On Linux, only if the
     // shouldUseNativeAppearance flag is set to false.
     winConf.frame = false

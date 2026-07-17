@@ -13,9 +13,11 @@
  * END HEADER
  */
 
+import { type GetTextTranslations } from 'gettext-parser'
+
 const ipcRenderer = window.ipc
 
-let i18nData: any
+let i18nData: GetTextTranslations|undefined
 
 /**
  * Call this function during window registration to load the translation data

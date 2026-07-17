@@ -20,6 +20,32 @@
         v-bind:label="projectTitleLabel"
       ></TextControl>
 
+      <!-- Then the CSL file -->
+      <FileControl
+        v-model="projectSettings.cslStyle"
+        v-bind:label="cslStyleLabel"
+        v-bind:reset="true"
+        v-bind:filter="[{ extensions: ['csl'], name: 'CSL Stylesheet' }]"
+      ></FileControl>
+      <!-- Also, the other possible files users can override -->
+      <FileControl
+        v-model="projectSettings.templates.tex"
+        v-bind:label="texTemplateLabel"
+        v-bind:reset="true"
+        v-bind:filter="[{ extensions: ['tex'], name: 'LaTeX Source' }]"
+      ></FileControl>
+      <FileControl
+        v-model="projectSettings.templates.html"
+        v-bind:label="htmlTemplateLabel"
+        v-bind:reset="true"
+        v-bind:filter="[{ extensions: [ 'html', 'htm' ], name: 'HTML Template' }]"
+      ></FileControl>
+    </div>
+    <div
+      v-show="currentTab === 1"
+      id="profiles-panel"
+      role="tabpanel"
+    >
       <ZtrAdmonition v-if="projectSettings.profiles.length === 0" style="margin: 10px 0">
         {{ projectBuildWarning }}
       </ZtrAdmonition>
@@ -36,7 +62,7 @@
       ></ListControl>
     </div>
     <div
-      v-show="currentTab === 1"
+      v-show="currentTab === 2"
       id="files-panel"
       role="tabpanel"
     >
@@ -115,27 +141,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Then the CSL file -->
-      <FileControl
-        v-model="projectSettings.cslStyle"
-        v-bind:label="cslStyleLabel"
-        v-bind:reset="true"
-        v-bind:filter="[{ extensions: ['csl'], name: 'CSL Stylesheet' }]"
-      ></FileControl>
-      <!-- Also, the other possible files users can override -->
-      <FileControl
-        v-model="projectSettings.templates.tex"
-        v-bind:label="texTemplateLabel"
-        v-bind:reset="true"
-        v-bind:filter="[{ extensions: ['tex'], name: 'LaTeX Source' }]"
-      ></FileControl>
-      <FileControl
-        v-model="projectSettings.templates.html"
-        v-bind:label="htmlTemplateLabel"
-        v-bind:reset="true"
-        v-bind:filter="[{ extensions: [ 'html', 'htm' ], name: 'HTML Template' }]"
-      ></FileControl>
     </div>
   </WindowChrome>
 </template>
@@ -206,6 +211,12 @@ const tabs: WindowTab[] = [
     label: trans('General'),
     icon: 'cog',
     controls: 'formats-panel'
+  },
+  {
+    id: 'profiles-selector',
+    label: trans('Profiles'),
+    icon: 'export',
+    controls: 'profiles-panel'
   },
   {
     id: 'files-control',

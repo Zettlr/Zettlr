@@ -11,12 +11,20 @@
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
+
+    <CheckboxControl
+      v-model="caseInsensitive"
+      v-bind:label="caseInsensitiveLabel"
+      v-bind:name="'full-text-search-case-toggle'"
+      style="margin: 0px"
+    ></CheckboxControl>
+
     <AutocompleteText
       ref="restrict-to-dir-input"
       v-model="restrictToDir"
       name="restrict-to-dir-input"
       v-bind:label="restrictDirLabel"
-      v-bind:autocomplete-values="directorySuggestions"
+      v-bind:autocomplete-values="directorySuggestions.map(s => s.displayValue)"
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
@@ -25,7 +33,7 @@
       <ButtonControl
         v-bind:label="searchButtonLabel"
         v-bind:inline="true"
-        v-bind:disabled="false"
+        v-bind:disabled="searchIsRunning"
         v-on:click="startSearch()"
       ></ButtonControl>
       <ButtonControl
@@ -36,23 +44,24 @@
       ></ButtonControl>
     </p>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
-    <template v-if="searchResults.length > 0">
+    <template v-if="windowStateStore.searchResults.length > 0">
+      <template v-if="!searchIsRunning">
+        <hr>
+        <p>
+          <ButtonControl
+            v-bind:label="clearButtonLabel"
+            v-bind:inline="true"
+            v-on:click="emptySearchResults()"
+          ></ButtonControl>
+          <ButtonControl
+            v-bind:label="toggleButtonLabel"
+            v-bind:inline="true"
+            v-on:click="toggleIndividualResults()"
+          ></ButtonControl>
+        </p>
+      </template>
       <hr>
-      <p style="text-align: center;">
-        <ButtonControl
-          v-if="filesToSearch.length === 0"
-          v-bind:label="clearButtonLabel"
-          v-bind:inline="true"
-          v-on:click="emptySearchResults()"
-        ></ButtonControl>
-        <ButtonControl
-          v-if="filesToSearch.length === 0"
-          v-bind:label="toggleButtonLabel"
-          v-bind:inline="true"
-          v-on:click="toggleIndividualResults()"
-        ></ButtonControl>
-      </p>
-      <p style="font-size: 14px; padding: 5px 0; text-align: center;">
+      <p style="padding: 5px 0; text-align: center; display: block;">
         {{ resultsMessage }}
       </p>
       <hr>
@@ -64,8 +73,8 @@
     <template v-if="searchIsRunning">
       <div>
         <ProgressControl
-          v-bind:max="sumFilesToSearch"
-          v-bind:value="sumFilesToSearch - filesToSearch.length"
+          v-bind:max="1"
+          v-bind:value="searchProgress"
           v-bind:interruptible="true"
           v-on:interrupt="cancelSearch()"
         ></ProgressControl>
@@ -73,55 +82,61 @@
       <hr>
     </template>
     <!-- Finally, display all search results, per file and line. -->
-    <template v-if="searchResults.length > 0">
+    <template v-if="filteredSearchResults.length > 0 && !searchIsRunning">
       <!-- First, display a filter ... -->
       <TextControl
         v-model="filter"
         v-bind:placeholder="filterPlaceholder"
         v-bind:label="filterLabel"
       ></TextControl>
-      <!-- ... then the search results. -->
-      <div
-        v-for="result, idx in filteredSearchResults"
-        v-bind:key="idx"
+      <!-- ... then the search results. NOTE: The 34px minimum size are purely empirical, and will be overridden with the actually measured size. -->
+      <DynamicScroller
+        v-bind:items="filteredSearchResults"
+        v-bind:min-item-size="34"
+        v-bind:key-field="'key'"
+        v-bind:disable-transform="true"
+        v-bind:page-mode="true"
         class="search-result-container"
       >
-        <div class="filename" v-on:click="result.hideResultSet = !result.hideResultSet">
-          <!--
-            NOTE: This DIV is just here due to the parent item's "display: flex",
-            such that the filename plus indicator icon are floated to the left,
-            while the collapse icon is floated to the right.
-          -->
-          <div class="overflow-hidden">
-            <cds-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></cds-icon>
-            <cds-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></cds-icon>
-            <cds-icon v-else shape="dot-circle" style="fill: #33aa33"></cds-icon>
-            {{ result.file.displayName }}
-          </div>
-
-          <div class="collapse-icon">
-            <cds-icon shape="angle" v-bind:direction="(result.hideResultSet) ? 'left' : 'down'"></cds-icon>
-          </div>
-        </div>
-        <div class="filepath">
-          {{ result.file.relativeDirectoryPath }}
-        </div>
-        <div v-if="!result.hideResultSet" class="results-container">
-          <div
-            v-for="singleRes, idx2 in result.result"
-            v-bind:key="idx2"
-            class="result-line"
-            v-bind:class="{'active': idx==activeFileIdx && idx2==activeLineIdx}"
-            v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line, singleRes.restext)"
-            v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
+        <template #default="{ item, index, active }">
+          <DynamicScrollerItem
+            v-bind:item="item"
+            v-bind:active="active"
+            class="single-search-result"
           >
-            <!-- NOTE how we have to increase the line number from zero-based to 1-based -->
-            <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line + 1 }}</strong>: </span>
-            <!-- eslint-disable-next-line vue/no-v-html NOTE: We can disable the v-html error here, since markText runs DOMPurify over the data, and we have to allow HTML tags to mark the elements. -->
-            <span v-html="markText(singleRes)"></span>
-          </div>
-        </div>
-      </div>
+            <div class="result-header" v-on:click="item.hideResultSet = !item.hideResultSet">
+              <cds-icon shape="dot-circle" v-bind:style="`fill: ${getRelevancyColor(item)}`" class="relevancy-icon"></cds-icon>
+              <span class="filename">{{ item.file.displayName }}</span>
+              <cds-icon class="collapse-indicator" shape="angle" v-bind:direction="(item.hideResultSet) ? 'left' : 'down'"></cds-icon>
+              <span class="filepath">{{ item.file.relativeDirectoryPath }}</span>
+            </div>
+
+            <div v-if="!item.hideResultSet" class="results-container">
+              <template
+                v-for="singleRes, idx2 in item.result"
+                v-bind:key="idx2"
+              >
+                <div
+                  class="result-line"
+                  v-bind:class="{ active: index === activeFileIdx && idx2 === activeLineIdx }"
+                  v-on:contextmenu.stop.prevent="fileContextMenu($event, item.file.path, singleRes)"
+                  v-on:mousedown.stop.prevent="onResultClick($event, index, idx2, item.file.path, singleRes.type === 'content' ? singleRes.line : 1)"
+                >
+                  <span class="line-number"><strong>{{ singleRes.type === 'content' ? singleRes.line : 1 }}</strong>: </span>
+                  <!-- eslint-disable-next-line vue/no-v-html NOTE: We can disable the v-html error here, since markText runs DOMPurify over the data, and we have to allow HTML tags to mark the elements. -->
+                  <span v-if="singleRes.type === 'content'" class="excerpt" v-html="markText(singleRes)"></span>
+                </div>
+              </template>
+            </div>
+          </DynamicScrollerItem>
+        </template>
+      </DynamicScroller>
+    </template>
+    <template v-else-if="!searchIsRunning && hadNoResult">
+      <hr>
+      <p style="text-align: center; display: block;">
+        {{ noResultsMessage }}
+      </p>
     </template>
   </div>
 </template>
@@ -141,18 +156,42 @@
  * END HEADER
  */
 
-import compileSearchTerms from '@common/util/compile-search-terms'
 import TextControl from '@common/vue/form/elements/TextControl.vue'
 import ButtonControl from '@common/vue/form/elements/ButtonControl.vue'
 import ProgressControl from '@common/vue/form/elements/ProgressControl.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
-import { ref, computed, onMounted } from 'vue'
-import type { FileSearchDescriptor, SearchResult, SearchResultWrapper } from '@dts/common/search'
+import { ref, computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { useConfigStore, useWindowStateStore, useWorkspaceStore } from 'source/pinia'
-import { pathDirname, relativePath } from 'source/common/util/renderer-path-polyfill'
+import { pathBasename, pathDirname, relativePath } from 'source/common/util/renderer-path-polyfill'
 import { sanitizeHTML } from 'source/common/util/sanitize-html'
+import type { SearchProviderIPCAPI, SearchResult, FileContentSearchResult } from 'source/app/service-providers/search'
+import CheckboxControl from 'source/common/vue/form/elements/CheckboxControl.vue'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import type { MetadataSearchResult } from 'source/app/service-providers/search/util/boolean-search'
+
+/**
+ * This interface describes a specific descriptor for use during file searches
+ */
+interface FileSearchDescriptor {
+  path: string
+  relativeDirectoryPath: string
+  filename: string
+  displayName: string
+}
+
+/**
+ * This interface describes a wrapper that combines search results with metadata
+ * on the file the results describe
+ */
+export interface SearchResultWrapper {
+  key: string
+  file: FileSearchDescriptor
+  result: SearchResult
+  hideResultSet: boolean
+  weight: number
+}
 
 const ipcRenderer = window.ipc
 
@@ -162,18 +201,20 @@ const queryInputPlaceholder = trans('Find…')
 const filterPlaceholder = trans('Filter…')
 const filterLabel = trans('Filter search results')
 const restrictDirLabel = trans('Restrict search to directory')
+const caseInsensitiveLabel = trans('Case insensitive')
 const restrictDirPlaceholder = trans('Choose directory…')
 const searchButtonLabel = trans('Search')
 const cancelButtonLabel = trans('Cancel')
 const clearButtonLabel = trans('Clear search')
 const toggleButtonLabel = trans('Toggle results')
+const noResultsMessage = trans('No results for your search.')
 
 // Again: We have a side effect that trans() cannot be executed during import
 // stage. It needs to be executed after the window registration ran for now. It
 // will become better with the big refactoring that is currently underway since
 // API methods will then be infused by the preload scripts so that trans will
 // also work at the import stage.
-function getContextMenu (): AnyMenuItem[] {
+function getContextMenu (canCopyText = true): AnyMenuItem[] {
   return [
     {
       label: trans('Open in new tab'),
@@ -183,9 +224,20 @@ function getContextMenu (): AnyMenuItem[] {
     {
       label: trans('Copy'),
       id: 'copy',
-      type: 'normal'
+      type: 'normal',
+      enabled: canCopyText
     }
   ]
+}
+
+function getRelevancyColor (item: SearchResultWrapper): string {
+  if (item.weight / windowStateStore.maxSearchResultWeight < 0.3) {
+    return '#aaaaaa'
+  } else if(item.weight / windowStateStore.maxSearchResultWeight < 0.7) {
+    return '#2975d9'
+  } else {
+    return '#33aa33'
+  }
 }
 
 defineProps<{
@@ -200,19 +252,22 @@ const query = ref<string>('')
 const filter = ref<string>('')
 // Whether or not we should restrict search to a given directory
 const restrictToDir = ref<string>('')
-// All files that we need to search. Will be emptied during a search.
-const filesToSearch = ref<FileSearchDescriptor[]>([])
-// The number of files the search started with (for progress bar)
-const sumFilesToSearch = ref<number>(0)
+// Whether this search should be case insensitive
+const caseInsensitive = ref<boolean>(true)
+// Search result progress
+const searchProgress = ref(0)
+// Whether the last search had no result
+const hadNoResult = ref(false)
 // A global trigger for the result set trigger. This will determine what
 // the toggle will do to all result sets -- either hide or display them.
 const toggleState = ref<boolean>(false)
-// Contains the current search's maximum (combined) weight across the results
-const maxWeight = ref<number>(0)
 // The file list index of the most recently clicked search result.
 const activeFileIdx = ref<undefined|number>(undefined)
 // The result line index of the most recently clicked search result.
 const activeLineIdx = ref<undefined|number>(undefined)
+
+const searchIsRunning = ref<boolean>(false)
+const shouldStartNewSearch = ref<boolean>(false)
 
 const workspaceStore = useWorkspaceStore()
 const configStore = useConfigStore()
@@ -220,10 +275,6 @@ const windowStateStore = useWindowStateStore()
 
 const recentGlobalSearches = computed(() => configStore.config.window.recentGlobalSearches)
 
-const fileTree = computed(() => ([...workspaceStore.descriptorMap.values()]))
-const rootPaths = computed(() => ([...workspaceStore.workspaceMap.keys()]))
-const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
-const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const queryInputElement = ref<HTMLInputElement|null>(null)
 
 // All directories we've found in the file tree. NOTE: The search function
@@ -235,8 +286,8 @@ const queryInputElement = ref<HTMLInputElement|null>(null)
 // which contains two folders "assets" and "My Project". This function will
 // return a list with "my-workspace", "my-workspace/assets" and
 // "my-workspace/My Project".
-const directorySuggestions = computed<string[]>(() => {
-  const suggestedDirectories: string[] = []
+const directorySuggestions = computed<Array<{ absPath: string, displayValue: string }>>(() => {
+  const suggestedDirectories: Array<{ absPath: string, displayValue: string }> = []
   for (const [ rootPath, dirPaths ] of workspaceStore.workspaceMap.entries()) {
     const rootDir = pathDirname(rootPath)
     const wsRelativePaths = dirPaths
@@ -245,27 +296,20 @@ const directorySuggestions = computed<string[]>(() => {
       // Only retain directories
       .filter(d => d !== undefined && d.type === 'directory')
       // Map from absolute to workspace-relative paths
-      .map(d => d.path.slice(rootDir.length + 1))
+      .map(d => ({ absPath: d.path, displayValue: d.path.slice(rootDir.length + 1) }))
       // Filter empty ones
-      .filter(p => p.length > 0)
+      .filter(p => p.displayValue.length > 0)
     
     suggestedDirectories.push(...wsRelativePaths)
   }
   return suggestedDirectories
 })
 
-const searchResults = computed(() => {
-  // NOTE: Vue's reactivity can be tricky, and one thing is to sort arrays.
-  // This is why we first clone them, sort the cloned array and return that one.
-  const results = [...windowStateStore.searchResults]
-  return results.sort((a, b) => b.weight - a.weight)
-})
-
 const resultsMessage = computed<string>(() => {
-  const nMatches = searchResults.value
+  const nMatches = windowStateStore.searchResults
     .map(x => x.result.length)
     .reduce((prev, cur) => prev + cur, 0)
-  const nFiles = searchResults.value.length
+  const nFiles = windowStateStore.searchResults.length
   return trans('%s matches across %s files', nMatches, nFiles)
 })
 
@@ -273,43 +317,65 @@ const resultsMessage = computed<string>(() => {
  * Allows search results to be further filtered
  */
 const filteredSearchResults = computed<SearchResultWrapper[]>(() => {
+  const matchedResults = windowStateStore.searchResults.filter(r => r.result.length > 0)
   if (filter.value === '') {
-    return searchResults.value
+    return matchedResults
   }
 
   const lowercase = filter.value.toLowerCase()
 
-  return searchResults.value.filter(result => {
-    // First check the actual results in the files
-    for (const lineResult of result.result) {
-      if (lineResult.restext.toLowerCase().includes(lowercase)) {
+  return matchedResults
+    .filter(result => {
+      for (const r of result.result) {
+        if (r.type === 'content' && r.excerpt.toLowerCase().includes(lowercase) === true) {
+          return true
+        }
+      }
+
+      // Next, try the different variations on filename and displayName
+      if (result.file.filename.toLowerCase().includes(lowercase) === true) {
         return true
       }
-    }
+      if (result.file.displayName.toLowerCase().includes(lowercase) === true) {
+        return true
+      }
+      if (result.file.path.toLowerCase().includes(lowercase) === true) {
+        return true
+      }
 
-    // Next, try the different variations on filename and displayName
-    if (result.file.filename.toLowerCase().includes(lowercase)) {
-      return true
-    }
-    if (result.file.displayName.toLowerCase().includes(lowercase)) {
-      return true
-    }
-    if (result.file.path.toLowerCase().includes(lowercase)) {
-      return true
-    }
-
-    // No luck here.
-    return false
-  })
+      // No luck here.
+      return false
+    })
 })
 
-const searchIsRunning = computed(() => { return filesToSearch.value.length > 0 })
-const shouldStartNewSearch = ref<boolean>(false)
+// Changing the query should reset the no-results message
+watch(query, () => { hadNoResult.value = false })
+
+const stopListeningForSearchResults = ipcRenderer.on('search-provider', (event, message) => {
+  if (message.type === 'search-end') {
+    searchIsRunning.value = false
+    hadNoResult.value = filteredSearchResults.value.length === 0
+    searchProgress.value = 0
+  } else if (message.type === 'search-result') {
+    processSearchResult(message.progress as number, message.file as string, message.result as SearchResult|undefined)
+      .catch(err => console.error(err))
+  }
+})
 
 onMounted(() => {
   queryInputElement.value?.focus()
 })
 
+onBeforeUnmount(() => {
+  stopListeningForSearchResults()
+})
+
+/**
+ * Starts a new search
+ *
+ * @param  {string}  overrideQuery  Optional property that can be used to
+ *                                  programmatically set a search.
+ */
 function startSearch (overrideQuery?: string): void {
   // This allows other components to inject a new query when starting a search
   if (overrideQuery !== undefined) {
@@ -321,111 +387,99 @@ function startSearch (overrideQuery?: string): void {
     return
   }
 
-  // We should start a search. We need two types of information for that:
-  // 1. A list of files to be searched
-  // 2. The compiled search terms.
-  // Let's do that first.
+  // We should start a search.
 
-  let fileList: FileSearchDescriptor[] = fileTree.value
-    .filter(d => d.type === 'file' || d.type === 'code')
-    .map(d => {
-      const root = rootPaths.value.find(p => d.path.startsWith(p))
-      let displayName = d.name
-      if (d.type === 'file') {
-        if (useTitle.value && d.frontmatter != null && typeof d.frontmatter.title === 'string') {
-          displayName = d.frontmatter.title
-        } else if (useH1.value && d.firstHeading !== null) {
-          displayName = d.firstHeading
-        }
-      }
-
-      return {
-        path: d.path,
-        relativeDirectoryPath: root !== undefined ? relativePath(pathDirname(root), d.path) : d.dir,
-        filename: d.name,
-        displayName: displayName
-      }
-    })
-
-  // And also all files that are not within the selected directory
-  if (restrictToDir.value.trim() !== '') {
-    fileList = fileList.filter(item => item.relativeDirectoryPath.startsWith(restrictToDir.value))
-  }
-
-  if (fileList.length === 0) {
-    return console.warn('Could not begin search: The file list was empty.')
-  }
-
-  // One last thing: Add the query to the recent searches
+  // Add the query to the recent searches
   const recentSearches: string[] = recentGlobalSearches.value.map(x => x)
-
   const idx = recentSearches.indexOf(query.value)
-
   if (idx > -1) {
     recentSearches.splice(idx, 1)
   }
-
   recentSearches.unshift(query.value)
   configStore.setConfigValue('window.recentGlobalSearches', recentSearches.slice(0, 10))
 
   // Now we're good to go!
+  searchProgress.value = 0
+  hadNoResult.value = false
+  searchIsRunning.value = true
+  toggleState.value = false
   emptySearchResults()
   blurQueryInput()
-  filter.value = '' // Reset the filter
-  sumFilesToSearch.value = fileList.length
-  filesToSearch.value = fileList
-  maxWeight.value = 0
-  singleSearchRun().catch(err => console.error(err))
-}
+  filter.value = ''
 
-async function singleSearchRun (): Promise<void> {
-  // Take the file to be searched ...
-  const terms = compileSearchTerms(query.value)
-  let fileToSearch: FileSearchDescriptor|undefined
-  while ((fileToSearch = filesToSearch.value.shift()) !== undefined) {
-    // Now start the search
-    const result: SearchResult[] = await ipcRenderer.invoke('application', {
-      command: 'file-search',
-      payload: {
-        path: fileToSearch.path,
-        terms
-      }
-    })
+  const restrictDirEntry = directorySuggestions.value.find(s => s.displayValue === restrictToDir.value)
+  const restrictToDirectory = restrictDirEntry === undefined
+    ? ''
+    : restrictDirEntry.absPath
 
-    if (result.length > 0) {
-      const newResult: SearchResultWrapper = {
-        file: fileToSearch,
-        result,
-        hideResultSet: false, // If true, the individual results won't be displayed
-        weight: result.reduce((accumulator: number, currentValue: SearchResult) => {
-          return accumulator + currentValue.weight
-        }, 0) // This is the initialValue, b/c we're summing up props
-      }
-      windowStateStore.searchResults.push(newResult)
-      if (newResult.weight > maxWeight.value) {
-        maxWeight.value = newResult.weight
-      }
+  ipcRenderer.invoke('search-provider', {
+    command: 'start-full-text-search',
+    payload: {
+      query: query.value,
+      restrictToDirectory,
+      caseInsensitive: caseInsensitive.value
     }
-  }
-
-  finaliseSearch()
+  } satisfies SearchProviderIPCAPI)
+    .catch(err => {
+      console.error(err)
+    })
 }
 
+/**
+ * Processes a new search result from main
+ *
+ * @param  {number}                  progress  The current progress in main (0-1)
+ * @param  {string}                  absPath   The filepath that had been searched
+ * @param  {SearchResult|undefined}  result    The search result, if the file contains a result
+ */
+async function processSearchResult (progress: number, absPath: string, result: SearchResult|undefined): Promise<void> {
+  searchProgress.value = progress
+
+  if (result === undefined) {
+    return
+  }
+
+  const filename = pathBasename(absPath)
+  const root = configStore.config.app.openWorkspaces.find(r => absPath.startsWith(r))
+  const relativeDirectoryPath = root !== undefined
+    ? relativePath(pathDirname(root), absPath)
+    : filename
+
+  const newResult: SearchResultWrapper = {
+    key: absPath,
+    file: {
+      path: absPath, filename,
+      relativeDirectoryPath,
+      displayName: filename
+    },
+    result,
+    hideResultSet: toggleState.value,
+    weight: result.reduce((acc, cur) => acc + cur.weight, 0)
+  }
+  windowStateStore.addSearchResult(newResult)
+}
+
+/**
+ * Cancel an in-progress search.
+ *
+ * @param   {boolean}  startNewSearch  Whether to start a new search afterwards
+ */
 function cancelSearch (startNewSearch: boolean = false): void {
-  filesToSearch.value = []
+  ipcRenderer.invoke('search-provider', { command: 'cancel-search', payload: undefined } satisfies SearchProviderIPCAPI)
+    .catch(err => console.error(err))
+
   shouldStartNewSearch.value = startNewSearch
+  searchProgress.value = 0
 }
 
-function finaliseSearch (): void {
-  filesToSearch.value = [] // Reset, in case the search was aborted.
-  if (shouldStartNewSearch.value) {
-    shouldStartNewSearch.value = false
-    startSearch()
-  }
-}
-
+/**
+ * Empties the current set of search results.
+ *
+ * @return  {void}    [return description]
+ */
 function emptySearchResults (): void {
   windowStateStore.searchResults = []
+  toggleState.value = false
 
   // Clear indices of active search result
   activeFileIdx.value = -1
@@ -438,26 +492,26 @@ function emptySearchResults (): void {
 
 function toggleIndividualResults (): void {
   toggleState.value = !toggleState.value
-  for (const result of searchResults.value) {
+  for (const result of windowStateStore.searchResults) {
     result.hideResultSet = toggleState.value
   }
 }
 
-function fileContextMenu (event: MouseEvent, filePath: string, lineNumber: number, restext: string): void {
+function fileContextMenu (event: MouseEvent, filePath: string, result: MetadataSearchResult|FileContentSearchResult): void {
   const point = { x: event.clientX, y: event.clientY }
-  showPopupMenu(point, getContextMenu(), (clickedID: string) => {
+  showPopupMenu(point, getContextMenu(result.type === 'content'), (clickedID: string) => {
     switch (clickedID) {
       case 'new-tab':
-        jumpToLine(filePath, lineNumber, true)
+        jumpToLine(filePath, result.type === 'content' ? result.line : 1, true)
         break
       case 'copy':
-        navigator.clipboard.writeText(restext).catch(err => console.error(err))
+        navigator.clipboard.writeText(result.type === 'content' ? result.excerpt : '').catch(err => console.error(err))
         break
     }
   })
 }
 
-function onResultClick (event: MouseEvent, idx: number, idx2: number, filePath: string, lineNumber: number): void {
+function onResultClick (event: MouseEvent, fileIndex: number, lineIndex: number, filePath: string, lineNumber: number): void {
   // This intermediary function is needed to make sure that jumpToLine can
   // also be called from within the context menu (see above).
   if (event.button === 2) {
@@ -466,19 +520,18 @@ function onResultClick (event: MouseEvent, idx: number, idx2: number, filePath: 
 
   // Update indices so we can keep track of the most recently clicked
   // search result.
-  activeFileIdx.value = idx
-  activeLineIdx.value = idx2
+  activeFileIdx.value = fileIndex
+  activeLineIdx.value = lineIndex
 
   const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
   jumpToLine(filePath, lineNumber, isMiddleClick)
 }
 
 function jumpToLine (filePath: string, lineNumber: number, openInNewTab: boolean = false): void {
-  // NOTE that we have to increase the line number for the JTL command
-  emit('jtl', filePath, lineNumber + 1, openInNewTab)
+  emit('jtl', filePath, lineNumber, openInNewTab)
 }
 
-function markText (resultObject: SearchResult): string {
+function markText (resultObject: FileContentSearchResult): string {
   const startTag = '<span class="search-result-highlight">'
   const endTag = '</span>'
   // We receive a result object and should return an HTML string containing
@@ -488,17 +541,16 @@ function markText (resultObject: SearchResult): string {
   // being sorted correctly by the main process, so we can just assume the
   // results to be non-overlapping and from beginning to the end of the
   // line.
-  let marked = resultObject.restext
+  let marked = resultObject.excerpt
 
   // We go through the ranges in reverse order so that the range positions
   // remain valid as we highlight parts of the string
-  for (let i = resultObject.ranges.length - 1; i > -1; i--) {
-    const range = resultObject.ranges[i]
+  for (const range of resultObject.ranges.toReversed()) {
     marked = marked.substring(0, range.to) + endTag + marked.substring(range.to)
     marked = marked.substring(0, range.from) + startTag + marked.substring(range.from)
   }
 
-  return sanitizeHTML(marked)
+  return sanitizeHTML(marked.replace(/\n/g, '<br />'))
 }
 
 function focusQueryInput (): void {
@@ -517,6 +569,7 @@ body div#global-search-pane {
   padding: 10px;
   overflow: auto;
   height: 100%;
+  font-size: 13px;
 
   hr {
     margin: 10px 0;
@@ -539,33 +592,60 @@ body div#global-search-pane {
 
   div.search-result-container {
     border-bottom: 1px solid rgb(180, 180, 180);
-    padding: 10px;
     overflow: hidden;
     font-size: 14px;
 
-    div.filename {
-      white-space: nowrap;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-
-      div.overflow-hidden {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-
-    div.filepath {
-      color: rgb(131, 131, 131);
-      font-size: 10px;
-      white-space: nowrap;
-      overflow: hidden;
+    div.single-search-result {
       margin-bottom: 5px;
     }
 
+    div.result-header {
+      white-space: nowrap;
+      display: grid;
+      width: 100%;
+      grid-template-areas: "relevancy filename collapse" "path path path";
+      grid-template-columns: 20px auto 20px;
+      grid-template-rows: 1fr 1fr;
+
+      .relevancy-icon { grid-area: relevancy; }
+
+      .filename {
+        grid-area: filename;
+        font-weight: bold;
+      }
+
+      .filename, .filepath {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .collapse-indicator { grid-area: collapse; }
+
+      .filepath {
+        color: rgb(131, 131, 131);
+        font-size: 10px;
+        margin-bottom: 5px;
+        grid-area: path;
+      }
+    }
+
     div.result-line {
-      padding: 5px;
+      padding: 5px 0px;
       font-size: 12px;
+      display: grid;
+      gap: 4px;
+      grid-template-areas: "line-number excerpt";
+      grid-template-columns: 25px auto;
+
+      .line-number {
+        grid-area: line-number;
+        text-align: right;
+      }
+
+      .excerpt {
+        grid-area: excerpt;
+      }
 
       &:hover {
         background-color: rgb(180, 180, 180);
