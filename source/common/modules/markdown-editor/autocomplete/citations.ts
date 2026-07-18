@@ -20,6 +20,30 @@ import { configField } from '../util/configuration'
 import { extractCitationNodes, nodeToCiteItem } from '../parser/citation-parser'
 
 /**
+ * Strips inline HTML that citeproc/biblatex emits in citation display text so
+ * that it can be shown verbatim in the autocomplete info pane.
+ *
+ * BibTeX's double-curly-brace case-preserving syntax (e.g. `{{Opening Up}}`)
+ * is serialised by citeproc as `<span class="nocase">…</span>`, and other
+ * markup such as `<i>`/`<b>` can appear in titles too. CodeMirror renders a
+ * string `info` as escaped plain text, so without stripping, the raw tags show
+ * up literally in the citation picker preview (see issue #6409). We only ever
+ * display the text content, so dropping the tags is both safe and correct.
+ *
+ * @param   {string}  displayText  The raw display text, possibly containing HTML.
+ *
+ * @return  {string}               The display text with any HTML tags removed.
+ */
+function stripCitationHtml (displayText: string): string {
+  // Remove anything that looks like an HTML tag, then collapse the whitespace
+  // that collapsing span boundaries can leave behind.
+  return displayText
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/**
  * Use this effect to provide the editor state with a set of new citekeys
  */
 export const citekeyUpdate = StateEffect.define<Array<{ citekey: string, displayText: string }>>()
@@ -30,11 +54,14 @@ export const citekeyUpdateField = StateField.define<Completion[]>({
   update (val, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(citekeyUpdate)) {
-        // Convert the citationentries into completion objects
+        // Convert the citationentries into completion objects. The displayText
+        // may contain citeproc HTML (e.g. <span class="nocase">…</span> from
+        // case-preserving braces) which CodeMirror would render as escaped
+        // plain text in the info pane, so strip it before exposing the info.
         return effect.value.map(entry => {
           return {
             label: entry.citekey,
-            info: entry.displayText,
+            info: stripCitationHtml(entry.displayText),
             apply
           }
         })
@@ -135,7 +162,7 @@ export const citations: AutocompletePlugin = {
     if (text.startsWith('@') && ctx.pos - from === 1) {
       // The line starts with an @ and the cursor is directly behind it
       return ctx.pos
-    } else if (/(?<=[-[\s(])@[^[\]]*$/.test(textBefore)) {
+    } else if (/(?<=[-[\s(])@[^\[\]]*$/.test(textBefore)) {
       // The text immediately before the cursor matches a valid citation
       return from + textBefore.lastIndexOf('@') + 1
     } else {
