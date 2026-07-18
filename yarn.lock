@@ -2478,15 +2478,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/adm-zip@npm:^0.5.8":
-  version: 0.5.8
-  resolution: "@types/adm-zip@npm:0.5.8"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10/0739e5abda05f5c02b84048a02d308f77dd9e2d4e7d6ac7126830a0000b9e962a1f5795efd96d50df289333af9ae3b264adacfad9623dde66c10570ce65029d5
-  languageName: node
-  linkType: hard
-
 "@types/archiver@npm:^8.0.0":
   version: 8.0.0
   resolution: "@types/archiver@npm:8.0.0"
@@ -15713,7 +15704,6 @@ __metadata:
     "@replit/codemirror-lang-nix": "npm:^6.0.1"
     "@replit/codemirror-vim": "npm:^6.3.0"
     "@stylistic/eslint-plugin": "npm:^5.10.0"
-    "@types/adm-zip": "npm:^0.5.8"
     "@types/archiver": "npm:^8.0.0"
     "@types/command-exists": "npm:^1.2.3"
     "@types/d3": "npm:^7.4.3"
