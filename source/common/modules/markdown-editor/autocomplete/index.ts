@@ -54,9 +54,16 @@ export interface AutocompletePlugin {
    */
   entries: (ctx: CompletionContext, query: string) => Completion[]
   fields?: Array<StateField<any>>
+  /**
+   * The list of CodeMirror syntax-tree tokens inside which this autocomplete
+   * should NOT trigger. By default, every plugin is suppressed inside YAML
+   * frontmatter and math blocks. A plugin can override this list (e.g. set it
+   * to an empty array) to opt back into those contexts.
+   */
+  forbiddenTokens?: string[]
 }
 
-const forbiddenTokens = [
+const defaultForbiddenTokens = [
   'YAMLFrontmatter',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
@@ -67,17 +74,20 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
   // This function is called for every keystroke and shall determine whether to
   // actually start the autocomplete.
 
-  // With this function we check whether we are currently within "forbidden"
-  // tokens (i.e. codeblocks, YAML stuff, etc.)
-  if (ctx.tokenBefore(forbiddenTokens) !== null) {
-    return null
-  }
-
   let plugin: AutocompletePlugin|undefined
   let startpos = ctx.pos
 
   // NOTE: Headings has to be checked before tags
   for (const p of [ codeBlocks, citations, files, headings, tags, snippets ]) {
+    // Each plugin decides for itself in which contexts it should be suppressed
+    // (i.e. codeblocks, YAML stuff, etc.). This allows individual plugins to opt
+    // back into contexts that were previously forbidden for everyone — such as
+    // snippets inside YAML frontmatter (see issue #6240).
+    const forbidden = p.forbiddenTokens ?? defaultForbiddenTokens
+    if (forbidden.length > 0 && ctx.tokenBefore(forbidden) !== null) {
+      continue
+    }
+
     const res = p.applies(ctx)
     if (res !== false) {
       plugin = p

@@ -477,6 +477,12 @@ export const snippets: AutocompletePlugin = {
       }
     })
   },
+  // Snippets are useful inside YAML frontmatter (e.g. to insert a
+  // `header-includes` block), so we explicitly opt back into that context by
+  // omitting the YAMLFrontmatter* tokens here. We still suppress snippets inside
+  // math blocks, since a colon there is part of the equation, not a trigger.
+  // See issue #6240.
+  forbiddenTokens: ['MathEquation'],
   fields: [snippetsUpdateField]
 }
 
