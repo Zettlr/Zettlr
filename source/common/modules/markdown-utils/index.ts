@@ -136,6 +136,25 @@ export function extractTextnodes (ast: ASTNode, filter?: (node: ASTNode) => bool
       break
     }
 
+    case 'Footnote': {
+      // Inline footnotes (^[text]) contain their text content in the label
+      // property rather than as children. We need to expose that text so it
+      // gets spell-checked, counted, and processed by the readability mode.
+      // The label text starts at from + 2 (after the ^[ prefix).
+      if (ast.inline) {
+        textNodes.push({
+          type: 'Text',
+          name: 'text',
+          from: ast.from + 2,
+          to: ast.from + 2 + ast.label.length,
+          value: ast.label,
+          whitespaceBefore: ast.whitespaceBefore,
+          attributes: {}
+        })
+      }
+      break
+    }
+
     case 'Generic':
     case 'Heading':
     case 'Emphasis':
