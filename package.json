@@ -85,7 +85,7 @@
     "@replit/codemirror-emacs": "^6.1.0",
     "@replit/codemirror-lang-nix": "^6.0.1",
     "@replit/codemirror-vim": "^6.3.0",
-    "adm-zip": "^0.5.17",
+    "adm-zip": "^0.6.0",
     "archiver": "^8.0.0",
     "astrocite": "^0.16.4",
     "bcp-47": "^2.1.0",
