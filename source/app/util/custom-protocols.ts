@@ -48,6 +48,28 @@ function headersForFileType (filePath: string): Record<string, string> {
   return headers
 }
 
+/**
+ * Decodes a (potentially partially-encoded) URI component safely.
+ *
+ * The `URL` constructor encodes some characters (e.g. spaces become `%20`) but
+ * leaves a bare `%` in the original filename untouched, since `%` is a valid
+ * path character. A subsequent `decodeURIComponent` then throws "URI malformed"
+ * because a lone `%` is not a valid percent-encoding sequence. This helper
+ * first re-encodes any `%` that is not followed by two hex digits to `%25`,
+ * so that `decodeURIComponent` succeeds and the bare `%` is restored as a
+ * literal character in the resulting path.
+ *
+ * See: https://github.com/Zettlr/Zettlr/issues/6261
+ *
+ * @param   {string}  str  The (partially-encoded) URI component to decode
+ *
+ * @return  {string}       The decoded string
+ */
+function safeDecodeURIComponent (str: string): string {
+  const sanitized = str.replace(/%(?![0-9A-Fa-f]{2})/g, '%25')
+  return decodeURIComponent(sanitized)
+}
+
 export default function registerCustomProtocols (logger: LogProvider): void {
   // Make it possible to safely load external files
   // In order to load files, the 'safe-file' protocol has to be used instead of 'file'
@@ -58,7 +80,7 @@ export default function registerCustomProtocols (logger: LogProvider): void {
   protocol.handle(protocolName, async request => {
     const url = new URL(request.url)
     try {
-      let pathName = decodeURIComponent(url.pathname)
+      let pathName = safeDecodeURIComponent(url.pathname)
 
       // Due to the colons in the drive letters on Windows, the pathname will
       // look like this: /C:/Users/Documents/test.jpg
