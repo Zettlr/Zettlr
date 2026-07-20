@@ -49,6 +49,7 @@
 <!-- Describe how AI has been used in this PR (GPT-models/coding agents). -->
 
 ## Declarations
+<!-- Add an "x" to the following checkboxes once you have read and understood each item. Do not add any other text in this section. -->
 
 - [ ] I hereby confirm that I am solely responsible for the code provided in
   this PR. Usage of AI to generate code has been documented and made
