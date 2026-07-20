@@ -22,6 +22,7 @@ import { languageToolStatus } from './language-tool'
 import { diagnosticsStatus } from './diagnostics'
 import { statusbarProjectInfo } from '../plugins/project-info-field'
 import { renderingModeToggle } from '../renderers'
+import { textDirectionStatus } from '../writer/direction-statusbar'
 import { sanitizeHTML } from 'source/common/util/sanitize-html'
 
 /**
@@ -80,6 +81,7 @@ function createStatusbar (_view: EditorView): Panel {
         cursorStatus,
         wordcountStatus,
         charcountStatus,
+        textDirectionStatus,
         inputModeStatus,
         languageToolStatus,
         diagnosticsStatus
