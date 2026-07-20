@@ -95,6 +95,7 @@ import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
 import { zknTagParser } from './zkn-tag-parser'
 import { pandocDivComposite, pandocDivParser, pandocSpanParser } from './pandoc-div-span-parser'
+import { bidiIsolateProps } from '../writer/bidi-isolate-props'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   { mode: markdownLanguage, selectors: [ 'markdown', 'md' ] },
@@ -218,7 +219,8 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
     addKeymap: false,
     extensions: {
       props: [
-        customFoldNodeProp
+        customFoldNodeProp,
+        bidiIsolateProps
       ],
       // yamlCodeParse is a wrapper that scans the document for the existence of
       // a YAML frontmatter and then parses its contents. NOTE: Since a single

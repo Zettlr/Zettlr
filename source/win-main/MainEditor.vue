@@ -275,6 +275,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     zknAddFileTitle: zkn.linkAddFileTitle,
     linkWithIDIfPossible: zkn.linkWithIDIfPossible,
     inputMode: editor.inputMode,
+    defaultTextDirection: editor.defaultTextDirection,
     lintMarkdown: editor.lint.markdown,
     // The editor only needs to know if it should use languageTool
     lintLanguageTool: editor.lint.languageTool.active,

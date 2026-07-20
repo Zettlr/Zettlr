@@ -129,6 +129,11 @@ function getTagInfo (node: GenericNode): HTMLTag {
     ret.attributes.push([ 'class', node.name.toLowerCase() ])
   }
 
+  if (ret.tagName === 'p') {
+    // Each block resolves its own base text direction (bidi support)
+    ret.attributes.push([ 'dir', 'auto' ])
+  }
+
   if ([ 'span', 'div' ].includes(ret.tagName)) {
     ret.attributes.push([ 'class', node.name.toLowerCase() ])
   }
@@ -234,6 +239,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<div${attr}>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Heading') {
+    addAttribute(node, 'dir', 'auto')
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<h${node.level}${attr}>${nodeToHTML(node.children, options, indent)}</h${node.level}>`
   } else if (node.type === 'Highlight') {
@@ -298,7 +304,7 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
         cells.push(nodeToHTML(cell.children, options, indent))
       }
       const tag = row.isHeaderOrFooter ? 'th' : 'td'
-      const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
+      const content = cells.map(c => `<${tag} dir="auto">${c}</${tag}>`).join('\n')
       const attr = renderNodeAttributes(row)
       if (row.isHeaderOrFooter) {
         rows.push(`${row.whitespaceBefore}<thead>\n<tr${attr}>\n${content}\n</tr>\n</thead>`)

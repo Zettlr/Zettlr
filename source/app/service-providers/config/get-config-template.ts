@@ -148,6 +148,7 @@ export interface ConfigOptions {
     fontSize: number
     countChars: boolean
     inputMode: 'default'|'vim'|'emacs'
+    defaultTextDirection: 'auto'|'ltr'|'rtl'
     boldFormatting: '**'|'__'
     italicFormatting: '_'|'*'
     highlightFormatting: 'span'|'=='
@@ -365,6 +366,7 @@ export function getConfigTemplate (): ConfigOptions {
       fontSize: 18, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
+      defaultTextDirection: 'auto', // Base direction for documents without a frontmatter override
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
       highlightFormatting: '==', // Can be 'span' or ==

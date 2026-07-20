@@ -37,12 +37,19 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
     },
     {
       title: trans('Writing direction'),
-      infoString: trans('We are currently planning on re-introducing bidirectional writing support, which will then be configurable here.'),
+      infoString: trans('The default base direction for documents. "Automatic" resolves each line from its first strong character, which is recommended for documents mixing left-to-right and right-to-left text. A "direction" key in a document\'s YAML frontmatter overrides this setting.'),
       group: PreferencesGroups.Editor,
-      help: undefined, // TODO
-      fields: [
-        // TODO: Add field for LTR/RTL
-      ]
+      titleField: {
+        type: 'select',
+        model: 'editor.defaultTextDirection',
+        options: {
+          auto: trans('Automatic'),
+          ltr: trans('Left-to-right'),
+          rtl: trans('Right-to-left')
+        }
+      },
+      help: undefined,
+      fields: []
     },
     {
       title: trans('Markdown rendering'),

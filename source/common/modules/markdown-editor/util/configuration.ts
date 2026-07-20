@@ -67,6 +67,7 @@ export interface EditorConfiguration {
   highlightFormatting: 'span'|'=='
   citeStyle: 'in-text'|'in-text-suffix'|'regular'
   inputMode: 'default'|'vim'|'emacs'
+  defaultTextDirection: 'auto'|'ltr'|'rtl'
   muteLines: boolean
   readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
   readabilityMode: boolean
@@ -135,6 +136,7 @@ export function getDefaultConfig (): EditorConfiguration {
     muteLines: true,
     readabilityAlgorithm: 'dale-chall',
     inputMode: 'default',
+    defaultTextDirection: 'auto',
     readabilityMode: false,
     typewriterMode: false,
     distractionFree: false,
