@@ -76,8 +76,7 @@ export default function createPreferencesWindow (logger: LogProvider, config: Co
       storages: [
         'cookies', // Nobody needs cookies except for downloading pandoc etc
         'localstorage',
-        'shadercache', // Should never contain anything
-        'websql'
+        'shadercache' // Should never contain anything
       ]
     }).catch(e => {
       logger.error(`Could not clear session data: ${e.message as string}`, e)
