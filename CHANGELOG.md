@@ -2,6 +2,15 @@
 
 ## GUI and Functionality
 
+- **Feature**: Custom shortcuts are here. You can now customize many of the
+  available shortcuts and assign them to your likings. This also includes the
+  various text transformations that we introduced in version 3.6.0 so that you
+  can bind frequently used ones to a handy shortcut. The feature comes with all
+  the standards of custom shortcuts, including an interactive shortcut recording
+  that visualizes which keys will become part of the shortcuts as you type them,
+  a reset function to restore the default, and an automated conflict detection
+  that lets you know whether a shortcut you have provided might conflict with
+  another one.
 - **Feature**: You can now set the editor theme to use a light or dark
   appearance independent of the app appearance (#5851).
 - **Feature**: You can now click a long-running-task notification for both
