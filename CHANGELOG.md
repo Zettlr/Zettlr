@@ -50,6 +50,7 @@
 
 ## Under the Hood
 
+- Update Electron to `v43.1.0`.
 - Zettlr now additionally trusts system certificates when making network
   connections, meaning that custom TLS certificates can be used, e.g., for
   corporate firewalls (#6006; #5271).
