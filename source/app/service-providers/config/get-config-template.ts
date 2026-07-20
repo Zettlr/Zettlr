@@ -136,6 +136,8 @@ export interface ConfigOptions {
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
     showLinkPreviews: boolean
+    citationTooltipEnabled: boolean 
+    citationTooltipDelay: number
     showStatusbar: boolean
     showFormattingToolbar: boolean
     showWhitespace: boolean
@@ -354,6 +356,8 @@ export function getConfigTemplate (): ConfigOptions {
       snippetAutocompleteTriggerCharacter: ':',
       autoCloseBrackets: true,
       showLinkPreviews: true, // Whether to fetch link previews in the editor
+      citationTooltipEnabled: true, 
+      citationTooltipDelay: 500, // Milliseconds 
       showWhitespace: false,
       showMarkdownLineNumbers: false,
       defaultSaveImagePath: '',
@@ -469,7 +473,7 @@ export function getConfigTemplate (): ConfigOptions {
       imageHeight: 50, // Maximum preview image height
       renderingMode: 'preview',
       renderCitations: true,
-      renderIframes: true,
+      renderIframes: true, 
       renderImages: true,
       renderLinks: true,
       renderMath: true,

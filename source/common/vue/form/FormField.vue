@@ -150,6 +150,7 @@
     v-bind:model-value="model"
     v-bind:min="props.field.min"
     v-bind:max="props.field.max"
+    v-bind:step="props.field.step"
     v-bind:label="props.field.label"
     v-bind:name="props.field.model"
     v-on:update:model-value="emit('update:modelValue', $event)"

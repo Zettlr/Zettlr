@@ -6,6 +6,7 @@
       type="range"
       v-bind:min="props.min"
       v-bind:max="props.max"
+      v-bind:step="props.step"
       v-bind:name="props.name"
     >
   </div>
@@ -32,6 +33,7 @@ const props = defineProps<{
   modelValue: number
   min?: number
   max?: number
+  step?: number
   label?: string
   name?: string
 }>()

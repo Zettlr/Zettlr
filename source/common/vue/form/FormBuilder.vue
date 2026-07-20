@@ -259,6 +259,7 @@ interface SliderField extends BasicInfo {
   type: 'slider'
   min?: number
   max?: number
+  step?: number
 }
 
 interface ThemeField extends BasicInfo {

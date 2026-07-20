@@ -75,7 +75,7 @@ import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
-import { citationTooltips } from './tooltips/citations'
+import { getCitationTooltips } from './tooltips/citations' 
 
 /**
  * This interface describes the required properties which the extension sets
@@ -333,7 +333,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     footnoteGutter, // Should be after markdownFolding
     urlHover,
     filePreview,
-    citationTooltips,
+    getCitationTooltips(options.initialConfig.citationTooltipEnabled, options.initialConfig.citationTooltipDelay), // getting the config options, if it should load and how long it should wait to load.
     backgroundLayers, // Add a background behind inline code and code blocks
     defaultContextMenu, // A default context menu
     softwrapVisualIndent, // Always indent visually

@@ -36,6 +36,8 @@ export interface EditorConfiguration {
   renderingMode: 'preview'|'raw'
   previewModeShowSyntaxWhenCursorIsAdjacent: boolean
   renderCitations: boolean
+  citationTooltipEnabled: boolean 
+  citationTooltipDelay: number
   renderIframes: boolean
   renderImages: boolean
   renderLinks: boolean
@@ -102,6 +104,8 @@ export function getDefaultConfig (): EditorConfiguration {
     renderingMode: 'preview',
     previewModeShowSyntaxWhenCursorIsAdjacent: true,
     renderCitations: true,
+    citationTooltipEnabled: true, 
+    citationTooltipDelay: 500, // Milliseconds
     renderIframes: true,
     renderImages: true,
     renderLinks: true,
