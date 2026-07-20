@@ -17,7 +17,7 @@
  */
 
 import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language'
-import { EditorState, MapMode, Prec, StateField, EditorSelection, type ChangeSpec, type Range } from '@codemirror/state'
+import { EditorState, MapMode, StateField, EditorSelection, type ChangeSpec, type Range } from '@codemirror/state'
 import { EditorView, drawSelection, type DecorationSet, Decoration, ViewPlugin, type ViewUpdate } from '@codemirror/view'
 import markdownParser from '../parser/markdown-parser'
 import { tableEditorKeymap } from '../keymaps/table-editor'
@@ -26,7 +26,6 @@ import { configField, type EditorConfiguration } from '../util/configuration'
 import { getMainEditorThemes } from '../editor-extension-sets'
 import { darkMode, useDarkModeEditor } from '../theme/dark-mode'
 import { markdownSyntaxHighlighter } from '../theme/syntax'
-import { defaultKeymap } from '../keymaps/default'
 import { clickListeners } from '../plugins/click-listeners'
 
 /**
@@ -228,8 +227,7 @@ export function createSubviewForCell (
     selection: mainView.state.selection,
     extensions: [
       // A minimal set of extensions
-      defaultKeymap(),
-      Prec.highest(tableEditorKeymap(mainView)),
+      tableEditorKeymap(mainView, cfg.shortcuts),
       drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
       EditorState.allowMultipleSelections.of(true),
       // Add the configuration and preset it with whatever is in the main view.

@@ -71,11 +71,11 @@ import { highlightWhitespace } from './plugins/highlight-whitespace'
 import { showLineNumbers } from './plugins/line-numbers'
 import { tagClasses } from './plugins/tag-classes'
 import { autocompleteTriggerCharacter } from './autocomplete/snippets'
-import { defaultKeymap } from './keymaps/default'
 import { vimPlugin } from './plugins/vim-mode'
 import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
 import { citationTooltips } from './tooltips/citations'
+import { zettlrKeymap } from './keymaps'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -170,7 +170,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // keymap.
     inputModeCompartment.of(inputMode),
     // Then, include the default keymap
-    defaultKeymap(),
+    zettlrKeymap(options.initialConfig.shortcuts),
     darkMode({ darkMode: useDarkModeEditor(options.initialConfig.darkMode, options.initialConfig.darkModeEditor), ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),

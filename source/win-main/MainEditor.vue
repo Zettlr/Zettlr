@@ -51,6 +51,7 @@ import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/s
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 import type { FileContentSearchResult } from 'source/app/service-providers/search'
+import type { CustomEditorShortcut } from 'source/common/modules/markdown-editor/keymaps/shortcuts.js'
 
 const ipcRenderer = window.ipc
 
@@ -231,7 +232,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // right after setting the new configurations. Plus, the user won't update
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
-  const { editor, display, zkn, darkMode, darkModeEditor } = configStore.config
+  const { editor, display, zkn, darkMode, shortcuts, darkModeEditor } = configStore.config
   return {
     indentUnit: editor.indentUnit,
     indentWithTabs: editor.indentWithTabs,
@@ -286,7 +287,10 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     theme: display.theme,
     highlightWhitespace: editor.showWhitespace,
     showMarkdownLineNumbers: editor.showMarkdownLineNumbers,
-    countChars: editor.countChars
+    countChars: editor.countChars,
+    shortcuts: Object.entries(shortcuts.editor)
+      .map(([ name, shortcut ]) => ({ name, shortcut }))
+      .filter((shortcut): shortcut is CustomEditorShortcut => shortcut.shortcut !== undefined)
   } satisfies EditorConfigOptions
 })
 

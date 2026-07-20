@@ -27,5 +27,6 @@ export enum PreferencesGroups {
   ImportExport,
   Snippets,
   Spellchecking,
-  Zettelkasten
+  Zettelkasten,
+  Shortcuts
 }

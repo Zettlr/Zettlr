@@ -162,6 +162,16 @@
     v-bind:name="props.field.model"
     v-on:update:model-value="emit('update:modelValue', $event)"
   ></ThemeInput>
+  <ShortcutCaptureControl
+    v-else-if="props.field.type === 'shortcut'"
+    v-bind:model-value="model"
+    v-bind:label="props.field.label"
+    v-bind:name="props.field.model"
+    v-bind:default-shortcut="props.field.defaultShortcut"
+    v-bind:conflicts="props.field.conflicts"
+    v-bind:reset="props.field.reset"
+    v-on:update:model-value="emit('update:modelValue', $event)"
+  ></ShortcutCaptureControl>
 </template>
 
 <script setup lang="ts">
@@ -180,6 +190,7 @@ import SliderInput from './elements/SliderControl.vue'
 import ListControl from './elements/ListControl.vue'
 import TokenInput from './elements/TokenList.vue'
 import ThemeInput from './elements/ThemeSelector.vue'
+import ShortcutCaptureControl from './elements/ShortcutCaptureControl.vue'
 
 /**
  * @ignore
