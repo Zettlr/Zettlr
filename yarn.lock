@@ -3068,7 +3068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.20.1, @types/node@npm:^22.5.5":
+"@types/node@npm:^22.5.5":
   version: 22.20.1
   resolution: "@types/node@npm:22.20.1"
   dependencies:
@@ -3077,7 +3077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^24.9.0":
+"@types/node@npm:^24.13.3, @types/node@npm:^24.9.0":
   version: 24.13.3
   resolution: "@types/node@npm:24.13.3"
   dependencies:
@@ -15703,7 +15703,7 @@ __metadata:
     "@types/luxon": "npm:^3.7.2"
     "@types/md5": "npm:^2.3.6"
     "@types/mocha": "npm:^10.0.10"
-    "@types/node": "npm:^22.20.1"
+    "@types/node": "npm:^24.13.3"
     "@types/semver": "npm:^7.7.1"
     "@types/showdown": "npm:^2.0.6"
     "@types/underscore": "npm:^1.13.0"
