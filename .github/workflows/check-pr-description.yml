@@ -1,0 +1,72 @@
+# This workflow has been instantiated to force users to adhere to the PR
+# template description we have. It checks each newly opened, edited, and
+# reopened PR for compliance, and when it detects a misalignment, it adds a
+# stern comment telling people that they should use the correct PR template.
+name: Check PR Description
+
+# NOTE: Adjusted from https://github.com/orgs/community/discussions/84771#discussioncomment-8039595
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  # First, validate the PR description
+  validate-pr-description:
+    name: Validate PR Description
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Repository
+      uses: actions/checkout@v6
+    - name: Validate PR Description
+      run: ./scripts/enforce-pr-structure.sh
+
+  # If the validation fails, add a comment that tells the user to rectify any
+  # issues with their PR description.
+  post-comment:
+    if: failure()
+    name: Remind user that we have some rules here.
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Repository
+      uses: actions/checkout@v6
+    
+    # Find an existing comment to avoid doubly commenting.
+    - name: Find Existing Comment
+      uses: peter-evans/find-comment@v3
+      id: fc
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+        # Ensure we check for a line that will be present in the comment.
+        body-includes: "**Your PR Description does not adhere to the contributing guidelines.**"
+
+    - name: Create comment
+      if: steps.fc.outputs.comment-id == ''
+      uses: peter-evans/create-or-update-comment@v5
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          **Your PR Description does not adhere to the contributing guidelines.**
+
+          Hi there. We have checked your PR for compliance with the contributor
+          guide and found that your PR description unfortunately does not
+          fulfill our requirements.
+
+          Before we can take a look at your PR, we need you to update your PR
+          description such that it matches our requirements. Failure to do so
+          will lead to the closure of this PR.
+
+          Please see the corresponding action run for more detail on how your PR
+          fails to comply with the requirements.
+
+          Here are some guidelines:
+
+          1. Ensure you use and properly fill in the PULL_REQUEST_TEMPLATE.md.
+          2. Ensure that you write the description by hand. LLM-written PR descriptions will not be accepted.
+          3. Check the required declarations.
+
+          For more information, please see our
+          [Contributing Guide](./CONTRIBUTING.md) and our
+          [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+          Thank you!
