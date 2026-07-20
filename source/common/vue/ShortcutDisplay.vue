@@ -58,7 +58,7 @@ div.shortcut-wrapper {
     font-size: 10px;
     border: 1px solid #666;
     color: #666;
-    background-color: #ffe;
+    background-color: #fffff8;
     border-radius: 4px;
     border-bottom-width: 2px;
     border-right-width: 2px;
@@ -75,7 +75,7 @@ body.dark div.shortcut-wrapper {
   kbd {
     border-color: white;
     color: white;
-    background-color: rgb(124, 124, 90);
+    background-color: #3d3d3d;
   }
 
   &.muted kbd {
