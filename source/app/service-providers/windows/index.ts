@@ -78,6 +78,7 @@ export type WindowControlsIPCAPI = IPCAPI<{
   'copy': unknown
   'paste': unknown
   'selectAll': unknown
+  'show-definition-for-selection': undefined
   'inspect-element': { x: number, y: number }
   'drag-start': { filePath: string }
   'show-item-in-folder': { itemPath: string }
@@ -191,6 +192,12 @@ export default class WindowProvider extends ProviderContract {
           break
         case 'selectAll':
           event.sender.selectAll()
+          break
+        // This command is only available on macOS
+        case 'show-definition-for-selection':
+          if (process.platform === 'darwin') {
+            event.sender.showDefinitionForSelection()
+          }
           break
         case 'inspect-element':
           event.sender.inspectElement(Math.round(payload.x), Math.round(payload.y))

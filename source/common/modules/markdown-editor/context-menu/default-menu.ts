@@ -22,6 +22,7 @@ import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, 
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 import { getTransformSubmenu } from './transform-items'
 import { extractLTSpellcheckSuggestionsFrom, isLanguageToolMisspelling } from '../linters/language-tool'
+import { getMacOSLookupItem } from './macos-lookup-item'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -279,6 +280,11 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     },
     getTransformSubmenu(view)
   ]
+
+  const lookupItem = getMacOSLookupItem(view)
+  if (lookupItem !== undefined) {
+    tpl.push({ type: 'separator' }, lookupItem)
+  }
 
   // If we found a diagnostic earlier and a word, add the suggestion items
   if (diagnostic !== undefined && misspelledWord !== undefined) {
