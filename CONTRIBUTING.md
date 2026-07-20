@@ -76,6 +76,12 @@ in which you can help!):
 We welcome PRs that fix bugs, improve behavior, or implement new features. You
 can find all information to get started in the [README.md](./README.md) file.
 
+> [!WARNING]
+> We require every contributor to use and fill in the PR issue template by hand.
+> Failure to use the provided template, or letting an LLM write the description
+> for you will lead to a closure of your PR. See also the Code of Conduct for
+> more information on the AI usage in communication.
+
 ### Test Preview Versions
 
 Every new feature or change to the app can introduce bugs or other unwanted
