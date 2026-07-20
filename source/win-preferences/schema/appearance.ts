@@ -180,8 +180,18 @@ export function getAppearanceFields (config: ConfigOptions): PreferencesFieldset
         },
         {
           type: 'checkbox',
-          label: trans('Display "Insert task list" button'),
+          label: trans('Display "Toggle task list" button'),
           model: 'displayToolbarButtons.showMarkdownMakeTaskListButton'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Display "Toggle numbered list" button'),
+          model: 'displayToolbarButtons.showMarkdownMakeOrderedListButton'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Display "Toggle unordered list" button'),
+          model: 'displayToolbarButtons.showMarkdownMakeBulletListButton'
         },
         {
           type: 'checkbox',

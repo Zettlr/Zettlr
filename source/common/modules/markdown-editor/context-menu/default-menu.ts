@@ -207,17 +207,19 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       action () { insertLink(view) }
     },
     {
-      label: trans('Insert unordered list'),
+      label: trans('Toggle unordered list'),
+      accelerator: 'CmdOrCtrl+Shift+B',
       type: 'normal',
       action () { applyBulletList(view) }
     },
     {
-      label: trans('Insert numbered list'),
+      label: trans('Toggle numbered list'),
+      accelerator: 'CmdOrCtrl+Shift+O',
       type: 'normal',
       action () { applyOrderedList(view) }
     },
     {
-      label: trans('Insert task list'),
+      label: trans('Toggle task list'),
       accelerator: 'CmdOrCtrl+T',
       type: 'normal',
       action () { applyTaskList(view) }

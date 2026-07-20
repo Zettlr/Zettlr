@@ -61,7 +61,7 @@ import {
   maybeIndentList, maybeUnindentList, customMoveLineUp, customMoveLineDown
 } from '../commands/lists'
 import {
-  insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList,
+  insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList, applyOrderedList, applyBulletList,
   applyHighlight,
   insertTabOrSpace
 } from '../commands/markdown'
@@ -132,6 +132,8 @@ export function defaultKeymap (): Extension {
     { key: 'Alt-ArrowUp', run: customMoveLineUp, shift: copyLineUp },
     { key: 'Alt-ArrowDown', run: customMoveLineDown, shift: copyLineDown },
     { key: 'Mod-t', run: applyTaskList },
+    { key: 'Mod-Shift-b', run: applyBulletList },
+    { key: 'Mod-Shift-o', run: applyOrderedList },
     { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
     { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
     { key: '"', run: handleQuote('"') },

@@ -73,6 +73,8 @@ import {
 import {
   applyComment,
   applyTaskList,
+  applyOrderedList,
+  applyBulletList,
   insertImage,
   insertLink,
   applyPandocDivOrSpan
@@ -608,6 +610,12 @@ export default class MarkdownEditor extends EventEmitter {
         break
       case 'markdownMakeTaskList':
         applyTaskList(this._instance)
+        break
+      case 'markdownMakeOrderedList':
+        applyOrderedList(this._instance)
+        break
+      case 'markdownMakeBulletList':
+        applyBulletList(this._instance)
         break
       default:
         console.warn('Unimplemented command:', cmd)
