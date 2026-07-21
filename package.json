@@ -101,7 +101,7 @@
     "gemoji": "^8.1.0",
     "gettext-parser": "^9.1.1",
     "got": "^11.8.6",
-    "katex": "^0.17.0",
+    "katex": "^0.18.1",
     "ky": "^2.0.2",
     "lang-criticmarkup": "^0.3.0",
     "luxon": "^3.7.2",
