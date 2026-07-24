@@ -47,6 +47,7 @@
   export popover would not be clickable.
 - Fixed a visual glitch when running multiple full-text searches in between
   showing and hiding the search pane (#6454).
+- Fixed bold and italic styling (#6472).
 
 ## Under the Hood
 
