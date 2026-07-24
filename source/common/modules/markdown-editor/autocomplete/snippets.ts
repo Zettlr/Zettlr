@@ -147,7 +147,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
   update (val, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(snippetsUpdate)) {
-        val.availableSnippets = effect.value.map(entry => {
+        let availableSnippets = effect.value.map(entry => {
           return {
             label: entry.name,
             info: entry.content,
@@ -155,16 +155,16 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
           }
         })
 
-        return { ...val }
+        return { ...val, availableSnippets }
       } else if (effect.is(snippetTabsEffect)) {
-        val.activeSelections = effect.value
+        let activeSelections = effect.value
 
         // Calculate the association when the effects come in
         // because we need access to the current tab stop
         // range, which is the `transaction.selection` value.
-        val.association = getAssociation(val.activeSelections, transaction.selection?.main.from)
+        let association = getAssociation(val.activeSelections, transaction.selection?.main.from)
 
-        return { ...val }
+        return { ...val, activeSelections, association }
       } else if (effect.is(shiftNextTabEffect)) {
         // NOTE: We cannot shift the range in the nextTab() command, as this
         // change is not transparent to the library (hence it would render a
@@ -172,10 +172,12 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         // up the fact that this range doesn't exist anymore after the user
         // starts typing, which re-evaluates the length of the activeRanges
         // array.)
-        val.activeSelections.shift()
-        val.association = getAssociation(val.activeSelections, transaction.selection?.main.from)
+        let activeSelections = val.activeSelections
+        activeSelections.shift()
 
-        return { ...val }
+        let association = getAssociation(val.activeSelections, transaction.selection?.main.from)
+
+        return { ...val, activeSelections, association }
       }
     }
 
