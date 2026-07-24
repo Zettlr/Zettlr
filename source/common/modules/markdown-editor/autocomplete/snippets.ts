@@ -180,11 +180,11 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
     }
 
     if (!transaction.docChanged || val.activeSelections.length === 0) {
-      return val
+      return { ...val }
     }
 
     // This monstrosity ensures that our ranges stay in sync while the user types
-    val.activeSelections = val.activeSelections
+    let activeSelections = val.activeSelections
       .filter(selection => {
         return selection.ranges
           .some(r => transaction.changes.mapPos(r.from, 1, r.empty ? MapMode.TrackAfter : MapMode.TrackDel) !== null)
@@ -205,7 +205,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         }))
       })
 
-    return { ...val }
+    return { ...val, activeSelections }
   },
   // Turns any active ranges into decorations to highlight them
   provide: field => {
