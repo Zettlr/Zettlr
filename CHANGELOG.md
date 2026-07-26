@@ -48,6 +48,8 @@
 - Fixed a visual glitch when running multiple full-text searches in between
   showing and hiding the search pane (#6454).
 - Fixed bold and italic styling (#6472).
+- Fix an issue leading to buggy interactions between snippets and the typewriter
+  mode (#6473).
 
 ## Under the Hood
 
