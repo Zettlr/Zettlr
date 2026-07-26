@@ -3993,9 +3993,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"app-builder-lib@npm:26.15.6":
-  version: 26.15.6
-  resolution: "app-builder-lib@npm:26.15.6"
+"app-builder-lib@npm:26.15.7":
+  version: 26.15.7
+  resolution: "app-builder-lib@npm:26.15.7"
   dependencies:
     "@electron/asar": "npm:3.4.1"
     "@electron/fuses": "npm:^1.8.0"
@@ -4039,9 +4039,9 @@ __metadata:
     unzipper: "npm:^0.12.3"
     which: "npm:^5.0.0"
   peerDependencies:
-    dmg-builder: 26.15.6
-    electron-builder-squirrel-windows: 26.15.6
-  checksum: 10/5970086976ad78e9b469ca29ac2eb91172eb03e505b1d9d4921c2f63a3d674b3f789fdbcb326c669e669dd6757241a3e2360aed0c1fbe21a641d7fb00690caeb
+    dmg-builder: 26.15.7
+    electron-builder-squirrel-windows: 26.15.7
+  checksum: 10/fbf8570d7ccf32d5c9ad973f29cf3019db7e5bd54b5d373f6cdee70c1093ea7e94d2909f53613cab6e79c3e0eb364e0d2dac9f9f022f901354d6886e6e388b58
   languageName: node
   linkType: hard
 
@@ -6158,15 +6158,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dmg-builder@npm:26.15.6":
-  version: 26.15.6
-  resolution: "dmg-builder@npm:26.15.6"
+"dmg-builder@npm:26.15.7":
+  version: 26.15.7
+  resolution: "dmg-builder@npm:26.15.7"
   dependencies:
-    app-builder-lib: "npm:26.15.6"
+    app-builder-lib: "npm:26.15.7"
     builder-util: "npm:26.15.3"
     fs-extra: "npm:^10.1.0"
     js-yaml: "npm:^4.1.0"
-  checksum: 10/3c87682660141c22c94ee29d8f705beb351f73e9d1d812295c5bf3b3f5528ce9cbf67270dcc2587e935e7864d7f494e096c2f23b89b2e6153e628c2e8084423c
+  checksum: 10/4a4d4f3851a8089dc7ef084d98c1c3f1c6bc12de79d050b0ad749873cbfebd9c02088faa786c2c325e409a8a665467e110b6f728ed341c6351bb04f4844afc15
   languageName: node
   linkType: hard
 
@@ -6318,16 +6318,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-builder@npm:^26.15.6":
-  version: 26.15.6
-  resolution: "electron-builder@npm:26.15.6"
+"electron-builder@npm:^26.15.7":
+  version: 26.15.7
+  resolution: "electron-builder@npm:26.15.7"
   dependencies:
-    app-builder-lib: "npm:26.15.6"
+    app-builder-lib: "npm:26.15.7"
     builder-util: "npm:26.15.3"
     builder-util-runtime: "npm:9.7.0"
     chalk: "npm:^4.1.2"
     ci-info: "npm:^4.2.0"
-    dmg-builder: "npm:26.15.6"
+    dmg-builder: "npm:26.15.7"
     fs-extra: "npm:^10.1.0"
     lazy-val: "npm:^1.0.5"
     simple-update-notifier: "npm:2.0.0"
@@ -6335,7 +6335,7 @@ __metadata:
   bin:
     electron-builder: ./cli.js
     install-app-deps: ./install-app-deps.js
-  checksum: 10/80a91eef1213095b4a6c89e7c2452e07b6416bf1f0e7a5f82cb0f218a7770e9c57be89835c04c98bd8a9f15b5335d1a41874052eb92f43938e147f9f8ab5a102
+  checksum: 10/59554c5919ec3ca4fbc749c43792c7c3fd592fb6c6ee64e70f374d0fe4a7ac452576cf7cf97c54ac40ccdd5db7db5dee6901213a8dc570082372e2f240463001
   languageName: node
   linkType: hard
 
@@ -15727,7 +15727,7 @@ __metadata:
     d3: "npm:^7.9.0"
     dompurify: "npm:^3.4.12"
     electron: "npm:^43.1.0"
-    electron-builder: "npm:^26.15.6"
+    electron-builder: "npm:^26.15.7"
     electron-devtools-installer: "npm:^4.0.0"
     eslint: "npm:^10.7.0"
     eslint-plugin-import: "npm:^2.32.0"
