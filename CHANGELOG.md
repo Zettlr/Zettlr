@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
+# 4.7.0
+
+## GUI and Functionality
+
 - **Feature**: Custom shortcuts are here. You can now customize many of the
   available shortcuts and assign them to your likings. This also includes the
   various text transformations that we introduced in version 3.6.0 so that you
