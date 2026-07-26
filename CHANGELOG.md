@@ -53,6 +53,7 @@
 
 ## Under the Hood
 
+- Update Pandoc to `v3.10.1`.
 - Update Electron to `v43.1.0`.
 - Zettlr now additionally trusts system certificates when making network
   connections, meaning that custom TLS certificates can be used, e.g., for
