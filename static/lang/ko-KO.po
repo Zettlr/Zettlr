@@ -19,7 +19,7 @@ msgstr ""
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl 클릭으로 링크 이동"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:15
@@ -37,17 +37,17 @@ msgstr "이탤릭체"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
 msgid "Underline"
-msgstr ""
+msgstr "밑줄"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
 #: source/win-preferences/schema/editor.ts:174
 #: source/win-preferences/schema/editor.ts:175
 msgid "Highlight"
-msgstr ""
+msgstr "강조"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
 msgid "Strikethrough"
-msgstr ""
+msgstr "취소선"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
 msgid "Link"
@@ -69,7 +69,7 @@ msgstr "코드"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:96
 msgid "No footnote text found."
-msgstr ""
+msgstr "각주 텍스트를 찾을 수 없습니다."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:116
 #: source/app/service-providers/menu/menu.darwin.ts:319
@@ -80,30 +80,30 @@ msgstr "편집"
 #: source/common/modules/markdown-editor/tooltips/citations.ts:67
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
-msgstr ""
+msgstr "불러오는 중…"
 
 #: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
-msgstr ""
+msgstr "인용 서지 정보를 가져올 수 없습니다."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "%s 파일이 존재하지 않습니다."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Generating preview…"
-msgstr ""
+msgstr "미리보기 생성 중…"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:124
 msgid "Word count"
-msgstr ""
+msgstr "단어 수"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 msgid "Modified"
-msgstr ""
+msgstr "수정됨"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:144
 msgid "Open…"
@@ -115,53 +115,52 @@ msgstr "새 탭에서 열기"
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:97
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "링크 미리보기 불러오는 중…"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:140
 msgid "Preview"
-msgstr ""
+msgstr "미리보기"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:140
 msgid "Raw"
-msgstr ""
+msgstr "원문"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:139
 #, javascript-format
 msgid "Rendering: %s"
-msgstr ""
+msgstr "렌더링: %s"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:142
 msgid "Enable or disable the preview mode for Markdown files by clicking"
-msgstr ""
+msgstr "클릭하여 마크다운 파일의 미리보기 모드를 활성화 또는 비활성화"
 
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "가독성 모드 (%s)"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:56
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Mermaid 그래프 렌더링 중 …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:61
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:80
-#, fuzzy
 msgid "Could not render Graph:"
-msgstr "파일을 생성할 수 없습니다"
+msgstr "그래프를 렌더링할 수 없습니다:"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:149
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "이미지를 찾을 수 없음: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:224
 msgid "Open image externally"
-msgstr ""
+msgstr "외부 프로그램으로 이미지 열기"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "강조 없음"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:21
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
@@ -223,91 +222,91 @@ msgstr "모두 선택"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:86
 msgid "Row"
-msgstr ""
+msgstr "행"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:91
 msgid "Insert new row above"
-msgstr ""
+msgstr "위에 새 행 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:97
 msgid "Insert new row below"
-msgstr ""
+msgstr "아래에 새 행 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:104
 msgid "Move row up"
-msgstr ""
+msgstr "행 위로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:110
 msgid "Move row down"
-msgstr ""
+msgstr "행 아래로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:117
 msgid "Clear row"
-msgstr ""
+msgstr "행 내용 지우기"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:122
 msgid "Delete row"
-msgstr ""
+msgstr "행 삭제"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:129
 msgid "Column"
-msgstr ""
+msgstr "열"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:133
 msgid "Insert new column left"
-msgstr ""
+msgstr "왼쪽에 새 열 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:139
 msgid "Insert new column right"
-msgstr ""
+msgstr "오른쪽에 새 열 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:146
 msgid "Move column left"
-msgstr ""
+msgstr "열 왼쪽으로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:152
 msgid "Move column right"
-msgstr ""
+msgstr "열 오른쪽으로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:159
 msgid "Align column text left"
-msgstr ""
+msgstr "열 텍스트 왼쪽 정렬"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:164
 msgid "Align column text center"
-msgstr ""
+msgstr "열 텍스트 가운데 정렬"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:169
 msgid "Align column text right"
-msgstr ""
+msgstr "열 텍스트 오른쪽 정렬"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:188
 msgid "Clear column"
-msgstr ""
+msgstr "열 내용 지우기"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:193
 msgid "Delete column"
-msgstr ""
+msgstr "열 삭제"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:200
 msgid "Table"
-msgstr ""
+msgstr "표"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:204
 msgid "Clear table"
-msgstr ""
+msgstr "표 내용 지우기"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:209
 msgid "Delete table"
-msgstr ""
+msgstr "표 삭제"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "맞춤법 오류"
 
 #: source/common/modules/markdown-editor/linters/language-tool.ts:269
 msgid "Disable Rule"
-msgstr ""
+msgstr "규칙 비활성화"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:76
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
@@ -317,7 +316,7 @@ msgstr ""
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:239
 #, javascript-format
 msgid "%s characters"
-msgstr ""
+msgstr "%s 글자"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
@@ -334,16 +333,16 @@ msgstr "%s 단어"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:82
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr ""
+msgstr "이 파일은 프로젝트 \"%s\"의 일부입니다"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "각주 참조로 이동"
 
 #: source/common/modules/markdown-editor/context-menu/citation-menu.ts:60
 #, javascript-format
 msgid "Open PDF for %s"
-msgstr ""
+msgstr "%s 의 PDF 열기"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
 msgid "No suggestions"
@@ -364,238 +363,231 @@ msgstr "숫자 목록 삽입"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
 #: source/tmp/win-main/App.vue.ts:400
 msgid "Insert task list"
-msgstr ""
+msgstr "할 일 목록 삽입"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
 msgid "Insert blockquote"
-msgstr ""
+msgstr "인용구 삽입"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 #: source/tmp/win-main/App.vue.ts:407
 msgid "Insert table"
-msgstr ""
+msgstr "표 삽입"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
 msgid "Open link"
-msgstr ""
+msgstr "링크 열기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
 msgid "Copy email address"
-msgstr ""
+msgstr "이메일 주소 복사"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
 msgid "Copy link"
-msgstr ""
+msgstr "링크 복사"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
 msgid "Remove link"
-msgstr ""
+msgstr "링크 제거"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
 msgid "Copy image to clipboard"
 msgstr "이미지를 클립 보드에 복사"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
-#, fuzzy
 msgid "Open image"
-msgstr "파일 열기"
+msgstr "이미지 열기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
 #: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Finder에서 보기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
-#, fuzzy
 msgid "Open in File Browser"
-msgstr "브라우저에서 열기"
+msgstr "파일 탐색기에서 열기"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:35
 msgid "Transform"
-msgstr ""
+msgstr "변환"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:40
 msgid "Zap gremlins"
-msgstr ""
+msgstr "숨겨진 문자 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:45
 msgid "Strip duplicate spaces"
-msgstr ""
+msgstr "중복 공백 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:50
 msgid "Italics to quotes"
-msgstr ""
+msgstr "이탤릭체를 따옴표로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:55
 msgid "Quotes to italics"
-msgstr ""
+msgstr "따옴표를 이탤릭체로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:60
 msgid "Remove line breaks"
-msgstr ""
+msgstr "줄바꿈 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:68
 msgid "Straighten quotes"
-msgstr ""
+msgstr "따옴표 직선으로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:73
 msgid "Ensure double quotes"
-msgstr ""
+msgstr "큰따옴표 적용"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:78
 msgid "Double quotes to single"
-msgstr ""
+msgstr "큰따옴표를 작은따옴표로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
 msgid "Single quotes to double"
-msgstr ""
+msgstr "작은따옴표를 큰따옴표로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:91
 msgid "Emdash — Add spaces around"
-msgstr ""
+msgstr "Em 대시 — 주위에 공백 추가"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:96
 msgid "Emdash — Remove spaces around"
-msgstr ""
+msgstr "Em 대시 — 주위의 공백 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:104
 msgid "To sentence case"
-msgstr ""
+msgstr "문장 첫 글자 대문자"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:109
 msgid "To title case"
-msgstr ""
+msgstr "제목 형식으로"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
 msgid "Copy equation code"
-msgstr ""
+msgstr "수식 코드 복사"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:130
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:136
-#, fuzzy
 msgid "Custom"
-msgstr "커스텀 CSS"
+msgstr "사용자 지정"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:144
 msgid "Detect automatically"
-msgstr ""
+msgstr "자동 감지"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Toggle diagnostics panel"
-msgstr ""
+msgstr "진단 패널 전환"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "아프리칸스어"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
-msgstr "Arabic"
+msgstr "아랍어"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "아스투리아스어"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
-msgstr "Belarus"
+msgstr "벨라루스어"
 
 #: source/common/util/map-lang-code.ts:37
 msgid "Bulgarian"
-msgstr "Bulgarian"
+msgstr "불가리아어"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "브르타뉴어"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
-msgstr "Bosnian"
+msgstr "보스니아어"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "카탈로니아어"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "카탈로니아어 (발렌시아)"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
+msgstr "체코어"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
-msgstr "Danish"
+msgstr "덴마크어"
 
 #: source/common/util/map-lang-code.ts:44
 msgid "German (Austria)"
-msgstr "German (Austria)"
+msgstr "독일어 (오스트리아)"
 
 #: source/common/util/map-lang-code.ts:45
 msgid "German (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "독일어 (스위스)"
 
 #: source/common/util/map-lang-code.ts:46
-#, fuzzy
 msgid "German (simple)"
-msgstr "German (Austria)"
+msgstr "독일어 (간이)"
 
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
-msgstr "German (Germany)"
+msgstr "독일어 (독일)"
 
 #: source/common/util/map-lang-code.ts:48
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "German (Austria)"
+msgstr "독일어 (룩셈부르크)"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
+msgstr "독일어"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
-msgstr "Greek"
+msgstr "그리스어"
 
 #: source/common/util/map-lang-code.ts:51
 msgid "English (Australia)"
-msgstr "English (Australia)"
+msgstr "영어 (호주)"
 
 #: source/common/util/map-lang-code.ts:52
 msgid "English (Canada)"
-msgstr "English (Canada)"
+msgstr "영어 (캐나다)"
 
 #: source/common/util/map-lang-code.ts:53
 msgid "English (United Kingdom)"
-msgstr "English (United Kingdom)"
+msgstr "영어 (영국)"
 
 #: source/common/util/map-lang-code.ts:54
 msgid "English (India)"
-msgstr "English (India)"
+msgstr "영어 (인도)"
 
 #: source/common/util/map-lang-code.ts:55
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "English (Canada)"
+msgstr "영어 (뉴질랜드)"
 
 #: source/common/util/map-lang-code.ts:56
 msgid "English (United States)"
-msgstr "English (United States)"
+msgstr "영어 (미국)"
 
 #: source/common/util/map-lang-code.ts:57
 msgid "English (South Africa)"
-msgstr "English (South Africa)"
+msgstr "영어 (남아프리카)"
 
 #: source/common/util/map-lang-code.ts:58
-#, fuzzy
 msgid "English"
-msgstr "English (India)"
+msgstr "영어"
 
 #: source/common/util/map-lang-code.ts:59
 msgid "Esperanto"
