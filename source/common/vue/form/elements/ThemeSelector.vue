@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p id="theme-selection-label">{{ props.label }}</p>
+    <p id="theme-selection-label">
+      {{ props.label }}
+    </p>
     <div id="theme-container">
       <div
         v-for="(theme, index) in props.options"

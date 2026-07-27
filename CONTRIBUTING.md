@@ -76,6 +76,12 @@ in which you can help!):
 We welcome PRs that fix bugs, improve behavior, or implement new features. You
 can find all information to get started in the [README.md](./README.md) file.
 
+> [!WARNING]
+> We require every contributor to use and fill in the PR issue template by hand.
+> Failure to use the provided template, or letting an LLM write the description
+> for you will lead to a closure of your PR. See also the Code of Conduct for
+> more information on the AI usage in communication.
+
 ### Test Preview Versions
 
 Every new feature or change to the app can introduce bugs or other unwanted
@@ -159,7 +165,7 @@ and keep a few limits in mind.
 By contributing to the repository, **you agree to abide by our AI Usage Policy**:
 
 * Wherever you have consulted GPT models (ChatGPT, Claude, Gemini, Apple
-  Intelligence, or local models), you disclose the extend of the usage. "Usage"
+  Intelligence, or local models), you disclose the extent of the usage. "Usage"
   in the context of this policy refers to you letting it write code or (docs)
   text that you use in your contribution. This also includes letting it improve
   a paragraph of text or block of code that you have written. A coarse statement

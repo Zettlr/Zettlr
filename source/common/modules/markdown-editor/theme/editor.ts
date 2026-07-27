@@ -53,9 +53,9 @@ export interface ThemeVars {
   '--zettlr-editor-line-height': string,
   /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-code-style': string,
-  /** CSS `font-weight` or `font-style` value */
+  /** CSS `font-style` value */
   '--zettlr-editor-emphasis-style': string
-  /** CSS `font-weight` or `font-style` value */
+  /** CSS `font-weight` value */
   '--zettlr-editor-strong-style': string
   /** CSS `font-weight` or `font-style` value */
   '--zettlr-editor-header-style': string
@@ -341,7 +341,7 @@ export const editorTheme = EditorView.baseTheme({
     borderLeftColor: 'var(--zettlr-editor-primary-color)',
   },
   '.cm-emphasis': {
-    font: 'var(--zettlr-editor-emphasis-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
+    fontStyle: 'var(--zettlr-editor-emphasis-style)',
   },
   // Shown when a region is folded
   '.cm-foldPlaceholder': {
@@ -373,7 +373,7 @@ export const editorTheme = EditorView.baseTheme({
     color: 'var(--zettlr-editor-secondary-color)',
   },
   '.cm-strong': {
-    font: 'var(--zettlr-editor-strong-style) var(--zettlr-editor-font-size) var(--zettlr-editor-font)',
+    fontWeight: 'var(--zettlr-editor-strong-style)',
   },
   '.cm-url': {
     color: 'var(--zettlr-editor-primary-color)',

@@ -2,12 +2,85 @@
 
 ## GUI and Functionality
 
-- Fixed a regression from 4.6.1 where the full-text search would not search any
-  open standalone files (#6387).
+(nothing here)
 
 ## Under the Hood
 
 (nothing here)
+
+# 4.7.0
+
+## GUI and Functionality
+
+- **Feature**: Custom shortcuts are here. You can now customize many of the
+  available shortcuts and assign them to your likings. This also includes the
+  various text transformations that we introduced in version 3.6.0 so that you
+  can bind frequently used ones to a handy shortcut. The feature comes with all
+  the standards of custom shortcuts, including an interactive shortcut recording
+  that visualizes which keys will become part of the shortcuts as you type them,
+  a reset function to restore the default, and an automated conflict detection
+  that lets you know whether a shortcut you have provided might conflict with
+  another one.
+- **Feature**: You can now set the editor theme to use a light or dark
+  appearance independent of the app appearance (#5851).
+- **Feature**: You can now click a long-running-task notification for both
+  projects and single files to directly open the corresponding file.
+- **Feature**: Popovers can now be closed with a quick press on `Escape`.
+- **Change**: Changed the layout of the project properties. Now the custom
+  templates and CSL section are placed on the general tab, while the export
+  profile picker has moved to its own tab. This gives the custom options more
+  visibility and provides a better grouping of the options.
+- Fixed a regression from 4.6.1 where the full-text search would not search any
+  open standalone files (#6387).
+- Fixed an issue on macOS where opening a file from Finder with no open main
+  window would not automatically open one (#6391).
+- Update translations:
+  - `ja-JP` (#6390).
+  - `de-DE` (#6449).
+  - `tr-TR` (#6450).
+- Fix snippets syntax and improve nested support (#6389).
+- Fixed a bug that would cause Zettlr to replace a magic quote with a regular
+  quote instead of deleting the text if some text was selected that happened to
+  be adjacent to a magic quote.
+- The Table of Contents title in the sidebar is now properly reset (#6397).
+- Improve toolbar styling (#6418).
+- Fixed a linter warning for footnotes without spaces (#6434).
+- Updated French translations (#6430).
+- Fixed a regression that causes windows to briefly flash white when macOS
+  vibrancy is disabled and the app is set to dark mode (#6438).
+- Fixed `s`/`S` shortcuts in vim mode (#6445).
+- Fixed a regression from the previous version that caused timeouts when using a
+  local LanguageTool integration with very long texts after the switch from
+  `got` to `ky`.
+- Fixed an issue where empty Pandoc spans would crash the span renderer (#6448).
+- Fixed an issue where the label of the "open automatically" checkbox in the
+  export popover would not be clickable.
+- Fixed a visual glitch when running multiple full-text searches in between
+  showing and hiding the search pane (#6454).
+- Fixed bold and italic styling (#6472).
+- Fix an issue leading to buggy interactions between snippets and the typewriter
+  mode (#6473).
+
+## Under the Hood
+
+- Update Pandoc to `v3.10.1`.
+- Update Electron to `v43.1.0`.
+- Zettlr now additionally trusts system certificates when making network
+  connections, meaning that custom TLS certificates can be used, e.g., for
+  corporate firewalls (#6006; #5271).
+- Added a new Vue directive, `v-focus` that can be applied to any element in a
+  Vue component and that will focus the element as soon as it is mounted to the
+  DOM.
+- Removed deprecated path check for the app.
+- Improve performance of the editor (#6388).
+- Improved handling of invalid dates in the statistics provider (#6433).
+- Remove superfluous search logging (#6401).
+- Refactor `posInNode` utility to `nodeAtPos` and align documentation with
+  behavior (#6399).
+- Update various (incl. transitive) dependencies.
+- Remove fix for an old `archiver` dependency.
+- Refactor TextPack export to match new `archiver` API.
+- Remove remnant `.tern-project` file.
 
 # 4.6.0
 

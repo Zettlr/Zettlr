@@ -1,7 +1,12 @@
 <template>
   <Teleport to="body">
     <div ref="popupArrow" class="popover-arrow"></div>
-    <div ref="popupWrapper" class="popover">
+    <div
+      ref="popupWrapper"
+      v-focus
+      class="popover"
+      tabindex="-1"
+    >
       <slot></slot>
     </div>
   </Teleport>
@@ -56,6 +61,9 @@ onMounted(() => {
   document.addEventListener('contextmenu', onClick)
   document.addEventListener('resize', onResize)
 
+  // Allow closing of the popover with Escape
+  popupWrapper.value?.addEventListener('keydown', onKeydown)
+
   place() // Initial placement
 })
 
@@ -63,9 +71,24 @@ onBeforeUnmount(() => {
   document.removeEventListener('mousedown', onClick)
   document.removeEventListener('contextmenu', onClick)
   document.removeEventListener('resize', onResize)
+  popupWrapper.value?.removeEventListener('keydown', onKeydown)
 })
 
 onUpdated(place)
+
+/**
+ * This function should be attached to the popover wrapper to allow easy closing
+ * of the popover via the Escape key.
+ *
+ * @param   {KeyboardEvent}  event  The keyboard event
+ */
+function onKeydown (event: KeyboardEvent): void {
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    event.stopPropagation()
+    emit('close')
+  }
+}
 
 function onClick (event: MouseEvent): void {
   const target = event.target as Node | null
@@ -321,6 +344,7 @@ body .popover {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 5px;
+  outline: none;
   // Make sure it overlays also CodeMirror elements, which have some z-indices
   // set. The highest (for panels) that I've seen so far was 300
   z-index: 300;

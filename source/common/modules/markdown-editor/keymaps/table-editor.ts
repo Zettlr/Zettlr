@@ -22,11 +22,9 @@ import { type EditorView, keymap } from '@codemirror/view'
 import { addColAfter, addColBefore, moveNextCell, movePrevCell, swapNextCol, swapPrevCol } from '../table-editor/commands/columns'
 import { addRowAfter, addRowBefore, moveNextRow, movePrevRow, swapNextRow, swapPrevRow } from '../table-editor/commands/rows'
 import { hiddenSpanField } from '../table-editor/subview'
-import { deleteBracketPair } from '@codemirror/autocomplete'
-import { applyBold, applyItalic, insertLink, insertImage, applyComment } from '../commands/markdown'
-import { pasteAsPlain, copyAsHTML } from '../util/copy-paste-cut'
-import { defaultKeymap } from './default'
-import { handleBackspace, handleQuote } from '../commands/autocorrect'
+import { zettlrKeymap } from '.'
+import { type CustomEditorShortcut, type EditorShortcutName, getCustomShortcut } from './shortcuts'
+import { setAlignment } from '../table-editor/commands/tables'
 
 /**
  * This command can be used to override the default selectAll functionality.
@@ -43,12 +41,34 @@ export function selectAllCommand (view: EditorView): boolean {
   return true
 }
 
-export function tableEditorKeymap (mainView: EditorView): Extension {
-  // TODO: Disable alignment commands until custom keymapping is implemented
-  // const alignLeft = setAlignment('left')
-  // const alignCenter = setAlignment('center')
-  // const alignRight = setAlignment('right')
+/**
+ * This is the table editor keymap that will be assigned to the subviews created
+ * as soon as a user edits a cell. NOTE: This keymap already includes the
+ * primary Zettlr keymap so that all keybindings remain consistent. NOTE further
+ * that this keymap -- unlike the Zettlr one -- is not updated whenever the
+ * shortcuts change. This should not be a problem as the table cell cannot be
+ * focused when the user changes a key binding, and it will take in the correct
+ * keybindings as soon as the user re-focuses the cell (and the subview gets
+ * recreated).
+ *
+ * @param   {EditorView}              mainView           The main editor view
+ * @param   {CustomEditorShortcut[]}  customShortcutMap  The custom shortcut map
+ *
+ * @return  {Extension}                                  The keymap
+ */
+export function tableEditorKeymap (mainView: EditorView, customShortcutMap: CustomEditorShortcut[]): Extension {
+  // Utility function to make retrieval much easier
+  const sc = (name: EditorShortcutName) => {
+    return getCustomShortcut(name, customShortcutMap)
+  }
+
+  const alignLeft = setAlignment('left')
+  const alignCenter = setAlignment('center')
+  const alignRight = setAlignment('right')
+
   return [
+    // This is a custom keymap that overrides some of the commands of the Zettlr
+    // keymap to make them work within table editors.
     keymap.of([
       // Prevent programmatic insertion of newlines by disabling some
       // keybindings (except Enter which should move the cursor to the next
@@ -69,27 +89,9 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
       { key: 'Mod-a', run: selectAllCommand, preventDefault: true },
       // Add a few more keyboard shortcuts.
       { key: 'Tab', run: _v => moveNextCell(mainView), shift: _v => movePrevCell(mainView) },
-      // TODO: Disable alignment commands until custom keymapping is implemented
-      // { key: 'Ctrl-l', run: _v => alignLeft(mainView), preventDefault: true },
-      // { key: 'Ctrl-c', run: _v => alignCenter(mainView), preventDefault: true },
-      // { key: 'Ctrl-r', run: _v => alignRight(mainView), preventDefault: true },
-      // Further (relevant) keyboard commands (taken from the `markdownKeymap`).
-      // NOTE: This is a subset of all commands, because block-based actions won't
-      // work in the editor.
-      { key: 'Mod-b', run: applyBold },
-      { key: 'Mod-i', run: applyItalic },
-      { key: 'Mod-k', run: insertLink },
-      { key: 'Mod-Alt-i', mac: 'Mod-Shift-i', run: insertImage },
-      { key: 'Mod-C', run: applyComment },
-
-      { key: 'Backspace', run: handleBackspace },
-      { key: 'Backspace', run: deleteBracketPair },
-
-      { key: '"', run: handleQuote('"') },
-      { key: "'", run: handleQuote("'") },
-
-      { key: 'Mod-Shift-v', run: view => { pasteAsPlain(view); return true } },
-      { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
+      { key: sc('table-align-col-left'), run: _v => alignLeft(mainView), preventDefault: true },
+      { key: sc('table-align-col-center'), run: _v => alignCenter(mainView), preventDefault: true },
+      { key: sc('table-align-col-right'), run: _v => alignRight(mainView), preventDefault: true },
 
       // These commands strictly speaking are block-based (or, rather, they go
       // beyond the current cell), but because they are very useful, we support
@@ -103,6 +105,6 @@ export function tableEditorKeymap (mainView: EditorView): Extension {
     ]),
     // Also include the sharedKeymap. The subview transaction filter will
     // automatically ensure that nothing spanning multiple lines will be executed.
-    defaultKeymap()
+    zettlrKeymap(customShortcutMap)
   ]
 }

@@ -16,12 +16,17 @@ import { EditorSelection, EditorState, Transaction } from '@codemirror/state'
 import { deepEqual, fail, strictEqual } from 'assert'
 import { curlQuotes } from 'source/common/modules/markdown-editor/commands/transforms/curl-quotes'
 import { selectAll } from '../codemirror-test-utils/select-all'
+import { configField, getDefaultConfig } from 'source/common/modules/markdown-editor/util/configuration'
+
+// Prepare a test config that provides the correct magic quotes setting (en-US)
+const testConfiguration = configField.init(state => {
+  const defaultConfig = getDefaultConfig()
+  defaultConfig.autocorrect.magicQuotes.primary = ['\u201c', '\u201d'].join('…')
+  defaultConfig.autocorrect.magicQuotes.secondary = ['\u2018', '\u2019'].join('…')
+  return defaultConfig
+})
 
 describe('MarkdownEditor#curlQuotes()', function () {
-  // Using en-US magic quotes: "\u201c\u201d" and "\u2018\u2019"
-  const primary: [string, string] = ['\u201c', '\u201d']
-  const secondary: [string, string] = ['\u2018', '\u2019']
-
   const sunnyDayTestCases = [
     {
       input: 'He said "hello" to her',
@@ -58,6 +63,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
       const state = EditorState.create({
         doc: testCase.input,
         selection: selectAll(testCase.input),
+        extensions: [ testConfiguration ],
       })
 
       let wasDispatched = false
@@ -79,7 +85,7 @@ describe('MarkdownEditor#curlQuotes()', function () {
         })
       }
 
-      curlQuotes(primary, secondary)({ state, dispatch })
+      curlQuotes({ state, dispatch })
 
       strictEqual(wasDispatched, true, 'A transaction must have been dispatched')
     })
@@ -92,13 +98,14 @@ describe('MarkdownEditor#curlQuotes()', function () {
     let state = EditorState.create({
       doc: input,
       selection: EditorSelection.create([EditorSelection.range(0, 4)]),
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = (tx: Transaction) => {
       state = state.update(tx).state
     }
 
-    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+    const handled = curlQuotes({ state, dispatch })
 
     strictEqual(handled, true)
     strictEqual(state.doc.toString(), expectedOutput)
@@ -111,13 +118,14 @@ describe('MarkdownEditor#curlQuotes()', function () {
     let state = EditorState.create({
       doc: input,
       selection: selectAll(input),
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = (tx: Transaction) => {
       state = state.update(tx).state
     }
 
-    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+    const handled = curlQuotes({ state, dispatch })
 
     strictEqual(handled, true)
     strictEqual(state.doc.toString(), expectedOutput)
@@ -130,13 +138,14 @@ describe('MarkdownEditor#curlQuotes()', function () {
     let state = EditorState.create({
       doc: input,
       selection: selectAll(input),
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = (tx: Transaction) => {
       state = state.update(tx).state
     }
 
-    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+    const handled = curlQuotes({ state, dispatch })
 
     strictEqual(handled, true)
     strictEqual(state.doc.toString(), expectedOutput)
@@ -149,13 +158,14 @@ describe('MarkdownEditor#curlQuotes()', function () {
     let state = EditorState.create({
       doc: input,
       selection: selectAll(input),
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = (tx: Transaction) => {
       state = state.update(tx).state
     }
 
-    const handled = curlQuotes(primary, secondary)({ state, dispatch })
+    const handled = curlQuotes({ state, dispatch })
 
     strictEqual(handled, true)
     strictEqual(state.doc.toString(), expectedOutput)
@@ -163,22 +173,24 @@ describe('MarkdownEditor#curlQuotes()', function () {
 
   it('given no quotes and no selection then no transaction is dispatched', function () {
     const state = EditorState.create({
-      doc: 'There are no quotes in this text'
+      doc: 'There are no quotes in this text',
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = () => fail('No transaction must be dispatched')
 
-    curlQuotes(primary, secondary)({ state, dispatch })
+    curlQuotes({ state, dispatch })
   })
 
   it('given quotes but no selection then no transaction is dispatched', function () {
     const state = EditorState.create({
-      doc: 'He said "hello"'
+      doc: 'He said "hello"',
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = () => fail('No transaction must be dispatched')
 
-    curlQuotes(primary, secondary)({ state, dispatch })
+    curlQuotes({ state, dispatch })
   })
 
   it('given only curly quotes, no transaction is dispatched', function () {
@@ -187,10 +199,11 @@ describe('MarkdownEditor#curlQuotes()', function () {
     const state = EditorState.create({
       doc: input,
       selection: selectAll(input),
+      extensions: [ testConfiguration ],
     })
 
     const dispatch = () => fail('No transaction must be dispatched')
 
-    curlQuotes(primary, secondary)({ state, dispatch })
+    curlQuotes({ state, dispatch })
   })
 })

@@ -16,6 +16,8 @@ import { app, nativeTheme } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
+import type { EditorShortcutName } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
+import { type MenuShortcutName } from '../menu/shortcuts'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 
@@ -30,6 +32,22 @@ interface FileTypeSettings<F = boolean, S = boolean, O = 'zettlr'|'system'> {
   showInSidebar: S
   openWith: O
 }
+
+// The following lines make a subset of all available editor/UI shortcuts
+// configurable. This way, we do not have to specify *all* shortcuts, but only
+// those that are actually configurable.
+type Extends<T, U extends T> = U // Helper type to allow for autocomplete
+export type ConfigurableEditorShortcuts = Extends<
+  EditorShortcutName,
+  'table-align'|'table-align-col-center'|'table-align-col-left'|
+  'table-align-col-right'|'tr-zap-gremlins'|'tr-emdash-add-spaces'|
+  'tr-double-quotes-to-single'|'tr-emdash-remove-spaces'|
+  'tr-ensure-double-quotes'|'tr-italics-to-quotes'|'tr-quotes-to-italics'|
+  'tr-quotes-to-magic'|'tr-remove-line-breaks'|'tr-sentence-case'|
+  'tr-single-quotes-to-double'|'tr-straighten-quotes'|
+  'tr-strip-duplicate-spaces'|'tr-title-case'
+>
+export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'|'filter-files'>
 
 /**
  * This type describes an entry of the ignored rules array in the config. We
@@ -60,6 +78,7 @@ export interface ConfigOptions {
   appLang: string
 
   darkMode: boolean
+  darkModeEditor: 'match'|'light'|'dark'
   autoDarkMode: 'off'|'system'|'schedule'
   autoDarkModeStart: string
   autoDarkModeEnd: string
@@ -237,6 +256,10 @@ export interface ConfigOptions {
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
   }
+  shortcuts: {
+    editor: Record<ConfigurableEditorShortcuts, string>
+    ui: Record<MenuShortcutName, string>
+  }
   displayToolbarButtons: {
     showOpenPreferencesButton: boolean
     showNewFileButton: boolean
@@ -302,6 +325,7 @@ export function getConfigTemplate (): ConfigOptions {
     attachmentExtensions: [],
     // UI related options
     darkMode: nativeTheme.shouldUseDarkColors,
+    darkModeEditor: 'match', // Possible values: 'match', 'light', 'dark'
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
     autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '21:00', // Switch into dark mode at this time
@@ -517,6 +541,33 @@ export function getConfigTemplate (): ConfigOptions {
       showInsertFootnoteButton: true,
       showDocumentInfoText: true,
       showPomodoroButton: true
+    },
+    shortcuts: {
+      ui: {
+        'next-tab': '',
+        'previous-tab': '',
+        'filter-files': ''
+      },
+      editor: {
+        'table-align': '',
+        'table-align-col-left': '',
+        'table-align-col-center': '',
+        'table-align-col-right': '',
+        'tr-double-quotes-to-single': '',
+        'tr-single-quotes-to-double': '',
+        'tr-emdash-add-spaces': '',
+        'tr-emdash-remove-spaces': '',
+        'tr-ensure-double-quotes': '',
+        'tr-italics-to-quotes': '',
+        'tr-quotes-to-italics': '',
+        'tr-quotes-to-magic': '',
+        'tr-remove-line-breaks': '',
+        'tr-sentence-case': '',
+        'tr-straighten-quotes': '',
+        'tr-strip-duplicate-spaces': '',
+        'tr-title-case': '',
+        'tr-zap-gremlins': ''
+      }
     },
     uuid: uuid4() // The app's unique anonymous identifier
   }

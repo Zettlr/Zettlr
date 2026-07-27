@@ -16,6 +16,7 @@ import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+import { FocusDirective } from '@common/vue/directives/v-focus'
 
 const ipcRenderer = window.ipc
 
@@ -30,6 +31,12 @@ function afterRegister (): void {
   const pinia = createPinia()
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const app = createApp(App).use(pinia)
+
+  // This code adds a custom directive `v-focus`, that can be added to any
+  // element. As soon as an element with this directive is mounted into the dom,
+  // this will move focus there. Thanks to https://stackoverflow.com/a/67576157.
+  // Huh, also found the docs afterwards: https://vuejs.org/guide/reusability/custom-directives.html#when-to-use
+  app.directive('focus', FocusDirective)
 
   app.mount('#app')
 

@@ -15,6 +15,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
+    "rootDir": ".",
     "resolveJsonModule": true,
     "paths": {
       "source/*": ["./source/*"],

@@ -164,6 +164,8 @@ app.on('open-file', (e, filePath) => {
 
   if (isAppServiceContainerReady()) {
     const serviceContainer = getAppServiceContainer()
+    serviceContainer.log.info(`[Application] Opening file ${filePath}.`)
+    serviceContainer.windows.showAnyWindow()
     serviceContainer.commands.run('roots-add', [filePath])
       .catch((err) => {
         serviceContainer.log.error('[Application] Error while adding new roots', err)

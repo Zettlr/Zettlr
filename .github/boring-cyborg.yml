@@ -2,21 +2,48 @@
 
 # Let's greet new users!
 firstPRWelcomeComment: >
-  Thank you for opening your first PR! 🎉 We would like to thank you already for
-  your contribution. If everything checks out, we'll make sure to review the PR
-  as soon as possible and give feedback. Please note a few things:
+  Thank you for opening your first PR. We appreciate the time and effort you
+  spent in creating this improvement. A maintainer will look at these changes
+  shortly, and conduct a review. Please be patient, as everyone here works on
+  this app in their free time. We will get to your PR as soon as we can.
+
+  In the meantime, please check that you aid us as much as possible to fast-
+  track your changes by adhering to our Contributing guide and Code of Conduct,
+  and ensuring that your PR is manageable and contains only as many changes as
+  absolutely necessary to expedite review.
+
+  Here is a checklist for you to go through as you await our review:
+
+  * **Keep your PR up-to-date.** We sometimes merge changes into develop that
+    then cause merge conflicts. We will not fix those for you, so please ensure
+    to merge the develop branch back into your branch to keep it up to date and
+    prevent merge conflicts from interfering with the process.
+  * **Ensure you follow the "human communication" requirement.** While we allow
+    the use of LLMs for aiding with code, we strictly require every contributor
+    to communicate themselves. If you have let your LLM fill in the PR
+    description, please use the official pull request template and exchange the
+    LLM-generated response with it, filling in the required sections yourself.
+  * **Check the status of the CI pipeline.** Every PR must pass a linter and
+    unit tests check. If those run correctly locally on your computer, they
+    likely will run fine here. You do not need to fix warnings or errors that
+    are clearly not caused by your PR. A failed check does not constitute a hard
+    block towards merging your PR.
+  * **Stay responsive.** We will let you know if there are issues with your PR,
+    and when we have conducted a code review. Please act on our comments and
+    requests in a timely manner. Failure to do so may lead to the closing of
+    your PR.
   
-  * For every PR, the automated pipeline will run the linter and unit tests on
-    your code. Should these fail, we will not merge your PR.
-  * Activate your notifications and check your inbox regularly to respond to our
-    reviews and/or comments.
-  
-  We are glad for every improvement that makes its way into the app, so we look
-  forward to collaborating on merging this PR.
+  If any of the above is unclear, or if you want to clarify something before
+  jumping into action, please let us know; either with a comment here under your
+  PR, or on the Community Forum or on Discord. We value upfront communication,
+  since this can reduce misunderstandings and improve the efficiency of the
+  work.
+
+  Thanks again!
 
 # Comment to be posted to congratulate user on their first merged PR
 firstPRMergeComment: >
-  Your PR got merged! Welcome to the party! 🔥
+  Your first PR just got merged. Thank you for making Zettlr a better app.
 
 # Comment to be posted to on first time issues
 firstIssueWelcomeComment: |

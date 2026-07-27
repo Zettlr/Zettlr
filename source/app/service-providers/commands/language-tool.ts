@@ -307,7 +307,15 @@ export default class LanguageTool extends ZettlrCommand {
       this._app.log.verbose(`[Application] Contacting LanguageTool at ${server} (using credentials: ${String(useCredentials)}); payload: ${numCharacters} characters`)
       const languages = await fetchSupportedLanguages(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
-      const result = await ky(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
+      const result = await ky(
+        `${server}/v2/check`,
+        {
+          method: 'post',
+          body: searchParams.toString(),
+          headers,
+          timeout: 30_000
+        }
+      )
       // Check the status codes. 2xx and 3xx codes are not treated as errors,
       // while 4xx and 5xx cause an HTTPError to be thrown.
       if (result.status === 200) {

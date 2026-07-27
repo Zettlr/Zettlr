@@ -15,7 +15,7 @@
 import { editorTheme } from './editor'
 import { codeTheme } from './code'
 
-export { darkMode } from './dark-mode'
+export { darkMode, useDarkModeEditor } from './dark-mode'
 
 export { themeBerlinLight, themeBerlinDark } from './themes/berlin'
 export { themeBielefeldLight, themeBielefeldDark } from './themes/bielefeld'

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import type { LRT_JSON, LRTIPCAsyncMessage, LRTIPCSyncMessage } from 'source/app/service-providers/long-running-tasks'
+import type { LRTIPCAsyncMessage, LRTIPCSyncMessage } from 'source/app/service-providers/long-running-tasks'
+import type { LRT_JSON } from 'source/app/service-providers/long-running-tasks/task'
 import { ref } from 'vue'
 
 /**

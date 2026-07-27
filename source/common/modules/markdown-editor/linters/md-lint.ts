@@ -17,6 +17,8 @@ import { linter, type Diagnostic } from '@codemirror/lint'
 import { remark } from 'remark'
 import { type Point, type Position } from 'unist'
 import remarkFrontmatter from 'remark-frontmatter'
+import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 import { configField } from '../util/configuration'
 
 // Rules we use
@@ -96,6 +98,8 @@ export const mdLint = linter(async view => {
       // ... or Jekyll/Static site generators-style frontmatters.
       { type: 'yaml', fence: { open: '---', close: '---' } }
     ])
+    .use(remarkGfm)
+    .use(remarkMath)
     .use(remarkLint)
     // https://github.com/remarkjs/remark-lint/tree/main/packages/remark-lint-blockquote-indentation#
     .use(remarkLintBlockquoteIndentation, 2)

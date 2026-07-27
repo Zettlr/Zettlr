@@ -68,7 +68,7 @@ div.pdf-viewer-container {
   iframe {
     width: 100%;
     height: 100%;
-    border: 1px solid transparent;
+    border: none;
     pointer-events: none;
 
     &.pointer-events {

@@ -22,6 +22,7 @@
       <CheckboxControl
         v-model="autoOpenExport"
         v-bind:label="autoOpenLabel"
+        v-bind:name="'open-automatically-checkbox'"
       ></CheckboxControl>
       <!-- Add the exporting button -->
       <button

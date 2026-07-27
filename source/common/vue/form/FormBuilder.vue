@@ -180,8 +180,12 @@ interface FormButton {
   onClick: () => void
 }
 
-interface TextField extends BasicInfo {
-  type: 'text'
+interface TextOrShortcutField extends BasicInfo {
+  /**
+   * This type can be both a regular plain text, or a keyboard shortcut (because
+   * both are stored as strings).
+   */
+  type: 'text'|'shortcut'
   /**
    * Optional placeholder text
    */
@@ -198,6 +202,16 @@ interface TextField extends BasicInfo {
    * Whether the field is disabled
    */
   disabled?: boolean
+}
+
+interface TextField extends TextOrShortcutField {
+  type: 'text'
+}
+
+interface ShortcutField extends TextOrShortcutField {
+  type: 'shortcut'
+  defaultShortcut?: string
+  conflicts?: string[]
 }
 
 interface NumberField extends BasicInfo {
@@ -271,7 +285,7 @@ interface ThemeField extends BasicInfo {
  */
 export type FormField = Separator|FormText|FormButton|TextField|NumberField|
 TimeField|ColorField|FileField|CheckboxField|RadioField|SelectField|ListField|
-TokenField|SliderField|ThemeField
+TokenField|SliderField|ThemeField|ShortcutField
 
 /**
  * Fields that can only occur within the title area of a fieldset

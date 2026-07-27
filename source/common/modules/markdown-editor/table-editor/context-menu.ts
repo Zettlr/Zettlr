@@ -8,8 +8,18 @@ import { selectAllCommand } from '../keymaps/table-editor'
 import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRow } from './commands/rows'
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
 import { clearTable, deleteTable, setAlignment } from './commands/tables'
+import { type EditorShortcutName, getCustomShortcut } from '../keymaps/shortcuts'
+import { configField } from '../util/configuration'
+import { cmShortcutToElectron } from 'source/common/util/shortcuts'
 
 export function displayTableContextMenu (event: MouseEvent, mainView: EditorView, subviewOrView: EditorView): void {
+  const config = mainView.state.field(configField, false)
+
+  const customShortcutMap = config?.shortcuts ?? []
+  const sc = (name: EditorShortcutName) => {
+    return cmShortcutToElectron(getCustomShortcut(name, customShortcutMap))
+  }
+
   const template: AnyMenuItem[] = [
     {
       label: trans('Bold'),
@@ -157,16 +167,19 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
         {
           type: 'normal',
           label: trans('Align column text left'),
+          accelerator: sc('table-align-col-left'),
           action () { setAlignment('left')(mainView) }
         },
         {
           type: 'normal',
           label: trans('Align column text center'),
+          accelerator: sc('table-align-col-center'),
           action () { setAlignment('center')(mainView) }
         },
         {
           type: 'normal',
           label: trans('Align column text right'),
+          accelerator: sc('table-align-col-right'),
           action () { setAlignment('right')(mainView) }
         },
         { type: 'separator' },

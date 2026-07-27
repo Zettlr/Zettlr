@@ -16,6 +16,7 @@ import { trans } from '@common/i18n-main'
 
 const RULES = {
   darkMode: 'required|boolean|default:false',
+  darkModeEditor: 'required|string|in:match,light,dark|default:match',
   autoDarkMode: 'required|string|in:off,system,schedule,auto|default:off',
   fileMeta: 'required|boolean|default:true',
   sorting: 'required|string|in:natural,ascii|default:natural',
