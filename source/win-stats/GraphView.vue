@@ -58,6 +58,7 @@ import { type SimulationNodeDatum } from 'd3'
 import DirectedGraph, { type GraphArc, type GraphVertex, type LinkGraph } from './directed-graph'
 import { type MDFileDescriptor } from '@dts/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
+import getDocumentTitle from 'source/win-main/util/get-document-title'
 
 const ipcRenderer = window.ipc
 
@@ -499,11 +500,6 @@ async function buildGraph (): Promise<void> {
   const dbObject: Record<string, string[]> = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
   const database = new Map<string, string[]>(Object.entries(dbObject))
 
-  const fileNameDisplay: string = window.config.get('fileNameDisplay')
-  const useH1 = fileNameDisplay.includes('heading')
-  const useTitle = fileNameDisplay.includes('title')
-  const displayMdExtensions = window.config.get('display.markdownFileExtensions') as boolean
-
   buildProgress.value.currentFile = 0
   buildProgress.value.totalFiles = Object.entries(dbObject).length
   componentFilter.value = ''
@@ -524,15 +520,7 @@ async function buildGraph (): Promise<void> {
       continue
     }
 
-    if (useTitle && sourceDescriptor.yamlTitle !== undefined) {
-      DG.addVertex(sourcePath, sourceDescriptor.yamlTitle)
-    } else if (useH1 && sourceDescriptor.firstHeading != null) {
-      DG.addVertex(sourcePath, sourceDescriptor.firstHeading)
-    } else if (displayMdExtensions) {
-      DG.addVertex(sourcePath, sourceDescriptor.name)
-    } else {
-      DG.addVertex(sourcePath, sourceDescriptor.name.replace(sourceDescriptor.ext, ''))
-    }
+    DG.addVertex(sourcePath, getDocumentTitle(sourceDescriptor))
 
     for (const target of targets) {
       // Before adding a target, we MUST resolve the link to an actual file
@@ -550,15 +538,7 @@ async function buildGraph (): Promise<void> {
           DG.addVertex(target, target)
         } else {
           resolvedLinks.set(target, found.path)
-          if (useTitle && found.yamlTitle !== undefined) {
-            DG.addVertex(found.path, found.yamlTitle)
-          } else if (useH1 && found.firstHeading != null) {
-            DG.addVertex(found.path, found.firstHeading)
-          } else if (displayMdExtensions) {
-            DG.addVertex(found.path, found.name)
-          } else {
-            DG.addVertex(found.path, found.name.replace(found.ext, ''))
-          }
+          DG.addVertex(found.path, getDocumentTitle(found))
         }
       }
       DG.addArc(sourcePath, resolvedLinks.get(target)!)

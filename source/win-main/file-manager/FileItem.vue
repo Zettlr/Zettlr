@@ -165,6 +165,7 @@ import { useConfigStore, useTagsStore, useWindowStateStore } from 'source/pinia'
 import { useItemComposable } from './util/item-composable'
 import type { FSALEventPayload, FSALEventPayloadChange } from 'source/app/service-providers/fsal'
 import { relativePath } from 'source/common/util/renderer-path-polyfill'
+import getDocumentTitle from '../util/get-document-title'
 
 const props = defineProps<{
   activeFile: AnyDescriptor|undefined
@@ -186,10 +187,7 @@ const tagStore = useTagsStore()
 const windowStateStore = useWindowStateStore()
 
 const shouldCountChars = computed(() => configStore.config.editor.countChars)
-const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
-const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 const writingTargets = computed(() => windowStateStore.writingTargets)
-const displayMdExtensions = computed(() => configStore.config.display.markdownFileExtensions)
 
 const displayText = ref<HTMLDivElement|null>(null)
 const nameEditingInput = ref<HTMLInputElement|null>(null)
@@ -254,19 +252,7 @@ const {
 // We have to explicitly transform ALL properties to computed ones for
 // the reactivity in conjunction with the recycle-scroller.
 const basename = computed(() => {
-  if (props.item.type !== 'file') {
-    return props.item.name
-  }
-
-  if (useTitle.value && props.item.yamlTitle !== undefined) {
-    return props.item.yamlTitle
-  } else if (useH1.value && props.item.firstHeading !== null) {
-    return props.item.firstHeading
-  } else if (displayMdExtensions.value) {
-    return props.item.name
-  } else {
-    return props.item.name.replace(props.item.ext, '')
-  }
+  return getDocumentTitle(props.item)
 })
 
 const getFilename = computed(() => props.item.name)
