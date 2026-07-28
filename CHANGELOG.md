@@ -7,6 +7,13 @@
   heading or YAML title, if you specified it as such. Now, the logic has been
   centralized and everywhere you expect a proper file title it should now show
   you one (see #6471).
+- Set default mode for LanguageTool to `standard` for new installations. If you
+  prefer `picky`, simply set it accordingly.
+- Fixed an issue where configuration changes emitted from the onboarding dialog
+  for new users were one-way-only, with no way to undo the changes. This has now
+  been changed: the buttons accurately reflect the actual configuration state,
+  and pressing the buttons multiple times toggles between the two sets of
+  suggested settings (#6429).
 - Update translations:
   - `ko-KO` (#6478).
   - `de-DE`.

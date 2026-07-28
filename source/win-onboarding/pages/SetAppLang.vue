@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { trans } from 'source/common/i18n-renderer'
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { resolveLangCode } from 'source/common/util/map-lang-code'
 import type { OnboardingIPCSetAppLangMessage } from 'source/app/service-providers/config/onboarding-window'
 import { loadData } from '@common/i18n-renderer'
@@ -45,16 +45,21 @@ const emit = defineEmits<{
   (e: 'enable-navigation'): void
 }>()
 
-const pageHeading = trans('Which Language do you speak?')
-const langIntro = computed(() => {
-  return trans('Based on your operating system settings, we have selected %s as the application language. If you wish, you can select a different language here.', appLangOptions.value[originalLanguage])
-})
-const caveatLabel = trans('The changes apply from the next slide.')
-
-const appLangOptions = ref<Record<string, string>>({})
-
 const originalLanguage = window.config.get('appLang')
 
+const pageHeading = ref(trans('Which Language do you speak?'))
+const langIntro = ref(trans('Based on your operating system settings, we have selected %s as the application language. If you wish, you can select a different language here.', originalLanguage))
+const caveatLabel = ref(trans('The changes apply from the next slide.'))
+
+function retranslate () {
+  // Just as with the navigation, we have to re-translate the page's strings
+  // once the user toggles the app lang.
+  pageHeading.value = trans('Which Language do you speak?')
+  caveatLabel.value = trans('The changes apply from the next slide.')
+  langIntro.value = trans('Based on your operating system settings, we have selected %s as the application language. If you wish, you can select a different language here.', appLangOptions.value[originalLanguage])
+}
+
+const appLangOptions = ref<Record<string, string>>({})
 const appLang = ref(originalLanguage)
 
 watch(appLang, () => {
@@ -70,6 +75,8 @@ async function getAvailableLanguages () {
   languages.map((lang: string) => {
     appLangOptions.value[lang] = resolveLangCode(lang, 'name')
   })
+
+  langIntro.value = trans('Based on your operating system settings, we have selected %s as the application language. If you wish, you can select a different language here.', appLangOptions.value[originalLanguage])
 }
 
 onMounted(async () => {
@@ -83,7 +90,10 @@ function changeAppLang () {
   ipcRenderer.invoke('onboarding', msg)
     .then(() => {
       loadData()
-        .then(() => emit('app-lang-changed'))
+        .then(() => {
+          emit('app-lang-changed')
+          retranslate()
+        })
         .catch(err => console.error(err))
     })
     .catch(err => {
