@@ -17,6 +17,7 @@
 - Update translations:
   - `ko-KO` (#6478).
   - `de-DE`.
+  - `ja-JP` (#6480).
 
 ## Under the Hood
 
