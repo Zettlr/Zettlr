@@ -2,6 +2,11 @@
 
 ## GUI and Functionality
 
+- Fixed an issue where in some places instead of showing you a proper file
+  title, the app would default to only showing you the filename, and neither a
+  heading or YAML title, if you specified it as such. Now, the logic has been
+  centralized and everywhere you expect a proper file title it should now show
+  you one (see #6471).
 - Update translations:
   - `ko-KO` (#6478).
   - `de-DE`.

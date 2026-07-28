@@ -51,7 +51,8 @@ import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/s
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 import type { FileContentSearchResult } from 'source/app/service-providers/search'
-import type { CustomEditorShortcut } from 'source/common/modules/markdown-editor/keymaps/shortcuts.js'
+import type { CustomEditorShortcut } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
+import getDocumentTitle from './util/get-document-title'
 
 const ipcRenderer = window.ipc
 
@@ -633,15 +634,9 @@ async function updateFileDatabase (): Promise<void> {
 
   // First, add all existing files to the database ...
   for (const file of fsalFiles.value) {
-    let displayName = pathBasename(file.name, file.ext)
-    if (useTitle.value && file.yamlTitle !== undefined) {
-      displayName = file.yamlTitle
-    } else if (useH1.value && file.firstHeading !== null) {
-      displayName = file.firstHeading
-    }
     fileDatabase.push({
       filename: pathBasename(file.name, file.ext),
-      displayName,
+      displayName: getDocumentTitle(file),
       id: file.id
     })
   }

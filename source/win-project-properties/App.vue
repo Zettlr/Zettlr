@@ -172,9 +172,9 @@ import type { AssetsProviderIPCAPI, PandocProfileMetadata } from '@providers/ass
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
 import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
 import { useConfigStore, useWorkspaceStore } from 'source/pinia'
-import { pathBasename } from 'source/common/util/renderer-path-polyfill'
 import { pathToUnix } from 'source/common/util/path-to-unix'
 import { parseReaderWriter } from 'source/common/pandoc-util/parse-reader-writer'
+import getDocumentTitle from 'source/win-main/util/get-document-title'
 
 const ipcRenderer = window.ipc
 
@@ -200,8 +200,6 @@ const missingFilesMessage = trans('Some files are selected for export but no lon
 
 const configStore = useConfigStore()
 const workspaceStore = useWorkspaceStore()
-const useH1 = computed(() => configStore.config.fileNameDisplay.includes('heading'))
-const useTitle = computed(() => configStore.config.fileNameDisplay.includes('title'))
 
 const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
 
@@ -264,21 +262,12 @@ const exportFileList = computed(() => {
   const projectFiles = projectSettings.value.files
 
   for (const file of availableFiles.value) {
-    let basename = pathBasename(file.path)
-    if (file.type === 'file') {
-      if (useTitle.value && file.yamlTitle !== undefined) {
-        basename = file.yamlTitle
-      } else if (useH1.value && file.firstHeading !== null) {
-        basename = file.firstHeading
-      }
-    }
-
     // The app always defaults to the Unix path conventions (/ instead of \\)
     const relativePath = pathToUnix(file.path.slice(dirPath.length + 1))
     files.push({
       // NOTE: We must map the files to the relative paths from the directory!
       relativePath,
-      displayName: basename,
+      displayName: getDocumentTitle(file),
       included: projectFiles.includes(relativePath)
     })
   }
