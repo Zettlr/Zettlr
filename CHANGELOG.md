@@ -4,6 +4,7 @@
 
 - Update translations:
   - `ko-KO` (#6478).
+  - `de-DE`.
 
 ## Under the Hood
 

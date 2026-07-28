@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 4.2.1\n"
+"Project-Id-Version: Zettlr 4.7.8\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-07-28 11:46+0200\n"
-"PO-Revision-Date: 2026-03-07 15:00+0100\n"
+"PO-Revision-Date: 2026-07-28 12:02+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: source/app/app-service-container.ts:180
 #, javascript-format
@@ -803,14 +803,14 @@ msgstr "Die Sprachdatei %s konnte nicht importiert werden!"
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting file \"%s\""
-msgstr ""
+msgstr "Exportiere Datei “%s”"
 
 #: source/app/service-providers/commands/export.ts:67
 #: source/app/service-providers/commands/dir-project-export.ts:161
 #: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting using custom command %s"
-msgstr ""
+msgstr "Exportiere mit benutzerdefiniertem Programm %s"
 
 #: source/app/service-providers/commands/export.ts:75
 #: source/app/service-providers/commands/export.ts:206
@@ -824,7 +824,7 @@ msgstr "Beim Export ist ein Fehler aufgetreten: %s"
 
 #: source/app/service-providers/commands/export.ts:81
 msgid "Exported file successfully."
-msgstr ""
+msgstr "Datei erfolgreich exportiert."
 
 #: source/app/service-providers/commands/export.ts:149
 msgid "Choose export destination"
@@ -833,27 +833,27 @@ msgstr "Exportieren nach"
 #: source/app/service-providers/commands/export.ts:173
 #, javascript-format
 msgid "Exporting file %s"
-msgstr ""
+msgstr "Exportiere Datei %s"
 
 #: source/app/service-providers/commands/export.ts:173
 #, javascript-format
 msgid "Exporting using profile %s"
-msgstr ""
+msgstr "Exportiere mit Profil %s"
 
 #: source/app/service-providers/commands/export.ts:182
 #, javascript-format
 msgid "Exported to %s"
-msgstr ""
+msgstr "Exportiert nach %s"
 
 #: source/app/service-providers/commands/export.ts:184
 #, javascript-format
 msgid "File %s has been exported"
-msgstr ""
+msgstr "Datei %s wurde exportiert"
 
 #: source/app/service-providers/commands/export.ts:185
 #, javascript-format
 msgid "File has been exported to %s"
-msgstr ""
+msgstr "Datei wurde nach %s exportiert"
 
 #: source/app/service-providers/commands/export.ts:207
 #, javascript-format
@@ -902,7 +902,7 @@ msgstr "Konnte Anhang nicht öffnen. Läuft Zotero?"
 
 #: source/app/service-providers/commands/language-tool.ts:332
 msgid "Forbidden (are your credentials correct?)"
-msgstr ""
+msgstr "Kein Zugriff (sind die Zugangsdaten korrekt?)"
 
 #: source/app/service-providers/commands/language-tool.ts:334
 msgid "Document too long"
@@ -910,11 +910,11 @@ msgstr "Dokument zu lang"
 
 #: source/app/service-providers/commands/language-tool.ts:337
 msgid "Server error"
-msgstr ""
+msgstr "Server-Fehler"
 
 #: source/app/service-providers/commands/language-tool.ts:339
 msgid "Client error"
-msgstr ""
+msgstr "Benutzerfehler"
 
 #: source/app/service-providers/commands/language-tool.ts:344
 msgid "offline"
@@ -1035,46 +1035,46 @@ msgstr "Projektexport"
 #: source/app/service-providers/commands/dir-project-export.ts:199
 #, javascript-format
 msgid "Exporting project \"%s\""
-msgstr ""
+msgstr "Exportiere Projekt “%s”"
 
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project export failed: %s"
-msgstr ""
+msgstr "Projektexport fehlgeschlagen: %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:178
 #: source/app/service-providers/commands/dir-project-export.ts:248
 #: source/app/service-providers/commands/dir-project-export.ts:271
 #, javascript-format
 msgid "Could not export project \"%s\"."
-msgstr ""
+msgstr "Konnte Projekt “%s” nicht exportieren."
 
 #: source/app/service-providers/commands/dir-project-export.ts:179
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
-msgstr ""
+msgstr "Export mit benutzerdefiniertem Programm %s fehlgeschlagen: %s."
 
 #. Error
 #: source/app/service-providers/commands/dir-project-export.ts:246
 #, javascript-format
 msgid "Export failed: %s"
-msgstr ""
+msgstr "Export fehlgeschlagen: %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:249
 #: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
-msgstr ""
+msgstr "Export mit Profil %s fehlgeschlagen: %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:256
 #, javascript-format
 msgid "Project \"%s\" has been exported."
-msgstr ""
+msgstr "Projekt “%s” wurde exportiert."
 
 #: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project has been exported to %s."
-msgstr ""
+msgstr "Projekt wurde nach %s exportiert."
 
 #: source/app/service-providers/citeproc/index.ts:259
 #: source/app/service-providers/citeproc/index.ts:426
@@ -1233,20 +1233,20 @@ msgstr "Projektverzeichnis öffnen"
 #. cache is cleared on startup.
 #: source/app/service-providers/fsal/index.ts:295
 msgid "Indexing files"
-msgstr ""
+msgstr "Indiziere Dateien"
 
 #: source/app/service-providers/fsal/index.ts:295
 msgid "Discovering paths to index…"
-msgstr ""
+msgstr "Suche nach indizierbaren Pfaden…"
 
 #: source/app/service-providers/fsal/index.ts:330
 #, javascript-format
 msgid "Indexing %s paths…"
-msgstr ""
+msgstr "Indiziere %s Pfade…"
 
 #: source/app/service-providers/fsal/index.ts:349
 msgid "Indexing complete."
-msgstr ""
+msgstr "Indizierung abgeschlossen."
 
 #: source/win-main/file-manager/util/file-item-context.ts:30
 #: source/tmp/win-main/GlobalSearch.vue.ts:77
@@ -1750,7 +1750,7 @@ msgstr "Konnte Graph nicht darstellen:"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
 msgid "Could not render Graph."
-msgstr ""
+msgstr "Konnte Graph nicht darstellen."
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
@@ -2004,7 +2004,7 @@ msgstr "Anführungszeichen begradigen"
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:89
 #: source/win-preferences/schema/shortcuts.ts:207
 msgid "Convert quotes to Magic Quotes"
-msgstr ""
+msgstr "Konvertiere zu typographischen Anführungszeichen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:95
 #: source/win-preferences/schema/shortcuts.ts:214
@@ -2535,7 +2535,7 @@ msgstr "Pomodoro-Uhr"
 #: source/tmp/win-main/App.vue.ts:461
 #: source/tmp/common/vue/IrisIndicator.vue.ts:40
 msgid "Show tasks"
-msgstr ""
+msgstr "Zeige Jobs"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:56
 msgid "Enter your search terms below"
@@ -2560,7 +2560,7 @@ msgstr "Begrenze Suche auf ein Verzeichnis"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:61
 msgid "Case insensitive"
-msgstr ""
+msgstr "Ignoriere Groß/Kleinschreibung"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:62
 msgid "Choose directory…"
@@ -2581,7 +2581,7 @@ msgstr "Ergebnisse umschalten"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:67
 msgid "No results for your search."
-msgstr ""
+msgstr "Keine Suchergebnisse."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:170
 #, javascript-format
@@ -3087,7 +3087,7 @@ msgstr "Schachbrett-Hintergrund verwenden"
 
 #: source/tmp/win-main/PopoverLRT.vue.ts:18
 msgid "Clear finished tasks"
-msgstr ""
+msgstr "Abgeschlossene Jobs leeren"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -3141,7 +3141,7 @@ msgstr ""
 
 #: source/tmp/win-about/General-Tab.vue.ts:25
 msgid "View the Privacy Policy by LanguageTooler GmbH"
-msgstr ""
+msgstr "Datenschutzrichtlinie von LanguageTooler GmbH aufrufen"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
@@ -3551,7 +3551,7 @@ msgstr "Allgemein"
 
 #: source/tmp/win-project-properties/App.vue.ts:70
 msgid "Profiles"
-msgstr ""
+msgstr "Profile"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:115
 msgid "Add"
@@ -3587,21 +3587,21 @@ msgstr "Datei auswählen…"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:44
 msgid "unassigned"
-msgstr ""
+msgstr "kein Tastaturkürzel"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:45
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "Standard: %s"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:49
 msgid "Recording…"
-msgstr ""
+msgstr "Zeichne auf…"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:54
 #, javascript-format
 msgid "This shortcut conflicts with: %s"
-msgstr ""
+msgstr "Dieses Kürzel wird auch für %s verwendet."
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "January"
@@ -3810,7 +3810,7 @@ msgstr "AutoCorrect"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Shortcuts"
-msgstr ""
+msgstr "Tastaturkürzel"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Zettelkasten"
@@ -3908,15 +3908,15 @@ msgstr "Wähle ein Farb- und Schriftarten-Thema für den Editor."
 
 #: source/win-preferences/schema/appearance.ts:77
 msgid "Follow App"
-msgstr ""
+msgstr "Folge Anwendung"
 
 #: source/win-preferences/schema/appearance.ts:78
 msgid "Light Theme"
-msgstr ""
+msgstr "Helles Thema"
 
 #: source/win-preferences/schema/appearance.ts:79
 msgid "Dark Theme"
-msgstr ""
+msgstr "Dunkles Thema"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Toolbar buttons"
@@ -4442,16 +4442,16 @@ msgstr "Schriftgröße"
 
 #: source/win-preferences/schema/editor.ts:303
 msgid "Font size in pixels:"
-msgstr ""
+msgstr "Schriftgröße in Pixel:"
 
 #: source/win-preferences/schema/editor.ts:310
 msgid "Indentation"
-msgstr ""
+msgstr "Einzug"
 
 #. TODO
 #: source/win-preferences/schema/editor.ts:313
 msgid "Adjust your editor indentation settings"
-msgstr ""
+msgstr "Passe die Indentation des Editors an"
 
 #: source/win-preferences/schema/editor.ts:317
 msgid "Tab size (in number of spaces)"
@@ -4475,16 +4475,16 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:336
 msgid "Snippet Autocompletion"
-msgstr ""
+msgstr "Snippet-Autovervollständigung"
 
 #. TODO
 #: source/win-preferences/schema/editor.ts:339
 msgid "Control the snippet autocompletion functionality"
-msgstr ""
+msgstr "Kontrolliert die Autovervollständigung"
 
 #: source/win-preferences/schema/editor.ts:344
 msgid "Autocomplete trigger character:"
-msgstr ""
+msgstr "Auslöser für Autovervollständigung:"
 
 #: source/win-preferences/schema/editor.ts:354
 msgid "Suggest emojis during autocompletion"
@@ -4690,55 +4690,55 @@ msgstr "Befehl"
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
-msgstr ""
+msgstr "Tastaturkürzel für Tabellen"
 
 #: source/win-preferences/schema/shortcuts.ts:123
 msgid "Customize the available table shortcuts for the editor."
-msgstr ""
+msgstr "Passe die verfügbaren Tastaturkürzel für den Editor an."
 
 #: source/win-preferences/schema/shortcuts.ts:129
 msgid "Align Markdown table under cursor"
-msgstr ""
+msgstr "Formatiere Tabelle am Textcursor"
 
 #: source/win-preferences/schema/shortcuts.ts:136
 msgid "Align table column left"
-msgstr ""
+msgstr "Tabellenspalte linksbündig"
 
 #: source/win-preferences/schema/shortcuts.ts:143
 msgid "Align table column center"
-msgstr ""
+msgstr "Tabellenspalte zentiert"
 
 #: source/win-preferences/schema/shortcuts.ts:150
 msgid "Align table column right"
-msgstr ""
+msgstr "Tabellenspalte rechtsbündig"
 
 #: source/win-preferences/schema/shortcuts.ts:158
 msgid "Transform Shortcuts"
-msgstr ""
+msgstr "Transformations-Kürzel"
 
 #: source/win-preferences/schema/shortcuts.ts:159
 msgid "Assign shortcuts to your frequently used text transformations here."
-msgstr ""
+msgstr "Weise oft genutzten Transformationen Tastaturkürzel zu."
 
 #: source/win-preferences/schema/shortcuts.ts:165
 msgid "Zap Gremlins"
-msgstr ""
+msgstr "Zap Gremlins"
 
 #: source/win-preferences/schema/shortcuts.ts:264
 msgid "UI Shortcuts"
-msgstr ""
+msgstr "Oberflächenkürzel"
 
 #: source/win-preferences/schema/shortcuts.ts:265
 msgid "Customize general user interface shortcuts here."
-msgstr ""
+msgstr "Passe generelle UI-Kürzel an."
 
 #: source/win-preferences/schema/shortcuts.ts:271
 msgid "Switch to next tab"
-msgstr ""
+msgstr "Nächster Tab"
 
 #: source/win-preferences/schema/shortcuts.ts:278
 msgid "Switch to previous tab"
-msgstr ""
+msgstr "Vorheriger Tab"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
