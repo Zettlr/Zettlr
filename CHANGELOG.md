@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Update translations:
+  - `ko-KO` (#6478).
 
 ## Under the Hood
 
