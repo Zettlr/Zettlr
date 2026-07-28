@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
@@ -19,7 +18,7 @@ msgstr ""
 
 #: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
 msgid "Cmd/Ctrl-click to follow this link"
-msgstr ""
+msgstr "Cmd/Ctrl 클릭으로 링크 이동"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:15
@@ -37,17 +36,17 @@ msgstr "이탤릭체"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
 msgid "Underline"
-msgstr ""
+msgstr "밑줄"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
 #: source/win-preferences/schema/editor.ts:174
 #: source/win-preferences/schema/editor.ts:175
 msgid "Highlight"
-msgstr ""
+msgstr "강조"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
 msgid "Strikethrough"
-msgstr ""
+msgstr "취소선"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
 msgid "Link"
@@ -69,7 +68,7 @@ msgstr "코드"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:96
 msgid "No footnote text found."
-msgstr ""
+msgstr "각주 텍스트를 찾을 수 없습니다."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:116
 #: source/app/service-providers/menu/menu.darwin.ts:319
@@ -80,30 +79,30 @@ msgstr "편집"
 #: source/common/modules/markdown-editor/tooltips/citations.ts:67
 #: source/tmp/win-splash-screen/App.vue.ts:22
 msgid "Loading…"
-msgstr ""
+msgstr "불러오는 중…"
 
 #: source/common/modules/markdown-editor/tooltips/citations.ts:100
 msgid "Could not fetch bibliography for citation."
-msgstr ""
+msgstr "인용 서지 정보를 가져올 수 없습니다."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "%s 파일이 존재하지 않습니다."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Generating preview…"
-msgstr ""
+msgstr "미리보기 생성 중…"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:124
 msgid "Word count"
-msgstr ""
+msgstr "단어 수"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
 msgid "Modified"
-msgstr ""
+msgstr "수정됨"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:144
 msgid "Open…"
@@ -115,53 +114,52 @@ msgstr "새 탭에서 열기"
 
 #: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:97
 msgid "Fetching link preview…"
-msgstr ""
+msgstr "링크 미리보기 불러오는 중…"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:140
 msgid "Preview"
-msgstr ""
+msgstr "미리보기"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:140
 msgid "Raw"
-msgstr ""
+msgstr "원문"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:139
 #, javascript-format
 msgid "Rendering: %s"
-msgstr ""
+msgstr "렌더링: %s"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:142
 msgid "Enable or disable the preview mode for Markdown files by clicking"
-msgstr ""
+msgstr "클릭하여 마크다운 파일의 미리보기 모드를 활성화 또는 비활성화"
 
 #: source/common/modules/markdown-editor/renderers/readability.ts:39
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "가독성 모드 (%s)"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:56
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
 msgid "Rendering mermaid graph …"
-msgstr ""
+msgstr "Mermaid 그래프 렌더링 중 …"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:61
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:80
-#, fuzzy
 msgid "Could not render Graph:"
-msgstr "파일을 생성할 수 없습니다"
+msgstr "그래프를 렌더링할 수 없습니다:"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:149
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "이미지를 찾을 수 없음: %s"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:224
 msgid "Open image externally"
-msgstr ""
+msgstr "외부 프로그램으로 이미지 열기"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "강조 없음"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:21
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
@@ -223,91 +221,91 @@ msgstr "모두 선택"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:86
 msgid "Row"
-msgstr ""
+msgstr "행"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:91
 msgid "Insert new row above"
-msgstr ""
+msgstr "위에 새 행 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:97
 msgid "Insert new row below"
-msgstr ""
+msgstr "아래에 새 행 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:104
 msgid "Move row up"
-msgstr ""
+msgstr "행 위로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:110
 msgid "Move row down"
-msgstr ""
+msgstr "행 아래로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:117
 msgid "Clear row"
-msgstr ""
+msgstr "행 내용 지우기"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:122
 msgid "Delete row"
-msgstr ""
+msgstr "행 삭제"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:129
 msgid "Column"
-msgstr ""
+msgstr "열"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:133
 msgid "Insert new column left"
-msgstr ""
+msgstr "왼쪽에 새 열 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:139
 msgid "Insert new column right"
-msgstr ""
+msgstr "오른쪽에 새 열 삽입"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:146
 msgid "Move column left"
-msgstr ""
+msgstr "열 왼쪽으로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:152
 msgid "Move column right"
-msgstr ""
+msgstr "열 오른쪽으로 이동"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:159
 msgid "Align column text left"
-msgstr ""
+msgstr "열 텍스트 왼쪽 정렬"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:164
 msgid "Align column text center"
-msgstr ""
+msgstr "열 텍스트 가운데 정렬"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:169
 msgid "Align column text right"
-msgstr ""
+msgstr "열 텍스트 오른쪽 정렬"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:188
 msgid "Clear column"
-msgstr ""
+msgstr "열 내용 지우기"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:193
 msgid "Delete column"
-msgstr ""
+msgstr "열 삭제"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:200
 msgid "Table"
-msgstr ""
+msgstr "표"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:204
 msgid "Clear table"
-msgstr ""
+msgstr "표 내용 지우기"
 
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:209
 msgid "Delete table"
-msgstr ""
+msgstr "표 삭제"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "맞춤법 오류"
 
 #: source/common/modules/markdown-editor/linters/language-tool.ts:269
 msgid "Disable Rule"
-msgstr ""
+msgstr "규칙 비활성화"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:76
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
@@ -317,7 +315,7 @@ msgstr ""
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:239
 #, javascript-format
 msgid "%s characters"
-msgstr ""
+msgstr "%s 글자"
 
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
 #: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
@@ -334,16 +332,16 @@ msgstr "%s 단어"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:82
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr ""
+msgstr "이 파일은 프로젝트 \"%s\"의 일부입니다"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
-msgstr ""
+msgstr "각주 참조로 이동"
 
 #: source/common/modules/markdown-editor/context-menu/citation-menu.ts:60
 #, javascript-format
 msgid "Open PDF for %s"
-msgstr ""
+msgstr "%s 의 PDF 열기"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
 msgid "No suggestions"
@@ -364,560 +362,533 @@ msgstr "숫자 목록 삽입"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
 #: source/tmp/win-main/App.vue.ts:400
 msgid "Insert task list"
-msgstr ""
+msgstr "할 일 목록 삽입"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
 msgid "Insert blockquote"
-msgstr ""
+msgstr "인용구 삽입"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 #: source/tmp/win-main/App.vue.ts:407
 msgid "Insert table"
-msgstr ""
+msgstr "표 삽입"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
 msgid "Open link"
-msgstr ""
+msgstr "링크 열기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
 msgid "Copy email address"
-msgstr ""
+msgstr "이메일 주소 복사"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
 msgid "Copy link"
-msgstr ""
+msgstr "링크 복사"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
 msgid "Remove link"
-msgstr ""
+msgstr "링크 제거"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
 msgid "Copy image to clipboard"
 msgstr "이미지를 클립 보드에 복사"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
-#, fuzzy
 msgid "Open image"
-msgstr "파일 열기"
+msgstr "이미지 열기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
 #: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in Finder"
-msgstr ""
+msgstr "Finder에서 보기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
-#, fuzzy
 msgid "Open in File Browser"
-msgstr "브라우저에서 열기"
+msgstr "파일 탐색기에서 열기"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:35
 msgid "Transform"
-msgstr ""
+msgstr "변환"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:40
 msgid "Zap gremlins"
-msgstr ""
+msgstr "숨겨진 문자 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:45
 msgid "Strip duplicate spaces"
-msgstr ""
+msgstr "중복 공백 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:50
 msgid "Italics to quotes"
-msgstr ""
+msgstr "이탤릭체를 따옴표로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:55
 msgid "Quotes to italics"
-msgstr ""
+msgstr "따옴표를 이탤릭체로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:60
 msgid "Remove line breaks"
-msgstr ""
+msgstr "줄바꿈 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:68
 msgid "Straighten quotes"
-msgstr ""
+msgstr "따옴표 직선으로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:73
 msgid "Ensure double quotes"
-msgstr ""
+msgstr "큰따옴표 적용"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:78
 msgid "Double quotes to single"
-msgstr ""
+msgstr "큰따옴표를 작은따옴표로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
 msgid "Single quotes to double"
-msgstr ""
+msgstr "작은따옴표를 큰따옴표로"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:91
 msgid "Emdash — Add spaces around"
-msgstr ""
+msgstr "Em 대시 — 주위에 공백 추가"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:96
 msgid "Emdash — Remove spaces around"
-msgstr ""
+msgstr "Em 대시 — 주위의 공백 제거"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:104
 msgid "To sentence case"
-msgstr ""
+msgstr "문장 첫 글자 대문자"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:109
 msgid "To title case"
-msgstr ""
+msgstr "제목 형식으로"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
 msgid "Copy equation code"
-msgstr ""
+msgstr "수식 코드 복사"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:130
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:136
-#, fuzzy
 msgid "Custom"
-msgstr "커스텀 CSS"
+msgstr "사용자 지정"
 
 #: source/common/modules/markdown-editor/statusbar/language-tool.ts:144
 msgid "Detect automatically"
-msgstr ""
+msgstr "자동 감지"
 
 #: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
 msgid "Toggle diagnostics panel"
-msgstr ""
+msgstr "진단 패널 전환"
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "아프리칸스어"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
-msgstr "Arabic"
+msgstr "아랍어"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "아스투리아스어"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
-msgstr "Belarus"
+msgstr "벨라루스어"
 
 #: source/common/util/map-lang-code.ts:37
 msgid "Bulgarian"
-msgstr "Bulgarian"
+msgstr "불가리아어"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "브르타뉴어"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
-msgstr "Bosnian"
+msgstr "보스니아어"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "카탈로니아어"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Catalan (Valencia)"
-msgstr ""
+msgstr "카탈로니아어 (발렌시아)"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Czech"
-msgstr ""
+msgstr "체코어"
 
 #: source/common/util/map-lang-code.ts:43
 msgid "Danish"
-msgstr "Danish"
+msgstr "덴마크어"
 
 #: source/common/util/map-lang-code.ts:44
 msgid "German (Austria)"
-msgstr "German (Austria)"
+msgstr "독일어 (오스트리아)"
 
 #: source/common/util/map-lang-code.ts:45
 msgid "German (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "독일어 (스위스)"
 
 #: source/common/util/map-lang-code.ts:46
-#, fuzzy
 msgid "German (simple)"
-msgstr "German (Austria)"
+msgstr "독일어 (간이)"
 
 #: source/common/util/map-lang-code.ts:47
 msgid "German (Germany)"
-msgstr "German (Germany)"
+msgstr "독일어 (독일)"
 
 #: source/common/util/map-lang-code.ts:48
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "German (Austria)"
+msgstr "독일어 (룩셈부르크)"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "German"
-msgstr ""
+msgstr "독일어"
 
 #: source/common/util/map-lang-code.ts:50
 msgid "Greek"
-msgstr "Greek"
+msgstr "그리스어"
 
 #: source/common/util/map-lang-code.ts:51
 msgid "English (Australia)"
-msgstr "English (Australia)"
+msgstr "영어 (호주)"
 
 #: source/common/util/map-lang-code.ts:52
 msgid "English (Canada)"
-msgstr "English (Canada)"
+msgstr "영어 (캐나다)"
 
 #: source/common/util/map-lang-code.ts:53
 msgid "English (United Kingdom)"
-msgstr "English (United Kingdom)"
+msgstr "영어 (영국)"
 
 #: source/common/util/map-lang-code.ts:54
 msgid "English (India)"
-msgstr "English (India)"
+msgstr "영어 (인도)"
 
 #: source/common/util/map-lang-code.ts:55
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "English (Canada)"
+msgstr "영어 (뉴질랜드)"
 
 #: source/common/util/map-lang-code.ts:56
 msgid "English (United States)"
-msgstr "English (United States)"
+msgstr "영어 (미국)"
 
 #: source/common/util/map-lang-code.ts:57
 msgid "English (South Africa)"
-msgstr "English (South Africa)"
+msgstr "영어 (남아프리카)"
 
 #: source/common/util/map-lang-code.ts:58
-#, fuzzy
 msgid "English"
-msgstr "English (India)"
+msgstr "영어"
 
 #: source/common/util/map-lang-code.ts:59
 msgid "Esperanto"
-msgstr "Esperanto"
+msgstr "에스페란토"
 
 #: source/common/util/map-lang-code.ts:60
-#, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Spanish (Spain)"
+msgstr "스페인어(아르헨티나)"
 
 #: source/common/util/map-lang-code.ts:61
 msgid "Spanish (Spain)"
-msgstr "Spanish (Spain)"
+msgstr "스페인어(스페인)"
 
 #: source/common/util/map-lang-code.ts:62
-#, fuzzy
 msgid "Spanish"
-msgstr "Danish"
+msgstr "스페인어"
 
 #: source/common/util/map-lang-code.ts:63
 msgid "Estonian"
-msgstr "Estonian"
+msgstr "에스토니아어"
 
 #: source/common/util/map-lang-code.ts:64
 msgid "Basque"
-msgstr "Basque"
+msgstr "바스크어"
 
 #: source/common/util/map-lang-code.ts:65
 msgid "Persian (Farsi)"
-msgstr "Persian (Farsi)"
+msgstr "페르시아어(파르시어)"
 
 #: source/common/util/map-lang-code.ts:66
 msgid "Finnish"
-msgstr "Finnish"
+msgstr "핀란드어"
 
 #: source/common/util/map-lang-code.ts:67
 msgid "Faroese"
-msgstr "Faroese"
+msgstr "페로어"
 
 #: source/common/util/map-lang-code.ts:68
-#, fuzzy
 msgid "French (Belgium)"
-msgstr "Dutch (Belgium)"
+msgstr "프랑스어(벨기에)"
 
 #: source/common/util/map-lang-code.ts:69
-#, fuzzy
 msgid "French (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "프랑스어(스위스)"
 
 #: source/common/util/map-lang-code.ts:70
 msgid "French (France)"
-msgstr "French (France)"
+msgstr "프랑스어(프랑스)"
 
 #: source/common/util/map-lang-code.ts:71
-#, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Luxembourgian"
+msgstr "프랑스어(룩셈부르크)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "프랑스어(모나코 공국)"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "French"
-msgstr ""
+msgstr "프랑스어"
 
 #: source/common/util/map-lang-code.ts:74
 msgid "Irish"
-msgstr "Irish"
+msgstr "아일랜드어"
 
 #: source/common/util/map-lang-code.ts:75
 msgid "Scottish (Gaelic)"
-msgstr "Scottish (Gaelic)"
+msgstr "스코틀랜드 게일어"
 
 #: source/common/util/map-lang-code.ts:76
-#, fuzzy
 msgid "Galician"
-msgstr "Galician (Spain)"
+msgstr "갈리시아어"
 
 #: source/common/util/map-lang-code.ts:77
 msgid "Hebrew"
-msgstr "Hebrew"
+msgstr "히브리어"
 
 #: source/common/util/map-lang-code.ts:78
 msgid "Hindi"
-msgstr "Hindi"
+msgstr "힌디어"
 
 #: source/common/util/map-lang-code.ts:79
 msgid "Croatian"
-msgstr "Croatian"
+msgstr "크로아티아어"
 
 #: source/common/util/map-lang-code.ts:80
 msgid "Hungarian"
-msgstr "Hungarian"
+msgstr "헝가리어"
 
 #: source/common/util/map-lang-code.ts:81
 msgid "Armenian"
-msgstr "Armenian"
+msgstr "아르메니아어"
 
 #: source/common/util/map-lang-code.ts:82
 msgid "Indonesian"
-msgstr "Indonesian"
+msgstr "인도네시아어"
 
 #: source/common/util/map-lang-code.ts:83
 msgid "Icelandic"
-msgstr "Icelandic"
+msgstr "아이슬란드어"
 
 #: source/common/util/map-lang-code.ts:84
-#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "German (Switzerland)"
+msgstr "이탈리아어(스위스)"
 
 #: source/common/util/map-lang-code.ts:85
 msgid "Italian (Italy)"
-msgstr "Italian (Italy)"
+msgstr "이탈리아어(이탈리아)"
 
 #: source/common/util/map-lang-code.ts:86
-#, fuzzy
 msgid "Italian"
-msgstr "이탤릭체"
+msgstr "이탈리아어"
 
 #: source/common/util/map-lang-code.ts:87
 msgid "Japanese"
-msgstr "Japanese"
+msgstr "일본어"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Georgian"
-msgstr "Georgian"
+msgstr "조지아어"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Kazakh"
-msgstr ""
+msgstr "카자흐어"
 
 #: source/common/util/map-lang-code.ts:90
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "크메르어(캄보디아)"
 
 #: source/common/util/map-lang-code.ts:91
 msgid "Korean"
-msgstr "Korean"
+msgstr "한국어"
 
 #: source/common/util/map-lang-code.ts:92
 msgid "Latin"
-msgstr "Latin"
+msgstr "라틴어"
 
 #: source/common/util/map-lang-code.ts:93
 msgid "Luxembourgian"
-msgstr "Luxembourgian"
+msgstr "룩셈부르크어"
 
 #: source/common/util/map-lang-code.ts:94
 msgid "Lithuanian"
-msgstr "Lithuanian"
+msgstr "리투아니아어"
 
 #: source/common/util/map-lang-code.ts:95
 msgid "Latvian"
-msgstr "Latvian"
+msgstr "라트비아어"
 
 #: source/common/util/map-lang-code.ts:96
 msgid "Macedonian"
-msgstr "Macedonian"
+msgstr "마케도니아어"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Mongolian"
-msgstr "Mongolian"
+msgstr "몽골어"
 
 #: source/common/util/map-lang-code.ts:98
-#, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malaysian (Malaysia)"
+msgstr "말레이어(브루나이 다루살람)"
 
 #: source/common/util/map-lang-code.ts:99
 msgid "Malaysian (Malaysia)"
-msgstr "Malaysian (Malaysia)"
+msgstr "말레이어(말레이시아)"
 
 #: source/common/util/map-lang-code.ts:100
-#, fuzzy
 msgid "Malaysian"
-msgstr "Malaysian (Malaysia)"
+msgstr "말레이어"
 
 #: source/common/util/map-lang-code.ts:101
 msgid "Norwegian (Bokmål)"
-msgstr "Norwegian (Bokmål)"
+msgstr "노르웨이어(보크몰)"
 
 #: source/common/util/map-lang-code.ts:102
 msgid "Nepalese"
-msgstr "Nepalese"
+msgstr "네팔어"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch (Belgium)"
-msgstr "Dutch (Belgium)"
+msgstr "네덜란드어(벨기에)"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Dutch (Netherlands)"
-msgstr "Dutch (Netherlands)"
+msgstr "네덜란드어(네덜란드)"
 
 #: source/common/util/map-lang-code.ts:105
 msgid "Dutch"
-msgstr ""
+msgstr "네덜란드어"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Norwegian (Nyorsk)"
-msgstr "Norwegian (Nyorsk)"
+msgstr "노르웨이어(뉘노르스크)"
 
 #: source/common/util/map-lang-code.ts:107
-#, fuzzy
 msgid "Norwegian"
-msgstr "Georgian"
+msgstr "노르웨이어"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Polish"
-msgstr "Polish"
+msgstr "폴란드어"
 
 #: source/common/util/map-lang-code.ts:109
-#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Portuguese (Portugal)"
+msgstr "포르투갈어(앙골라)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Brazil)"
-msgstr "Portuguese (Brazil)"
+msgstr "포르투갈어(브라질)"
 
 #: source/common/util/map-lang-code.ts:111
-#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Portuguese (Brazil)"
+msgstr "포르투갈어(모잠비크)"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Portuguese (Portugal)"
-msgstr "Portuguese (Portugal)"
+msgstr "포르투갈어(포르투갈)"
 
 #: source/common/util/map-lang-code.ts:113
-#, fuzzy
 msgid "Portuguese"
-msgstr "Portuguese (Brazil)"
+msgstr "포르투갈어"
 
 #: source/common/util/map-lang-code.ts:114
 msgid "Romanian"
-msgstr "Romanian"
+msgstr "루마니아어"
 
 #: source/common/util/map-lang-code.ts:115
 msgid "Russian"
-msgstr "Russian"
+msgstr "러시아어"
 
 #: source/common/util/map-lang-code.ts:116
 msgid "Rwandan (Kinyarwanda)"
-msgstr "Rwandan (Kinyarwanda)"
+msgstr "르완다어(키냐르완다어)"
 
 #: source/common/util/map-lang-code.ts:117
 msgid "Slovakian"
-msgstr "Slovakian"
+msgstr "슬로바키아어"
 
 #: source/common/util/map-lang-code.ts:118
 msgid "Slovenian"
-msgstr "Slovenian"
+msgstr "슬로베니아어"
 
 #: source/common/util/map-lang-code.ts:119
 msgid "Serbian"
-msgstr "Serbian"
+msgstr "세르비아어"
 
 #: source/common/util/map-lang-code.ts:120
-#, fuzzy
 msgid "Albanian"
-msgstr "Romanian"
+msgstr "알바니아어"
 
 #: source/common/util/map-lang-code.ts:121
-#, fuzzy
 msgid "Albanian (Albania)"
-msgstr "Malaysian (Malaysia)"
+msgstr "알바니아어(알바니아)"
 
 #: source/common/util/map-lang-code.ts:122
 msgid "Swedish"
-msgstr "Swedish"
+msgstr "스웨덴어"
 
 #: source/common/util/map-lang-code.ts:123
-#, fuzzy
 msgid "Tamil (India)"
-msgstr "English (India)"
+msgstr "타밀어(인도)"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Thai"
-msgstr ""
+msgstr "태국어"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "타갈로그어(필리핀어)"
 
 #: source/common/util/map-lang-code.ts:126
 msgid "Turkish"
-msgstr "Turkish"
+msgstr "튀르키예어"
 
 #: source/common/util/map-lang-code.ts:127
 msgid "Ukrainian"
-msgstr "Ukrainian"
+msgstr "우크라이나어"
 
 #: source/common/util/map-lang-code.ts:128
 msgid "Urdu"
-msgstr ""
+msgstr "우르두어"
 
 #: source/common/util/map-lang-code.ts:129
 msgid "Vietnamese"
-msgstr "Vietnamese"
+msgstr "베트남어"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
 #: source/common/util/map-lang-code.ts:132
-#, fuzzy
 msgid "Sorbian"
-msgstr "Serbian"
+msgstr "소르브어"
 
 #: source/common/util/map-lang-code.ts:133
 msgid "Chinese (China)"
-msgstr "Chinese (China)"
+msgstr "중국어(중국)"
 
 #: source/common/util/map-lang-code.ts:134
-#, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Chinese (China)"
+msgstr "중국어(대만)"
 
 #: source/common/util/map-lang-code.ts:135
-#, fuzzy
 msgid "Chinese"
-msgstr "Chinese (China)"
+msgstr "중국어"
 
 #: source/common/util/localise-number.ts:32
 msgid ","
@@ -929,54 +900,54 @@ msgstr "."
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
-msgstr ""
+msgstr "방금 전"
 
 #: source/pinia/workspace-store.ts:267
 msgid "Current folder"
-msgstr ""
+msgstr "현재 폴더"
 
 #: source/app/app-service-container.ts:174
 #, javascript-format
 msgid "Indexing %s…"
-msgstr ""
+msgstr "%s 색인 생성 중…"
 
 #: source/app/app-service-container.ts:364
 #, javascript-format
 msgid "Booting %s…"
-msgstr ""
+msgstr "%s 시작 중…"
 
 #: source/app/service-providers/updates/index.ts:285
 msgid "Cannot check for update"
-msgstr ""
+msgstr "업데이트를 확인할 수 없음"
 
 #: source/app/service-providers/updates/index.ts:286
 #, javascript-format
 msgid "There was an error while checking for updates. %s: %s"
-msgstr ""
+msgstr "업데이트를 확인하는 동안 오류가 발생했습니다. %s: %s"
 
 #: source/app/service-providers/updates/index.ts:345
 #: source/tmp/win-main/App.vue.ts:448 source/tmp/win-main/App.vue.ts:450
 msgid "Update available"
-msgstr ""
+msgstr "업데이트 사용 가능"
 
 #: source/app/service-providers/updates/index.ts:346
 #, javascript-format
 msgid "An update to version %s is available!"
-msgstr ""
+msgstr "버전 %s 업데이트를 사용할 수 있습니다!"
 
 #: source/app/service-providers/updates/index.ts:347
 msgid ""
 "Please update at your earliest convenience. You can open the updater now, or "
 "update later."
-msgstr ""
+msgstr "가능한 한 빨리 업데이트해 주세요. 지금 업데이터를 열거나 나중에 업데이트할 수 있습니다."
 
 #: source/app/service-providers/updates/index.ts:349
 msgid "Open updater"
-msgstr ""
+msgstr "업데이터 열기"
 
 #: source/app/service-providers/updates/index.ts:350
 msgid "Not now"
-msgstr ""
+msgstr "나중에"
 
 #: source/app/service-providers/updates/index.ts:387
 #, javascript-format
@@ -1009,13 +980,13 @@ msgstr "업데이트를 확인할 수 없습니다: 연결할 수 없습니다."
 #. hour or so. See #5944 for context.
 #: source/app/service-providers/updates/index.ts:406
 msgid "Could not check for updates: The connection attempt timed out."
-msgstr ""
+msgstr "업데이트를 확인할 수 없습니다: 연결 시도가 시간 초과되었습니다."
 
 #. Something else has occurred. GotError objects have a name property.
 #: source/app/service-providers/updates/index.ts:410
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
-msgstr ""
+msgstr "업데이트를 확인할 수 없습니다. %s: %s"
 
 #: source/app/service-providers/updates/index.ts:425
 msgid "Could not check for updates: Server hasn't sent any data"
@@ -1024,53 +995,53 @@ msgstr ""
 
 #: source/app/service-providers/updates/index.ts:501
 msgid "The SHA256 checksums file seems to be missing for this release."
-msgstr ""
+msgstr "이 릴리스의 SHA256 체크섬 파일이 없는 것 같습니다."
 
 #: source/app/service-providers/updates/index.ts:524
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
-msgstr ""
+msgstr "SHA256 체크섬을 가져올 수 없습니다: %s"
 
 #: source/app/service-providers/updates/index.ts:565
 msgid "Could not accept data for application update: Write stream is gone."
-msgstr ""
+msgstr "애플리케이션 업데이트 데이터를 받을 수 없습니다: 쓰기 스트림이 종료되었습니다."
 
 #: source/app/service-providers/updates/index.ts:620
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
-msgstr ""
+msgstr "다운로드한 업데이트의 무결성을 확인할 수 없습니다. 다시 시도하거나 수동으로 업데이트해 주세요."
 
 #: source/app/service-providers/updates/index.ts:632
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
-msgstr ""
+msgstr "다운로드한 파일의 체크섬이 서버에서 보고한 값과 다릅니다. 다시 시도하거나 수동으로 업데이트해 주세요."
 
 #: source/app/service-providers/updates/index.ts:651
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
-msgstr ""
+msgstr "업데이트를 시작할 수 없습니다. 다시 시도하거나 수동으로 업데이트해 주세요. 오류: %s"
 
 #: source/app/service-providers/config/index.ts:592
 msgid "Changing this option requires a restart to take effect."
-msgstr ""
+msgstr "이 옵션을 적용하려면 다시 시작해야 합니다."
 
 #: source/app/service-providers/config/index.ts:595
 #: source/app/service-providers/menu/menu.darwin.ts:705
 #: source/app/service-providers/menu/menu.win32.ts:681
 msgid "Restart now"
-msgstr ""
+msgstr "지금 다시 시작"
 
 #: source/app/service-providers/config/index.ts:596
 msgid "Restart later"
-msgstr ""
+msgstr "나중에 다시 시작"
 
 #: source/app/service-providers/config/index.ts:600
 #: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/commands/rename-tag.ts:44
 msgid "Confirm"
-msgstr ""
+msgstr "확인"
 
 #: source/app/service-providers/config/config-validation.ts:277
 #, javascript-format
@@ -1108,25 +1079,25 @@ msgstr "프로젝트 폴더 열기"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:30
 msgid "Close all"
-msgstr ""
+msgstr "모두 닫기"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:190
 msgid "Close all files"
-msgstr ""
+msgstr "모든 파일 닫기"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 msgid "Close all workspaces"
-msgstr ""
+msgstr "모든 작업공간 닫기"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:33
 msgid "Do you really want to close all files?"
-msgstr ""
+msgstr "모든 파일을 정말 닫으시겠습니까?"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:34
 msgid "Do you really want to close all workspaces?"
-msgstr ""
+msgstr "모든 작업공간을 정말 닫으시겠습니까?"
 
 #. 1: Omit all changes
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
@@ -1157,19 +1128,19 @@ msgstr "확인"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "파일 저장"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/app/service-providers/commands/file-rename.ts:162
 #: source/app/service-providers/commands/rename-tag.ts:47
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #. 0: Save all changes
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:35
 #: source/app/service-providers/commands/file-rename.ts:163
 msgid "No"
-msgstr ""
+msgstr "아니요"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:40
@@ -1180,25 +1151,22 @@ msgstr ""
 #: source/tmp/win-assets/FilterTab.vue.ts:62
 #: source/tmp/win-assets/CustomCSS.vue.ts:36
 msgid "Unsaved changes"
-msgstr ""
+msgstr "저장하지 않은 변경 사항"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:41
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"현재 파일에 저장하지 않은 변경 사항이 있습니다. 변경 사항을 생략하거나 아니"
-"면 저장할까요?"
+msgstr "저장하지 않은 변경 사항이 있습니다. 먼저 저장하시겠습니까?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
-msgstr ""
+msgstr "파일 바꾸기"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:32
 #, javascript-format
 msgid ""
 "File %s has been modified remotely. Replace the loaded version with the "
 "newer one from disk?"
-msgstr ""
+msgstr "파일 %s이(가) 외부에서 수정되었습니다. 불러온 버전을 디스크의 최신 버전으로 바꾸시겠습니까?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:33
 #: source/win-preferences/schema/general.ts:97
@@ -1236,70 +1204,64 @@ msgid "Changes to the library file detected. Reloading …"
 msgstr "라이브러리 파일이 변경되었습니다. 다시 읽는 중 ..."
 
 #: source/app/service-providers/documents/index.ts:394
-#, fuzzy
 msgid "Save changes"
-msgstr "저장하지 않은 변경 사항을 생략하시겠습니까?"
+msgstr "변경 사항 저장"
 
 #: source/app/service-providers/documents/index.ts:395
-#, fuzzy
 msgid "Discard changes"
-msgstr "저장하지 않은 변경 사항을 생략하시겠습니까?"
+msgstr "변경 사항 버리기"
 
 #: source/app/service-providers/documents/index.ts:401
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save or discard them?"
-msgstr ""
-"현재 파일에 저장하지 않은 변경 사항이 있습니다. 변경 사항을 생략하거나 아니"
-"면 저장할까요?"
+msgstr "저장하지 않은 변경 사항이 있습니다. 저장하거나 버리시겠습니까?"
 
 #: source/app/service-providers/documents/index.ts:948
 #, javascript-format
 msgid "File: %s"
-msgstr ""
+msgstr "파일: %s"
 
 #: source/app/service-providers/documents/index.ts:1111
-#, fuzzy
 msgid "File changed on disk"
-msgstr "파일 관리자 모드"
+msgstr "디스크에서 파일이 변경됨"
 
 #: source/app/service-providers/documents/index.ts:1112
 #, javascript-format
 msgid "%s changed on disk"
-msgstr ""
+msgstr "%s이(가) 디스크에서 변경됨"
 
 #: source/app/service-providers/documents/index.ts:1114
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
 "to keep the current editor contents or load the file from disk?"
-msgstr ""
+msgstr "%s이(가) 디스크에서 변경되었지만 편집기에는 저장하지 않은 변경 사항이 있습니다. 현재 편집기 내용을 유지하시겠습니까, 아니면 디스크의 파일을 불러오시겠습니까?"
 
 #: source/app/service-providers/documents/index.ts:1115
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
-msgstr ""
+msgstr "현재 편집기 내용을 유지하시겠습니까, 아니면 디스크의 파일을 불러오시겠습니까?"
 
 #: source/app/service-providers/documents/index.ts:1118
 msgid "Keep editor contents"
-msgstr ""
+msgstr "편집기 내용 유지"
 
 #: source/app/service-providers/documents/index.ts:1119
 msgid "Load changes from disk"
-msgstr ""
+msgstr "디스크의 변경 사항 불러오기"
 
 #: source/app/service-providers/documents/index.ts:1122
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
-msgstr ""
+msgstr "편집기에 저장하지 않은 변경 사항이 없으면 항상 디스크의 변경 사항 불러오기"
 
 #: source/app/service-providers/documents/index.ts:1592
 msgid "Could not save file"
-msgstr ""
+msgstr "파일을 저장할 수 없음"
 
 #: source/app/service-providers/documents/index.ts:1592
 #, javascript-format
 msgid "Could not save file %s: %s"
-msgstr ""
+msgstr "파일 %s을(를) 저장할 수 없습니다: %s"
 
 #: source/app/service-providers/menu/menu.darwin.ts:41
 #: source/app/service-providers/menu/menu.win32.ts:42
@@ -1324,13 +1286,13 @@ msgstr "환경 설정..."
 #: source/app/service-providers/menu/menu.win32.ts:246
 #: source/tmp/win-assets/App.vue.ts:17
 msgid "Assets Manager"
-msgstr ""
+msgstr "자산 관리자"
 
 #: source/app/service-providers/menu/menu.darwin.ts:78
 #: source/app/service-providers/menu/menu.win32.ts:254
 #: source/tmp/win-tag-manager/App.vue.ts:34
 msgid "Tags Manager"
-msgstr ""
+msgstr "태그 관리자"
 
 #: source/app/service-providers/menu/menu.darwin.ts:88
 msgid "Services"
@@ -1364,7 +1326,7 @@ msgstr "파일"
 #: source/tmp/win-main/App.vue.ts:333
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 msgid "New file…"
-msgstr ""
+msgstr "새 파일…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:166
 #: source/app/service-providers/menu/menu.win32.ts:142
@@ -1375,25 +1337,25 @@ msgstr "새로운 디렉토리..."
 #: source/app/service-providers/menu/menu.darwin.ts:176
 #: source/app/service-providers/menu/menu.win32.ts:152
 msgid "Open file…"
-msgstr ""
+msgstr "파일 열기…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:185
 #: source/app/service-providers/menu/menu.win32.ts:161
 #: source/tmp/win-main/App.vue.ts:307
 msgid "Open workspace…"
-msgstr ""
+msgstr "작업공간 열기…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:194
 #: source/app/service-providers/menu/menu.win32.ts:55
 #: source/app/service-providers/menu/menu.win32.ts:67
 msgid "Recent files"
-msgstr ""
+msgstr "최근 파일"
 
 #: source/app/service-providers/menu/menu.darwin.ts:198
 #: source/app/service-providers/menu/menu.win32.ts:59
 #: source/app/service-providers/menu/menu.win32.ts:71
 msgid "Clear"
-msgstr ""
+msgstr "지우기"
 
 #. primary: true // It's a primary button
 #: source/app/service-providers/menu/menu.darwin.ts:207
@@ -1412,13 +1374,13 @@ msgstr "저장"
 #: source/app/service-providers/menu/menu.win32.ts:185
 #: source/tmp/win-main/App.vue.ts:340
 msgid "Previous file"
-msgstr ""
+msgstr "이전 파일"
 
 #: source/app/service-providers/menu/menu.darwin.ts:229
 #: source/app/service-providers/menu/menu.win32.ts:196
 #: source/tmp/win-main/App.vue.ts:348
 msgid "Next file"
-msgstr ""
+msgstr "다음 파일"
 
 #: source/app/service-providers/menu/menu.darwin.ts:243
 #: source/app/service-providers/menu/menu.win32.ts:210
@@ -1472,17 +1434,17 @@ msgstr "다시 실행"
 #: source/app/service-providers/menu/menu.darwin.ts:381
 #: source/app/service-providers/menu/menu.win32.ts:385
 msgid "Find in current file"
-msgstr ""
+msgstr "현재 파일에서 찾기"
 
 #: source/app/service-providers/menu/menu.darwin.ts:389
 #: source/app/service-providers/menu/menu.win32.ts:393
 msgid "Search all files"
-msgstr ""
+msgstr "모든 파일 검색"
 
 #: source/app/service-providers/menu/menu.darwin.ts:397
 #: source/app/service-providers/menu/menu.win32.ts:401
 msgid "Filter files"
-msgstr ""
+msgstr "파일 필터링"
 
 #: source/app/service-providers/menu/menu.darwin.ts:408
 #: source/app/service-providers/menu/menu.win32.ts:412
@@ -1522,25 +1484,24 @@ msgstr "다크 모드"
 #: source/app/service-providers/menu/menu.darwin.ts:460
 #: source/app/service-providers/menu/menu.win32.ts:445
 msgid "Additional information"
-msgstr ""
+msgstr "추가 정보"
 
 #: source/app/service-providers/menu/menu.darwin.ts:470
 #: source/app/service-providers/menu/menu.win32.ts:455
 #: source/win-preferences/schema/editor.ts:225
-#, fuzzy
 msgid "Distraction-free mode"
 msgstr "집중 모드"
 
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/app/service-providers/menu/menu.win32.ts:463
 msgid "Typewriter mode"
-msgstr ""
+msgstr "타자기 모드"
 
 #: source/app/service-providers/menu/menu.darwin.ts:489
 #: source/app/service-providers/menu/menu.win32.ts:474
 #: source/tmp/win-main/App.vue.ts:294
 msgid "Toggle File Manager"
-msgstr ""
+msgstr "파일 관리자 전환"
 
 #: source/app/service-providers/menu/menu.darwin.ts:497
 #: source/app/service-providers/menu/menu.win32.ts:482
@@ -1586,7 +1547,7 @@ msgstr "개발자 도구 전환"
 #: source/app/service-providers/menu/menu.darwin.ts:565
 #: source/app/service-providers/menu/menu.win32.ts:548
 msgid "View logs"
-msgstr ""
+msgstr "로그 보기"
 
 #: source/app/service-providers/menu/menu.darwin.ts:576
 #: source/app/service-providers/menu/menu.win32.ts:559
@@ -1625,9 +1586,8 @@ msgstr "다음 탭"
 
 #: source/app/service-providers/menu/menu.darwin.ts:627
 #: source/app/service-providers/menu/menu.win32.ts:603
-#, fuzzy
 msgid "New window"
-msgstr "윈도우"
+msgstr "새 창"
 
 #: source/app/service-providers/menu/menu.darwin.ts:638
 #: source/app/service-providers/menu/menu.win32.ts:614
@@ -1638,37 +1598,37 @@ msgstr "도움말"
 #: source/app/service-providers/menu/menu.darwin.ts:654
 #: source/app/service-providers/menu/menu.win32.ts:630
 msgid "Support Zettlr ↗︎"
-msgstr ""
+msgstr "Zettlr 후원하기 ↗︎"
 
 #: source/app/service-providers/menu/menu.darwin.ts:664
 #: source/app/service-providers/menu/menu.win32.ts:640
 msgid "Visit website ↗︎"
-msgstr ""
+msgstr "웹사이트 방문 ↗︎"
 
 #: source/app/service-providers/menu/menu.darwin.ts:674
 #: source/app/service-providers/menu/menu.win32.ts:650
 msgid "Open user manual ↗︎"
-msgstr ""
+msgstr "사용자 설명서 열기 ↗︎"
 
 #: source/app/service-providers/menu/menu.darwin.ts:688
 #: source/app/service-providers/menu/menu.win32.ts:664
 msgid "Open tutorial"
-msgstr ""
+msgstr "튜토리얼 열기"
 
 #: source/app/service-providers/menu/menu.darwin.ts:696
 #: source/app/service-providers/menu/menu.win32.ts:672
 msgid "Clear FSAL cache…"
-msgstr ""
+msgstr "FSAL 캐시 지우기…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:700
 #: source/app/service-providers/menu/menu.win32.ts:676
 msgid "Clear FSAL Cache"
-msgstr ""
+msgstr "FSAL 캐시 지우기"
 
 #: source/app/service-providers/menu/menu.darwin.ts:701
 #: source/app/service-providers/menu/menu.win32.ts:677
 msgid "Clearing the FSAL cache requires a restart."
-msgstr ""
+msgstr "FSAL 캐시를 지우려면 다시 시작해야 합니다."
 
 #: source/app/service-providers/menu/menu.darwin.ts:702
 #: source/app/service-providers/menu/menu.win32.ts:678
@@ -1676,7 +1636,7 @@ msgid ""
 "After the restart, Zettlr will recreate the entire cache, which may take a "
 "few moments, depending on the amount of files you have loaded and the speed "
 "of your disk. The window(s) will show afterward."
-msgstr ""
+msgstr "다시 시작하면 Zettlr가 전체 캐시를 다시 생성합니다. 불러온 파일 수와 디스크 속도에 따라 잠시 걸릴 수 있으며, 완료 후 창이 다시 표시됩니다."
 
 #: source/app/service-providers/tray/index.ts:166
 msgid "Show Zettlr"
@@ -1696,7 +1656,7 @@ msgstr "%s 키를 가진 레퍼런스는 첨부파일이 없는 것으로 보입
 #, javascript-format
 msgid ""
 "Could not open attachment for key %s. Check the logs for more information."
-msgstr ""
+msgstr "키 %s의 첨부 파일을 열 수 없습니다. 자세한 내용은 로그를 확인하세요."
 
 #: source/app/service-providers/commands/open-attachment.ts:163
 #: source/app/service-providers/commands/open-attachment.ts:167
@@ -1744,50 +1704,50 @@ msgstr "%s 언어 파일을 가져올 수 없습니다!"
 
 #: source/app/service-providers/commands/root-open.ts:61
 msgid "Markdown Files"
-msgstr ""
+msgstr "Markdown 파일"
 
 #: source/app/service-providers/commands/root-open.ts:62
 msgid "Code Files"
-msgstr ""
+msgstr "코드 파일"
 
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:76
 msgid "Open workspace"
-msgstr ""
+msgstr "작업공간 열기"
 
 #: source/app/service-providers/commands/root-open.ts:85
 msgid "Cannot open workpace"
-msgstr ""
+msgstr "작업공간을 열 수 없음"
 
 #: source/app/service-providers/commands/root-open.ts:86
 #, javascript-format
 msgid "Cannot open workspace \"%s\"."
-msgstr ""
+msgstr "작업공간 \"%s\"을(를) 열 수 없습니다."
 
 #: source/app/service-providers/commands/language-tool.ts:320
 msgid "Document too long"
-msgstr ""
+msgstr "문서가 너무 김"
 
 #: source/app/service-providers/commands/language-tool.ts:325
 msgid "offline"
-msgstr ""
+msgstr "오프라인"
 
 #: source/app/service-providers/commands/importer/index.ts:86
 msgid ""
 "Zettlr can import this file, but it requires an import profile. Please "
 "create one first."
-msgstr ""
+msgstr "Zettlr에서 이 파일을 가져올 수 있지만 가져오기 프로필이 필요합니다. 먼저 프로필을 만들어 주세요."
 
 #: source/app/service-providers/commands/importer/index.ts:97
 #: source/app/service-providers/commands/importer/index.ts:98
 msgid "Select import profile"
-msgstr ""
+msgstr "가져오기 프로필 선택"
 
 #: source/app/service-providers/commands/importer/index.ts:99
 #, javascript-format
 msgid "There are multiple profiles that can import %s. Please choose one."
-msgstr ""
+msgstr "%s을(를) 가져올 수 있는 프로필이 여러 개 있습니다. 하나를 선택해 주세요."
 
 #: source/app/service-providers/commands/importer/import-textbundle.ts:68
 #: source/app/service-providers/commands/importer/import-textbundle.ts:75
@@ -1797,15 +1757,15 @@ msgstr "올바르지 않은 Textbundle: %s"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "Import directory"
-msgstr ""
+msgstr "디렉터리 가져오기"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "Select folder"
-msgstr ""
+msgstr "폴더 선택"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "Select import destination"
-msgstr ""
+msgstr "가져올 위치 선택"
 
 #: source/app/service-providers/commands/import.ts:37
 msgid "You have to select a directory to import to."
@@ -1831,23 +1791,22 @@ msgstr "%s 가져오기 성공."
 #: source/app/service-providers/commands/import.ts:79
 #, javascript-format
 msgid "The following %s files could not be imported: %s"
-msgstr ""
+msgstr "다음 %s개 파일을 가져올 수 없습니다: %s"
 
 #: source/app/service-providers/commands/import.ts:86
 #: source/app/service-providers/commands/import.ts:89
 #, javascript-format
 msgid "Could not import files due to an error: %s"
-msgstr ""
+msgstr "오류로 인해 파일을 가져올 수 없습니다: %s"
 
 #: source/app/service-providers/commands/import.ts:86
 #: source/app/service-providers/commands/import.ts:89
-#, fuzzy
 msgid "Import failed"
-msgstr "내보내기 실패"
+msgstr "가져오기 실패"
 
 #: source/app/service-providers/commands/import.ts:89
 msgid "Unknown error"
-msgstr ""
+msgstr "알 수 없는 오류"
 
 #: source/app/service-providers/commands/file-duplicate.ts:40
 #: source/app/service-providers/commands/file-duplicate.ts:57
@@ -1860,7 +1819,7 @@ msgstr "파일을 생성할 수 없습니다"
 #: source/app/service-providers/commands/file-duplicate.ts:69
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "%s의 복사본"
 
 #: source/app/service-providers/commands/export.ts:72
 #: source/app/service-providers/commands/export.ts:179
@@ -1868,13 +1827,13 @@ msgid "Export failed"
 msgstr "내보내기 실패"
 
 #: source/app/service-providers/commands/export.ts:73
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "An error occurred during export: %s"
-msgstr "내보내기 중 오류 발생: %s"
+msgstr "내보내는 중 오류가 발생했습니다: %s"
 
 #: source/app/service-providers/commands/export.ts:134
 msgid "Choose export destination"
-msgstr ""
+msgstr "내보낼 위치 선택"
 
 #: source/app/service-providers/commands/export.ts:165
 #, javascript-format
@@ -1888,13 +1847,13 @@ msgstr "내보내기 중 오류 발생: %s"
 
 #: source/app/service-providers/commands/export.ts:187
 msgid "Export error"
-msgstr ""
+msgstr "내보내기 오류"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
 #: source/tmp/win-main/file-manager/TreeItem.vue.ts:352
 msgid "Untitled"
-msgstr "Untitled"
+msgstr "제목 없음"
 
 #: source/app/service-providers/commands/dir-new.ts:38
 #: source/app/service-providers/commands/dir-new.ts:39
@@ -1912,91 +1871,88 @@ msgstr "요청한 디렉토리를 찾을 수 없습니다."
 
 #: source/app/service-providers/commands/file-new.ts:186
 msgid "An unknown error occurred."
-msgstr ""
+msgstr "알 수 없는 오류가 발생했습니다."
 
 #: source/app/service-providers/commands/dir-project-export.ts:84
-#, fuzzy
 msgid "Cannot export project"
-msgstr "프로젝트 내보내기"
+msgstr "프로젝트를 내보낼 수 없음"
 
 #: source/app/service-providers/commands/dir-project-export.ts:85
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
-msgstr ""
+msgstr "내보내도록 선택된 파일이 없습니다. 프로젝트 설정에서 포함할 파일을 선택해 주세요."
 
 #: source/app/service-providers/commands/dir-project-export.ts:90
 msgid "Project File Mismatch"
-msgstr ""
+msgstr "프로젝트 파일 불일치"
 
 #: source/app/service-providers/commands/dir-project-export.ts:91
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
-msgstr ""
+msgstr "프로젝트 설정에 지정된 파일을 하나 이상 찾을 수 없습니다. 파일이 이동되었거나 삭제되었을 수 있습니다. 내보낼 모든 파일이 포함되어 있는지 확인해 주세요."
 
 #: source/app/service-providers/commands/dir-project-export.ts:172
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
-msgstr ""
+msgstr "프로젝트 \"%s\"을(를) 성공적으로 내보냈습니다. 클릭하여 표시합니다."
 
 #: source/app/service-providers/commands/dir-project-export.ts:173
-#, fuzzy
 msgid "Project Export"
-msgstr "내보내기..."
+msgstr "프로젝트 내보내기"
 
 #: source/app/service-providers/commands/dir-rename.ts:73
 msgid "Could not rename file"
-msgstr ""
+msgstr "파일 이름을 바꿀 수 없음"
 
 #: source/app/service-providers/commands/dir-rename.ts:74
 msgid "There was an error renaming the file."
-msgstr ""
+msgstr "파일 이름을 바꾸는 중 오류가 발생했습니다."
 
 #: source/app/service-providers/commands/file-rename.ts:62
 msgid "Change file extension"
-msgstr ""
+msgstr "파일 확장자 변경"
 
 #: source/app/service-providers/commands/file-rename.ts:63
 #, javascript-format
 msgid "Do you want to change the file extension from %s to %s?"
-msgstr ""
+msgstr "파일 확장자를 %s에서 %s(으)로 변경하시겠습니까?"
 
 #: source/app/service-providers/commands/file-rename.ts:65
 #, javascript-format
 msgid "Use %s"
-msgstr ""
+msgstr "%s 사용"
 
 #: source/app/service-providers/commands/file-rename.ts:66
 #, javascript-format
 msgid "Keep %s"
-msgstr ""
+msgstr "%s 유지"
 
 #: source/app/service-providers/commands/file-rename.ts:160
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "파일 %s을(를) 가리키는 %s개의 내부 링크를 업데이트하시겠습니까?"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "%s개 파일에서 태그 \"%s\"을(를) \"%s\"(으)로 바꾸시겠습니까?"
 
 #: source/win-preferences/schema/advanced.ts:29
 msgid "Beta releases"
-msgstr ""
+msgstr "베타 릴리스"
 
 #: source/win-preferences/schema/advanced.ts:31
 msgid "Requires that check for updates is also active."
-msgstr ""
+msgstr "업데이트 확인도 활성화되어 있어야 합니다."
 
 #: source/win-preferences/schema/advanced.ts:36
 msgid "Notify me about beta releases"
 msgstr "베타 출시를 알림"
 
 #: source/win-preferences/schema/advanced.ts:45
-#, fuzzy
 msgid "Pattern for new file names"
 msgstr "새 파일 이름 패턴"
 
@@ -2004,21 +1960,21 @@ msgstr "새 파일 이름 패턴"
 msgid ""
 "Zettlr uses this pattern to generate new filenames. By default, it just uses "
 "a new Zettelkasten ID."
-msgstr ""
+msgstr "Zettlr는 이 패턴으로 새 파일 이름을 생성합니다. 기본적으로 새 제텔카스텐 ID만 사용합니다."
 
 #: source/win-preferences/schema/advanced.ts:53
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "사용 가능한 변수: %s"
 
 #: source/win-preferences/schema/advanced.ts:60
 msgid "Automatically create new files without asking for confirmation."
-msgstr ""
+msgstr "확인을 묻지 않고 새 파일을 자동으로 만듭니다."
 
 #: source/win-preferences/schema/advanced.ts:67
 #: source/tmp/win-preferences/App.vue.ts:147
 msgid "Appearance"
-msgstr ""
+msgstr "모양"
 
 #: source/win-preferences/schema/advanced.ts:73
 msgid "Use native window appearance"
@@ -2026,65 +1982,63 @@ msgstr "기본 창 모양 사용"
 
 #: source/win-preferences/schema/advanced.ts:74
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Linux에서만 사용할 수 있습니다. macOS와 Windows에서는 기본값입니다."
 
 #: source/win-preferences/schema/advanced.ts:80
-#, fuzzy
 msgid "Enable window vibrancy"
-msgstr "기본 창 모양 사용"
+msgstr "창 투명 효과 활성화"
 
 #: source/win-preferences/schema/advanced.ts:81
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "macOS에서만 사용할 수 있습니다. 창 배경을 불투명하게 만듭니다."
 
 #: source/win-preferences/schema/advanced.ts:88
 msgid "Show app in the notification area"
-msgstr ""
+msgstr "알림 영역에 앱 표시"
 
 #: source/win-preferences/schema/advanced.ts:89
 msgid "Leave app running in the notification area"
-msgstr ""
+msgstr "앱을 알림 영역에서 계속 실행"
 
 #: source/win-preferences/schema/advanced.ts:98
 msgid "Zoom behavior"
-msgstr ""
+msgstr "확대/축소 동작"
 
 #: source/win-preferences/schema/advanced.ts:101
 msgid "Resizes the whole GUI"
-msgstr ""
+msgstr "전체 GUI 크기 조절"
 
 #: source/win-preferences/schema/advanced.ts:102
-#, fuzzy
 msgid "Changes the editor font size"
-msgstr "편집기 폰트 크기"
+msgstr "편집기 글꼴 크기를 변경합니다."
 
 #: source/win-preferences/schema/advanced.ts:108
 msgid "File Treatment"
-msgstr ""
+msgstr "파일 처리"
 
 #: source/win-preferences/schema/advanced.ts:109
 msgid "Decide where various file types are displayed, and how to open them."
-msgstr ""
+msgstr "여러 파일 형식을 어디에 표시하고 어떻게 열지 결정합니다."
 
 #: source/win-preferences/schema/advanced.ts:120
 msgid "Display in file manager"
-msgstr ""
+msgstr "파일 관리자에 표시"
 
 #: source/win-preferences/schema/advanced.ts:121
 msgid "Display in sidebar"
-msgstr ""
+msgstr "사이드바에 표시"
 
 #: source/win-preferences/schema/advanced.ts:122
 msgid "Open with"
-msgstr ""
+msgstr "다음으로 열기"
 
 #: source/win-preferences/schema/advanced.ts:130
 msgid "Built-in Markdown and Code files"
-msgstr ""
+msgstr "내장 Markdown 및 코드 파일"
 
 #: source/win-preferences/schema/advanced.ts:153
 msgid "Images"
-msgstr ""
+msgstr "이미지"
 
 #: source/win-preferences/schema/advanced.ts:167
 #: source/win-preferences/schema/advanced.ts:191
@@ -2093,94 +2047,90 @@ msgstr ""
 #: source/win-preferences/schema/advanced.ts:256
 #: source/win-preferences/schema/advanced.ts:276
 msgid "System default"
-msgstr ""
+msgstr "시스템 기본값"
 
 #: source/win-preferences/schema/advanced.ts:177
 msgid "PDF documents"
-msgstr ""
+msgstr "PDF 문서"
 
 #: source/win-preferences/schema/advanced.ts:201
 msgid "MS Office Documents"
-msgstr ""
+msgstr "MS Office 문서"
 
 #: source/win-preferences/schema/advanced.ts:222
 msgid "Open Office Documents"
-msgstr ""
+msgstr "OpenOffice 문서"
 
 #: source/win-preferences/schema/advanced.ts:243
 msgid "Data files (tsv, csv, etc.)"
-msgstr ""
+msgstr "데이터 파일(tsv, csv 등)"
 
 #: source/win-preferences/schema/advanced.ts:263
 msgid "Dot Files and Folders"
-msgstr ""
+msgstr "점으로 시작하는 파일 및 폴더"
 
 #: source/win-preferences/schema/advanced.ts:286
 msgid ""
 "Add additional file extensions you wish to see in the file manager and "
 "sidebar below. Include the leading period, e.g., \".xml\"."
-msgstr ""
+msgstr "파일 관리자와 사이드바에 표시할 추가 파일 확장자를 아래에 입력하세요. 앞의 마침표를 포함해야 합니다(예: \".xml\")."
 
 #: source/win-preferences/schema/advanced.ts:287
 msgid "Enter an extension and press enter"
-msgstr ""
+msgstr "확장자를 입력하고 Enter 키를 누르세요"
 
 #: source/win-preferences/schema/advanced.ts:293
 msgid "Iframe rendering whitelist"
-msgstr ""
+msgstr "iframe 렌더링 허용 목록"
 
 #: source/win-preferences/schema/advanced.ts:294
 msgid ""
 "Iframes are potentially dangerous and can execute remote code. Each host "
 "listed here is automatically trusted. Iframes from these hosts will be "
 "automatically loaded."
-msgstr ""
+msgstr "iframe은 잠재적으로 위험하며 원격 코드를 실행할 수 있습니다. 여기에 나열된 각 호스트는 자동으로 신뢰되며, 해당 호스트의 iframe이 자동으로 불러와집니다."
 
 #: source/win-preferences/schema/advanced.ts:303
 msgid "Hostname"
-msgstr ""
+msgstr "호스트 이름"
 
 #: source/win-preferences/schema/advanced.ts:305
 #: source/win-preferences/schema/autocorrect.ts:53
 #: source/win-preferences/schema/spellchecking.ts:42
 #: source/win-preferences/schema/spellchecking.ts:233
-#, fuzzy
 msgid "Filter"
-msgstr "필터 태그..."
+msgstr "필터"
 
 #: source/win-preferences/schema/advanced.ts:310
-#, fuzzy
 msgid "Watchdog polling"
-msgstr "와치독 폴링 활성화"
+msgstr "Watchdog 폴링"
 
 #: source/win-preferences/schema/advanced.ts:311
 msgid ""
 "In rare instances, Zettlr may be unable to check for changes to your files. "
 "In that case, you can try activating watchdog polling. Do not use this "
 "option unless necessary: Polling is very slow and resource-heavy."
-msgstr ""
+msgstr "드물게 Zettlr가 파일 변경 사항을 확인하지 못할 수 있습니다. 이 경우 watchdog 폴링을 활성화해 보세요. 꼭 필요한 경우가 아니면 이 옵션을 사용하지 마세요. 폴링은 매우 느리고 리소스를 많이 사용합니다."
 
 #: source/win-preferences/schema/advanced.ts:317
 msgid "Activate watchdog polling"
-msgstr ""
+msgstr "watchdog 폴링 활성화"
 
 #: source/win-preferences/schema/advanced.ts:322
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "파일 쓰기가 완료된 것으로 간주하기 전에 대기할 시간 (밀리초)"
 
 #: source/win-preferences/schema/advanced.ts:329
-#, fuzzy
 msgid "Deleting items"
-msgstr "파일 삭제"
+msgstr "항목 삭제"
 
 #: source/win-preferences/schema/advanced.ts:335
 msgid "Delete items irreversibly if moving them to trash fails"
-msgstr ""
+msgstr "휴지통으로 이동하지 못하면 항목을 영구 삭제"
 
 #: source/win-preferences/schema/advanced.ts:341
-#, fuzzy
 msgid "Debug mode"
-msgstr "디버그 모드 활성화"
+msgstr "디버그 모드"
 
 #: source/win-preferences/schema/advanced.ts:347
 msgid "Enable debug mode"
@@ -2190,59 +2140,55 @@ msgstr "디버그 모드 활성화"
 #: source/tmp/win-preferences/App.vue.ts:182
 #: source/tmp/win-assets/App.vue.ts:44
 msgid "Snippets"
-msgstr ""
+msgstr "스니펫"
 
 #: source/win-preferences/schema/snippets.ts:30
 msgid "Open snippets editor"
-msgstr ""
+msgstr "스니펫 편집기 열기"
 
 #: source/win-preferences/schema/import-export.ts:24
 msgid "Import and export profiles"
-msgstr ""
+msgstr "가져오기 및 내보내기 프로필"
 
 #: source/win-preferences/schema/import-export.ts:30
 msgid "Open import profiles editor"
-msgstr ""
+msgstr "가져오기 프로필 편집기 열기"
 
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "내보내기 프로필 편집기 열기"
 
 #: source/win-preferences/schema/import-export.ts:59
-#, fuzzy
 msgid "Export settings"
-msgstr "%s 로 내보내는 중"
+msgstr "내보내기 설정"
 
 #. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
 #: source/win-preferences/schema/import-export.ts:65
-#, fuzzy
 msgid "Use Zettlr's internal Pandoc for exports"
-msgstr "내보내기에 내장 Pandoc 사용"
+msgstr "내보내기에 Zettlr 내장 Pandoc 사용"
 
 #: source/win-preferences/schema/import-export.ts:70
 msgid "Automatically open successfully exported files"
-msgstr ""
+msgstr "성공적으로 내보낸 파일 자동 열기"
 
 #: source/win-preferences/schema/import-export.ts:75
 msgid "Enforce highlight extension on export"
-msgstr ""
+msgstr "내보낼 때 highlight 확장 기능 강제 적용"
 
 #: source/win-preferences/schema/import-export.ts:76
 msgid ""
 "When enabled, Zettlr will automatically enable the \"mark\"-extension when "
 "exporting Markdown files."
-msgstr ""
+msgstr "활성화하면 Markdown 파일을 내보낼 때 Zettlr가 \"mark\" 확장 기능을 자동으로 활성화합니다."
 
 #: source/win-preferences/schema/import-export.ts:82
-#, fuzzy
 msgid "Remove tags from files when exporting"
-msgstr "파일에서 태그 제거"
+msgstr "내보낼 때 파일에서 태그 제거"
 
 #: source/win-preferences/schema/import-export.ts:88
 #: source/win-preferences/schema/zettelkasten.ts:46
-#, fuzzy
 msgid "Internal links"
-msgstr "내부 링크 연결 해제"
+msgstr "내부 링크"
 
 #: source/win-preferences/schema/import-export.ts:91
 msgid "Remove internal links completely"
@@ -2258,64 +2204,62 @@ msgstr "내부 링크를 수정하지 않음"
 
 #: source/win-preferences/schema/import-export.ts:99
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "내보낸 파일의 대상 폴더"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:103
 msgid "Temporary folder"
-msgstr ""
+msgstr "임시 폴더"
 
 #: source/win-preferences/schema/import-export.ts:104
-#, fuzzy
 msgid "Same as file location"
-msgstr "파일 정보 표시"
+msgstr "파일 위치와 동일"
 
 #: source/win-preferences/schema/import-export.ts:105
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "내보낼 때 폴더 묻기"
 
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Warning! Files in the temporary folder are regularly deleted. Choosing the "
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
-msgstr ""
+msgstr "경고! 임시 폴더의 파일은 정기적으로 삭제됩니다. 파일과 같은 위치를 선택하면 동일한 이름의 파일이 이미 있을 경우 덮어씁니다."
 
 #: source/win-preferences/schema/import-export.ts:116
 msgid "Custom export commands"
-msgstr ""
+msgstr "사용자 지정 내보내기 명령"
 
 #: source/win-preferences/schema/import-export.ts:117
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
 "its first argument the file or project folder to be exported."
-msgstr ""
+msgstr "내보내기에 사용할 사용자 지정 명령을 지정합니다. 각 명령은 내보낼 파일 또는 프로젝트 폴더를 첫 번째 인수로 받습니다."
 
 #: source/win-preferences/schema/import-export.ts:125
 msgid "Display name"
-msgstr ""
+msgstr "표시 이름"
 
 #: source/win-preferences/schema/import-export.ts:125
-#, fuzzy
 msgid "Command"
-msgstr "주석"
+msgstr "명령"
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule dark mode automatically"
-msgstr ""
+msgstr "다크 모드 자동 예약"
 
 #: source/win-preferences/schema/appearance.ts:41
 msgid "Do not automatically switch"
-msgstr ""
+msgstr "자동 전환 안 함"
 
 #: source/win-preferences/schema/appearance.ts:42
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:22
 msgid "Follow operating system"
-msgstr ""
+msgstr "운영체제 설정 따르기"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "Follow custom schedule"
-msgstr ""
+msgstr "사용자 지정 일정 따르기"
 
 #: source/win-preferences/schema/appearance.ts:52
 msgid "Start dark mode at"
@@ -2327,81 +2271,81 @@ msgstr "다크 모드 종료 시간"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Editor Theme"
-msgstr ""
+msgstr "편집기 테마"
 
 #: source/win-preferences/schema/appearance.ts:70
 msgid "Select a color and font theme for the editor."
-msgstr ""
+msgstr "편집기의 색상 및 글꼴 테마를 선택합니다."
 
 #: source/win-preferences/schema/appearance.ts:119
 msgid "Toolbar buttons"
-msgstr ""
+msgstr "도구 모음 버튼"
 
 #: source/win-preferences/schema/appearance.ts:120
 msgid ""
 "Select which buttons should be shown on the toolbar. Some buttons cannot be "
 "hidden."
-msgstr ""
+msgstr "도구 모음에 표시할 버튼을 선택합니다. 일부 버튼은 숨길 수 없습니다."
 
 #: source/win-preferences/schema/appearance.ts:128
 msgid "Left section"
-msgstr ""
+msgstr "왼쪽 영역"
 
 #: source/win-preferences/schema/appearance.ts:132
 msgid "Display \"Open settings\" button"
-msgstr ""
+msgstr "\"설정 열기\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:137
 msgid "Display \"New file\" button"
-msgstr ""
+msgstr "\"새 파일\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:142
 msgid "Display \"Previous file\" button"
-msgstr ""
+msgstr "\"이전 파일\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:147
 msgid "Display \"Next file\" button"
-msgstr ""
+msgstr "\"다음 파일\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:154
 msgid "Center section"
-msgstr ""
+msgstr "가운데 영역"
 
 #: source/win-preferences/schema/appearance.ts:158
 msgid "Display \"Insert comment\" button"
-msgstr ""
+msgstr "\"주석 삽입\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:163
 msgid "Display \"Insert link\" button"
-msgstr ""
+msgstr "\"링크 삽입\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:168
 msgid "Display \"Insert image\" button"
-msgstr ""
+msgstr "\"이미지 삽입\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:173
 msgid "Display \"Insert task list\" button"
-msgstr ""
+msgstr "\"작업 목록 삽입\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:178
 msgid "Display \"Insert table\" button"
-msgstr ""
+msgstr "\"표 삽입\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:183
 msgid "Display \"Insert footnote\" button"
-msgstr ""
+msgstr "\"각주 삽입\" 버튼 표시"
 
 #: source/win-preferences/schema/appearance.ts:190
 msgid "Right section"
-msgstr ""
+msgstr "오른쪽 영역"
 
 #: source/win-preferences/schema/appearance.ts:194
 msgid "Display word/character counter"
-msgstr ""
+msgstr "단어/문자 수 표시"
 
 #: source/win-preferences/schema/appearance.ts:199
 msgid "Display Pomodoro timer"
-msgstr ""
+msgstr "포모도로 타이머 표시"
 
 #: source/win-preferences/schema/appearance.ts:205
 #: source/tmp/win-assets/App.vue.ts:50
@@ -2409,26 +2353,24 @@ msgid "Custom CSS"
 msgstr "커스텀 CSS"
 
 #: source/win-preferences/schema/appearance.ts:210
-#, fuzzy
 msgid "Open CSS editor"
-msgstr "디렉토리 열기"
+msgstr "CSS 편집기 열기"
 
 #: source/win-preferences/schema/file-manager.ts:23
-#, fuzzy
 msgid "Display mode"
-msgstr "다크 모드"
+msgstr "표시 모드"
 
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
-msgstr ""
+msgstr "얇게"
 
 #: source/win-preferences/schema/file-manager.ts:33
 msgid "Expanded"
-msgstr ""
+msgstr "확장"
 
 #: source/win-preferences/schema/file-manager.ts:34
 msgid "Combined"
-msgstr ""
+msgstr "결합"
 
 #: source/win-preferences/schema/file-manager.ts:40
 msgid ""
@@ -2436,7 +2378,7 @@ msgid ""
 "directory to have its contents displayed in the file list. Switch between "
 "file list and directory tree by clicking on directories or the arrow button "
 "which appears at the top left corner of the file list."
-msgstr ""
+msgstr "얇게 모드에서는 디렉터리와 파일을 분리해 표시합니다. 디렉터리를 선택하면 해당 내용이 파일 목록에 표시됩니다. 디렉터리나 파일 목록 왼쪽 위에 나타나는 화살표 버튼을 클릭해 파일 목록과 디렉터리 트리 사이를 전환할 수 있습니다."
 
 #: source/win-preferences/schema/file-manager.ts:45
 msgid "Show file information"
@@ -2444,33 +2386,33 @@ msgstr "파일 정보 표시"
 
 #: source/win-preferences/schema/file-manager.ts:50
 msgid "Show folders above files"
-msgstr ""
+msgstr "파일 위에 폴더 표시"
 
 #: source/win-preferences/schema/file-manager.ts:56
 msgid "Markdown document name display"
-msgstr ""
+msgstr "Markdown 문서 이름 표시"
 
 #: source/win-preferences/schema/file-manager.ts:57
 msgid ""
 "Determines how Zettlr will display files in various places such as the file "
 "manager."
-msgstr ""
+msgstr "Zettlr가 파일 관리자 등 여러 위치에서 파일 이름을 표시하는 방식을 결정합니다."
 
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Filename only"
-msgstr ""
+msgstr "파일 이름만"
 
 #: source/win-preferences/schema/file-manager.ts:66
 msgid "Title if applicable"
-msgstr ""
+msgstr "가능한 경우 제목"
 
 #: source/win-preferences/schema/file-manager.ts:67
 msgid "First heading level 1 if applicable"
-msgstr ""
+msgstr "가능한 경우 첫 번째 1단계 제목"
 
 #: source/win-preferences/schema/file-manager.ts:68
 msgid "Title or first heading level 1 if applicable"
-msgstr ""
+msgstr "가능한 경우 제목 또는 첫 번째 1단계 제목"
 
 #: source/win-preferences/schema/file-manager.ts:74
 msgid "Display Markdown file extensions"
@@ -2478,17 +2420,17 @@ msgstr "마크다운 파일의 확장자를 표시"
 
 #: source/win-preferences/schema/file-manager.ts:75
 msgid "Only available if name display is set to \"Filename only\""
-msgstr ""
+msgstr "이름 표시가 \"파일 이름만\"으로 설정된 경우에만 사용할 수 있습니다."
 
 #: source/win-preferences/schema/file-manager.ts:82
 msgid "Time display and sorting"
-msgstr ""
+msgstr "시간 표시 및 정렬"
 
 #: source/win-preferences/schema/file-manager.ts:83
 msgid ""
 "Determine which timestamp Zettlr shows for files. This also affects sorting "
 "by time."
-msgstr ""
+msgstr "Zettlr가 파일에 표시할 타임스탬프를 결정합니다. 시간 기준 정렬에도 영향을 줍니다."
 
 #: source/win-preferences/schema/file-manager.ts:91
 msgid "Last modification time"
@@ -2500,73 +2442,70 @@ msgstr "파일이 만들어진 시간"
 
 #: source/win-preferences/schema/file-manager.ts:98
 msgid "Filename sorting"
-msgstr ""
+msgstr "파일 이름 정렬"
 
 #: source/win-preferences/schema/file-manager.ts:99
 msgid "Determines how Zettlr sorts files and folders when sorting by name."
-msgstr ""
+msgstr "이름순으로 정렬할 때 Zettlr가 파일과 폴더를 정렬하는 방식을 결정합니다."
 
 #: source/win-preferences/schema/file-manager.ts:105
-#, fuzzy
 msgid "When sorting documents…"
-msgstr "최근 문서"
+msgstr "문서를 정렬할 때…"
 
 #: source/win-preferences/schema/file-manager.ts:108
-#, fuzzy
 msgid "Use natural order (2 comes before 10)"
-msgstr "일반적인 순서 (2 다음에 10)"
+msgstr "자연 정렬 사용(2가 10보다 먼저 옴)"
 
 #: source/win-preferences/schema/file-manager.ts:109
-#, fuzzy
 msgid "Use ASCII order (2 comes after 10)"
-msgstr "ASCII 순서(2가 10 다음에 옴)"
+msgstr "ASCII 정렬 사용(2가 10보다 나중에 옴)"
 
 #: source/win-preferences/schema/file-manager.ts:115
 msgid "Workspace sorting"
-msgstr ""
+msgstr "작업공간 정렬"
 
 #: source/win-preferences/schema/file-manager.ts:116
 msgid "Zettlr automatically sorts your workspaces by name."
-msgstr ""
+msgstr "Zettlr는 작업공간을 이름순으로 자동 정렬합니다."
 
 #: source/win-preferences/schema/file-manager.ts:122
 msgid "Sort workspaces manually"
-msgstr ""
+msgstr "작업공간 수동 정렬"
 
 #: source/win-preferences/schema/file-manager.ts:123
 msgid ""
 "This will be active as soon as you manually change the sort order. Disable "
 "this to reinstate automatic sorting."
-msgstr ""
+msgstr "정렬 순서를 직접 바꾸는 즉시 활성화됩니다. 자동 정렬로 돌아가려면 이 옵션을 비활성화하세요."
 
 #: source/win-preferences/schema/file-manager.ts:129
 msgid "Collapse Workspaces Behavior"
-msgstr ""
+msgstr "작업공간 접기 동작"
 
 #: source/win-preferences/schema/file-manager.ts:131
 msgid ""
 "Determine how the context menu item to collapse workspaces in the file "
 "manager behaves. You can choose single-step or two-step."
-msgstr ""
+msgstr "파일 관리자의 작업공간 접기 컨텍스트 메뉴 항목이 작동하는 방식을 결정합니다. 한 단계 또는 두 단계 방식을 선택할 수 있습니다."
 
 #: source/win-preferences/schema/file-manager.ts:136
 msgid "Require two steps to collapse workspaces"
-msgstr ""
+msgstr "작업공간을 접을 때 두 단계 사용"
 
 #: source/win-preferences/schema/file-manager.ts:137
 msgid ""
 "When this is active, the first collapse workspace will only collapse "
 "subfolders, the second the workspaces."
-msgstr ""
+msgstr "활성화하면 첫 번째 작업공간 접기는 하위 폴더만 접고, 두 번째 작업은 작업공간을 접습니다."
 
 #: source/win-preferences/schema/general.ts:21
 #: source/win-preferences/schema/general.ts:35
 msgid "Updates"
-msgstr ""
+msgstr "업데이트"
 
 #: source/win-preferences/schema/general.ts:22
 msgid "If you installed Zettlr via a package manager, you should disable this."
-msgstr ""
+msgstr "패키지 관리자를 통해 설치했다면 이 옵션을 비활성화해야 합니다."
 
 #: source/win-preferences/schema/general.ts:28
 msgid "Automatically check for updates"
@@ -2578,11 +2517,11 @@ msgid ""
 "a choice made by the packager and is common when Zettlr is being distributed "
 "via package managers. In these cases, Zettlr will be updated through your "
 "package manager."
-msgstr ""
+msgstr "이 Zettlr 바이너리의 업데이트 기능은 빌드 시 비활성화되었습니다. 패키지 관리자가 배포판을 만들 때 흔히 선택하는 방식이며, 이런 경우 Zettlr는 사용 중인 패키지 관리자를 통해 업데이트됩니다."
 
 #: source/win-preferences/schema/general.ts:43
 msgid "Application language"
-msgstr ""
+msgstr "애플리케이션 언어"
 
 #: source/win-preferences/schema/general.ts:54
 msgid "Autosave"
@@ -2590,12 +2529,11 @@ msgstr "자동 저장"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Should Zettlr automatically save changes to your documents?"
-msgstr ""
+msgstr "Zettlr가 문서 변경 사항을 자동으로 저장할까요?"
 
 #: source/win-preferences/schema/general.ts:65
-#, fuzzy
 msgid "Never"
-msgstr "안함"
+msgstr "사용 안 함"
 
 #: source/win-preferences/schema/general.ts:66
 msgid "Immediately"
@@ -2607,23 +2545,23 @@ msgstr "잠시 쉴 때"
 
 #: source/win-preferences/schema/general.ts:73
 msgid "Default image folder"
-msgstr ""
+msgstr "기본 이미지 폴더"
 
 #: source/win-preferences/schema/general.ts:74
 msgid ""
 "Automatically suggests this folder to save images to, and searches this "
 "folder to propose \"other files\"."
-msgstr ""
+msgstr "이미지를 저장할 폴더로 자동 제안하고, \"기타 파일\"을 제안할 때 이 폴더를 검색합니다."
 
 #: source/win-preferences/schema/general.ts:86
 msgid ""
 "Click \"Select folder…\" or type an absolute or relative path directly into "
 "the input field."
-msgstr ""
+msgstr "\"폴더 선택…\"을 클릭하거나 입력란에 절대 경로 또는 상대 경로를 직접 입력하세요."
 
 #: source/win-preferences/schema/general.ts:91
 msgid "Behavior"
-msgstr ""
+msgstr "동작"
 
 #: source/win-preferences/schema/general.ts:102
 msgid "Avoid opening files in new tabs if possible"
@@ -2632,9 +2570,8 @@ msgstr "가능하면 파일을 새로운 탭으로 열지 않기"
 #: source/win-preferences/schema/citations.ts:22
 #: source/tmp/win-preferences/App.vue.ts:172
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:7
-#, fuzzy
 msgid "Citations"
-msgstr "인용(Citation) 보이기"
+msgstr "인용"
 
 #: source/win-preferences/schema/citations.ts:28
 msgid "How would you like autocomplete to insert your citations?"
@@ -2642,68 +2579,65 @@ msgstr "인용이 자동 완성되는 방식을 선택할 수 있습니다."
 
 #: source/win-preferences/schema/citations.ts:39
 msgid "Citation database (CSL JSON or BibTex)"
-msgstr ""
+msgstr "인용 데이터베이스(CSL JSON 또는 BibTeX)"
 
 #: source/win-preferences/schema/citations.ts:41
 #: source/win-preferences/schema/citations.ts:53
-#, fuzzy
 msgid "Path to file"
-msgstr "파일 보기"
+msgstr "파일 경로"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL style (optional)"
-msgstr ""
+msgstr "CSL 스타일(선택 사항)"
 
 #: source/win-preferences/schema/autocorrect.ts:22
 #: source/tmp/win-preferences/App.vue.ts:167
-#, fuzzy
 msgid "Autocorrect"
-msgstr "자동 수정 켜기"
+msgstr "자동 고침"
 
 #: source/win-preferences/schema/autocorrect.ts:23
 msgid ""
 "Autocorrect can automatically replace certain sequences of characters with "
 "others, and use typographical quotes."
-msgstr ""
+msgstr "자동 고침은 특정 문자 조합을 다른 문자로 자동 대체하고, 인쇄용 따옴표를 사용할 수 있습니다."
 
 #: source/win-preferences/schema/autocorrect.ts:33
 msgid "Autocorrect: Replacement Table"
-msgstr ""
+msgstr "자동 고침: 대체 표"
 
 #: source/win-preferences/schema/autocorrect.ts:34
 msgid "Configure which sequences of characters get replaced by which symbols."
-msgstr ""
+msgstr "어떤 문자 조합을 어떤 기호로 바꿀지 설정합니다."
 
 #: source/win-preferences/schema/autocorrect.ts:39
 msgid "Match whole words"
-msgstr ""
+msgstr "전체 단어 일치"
 
 #: source/win-preferences/schema/autocorrect.ts:40
 msgid "When checked, AutoCorrect will never replace parts of words"
-msgstr ""
+msgstr "선택하면 자동 고침이 단어 일부를 대체하지 않습니다."
 
 #: source/win-preferences/schema/autocorrect.ts:48
-#, fuzzy
 msgid "Replace"
-msgstr "파일 바꾸기"
+msgstr "바꾸기"
 
 #: source/win-preferences/schema/autocorrect.ts:48
 msgid "With"
-msgstr ""
+msgstr "바꿀 내용"
 
 #: source/win-preferences/schema/autocorrect.ts:59
 msgid "Magic Quotes"
-msgstr ""
+msgstr "스마트 따옴표"
 
 #: source/win-preferences/schema/autocorrect.ts:60
 msgid ""
 "This setting allows you to pick which typographical quotes Zettlr will "
 "insert when you insert a quotation mark. Requires Autocorrect to be enabled."
-msgstr ""
+msgstr "따옴표를 입력할 때 Zettlr가 삽입할 인쇄용 따옴표를 선택합니다. 자동 고침을 활성화해야 합니다."
 
 #: source/win-preferences/schema/autocorrect.ts:73
 msgid "Double/Primary Quotes"
-msgstr ""
+msgstr "큰따옴표/기본 따옴표"
 
 #: source/win-preferences/schema/autocorrect.ts:76
 #: source/win-preferences/schema/autocorrect.ts:98
@@ -2712,81 +2646,79 @@ msgstr "없음"
 
 #: source/win-preferences/schema/autocorrect.ts:95
 msgid "Single/Secondary Quotes"
-msgstr ""
+msgstr "작은따옴표/보조 따옴표"
 
 #: source/win-preferences/schema/editor.ts:23
-#, fuzzy
 msgid "Input mode"
-msgstr "편집기 입력 모드"
+msgstr "입력 모드"
 
 #: source/win-preferences/schema/editor.ts:24
 msgid ""
 "The input mode determines how you interact with the editor. We recommend "
 "keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
 "know what this implies."
-msgstr ""
+msgstr "입력 모드는 편집기와 상호작용하는 방식을 결정합니다. \"일반\" 설정을 유지하는 것을 권장합니다. 의미를 정확히 아는 경우에만 \"Vim\" 또는 \"Emacs\"를 선택하세요."
 
 #: source/win-preferences/schema/editor.ts:39
-#, fuzzy
 msgid "Writing direction"
-msgstr "디렉토리 안에서 찾기..."
+msgstr "쓰기 방향"
 
 #: source/win-preferences/schema/editor.ts:40
 msgid ""
 "We are currently planning on re-introducing bidirectional writing support, "
 "which will then be configurable here."
-msgstr ""
+msgstr "양방향 쓰기 지원을 다시 도입할 계획이며, 이후 이곳에서 설정할 수 있습니다."
 
 #: source/win-preferences/schema/editor.ts:48
 msgid "Markdown rendering"
-msgstr ""
+msgstr "Markdown 렌더링"
 
 #: source/win-preferences/schema/editor.ts:49
 msgid ""
 "Check to enable live rendering of various Markdown elements to formatted "
 "appearance. This hides formatting characters (such as **text**) or renders "
 "images instead of their link."
-msgstr ""
+msgstr "여러 Markdown 요소를 서식이 적용된 모습으로 실시간 렌더링하려면 선택하세요. 서식 문자(예: **텍스트**)를 숨기거나 링크 대신 이미지를 표시합니다."
 
 #: source/win-preferences/schema/editor.ts:56
 msgid "Choose between preview mode (\"WYSIWYG) or raw mode (\"WYSIWYM\")."
-msgstr ""
+msgstr "미리보기 모드(\"WYSIWYG\")와 원문 모드(\"WYSIWYM\") 중에서 선택하세요."
 
 #: source/win-preferences/schema/editor.ts:60
 msgid "Preview mode"
-msgstr ""
+msgstr "미리보기 모드"
 
 #: source/win-preferences/schema/editor.ts:61
 msgid "Raw mode"
-msgstr ""
+msgstr "원문 모드"
 
 #: source/win-preferences/schema/editor.ts:68
 msgid "Enable the following renderers in preview mode:"
-msgstr ""
+msgstr "미리보기 모드에서 다음 렌더러 활성화:"
 
 #: source/win-preferences/schema/editor.ts:76
 msgid "Render citations"
-msgstr ""
+msgstr "인용 렌더링"
 
 #: source/win-preferences/schema/editor.ts:82
 msgid "Render iframes"
-msgstr ""
+msgstr "iframe 렌더링"
 
 #: source/win-preferences/schema/editor.ts:88
 msgid "Render images"
-msgstr ""
+msgstr "이미지 렌더링"
 
 #: source/win-preferences/schema/editor.ts:94
 msgid "Render links"
-msgstr ""
+msgstr "링크 렌더링"
 
 #: source/win-preferences/schema/editor.ts:100
 msgid "Render formulae"
-msgstr ""
+msgstr "수식 렌더링"
 
 #: source/win-preferences/schema/editor.ts:106
 msgid "Render tasks"
-msgstr ""
+msgstr "작업 렌더링"
 
 #: source/win-preferences/schema/editor.ts:112
 msgid "Hide heading characters"
@@ -2794,79 +2726,77 @@ msgstr "헤딩(heading) 문자 숨기기"
 
 #: source/win-preferences/schema/editor.ts:118
 msgid "Render emphasis"
-msgstr ""
+msgstr "강조 렌더링"
 
 #: source/win-preferences/schema/editor.ts:124
 msgid "Render pandoc divs and spans"
-msgstr ""
+msgstr "Pandoc div 및 span 렌더링"
 
 #: source/win-preferences/schema/editor.ts:130
 msgid "Render horizontal rules"
-msgstr ""
+msgstr "수평선 렌더링"
 
 #: source/win-preferences/schema/editor.ts:139
 msgid "Show Markdown syntax when the cursor is adjacent or inside an element"
-msgstr ""
+msgstr "커서가 요소 옆이나 내부에 있을 때 Markdown 문법 표시"
 
 #: source/win-preferences/schema/editor.ts:140
 msgid ""
 "If disabled, the editor will not show the Markdown syntax if the cursor is "
 "adjacent to the element."
-msgstr ""
+msgstr "비활성화하면 커서가 요소 옆에 있어도 편집기에 Markdown 문법이 표시되지 않습니다."
 
 #: source/win-preferences/schema/editor.ts:146
 msgid "Default Formatting Characters"
-msgstr ""
+msgstr "기본 서식 문자"
 
 #: source/win-preferences/schema/editor.ts:147
 msgid ""
 "Select the characters Zettlr should use when marking text as bold or italic."
-msgstr ""
+msgstr "Zettlr가 텍스트를 굵게 또는 기울임꼴로 표시할 때 사용할 문자를 선택합니다."
 
 #: source/win-preferences/schema/editor.ts:183
 msgid "Markdown Style"
-msgstr ""
+msgstr "Markdown 스타일"
 
 #: source/win-preferences/schema/editor.ts:184
 msgid "Check your Markdown documents for style issues"
-msgstr ""
+msgstr "Markdown 문서의 스타일 문제 확인"
 
 #: source/win-preferences/schema/editor.ts:189
 msgid "Enable Markdown Linter"
-msgstr ""
+msgstr "Markdown 린터 활성화"
 
 #: source/win-preferences/schema/editor.ts:195
-#, fuzzy
 msgid "Table Editor"
-msgstr "테이블 편집기 사용"
+msgstr "표 편집기"
 
 #: source/win-preferences/schema/editor.ts:207
 msgid ""
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
 "care of Markdown formatting."
-msgstr ""
+msgstr "표 편집기는 표를 쉽게 만들고 편집할 수 있는 대화형 인터페이스입니다. 자주 쓰는 기능 버튼을 제공하고 Markdown 서식을 자동으로 처리합니다."
 
 #: source/win-preferences/schema/editor.ts:212
-#, fuzzy
 msgid "Status bar"
-msgstr "Zettlr 보기"
+msgstr "상태 표시줄"
 
 #: source/win-preferences/schema/editor.ts:213
 msgid ""
 "The status bar is a section for various quick controls and shows information "
 "about the current document. It is shown for both Markdown and code editors."
-msgstr ""
+msgstr "상태 표시줄은 여러 빠른 제어 기능과 현재 문서 정보를 표시하는 영역입니다. Markdown 편집기와 코드 편집기 모두에 표시됩니다."
 
 #: source/win-preferences/schema/editor.ts:219
 msgid "Show status bar"
-msgstr ""
+msgstr "상태 표시줄 표시"
 
 #: source/win-preferences/schema/editor.ts:226
 msgid ""
 "Customize the appearance of the editor when the distraction-free mode is "
 "active."
-msgstr ""
+msgstr "집중 모드가 활성화되었을 때 편집기 모양을 사용자 지정합니다."
 
 #: source/win-preferences/schema/editor.ts:232
 msgid "Mute non-focused lines in distraction-free mode"
@@ -2874,94 +2804,91 @@ msgstr "집중 모드에서 포커스를 가지지 않은 라인 감추기"
 
 #: source/win-preferences/schema/editor.ts:237
 msgid "Hide toolbar in distraction-free mode"
-msgstr ""
+msgstr "집중 모드에서 도구 모음 숨기기"
 
 #: source/win-preferences/schema/editor.ts:243
 msgid "Word counter"
-msgstr ""
+msgstr "단어 수 표시"
 
 #: source/win-preferences/schema/editor.ts:249
 msgid "Show character count instead of word count"
-msgstr ""
+msgstr "단어 수 대신 문자 수 표시"
 
 #: source/win-preferences/schema/editor.ts:255
 msgid "Readability mode"
-msgstr ""
+msgstr "가독성 모드"
 
 #: source/win-preferences/schema/editor.ts:256
 msgid "Choose the algorithm to calculate readability scores."
-msgstr ""
+msgstr "가독성 점수를 계산할 알고리즘을 선택합니다."
 
 #: source/win-preferences/schema/editor.ts:263
 msgid "Readability Algorithm:"
-msgstr ""
+msgstr "가독성 알고리즘:"
 
 #: source/win-preferences/schema/editor.ts:275
 #: source/tmp/win-paste-image/App.vue.ts:58
-#, fuzzy
 msgid "Image size"
-msgstr "그림"
+msgstr "이미지 크기"
 
 #: source/win-preferences/schema/editor.ts:276
 msgid ""
 "Restrict images to a percentage of the available editor width and height."
-msgstr ""
+msgstr "이미지를 사용 가능한 편집기 너비와 높이의 일정 비율로 제한합니다."
 
 #: source/win-preferences/schema/editor.ts:282
 msgid "Restrict width to %s %"
-msgstr ""
+msgstr "너비를 %s%로 제한"
 
 #: source/win-preferences/schema/editor.ts:289
 msgid "Restrict height to %s %"
-msgstr ""
+msgstr "높이를 %s%로 제한"
 
 #: source/win-preferences/schema/editor.ts:297
 msgid "Other settings"
-msgstr ""
+msgstr "기타 설정"
 
 #: source/win-preferences/schema/editor.ts:304
 msgid "Editor font size"
-msgstr ""
+msgstr "편집기 글꼴 크기"
 
 #: source/win-preferences/schema/editor.ts:311
 msgid "Tab size (in number of spaces)"
-msgstr ""
+msgstr "탭 크기(공백 수)"
 
 #: source/win-preferences/schema/editor.ts:319
-#, fuzzy
 msgid "Indent using tabs instead of spaces"
-msgstr "다음 공백만큼 들여쓰기"
+msgstr "공백 대신 탭으로 들여쓰기"
 
 #: source/win-preferences/schema/editor.ts:324
 msgid "Always indent the current line when pressing Tab"
-msgstr ""
+msgstr "Tab 키를 누를 때 항상 현재 줄 들여쓰기"
 
 #: source/win-preferences/schema/editor.ts:325
 msgid ""
 "Zettlr always indents the line for list items. Turn this setting on to "
 "always indent any line."
-msgstr ""
+msgstr "Zettlr는 목록 항목의 줄을 항상 들여씁니다. 어떤 줄이든 항상 들여쓰려면 이 설정을 켜세요."
 
 #: source/win-preferences/schema/editor.ts:331
 msgid "Show formatting toolbar when text is selected"
-msgstr ""
+msgstr "텍스트를 선택할 때 서식 도구 모음 표시"
 
 #: source/win-preferences/schema/editor.ts:336
 msgid "Show line numbers for Markdown files"
-msgstr ""
+msgstr "Markdown 파일에 줄 번호 표시"
 
 #: source/win-preferences/schema/editor.ts:341
 msgid "Highlight whitespace"
-msgstr ""
+msgstr "공백 강조 표시"
 
 #: source/win-preferences/schema/editor.ts:347
-#, fuzzy
 msgid "Suggest emojis during autocompletion"
-msgstr "자동완성 중에 공백 허용"
+msgstr "자동 완성 중 이모지 제안"
 
 #: source/win-preferences/schema/editor.ts:352
 msgid "Show link previews"
-msgstr ""
+msgstr "링크 미리보기 표시"
 
 #: source/win-preferences/schema/editor.ts:358
 msgid "Automatically close matching character pairs"
@@ -2970,21 +2897,21 @@ msgstr "일치하는 문자 쌍 자동으로 닫기"
 #: source/win-preferences/schema/spellchecking.ts:26
 #: source/tmp/win-preferences/App.vue.ts:162
 msgid "Spellchecking"
-msgstr ""
+msgstr "맞춤법 검사"
 
 #: source/win-preferences/schema/spellchecking.ts:27
 msgid ""
 "The spellchecker checks your words for misspellings. It uses Hunspell-"
 "compatible dictionaries."
-msgstr ""
+msgstr "맞춤법 검사기는 단어의 철자 오류를 확인합니다. Hunspell 호환 사전을 사용합니다."
 
 #: source/win-preferences/schema/spellchecking.ts:36
 msgid "Active"
-msgstr ""
+msgstr "활성"
 
 #: source/win-preferences/schema/spellchecking.ts:36
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 #: source/win-preferences/schema/spellchecking.ts:37
 msgid ""
@@ -2993,252 +2920,246 @@ msgstr "자동 맞춤법 ​​검사를 활성화할 언어를 선택하십시�
 
 #: source/win-preferences/schema/spellchecking.ts:48
 msgid "Install Dictionaries"
-msgstr ""
+msgstr "사전 설치"
 
 #: source/win-preferences/schema/spellchecking.ts:49
 msgid ""
 "You can install new Hunspell-compatible dictionaries by placing them in the "
 "dictionary folder. Click the button below to open the dictionary folder. For "
 "more information, please see the manual."
-msgstr ""
+msgstr "새 Hunspell 호환 사전을 사전 폴더에 넣어 설치할 수 있습니다. 아래 버튼을 클릭해 사전 폴더를 여세요. 자세한 내용은 설명서를 참조하세요."
 
 #: source/win-preferences/schema/spellchecking.ts:54
 msgid "Open dictionary folder"
-msgstr ""
+msgstr "사전 폴더 열기"
 
 #: source/win-preferences/schema/spellchecking.ts:64
 msgid "User Dictionary"
-msgstr ""
+msgstr "사용자 사전"
 
 #: source/win-preferences/schema/spellchecking.ts:65
 msgid "Manage your user dictionary here."
-msgstr ""
+msgstr "여기에서 사용자 사전을 관리합니다."
 
 #: source/win-preferences/schema/spellchecking.ts:72
 msgid "Dictionary entry"
-msgstr ""
+msgstr "사전 항목"
 
 #: source/win-preferences/schema/spellchecking.ts:75
 msgid "Search for entries …"
-msgstr ""
+msgstr "항목 검색…"
 
 #: source/win-preferences/schema/spellchecking.ts:81
 msgid "LanguageTool"
-msgstr ""
+msgstr "LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:82
 msgid ""
 "LanguageTool can check your texts for typos, grammatical, and stylistic "
 "issues. By default, LanguageTool sends your texts to the official servers. "
 "You can also self-host the software."
-msgstr ""
+msgstr "LanguageTool은 텍스트의 오타, 문법 및 문체 문제를 검사할 수 있습니다. 기본적으로 텍스트를 공식 서버로 전송하며, 직접 서버를 운영할 수도 있습니다."
 
 #: source/win-preferences/schema/spellchecking.ts:93
 msgid "Strictness"
-msgstr ""
+msgstr "엄격도"
 
 #: source/win-preferences/schema/spellchecking.ts:96
 msgid "Standard"
-msgstr ""
+msgstr "표준"
 
 #: source/win-preferences/schema/spellchecking.ts:97
 msgid "Picky"
-msgstr ""
+msgstr "엄격"
 
 #: source/win-preferences/schema/spellchecking.ts:106
 msgid "Select your native language"
-msgstr ""
+msgstr "모국어 선택"
 
 #: source/win-preferences/schema/spellchecking.ts:112
 msgid "Not set"
-msgstr ""
+msgstr "설정되지 않음"
 
 #: source/win-preferences/schema/spellchecking.ts:121
 msgid "Preferred Language Variants"
-msgstr ""
+msgstr "선호 언어 변형"
 
 #: source/win-preferences/schema/spellchecking.ts:126
 msgid ""
 "LanguageTool cannot distinguish certain language's variants. These settings "
 "will nudge LanguageTool to auto-detect your preferred variant of these "
 "languages."
-msgstr ""
+msgstr "LanguageTool은 일부 언어의 변형을 구분하지 못합니다. 이 설정을 사용하면 선호하는 언어 변형을 자동 감지하도록 유도할 수 있습니다."
 
 #: source/win-preferences/schema/spellchecking.ts:131
 msgid "Interpret English as"
-msgstr ""
+msgstr "영어 해석 기준"
 
 #: source/win-preferences/schema/spellchecking.ts:144
 msgid "Interpret German as"
-msgstr ""
+msgstr "독일어 해석 기준"
 
 #: source/win-preferences/schema/spellchecking.ts:154
 msgid "Interpret Portuguese as"
-msgstr ""
+msgstr "포르투갈어 해석 기준"
 
 #: source/win-preferences/schema/spellchecking.ts:165
 msgid "Interpret Catalan as"
-msgstr ""
+msgstr "카탈루냐어 해석 기준"
 
 #: source/win-preferences/schema/spellchecking.ts:174
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "LanguageTool 제공자"
 
 #: source/win-preferences/schema/spellchecking.ts:178
-#, fuzzy
 msgid "Custom server"
-msgstr "커스텀 CSS"
+msgstr "사용자 지정 서버"
 
 #: source/win-preferences/schema/spellchecking.ts:185
-#, fuzzy
 msgid "Custom server address"
-msgstr "커스텀 CSS"
+msgstr "사용자 지정 서버 주소"
 
 #: source/win-preferences/schema/spellchecking.ts:194
 msgid "LanguageTool Premium"
-msgstr ""
+msgstr "LanguageTool Premium"
 
 #: source/win-preferences/schema/spellchecking.ts:199
 msgid ""
 "Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
 "credentials here."
-msgstr ""
+msgstr "여기에 자격 증명을 입력하면 Zettlr는 \"LanguageTool 제공자\" 설정을 무시합니다."
 
 #: source/win-preferences/schema/spellchecking.ts:203
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "LanguageTool 사용자 이름"
 
 #: source/win-preferences/schema/spellchecking.ts:210
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "LanguageTool API 키"
 
 #: source/win-preferences/schema/spellchecking.ts:218
 msgid "LanguageTool: Disabled rules"
-msgstr ""
+msgstr "LanguageTool: 비활성화된 규칙"
 
 #: source/win-preferences/schema/spellchecking.ts:219
 msgid ""
 "These are LanguageTool rules that you have disabled. You can re-enable them "
 "here."
-msgstr ""
+msgstr "비활성화한 LanguageTool 규칙입니다. 여기에서 다시 활성화할 수 있습니다."
 
 #: source/win-preferences/schema/spellchecking.ts:227
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 msgid "Name"
-msgstr ""
+msgstr "이름"
 
 #: source/win-preferences/schema/spellchecking.ts:227
 msgid "Rule ID"
-msgstr ""
+msgstr "규칙 ID"
 
 #: source/win-preferences/schema/spellchecking.ts:227
 msgid "Category"
-msgstr ""
+msgstr "범주"
 
 #: source/win-preferences/schema/spellchecking.ts:230
 msgid "Re-enable"
-msgstr ""
+msgstr "다시 활성화"
 
 #: source/win-preferences/schema/spellchecking.ts:235
 msgid "No ignored rules."
-msgstr ""
+msgstr "무시된 규칙이 없습니다."
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
-msgstr ""
+msgstr "제텔카스텐 ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:24
 msgid ""
 "Specify how Zettlr generates new file IDs for your Zettelkasten, and enable "
 "Zettlr to detect them."
-msgstr ""
+msgstr "Zettlr가 제텔카스텐용 새 파일 ID를 생성하는 방식과 ID 감지 방식을 지정합니다."
 
 #: source/win-preferences/schema/zettelkasten.ts:30
 msgid "Pattern for generating new IDs"
-msgstr ""
+msgstr "새 ID 생성 패턴"
 
 #: source/win-preferences/schema/zettelkasten.ts:33
 #, javascript-format
 msgid "Available Variables: %s"
-msgstr ""
+msgstr "사용 가능한 변수: %s"
 
 #: source/win-preferences/schema/zettelkasten.ts:38
 msgid "Pattern to detect Zettelkasten IDs"
-msgstr ""
+msgstr "제텔카스텐 ID 감지 패턴"
 
 #: source/win-preferences/schema/zettelkasten.ts:39
-#, fuzzy
 msgid "Uses ECMAScript regular expressions"
-msgstr "ID 정규표현식"
+msgstr "ECMAScript 정규식을 사용합니다."
 
 #: source/win-preferences/schema/zettelkasten.ts:52
 msgid "Always use the file title as label for internal links"
-msgstr ""
+msgstr "내부 링크의 레이블로 항상 파일 제목 사용"
 
 #: source/win-preferences/schema/zettelkasten.ts:57
 msgid "Use the file ID as link target if possible"
-msgstr ""
+msgstr "가능하면 파일 ID를 링크 대상으로 사용"
 
 #: source/win-preferences/schema/zettelkasten.ts:64
 msgid "Link format"
-msgstr ""
+msgstr "링크 형식"
 
 #: source/win-preferences/schema/zettelkasten.ts:69
 msgid ""
 "Internal links allow you to add an optional title, separated by a vertical "
 "bar character from the actual link target. Here you can define the ordering "
 "of the two."
-msgstr ""
+msgstr "내부 링크에는 실제 링크 대상과 세로줄 문자로 구분한 선택적 제목을 추가할 수 있습니다. 여기에서 두 요소의 순서를 정의할 수 있습니다."
 
 #: source/win-preferences/schema/zettelkasten.ts:75
 msgid "[[Link|Title]]: Link first (recommended)"
-msgstr ""
+msgstr "[[링크|제목]]: 링크 먼저(권장)"
 
 #: source/win-preferences/schema/zettelkasten.ts:76
 msgid "[[Title|Link]]: Title first"
-msgstr ""
+msgstr "[[제목|링크]]: 제목 먼저"
 
 #: source/win-preferences/schema/zettelkasten.ts:84
-#, fuzzy
 msgid "Start a full-text search when following internal links"
-msgstr "제텔카스텐 링크를 따라갈 때 검색 시작"
+msgstr "내부 링크를 따라갈 때 전체 텍스트 검색 시작"
 
 #: source/win-preferences/schema/zettelkasten.ts:85
 msgid "The search string will match the content between the brackets: [[ ]]."
-msgstr ""
+msgstr "검색 문자열은 대괄호 사이의 내용([[ ]])과 일치합니다."
 
 #: source/win-preferences/schema/zettelkasten.ts:91
 msgid "Zettelkasten folder"
-msgstr ""
+msgstr "제텔카스텐 폴더"
 
 #: source/win-preferences/schema/zettelkasten.ts:92
 msgid ""
 "Choosing a Zettelkasten folder allows Zettlr to automatically create files "
 "when following links to not-yet-existing files. This folder must be open as "
 "a Workspace in Zettlr."
-msgstr ""
+msgstr "제텔카스텐 폴더를 선택하면 아직 존재하지 않는 파일 링크를 따라갈 때 Zettlr가 파일을 자동으로 만들 수 있습니다. 이 폴더는 Zettlr에서 작업공간으로 열려 있어야 합니다."
 
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
-msgstr ""
+msgstr "폴더 경로"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
-#, fuzzy
 msgid "Select folder…"
-msgstr "프로젝트 폴더 열기"
+msgstr "폴더 선택…"
 
 #: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
-#, fuzzy
 msgid "Select file…"
-msgstr "파일 삭제"
+msgstr "파일 선택…"
 
 #: source/tmp/common/vue/form/elements/SelectableList.vue.ts:50
 msgid "New item"
-msgstr ""
+msgstr "새 항목"
 
 #: source/tmp/common/vue/form/elements/SelectableList.vue.ts:53
 msgid "No items"
-msgstr ""
+msgstr "항목 없음"
 
 #: source/tmp/common/vue/form/elements/NumberControl.vue.ts:40
 #: source/tmp/common/vue/form/elements/TextControl.vue.ts:56
@@ -3247,32 +3168,31 @@ msgstr ""
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
 msgid "Reset"
-msgstr ""
+msgstr "초기화"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:115
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:116
 msgid "Actions"
-msgstr ""
+msgstr "작업"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:117
-#, fuzzy
 msgid "Delete"
-msgstr "파일 삭제"
+msgstr "삭제"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:118
 msgid "No records."
-msgstr ""
+msgstr "기록이 없습니다."
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:22
 msgid "Click to set your shortcut"
-msgstr ""
+msgstr "클릭하여 단축키 설정"
 
 #: source/tmp/win-update/App.vue.ts:31
 msgid "Updater"
-msgstr ""
+msgstr "업데이터"
 
 #: source/tmp/win-update/App.vue.ts:32
 msgid "New update available"
@@ -3291,174 +3211,174 @@ msgstr ""
 
 #: source/tmp/win-update/App.vue.ts:35
 msgid "Downloading your update"
-msgstr ""
+msgstr "업데이트 다운로드 중"
 
 #: source/tmp/win-update/App.vue.ts:36
 msgid "No update available. You have the most recent version."
-msgstr ""
+msgstr "사용 가능한 업데이트가 없습니다. 최신 버전을 사용 중입니다."
 
 #: source/tmp/win-update/App.vue.ts:42
 msgid "Click to start update"
-msgstr ""
+msgstr "클릭하여 업데이트 시작"
 
 #: source/tmp/win-update/App.vue.ts:45
 msgid "never"
-msgstr ""
+msgstr "없음"
 
 #: source/tmp/win-update/App.vue.ts:45 source/tmp/win-update/App.vue.ts:48
 #, javascript-format
 msgid "Last checked: %s"
-msgstr ""
+msgstr "마지막 확인: %s"
 
 #: source/tmp/win-update/App.vue.ts:124
 msgid "Starting update …"
-msgstr ""
+msgstr "업데이트 시작 중…"
 
 #. STATIC VARIABLES
 #: source/tmp/win-stats/CalendarView.vue.ts:27
 #: source/tmp/win-stats/App.vue.ts:28
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
 msgid "Calendar"
-msgstr ""
+msgstr "달력"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "January"
-msgstr ""
+msgstr "1월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "February"
-msgstr ""
+msgstr "2월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "March"
-msgstr ""
+msgstr "3월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "April"
-msgstr ""
+msgstr "4월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "May"
-msgstr ""
+msgstr "5월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "June"
-msgstr ""
+msgstr "6월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "July"
-msgstr ""
+msgstr "7월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:30
 msgid "August"
-msgstr ""
+msgstr "8월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "September"
-msgstr ""
+msgstr "9월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "October"
-msgstr ""
+msgstr "10월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "November"
-msgstr ""
+msgstr "11월"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:31
 msgid "December"
-msgstr ""
+msgstr "12월"
 
 #: source/tmp/win-stats/ChartView.vue.ts:24
 msgid "Monday"
-msgstr ""
+msgstr "월요일"
 
 #: source/tmp/win-stats/ChartView.vue.ts:25
 msgid "Tuesday"
-msgstr ""
+msgstr "화요일"
 
 #: source/tmp/win-stats/ChartView.vue.ts:26
 msgid "Wednesday"
-msgstr ""
+msgstr "수요일"
 
 #: source/tmp/win-stats/ChartView.vue.ts:27
 msgid "Thursday"
-msgstr ""
+msgstr "목요일"
 
 #: source/tmp/win-stats/ChartView.vue.ts:28
 msgid "Friday"
-msgstr ""
+msgstr "금요일"
 
 #: source/tmp/win-stats/ChartView.vue.ts:29
 msgid "Saturday"
-msgstr ""
+msgstr "토요일"
 
 #: source/tmp/win-stats/ChartView.vue.ts:30
 msgid "Sunday"
-msgstr ""
+msgstr "일요일"
 
 #. Static properties
 #: source/tmp/win-stats/ChartView.vue.ts:34 source/tmp/win-stats/App.vue.ts:34
 msgid "Charts"
-msgstr ""
+msgstr "차트"
 
 #: source/tmp/win-stats/ChartView.vue.ts:35
 msgid ""
 "This chart shows your current word count and compares it to the average of "
 "this and the previous year(s)."
-msgstr ""
+msgstr "이 차트는 현재 단어 수를 보여 주고 올해와 이전 연도의 평균과 비교합니다."
 
 #: source/tmp/win-stats/ChartView.vue.ts:36
 msgid "This week"
-msgstr ""
+msgstr "이번 주"
 
 #: source/tmp/win-stats/ChartView.vue.ts:37
 msgid "This year"
-msgstr ""
+msgstr "올해"
 
 #: source/tmp/win-stats/ChartView.vue.ts:38
 msgid "Last year"
-msgstr ""
+msgstr "지난해"
 
 #: source/tmp/win-stats/App.vue.ts:40
 msgid "FSAL Stats"
-msgstr ""
+msgstr "FSAL 통계"
 
 #: source/tmp/win-stats/App.vue.ts:62
 msgid "Writing statistics"
-msgstr ""
+msgstr "글쓰기 통계"
 
 #: source/tmp/win-tag-manager/App.vue.ts:27
 msgid "Assign color"
-msgstr ""
+msgstr "색상 지정"
 
 #: source/tmp/win-tag-manager/App.vue.ts:28
 msgid "Remove color"
-msgstr ""
+msgstr "색상 제거"
 
 #: source/tmp/win-tag-manager/App.vue.ts:29
 msgid "Tag name"
-msgstr ""
+msgstr "태그 이름"
 
 #: source/tmp/win-tag-manager/App.vue.ts:30
 msgid "Color"
-msgstr ""
+msgstr "색상"
 
 #: source/tmp/win-tag-manager/App.vue.ts:31
 #: source/tmp/win-main/PopoverTags.vue.ts:40
 msgid "Count"
-msgstr ""
+msgstr "개수"
 
 #: source/tmp/win-tag-manager/App.vue.ts:32
 msgid "A short description"
-msgstr ""
+msgstr "간단한 설명"
 
 #: source/tmp/win-tag-manager/App.vue.ts:33
 msgid ""
 "Here you can assign colors to different tags. If a tag is found in a file, "
 "its tile in the preview list will receive a colored indicator. The "
 "description will be shown on mouse hover."
-msgstr ""
+msgstr "여기에서 태그마다 색상을 지정할 수 있습니다. 파일에서 태그가 발견되면 미리보기 목록의 타일에 색상 표시기가 나타납니다. 마우스를 올리면 설명이 표시됩니다."
 
 #: source/tmp/win-tag-manager/App.vue.ts:35
 #: source/tmp/win-main/PopoverTags.vue.ts:47
@@ -3467,15 +3387,15 @@ msgstr "필터 태그..."
 
 #: source/tmp/win-tag-manager/App.vue.ts:36
 msgid "New tag"
-msgstr ""
+msgstr "새 태그"
 
 #: source/tmp/win-tag-manager/App.vue.ts:37
 msgid "Rename"
-msgstr ""
+msgstr "이름 바꾸기"
 
 #: source/tmp/win-tag-manager/App.vue.ts:38
 msgid "Rename tag…"
-msgstr ""
+msgstr "태그 이름 바꾸기…"
 
 #: source/tmp/win-about/Projects-Tab.vue.ts:19
 msgid "Zettlr also makes use of these projects:"
@@ -3522,19 +3442,19 @@ msgid ""
 "LanguageTooler GmbH. Using this service requires an internet connection and "
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
-msgstr ""
+msgstr "Zettlr는 LanguageTooler GmbH가 제공하는 LanguageTool.org 서비스와 연동됩니다. 이 서비스를 사용하려면 인터넷 연결이 필요하며 LanguageTooler GmbH 또는 사용 중인 해당 서버의 개인정보 처리방침이 적용됩니다."
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
-msgstr ""
+msgstr "기타 프로젝트"
 
 #: source/tmp/win-about/App.vue.ts:47
 msgid "Sponsors"
-msgstr ""
+msgstr "후원자"
 
 #: source/tmp/win-about/App.vue.ts:53
 msgid "License"
-msgstr ""
+msgstr "라이선스"
 
 #: source/tmp/win-print/App.vue.ts:70
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:34
@@ -3544,122 +3464,122 @@ msgstr "레퍼런스"
 
 #: source/tmp/win-project-properties/App.vue.ts:37
 msgid "Export project to:"
-msgstr ""
+msgstr "프로젝트 내보내기 위치:"
 
 #: source/tmp/win-project-properties/App.vue.ts:38
 msgid "Use"
-msgstr ""
+msgstr "사용"
 
 #: source/tmp/win-project-properties/App.vue.ts:39
 #: source/tmp/win-main/PopoverExport.vue.ts:31
 msgid "Format"
-msgstr ""
+msgstr "형식"
 
 #: source/tmp/win-project-properties/App.vue.ts:40
 msgid "Conversion"
-msgstr ""
+msgstr "변환"
 
 #: source/tmp/win-project-properties/App.vue.ts:41
 msgid "Files to be included in the export"
-msgstr ""
+msgstr "내보내기에 포함할 파일"
 
 #: source/tmp/win-project-properties/App.vue.ts:42
 msgid "Please select at least one profile to build this project."
-msgstr ""
+msgstr "이 프로젝트를 빌드하려면 프로필을 하나 이상 선택해 주세요."
 
 #: source/tmp/win-project-properties/App.vue.ts:43
 msgid "Project Title"
-msgstr ""
+msgstr "프로젝트 제목"
 
 #: source/tmp/win-project-properties/App.vue.ts:44
 msgid "CSL Stylesheet"
-msgstr ""
+msgstr "CSL 스타일시트"
 
 #: source/tmp/win-project-properties/App.vue.ts:45
 msgid "LaTeX Template"
-msgstr ""
+msgstr "LaTeX 템플릿"
 
 #: source/tmp/win-project-properties/App.vue.ts:46
 msgid "HTML Template"
-msgstr ""
+msgstr "HTML 템플릿"
 
 #: source/tmp/win-project-properties/App.vue.ts:47
 msgid "Remove file from export"
-msgstr ""
+msgstr "내보내기에서 파일 제거"
 
 #: source/tmp/win-project-properties/App.vue.ts:48
 msgid "Add file to export"
-msgstr ""
+msgstr "내보내기에 파일 추가"
 
 #: source/tmp/win-project-properties/App.vue.ts:49
 msgid "Move file up"
-msgstr ""
+msgstr "파일 위로 이동"
 
 #: source/tmp/win-project-properties/App.vue.ts:50
 msgid "Move file down"
-msgstr ""
+msgstr "파일 아래로 이동"
 
 #: source/tmp/win-project-properties/App.vue.ts:51
 msgid "You have not selected any files for export."
-msgstr ""
+msgstr "내보낼 파일을 선택하지 않았습니다."
 
 #: source/tmp/win-project-properties/App.vue.ts:52
 msgid ""
 "Some files are selected for export but no longer exist in the directory."
-msgstr ""
+msgstr "내보내도록 선택한 일부 파일이 디렉터리에 더 이상 존재하지 않습니다."
 
 #: source/tmp/win-project-properties/App.vue.ts:64
 #: source/tmp/win-preferences/App.vue.ts:142
 msgid "General"
-msgstr ""
+msgstr "일반"
 
 #: source/tmp/win-preferences/App.vue.ts:58
 #, javascript-format
 msgid "No results for \"%s\""
-msgstr ""
+msgstr "\"%s\"에 대한 결과 없음"
 
 #: source/tmp/win-preferences/App.vue.ts:59
 #: source/tmp/win-main/GlobalSearch.vue.ts:37
 msgid "Search"
-msgstr ""
+msgstr "검색"
 
 #: source/tmp/win-preferences/App.vue.ts:152
 msgid "File Manager"
-msgstr ""
+msgstr "파일 관리자"
 
 #: source/tmp/win-preferences/App.vue.ts:157
 msgid "Editor"
-msgstr ""
+msgstr "편집기"
 
 #: source/tmp/win-preferences/App.vue.ts:177
 msgid "Zettelkasten"
-msgstr ""
+msgstr "제텔카스텐"
 
 #: source/tmp/win-preferences/App.vue.ts:187
 msgid "Import and Export"
-msgstr ""
+msgstr "가져오기 및 내보내기"
 
 #: source/tmp/win-preferences/App.vue.ts:192
 msgid "Advanced"
-msgstr ""
+msgstr "고급"
 
 #: source/tmp/win-preferences/App.vue.ts:201
 #, javascript-format
 msgid "Searching: %s"
-msgstr ""
+msgstr "검색 중: %s"
 
 #: source/tmp/win-preferences/App.vue.ts:205
 msgid "Preferences"
-msgstr ""
+msgstr "환경 설정"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:30
 #: source/tmp/win-main/App.vue.ts:299
 msgid "Search across all files"
-msgstr ""
+msgstr "모든 파일에서 검색"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:31
 msgid "Enter your search terms below"
-msgstr ""
+msgstr "아래에 검색어를 입력하세요"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:32
 msgid "Find…"
@@ -3668,37 +3588,37 @@ msgstr "검색..."
 #: source/tmp/win-main/GlobalSearch.vue.ts:33
 #: source/tmp/win-main/file-manager/FileManager.vue.ts:44
 msgid "Filter…"
-msgstr ""
+msgstr "필터…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:34
 msgid "Filter search results"
-msgstr ""
+msgstr "검색 결과 필터링"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:35
 msgid "Restrict search to directory"
-msgstr ""
+msgstr "검색 범위를 디렉터리로 제한"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:36
 msgid "Choose directory…"
-msgstr ""
+msgstr "디렉터리 선택…"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:39
 msgid "Clear search"
-msgstr ""
+msgstr "검색 지우기"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:40
 msgid "Toggle results"
-msgstr ""
+msgstr "결과 전환"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:50
 #: source/win-main/file-manager/util/file-item-context.ts:30
 msgid "Open in new tab"
-msgstr ""
+msgstr "새 탭에서 열기"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:140
 #, javascript-format
 msgid "%s matches across %s files"
-msgstr ""
+msgstr "%s개 파일에서 %s개 일치"
 
 #: source/tmp/win-main/PopoverTags.vue.ts:48
 msgid "Tag Cloud"
@@ -3706,47 +3626,47 @@ msgstr "태크 클라우드"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:35
 msgid "#identifier"
-msgstr ""
+msgstr "#식별자"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:38
 msgid ".classes"
-msgstr ""
+msgstr ".클래스"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:41
 msgid "key=value"
-msgstr ""
+msgstr "키=값"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:43
 msgid "div"
-msgstr ""
+msgstr "div"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:46
 msgid "Div"
-msgstr ""
+msgstr "Div"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:47
 msgid "Span"
-msgstr ""
+msgstr "Span"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:58
 msgid "Open in system viewer"
-msgstr ""
+msgstr "시스템 뷰어에서 열기"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:62
 msgid "Use transparent background"
-msgstr ""
+msgstr "투명 배경 사용"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:63
 msgid "Use white background"
-msgstr ""
+msgstr "흰색 배경 사용"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:64
 msgid "Use black background"
-msgstr ""
+msgstr "검은색 배경 사용"
 
 #: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:65
 msgid "Use checkerboard background"
-msgstr ""
+msgstr "체커보드 배경 사용"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
@@ -3758,15 +3678,15 @@ msgstr "글자"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:23
 msgid "No open document"
-msgstr ""
+msgstr "열린 문서 없음"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:414
 msgid "Close tab"
-msgstr ""
+msgstr "탭 닫기"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:425
 msgid "Close other tabs"
-msgstr ""
+msgstr "다른 탭 닫기"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:441
 msgid "Close all tabs"
@@ -3774,23 +3694,23 @@ msgstr "모든 탭 닫기"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:457
 msgid "Move"
-msgstr ""
+msgstr "이동"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:462
 msgid "Move to start"
-msgstr ""
+msgstr "맨 앞으로 이동"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:468
 msgid "Move to end"
-msgstr ""
+msgstr "맨 뒤로 이동"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:476
 msgid "Unpin tab"
-msgstr ""
+msgstr "탭 고정 해제"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:476
 msgid "Pin tab"
-msgstr ""
+msgstr "탭 고정"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:491
 #: source/win-main/file-manager/util/file-item-context.ts:68
@@ -3800,21 +3720,20 @@ msgstr "파일 이름 복사"
 #: source/tmp/win-main/DocumentTabs.vue.ts:498
 #: source/win-main/file-manager/util/file-item-context.ts:63
 #: source/win-main/file-manager/util/dir-item-context.ts:64
-#, fuzzy
 msgid "Copy path"
-msgstr "ID 복사"
+msgstr "경로 복사"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in Explorer"
-msgstr ""
+msgstr "탐색기에서 표시"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:505
 #: source/win-main/file-manager/util/file-item-context.ts:82
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 msgid "Reveal in File Browser"
-msgstr ""
+msgstr "파일 브라우저에서 표시"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:528
 #: source/win-main/file-manager/util/file-item-context.ts:94
@@ -3843,16 +3762,16 @@ msgstr "긴 휴식"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:29
 msgid "Sound Effect"
-msgstr ""
+msgstr "효과음"
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:30
 msgid "Volume"
-msgstr ""
+msgstr "음량"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:25
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
 msgid "Other files"
-msgstr ""
+msgstr "기타 파일"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:26
 msgid "Open directory"
@@ -3860,7 +3779,7 @@ msgstr "디렉토리 열기"
 
 #: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:27
 msgid "No other files"
-msgstr ""
+msgstr "기타 파일 없음"
 
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:44
 msgid "There are no citations in this document."
@@ -3869,39 +3788,39 @@ msgstr "현재 문서에는 인용이 없습니다."
 #: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:65
 #, javascript-format
 msgid "circa %s words"
-msgstr ""
+msgstr "약 %s단어"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
 msgid "Related files"
-msgstr ""
+msgstr "관련 파일"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
 msgid "No related files"
-msgstr ""
+msgstr "관련 파일 없음"
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "이 관계는 양방향 링크를 기반으로 합니다."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "이 관계는 나가는 링크를 기반으로 합니다."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "이 관계는 백링크를 기반으로 합니다."
 
 #: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:227
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "이 관계는 %s개의 공통 태그를 기반으로 합니다: %s"
 
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:41
 #: source/tmp/win-main/sidebar/ToCTab.vue.ts:49
 #: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
 msgid "Table of contents"
-msgstr ""
+msgstr "목차"
 
 #: source/tmp/win-main/PopoverStats.vue.ts:29
 msgid "words last month"
@@ -3933,85 +3852,83 @@ msgstr "더 많은 통계 ..."
 
 #: source/tmp/win-main/PopoverExport.vue.ts:32
 msgid "Open after export"
-msgstr ""
+msgstr "내보낸 뒤 열기"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:33
 msgid "Temporary directory"
-msgstr ""
+msgstr "임시 디렉터리"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:34
 msgid "Current directory"
-msgstr ""
+msgstr "현재 디렉터리"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:35
 msgid "Select directory"
-msgstr ""
+msgstr "디렉터리 선택"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:85
-#, fuzzy
 msgid "Exporting…"
-msgstr "내보내기..."
+msgstr "내보내는 중…"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:85
-#, fuzzy
 msgid "Export"
-msgstr "내보내기..."
+msgstr "내보내기"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:98
 msgid "command"
-msgstr ""
+msgstr "명령"
 
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
 msgid "Table size: %s &times; %s"
-msgstr ""
+msgstr "표 크기: %s &times; %s"
 
 #: source/tmp/win-main/App.vue.ts:264
 #, javascript-format
 msgid "%s selected"
-msgstr ""
+msgstr "%s개 선택됨"
 
 #. Multiple selections --> indicate
 #: source/tmp/win-main/App.vue.ts:273
 #, javascript-format
 msgid "%s selections"
-msgstr ""
+msgstr "%s개 항목 선택됨"
 
 #: source/tmp/win-main/App.vue.ts:313
 msgid "View writing statistics"
-msgstr ""
+msgstr "글쓰기 통계 보기"
 
 #: source/tmp/win-main/App.vue.ts:319
 msgid "View Tag Cloud"
-msgstr ""
+msgstr "태그 클라우드 보기"
 
 #: source/tmp/win-main/App.vue.ts:326
 msgid "Open settings"
-msgstr ""
+msgstr "설정 열기"
 
 #: source/tmp/win-main/App.vue.ts:361
 msgid "Export current file"
-msgstr ""
+msgstr "현재 파일 내보내기"
 
 #: source/tmp/win-main/App.vue.ts:372
 msgid "Insert Pandoc Div or Span"
-msgstr ""
+msgstr "Pandoc Div 또는 Span 삽입"
 
 #: source/tmp/win-main/App.vue.ts:379
 msgid "Insert comment"
-msgstr ""
+msgstr "주석 삽입"
 
 #: source/tmp/win-main/App.vue.ts:393
 msgid "Insert image"
-msgstr ""
+msgstr "이미지 삽입"
 
 #: source/tmp/win-main/App.vue.ts:414
 msgid "Insert footnote"
-msgstr ""
+msgstr "각주 삽입"
 
 #: source/tmp/win-main/App.vue.ts:432
 msgid "Pomodoro timer"
-msgstr ""
+msgstr "포모도로 타이머"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:64
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:154
@@ -4035,39 +3952,39 @@ msgstr "결과 없음"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
-msgstr ""
+msgstr "파일 숨기기"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
-msgstr ""
+msgstr "파일 표시"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
-msgstr ""
+msgstr "작업공간 숨기기"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
-msgstr ""
+msgstr "작업공간 표시"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
-msgstr ""
+msgstr "자동 정렬로 전환"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:255
 msgid "Collapse workspaces"
-msgstr ""
+msgstr "작업공간 접기"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:255
 msgid "Collapse subfolders"
-msgstr ""
+msgstr "하위 폴더 접기"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:260
 msgid "Sort workspaces…"
-msgstr ""
+msgstr "작업공간 정렬…"
 
 #: source/tmp/win-main/file-manager/TreeItem.vue.ts:83
 msgid "Enter a name"
-msgstr ""
+msgstr "이름 입력"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:147
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:149
@@ -4087,40 +4004,40 @@ msgstr "단어"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
 msgid "Remove the custom color"
-msgstr ""
+msgstr "사용자 지정 색상 제거"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
 msgid "Assign a blue accent color"
-msgstr ""
+msgstr "파란색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
 msgid "Assign a purple accent color"
-msgstr ""
+msgstr "보라색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:39
 msgid "Assign a rose accent color"
-msgstr ""
+msgstr "장미색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:40
 msgid "Assign a red accent color"
-msgstr ""
+msgstr "빨간색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
 msgid "Assign a orange accent color"
-msgstr ""
+msgstr "주황색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
 msgid "Assign a yellow accent color"
-msgstr ""
+msgstr "노란색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
 msgid "Assign a green accent color"
-msgstr ""
+msgstr "초록색 강조 색상 지정"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
 msgid "Created"
-msgstr ""
+msgstr "생성일"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
 msgid "Project Settings…"
@@ -4128,287 +4045,287 @@ msgstr "프로젝트 설정..."
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
 msgid "Enable Project"
-msgstr ""
+msgstr "프로젝트 활성화"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
 msgid "Sort by name"
-msgstr ""
+msgstr "이름순 정렬"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
 msgid "Sort by time"
-msgstr ""
+msgstr "시간순 정렬"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
 msgid "ascending"
-msgstr ""
+msgstr "오름차순"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
 msgid "descending"
-msgstr ""
+msgstr "내림차순"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
 msgid "Cog"
-msgstr ""
+msgstr "톱니바퀴"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
 msgid "Cloud"
-msgstr ""
+msgstr "구름"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
 msgid "Check"
-msgstr ""
+msgstr "체크"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
 msgid "Times"
-msgstr ""
+msgstr "곱표"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
 msgid "Info"
-msgstr ""
+msgstr "정보"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
 msgid "Success"
-msgstr ""
+msgstr "성공"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
 msgid "Error"
-msgstr ""
+msgstr "오류"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
 msgid "Warning"
-msgstr ""
+msgstr "경고"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Bell"
-msgstr ""
+msgstr "종"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
 msgid "Person"
-msgstr ""
+msgstr "사람"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
 msgid "People"
-msgstr ""
+msgstr "사람들"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
 msgid "Home"
-msgstr ""
+msgstr "홈"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
 msgid "Ban"
-msgstr ""
+msgstr "금지"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
 msgid "Eye"
-msgstr ""
+msgstr "눈"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
 msgid "Eye (crossed)"
-msgstr ""
+msgstr "눈(가림)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
 msgid "Calculator"
-msgstr ""
+msgstr "계산기"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
 msgid "Store"
-msgstr ""
+msgstr "상점"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
 msgid "Shopping bag"
-msgstr ""
+msgstr "쇼핑백"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
 msgid "Shopping cart"
-msgstr ""
+msgstr "쇼핑 카트"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
 msgid "Factory"
-msgstr ""
+msgstr "공장"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
 msgid "Heart"
-msgstr ""
+msgstr "하트"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
 msgid "Heart (broken)"
-msgstr ""
+msgstr "하트(깨짐)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
 msgid "Bubbles"
-msgstr ""
+msgstr "말풍선 여러 개"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
 msgid "Bubble"
-msgstr ""
+msgstr "말풍선"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
 msgid "Bubble (exclamation)"
-msgstr ""
+msgstr "말풍선(느낌표)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
 msgid "Colour Palette"
-msgstr ""
+msgstr "색상 팔레트"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
 msgid "Bars"
-msgstr ""
+msgstr "막대"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
 msgid "Thermometer"
-msgstr ""
+msgstr "온도계"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
 msgid "Book"
-msgstr ""
+msgstr "책"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
 msgid "Library"
-msgstr ""
+msgstr "도서관"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Bug"
-msgstr ""
+msgstr "버그"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Note"
-msgstr ""
+msgstr "메모"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Lightbulb"
-msgstr ""
+msgstr "전구"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
 msgid "Trash"
-msgstr ""
+msgstr "휴지통"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
 msgid "Snowflake"
-msgstr ""
+msgstr "눈송이"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
 msgid "Asterisk"
-msgstr ""
+msgstr "별표"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
 msgid "Key"
-msgstr ""
+msgstr "열쇠"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
 msgid "Bolt"
-msgstr ""
+msgstr "번개"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
 msgid "Wrench"
-msgstr ""
+msgstr "렌치"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Flame"
-msgstr ""
+msgstr "불꽃"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Hourglass"
-msgstr ""
+msgstr "모래시계"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
 msgid "Briefcase"
-msgstr ""
+msgstr "서류가방"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
 msgid "Tools"
-msgstr ""
+msgstr "도구"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
 msgid "Moon"
-msgstr ""
+msgstr "달"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
 msgid "Sun"
-msgstr ""
+msgstr "해"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
 msgid "Tree"
-msgstr ""
+msgstr "나무"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
 msgid "Circle (dot)"
-msgstr ""
+msgstr "원(점)"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:111
 msgid "Circle"
-msgstr ""
+msgstr "원"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:112
 msgid "Video camera"
-msgstr ""
+msgstr "비디오카메라"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:113
 msgid "Film strip"
-msgstr ""
+msgstr "필름 스트립"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:114
 msgid "Microphone"
-msgstr ""
+msgstr "마이크"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:115
 msgid "Crown"
-msgstr ""
+msgstr "왕관"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:116
 msgid "Star"
-msgstr ""
+msgstr "별"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:117
 msgid "Flag"
-msgstr ""
+msgstr "깃발"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:118
 msgid "Envelope"
-msgstr ""
+msgstr "봉투"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:119
 msgid "Airplane"
-msgstr ""
+msgstr "비행기"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:120
 msgid "Happy emoji"
-msgstr ""
+msgstr "행복한 이모지"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:121
 msgid "Neutral emoji"
-msgstr ""
+msgstr "무표정 이모지"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:122
 msgid "Sad emoji"
-msgstr ""
+msgstr "슬픈 이모지"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:123
 msgid "Thumbs up"
-msgstr ""
+msgstr "좋아요"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:124
 msgid "Thumbs down"
-msgstr ""
+msgstr "싫어요"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:125
 msgid "Map"
-msgstr ""
+msgstr "지도"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:126
 msgid "Compass"
-msgstr ""
+msgstr "나침반"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:127
 msgid "Map marker"
-msgstr ""
+msgstr "지도 마커"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:128
 msgid "Flask"
-msgstr ""
+msgstr "플라스크"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:129
 msgid "CD/DVD"
-msgstr ""
+msgstr "CD/DVD"
 
 #: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
 msgid "Set writing target…"
@@ -4424,177 +4341,177 @@ msgstr "빈 디렉토리"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
-msgstr ""
+msgstr "클립보드에서 이미지 삽입"
 
 #: source/tmp/win-paste-image/App.vue.ts:59
 msgid "Retain aspect ratio"
-msgstr ""
+msgstr "가로세로 비율 유지"
 
 #: source/tmp/win-paste-image/App.vue.ts:60
 msgid "Resize image to"
-msgstr ""
+msgstr "이미지 크기 조절"
 
 #: source/tmp/win-paste-image/App.vue.ts:61
 msgid "Filename"
-msgstr ""
+msgstr "파일 이름"
 
 #: source/tmp/win-paste-image/App.vue.ts:62
 #: source/tmp/win-paste-image/App.vue.ts:63
 msgid "A unique filename"
-msgstr ""
+msgstr "고유한 파일 이름"
 
 #: source/tmp/win-onboarding/SupportLogos.vue.ts:4
 msgid "Support the development of Zettlr"
-msgstr ""
+msgstr "Zettlr 개발 후원"
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:8
 msgid ""
 "If you already have a library of references, you can select it here to make "
 "all your stored reference items available to Zettlr."
-msgstr ""
+msgstr "이미 참고문헌 라이브러리가 있다면 여기에서 선택하여 저장된 모든 참고문헌 항목을 Zettlr에서 사용할 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:9
 msgid "Learn how to export your Zotero library"
-msgstr ""
+msgstr "Zotero 라이브러리 내보내기 방법 알아보기"
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:10
 msgid ""
 "Different academic fields have different citation styles. Here you choose "
 "which one Zettlr uses when you autocomplete citations."
-msgstr ""
+msgstr "학문 분야마다 인용 스타일이 다릅니다. 여기에서 인용 자동 완성에 Zettlr가 사용할 스타일을 선택합니다."
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:5
 msgid "You're All Set!"
-msgstr ""
+msgstr "설정이 모두 끝났습니다!"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:6
 msgid ""
 "We wish you a great writing experience! Remember to take a look at the "
 "preferences to tweak Zettlr even more."
-msgstr ""
+msgstr "즐거운 글쓰기 경험이 되기를 바랍니다! 환경 설정에서 Zettlr를 더 세밀하게 조정할 수 있다는 점도 잊지 마세요."
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:7
 msgid ""
 "If anything comes up, and you need help, encounter a bug, or have an idea "
 "for a new feature, please get in touch with us. Zettlr is maintained by a "
 "global community of excellent volunteers who will help you out."
-msgstr ""
+msgstr "도움이 필요하거나 버그를 발견했거나 새 기능 아이디어가 있다면 언제든 문의해 주세요. Zettlr는 전 세계의 훌륭한 자원봉사자 커뮤니티가 관리하며 여러분을 도와드릴 것입니다."
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:9
 msgid "Join our Discord Server"
-msgstr ""
+msgstr "Discord 서버 참여"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:10
 msgid "Join our Community Forum"
-msgstr ""
+msgstr "커뮤니티 포럼 참여"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:11
 msgid "View Source Code on GitHub"
-msgstr ""
+msgstr "GitHub에서 소스 코드 보기"
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:6
 msgid "Staying Up To Date"
-msgstr ""
+msgstr "최신 상태 유지"
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:7
 msgid ""
 "Zettlr will from time to time check for updates. If you installed Zettlr via "
 "a package manager (e.g., APT or Pacman, Homebrew, or winget or chocolatey), "
 "you should turn this off."
-msgstr ""
+msgstr "Zettlr는 때때로 업데이트를 확인합니다. 패키지 관리자(예: APT, Pacman, Homebrew, winget 또는 Chocolatey)를 통해 설치했다면 이 기능을 꺼야 합니다."
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:8
 msgid "Check for Updates"
-msgstr ""
+msgstr "업데이트 확인"
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:9
 msgid ""
 "From time to time, we also release beta updates. The more users test these "
 "early versions, the better the app becomes."
-msgstr ""
+msgstr "때때로 베타 업데이트도 출시합니다. 더 많은 사용자가 초기 버전을 테스트할수록 앱이 더 좋아집니다."
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:10
 msgid "Test Beta Versions"
-msgstr ""
+msgstr "베타 버전 테스트"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:5
 msgid "Writing Markdown"
-msgstr ""
+msgstr "Markdown 작성"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:6
 msgid ""
 "The core of Zettlr is writing Markdown, which can be shown using either its "
 "raw syntax, or in a WYSIWYG mode. Which one do you prefer?"
-msgstr ""
+msgstr "Zettlr의 핵심은 Markdown 작성이며, 원문 문법이나 WYSIWYG 모드로 표시할 수 있습니다. 어느 방식을 선호하시나요?"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:7
 msgid "Raw Syntax"
-msgstr ""
+msgstr "원문 문법"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:8
 msgid ""
 "Some people prefer an app automatically saving your work; others want to "
 "manually save. Which do you prefer?"
-msgstr ""
+msgstr "작업을 자동으로 저장하는 앱을 선호하는 사람도 있고, 직접 저장하기를 원하는 사람도 있습니다. 어느 쪽을 선호하시나요?"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:9
 msgid "Save manually"
-msgstr ""
+msgstr "수동으로 저장"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:10
 msgid "Activate Autosave"
-msgstr ""
+msgstr "자동 저장 활성화"
 
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:19
 msgid "Which Language do you speak?"
-msgstr ""
+msgstr "어떤 언어를 사용하시나요?"
 
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:21
 #, javascript-format
 msgid ""
 "Based on your operating system settings, we have selected %s as the "
 "application language. If you wish, you can select a different language here."
-msgstr ""
+msgstr "운영체제 설정을 기준으로 애플리케이션 언어를 %s(으)로 선택했습니다. 원한다면 여기에서 다른 언어를 선택할 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:23
 msgid "The changes apply from the next slide."
-msgstr ""
+msgstr "변경 사항은 다음 화면부터 적용됩니다."
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:8
 msgid "Look and Feel"
-msgstr ""
+msgstr "모양 및 느낌"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:9
 msgid ""
 "Zettlr supports both light and dark mode. You can turn it on manually here."
-msgstr ""
+msgstr "Zettlr는 라이트 모드와 다크 모드를 모두 지원합니다. 여기에서 직접 켤 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:10
 msgid "Activate dark mode"
-msgstr ""
+msgstr "다크 모드 활성화"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:11
 msgid "Do you wish to let Zettlr automatically switch to dark mode?"
-msgstr ""
+msgstr "Zettlr가 다크 모드로 자동 전환하도록 하시겠습니까?"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:18
 #, javascript-format
 msgid ""
 "If you choose \"schedule,\" Zettlr will turn on dark mode between %s and %s. "
 "You can adjust these times in the settings."
-msgstr ""
+msgstr "\"일정\"을 선택하면 Zettlr가 %s부터 %s까지 다크 모드를 켭니다. 설정에서 이 시간을 조정할 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:21
 msgid "Do not automatically toggle light/dark mode"
-msgstr ""
+msgstr "라이트/다크 모드 자동 전환 안 함"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:23
 msgid "Schedule dark mode"
-msgstr ""
+msgstr "다크 모드 예약"
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:5
 msgid "Images and PDFs in Zettlr"
-msgstr ""
+msgstr "Zettlr의 이미지와 PDF"
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:6
 msgid ""
@@ -4602,26 +4519,26 @@ msgid ""
 "to reference plots or literature directly while writing. If you do not "
 "activate this, images and PDF files will only be shown in the sidebar and "
 "open with your computer's default viewer."
-msgstr ""
+msgstr "Zettlr는 이미지와 PDF 파일을 앱 안에서 직접 미리 볼 수 있습니다. 글을 쓰면서 도표나 문헌을 바로 참조할 수 있습니다. 이 기능을 활성화하지 않으면 이미지와 PDF 파일은 사이드바에만 표시되고 컴퓨터의 기본 뷰어로 열립니다."
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:7
 msgid "Activate Image and PDF Previews in Zettlr"
-msgstr ""
+msgstr "Zettlr에서 이미지 및 PDF 미리보기 활성화"
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:4
 msgid "Hello!"
-msgstr ""
+msgstr "안녕하세요!"
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:5
 msgid ""
 "Thank your for choosing Zettlr as your new one-stop publication workbench."
-msgstr ""
+msgstr "새로운 통합 출판 작업 도구로 Zettlr를 선택해 주셔서 감사합니다."
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:6
 msgid ""
 "Before we get started, let us first make sure Zettlr looks and feels as you "
 "expect it to."
-msgstr ""
+msgstr "시작하기 전에 먼저 Zettlr의 모양과 사용감이 원하는 대로 설정되어 있는지 확인하겠습니다."
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:7
 msgid ""
@@ -4629,102 +4546,102 @@ msgid ""
 "settings for a great writing experience. Zettlr ships with sensible "
 "defaults, so you may skip this wizard at any time, and adjust your settings "
 "later on."
-msgstr ""
+msgstr "다음 화면에서는 좋은 글쓰기 환경에 필요한 핵심 설정을 안내합니다. Zettlr에는 적절한 기본값이 적용되어 있으므로 언제든 이 마법사를 건너뛰고 나중에 설정을 조정할 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:7
 msgid "Check your writing"
-msgstr ""
+msgstr "글 검사"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:8
 msgid ""
 "Here you can configure how you wish to check for spelling errors. You can "
 "select a built-in dictionary, or set up LanguageTool."
-msgstr ""
+msgstr "여기에서 철자 오류를 검사할 방식을 설정할 수 있습니다. 내장 사전을 선택하거나 LanguageTool을 설정할 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:10
 #, javascript-format
 msgid "Set %s as a spellchecking dictionary"
-msgstr ""
+msgstr "%s을(를) 맞춤법 검사 사전으로 설정"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:12
 msgid ""
 "Zettlr integrates with LanguageTool, a free grammar and spellchecker. You "
 "can turn it on with simple defaults."
-msgstr ""
+msgstr "Zettlr는 무료 문법 및 맞춤법 검사기인 LanguageTool과 연동됩니다. 간단한 기본 설정으로 활성화할 수 있습니다."
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:13
 msgid "Activate LanguageTool (uses online service)"
-msgstr ""
+msgstr "LanguageTool 활성화(온라인 서비스 사용)"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:14
 msgid ""
 "You can choose a custom server and provide your LanguageTool username later "
 "in the settings."
-msgstr ""
+msgstr "설정에서 사용자 지정 서버를 선택하고 LanguageTool 사용자 이름을 나중에 입력할 수 있습니다."
 
 #. Update labels
 #: source/tmp/win-onboarding/App.vue.ts:49
 msgid "Update complete!"
-msgstr ""
+msgstr "업데이트 완료!"
 
 #: source/tmp/win-onboarding/App.vue.ts:50
 msgid "Zettlr has been updated. You are now running Zettlr"
-msgstr ""
+msgstr "Zettlr가 업데이트되었습니다. 현재 실행 중인 Zettlr 버전:"
 
 #: source/tmp/win-onboarding/App.vue.ts:51
 msgid "Get started"
-msgstr ""
+msgstr "시작하기"
 
 #: source/tmp/win-onboarding/App.vue.ts:52
 msgid "See what's changed"
-msgstr ""
+msgstr "변경 사항 보기"
 
 #: source/tmp/win-onboarding/App.vue.ts:54
 #, javascript-format
 msgid "Build date: %s"
-msgstr ""
+msgstr "빌드 날짜: %s"
 
 #. Onboarding workflow labels
 #: source/tmp/win-onboarding/App.vue.ts:57
 #: source/tmp/win-onboarding/App.vue.ts:68
 msgid "Start setup"
-msgstr ""
+msgstr "설정 시작"
 
 #: source/tmp/win-onboarding/App.vue.ts:58
 #: source/tmp/win-onboarding/App.vue.ts:69
 msgid "Skip"
-msgstr ""
+msgstr "건너뛰기"
 
 #: source/tmp/win-onboarding/App.vue.ts:59
 #: source/tmp/win-onboarding/App.vue.ts:70
 msgid "Previous"
-msgstr ""
+msgstr "이전"
 
 #: source/tmp/win-onboarding/App.vue.ts:60
 #: source/tmp/win-onboarding/App.vue.ts:71
 msgid "Next"
-msgstr ""
+msgstr "다음"
 
 #: source/tmp/win-onboarding/App.vue.ts:61
 #: source/tmp/win-onboarding/App.vue.ts:72
 msgid "Finish"
-msgstr ""
+msgstr "마침"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:56
 msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
-msgstr ""
+msgstr "이 프로필은 보호되어 있습니다. 프로필을 제거하거나 이름을 바꾸면 원래 상태로 복원됩니다."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:57
 msgid ""
 "This profile is invalid. It may contain errors, or it may be missing the "
 "writer or reader property."
-msgstr ""
+msgstr "이 프로필은 유효하지 않습니다. 오류가 있거나 writer 또는 reader 속성이 없을 수 있습니다."
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:59
 msgid "Open defaults folder"
-msgstr ""
+msgstr "기본값 폴더 열기"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:60
 msgid "Edit the default settings for imports or exports here."
@@ -4735,82 +4652,82 @@ msgstr "불러오기와 내보내기의 기본 설정을 변경합니다."
 #: source/tmp/win-assets/FilterTab.vue.ts:134
 #: source/tmp/win-assets/CustomCSS.vue.ts:58
 msgid "Saving …"
-msgstr ""
+msgstr "저장 중…"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:188
 #: source/tmp/win-assets/SnippetsTab.vue.ts:118
 #: source/tmp/win-assets/FilterTab.vue.ts:145
 #: source/tmp/win-assets/CustomCSS.vue.ts:65
 msgid "Saved!"
-msgstr ""
+msgstr "저장됨!"
 
 #: source/tmp/win-assets/DefaultsTab.vue.ts:193
 #: source/tmp/win-assets/SnippetsTab.vue.ts:122
 #: source/tmp/win-assets/FilterTab.vue.ts:149
 #: source/tmp/win-assets/CustomCSS.vue.ts:69
 msgid "Could not save changes"
-msgstr ""
+msgstr "변경 사항을 저장할 수 없음"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "No snippet selected."
-msgstr ""
+msgstr "선택한 스니펫이 없습니다."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:31
 msgid "Rename snippet"
-msgstr ""
+msgstr "스니펫 이름 바꾸기"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:32
 msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
+msgstr "스니펫을 사용하면 변수가 포함된 재사용 가능한 텍스트 조각을 정의할 수 있습니다."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:33
 msgid "Open snippets folder"
-msgstr ""
+msgstr "스니펫 폴더 열기"
 
 #: source/tmp/win-assets/FilterTab.vue.ts:28
 msgid "No filter selected."
-msgstr ""
+msgstr "선택한 필터가 없습니다."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:29
 msgid ""
 "This filter is protected. It will be restored if you rename or remove this "
 "file."
-msgstr ""
+msgstr "이 필터는 보호되어 있습니다. 파일 이름을 바꾸거나 제거하면 원래 상태로 복원됩니다."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:31
 msgid "Rename filter"
-msgstr ""
+msgstr "필터 이름 바꾸기"
 
 #: source/tmp/win-assets/FilterTab.vue.ts:32
 msgid "Lua filters allow customization of your Pandoc exports."
-msgstr ""
+msgstr "Lua 필터를 사용하면 Pandoc 내보내기를 사용자 지정할 수 있습니다."
 
 #: source/tmp/win-assets/FilterTab.vue.ts:33
 msgid "Open filters folder"
-msgstr ""
+msgstr "필터 폴더 열기"
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:24
 msgid ""
 "Here you can override the styles of Zettlr to customise it even further."
-msgstr ""
+msgstr "여기에서 Zettlr 스타일을 재정의하여 더욱 세밀하게 사용자 지정할 수 있습니다."
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:25
 msgid ""
 "Attention: This file overrides all CSS directives! Never alter the geometry "
 "of elements, otherwise the app may expose unwanted behaviour!"
-msgstr ""
+msgstr "주의: 이 파일은 모든 CSS 지시문을 재정의합니다! 요소의 배치를 변경하지 마세요. 앱이 예기치 않게 작동할 수 있습니다."
 
 #: source/tmp/win-assets/App.vue.ts:26
 msgid "Exporting"
-msgstr ""
+msgstr "내보내는 중"
 
 #: source/tmp/win-assets/App.vue.ts:32
 msgid "Importing"
-msgstr ""
+msgstr "가져오는 중"
 
 #: source/tmp/win-assets/App.vue.ts:38
 msgid "Lua Filter"
-msgstr ""
+msgstr "Lua 필터"
 
 #: source/win-main/file-manager/util/file-item-context.ts:35
 #: source/win-main/file-manager/util/dir-item-context.ts:30
@@ -4839,7 +4756,7 @@ msgstr "프로젝트 내보내기"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:110
 msgid "Close workspace"
-msgstr ""
+msgstr "작업공간 닫기"
 
 #, javascript-format
 #~ msgid ""
