@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 4.6.0\n"
+"Project-Id-Version: Zettlr 4.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-07-28 11:46+0200\n"
-"PO-Revision-Date: 2026-06-15 14:08+0900\n"
+"PO-Revision-Date: 2026-07-28 22:11+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: source/app/app-service-container.ts:180
 #, javascript-format
 msgid "Indexing %s…"
-msgstr "%s のインデックスを作成…"
+msgstr "%s のインデックスを作成中…"
 
 #: source/app/app-service-container.ts:302
 #, javascript-format
@@ -589,7 +589,7 @@ msgstr "FSAL キャッシュを消去"
 #: source/app/service-providers/menu/menu.win32.ts:685
 #: source/app/service-providers/menu/menu.darwin.ts:709
 msgid "Clearing the FSAL cache requires a restart."
-msgstr "FSALキャッシュを消去するには再起動が必要です。"
+msgstr "FSAL キャッシュを消去するには再起動が必要です。"
 
 #: source/app/service-providers/menu/menu.win32.ts:686
 #: source/app/service-providers/menu/menu.darwin.ts:710
@@ -806,14 +806,14 @@ msgstr "言語ファイル %s をインポートできませんでした！"
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting file \"%s\""
-msgstr ""
+msgstr "ファイル \"%s\" をエクスポート中"
 
 #: source/app/service-providers/commands/export.ts:67
 #: source/app/service-providers/commands/dir-project-export.ts:161
 #: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting using custom command %s"
-msgstr ""
+msgstr "カスタムコマンド %s を使用してエクスポート中"
 
 #: source/app/service-providers/commands/export.ts:75
 #: source/app/service-providers/commands/export.ts:206
@@ -827,7 +827,7 @@ msgstr "エクスポート中にエラーが発生しました : %s"
 
 #: source/app/service-providers/commands/export.ts:81
 msgid "Exported file successfully."
-msgstr ""
+msgstr "ファイルのエクスポートに成功しました。"
 
 #: source/app/service-providers/commands/export.ts:149
 msgid "Choose export destination"
@@ -836,27 +836,27 @@ msgstr "エクスポート先を選択"
 #: source/app/service-providers/commands/export.ts:173
 #, javascript-format
 msgid "Exporting file %s"
-msgstr ""
+msgstr "ファイル %s をエクスポート中"
 
 #: source/app/service-providers/commands/export.ts:173
 #, javascript-format
 msgid "Exporting using profile %s"
-msgstr ""
+msgstr "プロファイル %s を使用してエクスポート中"
 
 #: source/app/service-providers/commands/export.ts:182
 #, javascript-format
 msgid "Exported to %s"
-msgstr ""
+msgstr "%s にエクスポートされました"
 
 #: source/app/service-providers/commands/export.ts:184
 #, javascript-format
 msgid "File %s has been exported"
-msgstr ""
+msgstr "ファイル %s がエクスポートされました"
 
 #: source/app/service-providers/commands/export.ts:185
 #, javascript-format
 msgid "File has been exported to %s"
-msgstr ""
+msgstr "ファイルが %s にエクスポートされました"
 
 #: source/app/service-providers/commands/export.ts:207
 #, javascript-format
@@ -904,7 +904,7 @@ msgstr "添付ファイルを開けませんでした。Zotero は起動して�
 
 #: source/app/service-providers/commands/language-tool.ts:332
 msgid "Forbidden (are your credentials correct?)"
-msgstr ""
+msgstr "アクセス不可 (認証情報は正しいですか？)"
 
 #: source/app/service-providers/commands/language-tool.ts:334
 msgid "Document too long"
@@ -912,11 +912,11 @@ msgstr "ドキュメントが長すぎます"
 
 #: source/app/service-providers/commands/language-tool.ts:337
 msgid "Server error"
-msgstr ""
+msgstr "サーバー エラー"
 
 #: source/app/service-providers/commands/language-tool.ts:339
 msgid "Client error"
-msgstr ""
+msgstr "クライアント エラー"
 
 #: source/app/service-providers/commands/language-tool.ts:344
 msgid "offline"
@@ -1019,9 +1019,9 @@ msgid ""
 "They may have moved or been deleted. Please verify that all files that you "
 "would like to export are included."
 msgstr ""
-"プロジェクト設定で指定された1つ以上のファイルが見つかりません。移動または削除"
-"された可能性があります。エクスポートするファイルがすべて含まれていることを確"
-"認してください。"
+"プロジェクト設定で指定された 1つ以上のファイルが見つかりません。移動または削"
+"除された可能性があります。エクスポートするファイルがすべて含まれていることを"
+"確認してください。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:135
 #, javascript-format
@@ -1037,46 +1037,46 @@ msgstr "プロジェクトのエクスポート"
 #: source/app/service-providers/commands/dir-project-export.ts:199
 #, javascript-format
 msgid "Exporting project \"%s\""
-msgstr ""
+msgstr "プロジェクト \"%s\" をエクスポート中"
 
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project export failed: %s"
-msgstr ""
+msgstr "プロジェクトのエクスポートに失敗しました : %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:178
 #: source/app/service-providers/commands/dir-project-export.ts:248
 #: source/app/service-providers/commands/dir-project-export.ts:271
 #, javascript-format
 msgid "Could not export project \"%s\"."
-msgstr ""
+msgstr "プロジェクト \"%s\" をエクスポートできませんでした。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:179
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
-msgstr ""
+msgstr "コマンド %s によるエクスポートに失敗しました : %s。"
 
 #. Error
 #: source/app/service-providers/commands/dir-project-export.ts:246
 #, javascript-format
 msgid "Export failed: %s"
-msgstr ""
+msgstr "エクスポートに失敗しました : %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:249
 #: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
-msgstr ""
+msgstr "プロファイル %s を使用したエクスポートに失敗しました : %s。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:256
 #, javascript-format
 msgid "Project \"%s\" has been exported."
-msgstr ""
+msgstr "プロジェクト \"%s\"  がエクスポートされました。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project has been exported to %s."
-msgstr ""
+msgstr "プロジェクトが %s にエクスポートされました。"
 
 #: source/app/service-providers/citeproc/index.ts:259
 #: source/app/service-providers/citeproc/index.ts:426
@@ -1234,20 +1234,20 @@ msgstr "プロジェクト フォルダーを開く"
 #. cache is cleared on startup.
 #: source/app/service-providers/fsal/index.ts:295
 msgid "Indexing files"
-msgstr ""
+msgstr "ファイルのインデックス作成中"
 
 #: source/app/service-providers/fsal/index.ts:295
 msgid "Discovering paths to index…"
-msgstr ""
+msgstr "インデックスへのパスを検出中…"
 
 #: source/app/service-providers/fsal/index.ts:330
 #, javascript-format
 msgid "Indexing %s paths…"
-msgstr ""
+msgstr "%s のパスをインデックス中…"
 
 #: source/app/service-providers/fsal/index.ts:349
 msgid "Indexing complete."
-msgstr ""
+msgstr "インデックス作成が完了しました。"
 
 #: source/win-main/file-manager/util/file-item-context.ts:30
 #: source/tmp/win-main/GlobalSearch.vue.ts:77
@@ -1751,7 +1751,7 @@ msgstr "グラフをレンダリングできませんでした :"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
 msgid "Could not render Graph."
-msgstr ""
+msgstr "グラフをレンダリングできませんでした。"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
@@ -1976,7 +1976,7 @@ msgstr "変換"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:50
 msgid "Zap gremlins"
-msgstr "不可視文字を削除"
+msgstr "不要な制御文字を除去"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:56
 #: source/win-preferences/schema/shortcuts.ts:172
@@ -2006,7 +2006,7 @@ msgstr "スマートクォートを通常の引用符に変換"
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:89
 #: source/win-preferences/schema/shortcuts.ts:207
 msgid "Convert quotes to Magic Quotes"
-msgstr ""
+msgstr "引用符をマジッククォートに変換"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:95
 #: source/win-preferences/schema/shortcuts.ts:214
@@ -2538,7 +2538,7 @@ msgstr "ポモドーロ タイマー"
 #: source/tmp/win-main/App.vue.ts:461
 #: source/tmp/common/vue/IrisIndicator.vue.ts:40
 msgid "Show tasks"
-msgstr ""
+msgstr "タスクを表示"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:56
 msgid "Enter your search terms below"
@@ -2563,7 +2563,7 @@ msgstr "検索をディレクトリに制限"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:61
 msgid "Case insensitive"
-msgstr ""
+msgstr "大文字と小文字を区別しない"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:62
 msgid "Choose directory…"
@@ -2584,7 +2584,7 @@ msgstr "結果を切り替え"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:67
 msgid "No results for your search."
-msgstr ""
+msgstr "検索に一致する結果はありません。"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:170
 #, javascript-format
@@ -3090,7 +3090,7 @@ msgstr "チェック柄の背景を使用する"
 
 #: source/tmp/win-main/PopoverLRT.vue.ts:18
 msgid "Clear finished tasks"
-msgstr ""
+msgstr "完了したタスクをクリアする"
 
 #: source/tmp/win-about/General-Tab.vue.ts:21
 msgid ""
@@ -3101,10 +3101,10 @@ msgid ""
 "possible. Below you can find all projects that Zettlr uses."
 msgstr ""
 "Zettlr は Hendrik Erz によるプロジェクトであり、GNU GPL v3でライセンスされて"
-"います。オープンソースで、無料で使用可能、そしてElectronフレームワークに基づ"
-"いています。Electron、Node.jsフレームワーク、そしてCodeMirrorエディタの開発者"
-"とその成果に感謝します。これら無しに、Zettlr は存在できなかったでしょう。以下"
-"に、Zettlr が利用しているすべてのプロジェクトを示します。"
+"います。オープンソースで、無料で使用可能、そして Electron フレームワークに基"
+"づいています。Electron、Node.js フレームワーク、そして CodeMirror エディタの"
+"開発者とその成果に感謝します。これら無しに、Zettlr は存在できなかったでしょ"
+"う。以下に、Zettlr が利用しているすべてのプロジェクトを示します。"
 
 #: source/tmp/win-about/General-Tab.vue.ts:22
 msgid ""
@@ -3114,9 +3114,9 @@ msgid ""
 "information:"
 msgstr ""
 "Zettlr は参考文献をエディタに直接表示するために、citeproc を利用しています。"
-"この目的のために、Zettlr はCitationStyleLanguage(CSL)とスタイルファイルを使用"
-"しています。これらのファイルは authorメタデータを変更せずに出荷されています。"
-"詳細 :"
+"この目的のために、Zettlr は CitationStyleLanguage(CSL) とスタイルファイルを使"
+"用しています。これらのファイルは author メタデータを変更せずに出荷されていま"
+"す。詳細 :"
 
 #: source/tmp/win-about/General-Tab.vue.ts:23
 msgid ""
@@ -3142,7 +3142,7 @@ msgstr ""
 
 #: source/tmp/win-about/General-Tab.vue.ts:25
 msgid "View the Privacy Policy by LanguageTooler GmbH"
-msgstr ""
+msgstr "LanguageTooler GmbH のプライバシーポリシーをご覧ください"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
@@ -3336,7 +3336,7 @@ msgid ""
 "raw syntax, or in a WYSIWYG mode. Which one do you prefer?"
 msgstr ""
 "Zettlr の核となるのは Markdown で、Markdown はそのままの構文で表示すること"
-"も、WYSIWYGモードで表示することもできます。どちらがお好みですか?"
+"も、WYSIWYG モードで表示することもできます。どちらがお好みですか?"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:7
 msgid "Raw Syntax"
@@ -3399,14 +3399,14 @@ msgid ""
 "activate this, images and PDF files will only be shown in the sidebar and "
 "open with your computer's default viewer."
 msgstr ""
-"Zettlr では、画像やPDFファイルをZettlr内で直接プレビューできます。これによ"
+"Zettlr では、画像や PDFファイルを Zettlr内で直接プレビューできます。これによ"
 "り、執筆中にプロットや文献を直接参照できます。この機能を有効にしない場合、画"
-"像とPDFファイルはサイドバーにのみ表示され、コンピュータのデフォルトのビューア"
-"で開かれます。"
+"像と PDFファイルはサイドバーにのみ表示され、コンピュータのデフォルトのビュー"
+"アで開かれます。"
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:7
 msgid "Activate Image and PDF Previews in Zettlr"
-msgstr "Zettlr で画像とPDFのプレビューを有効にする"
+msgstr "Zettlr で画像と PDFのプレビューを有効にする"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:7
 msgid "Check your writing"
@@ -3551,7 +3551,7 @@ msgstr "全般"
 
 #: source/tmp/win-project-properties/App.vue.ts:70
 msgid "Profiles"
-msgstr ""
+msgstr "プロファイル"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:115
 msgid "Add"
@@ -3587,21 +3587,21 @@ msgstr "ファイルの選択…"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:44
 msgid "unassigned"
-msgstr ""
+msgstr "未割り当て"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:45
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "デフォルト : %s"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:49
 msgid "Recording…"
-msgstr ""
+msgstr "記録中…"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:54
 #, javascript-format
 msgid "This shortcut conflicts with: %s"
-msgstr ""
+msgstr "このショートカットは競合しています : %s"
 
 #: source/tmp/win-stats/CalendarView.vue.ts:29
 msgid "January"
@@ -3809,7 +3809,7 @@ msgstr "自動修正"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Shortcuts"
-msgstr ""
+msgstr "ショートカット"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Zettelkasten"
@@ -3907,15 +3907,15 @@ msgstr "エディタの色とフォントのテーマを選択します。"
 
 #: source/win-preferences/schema/appearance.ts:77
 msgid "Follow App"
-msgstr ""
+msgstr "アプリの設定に従う"
 
 #: source/win-preferences/schema/appearance.ts:78
 msgid "Light Theme"
-msgstr ""
+msgstr "ライト テーマ"
 
 #: source/win-preferences/schema/appearance.ts:79
 msgid "Dark Theme"
-msgstr ""
+msgstr "ダーク テーマ"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Toolbar buttons"
@@ -4603,7 +4603,7 @@ msgstr "エクスポートの設定"
 #. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
 #: source/win-preferences/schema/import-export.ts:65
 msgid "Use Zettlr's internal Pandoc for exports"
-msgstr "エクスポートには Zettlr の内部Pandoc を使用する"
+msgstr "エクスポートには Zettlr の内部 Pandoc を使用する"
 
 #: source/win-preferences/schema/import-export.ts:70
 msgid "Automatically open successfully exported files"
@@ -4691,55 +4691,57 @@ msgstr "コマンド"
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
-msgstr ""
+msgstr "テーブル ショートカット"
 
 #: source/win-preferences/schema/shortcuts.ts:123
 msgid "Customize the available table shortcuts for the editor."
-msgstr ""
+msgstr "エディタで使用できるテーブルショートカットをカスタマイズします。"
 
 #: source/win-preferences/schema/shortcuts.ts:129
 msgid "Align Markdown table under cursor"
-msgstr ""
+msgstr "カーソル位置の Markdown テーブルを整列"
 
 #: source/win-preferences/schema/shortcuts.ts:136
 msgid "Align table column left"
-msgstr ""
+msgstr "テーブル列を左揃え"
 
 #: source/win-preferences/schema/shortcuts.ts:143
 msgid "Align table column center"
-msgstr ""
+msgstr "テーブル列を中央揃え"
 
 #: source/win-preferences/schema/shortcuts.ts:150
 msgid "Align table column right"
-msgstr ""
+msgstr "テーブル列を右揃え"
 
 #: source/win-preferences/schema/shortcuts.ts:158
 msgid "Transform Shortcuts"
-msgstr ""
+msgstr "変換 ショートカット"
 
 #: source/win-preferences/schema/shortcuts.ts:159
 msgid "Assign shortcuts to your frequently used text transformations here."
-msgstr ""
+msgstr "よく使うテキスト変換にショートカットを割り当てます。"
 
 #: source/win-preferences/schema/shortcuts.ts:165
 msgid "Zap Gremlins"
-msgstr ""
+msgstr "不要な制御文字を除去"
 
 #: source/win-preferences/schema/shortcuts.ts:264
 msgid "UI Shortcuts"
-msgstr ""
+msgstr "UI ショートカット"
 
 #: source/win-preferences/schema/shortcuts.ts:265
 msgid "Customize general user interface shortcuts here."
 msgstr ""
+"ここでは、一般的なユーザーインターフェースのショートカットをカスタマイズでき"
+"ます。"
 
 #: source/win-preferences/schema/shortcuts.ts:271
 msgid "Switch to next tab"
-msgstr ""
+msgstr "次のタブに切り替え"
 
 #: source/win-preferences/schema/shortcuts.ts:278
 msgid "Switch to previous tab"
-msgstr ""
+msgstr "前のタブに切り替え"
 
 #: source/win-preferences/schema/zettelkasten.ts:23
 msgid "Zettelkasten IDs"
@@ -4844,7 +4846,7 @@ msgstr "言語"
 #: source/win-preferences/schema/spellchecking.ts:37
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
-msgstr "自動スペルチェックを有効にする言語の選択。"
+msgstr "自動スペルチェックを有効にしたい言語を選択してください。"
 
 #: source/win-preferences/schema/spellchecking.ts:48
 msgid "Install Dictionaries"
@@ -5025,7 +5027,7 @@ msgid ""
 "a new Zettelkasten ID."
 msgstr ""
 "Zettlr はこのパターンを使って新しいファイル名を生成します。デフォルトでは、新"
-"しい Zettelkasten IDが使用されます。"
+"しい Zettelkasten ID が使用されます。"
 
 #: source/win-preferences/schema/advanced.ts:53
 #, javascript-format
@@ -5137,7 +5139,7 @@ msgid ""
 "sidebar below. Include the leading period, e.g., \".xml\"."
 msgstr ""
 "ファイルマネージャーとサイドバーに表示したいファイル拡張子を下記に追加してく"
-"ださい。先頭のピリオドを含めてください (例：.xml)。"
+"ださい。先頭のピリオドを含めてください (例 ：.xml)。"
 
 #: source/win-preferences/schema/advanced.ts:287
 msgid "Enter an extension and press enter"
