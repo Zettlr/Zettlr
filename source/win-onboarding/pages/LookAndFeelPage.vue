@@ -48,7 +48,7 @@ const autoDarkModeEnd = window.config.get('autoDarkModeEnd')
 const dmStart = DateTime.fromFormat(String(autoDarkModeStart), 'HH:mm', { locale: window.config.get('appLang') }).toLocaleString({ timeStyle: 'short' })
 const dmEnd = DateTime.fromFormat(String(autoDarkModeEnd), 'HH:mm', { locale: window.config.get('appLang') }).toLocaleString({ timeStyle: 'short' })
 
-const darkModeScheduleTimesInfo = trans('If you choose "schedule," Zettlr will turn on dark mode between %s and %s. You can adjust these times in the settings.', dmStart, dmEnd)
+const darkModeScheduleTimesInfo = trans('Zettlr will turn on dark mode between %s and %s. You can adjust these times in the settings.', dmStart, dmEnd)
 
 const darkModeScheduleOptions = {
   off: trans('Do not automatically toggle light/dark mode'),

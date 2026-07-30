@@ -7,7 +7,7 @@
     </p>
   
     <p>
-      <button v-bind:class="{ active: hasChosenDict }" v-on:click="acceptCandidate">
+      <button v-bind:class="{ active: hasChosenDict }" v-on:click="toggleDictionary">
         {{ dictLabel }}
       </button>
     </p>
@@ -18,7 +18,7 @@
   </p>
 
   <p>
-    <button v-bind:class="{ active: hasActivatedLT }" v-on:click="activateLanguageTool">
+    <button v-bind:class="{ active: hasActivatedLT }" v-on:click="toggleLanguageTool">
       {{ ltLabel }}
     </button>
   </p>
@@ -32,6 +32,7 @@
 import { trans } from 'source/common/i18n-renderer'
 import findLangCandidates from 'source/common/util/find-lang-candidates'
 import { resolveLangCode } from 'source/common/util/map-lang-code'
+import { useConfigStore } from 'source/pinia'
 import { ref, computed, onMounted } from 'vue'
 
 const pageHeading = trans('Check your writing')
@@ -43,10 +44,17 @@ const ltIntro = trans('Zettlr integrates with LanguageTool, a free grammar and s
 const ltLabel = trans('Activate LanguageTool (uses online service)')
 const ltOutro = trans('You can choose a custom server and provide your LanguageTool username later in the settings.')
 
-const ipcRenderer = window.ipc
+const configStore = useConfigStore()
 
-const hasActivatedLT = ref(false)
-const hasChosenDict = ref(false)
+const ipcRenderer = window.ipc
+const hasActivatedLT = computed(() => {
+  return configStore.config.editor.lint.languageTool.active
+})
+
+const hasChosenDict = computed(() => {
+  return configStore.config.selectedDicts.length > 0
+})
+
 const dictionaryCandidate = ref<string|undefined>(undefined)
 const dictionaryCandidateLanguage = computed(() => {
   if (dictionaryCandidate.value === undefined) {
@@ -73,17 +81,16 @@ onMounted(async () => {
   }
 })
 
-function acceptCandidate () {
-  window.config.set('selectedDicts', [dictionaryCandidate.value])
-  hasChosenDict.value = true
+function toggleDictionary () {
+  if (hasChosenDict.value) {
+    window.config.set('selectedDicts', [])
+  } else {
+    window.config.set('selectedDicts', [dictionaryCandidate.value])
+  }
 }
 
-function activateLanguageTool () {
-  // Here we apply a basic default
-  window.config.set('editor.lint.languageTool.active', true)
-  window.config.set('editor.lint.languageTool.level', 'default')
-  window.config.set('editor.lint.languageTool.provider', 'official')
-  hasActivatedLT.value = true
+function toggleLanguageTool () {
+  configStore.setConfigValue('editor.lint.languageTool.active', !hasActivatedLT.value)
 }
 </script>
 

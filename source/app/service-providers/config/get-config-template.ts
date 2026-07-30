@@ -397,7 +397,7 @@ export function getConfigTemplate (): ConfigOptions {
         markdown: true, // Should Markdown be linted?
         languageTool: {
           active: false, // Utilize languageTool?
-          level: 'picky', // API: https://languagetool.org/http-api/#!/default/post_check
+          level: 'default', // API: https://languagetool.org/http-api/#!/default/post_check
           motherTongue: '', // Optional motherTongue property
           variants: {
             // These defaults are taken from LT's extension
