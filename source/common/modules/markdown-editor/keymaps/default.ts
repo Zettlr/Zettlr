@@ -76,7 +76,7 @@ import { zapGremlins } from '../commands/transforms/zap-gremlins'
 import { stripDuplicateSpaces } from '../commands/transforms/strip-duplicate-spaces'
 import { italicsToQuotes } from '../commands/transforms/italics-to-quotes'
 import { quotesToItalics } from '../commands/transforms/quotes-to-italics'
-import { configField } from '../util/configuration'
+import { configField, type EditorConfiguration } from '../util/configuration'
 import { straightenQuotes } from '../commands/transforms/straighten-quotes'
 import { curlQuotes } from '../commands/transforms/curl-quotes'
 import { toDoubleQuotes } from '../commands/transforms/to-double-quotes'
@@ -94,11 +94,13 @@ import { toTitleCase } from '../commands/transforms/to-title-case'
  *
  * @return  {Keybinding[]}  The keybindings. Must be passed to `keymap.of()`
  */
-export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]): KeyBinding[] {
+export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[], config: EditorConfiguration): KeyBinding[] {
   // Utility function to make retrieval much easier
   const sc = (name: EditorShortcutName) => {
     return getCustomShortcut(name, customShortcutMap)
   }
+
+  const { autocompleteWithEnter, autocompleteWithTab } = config
 
   const alignLeft = setAlignment('left')
   const alignCenter = setAlignment('center')
@@ -111,7 +113,7 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     // the further atop they need to be.
 
     // Tabulator
-    { key: 'Tab', run: acceptCompletion },
+    ...(autocompleteWithTab ? [{ key: 'Tab', run: acceptCompletion }] : []),
     { key: 'Tab', run: nextSnippet },
     { key: 'Tab', run: moveNextCell },
     { key: 'Tab', run: maybeIndentList },
@@ -122,6 +124,7 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: 'Shift-Tab', run: indentLess },
     
     // Enter
+    ...(autocompleteWithEnter ? [{ key: 'Enter', run: acceptCompletion }] : []),
     { key: 'Enter', run: handleAutocorrectEnter },
     { key: 'Enter', run: moveNextRow },
     { key: 'Enter', run: insertNewlineContinueMarkup },

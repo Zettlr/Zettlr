@@ -16,7 +16,7 @@ import { Compartment, EditorState, type Extension } from '@codemirror/state'
 import { type CustomEditorShortcut } from './shortcuts'
 import { keymap } from '@codemirror/view'
 import { mainEditorKeybindings } from './default'
-import { configUpdateEffect } from '../util/configuration'
+import { configField, configUpdateEffect, type EditorConfiguration } from '../util/configuration'
 
 const keymapCompartment = new Compartment()
 
@@ -26,10 +26,9 @@ const keybindingsTransactionExtender = EditorState.transactionExtender.of(tr => 
   let extendedTransaction = null
   for (const effect of tr.effects) {
     if (effect.is(configUpdateEffect) && effect.value.shortcuts !== undefined) {
+      const keys = mainEditorKeybindings(effect.value.shortcuts, tr.state.field(configField))
       extendedTransaction = {
-        effects: keymapCompartment.reconfigure(
-          keymap.of(mainEditorKeybindings(effect.value.shortcuts))
-        )
+        effects: keymapCompartment.reconfigure(keymap.of(keys))
       }
     }
   }
@@ -45,9 +44,9 @@ const keybindingsTransactionExtender = EditorState.transactionExtender.of(tr => 
  *
  * @return  {Extension}                                  The keymap
  */
-export function zettlrKeymap (customShortcutMap: CustomEditorShortcut[]): Extension {
+export function zettlrKeymap (customShortcutMap: CustomEditorShortcut[], config: EditorConfiguration): Extension {
   return [
     keybindingsTransactionExtender,
-    keymapCompartment.of(keymap.of(mainEditorKeybindings(customShortcutMap)))
+    keymapCompartment.of(keymap.of(mainEditorKeybindings(customShortcutMap, config)))
   ]
 }
