@@ -52,11 +52,14 @@ jobs:
       - name: Update translations
         run: |
           ./scripts/i18n.sh
-          git add -A
-          git diff-index --quiet HEAD || git commit -m "chore(i18n): Update translations ($(date))"
-          git diff-index --quiet HEAD || git push -u origin i18n-update-${{ github.run_id }}
-      - name: "[Optional] Open PR"
+      - name: Commit and Open PR
         run: |
-          git diff-index --quiet HEAD || gh pr create -B develop -H i18n-update-${{ github.run_id }} --title "chore(i18n): Update translations ($(date))" --body "This PR updates all translation PO-files. CAUTION: Do not merge this PR if there are unmerged translation updates, since those will otherwise become unmergeable. This PR will be recreated every week, so it's better to close it rather than have contributors rebase their changes."
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "chore(i18n): Update translations ($(date))"
+          git push -u origin i18n-update-${{ github.run_id }}
+          gh pr create -B develop -H i18n-update-${{ github.run_id }} --title "chore(i18n): Update translations ($(date))" --body "This PR updates all translation PO-files. CAUTION: Do not merge this PR if there are unmerged translation updates, since those will otherwise become unmergeable. This PR will be recreated every week, so it's better to close it rather than have contributors rebase their changes."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
