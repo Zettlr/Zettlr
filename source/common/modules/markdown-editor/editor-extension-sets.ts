@@ -170,7 +170,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // keymap.
     inputModeCompartment.of(inputMode),
     // Then, include the default keymap
-    zettlrKeymap(options.initialConfig.shortcuts),
+    zettlrKeymap(options.initialConfig.shortcuts, options.initialConfig),
     darkMode({ darkMode: useDarkModeEditor(options.initialConfig.darkMode, options.initialConfig.darkModeEditor), ...themes[options.initialConfig.theme] }),
     // CODE FOLDING
     codeFolding(),

@@ -382,6 +382,16 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
           model: 'editor.showLinkPreviews'
         },
         {
+          type: 'checkbox',
+          label: trans('Accept autocomplete suggestion with Enter'),
+          model: 'editor.autocompleteWithEnter'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Accept autocomplete suggestion with Tab'),
+          model: 'editor.autocompleteWithTab'
+        },
+        {
           // TODO: Where should this setting go?
           type: 'checkbox',
           label: trans('Automatically close matching character pairs'),

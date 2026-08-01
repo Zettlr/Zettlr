@@ -190,7 +190,7 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
         },
         {
           type: 'shortcut',
-          label: trans('Remove line breaks'),
+          label: trans('Remove excess line breaks'),
           model: 'shortcuts.editor.tr-remove-line-breaks',
           defaultShortcut: defaultEditorShortcut('tr-remove-line-breaks'),
           conflicts: conflicts('tr-remove-line-breaks')

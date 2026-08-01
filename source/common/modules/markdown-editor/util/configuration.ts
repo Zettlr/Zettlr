@@ -32,6 +32,8 @@ export interface AutocorrectOptions {
 export interface EditorConfiguration {
   autocompleteSuggestEmojis: boolean
   snippetAutocompleteTriggerCharacter: ':'
+  autocompleteWithEnter: boolean
+  autocompleteWithTab: boolean
   autocorrect: AutocorrectOptions
   autoCloseBrackets: boolean
   renderingMode: 'preview'|'raw'
@@ -100,6 +102,8 @@ export function getDefaultConfig (): EditorConfiguration {
     },
     autocompleteSuggestEmojis: false,
     snippetAutocompleteTriggerCharacter: ':',
+    autocompleteWithEnter: false,
+    autocompleteWithTab: true,
     autoCloseBrackets: true,
     renderingMode: 'preview',
     previewModeShowSyntaxWhenCursorIsAdjacent: true,

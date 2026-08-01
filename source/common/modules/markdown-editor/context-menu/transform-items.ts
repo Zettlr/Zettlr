@@ -71,7 +71,7 @@ export function getTransformSubmenu (view: EditorView): SubmenuItem {
         action () { quotesToItalics(view.state.field(configField).italicFormatting)(view) }
       },
       {
-        label: trans('Remove line breaks'),
+        label: trans('Remove excess line breaks'),
         accelerator: sc('tr-remove-line-breaks'),
         type: 'normal',
         action () { removeLineBreaks(view) }

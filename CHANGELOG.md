@@ -2,6 +2,9 @@
 
 ## GUI and Functionality
 
+- **Feature**: You can now choose whether you want to automatically accept the
+  selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
+  disable automatic accepting entirely (#6485).
 - Fixed an issue where in some places instead of showing you a proper file
   title, the app would default to only showing you the filename, and neither a
   heading or YAML title, if you specified it as such. Now, the logic has been
@@ -18,6 +21,7 @@
   - `ko-KO` (#6478).
   - `de-DE`.
   - `ja-JP` (#6480).
+- Renamed "Remove line breaks" to "Remove excess line breaks."
 
 ## Under the Hood
 
