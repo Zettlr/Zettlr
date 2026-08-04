@@ -79,7 +79,7 @@ function getExtensions (mode: SupportedLanguage): Extension[] {
   }
 
   const extensions = [
-    zettlrKeymap(shortcutList),
+    zettlrKeymap(shortcutList, editor),
     search({ top: true }),
     codeFolding(),
     foldGutter(),

@@ -25,6 +25,7 @@ import { hiddenSpanField } from '../table-editor/subview'
 import { zettlrKeymap } from '.'
 import { type CustomEditorShortcut, type EditorShortcutName, getCustomShortcut } from './shortcuts'
 import { setAlignment } from '../table-editor/commands/tables'
+import { configField } from '../util/configuration'
 
 /**
  * This command can be used to override the default selectAll functionality.
@@ -61,6 +62,8 @@ export function tableEditorKeymap (mainView: EditorView, customShortcutMap: Cust
   const sc = (name: EditorShortcutName) => {
     return getCustomShortcut(name, customShortcutMap)
   }
+
+  const config = mainView.state.field(configField)
 
   const alignLeft = setAlignment('left')
   const alignCenter = setAlignment('center')
@@ -105,6 +108,6 @@ export function tableEditorKeymap (mainView: EditorView, customShortcutMap: Cust
     ]),
     // Also include the sharedKeymap. The subview transaction filter will
     // automatically ensure that nothing spanning multiple lines will be executed.
-    zettlrKeymap(customShortcutMap)
+    zettlrKeymap(customShortcutMap, config)
   ]
 }
