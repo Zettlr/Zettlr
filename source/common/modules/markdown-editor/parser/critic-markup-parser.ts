@@ -12,7 +12,6 @@ export function criticMarkupLanguage (config?: MarkdownParserConfig): Extension[
   const markdownLanguage = markdownParser(config)
 
   const mixedCMParser = critic.parser.configure({
-    // @ts-expect-error This makes TS currently sad, but because we don't use it right now, we can ignore it
     wrap: parseMixed(node => {
       return node.type.isTop ? {
         parser: markdownLanguage.language.parser,
@@ -22,7 +21,6 @@ export function criticMarkupLanguage (config?: MarkdownParserConfig): Extension[
   })
 
   return [
-    // @ts-expect-error This makes TS currently sad, but because we don't use it right now, we can ignore it
     LRLanguage.define({ parser: mixedCMParser }),
     markdownLanguage.support,
   ]
