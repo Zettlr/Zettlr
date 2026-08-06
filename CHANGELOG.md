@@ -25,7 +25,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Update Electron to `v43.2.0`.
 
 # 4.7.0
 
