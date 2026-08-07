@@ -33,6 +33,7 @@ import { trans } from 'source/common/i18n-renderer'
 import type { StatusbarItem } from '../statusbar'
 import { renderHorizontalRules } from './render-hr'
 import { renderBlockquotes } from './render-blockquotes'
+import { renderAdmonitions } from './render-admonitions'
 
 const renderCompartment = new Compartment()
 
@@ -53,7 +54,7 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
   if (ext === undefined || config.renderingMode === 'raw') {
     // Default extensions to always include
     ext = [
-      renderCode,
+      renderCode
     ]
   }
 
@@ -71,6 +72,7 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
     updateExtension(renderEmphasis, config.renderEmphasis, ext)
     updateExtension(renderBlockquotes, config.renderEmphasis, ext)
     updateExtension(renderPandoc, config.renderPandoc, ext)
+    updateExtension(renderAdmonitions, config.renderAdmonitions, ext)
     updateExtension(renderHorizontalRules, config.renderHorizontalRules, ext)
   }
 
@@ -96,6 +98,7 @@ const modeSwitcher = EditorState.transactionExtender.from(configField, config =>
         renderIframes: effect.value.renderIframes ?? config.renderIframes,
         renderEmphasis: effect.value.renderEmphasis ?? config.renderEmphasis,
         renderPandoc: effect.value.renderPandoc ?? config.renderPandoc,
+        renderAdmonitions: effect.value.renderAdmonitions ?? config.renderAdmonitions,
         renderHorizontalRules: effect.value.renderHorizontalRules?? config.renderHorizontalRules
       }
 
