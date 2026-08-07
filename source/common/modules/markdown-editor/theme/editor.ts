@@ -73,6 +73,26 @@ export interface ThemeVars {
   '--zettlr-editor-accent-color': string
   /** CSS `<color>` value */
   '--zettlr-editor-accent-bg': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-note-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-tip-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-important-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-warning-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-caution-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-note-bg': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-tip-bg': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-important-bg': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-warning-bg': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-admonition-caution-bg': string
   /** CSS `font-size` value */
   '--zettlr-editor-header-1-size': string
   /** CSS `font-size` value */
@@ -140,6 +160,30 @@ const accentColorDark = 'var(--grey-2)'
 const accentBackground = 'var(--grey-2)'
 const accentBackgroundDark = 'var(--grey-4)'
 
+const admonitionNoteColorLight = 'rgb(170, 170, 170)'
+const admonitionTipColorLight = 'rgb(40, 170, 40)'
+const admonitionImportantColorLight = 'rgb(200, 20, 200)'
+const admonitionWarningColorLight = 'rgb(200, 200, 40)'
+const admonitionCautionColorLight = 'rgb(200, 0, 0)'
+
+const admonitionNoteBgLight = 'rgb(220, 220, 220)'
+const admonitionTipBgLight = 'rgb(200, 250, 200)'
+const admonitionImportantBgLight = 'rgb(250, 180, 250)'
+const admonitionWarningBgLight = 'rgb(250, 250, 180)'
+const admonitionCautionBgLight = 'rgb(250, 210, 210)'
+
+const admonitionNoteColorDark = 'rgb(200, 200, 200)'
+const admonitionTipColorDark = 'rgb(80, 230, 80)'
+const admonitionImportantColorDark = 'rgb(255, 30, 255)'
+const admonitionWarningColorDark = 'rgb(230, 230, 30)'
+const admonitionCautionColorDark = 'rgb(255, 70, 70)'
+
+const admonitionNoteBgDark = 'rgba(60, 60, 60, 0.6)'
+const admonitionTipBgDark = 'rgba(0, 70, 0, 0.6)'
+const admonitionImportantBgDark = 'rgba(90, 30, 90, 0.6)'
+const admonitionWarningBgDark = 'rgba(70, 70, 0, 0.6)'
+const admonitionCautionBgDark = 'rgba(80, 10, 10, 0.6)'
+
 const headerSize1 = '2em'
 const headerSize2 = '1.8em'
 const headerSize3 = '1.5em'
@@ -174,6 +218,16 @@ export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-code-bg': codeBackground,
   '--zettlr-editor-escape-color': escapeColor,
   '--zettlr-editor-accent-color': accentColor,
+  '--zettlr-editor-admonition-note-color': admonitionNoteColorLight,
+  '--zettlr-editor-admonition-tip-color': admonitionTipColorLight,
+  '--zettlr-editor-admonition-important-color': admonitionImportantColorLight,
+  '--zettlr-editor-admonition-warning-color': admonitionWarningColorLight,
+  '--zettlr-editor-admonition-caution-color': admonitionCautionColorLight,
+  '--zettlr-editor-admonition-note-bg': admonitionNoteBgLight,
+  '--zettlr-editor-admonition-tip-bg': admonitionTipBgLight,
+  '--zettlr-editor-admonition-important-bg': admonitionImportantBgLight,
+  '--zettlr-editor-admonition-warning-bg': admonitionWarningBgLight,
+  '--zettlr-editor-admonition-caution-bg': admonitionCautionBgLight,
   '--zettlr-editor-accent-bg': accentBackground,
   '--zettlr-editor-header-1-size': headerSize1,
   '--zettlr-editor-header-2-size': headerSize2,
@@ -208,6 +262,16 @@ export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-escape-color': escapeColorDark,
   '--zettlr-editor-accent-color': accentColorDark,
   '--zettlr-editor-accent-bg': accentBackgroundDark,
+  '--zettlr-editor-admonition-note-color': admonitionNoteColorDark,
+  '--zettlr-editor-admonition-tip-color': admonitionTipColorDark,
+  '--zettlr-editor-admonition-important-color': admonitionImportantColorDark,
+  '--zettlr-editor-admonition-warning-color': admonitionWarningColorDark,
+  '--zettlr-editor-admonition-caution-color': admonitionCautionColorDark,
+  '--zettlr-editor-admonition-note-bg': admonitionNoteBgDark,
+  '--zettlr-editor-admonition-tip-bg': admonitionTipBgDark,
+  '--zettlr-editor-admonition-important-bg': admonitionImportantBgDark,
+  '--zettlr-editor-admonition-warning-bg': admonitionWarningBgDark,
+  '--zettlr-editor-admonition-caution-bg': admonitionCautionBgDark,
   '--zettlr-editor-header-1-size': headerSize1,
   '--zettlr-editor-header-2-size': headerSize2,
   '--zettlr-editor-header-3-size': headerSize3,
@@ -433,4 +497,12 @@ export const editorTheme = EditorView.baseTheme({
     font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-6-size) var(--zettlr-editor-font)',
     '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
   },
+  // Admonitions
+  '.cm-admonition-note': { color: 'var(--zettlr-editor-admonition-note-color)' },
+  '.cm-admonition-tip': { color: 'var(--zettlr-editor-admonition-tip-color)' },
+  '.cm-admonition-important': { color: 'var(--zettlr-editor-admonition-important-color)' },
+  '.cm-admonition-warning': { color: 'var(--zettlr-editor-admonition-warning-color)' },
+  '.cm-admonition-caution': { color: 'var(--zettlr-editor-admonition-caution-color)' },
+  '.cm-admonition.cm-code-mark': { color: 'var(--zettlr-editor-admonition-note-color)' },
+  '.cm-admonition-title': { fontWeight: 'bold' }
 })
