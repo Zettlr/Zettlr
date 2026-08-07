@@ -95,6 +95,7 @@ import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
 import { zknTagParser } from './zkn-tag-parser'
 import { pandocDivComposite, pandocDivParser, pandocSpanParser } from './pandoc-div-span-parser'
+import { admonitionComposite, admonitionParser } from './admonition-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   { mode: markdownLanguage, selectors: [ 'markdown', 'md' ] },
@@ -228,6 +229,8 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       wrap: yamlCodeParse(),
       parseBlock: [
         pandocDivParser,
+        // Parse GitHub/Obsidian style admonitions/callouts
+        admonitionParser,
         // This BlockParser parses YAML frontmatters
         frontmatterParser,
         // This BlockParser parses math blocks
@@ -252,9 +255,24 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       // that the YAML block parser utilizes
       // NOTE: Changes here must be reflected in util/custom-tags.ts and theme/syntax.ts!
       defineNodes: [
+        // YAML frontmatter
         { name: 'YAMLFrontmatter', block: true },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
+        // Admonitions
+        {
+          name: 'Admonition',
+          block: true,
+          style: { 'Admonition/...': customTags.Admonition },
+          composite: admonitionComposite
+        },
+        { name: 'AdmonitionMarker', style: customTags.AdmonitionMarker },
+        { name: 'AdmonitionNote', style: customTags.AdmonitionNote },
+        { name: 'AdmonitionTip', style: customTags.AdmonitionTip },
+        { name: 'AdmonitionImportant', style: customTags.AdmonitionImportant },
+        { name: 'AdmonitionWarning', style: customTags.AdmonitionWarning },
+        { name: 'AdmonitionCaution', style: customTags.AdmonitionCaution },
+        { name: 'AdmonitionTitle', style: customTags.AdmonitionTitle },
         // Citation elements
         { name: 'Citation', style: { 'Citation/...': customTags.Citation } },
         { name: 'CitationMark', style: customTags.CitationMark },
@@ -278,6 +296,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
           composite: footnoteComposite,
         },
         { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },
+        // Zettelkasten elements (wikilinks + tags)
         { name: 'ZknLink', style: { 'ZknLink/...': customTags.ZknLink } },
         { name: 'ZknLinkMark', style: customTags.ZknLinkMark },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
@@ -285,8 +304,10 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'ZknLinkPipe', style: customTags.ZknLinkPipe },
         { name: 'ZknTag', style: { 'ZknTag/...': customTags.ZknTag } },
         { name: 'ZknTagMark', style: customTags.ZknTagMark },
+        // Pandoc attributes
         { name: 'PandocAttribute', style: customTags.PandocAttribute },
         { name: 'PandocAttributeMark', style: customTags.PandocAttributeMark },
+        // Pandoc DIVs
         {
           name: 'PandocDiv',
           block: true,

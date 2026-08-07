@@ -21,9 +21,21 @@ import { type Extension } from '@codemirror/state'
 // Instead of utilizing JS styling, we simply apply class names, in order to
 // retain our users' ability to apply custom CSS.
 const customTagHighlight = HighlightStyle.define([
+  // YAML frontmatter
   { tag: customTags.YAMLFrontmatter, class: 'cm-yaml-frontmatter' },
   { tag: customTags.YAMLFrontmatterStart, class: 'cm-yaml-frontmatter-start' },
   { tag: customTags.YAMLFrontmatterEnd, class: 'cm-yaml-frontmatter-end' },
+  // Admonition
+  { tag: customTags.AdmonitionTitle, class: 'cm-admonition-title' },
+  { tag: customTags.AdmonitionMarker, class: 'cm-admonition-marker' },
+  { tag: customTags.Admonition, class: 'cm-admonition' },
+  { tag: customTags.AdmonitionNote, class: 'cm-admonition-note' },
+  { tag: customTags.AdmonitionTip, class: 'cm-admonition-tip' },
+  { tag: customTags.AdmonitionImportant, class: 'cm-admonition-important' },
+  { tag: customTags.AdmonitionWarning, class: 'cm-admonition-warning' },
+  { tag: customTags.AdmonitionCaution, class: 'cm-admonition-caution' },
+  { tag: customTags.AdmonitionTitle, class: 'cm-admonition-title' },
+  // Footnotes
   { tag: customTags.Footnote, class: 'footnote' },
   { tag: customTags.FootnoteRef, class: 'footnote-ref' },
   { tag: customTags.FootnoteRefLabel, class: 'footnote-ref-label' },
