@@ -113,10 +113,6 @@ export const admonitionParser: BlockParser = {
 
     return null // composite blocks require returning `null` on success
   },
-
-  endLeaf: (ctx, line, _leaf) => {
-    return !admonitionStartRE.test(line.text)
-  }
 }
 
 // This function is used in the node [composite](https://github.com/lezer-parser/markdown?tab=readme-ov-file#user-content-nodespec.composite) method:
