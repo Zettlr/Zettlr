@@ -502,6 +502,22 @@ export interface TextNode extends MDNode {
   value: string
 }
 
+export interface Admonition extends MDNode {
+  type: 'Admonition',
+  /**
+   * The type of this admonition.
+   */
+  admonitionType: 'note'|'tip'|'important'|'warning'|'caution',
+  /**
+   * The admonition's title; typically either the keyword, or a custom title.
+   */
+  title: TextNode,
+  /**
+   * All children of the node
+   */
+  children: ASTNode[]
+}
+
 /**
  * This generic node represents any Lezer node that has no specific role (or can
  * be handled without additional care). This ensures that new nodes will always
@@ -522,7 +538,7 @@ export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefL
 | LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
 | Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
 | InlineCode | YAMLFrontmatter | Emphasis | Strikethrough | Table | TableCell | TableRow
-| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan
+| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan | Admonition
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -604,6 +620,56 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         alt: genericTextNode(node.from, node.to, url)
       }
       return astNode
+    }
+    case 'Admonition': {
+      // Each admonition will have one of these types of nodes describing their type
+      const marker = node.getChild('AdmonitionMarker')
+      if (marker === null) {
+        throw new Error('Parse error: Could not find Admonition Marker.')
+      }
+      const keywordNode = marker.getChild('AdmonitionNote')
+        ?? marker.getChild('AdmonitionTip')
+        ?? marker.getChild('AdmonitionImportant')
+        ?? marker.getChild('AdmonitionWarning')
+        ?? marker.getChild('AdmonitionCaution')
+
+      if (keywordNode === null) {
+        throw new Error('Parse error: Could not find Admonition keyword node.')
+      }
+
+      let keyword: Admonition['admonitionType'] = 'note'
+      let title = 'Note'
+      if (keywordNode.type.name === 'AdmonitionTip') {
+        keyword = 'tip'
+        title = 'Tip'
+      } else if (keywordNode.type.name === 'AdmonitionImportant') {
+        keyword = 'important'
+        title = 'Important'
+      } else if (keywordNode.type.name === 'AdmonitionWarning') {
+        keyword = 'warning'
+        title = 'Warning'
+      } else if (keywordNode.type.name === 'AdmonitionCaution') {
+        keyword = 'caution'
+        title = 'Caution'
+      }
+
+      const titleNode = node.getChild('AdmonitionTitle')
+      if (titleNode !== null) {
+        title = markdown.substring(titleNode.from, titleNode.to)
+      }
+
+      const astNode: Admonition = {
+        type: 'Admonition',
+        attributes: {},
+        title: genericTextNode(marker.from, marker.to, title),
+        admonitionType: keyword,
+        name: 'Admonition',
+        from: node.from,
+        to: node.to,
+        children: [],
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown)
+      }
+      return parseChildren(astNode, node, markdown)
     }
     case 'ATXHeading1':
     case 'ATXHeading2':

@@ -210,6 +210,55 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
           }
         ]
       }
+  },
+  {
+    description: 'Parse Admonitions',
+    input: `# Admonition file
+
+> [!NOTE] A Custom Note
+> This is a note admonition with a custom title.`,
+    output:  {
+    attributes: {}, from: 0, name: "Document", to: 91, type: "Document", whitespaceBefore: "",
+    children: [
+      {
+        attributes: {}, content: "Admonition file", from: 0, level: 1, name: "ATXHeading1", to: 17, type: "Heading", whitespaceBefore: "",
+        children: [
+          { attributes: {}, children: [], from: 0, name: "HeaderMark", to: 1, type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, from: 2, name: "text", to: 17, type: "Text", value: "Admonition file", whitespaceBefore: " " }
+        ]
+      },
+      {
+        admonitionType: "note", attributes: {},
+        from: 19, to: 91, type: "Admonition", whitespaceBefore: "\n\n", name: "Admonition",
+        title: { attributes: {}, from: 21, name: "text", to: 28, type: "Text", value: "A Custom Note", whitespaceBefore: "" },
+        children: [
+          { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "" },
+          {
+            attributes: {}, from: 21, name: "AdmonitionMarker", to: 28, type: "Generic", whitespaceBefore: " ",
+            children: [
+              { attributes: {}, children: [], from: 21, name: "CodeMark", to: 23, type: "Generic", whitespaceBefore: "" },
+              {
+                attributes: {}, from: 23, name: "AdmonitionNote", to: 27, type: "Generic", whitespaceBefore: "",
+                children: [
+                  { attributes: {}, from: 23, name: "text", to: 27, type: "Text", value: "NOTE", whitespaceBefore: "" }
+                ]
+              },
+              { attributes: {}, children: [], from: 27, name: "CodeMark", to: 28, type: "Generic", whitespaceBefore: "" }
+            ]
+          },
+          {
+            attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "Generic", whitespaceBefore: " ",
+            children: [{ attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: " " }]
+          },
+          { attributes: {}, children: [], from: 43, name: "QuoteMark", to: 44, type: "Generic", whitespaceBefore: "\n" },
+          {
+            attributes: {}, from: 45, name: "Paragraph", to: 91, type: "Generic", whitespaceBefore: " ",
+            children: [{ attributes: {}, from: 45, name: "text", to: 91, type: "Text", value: "This is a note admonition with a custom title.", whitespaceBefore: " " }]
+          }
+        ]
+      }
+    ]
+  }
   }
 ]
 

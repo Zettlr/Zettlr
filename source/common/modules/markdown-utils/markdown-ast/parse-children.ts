@@ -31,6 +31,8 @@ const EMPTY_NODES = new Set([
   // Top Node
   'Document',
   // Container nodes
+  'Admonition',
+  'AdmonitionMarker',
   'Blockquote',
   'List',
   'ListItem',
