@@ -623,15 +623,15 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
     }
     case 'Admonition': {
       // Each admonition will have one of these types of nodes describing their type
-      const marker = node.getChild('AdmonitionMarker')
-      if (marker === null) {
-        throw new Error('Parse error: Could not find Admonition Marker.')
+      const header = node.getChild('AdmonitionHeader')
+      if (header === null) {
+        throw new Error('Parse error: Could not find AdmonitionHeader.')
       }
-      const keywordNode = marker.getChild('AdmonitionNote')
-        ?? marker.getChild('AdmonitionTip')
-        ?? marker.getChild('AdmonitionImportant')
-        ?? marker.getChild('AdmonitionWarning')
-        ?? marker.getChild('AdmonitionCaution')
+      const keywordNode = header.getChild('AdmonitionNote')
+        ?? header.getChild('AdmonitionTip')
+        ?? header.getChild('AdmonitionImportant')
+        ?? header.getChild('AdmonitionWarning')
+        ?? header.getChild('AdmonitionCaution')
 
       if (keywordNode === null) {
         throw new Error('Parse error: Could not find Admonition keyword node.')
@@ -653,7 +653,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         title = 'Caution'
       }
 
-      const titleNode = node.getChild('AdmonitionTitle')
+      const titleNode = header.getChild('AdmonitionTitle')
       if (titleNode !== null) {
         title = markdown.substring(titleNode.from, titleNode.to)
       }
@@ -661,7 +661,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       const astNode: Admonition = {
         type: 'Admonition',
         attributes: {},
-        title: genericTextNode(marker.from, marker.to, title),
+        title: genericTextNode(titleNode?.from ?? header.from, titleNode?.to ?? header.to, title),
         admonitionType: keyword,
         name: 'Admonition',
         from: node.from,

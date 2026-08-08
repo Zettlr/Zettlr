@@ -24,7 +24,7 @@ export const customTags = {
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),
   // Admonitions
   Admonition: Tag.define(),
-  AdmonitionMarker: Tag.define(tags.processingInstruction),
+  AdmonitionHeader: Tag.define(tags.processingInstruction),
   AdmonitionNote: Tag.define(tags.attributeValue),
   AdmonitionTip: Tag.define(tags.attributeValue),
   AdmonitionImportant: Tag.define(tags.attributeValue),

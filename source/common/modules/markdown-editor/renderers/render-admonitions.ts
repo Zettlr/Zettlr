@@ -78,25 +78,26 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
         }
 
         const classes = ['admonition-wrapper']
-        const admonitionMarker = node.node.getChild('AdmonitionMarker')
+        const admonitionHeader = node.node.getChild('AdmonitionHeader')
         const titleMarker = node.node.getChild('AdmonitionTitle')
         const admonitionTitle = titleMarker != null ? view.state.sliceDoc(titleMarker.from, titleMarker.to) : undefined
-        if (admonitionMarker !== null) {
+        if (admonitionHeader !== null) {
           classes.push('admonition')
-          if (admonitionMarker.getChild('AdmonitionNote')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Note')).range(admonitionMarker.from, admonitionMarker.to))
+          const { from, to } = admonitionHeader
+          if (admonitionHeader.getChild('AdmonitionNote')) {
+            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Note')).range(from, to))
             classes.push('note')
-          } else if (admonitionMarker.getChild('AdmonitionTip')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Tip')).range(admonitionMarker.from, admonitionMarker.to))
+          } else if (admonitionHeader.getChild('AdmonitionTip')) {
+            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Tip')).range(from, to))
             classes.push('tip')
-          } else if (admonitionMarker.getChild('AdmonitionImportant')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Important')).range(admonitionMarker.from, admonitionMarker.to))
+          } else if (admonitionHeader.getChild('AdmonitionImportant')) {
+            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Important')).range(from, to))
             classes.push('important')
-          } else if (admonitionMarker.getChild('AdmonitionWarning')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Warning')).range(admonitionMarker.from, admonitionMarker.to))
+          } else if (admonitionHeader.getChild('AdmonitionWarning')) {
+            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Warning')).range(from, to))
             classes.push('warning')
-          } else if (admonitionMarker.getChild('AdmonitionCaution')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Caution')).range(admonitionMarker.from, admonitionMarker.to))
+          } else if (admonitionHeader.getChild('AdmonitionCaution')) {
+            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Caution')).range(from, to))
             classes.push('caution')
           }
         }

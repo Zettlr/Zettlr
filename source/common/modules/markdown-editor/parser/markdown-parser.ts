@@ -266,7 +266,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
           style: { 'Admonition/...': customTags.Admonition },
           composite: admonitionComposite
         },
-        { name: 'AdmonitionMarker', style: customTags.AdmonitionMarker },
+        { name: 'AdmonitionHeader', style: customTags.AdmonitionHeader },
         { name: 'AdmonitionNote', style: customTags.AdmonitionNote },
         { name: 'AdmonitionTip', style: customTags.AdmonitionTip },
         { name: 'AdmonitionImportant', style: customTags.AdmonitionImportant },

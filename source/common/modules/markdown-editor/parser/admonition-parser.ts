@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import type { BlockContext, BlockParser, Line } from '@lezer/markdown'
+import type { BlockContext, BlockParser, Element, Line } from '@lezer/markdown'
 
 const admonitionRE = /^>(?<ws>\s*)\[!(?<keyword>note|tip|important|warning|caution|)\](?:\s*|(?<title>(.+)))$/id
 const admonitionStartRE = /^(>\s*)+/
@@ -66,47 +66,47 @@ export const admonitionParser: BlockParser = {
     ctx.startComposite('Admonition', line.pos, getNestingLevel(line.text))
 
     // Place the required initial elements to mark:
-    //     >        [!     keyword     ]
-    // QuoteMark CodeMark {keyword} CodeMark
-    //           |     AdmonitionMarker    |
+    //     >        [!     keyword     ]        optional title
+    // QuoteMark CodeMark {keyword} CodeMark   AdmonitionTitle
+    //           |           AdmonitionHeader                |
+    // NOTE: We wrap the entire first line (except the QuoteMark) in
+    // AdmonitionHeader to make parsing the node easier.
     const linestart = ctx.lineStart + line.pos
+    ctx.addElement(ctx.elt('QuoteMark', linestart, linestart + 1))
+
     const skippedSpace = ctx.lineStart + line.skipSpace(line.pos + 1)
     const [ kwStart, kwEnd ] = match.indices.groups.keyword
-    ctx.addElement(ctx.elt('QuoteMark', linestart, linestart + 1))
+    const keyword = match.groups.keyword.toLowerCase()
     // The admonition marker encompasses both the keyword and the two code
     // marks, because this way it can be styled in its entirety.
-    const markerChildren = [ctx.elt('CodeMark', skippedSpace, skippedSpace + 2)]
-    switch (match.groups.keyword.toLowerCase()) {
-      case 'note':
-        markerChildren.push(ctx.elt('AdmonitionNote', linestart + kwStart, linestart + kwEnd))
-        break
-      case 'tip':
-        markerChildren.push(ctx.elt('AdmonitionTip', linestart + kwStart, linestart + kwEnd))
-        break
-      case 'important':
-        markerChildren.push(ctx.elt('AdmonitionImportant', linestart + kwStart, linestart + kwEnd))
-        break
-      case 'warning':
-        markerChildren.push(ctx.elt('AdmonitionWarning', linestart + kwStart, linestart + kwEnd))
-        break
-      case 'caution':
-        markerChildren.push(ctx.elt('AdmonitionCaution', linestart + kwStart, linestart + kwEnd))
-        break
+    const headerChildren: Element[] = [ctx.elt('CodeMark', skippedSpace, skippedSpace + 2)]
+    if (keyword === 'note') {
+      headerChildren.push(ctx.elt('AdmonitionNote', linestart + kwStart, linestart + kwEnd))
+    } else if (keyword === 'tip') {
+      headerChildren.push(ctx.elt('AdmonitionTip', linestart + kwStart, linestart + kwEnd))
+    } else if (keyword === 'important') {
+      headerChildren.push(ctx.elt('AdmonitionImportant', linestart + kwStart, linestart + kwEnd))
+    } else if (keyword === 'warning') {
+      headerChildren.push(ctx.elt('AdmonitionWarning', linestart + kwStart, linestart + kwEnd))
+    } else if (keyword === 'caution') {
+      headerChildren.push(ctx.elt('AdmonitionCaution', linestart + kwStart, linestart + kwEnd))
     }
-    markerChildren.push(ctx.elt('CodeMark', linestart + kwEnd, linestart + kwEnd + 1))
-    ctx.addElement(ctx.elt('AdmonitionMarker', skippedSpace, linestart + kwEnd + 1, markerChildren))
+    headerChildren.push(ctx.elt('CodeMark', linestart + kwEnd, linestart + kwEnd + 1))
     
     // We need to move the line position after parsing, so we track the offset
     // as we calculate markers. This is a line-relative position, not document-
     // relative.
     let lineBasePos = line.pos + kwEnd + 1
+    let headerEnd = linestart + kwEnd + 1
 
     if (match.groups?.title !== undefined) {
       const [ titleFrom, titleTo ] = match.indices.groups.title
       const skipped = line.skipSpace(titleFrom)
-      ctx.addElement(ctx.elt('AdmonitionTitle', linestart + skipped, linestart + titleTo))
+      headerChildren.push(ctx.elt('AdmonitionTitle', linestart + skipped, linestart + titleTo))
       lineBasePos = line.pos + titleTo
+      headerEnd = linestart + titleTo
     }
+    ctx.addElement(ctx.elt('AdmonitionHeader', skippedSpace, headerEnd, headerChildren))
 
     // Move the base position to avoid infinite loops
     line.moveBase(line.skipSpace(lineBasePos))

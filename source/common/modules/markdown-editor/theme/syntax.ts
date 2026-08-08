@@ -26,9 +26,9 @@ const customTagHighlight = HighlightStyle.define([
   { tag: customTags.YAMLFrontmatterStart, class: 'cm-yaml-frontmatter-start' },
   { tag: customTags.YAMLFrontmatterEnd, class: 'cm-yaml-frontmatter-end' },
   // Admonition
-  { tag: customTags.AdmonitionTitle, class: 'cm-admonition-title' },
-  { tag: customTags.AdmonitionMarker, class: 'cm-admonition-marker' },
   { tag: customTags.Admonition, class: 'cm-admonition' },
+  { tag: customTags.AdmonitionTitle, class: 'cm-admonition-title' },
+  { tag: customTags.AdmonitionHeader, class: 'cm-admonition-header' },
   { tag: customTags.AdmonitionNote, class: 'cm-admonition-note' },
   { tag: customTags.AdmonitionTip, class: 'cm-admonition-tip' },
   { tag: customTags.AdmonitionImportant, class: 'cm-admonition-important' },

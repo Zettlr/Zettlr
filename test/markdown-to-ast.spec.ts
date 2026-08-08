@@ -230,25 +230,20 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
       {
         admonitionType: "note", attributes: {},
         from: 19, to: 91, type: "Admonition", whitespaceBefore: "\n\n", name: "Admonition",
-        title: { attributes: {}, from: 21, name: "text", to: 28, type: "Text", value: "A Custom Note", whitespaceBefore: "" },
+        title: { attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: "" },
         children: [
           { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "" },
           {
-            attributes: {}, from: 21, name: "AdmonitionMarker", to: 28, type: "Generic", whitespaceBefore: " ",
+            attributes: {}, from: 21, name: "AdmonitionHeader", to: 42, type: "Generic", whitespaceBefore: " ",
             children: [
               { attributes: {}, children: [], from: 21, name: "CodeMark", to: 23, type: "Generic", whitespaceBefore: "" },
               {
                 attributes: {}, from: 23, name: "AdmonitionNote", to: 27, type: "Generic", whitespaceBefore: "",
-                children: [
-                  { attributes: {}, from: 23, name: "text", to: 27, type: "Text", value: "NOTE", whitespaceBefore: "" }
-                ]
+                children: []
               },
-              { attributes: {}, children: [], from: 27, name: "CodeMark", to: 28, type: "Generic", whitespaceBefore: "" }
+              { attributes: {}, children: [], from: 27, name: "CodeMark", to: 28, type: "Generic", whitespaceBefore: "" },
+              { attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "Generic", whitespaceBefore: " ", children: [] }
             ]
-          },
-          {
-            attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "Generic", whitespaceBefore: " ",
-            children: [{ attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: " " }]
           },
           { attributes: {}, children: [], from: 43, name: "QuoteMark", to: 44, type: "Generic", whitespaceBefore: "\n" },
           {
@@ -265,7 +260,6 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
 describe('MarkdownAST#markdownToAST()', function () {
   for (const test of TESTERS) {
     it(`should: ${test.description}`, () => {
-      console.log(markdownToAST(test.input))
       deepStrictEqual(test.output, markdownToAST(test.input))
     })
   }

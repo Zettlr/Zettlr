@@ -25,6 +25,13 @@ import { genericTextNode } from './generic-text-node'
  * marks) who can be reconstructed without the verbatim value, as well as larger
  * container nodes (whose contents is represented via their children).
  *
+ * Essentially, what this means is that these nodes will be ignored by the
+ * `parseChildren` function, meaning they don't end up in the AST. This makes
+ * the AST more abstract. But this also means that all of these nodes should be
+ * treated in the `parseNode` function. Also, this only applies to nodes where
+ * `parseNode` calls `parseChildren`, because unless you do, `parseNode` treats
+ * the entire node.
+ *
  * @var {string[]}
  */
 const EMPTY_NODES = new Set([
@@ -32,7 +39,13 @@ const EMPTY_NODES = new Set([
   'Document',
   // Container nodes
   'Admonition',
-  'AdmonitionMarker',
+  'AdmonitionHeader',
+  'AdmonitionTitle',
+  'AdmonitionNote',
+  'AdmonitionTip',
+  'AdmonitionImportant',
+  'AdmonitionWarning',
+  'AdmonitionCaution',
   'Blockquote',
   'List',
   'ListItem',
