@@ -172,12 +172,51 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
         }
       ], attributes: {}
     }
+  },
+  {
+    description: 'Parse Blockquotes',
+    input: `# Blockquote file
+
+> This is a **blockquote**`,
+    output: {
+        attributes: {}, from: 0, name: "Document", to: 45, type: "Document", whitespaceBefore: "",
+        children: [
+          {
+            attributes: {}, content: "Blockquote file", from: 0, level: 1, name: "ATXHeading1", to: 17, type: "Heading", whitespaceBefore: "",
+            children: [
+              { attributes: {}, children: [], from: 0, name: "HeaderMark", to: 1, type: "Generic", whitespaceBefore: "" },
+              { attributes: {}, from: 2, name: "text", to: 17, type: "Text", value: "Blockquote file", whitespaceBefore: " " }
+            ]
+          },
+          {
+            attributes: {}, from: 19, name: "Blockquote", to: 45, type: "Generic", whitespaceBefore: "\n\n",
+            children: [
+              { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "", },
+              {
+                attributes: {}, from: 21, name: "Paragraph", to: 45, type: "Generic", whitespaceBefore: " ",
+                children: [
+                  { attributes: {}, from: 21, name: "text", to: 31, type: "Text", value: "This is a ", whitespaceBefore: "", },
+                  {
+                    attributes: {}, from: 31, name: "Emphasis", to: 45, type: "Emphasis", which: "bold", whitespaceBefore: " ",
+                    children: [
+                      { attributes: {}, children: [], from: 31, name: "EmphasisMark", to: 33, type: "Generic", whitespaceBefore: "" },
+                      { attributes: {}, from: 33, name: "text", to: 43, type: "Text", value: "blockquote", whitespaceBefore: "" },
+                      { attributes: {}, children: [], from: 43, name: "EmphasisMark", to: 45, type: "Generic", whitespaceBefore: "" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
   }
 ]
 
 describe('MarkdownAST#markdownToAST()', function () {
   for (const test of TESTERS) {
     it(`should: ${test.description}`, () => {
+      console.log(markdownToAST(test.input))
       deepStrictEqual(test.output, markdownToAST(test.input))
     })
   }
