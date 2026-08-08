@@ -47,7 +47,6 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   // FlowSequence -> list of Item/Literal nodes (one-line array-style list)
 
   if (node.type.name !== 'Literal' && node.type.name !== 'QuotedLiteral') {
-    console.log('Node is neither Literal nor QuotedLiteral')
     return false
   }
 
@@ -60,7 +59,6 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   }
 
   if (parent?.type.name !== 'YAMLFrontmatter') {
-    console.log('Node is not within a Frontmatter')
     return false
   }
 
@@ -70,15 +68,12 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   const directParent = node.node.parent
   const valueContainer = directParent?.type.name === 'Item' ? directParent.parent : directParent
   if (valueContainer == null || ![ 'FlowSequence', 'BlockSequence', 'Pair' ].includes(valueContainer.type.name)) {
-    console.log('Node is neither part of a FlowSequence nor BlockSequence, nor Pair')
-    console.log(valueContainer?.type.name)
     return false
   }
 
   // It's a literal in a flow or block sequence, or direct part of a pair.
   const maybePair = valueContainer.type.name === 'Pair' ? valueContainer : valueContainer.parent
   if (maybePair?.type.name !== 'Pair') {
-    console.log('Node is not part of a Pair')
     return false
   }
 
@@ -86,13 +81,11 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   // "keywords" or "tags".
   const key = maybePair.getChild('Key')
   if (key === null) {
-    console.log('Nodes Pair did not have a key.')
     return false
   }
 
   const keyValue = state.sliceDoc(key.from, key.to)
   if (keyValue !== 'keywords' && keyValue !== 'tags') {
-    console.log('Key value was neither keywords nor tags')
     return false
   }
 
@@ -101,7 +94,6 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   // Pair -> BlockMapping -> Document
   // (The frontmatter is one large BlockMapping)
   if (maybePair.parent?.name !== 'BlockMapping' || maybePair.parent?.parent?.name !== 'Document') {
-    console.log('Pair was not a top-level element.')
     return false
   }
 
