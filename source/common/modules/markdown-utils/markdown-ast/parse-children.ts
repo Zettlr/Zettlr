@@ -38,7 +38,15 @@ const EMPTY_NODES = new Set([
   // Top Node
   'Document',
   // Container nodes
+  'Blockquote',
+  'List',
+  'ListItem',
+  'PandocAttribute',
   'Admonition',
+  // We also have to ignore all nodes the admonition parser adds, because when
+  // we parse the "Admonition" itself, all of these nodes are parsed into the
+  // Admonition AST node, but we need to parse the admonition node's children,
+  // which are siblings to the admonition header.
   'AdmonitionHeader',
   'AdmonitionTitle',
   'AdmonitionNote',
@@ -46,10 +54,6 @@ const EMPTY_NODES = new Set([
   'AdmonitionImportant',
   'AdmonitionWarning',
   'AdmonitionCaution',
-  'Blockquote',
-  'List',
-  'ListItem',
-  'PandocAttribute',
   // Formatting marks
   'CodeMark',
   'EmphasisMark',
