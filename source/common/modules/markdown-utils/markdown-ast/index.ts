@@ -622,11 +622,11 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       return astNode
     }
     case 'Admonition': {
-      // Each admonition will have one of these types of nodes describing their type
       const header = node.getChild('AdmonitionHeader')
       if (header === null) {
         throw new Error('Parse error: Could not find AdmonitionHeader.')
       }
+      // Each admonition will have one of these types of nodes describing their type
       const keywordNode = header.getChild('AdmonitionNote')
         ?? header.getChild('AdmonitionTip')
         ?? header.getChild('AdmonitionImportant')
