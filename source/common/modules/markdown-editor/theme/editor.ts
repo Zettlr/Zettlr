@@ -160,11 +160,11 @@ const accentColorDark = 'var(--grey-2)'
 const accentBackground = 'var(--grey-2)'
 const accentBackgroundDark = 'var(--grey-4)'
 
-const admonitionNoteColorLight = 'rgb(170, 170, 170)'
-const admonitionTipColorLight = 'rgb(40, 170, 40)'
-const admonitionImportantColorLight = 'rgb(200, 20, 200)'
-const admonitionWarningColorLight = 'rgb(200, 200, 40)'
-const admonitionCautionColorLight = 'rgb(200, 0, 0)'
+const admonitionNoteColorLight = 'rgb(125, 125, 125)'
+const admonitionTipColorLight = 'rgb(75, 134, 75)'
+const admonitionImportantColorLight = 'rgb(133, 87, 133)'
+const admonitionWarningColorLight = 'rgb(130, 130, 48)'
+const admonitionCautionColorLight = 'rgb(148, 76, 76)'
 
 const admonitionNoteBgLight = 'rgb(220, 220, 220)'
 const admonitionTipBgLight = 'rgb(200, 250, 200)'
@@ -173,10 +173,10 @@ const admonitionWarningBgLight = 'rgb(250, 250, 180)'
 const admonitionCautionBgLight = 'rgb(250, 210, 210)'
 
 const admonitionNoteColorDark = 'rgb(200, 200, 200)'
-const admonitionTipColorDark = 'rgb(80, 230, 80)'
-const admonitionImportantColorDark = 'rgb(255, 30, 255)'
-const admonitionWarningColorDark = 'rgb(230, 230, 30)'
-const admonitionCautionColorDark = 'rgb(255, 70, 70)'
+const admonitionTipColorDark = 'rgb(106 205 106)'
+const admonitionImportantColorDark = 'rgb(199, 87, 199)'
+const admonitionWarningColorDark = 'rgb(193, 193, 68)'
+const admonitionCautionColorDark = 'rgb(227, 99, 99)'
 
 const admonitionNoteBgDark = 'rgba(60, 60, 60, 0.6)'
 const admonitionTipBgDark = 'rgba(0, 70, 0, 0.6)'
@@ -503,6 +503,6 @@ export const editorTheme = EditorView.baseTheme({
   '.cm-admonition-important': { color: 'var(--zettlr-editor-admonition-important-color)' },
   '.cm-admonition-warning': { color: 'var(--zettlr-editor-admonition-warning-color)' },
   '.cm-admonition-caution': { color: 'var(--zettlr-editor-admonition-caution-color)' },
-  '.cm-admonition.cm-code-mark': { color: 'var(--zettlr-editor-admonition-note-color)' },
+  '.cm-admonition.cm-code-mark': { color: 'currentColor', opacity: '0.3' },
   '.cm-admonition-title': { fontWeight: 'bold' }
 })
