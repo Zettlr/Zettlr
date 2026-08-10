@@ -44,7 +44,7 @@ const keybindingsTransactionExtender = EditorState.transactionExtender.of(tr => 
  *
  * @return  {Extension}                                  The keymap
  */
-export function zettlrKeymap (customShortcutMap: CustomEditorShortcut[], config: EditorConfiguration): Extension {
+export function zettlrKeymap (customShortcutMap: CustomEditorShortcut[], config: Pick<EditorConfiguration, 'autocompleteWithEnter'|'autocompleteWithTab'>): Extension {
   return [
     keybindingsTransactionExtender,
     keymapCompartment.of(keymap.of(mainEditorKeybindings(customShortcutMap, config)))

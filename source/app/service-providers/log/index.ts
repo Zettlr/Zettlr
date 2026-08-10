@@ -15,6 +15,7 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
+// @ts-expect-error Somehow TypeScript is very unhappy about this import.
 import chalk from 'chalk'
 import ProviderContract from '../provider-contract'
 

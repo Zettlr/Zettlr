@@ -94,7 +94,7 @@ import { toTitleCase } from '../commands/transforms/to-title-case'
  *
  * @return  {Keybinding[]}  The keybindings. Must be passed to `keymap.of()`
  */
-export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[], config: EditorConfiguration): KeyBinding[] {
+export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[], config: Pick<EditorConfiguration, 'autocompleteWithEnter'|'autocompleteWithTab'>): KeyBinding[] {
   // Utility function to make retrieval much easier
   const sc = (name: EditorShortcutName) => {
     return getCustomShortcut(name, customShortcutMap)

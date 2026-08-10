@@ -19,7 +19,7 @@ import { FSWatcher, type ChokidarOptions } from 'chokidar'
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
 import path from 'path'
-import type { EventName } from 'chokidar/handler'
+import type { EventName } from 'chokidar/handler.js'
 import { WATCHDOG_IGNORE_RE } from '@common/util/ignore-path'
 import { type Stats } from 'fs'
 
