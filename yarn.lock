@@ -2791,10 +2791,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^3.7.2":
-  version: 3.7.2
-  resolution: "@types/luxon@npm:3.7.2"
-  checksum: 10/6634ebaceeec84d39cbb456d4db358481bc2ba7d05df47890a4f2d235100c29a52f621e1401f016747093093fa86c117bef01446199e0b1af3bcdcee47a57b1f
+"@types/luxon@npm:^3.7.3":
+  version: 3.7.3
+  resolution: "@types/luxon@npm:3.7.3"
+  checksum: 10/f097bd3f7c47ae766928e0fa496ec13fe4d72c42b29afa4bed457775ce4fb4d8574ccccc0c974bf8915d1e6a7e226fa6efb989905786c4c9c1714754f74e8a17
   languageName: node
   linkType: hard
 
@@ -15384,7 +15384,7 @@ __metadata:
     "@types/d3": "npm:^7.4.3"
     "@types/gettext-parser": "npm:^9.0.0"
     "@types/katex": "npm:^0.16.8"
-    "@types/luxon": "npm:^3.7.2"
+    "@types/luxon": "npm:^3.7.3"
     "@types/md5": "npm:^2.3.6"
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:^24.13.3"
