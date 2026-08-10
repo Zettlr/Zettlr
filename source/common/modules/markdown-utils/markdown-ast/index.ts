@@ -502,21 +502,30 @@ export interface TextNode extends MDNode {
   value: string
 }
 
+/**
+ * Describes a GitHub style admonition (`> [!keyword]`)
+ */
 export interface Admonition extends MDNode {
   type: 'Admonition',
   /**
-   * The type of this admonition.
+   * The type of this admonition. There are five central ones, but the type
+   * might also be another one.
    */
-  admonitionType: 'note'|'tip'|'important'|'warning'|'caution',
-  /**
-   * The admonition's title; typically either the keyword, or a custom title.
-   */
-  title: TextNode,
+  admonitionType: 'note'|'tip'|'important'|'warning'|'caution'|string,
   /**
    * All children of the node
    */
   children: ASTNode[]
 }
+
+/**
+ * This nodes holds an (optional) custom title for an admonition.
+ */
+export interface AdmonitionTitle extends MDNode {
+  type: 'AdmonitionTitle',
+  children: ASTNode[]
+}
+
 
 /**
  * This generic node represents any Lezer node that has no specific role (or can
@@ -538,7 +547,7 @@ export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefL
 | LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
 | Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
 | InlineCode | YAMLFrontmatter | Emphasis | Strikethrough | Table | TableCell | TableRow
-| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan | Admonition
+| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan | Admonition | AdmonitionTitle
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -621,48 +630,20 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       return astNode
     }
-    case 'Admonition': {
-      const header = node.getChild('AdmonitionHeader')
-      if (header === null) {
-        throw new Error('Parse error: Could not find AdmonitionHeader.')
-      }
-      // Each admonition will have one of these types of nodes describing their type
-      const keywordNode = header.getChild('AdmonitionNote')
-        ?? header.getChild('AdmonitionTip')
-        ?? header.getChild('AdmonitionImportant')
-        ?? header.getChild('AdmonitionWarning')
-        ?? header.getChild('AdmonitionCaution')
-
+    case 'AdmonitionNote':
+    case 'AdmonitionTip':
+    case 'AdmonitionImportant':
+    case 'AdmonitionWarning':
+    case 'AdmonitionCaution': {
+      const keywordNode = node.getChild('AdmonitionKeyword')
       if (keywordNode === null) {
-        throw new Error('Parse error: Could not find Admonition keyword node.')
-      }
-
-      let keyword: Admonition['admonitionType'] = 'note'
-      let title = 'Note'
-      if (keywordNode.type.name === 'AdmonitionTip') {
-        keyword = 'tip'
-        title = 'Tip'
-      } else if (keywordNode.type.name === 'AdmonitionImportant') {
-        keyword = 'important'
-        title = 'Important'
-      } else if (keywordNode.type.name === 'AdmonitionWarning') {
-        keyword = 'warning'
-        title = 'Warning'
-      } else if (keywordNode.type.name === 'AdmonitionCaution') {
-        keyword = 'caution'
-        title = 'Caution'
-      }
-
-      const titleNode = header.getChild('AdmonitionTitle')
-      if (titleNode !== null) {
-        title = markdown.substring(titleNode.from, titleNode.to)
+        throw new Error('Parse error: Could not find Admonition keyword node. This is a bug in the parser.')
       }
 
       const astNode: Admonition = {
         type: 'Admonition',
         attributes: {},
-        title: genericTextNode(titleNode?.from ?? header.from, titleNode?.to ?? header.to, title),
-        admonitionType: keyword,
+        admonitionType: markdown.slice(keywordNode.from, keywordNode.to).toLowerCase(),
         name: 'Admonition',
         from: node.from,
         to: node.to,
@@ -670,6 +651,18 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown)
       }
       return parseChildren(astNode, node, markdown)
+    }
+    case 'AdmonitionTitle': {
+      const astNode: AdmonitionTitle = {
+        type: 'AdmonitionTitle',
+        attributes: {},
+        name: node.name,
+        from: node.from,
+        to: node.to,
+        children: [genericTextNode(node.from, node.to, markdown.slice(node.from, node.to))],
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown)
+      }
+      return astNode
     }
     case 'ATXHeading1':
     case 'ATXHeading2':

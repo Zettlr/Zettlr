@@ -20,6 +20,7 @@ import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
 import { configField } from '../util/configuration'
 import { trans } from 'source/common/i18n-renderer'
+import { type AdmonitionNode, admonitionNodes } from '../parser/admonition-parser'
 
 class AdmonitionTitleWidget extends WidgetType {
   constructor (private readonly title: string) {
@@ -40,10 +41,28 @@ class AdmonitionTitleWidget extends WidgetType {
 
 const hiddenDeco = Decoration.replace({})
 
-function getTitleDeco (title: string): Decoration {
-  return Decoration.replace({
-    widget: new AdmonitionTitleWidget(title)
-  })
+/**
+ * Produces an AdmonitionTitle decoration widget and returns the corresponding
+ * range. Titles can either be ranges, in which case the range will be hidden,
+ * or they are merely points, in which case they will be placed at a specific
+ * position.
+ *
+ * @param   {string}              title  The title to use
+ * @param   {number}              from   The start point
+ * @param   {number}              to     Provide `to` to replace a range
+ *
+ * @return  {Range<Decoration>}          The decoration range
+ */
+function getTitleDeco (title: string, from: number, to?: number): Range<Decoration> {
+  if (to !== undefined) {
+    return Decoration.replace({
+      widget: new AdmonitionTitleWidget(title)
+    }).range(from, to)
+  } else {
+    return Decoration.widget({
+      widget: new AdmonitionTitleWidget(title)
+    }).range(from, to)
+  }
 }
 
 function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<BlockWrapper>, inlines: RangeSet<Decoration> } {
@@ -59,7 +78,12 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
           return
         }
 
-        if (node.name !== 'Admonition') {
+        if (!admonitionNodes.includes(node.name as AdmonitionNode)) {
+          return
+        }
+
+        const keywordMarker = node.node.getChild('AdmonitionKeyword')
+        if (keywordMarker === null) {
           return
         }
 
@@ -67,7 +91,7 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
         let parentNode
 
         while (parent) {
-          if (parent.name === 'Admonition') {
+          if (admonitionNodes.includes(parent.name as AdmonitionNode)) {
             parentNode = parent.node
           }
           parent = parent.parent
@@ -78,37 +102,41 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
         }
 
         const classes = ['admonition-wrapper']
-        const admonitionHeader = node.node.getChild('AdmonitionHeader')
-        const titleMarker = node.node.getChild('AdmonitionTitle')
-        const admonitionTitle = titleMarker != null ? view.state.sliceDoc(titleMarker.from, titleMarker.to) : undefined
-        if (admonitionHeader !== null) {
-          classes.push('admonition')
-          const { from, to } = admonitionHeader
-          if (admonitionHeader.getChild('AdmonitionNote')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Note')).range(from, to))
-            classes.push('note')
-          } else if (admonitionHeader.getChild('AdmonitionTip')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Tip')).range(from, to))
-            classes.push('tip')
-          } else if (admonitionHeader.getChild('AdmonitionImportant')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Important')).range(from, to))
-            classes.push('important')
-          } else if (admonitionHeader.getChild('AdmonitionWarning')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Warning')).range(from, to))
-            classes.push('warning')
-          } else if (admonitionHeader.getChild('AdmonitionCaution')) {
-            inlineRanges.push(getTitleDeco(admonitionTitle ?? trans('Caution')).range(from, to))
-            classes.push('caution')
-          }
+        if (node.type.name === 'AdmonitionNote') {
+          classes.push('note')
+        } else if (node.type.name === 'AdmonitionTip') {
+          classes.push('tip')
+        } else if (node.type.name === 'AdmonitionImportant') {
+          classes.push('important')
+        } else if (node.type.name === 'AdmonitionWarning') {
+          classes.push('warning')
+        } else if (node.type.name === 'AdmonitionCaution') {
+          classes.push('caution')
         }
 
+        const titleMarker = node.node.getChild('AdmonitionTitle')
+        const admonitionTitle = titleMarker != null ? view.state.sliceDoc(titleMarker.from, titleMarker.to) : undefined
+        inlineRanges.push(hiddenDeco.range(keywordMarker.from, keywordMarker.to))
+        // The title deco either replaces the title marker, or is placed after
+        // the keyword marker
+        inlineRanges.push(
+          getTitleDeco(
+            admonitionTitle ?? trans('Note'),
+            titleMarker?.from ?? keywordMarker.to,
+            titleMarker?.to
+          )
+        )
+
+        // Hide title marker, keyword marker, and the quote and code marks
         if (titleMarker !== null) {
           inlineRanges.push(hiddenDeco.range(titleMarker.from, titleMarker.to))
         }
 
-        const quoteMarkers = node.node.getChildren('QuoteMark')
-        for (const q of quoteMarkers) {
-          inlineRanges.push(hiddenDeco.range(q.from, q.to))
+        for (const qm of node.node.getChildren('QuoteMark')) {
+          inlineRanges.push(hiddenDeco.range(qm.from, qm.to))
+        }
+        for (const cm of node.node.getChildren('CodeMark')) {
+          inlineRanges.push(hiddenDeco.range(cm.from, cm.to))
         }
 
         const line = view.state.doc.lineAt(node.from)
@@ -174,27 +202,27 @@ export const renderAdmonitions = [
       paddingLeft: 'revert !important',
       textIndent: 'revert !important'
     },
-    '.admonition-wrapper.admonition.note': {
+    '.admonition-wrapper.note': {
       backgroundColor: 'var(--zettlr-editor-admonition-note-bg)',
       borderColor: 'var(--zettlr-editor-admonition-note-color)',
       color: 'var(--zettlr-editor-admonition-note-color)',
     },
-    '.admonition-wrapper.admonition.tip': {
+    '.admonition-wrapper.tip': {
       backgroundColor: 'var(--zettlr-editor-admonition-tip-bg)',
       borderColor: 'var(--zettlr-editor-admonition-tip-color)',
       color: 'var(--zettlr-editor-admonition-tip-color)',
     },
-    '.admonition-wrapper.admonition.important': {
+    '.admonition-wrapper.important': {
       backgroundColor: 'var(--zettlr-editor-admonition-important-bg)',
       borderColor: 'var(--zettlr-editor-admonition-important-color)',
       color: 'var(--zettlr-editor-admonition-important-color)',
     },
-    '.admonition-wrapper.admonition.warning': {
+    '.admonition-wrapper.warning': {
       backgroundColor: 'var(--zettlr-editor-admonition-warning-bg)',
       borderColor: 'var(--zettlr-editor-admonition-warning-color)',
       color: 'var(--zettlr-editor-admonition-warning-color)',
     },
-    '.admonition-wrapper.admonition.caution': {
+    '.admonition-wrapper.caution': {
       backgroundColor: 'var(--zettlr-editor-admonition-caution-bg)',
       borderColor: 'var(--zettlr-editor-admonition-caution-color)',
       color: 'var(--zettlr-editor-admonition-caution-color)',

@@ -42,13 +42,9 @@ const EMPTY_NODES = new Set([
   'List',
   'ListItem',
   'PandocAttribute',
-  'Admonition',
-  // We also have to ignore all nodes the admonition parser adds, because when
-  // we parse the "Admonition" itself, all of these nodes are parsed into the
-  // Admonition AST node, but we need to parse the admonition node's children,
-  // which are siblings to the admonition header.
-  'AdmonitionHeader',
-  'AdmonitionTitle',
+  // Ignore the five classes of admonitions since they are parsed via their
+  // children.
+  'AdmonitionKeyword',
   'AdmonitionNote',
   'AdmonitionTip',
   'AdmonitionImportant',

@@ -228,22 +228,16 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
         ]
       },
       {
+        type: "Admonition", from: 19, to: 91, whitespaceBefore: "\n\n", name: "Admonition",
         admonitionType: "note", attributes: {},
-        from: 19, to: 91, type: "Admonition", whitespaceBefore: "\n\n", name: "Admonition",
-        title: { attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: "" },
         children: [
           { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, children: [], from: 21, name: "CodeMark", to: 23, type: "Generic", whitespaceBefore: " " },
+          { attributes: {}, children: [], from: 23, to: 27, name: "AdmonitionKeyword", type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, children: [], from: 27, name: "CodeMark", to: 28, type: "Generic", whitespaceBefore: "" },
           {
-            attributes: {}, from: 21, name: "AdmonitionHeader", to: 42, type: "Generic", whitespaceBefore: " ",
-            children: [
-              { attributes: {}, children: [], from: 21, name: "CodeMark", to: 23, type: "Generic", whitespaceBefore: "" },
-              {
-                attributes: {}, from: 23, name: "AdmonitionNote", to: 27, type: "Generic", whitespaceBefore: "",
-                children: []
-              },
-              { attributes: {}, children: [], from: 27, name: "CodeMark", to: 28, type: "Generic", whitespaceBefore: "" },
-              { attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "Generic", whitespaceBefore: " ", children: [] }
-            ]
+            attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "AdmonitionTitle", whitespaceBefore: " ",
+            children: [{ attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: "" }]
           },
           { attributes: {}, children: [], from: 43, name: "QuoteMark", to: 44, type: "Generic", whitespaceBefore: "\n" },
           {
