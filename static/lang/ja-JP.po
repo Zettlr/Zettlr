@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 4.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-08-04 03:27+0000\n"
-"PO-Revision-Date: 2026-07-28 22:11+0900\n"
+"PO-Revision-Date: 2026-08-10 22:37+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -200,7 +200,7 @@ msgstr "引用符を斜体に変換"
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:74
 #: source/win-preferences/schema/shortcuts.ts:193
 msgid "Remove excess line breaks"
-msgstr ""
+msgstr "余分な改行を削除する"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
 #: source/win-preferences/schema/shortcuts.ts:200
@@ -2368,6 +2368,8 @@ msgid ""
 "Zettlr will turn on dark mode between %s and %s. You can adjust these times "
 "in the settings."
 msgstr ""
+"Zettlrは、%sから%sの間でダークモードを有効にします。これらの時間は設定で調整"
+"できます。"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:21
 msgid "Do not automatically toggle light/dark mode"
@@ -4547,11 +4549,11 @@ msgstr "リンク先のプレビューを表示する"
 
 #: source/win-preferences/schema/editor.ts:386
 msgid "Accept autocomplete suggestion with Enter"
-msgstr ""
+msgstr "Enterキーで自動補完の候補を確定する"
 
 #: source/win-preferences/schema/editor.ts:391
 msgid "Accept autocomplete suggestion with Tab"
-msgstr ""
+msgstr "Tabキーで自動補完の候補を確定する"
 
 #: source/win-preferences/schema/editor.ts:397
 msgid "Automatically close matching character pairs"
