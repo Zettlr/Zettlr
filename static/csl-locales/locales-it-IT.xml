@@ -6,7 +6,7 @@
       <email>filippo.vomiero@unipd.it</email>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-06-30T00:00:00+00:00</updated>
+    <updated>2026-08-07T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -64,7 +64,7 @@
       <multiple>riferimenti</multiple>
     </term>
     <term name="retrieved">recuperato</term>
-    <term name="review-of">review of</term>
+    <term name="review-of">recensione di</term>
     <term name="scale">scala</term>
     <term name="special-issue">edizione speciale</term>
     <term name="special-section">sezione speciale</term>
@@ -86,7 +86,7 @@
       <single>rif.</single>
       <multiple>rif.</multiple>
     </term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of" form="short">rec. di</term>
 
     <!-- SYMBOLIC GENERAL FORMS -->
 
@@ -443,7 +443,7 @@
     </term>
     <term name="number-of-volumes">
       <single>volume</single>
-      <multiple>volumes</multiple>
+      <multiple>volumi</multiple>
     </term>
     <term name="page-first">
       <single>page</single>
@@ -495,8 +495,8 @@
       <multiple>presidenti</multiple>
     </term>
     <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>a cura di</single>
+      <multiple>a cura di</multiple>
     </term>
     <term name="compiler">
       <single>compilatore</single>
@@ -653,7 +653,7 @@
 
     <!-- VERB ROLE FORMS -->
     <term name="chair" form="verb">presieduto da</term>
-    <term name="collection-editor" form="verb">edited by</term>
+    <term name="collection-editor" form="verb">a cura di</term>
     <term name="compiler" form="verb">compilato da</term>
     <term name="container-author" form="verb">di</term>
     <term name="contributor" form="verb">con un contributo di</term>
@@ -679,7 +679,7 @@
     <term name="translator" form="verb">tradotto da</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
+    <term name="collection-editor" form="verb-short">a cura di</term>
     <term name="compiler" form="verb-short">comp. da</term>
     <term name="contributor" form="verb-short">con un contrib. di</term>
     <term name="curator" form="verb-short">a c. di</term>
