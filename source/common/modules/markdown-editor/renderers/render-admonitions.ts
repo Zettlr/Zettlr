@@ -19,8 +19,8 @@ import { BlockWrapper, Decoration, EditorView, ViewPlugin, WidgetType, type View
 import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
 import { configField } from '../util/configuration'
-import { trans } from 'source/common/i18n-renderer'
 import { type AdmonitionNode, admonitionNodes } from '../parser/admonition-parser'
+import { trans } from 'source/common/i18n-renderer'
 
 class AdmonitionTitleWidget extends WidgetType {
   constructor (private readonly title: string) {
@@ -40,30 +40,6 @@ class AdmonitionTitleWidget extends WidgetType {
 }
 
 const hiddenDeco = Decoration.replace({})
-
-/**
- * Produces an AdmonitionTitle decoration widget and returns the corresponding
- * range. Titles can either be ranges, in which case the range will be hidden,
- * or they are merely points, in which case they will be placed at a specific
- * position.
- *
- * @param   {string}              title  The title to use
- * @param   {number}              from   The start point
- * @param   {number}              to     Provide `to` to replace a range
- *
- * @return  {Range<Decoration>}          The decoration range
- */
-function getTitleDeco (title: string, from: number, to?: number): Range<Decoration> {
-  if (to !== undefined) {
-    return Decoration.replace({
-      widget: new AdmonitionTitleWidget(title)
-    }).range(from, to)
-  } else {
-    return Decoration.widget({
-      widget: new AdmonitionTitleWidget(title)
-    }).range(from, to)
-  }
-}
 
 function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<BlockWrapper>, inlines: RangeSet<Decoration> } {
   const wrapperRanges: Range<BlockWrapper>[] = []
@@ -102,34 +78,43 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
         }
 
         const classes = ['admonition-wrapper']
+        let genericKeywordTranslated = trans('Note')
         if (node.type.name === 'AdmonitionNote') {
           classes.push('note')
         } else if (node.type.name === 'AdmonitionTip') {
           classes.push('tip')
+          genericKeywordTranslated = trans('Tip')
         } else if (node.type.name === 'AdmonitionImportant') {
           classes.push('important')
+          genericKeywordTranslated = trans('Important')
         } else if (node.type.name === 'AdmonitionWarning') {
           classes.push('warning')
+          genericKeywordTranslated = trans('Warning')
         } else if (node.type.name === 'AdmonitionCaution') {
           classes.push('caution')
+          genericKeywordTranslated = trans('Caution')
         }
 
+        // Then, we may have a custom title in the AdmonitionTitle element.
         const titleMarker = node.node.getChild('AdmonitionTitle')
-        const admonitionTitle = titleMarker != null ? view.state.sliceDoc(titleMarker.from, titleMarker.to) : undefined
-        inlineRanges.push(hiddenDeco.range(keywordMarker.from, keywordMarker.to))
-        // The title deco either replaces the title marker, or is placed after
-        // the keyword marker
-        inlineRanges.push(
-          getTitleDeco(
-            admonitionTitle ?? trans('Note'),
-            titleMarker?.from ?? keywordMarker.to,
-            titleMarker?.to
-          )
-        )
 
         // Hide title marker, keyword marker, and the quote and code marks
         if (titleMarker !== null) {
-          inlineRanges.push(hiddenDeco.range(titleMarker.from, titleMarker.to))
+          // We have a custom title -> hide the keyword entirely
+          const widget = new AdmonitionTitleWidget(view.state.sliceDoc(titleMarker.from, titleMarker.to))
+          inlineRanges.push(
+            Decoration
+              .replace({ widget })
+              .range(keywordMarker.from, titleMarker.to)
+          )
+        } else {
+          // We need a generic widget with the keyword
+          const widget = new AdmonitionTitleWidget(genericKeywordTranslated)
+          inlineRanges.push(
+            Decoration
+              .replace({ widget })
+              .range(keywordMarker.from, keywordMarker.to)
+          )
         }
 
         for (const qm of node.node.getChildren('QuoteMark')) {
