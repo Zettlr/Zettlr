@@ -26,6 +26,12 @@
 ## Under the Hood
 
 - Update Electron to `v43.4.0`.
+- Fixed a memory leak in the file manager: `FileItem` and `TreeItem` registered
+  `fsal-event` (and, for directories, `shortcut`) IPC listeners on mount without
+  ever removing them, so listeners accumulated as tree items were unmounted and
+  re-created. This surfaced as recurring
+  `MaxListenersExceededWarning: 101 fsal-event listeners added` warnings in the
+  renderer log.
 
 # 4.7.0
 
