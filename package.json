@@ -181,7 +181,7 @@
     "@types/md5": "^2.3.6",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.13.3",
-    "@types/semver": "^7.7.1",
+    "@types/semver": "^7.8.0",
     "@types/showdown": "^2.0.6",
     "@types/underscore": "^1.13.0",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
