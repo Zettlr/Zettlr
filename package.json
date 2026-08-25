@@ -203,7 +203,7 @@
     "jsdom": "^30.0.1",
     "less": "^4.8.1",
     "less-loader": "^13.0.0",
-    "mocha": "^11.7.6",
+    "mocha": "^11.8.0",
     "node-loader": "^2.1.0",
     "nyc": "^18.0.0",
     "style-loader": "^4.0.0",
