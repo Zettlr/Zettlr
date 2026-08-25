@@ -120,7 +120,7 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
         for (const qm of node.node.getChildren('QuoteMark')) {
           inlineRanges.push(hiddenDeco.range(qm.from, qm.to))
         }
-        for (const cm of node.node.getChildren('CodeMark')) {
+        for (const cm of node.node.getChildren('AdmonitionMark')) {
           inlineRanges.push(hiddenDeco.range(cm.from, cm.to))
         }
 

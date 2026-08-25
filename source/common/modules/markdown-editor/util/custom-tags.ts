@@ -29,6 +29,7 @@ export const customTags = {
   AdmonitionWarning: Tag.define(),
   AdmonitionCaution: Tag.define(),
   AdmonitionKeyword: Tag.define(tags.keyword),
+  AdmonitionMark: Tag.define(tags.meta),
   AdmonitionTitle: Tag.define(tags.attributeValue),
   // Citations: @citations
   Citation: Tag.define(),

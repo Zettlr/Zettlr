@@ -33,6 +33,7 @@ const customTagHighlight = HighlightStyle.define([
   { tag: customTags.AdmonitionWarning, class: 'cm-admonition cm-admonition-warning' },
   { tag: customTags.AdmonitionCaution, class: 'cm-admonition cm-admonition-caution' },
   { tag: customTags.AdmonitionKeyword, class: 'cm-admonition-keyword' },
+  { tag: customTags.AdmonitionMark, class: 'cm-admonition-mark' },
   { tag: customTags.AdmonitionTitle, class: 'cm-admonition-title' },
   // Footnotes
   { tag: customTags.Footnote, class: 'footnote' },

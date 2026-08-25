@@ -109,9 +109,9 @@ export function admonitionParserFactory (admonitionType: AdmonitionNode): BlockP
       const [ kwStart, kwEnd ] = match.indices.groups.keyword
       // The admonition marker encompasses both the keyword and the two code
       // marks, because this way it can be styled in its entirety.
-      ctx.addElement(ctx.elt('CodeMark', skippedSpace, skippedSpace + 2))
+      ctx.addElement(ctx.elt('AdmonitionMark', skippedSpace, skippedSpace + 2))
       ctx.addElement(ctx.elt('AdmonitionKeyword', linestart + kwStart, linestart + kwEnd))
-      ctx.addElement(ctx.elt('CodeMark', linestart + kwEnd, linestart + kwEnd + 1))
+      ctx.addElement(ctx.elt('AdmonitionMark', linestart + kwEnd, linestart + kwEnd + 1))
       
       // We need to move the line position after parsing, so we track the offset
       // as we calculate markers. This is a line-relative position, not document-

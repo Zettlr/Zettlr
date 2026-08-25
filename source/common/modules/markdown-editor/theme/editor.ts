@@ -503,6 +503,6 @@ export const editorTheme = EditorView.baseTheme({
   '.cm-admonition-important': { color: 'var(--zettlr-editor-admonition-important-color)' },
   '.cm-admonition-warning': { color: 'var(--zettlr-editor-admonition-warning-color)' },
   '.cm-admonition-caution': { color: 'var(--zettlr-editor-admonition-caution-color)' },
-  '.cm-admonition.cm-code-mark': { color: 'currentColor', opacity: '0.3' },
+  '.cm-admonition.cm-admonition-mark': { color: 'currentColor', opacity: '0.3' },
   '.cm-admonition-title': { fontWeight: 'bold' }
 })

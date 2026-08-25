@@ -269,6 +269,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         }),
         { name: 'AdmonitionTitle', style: customTags.AdmonitionTitle },
         { name: 'AdmonitionKeyword', style: customTags.AdmonitionKeyword },
+        { name: 'AdmonitionMark', style: customTags.AdmonitionMark },
         // Citation elements
         { name: 'Citation', style: { 'Citation/...': customTags.Citation } },
         { name: 'CitationMark', style: customTags.CitationMark },
