@@ -13,6 +13,35 @@
  * END HEADER
  */
 
+/* Variables */
+:root {
+  --zettlr-note-color: rgb(125, 125, 125);
+  --zettlr-tip-color: rgb(75, 134, 75);
+  --zettlr-important-color: rgb(133, 87, 133);
+  --zettlr-warning-color: rgb(130, 130, 48);
+  --zettlr-caution-color: rgb(148, 76, 76);
+
+  --zettlr-note-bg: rgb(220, 220, 220);
+  --zettlr-tip-bg: rgb(200, 250, 200);
+  --zettlr-important-bg: rgb(250, 180, 250);
+  --zettlr-warning-bg: rgb(250, 250, 180);
+  --zettlr-caution-bg: rgb(250, 210, 210);
+}
+
+body.dark {
+  --zettlr-note-color: rgb(200, 200, 200);
+  --zettlr-tip-color: rgb(106 205 106);
+  --zettlr-important-color: rgb(199, 87, 199);
+  --zettlr-warning-color: rgb(193, 193, 68);
+  --zettlr-caution-color: rgb(227, 99, 99);
+
+  --zettlr-note-bg: rgba(60, 60, 60, 0.6);
+  --zettlr-tip-bg: rgba(0, 70, 0, 0.6);
+  --zettlr-important-bg: rgba(90, 30, 90, 0.6);
+  --zettlr-warning-bg: rgba(70, 70, 0, 0.6);
+  --zettlr-caution-bg: rgba(80, 10, 10, 0.6);
+}
+
 /* Generic styles that apply to all platforms */
 body {
   label {

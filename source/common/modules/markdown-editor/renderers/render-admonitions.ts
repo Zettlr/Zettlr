@@ -188,29 +188,29 @@ export const renderAdmonitions = [
       textIndent: 'revert !important'
     },
     '.admonition-wrapper.note': {
-      backgroundColor: 'var(--zettlr-editor-admonition-note-bg)',
-      borderColor: 'var(--zettlr-editor-admonition-note-color)',
-      color: 'var(--zettlr-editor-admonition-note-color)',
+      backgroundColor: 'var(--zettlr-note-bg)',
+      borderColor: 'var(--zettlr-note-color)',
+      color: 'var(--zettlr-note-color)',
     },
     '.admonition-wrapper.tip': {
-      backgroundColor: 'var(--zettlr-editor-admonition-tip-bg)',
-      borderColor: 'var(--zettlr-editor-admonition-tip-color)',
-      color: 'var(--zettlr-editor-admonition-tip-color)',
+      backgroundColor: 'var(--zettlr-tip-bg)',
+      borderColor: 'var(--zettlr-tip-color)',
+      color: 'var(--zettlr-tip-color)',
     },
     '.admonition-wrapper.important': {
-      backgroundColor: 'var(--zettlr-editor-admonition-important-bg)',
-      borderColor: 'var(--zettlr-editor-admonition-important-color)',
-      color: 'var(--zettlr-editor-admonition-important-color)',
+      backgroundColor: 'var(--zettlr-important-bg)',
+      borderColor: 'var(--zettlr-important-color)',
+      color: 'var(--zettlr-important-color)',
     },
     '.admonition-wrapper.warning': {
-      backgroundColor: 'var(--zettlr-editor-admonition-warning-bg)',
-      borderColor: 'var(--zettlr-editor-admonition-warning-color)',
-      color: 'var(--zettlr-editor-admonition-warning-color)',
+      backgroundColor: 'var(--zettlr-warning-bg)',
+      borderColor: 'var(--zettlr-warning-color)',
+      color: 'var(--zettlr-warning-color)',
     },
     '.admonition-wrapper.caution': {
-      backgroundColor: 'var(--zettlr-editor-admonition-caution-bg)',
-      borderColor: 'var(--zettlr-editor-admonition-caution-color)',
-      color: 'var(--zettlr-editor-admonition-caution-color)',
+      backgroundColor: 'var(--zettlr-caution-bg)',
+      borderColor: 'var(--zettlr-caution-color)',
+      color: 'var(--zettlr-caution-color)',
     }
   })
 ]
