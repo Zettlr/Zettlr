@@ -45,6 +45,7 @@ const EMPTY_NODES = new Set([
   // Ignore the five classes of admonitions since they are parsed via their
   // children.
   'AdmonitionKeyword',
+  'AdmonitionMark',
   'AdmonitionNote',
   'AdmonitionTip',
   'AdmonitionImportant',

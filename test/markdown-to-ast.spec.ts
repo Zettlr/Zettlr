@@ -232,9 +232,9 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
         admonitionType: "note", attributes: {},
         children: [
           { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "" },
-          { attributes: {}, children: [], from: 21, name: "CodeMark", to: 23, type: "Generic", whitespaceBefore: " " },
+          { attributes: {}, children: [], from: 21, name: "AdmonitionMark", to: 23, type: "Generic", whitespaceBefore: " " },
           { attributes: {}, children: [], from: 23, to: 27, name: "AdmonitionKeyword", type: "Generic", whitespaceBefore: "" },
-          { attributes: {}, children: [], from: 27, name: "CodeMark", to: 28, type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, children: [], from: 27, name: "AdmonitionMark", to: 28, type: "Generic", whitespaceBefore: "" },
           {
             attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "AdmonitionTitle", whitespaceBefore: " ",
             children: [{ attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: "" }]
