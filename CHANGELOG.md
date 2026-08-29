@@ -21,6 +21,7 @@
   - `ko-KO` (#6478).
   - `de-DE`.
   - `ja-JP` (#6480).
+  - `ca-ES` (#6530).
 - Renamed "Remove line breaks" to "Remove excess line breaks."
 
 ## Under the Hood
