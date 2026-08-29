@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 2.3.0\n"
+"Project-Id-Version: Zettlr 4.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-08-25 03:14+0000\n"
-"PO-Revision-Date: 2026-07-08 21:30+0200\n"
-"Last-Translator: Engin Karahan <engin.karahan@gmail.com>\n"
+"PO-Revision-Date: 2026-08-29 18:37+0300\n"
+"Last-Translator: Mert Eti <qeee3937@gmail.com>\n"
 "Language-Team: \n"
 "Language: tr-TR\n"
 "MIME-Version: 1.0\n"
@@ -127,7 +127,7 @@ msgstr "Dosya"
 #: source/win-main/file-manager/util/dir-item-context.ts:38
 #: source/tmp/win-main/App.vue.ts:349
 msgid "New file…"
-msgstr ""
+msgstr "Yeni dosya…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:174
 #: source/app/service-providers/menu/menu.win32.ts:150
@@ -138,25 +138,25 @@ msgstr "Yeni dizin..."
 #: source/app/service-providers/menu/menu.darwin.ts:184
 #: source/app/service-providers/menu/menu.win32.ts:160
 msgid "Open file…"
-msgstr ""
+msgstr "Dosya aç..."
 
 #: source/app/service-providers/menu/menu.darwin.ts:193
 #: source/app/service-providers/menu/menu.win32.ts:169
 #: source/tmp/win-main/App.vue.ts:323
 msgid "Open workspace…"
-msgstr ""
+msgstr "Çalışma alanı aç…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:202
 #: source/app/service-providers/menu/menu.win32.ts:57
 #: source/app/service-providers/menu/menu.win32.ts:69
 msgid "Recent files"
-msgstr ""
+msgstr "Son dosyalar"
 
 #: source/app/service-providers/menu/menu.darwin.ts:206
 #: source/app/service-providers/menu/menu.win32.ts:61
 #: source/app/service-providers/menu/menu.win32.ts:73
 msgid "Clear"
-msgstr ""
+msgstr "Temizle"
 
 #. primary: true // It's a primary button
 #: source/app/service-providers/menu/menu.darwin.ts:215
@@ -288,18 +288,18 @@ msgstr "Tümünü seç"
 #: source/app/service-providers/menu/menu.darwin.ts:389
 #: source/app/service-providers/menu/menu.win32.ts:393
 msgid "Find in current file"
-msgstr ""
+msgstr "Geçerli dosyada bul"
 
 #: source/app/service-providers/menu/menu.darwin.ts:397
 #: source/app/service-providers/menu/menu.win32.ts:401
 msgid "Search all files"
-msgstr ""
+msgstr "Tüm dosyaları ara"
 
 #: source/app/service-providers/menu/menu.darwin.ts:405
 #: source/app/service-providers/menu/menu.win32.ts:409
 #: source/win-preferences/schema/shortcuts.ts:285
 msgid "Filter files"
-msgstr ""
+msgstr "Dosyaları filtrele"
 
 #: source/app/service-providers/menu/menu.darwin.ts:416
 #: source/app/service-providers/menu/menu.win32.ts:420
@@ -1149,11 +1149,11 @@ msgstr ""
 
 #: source/app/service-providers/commands/dir-rename.ts:73
 msgid "Could not rename file"
-msgstr ""
+msgstr "Dosya yeniden adlandırılamadı"
 
 #: source/app/service-providers/commands/dir-rename.ts:74
 msgid "There was an error renaming the file."
-msgstr ""
+msgstr "Dosyayı yeniden adlandırırken bir hata oluştu."
 
 #: source/app/service-providers/windows/index.ts:243
 msgid "Open project folder"
@@ -1177,29 +1177,29 @@ msgstr "Her zaman mevcut dosyaya dışarıdan yapılan değişikleri ekle"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:41
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "Kaydedilmemiş değişiklikler var. Önce kaydetmek ister misiniz?"
+msgstr "Kaydedilmemiş değişiklikler var. Önce kaydetmek ister misin?"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:30
 msgid "Close all"
-msgstr ""
+msgstr "Hepsini kapat"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:199
 msgid "Close all files"
-msgstr ""
+msgstr "Tüm dosyaları kapat"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:277
 msgid "Close all workspaces"
-msgstr ""
+msgstr "Tüm çalışma alanlarını kapat"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:33
 msgid "Do you really want to close all files?"
-msgstr ""
+msgstr "Tüm dosyaları kapatmak istediğine gerçekten emin misin?"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:34
 msgid "Do you really want to close all workspaces?"
-msgstr ""
+msgstr "Tüm çalışma alanlarını kapatmak istediğine gerçekten emin misin?"
 
 #: source/app/service-providers/windows/dialog/ask-file.ts:54
 msgid "Open file"
@@ -1207,7 +1207,7 @@ msgstr "Dosyayı aç"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:58
 msgid "Save file"
-msgstr ""
+msgstr "Dosyayı kaydet"
 
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
@@ -1224,11 +1224,11 @@ msgstr "Aktif Klasör"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:140
 msgid "Preview"
-msgstr ""
+msgstr "Önizleme"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:140
 msgid "Raw"
-msgstr ""
+msgstr "Ham"
 
 #: source/common/modules/markdown-editor/renderers/index.ts:139
 #, javascript-format
@@ -1237,7 +1237,7 @@ msgstr ""
 
 #: source/common/modules/markdown-editor/renderers/index.ts:142
 msgid "Enable or disable the preview mode for Markdown files by clicking"
-msgstr ""
+msgstr "Markdown dosyalarına tıklayarak önizlemeyi etkinleştir/devre dışı bırak"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:50
 msgid "Could not render Graph:"
@@ -1245,7 +1245,7 @@ msgstr "Graf oluşturulamadı:"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
 msgid "Could not render Graph."
-msgstr ""
+msgstr "Graf oluşturulamadı."
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
@@ -1307,7 +1307,7 @@ msgstr "%s karakter"
 #: source/common/modules/markdown-editor/plugins/project-info-field.ts:82
 #, javascript-format
 msgid "This file is part of project \"%s\""
-msgstr ""
+msgstr "Bu dosya \"%s\" projesinin bir parçasıdır"
 
 #: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
 msgid "Go to footnote reference"
@@ -1373,7 +1373,7 @@ msgstr "Eğik"
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:40
 #: source/tmp/win-main/App.vue.ts:402
 msgid "Insert link"
-msgstr "Link ekle"
+msgstr "Bağlantı yerleştir"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
 msgid "Insert unordered list"
@@ -1386,7 +1386,7 @@ msgstr "Numaralı liste ekle"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
 #: source/tmp/win-main/App.vue.ts:416
 msgid "Insert task list"
-msgstr ""
+msgstr "Görev listesi yerleştir"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
 msgid "Insert blockquote"
@@ -1395,7 +1395,7 @@ msgstr ""
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
-msgstr ""
+msgstr "Tablo yerleştir"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:45
 msgid "Transform"
@@ -2246,11 +2246,11 @@ msgstr ""
 
 #: source/win-preferences/schema/spellchecking.ts:227
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: source/win-preferences/schema/spellchecking.ts:230
 msgid "Re-enable"
-msgstr ""
+msgstr "Yeniden etkinleştir"
 
 #: source/win-preferences/schema/spellchecking.ts:235
 msgid "No ignored rules."
@@ -2258,58 +2258,58 @@ msgstr ""
 
 #: source/win-preferences/schema/appearance.ts:37
 msgid "Schedule dark mode automatically"
-msgstr ""
+msgstr "Karanlık modu otomatik olarak zamanla"
 
 #: source/win-preferences/schema/appearance.ts:41
 msgid "Do not automatically switch"
-msgstr ""
+msgstr "Otomatik olarak değiştirme"
 
 #: source/win-preferences/schema/appearance.ts:42
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:22
 msgid "Follow operating system"
-msgstr ""
+msgstr "İşletim sistemine uy"
 
 #: source/win-preferences/schema/appearance.ts:43
 msgid "Follow custom schedule"
-msgstr ""
+msgstr "Özel zaman belirle"
 
 #: source/win-preferences/schema/appearance.ts:52
 msgid "Start dark mode at"
-msgstr ""
+msgstr "Karanlık modu aç"
 
 #: source/win-preferences/schema/appearance.ts:59
 msgid "End dark mode at"
-msgstr ""
+msgstr "Karanlık modu kapat"
 
 #: source/win-preferences/schema/appearance.ts:69
 msgid "Editor Theme"
-msgstr ""
+msgstr "Düzenleyici Teması"
 
 #: source/win-preferences/schema/appearance.ts:70
 msgid "Select a color and font theme for the editor."
-msgstr ""
+msgstr "Düzenleyici için bir renk ve yazı stili seç."
 
 #: source/win-preferences/schema/appearance.ts:77
 msgid "Follow App"
-msgstr ""
+msgstr "Uygulamaya uy"
 
 #: source/win-preferences/schema/appearance.ts:78
 msgid "Light Theme"
-msgstr ""
+msgstr "Aydınlık Tema"
 
 #: source/win-preferences/schema/appearance.ts:79
 msgid "Dark Theme"
-msgstr ""
+msgstr "Karanlık Tema"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Toolbar buttons"
-msgstr ""
+msgstr "Araç çubuğu butonları"
 
 #: source/win-preferences/schema/appearance.ts:130
 msgid ""
 "Select which buttons should be shown on the toolbar. Some buttons cannot be "
 "hidden."
-msgstr ""
+msgstr "Araç çubuğunda hangi butonların görüneceğini seç. Bazı butonlar gizlenemez."
 
 #: source/win-preferences/schema/appearance.ts:138
 msgid "Left section"
@@ -2317,19 +2317,19 @@ msgstr ""
 
 #: source/win-preferences/schema/appearance.ts:142
 msgid "Display \"Open settings\" button"
-msgstr ""
+msgstr "\"Ayarları aç\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:147
 msgid "Display \"New file\" button"
-msgstr ""
+msgstr "\"Yeni dosya\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:152
 msgid "Display \"Previous file\" button"
-msgstr ""
+msgstr "\"Önceki dosya\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:157
 msgid "Display \"Next file\" button"
-msgstr ""
+msgstr "\"Sonraki dosya\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:164
 msgid "Center section"
@@ -2337,27 +2337,27 @@ msgstr ""
 
 #: source/win-preferences/schema/appearance.ts:168
 msgid "Display \"Insert comment\" button"
-msgstr ""
+msgstr "\"Yorum ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:173
 msgid "Display \"Insert link\" button"
-msgstr ""
+msgstr "\"Bağlantı yerleştir\" butonunu göster "
 
 #: source/win-preferences/schema/appearance.ts:178
 msgid "Display \"Insert image\" button"
-msgstr ""
+msgstr "\"Resim yerleştir\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:183
 msgid "Display \"Insert task list\" button"
-msgstr ""
+msgstr "\"Görev listesi yerleştir\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:188
 msgid "Display \"Insert table\" button"
-msgstr ""
+msgstr "\"Tablo yerleştir\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:193
 msgid "Display \"Insert footnote\" button"
-msgstr ""
+msgstr "\"Dipnot ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:200
 msgid "Right section"
@@ -2365,11 +2365,11 @@ msgstr ""
 
 #: source/win-preferences/schema/appearance.ts:204
 msgid "Display word/character counter"
-msgstr ""
+msgstr "Kelime/karakter sayacını göster"
 
 #: source/win-preferences/schema/appearance.ts:209
 msgid "Display Pomodoro timer"
-msgstr ""
+msgstr "Pomodoro sayacını göster"
 
 #: source/win-preferences/schema/appearance.ts:215
 #: source/tmp/win-assets/App.vue.ts:50
@@ -2390,7 +2390,7 @@ msgstr "İçe aktarma profili düzenleyicisini aç"
 
 #: source/win-preferences/schema/import-export.ts:44
 msgid "Open export profiles editor"
-msgstr ""
+msgstr "Dışa aktarma profili düzenleyicisini aç"
 
 #: source/win-preferences/schema/import-export.ts:59
 msgid "Export settings"
@@ -2403,17 +2403,17 @@ msgstr "Dışa aktarmalar için Zettlr'ın dahili Pandoc'unu kullan"
 
 #: source/win-preferences/schema/import-export.ts:70
 msgid "Automatically open successfully exported files"
-msgstr ""
+msgstr "Başarıyla dışarı aktarılan dosyaları otomatik olarak aç"
 
 #: source/win-preferences/schema/import-export.ts:75
 msgid "Enforce highlight extension on export"
-msgstr ""
+msgstr "Dışa aktarırken işaretleme uzantısını zorla"
 
 #: source/win-preferences/schema/import-export.ts:76
 msgid ""
 "When enabled, Zettlr will automatically enable the \"mark\"-extension when "
 "exporting Markdown files."
-msgstr ""
+msgstr "Etkinleştirildiğinde, Markdown dosyalarını dışa aktarırken Zettlr \"mark\" uzantısını otomatik olarak etkinleştirir."
 
 #: source/win-preferences/schema/import-export.ts:82
 msgid "Remove tags from files when exporting"
@@ -2438,12 +2438,12 @@ msgstr "Dahili bağlantılara dokunma"
 
 #: source/win-preferences/schema/import-export.ts:99
 msgid "Destination folder for exported files"
-msgstr ""
+msgstr "Dışa aktarılan dosyalar için hedef"
 
 #. TODO: Add info-strings
 #: source/win-preferences/schema/import-export.ts:103
 msgid "Temporary folder"
-msgstr ""
+msgstr "Geçici Klasör"
 
 #: source/win-preferences/schema/import-export.ts:104
 msgid "Same as file location"
@@ -2451,18 +2451,18 @@ msgstr "Dosya konumuyla aynı"
 
 #: source/win-preferences/schema/import-export.ts:105
 msgid "Ask for folder when exporting"
-msgstr ""
+msgstr "Dışa aktarırken dosyayı sor"
 
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Warning! Files in the temporary folder are regularly deleted. Choosing the "
 "same location as the file overwrites files with identical filenames if they "
 "already exist."
-msgstr ""
+msgstr "Uyarı! Geçiçi klasördeki dosyalar düzenli olarak silinirler."
 
 #: source/win-preferences/schema/import-export.ts:116
 msgid "Custom export commands"
-msgstr ""
+msgstr "Özel dışa aktarma komutları"
 
 #: source/win-preferences/schema/import-export.ts:117
 msgid ""
@@ -2472,7 +2472,7 @@ msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:125
 msgid "Display name"
-msgstr ""
+msgstr "Görünen ad"
 
 #: source/win-preferences/schema/import-export.ts:125
 msgid "Command"
@@ -2480,7 +2480,7 @@ msgstr "Komut"
 
 #: source/win-preferences/schema/file-manager.ts:23
 msgid "Display mode"
-msgstr ""
+msgstr "Görüntü modu"
 
 #: source/win-preferences/schema/file-manager.ts:32
 msgid "Thin"
@@ -2522,7 +2522,7 @@ msgstr ""
 
 #: source/win-preferences/schema/file-manager.ts:65
 msgid "Filename only"
-msgstr ""
+msgstr "Sadece dosya adı"
 
 #: source/win-preferences/schema/file-manager.ts:66
 msgid "Title if applicable"
@@ -2538,7 +2538,7 @@ msgstr ""
 
 #: source/win-preferences/schema/file-manager.ts:74
 msgid "Display Markdown file extensions"
-msgstr ""
+msgstr "Markdown dosyası uzantılarını görüntüle"
 
 #: source/win-preferences/schema/file-manager.ts:75
 msgid "Only available if name display is set to \"Filename only\""
@@ -2564,7 +2564,7 @@ msgstr "Dosya oluşturulma zamanı"
 
 #: source/win-preferences/schema/file-manager.ts:98
 msgid "Filename sorting"
-msgstr ""
+msgstr "Dosya adıyla sırala"
 
 #: source/win-preferences/schema/file-manager.ts:99
 msgid "Determines how Zettlr sorts files and folders when sorting by name."
@@ -3067,7 +3067,7 @@ msgstr "Güncellemeler"
 
 #: source/win-preferences/schema/general.ts:22
 msgid "If you installed Zettlr via a package manager, you should disable this."
-msgstr ""
+msgstr "Eğer Zettlr'ı bir paket yöneticisi ile yüklediyseniz, bunu devre dışı bırakın."
 
 #: source/win-preferences/schema/general.ts:28
 msgid "Automatically check for updates"
@@ -3091,7 +3091,7 @@ msgstr "Otomatik kaydet"
 
 #: source/win-preferences/schema/general.ts:55
 msgid "Should Zettlr automatically save changes to your documents?"
-msgstr ""
+msgstr "Zettlr dosyalarındaki değişiklikleri otomatik olarak kaydetmeli mi?"
 
 #: source/win-preferences/schema/general.ts:65
 msgid "Never"
@@ -3152,7 +3152,7 @@ msgstr "Dosya yolu"
 
 #: source/win-preferences/schema/citations.ts:51
 msgid "CSL style (optional)"
-msgstr ""
+msgstr "CSL stili (opsiyonel)"
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
@@ -3192,23 +3192,23 @@ msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:264
 msgid "UI Shortcuts"
-msgstr ""
+msgstr "Arayüz kısayolları"
 
 #: source/win-preferences/schema/shortcuts.ts:265
 msgid "Customize general user interface shortcuts here."
-msgstr ""
+msgstr "Genel arayüz kısayollarını buradan düzenleyebilirsiniz."
 
 #: source/win-preferences/schema/shortcuts.ts:271
 msgid "Switch to next tab"
-msgstr ""
+msgstr "Sonraki sekmeye geç"
 
 #: source/win-preferences/schema/shortcuts.ts:278
 msgid "Switch to previous tab"
-msgstr ""
+msgstr "Önceki sekmeye geç"
 
 #: source/win-preferences/schema/advanced.ts:29
 msgid "Beta releases"
-msgstr ""
+msgstr "Beta sürümler"
 
 #: source/win-preferences/schema/advanced.ts:31
 msgid "Requires that check for updates is also active."
@@ -3231,11 +3231,11 @@ msgstr ""
 #: source/win-preferences/schema/advanced.ts:53
 #, javascript-format
 msgid "Available variables: %s"
-msgstr ""
+msgstr "Kullanılabilir değişkenler: %s"
 
 #: source/win-preferences/schema/advanced.ts:60
 msgid "Automatically create new files without asking for confirmation."
-msgstr ""
+msgstr "Onay istemeden yeni dosyalar oluştur."
 
 #: source/win-preferences/schema/advanced.ts:67
 #: source/tmp/win-preferences/App.vue.ts:149
@@ -3248,7 +3248,7 @@ msgstr "Dahili pencere görünümün kullan"
 
 #: source/win-preferences/schema/advanced.ts:74
 msgid "Only available on Linux; this is the default for macOS and Windows."
-msgstr ""
+msgstr "Sadece Linux'ta kullanılabilir; macOS ve Windows için bu varsayılan."
 
 #: source/win-preferences/schema/advanced.ts:80
 msgid "Enable window vibrancy"
@@ -3256,15 +3256,15 @@ msgstr "Pencere saydamlığını etkinleştir"
 
 #: source/win-preferences/schema/advanced.ts:81
 msgid "Only available on macOS; makes the window background opaque."
-msgstr ""
+msgstr "Sadece macOS'te kullanılabilir; pencere arkaplanını opak yapar."
 
 #: source/win-preferences/schema/advanced.ts:88
 msgid "Show app in the notification area"
-msgstr ""
+msgstr "Bildirim kısmında uygulamayı göster"
 
 #: source/win-preferences/schema/advanced.ts:89
 msgid "Leave app running in the notification area"
-msgstr "Uygulamayı bildirim alanında çalışır halde bırak"
+msgstr "Uygulamayı bildirim kısmında çalışır halde bırak"
 
 #: source/win-preferences/schema/advanced.ts:98
 msgid "Zoom behavior"
@@ -3288,15 +3288,15 @@ msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:120
 msgid "Display in file manager"
-msgstr ""
+msgstr "Dosya yöneticisinde görüntüle"
 
 #: source/win-preferences/schema/advanced.ts:121
 msgid "Display in sidebar"
-msgstr ""
+msgstr "Kenar çubuğunda görüntüle"
 
 #: source/win-preferences/schema/advanced.ts:122
 msgid "Open with"
-msgstr ""
+msgstr "Şununla aç..."
 
 #: source/win-preferences/schema/advanced.ts:130
 msgid "Built-in Markdown and Code files"
@@ -3304,7 +3304,7 @@ msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:153
 msgid "Images"
-msgstr ""
+msgstr "Resimler"
 
 #: source/win-preferences/schema/advanced.ts:167
 #: source/win-preferences/schema/advanced.ts:191
@@ -3313,15 +3313,15 @@ msgstr ""
 #: source/win-preferences/schema/advanced.ts:256
 #: source/win-preferences/schema/advanced.ts:276
 msgid "System default"
-msgstr ""
+msgstr "Sistem varsayılanı"
 
 #: source/win-preferences/schema/advanced.ts:177
 msgid "PDF documents"
-msgstr ""
+msgstr "PDF dosyaları"
 
 #: source/win-preferences/schema/advanced.ts:201
 msgid "MS Office Documents"
-msgstr ""
+msgstr "MS Office dosyaları"
 
 #: source/win-preferences/schema/advanced.ts:222
 msgid "Open Office Documents"
@@ -3329,7 +3329,7 @@ msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:243
 msgid "Data files (tsv, csv, etc.)"
-msgstr ""
+msgstr "Veri dosyaları (tsv, csv, vb.)"
 
 #: source/win-preferences/schema/advanced.ts:263
 msgid "Dot Files and Folders"
@@ -3343,7 +3343,7 @@ msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:287
 msgid "Enter an extension and press enter"
-msgstr ""
+msgstr "Bir uzantı gir ve enter'a bas"
 
 #: source/win-preferences/schema/advanced.ts:293
 msgid "Iframe rendering whitelist"
@@ -3373,7 +3373,7 @@ msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:317
 msgid "Activate watchdog polling"
-msgstr ""
+msgstr "Watchdog düzenli kontrolünü etkinleştir"
 
 #: source/win-preferences/schema/advanced.ts:322
 msgid "Time to wait before writing a file is considered done (in ms)"
@@ -3603,7 +3603,7 @@ msgstr ""
 #: source/tmp/common/vue/IrisIndicator.vue.ts:40
 #: source/tmp/win-main/App.vue.ts:461
 msgid "Show tasks"
-msgstr ""
+msgstr "Görevleri göster"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
@@ -3646,7 +3646,7 @@ msgstr "Düzenleyici"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Shortcuts"
-msgstr ""
+msgstr "Kısayollar"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Zettelkasten"
@@ -3715,7 +3715,7 @@ msgstr ""
 
 #: source/tmp/win-about/General-Tab.vue.ts:25
 msgid "View the Privacy Policy by LanguageTooler GmbH"
-msgstr ""
+msgstr "LanguageTooler GmbH tarafından sunulan Gizlilik Politikasını incele"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
@@ -3779,11 +3779,11 @@ msgstr ""
 
 #: source/tmp/win-tag-manager/App.vue.ts:37
 msgid "Rename"
-msgstr ""
+msgstr "Yeniden adlandır"
 
 #: source/tmp/win-tag-manager/App.vue.ts:38
 msgid "Rename tag…"
-msgstr ""
+msgstr "Etiketi yeniden adlandır..."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:56
 #: source/tmp/win-main/App.vue.ts:315
@@ -3817,7 +3817,7 @@ msgstr ""
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:63
 msgid "Choose directory…"
-msgstr ""
+msgstr "Dizin seç..."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:66
 msgid "Clear search"
@@ -3829,7 +3829,7 @@ msgstr "Sonuçları değiştir"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:68
 msgid "No results for your search."
-msgstr ""
+msgstr "Aramanız için sonuç bulunamadı."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:171
 #, javascript-format
@@ -3843,19 +3843,19 @@ msgstr "Tablo boyutu: %s &tımes %s"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:32
 msgid "Open after export"
-msgstr ""
+msgstr "Dışa aktarmadan sonra aç"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:33
 msgid "Temporary directory"
-msgstr ""
+msgstr "Geçici dizin"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:34
 msgid "Current directory"
-msgstr ""
+msgstr "Geçerli dizin"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:35
 msgid "Select directory"
-msgstr ""
+msgstr "Dizin seç"
 
 #: source/tmp/win-main/PopoverExport.vue.ts:85
 msgid "Exporting…"
@@ -3871,12 +3871,12 @@ msgstr "komut"
 
 #: source/tmp/win-main/PopoverLRT.vue.ts:18
 msgid "Clear finished tasks"
-msgstr ""
+msgstr "Bitmiş görevleri temizle"
 
 #: source/tmp/win-main/App.vue.ts:277
 #, javascript-format
 msgid "%s selected"
-msgstr ""
+msgstr "%s seçildi"
 
 #. Multiple selections --> indicate
 #: source/tmp/win-main/App.vue.ts:283
@@ -3886,19 +3886,19 @@ msgstr "%s seçildi"
 
 #: source/tmp/win-main/App.vue.ts:329
 msgid "View writing statistics"
-msgstr ""
+msgstr "Yazım istatistiklerini görüntüle"
 
 #: source/tmp/win-main/App.vue.ts:335
 msgid "View Tag Cloud"
-msgstr ""
+msgstr "Etiket bulutunu görüntüle"
 
 #: source/tmp/win-main/App.vue.ts:342
 msgid "Open settings"
-msgstr ""
+msgstr "Ayarları aç"
 
 #: source/tmp/win-main/App.vue.ts:377
 msgid "Export current file"
-msgstr ""
+msgstr "Geçerli dosyayı dışa aktar"
 
 #: source/tmp/win-main/App.vue.ts:388
 msgid "Insert Pandoc Div or Span"
@@ -3906,19 +3906,19 @@ msgstr ""
 
 #: source/tmp/win-main/App.vue.ts:395
 msgid "Insert comment"
-msgstr ""
+msgstr "Yorum ekle"
 
 #: source/tmp/win-main/App.vue.ts:409
 msgid "Insert image"
-msgstr ""
+msgstr "Resim yerleştir"
 
 #: source/tmp/win-main/App.vue.ts:430
 msgid "Insert footnote"
-msgstr ""
+msgstr "Dipnot ekle"
 
 #: source/tmp/win-main/App.vue.ts:452
 msgid "Pomodoro timer"
-msgstr ""
+msgstr "Pomodoro zamanlayıcısı"
 
 #: source/tmp/win-main/PopoverDocInfo.vue.ts:21
 msgid "words"
@@ -4260,39 +4260,39 @@ msgstr "Takvim"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
 msgid "Calculator"
-msgstr ""
+msgstr "Hesap Makinesi"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
 msgid "Store"
-msgstr ""
+msgstr "Mağaza"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
 msgid "Shopping bag"
-msgstr ""
+msgstr "Alışveriş çantası"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
 msgid "Shopping cart"
-msgstr ""
+msgstr "Alışveriş kartı"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
 msgid "Factory"
-msgstr ""
+msgstr "Fabrika"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
 msgid "Heart"
-msgstr ""
+msgstr "Kalp"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
 msgid "Heart (broken)"
-msgstr ""
+msgstr "Kırık kalp"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
 msgid "Bubbles"
-msgstr ""
+msgstr "Baloncuklar"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
 msgid "Bubble"
-msgstr ""
+msgstr "Baloncuk"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
 msgid "Bubble (exclamation)"
@@ -4300,7 +4300,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
 msgid "Colour Palette"
-msgstr ""
+msgstr "Renk Paleti"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
 msgid "Bars"
@@ -4308,23 +4308,23 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
 msgid "Thermometer"
-msgstr ""
+msgstr "Termometre"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
 msgid "Book"
-msgstr ""
+msgstr "Kitap"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
 msgid "Library"
-msgstr ""
+msgstr "Kütüphane"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Bug"
-msgstr ""
+msgstr "Hata"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Note"
-msgstr ""
+msgstr "Not"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Lightbulb"
@@ -4332,7 +4332,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
 msgid "Trash"
-msgstr ""
+msgstr "Çöp"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
 msgid "Snowflake"
@@ -4344,7 +4344,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
 msgid "Key"
-msgstr ""
+msgstr "Anahtar"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
 msgid "Bolt"
@@ -4356,7 +4356,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Flame"
-msgstr ""
+msgstr "Alev"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Hourglass"
@@ -4476,19 +4476,19 @@ msgstr "Açık dosya veya dizin yok"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Hide files"
-msgstr ""
+msgstr "Dosyaları gizle"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Show files"
-msgstr ""
+msgstr "Dosyaları göster"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Hide workspaces"
-msgstr ""
+msgstr "Çalışma alanlarını gizle"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Show workspaces"
-msgstr ""
+msgstr "Çalışma alanlarını göster"
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:73
 msgid "Switch to automatic sorting"
@@ -4504,7 +4504,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/FileTree.vue.ts:269
 msgid "Sort workspaces…"
-msgstr ""
+msgstr "Çalışma alanlarını sırala..."
 
 #: source/tmp/win-main/PopoverPomodoro.vue.ts:24
 msgid "Start"
@@ -4540,31 +4540,31 @@ msgstr "Etiket Bulutu"
 
 #: source/tmp/win-stats/ChartView.vue.ts:24
 msgid "Monday"
-msgstr ""
+msgstr "Pazartesi"
 
 #: source/tmp/win-stats/ChartView.vue.ts:25
 msgid "Tuesday"
-msgstr ""
+msgstr "Salı"
 
 #: source/tmp/win-stats/ChartView.vue.ts:26
 msgid "Wednesday"
-msgstr ""
+msgstr "Çarşamba"
 
 #: source/tmp/win-stats/ChartView.vue.ts:27
 msgid "Thursday"
-msgstr ""
+msgstr "Perşembe"
 
 #: source/tmp/win-stats/ChartView.vue.ts:28
 msgid "Friday"
-msgstr ""
+msgstr "Cuma"
 
 #: source/tmp/win-stats/ChartView.vue.ts:29
 msgid "Saturday"
-msgstr ""
+msgstr "Cumartesi"
 
 #: source/tmp/win-stats/ChartView.vue.ts:30
 msgid "Sunday"
-msgstr ""
+msgstr "Pazar"
 
 #. Static properties
 #: source/tmp/win-stats/ChartView.vue.ts:34 source/tmp/win-stats/App.vue.ts:34
@@ -4647,50 +4647,50 @@ msgstr "Yazma istatistikleri"
 
 #: source/tmp/win-onboarding/SupportLogos.vue.ts:4
 msgid "Support the development of Zettlr"
-msgstr ""
+msgstr "Zettlr'ın gelişimini destekleyin"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:5
 msgid "Writing Markdown"
-msgstr ""
+msgstr "Markdown ile yazmak"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:6
 msgid ""
 "The core of Zettlr is writing Markdown, which can be shown using either its "
 "raw syntax, or in a WYSIWYG mode. Which one do you prefer?"
-msgstr ""
+msgstr "Zettlr'ın özü Markdown ile yazmaktır. Markdown hem ham sözdizimi hem de WYSIWYG modu ile görüntülenebilir. Hangisini tercih edersin?"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:7
 msgid "Raw Syntax"
-msgstr ""
+msgstr "Ham sözdizimi"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:8
 msgid ""
 "Some people prefer an app automatically saving your work; others want to "
 "manually save. Which do you prefer?"
-msgstr ""
+msgstr "Bazı insanlar uygulamanın işini otomatik kaydetmesini ister, bazılarıysa manuel olarak kaydetmeyi. Sen hangisini tercih edersin?"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:9
 msgid "Save manually"
-msgstr ""
+msgstr "Manuel olarak kaydet"
 
 #: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:10
 msgid "Activate Autosave"
-msgstr ""
+msgstr "Otomatik kaydetmeyi aç"
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:4
 msgid "Hello!"
-msgstr ""
+msgstr "Merhaba!"
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:5
 msgid ""
 "Thank your for choosing Zettlr as your new one-stop publication workbench."
-msgstr ""
+msgstr "Yeni çalışmaların üzerinde çalışırken Zettlr'ı tercih ettiğin için teşekkür ederiz. "
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:6
 msgid ""
 "Before we get started, let us first make sure Zettlr looks and feels as you "
 "expect it to."
-msgstr ""
+msgstr "Başlamadan önce, hadi Zettlr'ı sana göre özelleştirelim."
 
 #: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:7
 msgid ""
@@ -4698,11 +4698,11 @@ msgid ""
 "settings for a great writing experience. Zettlr ships with sensible "
 "defaults, so you may skip this wizard at any time, and adjust your settings "
 "later on."
-msgstr ""
+msgstr "Sonraki sayfalarda, harika bir yazma deneyimi için önem arz eden bazı ayarları nasıl yapacağın konusunda sana rehberlik edeceğiz. Zettlr zaten kabul edilebilir varsayılan ayarlarla gelir, o yüzden istersen bu kısmı atlayıp ayarlarını daha sonra da değiştirebilirsin."
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:8
 msgid "Images and PDFs in Zettlr"
-msgstr ""
+msgstr "Zettlr'da Resimler ve PDF'ler"
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:9
 msgid ""
@@ -4710,95 +4710,95 @@ msgid ""
 "to reference plots or literature directly while writing. If you do not "
 "activate this, images and PDF files will only be shown in the sidebar and "
 "open with your computer's default viewer."
-msgstr ""
+msgstr "Zettlr, resim ve PDF dosyalarını kendi içinde önizleyebilir. Bu sayede grafiklere ve kaynaklara doğrudan başvurabilirsin. Bu özelliği etkinleştirmezsen resim ve PDF dosyaları sadece kenar çubuğunda gösterilir ve bilgisayarının varsayılan görüntüleyicisi ile açılır. "
 
 #: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:10
 msgid "Activate Image and PDF Previews in Zettlr"
-msgstr ""
+msgstr "Resim ve PDF önizlemelerini aktifleştir"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:8
 msgid "Look and Feel"
-msgstr ""
+msgstr "Görünüm ve hissiyat"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:9
 msgid ""
 "Zettlr supports both light and dark mode. You can turn it on manually here."
-msgstr ""
+msgstr "Zettlr hem karanlık hem de aydınlık modu destekler. Buradan istediğini seçebilirsin."
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:10
 msgid "Activate dark mode"
-msgstr ""
+msgstr "Karanlık modu aktif et"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:11
 msgid "Do you wish to let Zettlr automatically switch to dark mode?"
-msgstr ""
+msgstr "Zettlr'ın otomatik olarak karanlık moda geçmesini ister misin?"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:18
 #, javascript-format
 msgid ""
 "Zettlr will turn on dark mode between %s and %s. You can adjust these times "
 "in the settings."
-msgstr ""
+msgstr "Zettlr %s ile %s arasında karanlık modu açacak. Ayarlardan bu zamanları değiştirebilirsin."
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:21
 msgid "Do not automatically toggle light/dark mode"
-msgstr ""
+msgstr "Karanlık ve aydınlık mod arasında otomatik geçiş yapma"
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:23
 msgid "Schedule dark mode"
-msgstr ""
+msgstr "Karanlık modu zamanla"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:5
 msgid "You're All Set!"
-msgstr ""
+msgstr "Artık hazırsın!"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:6
 msgid ""
 "We wish you a great writing experience! Remember to take a look at the "
 "preferences to tweak Zettlr even more."
-msgstr ""
+msgstr "Umarız güzel bir yazma deneyimi yaşarsın!  Daha fazla özelleştirme için tercihler kısmına göz atmayı unutma."
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:7
 msgid ""
 "If anything comes up, and you need help, encounter a bug, or have an idea "
 "for a new feature, please get in touch with us. Zettlr is maintained by a "
 "global community of excellent volunteers who will help you out."
-msgstr ""
+msgstr "Eğer yardıma ihtiyacın olursa, bir hatayla karşılaşırsan veya yeni bir özellik için bir fikrin varsa lütfen bizimle iletişime geç. Zettlr sana yardımcı olmaktan mutluluk duyacak harika gönüllülerden oluşan küresel bir topluluk tarafından geliştiriliyor."
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:9
 msgid "Join our Discord Server"
-msgstr ""
+msgstr "Discord sunucumuza katıl"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:10
 msgid "Join our Community Forum"
-msgstr ""
+msgstr "Topluluk forumumuza katıl"
 
 #: source/tmp/win-onboarding/pages/FinishPage.vue.ts:11
 msgid "View Source Code on GitHub"
-msgstr ""
+msgstr "Github'da kaynak kodu görüntüle"
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:8
 msgid ""
 "If you already have a library of references, you can select it here to make "
 "all your stored reference items available to Zettlr."
-msgstr ""
+msgstr "Eğer halihazırda bir kaynak kütüphanen varsa, buradan seçerek kaynaklarını Zettlr'da kullanılabilir hale getirebilirsin."
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:9
 msgid "Learn how to export your Zotero library"
-msgstr ""
+msgstr "Zotero kütüphaneni nasıl dışa aktaracağını öğren"
 
 #: source/tmp/win-onboarding/pages/CitingPage.vue.ts:10
 msgid ""
 "Different academic fields have different citation styles. Here you choose "
 "which one Zettlr uses when you autocomplete citations."
-msgstr ""
+msgstr "Farklı akademik alanlar farklı atıf stilleri gerektirebilir. Buradan Zettlr'ın atıfları otomatik tamamlarken hangi seçeneği kullanacağını seçebilirsin. "
 
 #. Just as with the navigation, we have to re-translate the page's strings
 #. once the user toggles the app lang.
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:21
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:28
 msgid "Which Language do you speak?"
-msgstr ""
+msgstr "Hangi dili konuşuyorsun?"
 
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:22
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:30
@@ -4807,116 +4807,116 @@ msgstr ""
 msgid ""
 "Based on your operating system settings, we have selected %s as the "
 "application language. If you wish, you can select a different language here."
-msgstr ""
+msgstr "İşletim sisteminin ayarlarına bağlı olarak senin için %s dilini seçtik. İstersen buradan farklı bir dil seçebilirsin."
 
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:23
 #: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:29
 msgid "The changes apply from the next slide."
-msgstr ""
+msgstr "Değişiklikler sonraki sayfada etkin olacak."
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:6
 msgid "Staying Up To Date"
-msgstr ""
+msgstr "Güncel kal"
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:7
 msgid ""
 "Zettlr will from time to time check for updates. If you installed Zettlr via "
 "a package manager (e.g., APT or Pacman, Homebrew, or winget or chocolatey), "
 "you should turn this off."
-msgstr ""
+msgstr "Zettlr zaman zaman güncellemeleri kontrol eder. Eğer Zettlr'ı bir paket yöneticisi (APT, Pacman, Homebrew, winget, chocolatey vb.) ile yüklediyseniz bunu kapatmalısınız."
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:8
 msgid "Check for Updates"
-msgstr ""
+msgstr "Güncellemeleri kontrol et"
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:9
 msgid ""
 "From time to time, we also release beta updates. The more users test these "
 "early versions, the better the app becomes."
-msgstr ""
+msgstr "Zaman zaman, beta güncellemeleri de yayınlıyoruz. Ne kadar çok kullanıcı bu erken sürümleri test ederse uygulama o kadar iyi hale gelir."
 
 #: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:10
 msgid "Test Beta Versions"
-msgstr ""
+msgstr "Beta sürümleri test et"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:8
 msgid "Check your writing"
-msgstr ""
+msgstr "Yazımını kontrol et"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:9
 msgid ""
 "Here you can configure how you wish to check for spelling errors. You can "
 "select a built-in dictionary, or set up LanguageTool."
-msgstr ""
+msgstr "Buradan Zettlr'ın yazım yanlışlarını nasıl denetleyebileceğini seçebilirsin. İstersen yerleşik bir sözlük seçebilir ya da LanguageTool'u kurabilirsin."
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:11
 #, javascript-format
 msgid "Set %s as a spellchecking dictionary"
-msgstr ""
+msgstr "%s dilini yazım denetimi sözlüğü olarak kullan."
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:13
 msgid ""
 "Zettlr integrates with LanguageTool, a free grammar and spellchecker. You "
 "can turn it on with simple defaults."
-msgstr ""
+msgstr "Zettlr ücretsiz bir dilbilgisi ve yazım denetleyicisi olan LanguageTool ile entegredir. Basit ayarlarla etkinleştirebilirsin."
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:14
 msgid "Activate LanguageTool (uses online service)"
-msgstr ""
+msgstr "LanguageTool'u aktif et. (çevrimiçi hizmet kullanır)"
 
 #: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:15
 msgid ""
 "You can choose a custom server and provide your LanguageTool username later "
 "in the settings."
-msgstr ""
+msgstr "Daha sonra ayarlardan özel bir sunucu seçebilir ve LanguageTool kullanıcı adını belirtebilirsin."
 
 #. Update labels
 #: source/tmp/win-onboarding/App.vue.ts:49
 msgid "Update complete!"
-msgstr ""
+msgstr "Güncelleme tamamlandı!"
 
 #: source/tmp/win-onboarding/App.vue.ts:50
 msgid "Zettlr has been updated. You are now running Zettlr"
-msgstr ""
+msgstr "Zettlr güncellendi. Artık güncel sürümdesin."
 
 #: source/tmp/win-onboarding/App.vue.ts:51
 msgid "Get started"
-msgstr ""
+msgstr "Başlayalım"
 
 #: source/tmp/win-onboarding/App.vue.ts:52
 msgid "See what's changed"
-msgstr ""
+msgstr "Neler değişti?"
 
 #: source/tmp/win-onboarding/App.vue.ts:54
 #, javascript-format
 msgid "Build date: %s"
-msgstr ""
+msgstr "Derleme tarihi: %s"
 
 #. Onboarding workflow labels
 #: source/tmp/win-onboarding/App.vue.ts:57
 #: source/tmp/win-onboarding/App.vue.ts:68
 msgid "Start setup"
-msgstr ""
+msgstr "Kurulumu başlat"
 
 #: source/tmp/win-onboarding/App.vue.ts:58
 #: source/tmp/win-onboarding/App.vue.ts:69
 msgid "Skip"
-msgstr ""
+msgstr "Atla"
 
 #: source/tmp/win-onboarding/App.vue.ts:59
 #: source/tmp/win-onboarding/App.vue.ts:70
 msgid "Previous"
-msgstr ""
+msgstr "Önceki"
 
 #: source/tmp/win-onboarding/App.vue.ts:60
 #: source/tmp/win-onboarding/App.vue.ts:71
 msgid "Next"
-msgstr ""
+msgstr "Sonraki"
 
 #: source/tmp/win-onboarding/App.vue.ts:61
 #: source/tmp/win-onboarding/App.vue.ts:72
 msgid "Finish"
-msgstr ""
+msgstr "Bitir"
 
 #: source/tmp/win-update/App.vue.ts:32
 msgid "Updater"
@@ -4934,7 +4934,7 @@ msgstr "Sizdeki sürüm"
 msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
-msgstr "Yeni bir Zettlr"
+msgstr "Yeni bir Zettlr sürümü mevcut. Lütfen aşağıdaki 'Neler değişti?' kısmını okuyun."
 
 #: source/tmp/win-update/App.vue.ts:36
 msgid "Downloading your update"
@@ -4946,7 +4946,7 @@ msgstr "Güncelleme mevcut değil. En son sürüme sahipsiniz."
 
 #: source/tmp/win-update/App.vue.ts:45
 msgid "Click to start update"
-msgstr "Güncellemeye başlamak için tıklayın"
+msgstr "Güncellemeyi başlatmak için tıklayın"
 
 #: source/tmp/win-update/App.vue.ts:48
 msgid "never"
@@ -5004,7 +5004,7 @@ msgstr "Kaydedildi!"
 #: source/tmp/win-assets/FilterTab.vue.ts:149
 #: source/tmp/win-assets/CustomCSS.vue.ts:69
 msgid "Could not save changes"
-msgstr ""
+msgstr "Değişiklikler kaydedilemedi"
 
 #: source/tmp/win-assets/App.vue.ts:26
 msgid "Exporting"
@@ -5012,7 +5012,7 @@ msgstr "Dışa aktarılıyor"
 
 #: source/tmp/win-assets/App.vue.ts:32
 msgid "Importing"
-msgstr "İçeri aktarılıyor"
+msgstr "İçe aktarılıyor"
 
 #: source/tmp/win-assets/App.vue.ts:38
 msgid "Lua Filter"
@@ -5061,13 +5061,13 @@ msgstr ""
 #: source/tmp/win-assets/CustomCSS.vue.ts:24
 msgid ""
 "Here you can override the styles of Zettlr to customise it even further."
-msgstr ""
+msgstr "Burada Zettlr'ın stillerini geçersiz kılarak onu daha da özelleştirebilirsin."
 
 #: source/tmp/win-assets/CustomCSS.vue.ts:25
 msgid ""
 "Attention: This file overrides all CSS directives! Never alter the geometry "
 "of elements, otherwise the app may expose unwanted behaviour!"
-msgstr ""
+msgstr "Dikkat: Bu dosya tüm CSS yönergelerini geçersiz kılar. Asla öğelerin geometrisini değiştirmeyin, aksi takdirde uygulama istenmeyen davranışlar sergileyebilir!"
 
 #, javascript-format
 #~ msgid "Exporting to %s"
