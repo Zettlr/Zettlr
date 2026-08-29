@@ -15,6 +15,8 @@
  * END HEADER
  */
 
+import type { PandocExtension } from './pandoc-extensions'
+
 /**
  * Represents a parsed `reader` or `writer` property string for Pandoc.
  */
@@ -111,11 +113,12 @@ export function readerWriterToString (readerWriter: PandocReaderWriter): string 
  * Enables an extension for the provided reader/writer
  *
  * @param   {PandocReaderWriter}  readerWriter  The ReaderWriter.
- * @param   {string}              extension     The extension to enable.
+ * @param   {PandocExtension}     extension     The extension to enable.
  *
  * @return  {void}                              Modifies in place.
+ *
  */
-export function enableExtension (readerWriter: PandocReaderWriter, extension: string): void {
+export function enableExtension (readerWriter: PandocReaderWriter, extension: PandocExtension): void {
   const disabledIdx = readerWriter.disabledExtensions.indexOf(extension)
   const hasExt = readerWriter.enabledExtensions.includes(extension)
   if (disabledIdx > -1) {
@@ -131,11 +134,11 @@ export function enableExtension (readerWriter: PandocReaderWriter, extension: st
  * Disables an extension for the provided reader/writer
  *
  * @param   {PandocReaderWriter}  readerWriter  The ReaderWriter.
- * @param   {string}              extension     The extension to disable.
+ * @param   {PandocExtension}     extension     The extension to disable.
  *
  * @return  {void}                              Modifies in place.
  */
-export function disableExtension (readerWriter: PandocReaderWriter, extension: string): void {
+export function disableExtension (readerWriter: PandocReaderWriter, extension: PandocExtension): void {
   const enabledIdx = readerWriter.enabledExtensions.indexOf(extension)
   const hasExt = readerWriter.disabledExtensions.includes(extension)
   if (enabledIdx > -1) {
