@@ -56,9 +56,9 @@ const icon = computed(() => {
   }
 
   &.info {
-    color: var(--zettlr-important-color);
-    background-color: var(--zettlr-important-bg);
-    border-color: var(--zettlr-important-color);
+    color: var(--zettlr-note-color);
+    background-color: var(--zettlr-note-bg);
+    border-color: var(--zettlr-note-color);
   }
 }
 </style>
