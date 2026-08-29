@@ -32,7 +32,7 @@ import type LogProvider from '@providers/log'
 import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
 import { enableExtension, parseReaderWriter, readerWriterToString } from '@common/pandoc-util/parse-reader-writer'
-import { EXT2READER } from '@common/pandoc-util/pandoc-maps'
+import { supportsExtension } from 'source/common/pandoc-util/pandoc-extensions'
 
 /**
  * This function returns faux metadata for the custom export formats the
@@ -94,7 +94,7 @@ export async function makeExport (
       return await runPandoc(logger, defaults, options.cwd)
     },
     writeDefaults: async (filename: string, overrides: Record<string, unknown> = {}) => {
-      return await writeDefaults(filename, overrides, config, assets, options.defaultsOverride)
+      return await writeDefaults(filename, overrides, config, logger, assets, options.defaultsOverride)
     },
     listDefaults: async () => {
       return await assets.listDefaults()
@@ -165,6 +165,7 @@ async function writeDefaults (
   filename: string, // The profile to use
   properties: Record<string, unknown>, // Contains properties that will be written to the defaults
   config: ConfigProvider,
+  logger: LogProvider,
   assets: AssetsProvider,
   defaultsOverride?: DefaultsOverride
 ): Promise<string> {
@@ -172,13 +173,12 @@ async function writeDefaults (
   const defaults = await assets.getDefaultsFile(filename)
 
   const cfg = config.get()
-  const { cslLibrary, cslStyle, stripTags, stripLinks, enforceMarkSupport } = cfg.export
+  const { cslLibrary, cslStyle, stripTags, stripLinks, forceEnableExtensions } = cfg.export
   const { linkFormat } = cfg.zkn
 
   // First step: Reader treatment. Zettlr can modify the reader to align with
   // the user preferences.
   const parsedReader = parseReaderWriter(defaults.reader as string)
-  const readsMarkdown = EXT2READER['md'].includes(parsedReader.name)
   
   // The user can choose to use [[link|title]] or [[title|link]] syntax. In
   // order for the Lua filter to work properly and respect the link removal
@@ -187,11 +187,25 @@ async function writeDefaults (
   const linkExt = linkFormat === 'link|title'
     ? 'wikilinks_title_after_pipe'
     : 'wikilinks_title_before_pipe'
-  enableExtension(parsedReader, linkExt)
 
-  // Same for the `mark` extension which makes Pandoc correctly parse `==mark==`
-  if (readsMarkdown && enforceMarkSupport) {
+  if (supportsExtension(parsedReader, linkExt)) {
+    enableExtension(parsedReader, linkExt)
+  } else {
+    logger.warning(`[Exporter] Cannot enable link extension "${linkExt}" for reader "${parsedReader.name}": It appears unsupported.`)
+  }
+
+  // Same for the `mark` and `alerts` extensions which makes Pandoc correctly
+  // parse `==mark==` and `> [!ALERT]` blocks.
+  if (forceEnableExtensions.mark && supportsExtension(parsedReader, 'mark')) {
     enableExtension(parsedReader, 'mark')
+  } else {
+    logger.warning(`[Exporter] Cannot enable link extension "mark" for reader "${parsedReader.name}": It appears unsupported.`)
+  }
+
+  if (forceEnableExtensions.alerts && supportsExtension(parsedReader, 'alerts')) {
+    enableExtension(parsedReader, 'alerts')
+  } else {
+    logger.warning(`[Exporter] Cannot enable link extension "alerts" for reader "${parsedReader.name}": It appears unsupported.`)
   }
 
   // Finally, write the modified reader

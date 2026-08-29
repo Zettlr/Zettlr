@@ -128,7 +128,6 @@ export interface ConfigOptions {
     dir: 'temp'|'cwd'|'ask'
     stripTags: boolean
     autoOpenExportedFiles: boolean
-    enforceMarkSupport: boolean
     stripLinks: 'full'|'unlink'|'no'
     cslLibrary: string
     cslStyle: string
@@ -137,6 +136,10 @@ export interface ConfigOptions {
     customCommands: Array<{ displayName: string, command: string }>
     selectedProfiles: Array<{ filePath: string, profile: string }>
     lastUsedProfile: string
+    forceEnableExtensions: {
+      mark: boolean
+      alerts: boolean
+    }
   }
   zkn: {
     idRE: string
@@ -351,7 +354,6 @@ export function getConfigTemplate (): ConfigOptions {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
       stripTags: false, // Strip tags a.k.a. #tag
       autoOpenExportedFiles: true,
-      enforceMarkSupport: true,
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file
       cslStyle: '', // Path to a CSL Style file
@@ -359,7 +361,11 @@ export function getConfigTemplate (): ConfigOptions {
       exportQmdWithQuarto: false, // Whether .qmd-files should be exported with Quarto
       customCommands: [], // Custom commands that the user can use to run arbitrary exports
       selectedProfiles: [], // Remembers the last chosen exporter per file for easy re-exporting
-      lastUsedProfile: 'HTML.yaml' // Remembers the last chosen exporter for easy re-exporting
+      lastUsedProfile: 'HTML.yaml', // Remembers the last chosen exporter for easy re-exporting
+      forceEnableExtensions: {
+        mark: true,
+        alerts: true
+      }
     },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
