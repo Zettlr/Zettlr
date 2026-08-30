@@ -453,7 +453,7 @@ msgstr "Yardım"
 #: source/app/service-providers/menu/menu.darwin.ts:662
 #: source/app/service-providers/menu/menu.win32.ts:638
 msgid "Support Zettlr ↗︎"
-msgstr "Zettlr'ı destekle"
+msgstr "Zettlr'ı destekle ↗︎"
 
 #: source/app/service-providers/menu/menu.darwin.ts:672
 #: source/app/service-providers/menu/menu.win32.ts:648
@@ -473,7 +473,7 @@ msgstr "Öğreticiyi aç"
 #: source/app/service-providers/menu/menu.darwin.ts:704
 #: source/app/service-providers/menu/menu.win32.ts:680
 msgid "Clear FSAL cache…"
-msgstr "FSAL önbelleği temizleniyor..."
+msgstr "FSAL önbelleğini temizle"
 
 #: source/app/service-providers/menu/menu.darwin.ts:708
 #: source/app/service-providers/menu/menu.win32.ts:684
@@ -2341,19 +2341,19 @@ msgstr "\"Yorum ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:173
 msgid "Display \"Insert link\" button"
-msgstr "\"Bağlantı yerleştir\" butonunu göster "
+msgstr "\"Bağlantı ekle\" butonunu göster "
 
 #: source/win-preferences/schema/appearance.ts:178
 msgid "Display \"Insert image\" button"
-msgstr "\"Resim yerleştir\" butonunu göster"
+msgstr "\"Resim ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:183
 msgid "Display \"Insert task list\" button"
-msgstr "\"Görev listesi yerleştir\" butonunu göster"
+msgstr "\"Görev listesi ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:188
 msgid "Display \"Insert table\" button"
-msgstr "\"Tablo yerleştir\" butonunu göster"
+msgstr "\"Tablo ekle\" butonunu göster"
 
 #: source/win-preferences/schema/appearance.ts:193
 msgid "Display \"Insert footnote\" button"
