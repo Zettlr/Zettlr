@@ -5,8 +5,12 @@
       <name>Filippo Vomiero</name>
       <email>filippo.vomiero@unipd.it</email>
     </translator>
+    <translator>
+      <name>Pietro Liuzzo</name>
+      <email>Pietro Liuzzo</email>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-08-07T00:00:00+00:00</updated>
+    <updated>2026-08-19T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -97,7 +101,7 @@
     <term name="article-newspaper">articolo di giornale</term>
     <term name="bill">proposta di legge</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">transmissione</term>
     <!-- chapter is in the list of locator terms -->
     <term name="classic">classico</term>
     <term name="collection">collezione</term>
@@ -126,8 +130,8 @@
     <term name="post">messaggio</term>
     <term name="post-weblog">messaggio di blog</term>
     <term name="regulation">decreto</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
+    <term name="report">resoconto</term>
+    <term name="review">recensione</term>
     <term name="review-book">recensione di libro</term>
     <term name="software">software</term>
     <term name="song">registrazione audio</term>
@@ -156,9 +160,9 @@
 
     <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">testimonianza di</term>
+    <term name="review" form="verb">recensione di</term>
+    <term name="review-book" form="verb">recensione del libro</term>
 
     <!-- SHORT VERB ITEM TYPE FORMS -->
 
@@ -305,8 +309,8 @@
       <multiple>sub verbis</multiple>
     </term>
     <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
+      <single>supplemento</single>
+      <multiple>supplementi</multiple>
     </term>
     <term name="table">
       <single>tavola</single>
@@ -346,14 +350,14 @@
     <term name="column" form="short">col.</term>
     <term name="elocation" form="short">
       <single>loc.</single>
-      <multiple>locs.</multiple>
+      <multiple>loc.</multiple>
     </term>
     <term name="equation" form="short">
       <single>eq.</single>
       <multiple>eq.</multiple>
     </term>
     <term name="figure" form="short">fig.</term>
-    <term name="folio" form="short">fgl.</term>
+    <term name="folio" form="short">fol.</term>
     <term name="issue" form="short">fasc.</term>
     <term name="line" form="short">r.</term>
     <term name="note" form="short">n.</term>
@@ -379,7 +383,7 @@
     </term>
     <term name="supplement" form="short">
       <single>supp.</single>
-      <multiple>supps.</multiple>
+      <multiple>supp.</multiple>
     </term>
     <term name="table" form="short">
       <single>tab.</single>
@@ -391,7 +395,7 @@
     </term>
     <term name="title-locator" form="short">
       <single>tit.</single>
-      <multiple>tits.</multiple>
+      <multiple>tit.</multiple>
     </term>
     <term name="verse" form="short">
       <single>v.</single>
@@ -414,12 +418,12 @@
 
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>capitolo</single>
+      <multiple>capitoli</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>citazione</single>
+      <multiple>citazioni</multiple>
     </term>
     <term name="collection-number" gender="masculine">
       <single>fascicolo</single>
@@ -446,23 +450,23 @@
       <multiple>volumi</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>pagina</single>
+      <multiple>pagine</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>stampa</single>
+      <multiple>stampe</multiple>
     </term>
     <term name="version">versione</term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>cap.</single>
+      <multiple>cap.</multiple>
     </term>
     <term name="citation-number" form="short">
       <single>cit.</single>
-      <multiple>cits.</multiple>
+      <multiple>cit.</multiple>
     </term>
     <term name="collection-number" form="short">fasc.</term>
     <term name="edition" form="short">ed.</term>
@@ -484,8 +488,8 @@
       <multiple>pp.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <single>stampa</single>
+      <multiple>stampe</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
@@ -679,7 +683,7 @@
     <term name="translator" form="verb">tradotto da</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">a cura di</term>
+    <term name="collection-editor" form="verb-short">a c. di</term>
     <term name="compiler" form="verb-short">comp. da</term>
     <term name="contributor" form="verb-short">con un contrib. di</term>
     <term name="curator" form="verb-short">a c. di</term>
