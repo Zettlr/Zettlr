@@ -22,15 +22,16 @@ import { genericTextNode } from './generic-text-node'
 /**
  * This list contains all Node names that do not themselves have any content.
  * These are either purely formatting nodes (such as heading marks or link
- * marks) who can be reconstructed without the verbatim value, as well as larger
- * container nodes (whose contents is represented via their children).
+ * marks) which can be reconstructed without the verbatim value, as well as
+ * larger container nodes (whose contents is represented via their children).
  *
  * Essentially, what this means is that these nodes will be ignored by the
  * `parseChildren` function, meaning they don't end up in the AST. This makes
- * the AST more abstract. But this also means that all of these nodes should be
- * treated in the `parseNode` function. Also, this only applies to nodes where
- * `parseNode` calls `parseChildren`, because unless you do, `parseNode` treats
- * the entire node.
+ * the AST a bit cleaner, but this also means that you should treat these nodes
+ * in the `parseNode` function. For example, we ignore all child nodes of the
+ * admonitions here, which means that `parseChildren` will simply ignore them
+ * (and any of their children), but in turn this implies that you should have
+ * already treated them in the `parseNode` function.
  *
  * @var {string[]}
  */
