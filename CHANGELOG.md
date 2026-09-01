@@ -5,6 +5,10 @@
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
+- **Change**: The old `mark` setting has been replaced by a new settings
+  category that enforces support for several Pandoc extensions during export. If
+  you have disabled the `mark` support in the import/export settings previously,
+  you will need to disable this again after updating Zettlr.
 - Fixed an issue where in some places instead of showing you a proper file
   title, the app would default to only showing you the filename, and neither a
   heading or YAML title, if you specified it as such. Now, the logic has been
@@ -30,6 +34,9 @@
 ## Under the Hood
 
 - Update Electron to `v43.4.0`.
+- Zettlr now checks whether a Pandoc extension it seeks to enable during export
+  is actually supported by the reader to avoid errors when, e.g., using the
+  `commonmark` reader which does not support the `mark` extension.
 
 # 4.7.0
 
