@@ -29,7 +29,7 @@ import EventEmitter from 'events'
 // CodeMirror imports
 import { Decoration, type DecorationSet, EditorView } from '@codemirror/view'
 import {
-  EditorSelection,
+  type EditorSelection,
   EditorState,
   Text,
   type StateEffect,
@@ -382,39 +382,16 @@ export default class MarkdownEditor extends EventEmitter {
       // Now that the correct document has been loaded, there will be content
       // and we can restore the persisted information.
       const { scrollSnapshot, selection, foldedRanges } = persistentState
-      const docLength = this._instance.state.doc.length
 
       const effects: StateEffect<any>[] = [scrollSnapshot]
 
       const cursor = foldedRanges.iter()
       while (cursor.value) {
-        const from = Math.min(cursor.from, docLength)
-        const to = Math.min(cursor.to, docLength)
-        if (to > from) {
-          effects.push(foldEffect.of({ from, to }))
-        }
+        effects.push(foldEffect.of({ from: cursor.from, to: cursor.to }))
         cursor.next()
-      } 
-
-      let clampedSelection = selection
-      if (selection.ranges.some(r => r.anchor > docLength || r.head > docLength)) {
-        try {
-          clampedSelection = EditorSelection.create(
-            selection.ranges.map(r => EditorSelection.range(
-              Math.min(r.anchor, docLength),
-              Math.min(r.head, docLength)
-            )),
-            selection.mainIndex
-          )
-        } catch (err: any) {
-        // Clamping can make multiple ranges overlap; fall back to a single
-        // cursor at the end of the (shrunk) document.
-          console.warn(`Could not restore selection after reload: ${String(err.message)}`)
-          clampedSelection = EditorSelection.single(docLength)
-        }
       }
 
-      this._instance.dispatch({ selection: clampedSelection, effects })
+      this._instance.dispatch({ selection, effects })
     }
 
     // Ensure the theme switcher picks the state change up; this somehow doesn't
@@ -460,7 +437,7 @@ export default class MarkdownEditor extends EventEmitter {
    * a setting has changed that requires extensions to be fully reloaded.
    */
   async reload (): Promise<void> {
-    await this.loadDocument(this.persistentState)
+    await this.loadDocument()
   }
 
   /**
