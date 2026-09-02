@@ -5,6 +5,13 @@
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
+- **Change**: Fixed a fundamental issue with the full-text search that would
+  turn **AND**-searches implicitly into **OR** searches. If you relied on how
+  the full-text search actually worked, and not how it was described in the
+  documentation, you will now have to explicitly add pipe-operators (`|`)
+  between your search terms to mark them as alternatives. By default, the full-
+  text search now requires all operators separated by a space to be present in a
+  file to be considered a valid result (#6517).
 - Fixed an issue where in some places instead of showing you a proper file
   title, the app would default to only showing you the filename, and neither a
   heading or YAML title, if you specified it as such. Now, the logic has been
