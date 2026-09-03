@@ -29,6 +29,7 @@
   - `de-DE`.
   - `ja-JP` (#6480).
   - `ca-ES` (#6530).
+  - `pt-BR` (#6537).
 - Renamed "Remove line breaks" to "Remove excess line breaks."
 - Fixed an issue in full text search where multiple search terms separated by whitespace
   would use an 'OR' operator rather than the documented 'AND' operator. Now, search
