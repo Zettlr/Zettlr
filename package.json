@@ -145,7 +145,7 @@
     "tippy.js": "^6.3.7",
     "underscore": "^1.13.8",
     "unified": "^11.0.5",
-    "uuid": "^14.0.1",
+    "uuid": "^14.0.2",
     "vue": "^3.5.41",
     "vue-virtual-scroller": "^3.0.5",
     "w3c-keyname": "^2.2.8",
