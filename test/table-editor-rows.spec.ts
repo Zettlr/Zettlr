@@ -13,74 +13,64 @@
  * END HEADER
  */
 
-import { doesNotThrow, ok, strictEqual } from 'assert'
+import { strictEqual } from 'assert'
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import markdownParser from 'source/common/modules/markdown-editor/parser/markdown-parser'
 import { addRowAfter } from 'source/common/modules/markdown-editor/table-editor/commands/rows'
 
-// The jsdom environment (see test/setup.js) does not provide requestAnimationFrame,
-// which the CodeMirror EditorView requires upon construction.
+// CodeMirror reads requestAnimationFrame off the view's own window on
+// construction, and jsdom does not put it there (test/setup.js only sets the
+// global).
 window.requestAnimationFrame = (cb: FrameRequestCallback) => setTimeout(cb, 0) as unknown as number
 window.cancelAnimationFrame = (id: number) => clearTimeout(id)
 
-/**
- * Creates an editor view containing a Markdown table and places the cursor at
- * the given document offset.
- *
- * @param   {string}      doc   The document contents
- * @param   {number}      head  The cursor position
- *
- * @return  {EditorView}        The editor view
- */
-function createView (doc: string, head: number): EditorView {
-  const state = EditorState.create({ doc, extensions: [markdownParser()] })
-  const view = new EditorView({ state, parent: document.body })
-  view.dispatch({ selection: { anchor: head } })
-  return view
-}
-
 const TABLE = '| A | B |\n| --- | --- |\n| 1 | 2 |\n| 3 | 4 |'
 
+// addRowAfter only moves the selection; the row it inserts is the same either
+// way. So each case pins where the cursor ends up: which line of the new
+// document, and which column within it.
+const table: Array<{
+  desc: string
+  cursor: number
+  newRowLine: number
+  column: number
+}> = [
+  {
+    desc: 'in the last row',
+    cursor: 36, // inside "3" in the last row
+    newRowLine: 5,
+    column: 2
+  },
+  {
+    desc: 'at the very end of the document',
+    // The old code shifted the selection by the line length, which landed
+    // outside the document and threw "Selection points outside of document".
+    cursor: TABLE.length,
+    newRowLine: 5,
+    column: 7 // clamped to the new row, which is shorter than the current one
+  },
+  {
+    desc: 'in the header row',
+    cursor: 2,
+    newRowLine: 3, // the new row goes after the delimiter, not after the header
+    column: 2
+  }
+]
+
 describe('TableEditor#addRowAfter()', function () {
-  it('should append an empty row after the last row', function () {
-    const view = createView(TABLE, 36) // Cursor inside the last row
-    const changed = addRowAfter(view)
+  for (let i = 0; i < table.length; i++) {
+    const { desc, cursor, newRowLine, column } = table[i]
+    it(`Should place the cursor in the new row when the cursor is ${desc}`, function () {
+      const state = EditorState.create({ doc: TABLE, extensions: [markdownParser()] })
+      const view = new EditorView({ state, parent: document.body })
+      view.dispatch({ selection: { anchor: cursor } })
 
-    ok(changed)
-    strictEqual(view.state.doc.toString(), `${TABLE}\n|  |  |`)
-  })
+      strictEqual(addRowAfter(view), true)
 
-  it('should place the cursor at the same column in the new row', function () {
-    // The last row "| 3 | 4 |" starts at offset 34; the cursor at offset 36
-    // sits in the first cell ("3"), two characters in.
-    const view = createView(TABLE, 36)
-    addRowAfter(view)
-
-    // The new row starts at offset 44 (after the inserted newline), so the
-    // same column is offset 46.
-    strictEqual(view.state.selection.main.head, 46)
-  })
-
-  it('should not throw when the cursor is at the very end of the document', function () {
-    // Previously the selection was moved by the line length, which pushed the
-    // resulting selection past the end of the document and threw a RangeError.
-    const view = createView(TABLE, TABLE.length)
-    let changed = false
-
-    doesNotThrow(() => {
-      changed = addRowAfter(view)
+      const line = view.state.doc.line(newRowLine)
+      strictEqual(line.text, '|  |  |')
+      strictEqual(view.state.selection.main.head, line.from + column)
     })
-
-    ok(changed)
-    strictEqual(view.state.doc.toString(), `${TABLE}\n|  |  |`)
-  })
-
-  it('should add a row after the delimiter when the cursor is in the header', function () {
-    const view = createView(TABLE, 2) // Cursor inside the header row
-    const changed = addRowAfter(view)
-
-    ok(changed)
-    strictEqual(view.state.doc.toString(), '| A | B |\n| --- | --- |\n|  |  |\n| 1 | 2 |\n| 3 | 4 |')
-  })
+  }
 })
