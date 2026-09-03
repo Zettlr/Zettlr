@@ -24,6 +24,7 @@ import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 import { configField } from '../util/configuration'
 import type { WindowControlsIPCAPI } from 'source/app/service-providers/windows'
 import { findReferenceForLinkLabel, removeMarkdownLink } from '../util/links'
+import { getFormatMenuItems } from './format-items'
 
 const ipcRenderer = window.ipc
 
@@ -82,8 +83,11 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
   const basePath = pathDirname(view.state.field(configField).metadata.path)
   const url = getURLForNode(node, view.state)
 
+  const defaultTpl: AnyMenuItem[] = getFormatMenuItems(view)
+
   if (url === undefined) {
     console.error('Could not show Link/Image context menu: No URL found!')
+    showPopupMenu(coords, defaultTpl)
     return
   }
 
@@ -123,7 +127,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
           removeMarkdownLink(node, view)
         }
       }
-    }
+    },
+    ...defaultTpl
   ]
 
   const validAbsoluteURI = makeValidUri(url, basePath)
@@ -153,7 +158,8 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
           payload: { itemPath: validAbsoluteURI }
         } as WindowControlsIPCAPI)
       }
-    }
+    },
+    ...defaultTpl
   ]
 
   showPopupMenu(coords, isLink ? linkTpl : imgTpl)
