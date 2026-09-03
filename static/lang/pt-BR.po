@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-08-25 03:14+0000\n"
-"PO-Revision-Date: 2026-05-19 16:22-0300\n"
+"PO-Revision-Date: 2026-08-31 21:44-0300\n"
 "Last-Translator: Felipe Rocha\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -41,20 +41,20 @@ msgstr "Alterações no arquivo da biblioteca detectadas. Recarregando…"
 #. cache is cleared on startup.
 #: source/app/service-providers/fsal/index.ts:295
 msgid "Indexing files"
-msgstr ""
+msgstr "Indexação de arquivos"
 
 #: source/app/service-providers/fsal/index.ts:295
 msgid "Discovering paths to index…"
-msgstr ""
+msgstr "Descobrindo caminhos para o índice…"
 
 #: source/app/service-providers/fsal/index.ts:330
 #, javascript-format
 msgid "Indexing %s paths…"
-msgstr ""
+msgstr "Indexando %s caminhos…"
 
 #: source/app/service-providers/fsal/index.ts:349
 msgid "Indexing complete."
-msgstr ""
+msgstr "A indexação foi concluída."
 
 #: source/app/service-providers/tray/index.ts:166
 msgid "Show Zettlr"
@@ -1007,7 +1007,7 @@ msgstr "Pacote de texto malformado: %s"
 
 #: source/app/service-providers/commands/language-tool.ts:332
 msgid "Forbidden (are your credentials correct?)"
-msgstr ""
+msgstr "Acesso proibido (suas credenciais estão corretas?)"
 
 #: source/app/service-providers/commands/language-tool.ts:334
 msgid "Document too long"
@@ -1015,11 +1015,11 @@ msgstr "Documento muito longo"
 
 #: source/app/service-providers/commands/language-tool.ts:337
 msgid "Server error"
-msgstr ""
+msgstr "Erro do servidor"
 
 #: source/app/service-providers/commands/language-tool.ts:339
 msgid "Client error"
-msgstr ""
+msgstr "Erro do cliente"
 
 #: source/app/service-providers/commands/language-tool.ts:344
 msgid "offline"
@@ -1040,14 +1040,14 @@ msgstr "Não foi possível criar pasta"
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting file \"%s\""
-msgstr ""
+msgstr "Exportando o arquivo “%s”"
 
 #: source/app/service-providers/commands/export.ts:67
 #: source/app/service-providers/commands/dir-project-export.ts:161
 #: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting using custom command %s"
-msgstr ""
+msgstr "Exportando usando o comando personalizado %s"
 
 #: source/app/service-providers/commands/export.ts:75
 #: source/app/service-providers/commands/export.ts:206
@@ -1061,7 +1061,7 @@ msgstr "Ocorreu um erro durante a exportação: %s"
 
 #: source/app/service-providers/commands/export.ts:81
 msgid "Exported file successfully."
-msgstr ""
+msgstr "O arquivo foi exportado com sucesso."
 
 #: source/app/service-providers/commands/export.ts:149
 msgid "Choose export destination"
@@ -1070,27 +1070,27 @@ msgstr "Selecione a pasta para exportação"
 #: source/app/service-providers/commands/export.ts:173
 #, javascript-format
 msgid "Exporting file %s"
-msgstr ""
+msgstr "Exportando arquivo %s"
 
 #: source/app/service-providers/commands/export.ts:173
 #, javascript-format
 msgid "Exporting using profile %s"
-msgstr ""
+msgstr "Exportando usando o perfil %s"
 
 #: source/app/service-providers/commands/export.ts:182
 #, javascript-format
 msgid "Exported to %s"
-msgstr ""
+msgstr "Exportado para %s"
 
 #: source/app/service-providers/commands/export.ts:184
 #, javascript-format
 msgid "File %s has been exported"
-msgstr ""
+msgstr "Arquivo %s foi exportado"
 
 #: source/app/service-providers/commands/export.ts:185
 #, javascript-format
 msgid "File has been exported to %s"
-msgstr ""
+msgstr "Arquivo foi exportado para %s"
 
 #: source/app/service-providers/commands/export.ts:207
 #, javascript-format
@@ -1140,46 +1140,46 @@ msgstr "Exportar Projeto"
 #: source/app/service-providers/commands/dir-project-export.ts:199
 #, javascript-format
 msgid "Exporting project \"%s\""
-msgstr ""
+msgstr "Exportando o projeto “%s”"
 
 #: source/app/service-providers/commands/dir-project-export.ts:168
 #, javascript-format
 msgid "Project export failed: %s"
-msgstr ""
+msgstr "Falha na exportação do projeto: %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:178
 #: source/app/service-providers/commands/dir-project-export.ts:248
 #: source/app/service-providers/commands/dir-project-export.ts:271
 #, javascript-format
 msgid "Could not export project \"%s\"."
-msgstr ""
+msgstr "Não foi possível exportar o projeto “%s”."
 
 #: source/app/service-providers/commands/dir-project-export.ts:179
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
-msgstr ""
+msgstr "A exportação com o comando %s não foi bem-sucedida: %s."
 
 #. Error
 #: source/app/service-providers/commands/dir-project-export.ts:246
 #, javascript-format
 msgid "Export failed: %s"
-msgstr ""
+msgstr "Falha na exportação: %s"
 
 #: source/app/service-providers/commands/dir-project-export.ts:249
 #: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
-msgstr ""
+msgstr "A exportação com o perfil %s não foi bem-sucedida: %s."
 
 #: source/app/service-providers/commands/dir-project-export.ts:256
 #, javascript-format
 msgid "Project \"%s\" has been exported."
-msgstr ""
+msgstr "O projeto “%s” foi exportado."
 
 #: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project has been exported to %s."
-msgstr ""
+msgstr "O projeto foi exportado para %s."
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
@@ -1287,7 +1287,7 @@ msgstr "Não foi possível renderizar o gráfico:"
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
 msgid "Could not render Graph."
-msgstr ""
+msgstr "Não foi possível renderizar o gráfico."
 
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
 #: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
@@ -1465,7 +1465,7 @@ msgstr "Converter aspas para itálico"
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:74
 #: source/win-preferences/schema/shortcuts.ts:193
 msgid "Remove excess line breaks"
-msgstr ""
+msgstr "Remova as quebras de linha em excesso"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
 #: source/win-preferences/schema/shortcuts.ts:200
@@ -1475,7 +1475,7 @@ msgstr "Converter para aspas retas"
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:89
 #: source/win-preferences/schema/shortcuts.ts:207
 msgid "Convert quotes to Magic Quotes"
-msgstr ""
+msgstr "Converter aspas em Magic Quotes"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:95
 #: source/win-preferences/schema/shortcuts.ts:214
@@ -2358,15 +2358,15 @@ msgstr "Selecione um tema de cores e tipos de letra para o editor."
 
 #: source/win-preferences/schema/appearance.ts:77
 msgid "Follow App"
-msgstr ""
+msgstr "Padrão do Sistema"
 
 #: source/win-preferences/schema/appearance.ts:78
 msgid "Light Theme"
-msgstr ""
+msgstr "Modo Claro"
 
 #: source/win-preferences/schema/appearance.ts:79
 msgid "Dark Theme"
-msgstr ""
+msgstr "Modo Escuro"
 
 #: source/win-preferences/schema/appearance.ts:129
 msgid "Toolbar buttons"
@@ -2951,22 +2951,21 @@ msgid "Restrict height to %s %"
 msgstr "Limitar a altura para %s %"
 
 #: source/win-preferences/schema/editor.ts:297
-#, fuzzy
 msgid "Font size"
-msgstr "Tamanho da fonte do editor"
+msgstr "Tamanho de fonte"
 
 #: source/win-preferences/schema/editor.ts:303
 msgid "Font size in pixels:"
-msgstr ""
+msgstr "Tamanho em pixels:"
 
 #: source/win-preferences/schema/editor.ts:310
 msgid "Indentation"
-msgstr ""
+msgstr "Recuo"
 
 #. TODO
 #: source/win-preferences/schema/editor.ts:313
 msgid "Adjust your editor indentation settings"
-msgstr ""
+msgstr "Ajuste o recuo do seu editor"
 
 #: source/win-preferences/schema/editor.ts:317
 msgid "Tab size (in number of spaces)"
@@ -2990,16 +2989,16 @@ msgstr ""
 
 #: source/win-preferences/schema/editor.ts:336
 msgid "Snippet Autocompletion"
-msgstr ""
+msgstr "Autocompletar de Trechos"
 
 #. TODO
 #: source/win-preferences/schema/editor.ts:339
 msgid "Control the snippet autocompletion functionality"
-msgstr ""
+msgstr "Controle a função de autocomplete"
 
 #: source/win-preferences/schema/editor.ts:344
 msgid "Autocomplete trigger character:"
-msgstr ""
+msgstr "Caractere que aciona o preenchimento automático:"
 
 #: source/win-preferences/schema/editor.ts:354
 msgid "Suggest emojis during autocompletion"
@@ -3029,11 +3028,11 @@ msgstr "Mostrar previsão de links"
 
 #: source/win-preferences/schema/editor.ts:386
 msgid "Accept autocomplete suggestion with Enter"
-msgstr ""
+msgstr "Aceitar a sugestão de preenchimento automático com a tecla Enter"
 
 #: source/win-preferences/schema/editor.ts:391
 msgid "Accept autocomplete suggestion with Tab"
-msgstr ""
+msgstr "Aceitar a sugestão de preenchimento automático com a tecla Tab"
 
 #: source/win-preferences/schema/editor.ts:397
 msgid "Automatically close matching character pairs"
@@ -3297,55 +3296,56 @@ msgstr "Estilo CSL (opcional)"
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
-msgstr ""
+msgstr "Atalhos da tabela"
 
 #: source/win-preferences/schema/shortcuts.ts:123
 msgid "Customize the available table shortcuts for the editor."
-msgstr ""
+msgstr "Personalize os atalhos de tabela disponíveis para o editor."
 
 #: source/win-preferences/schema/shortcuts.ts:129
 msgid "Align Markdown table under cursor"
-msgstr ""
+msgstr "Alinhar a tabela do Markdown sob o cursor"
 
 #: source/win-preferences/schema/shortcuts.ts:136
 msgid "Align table column left"
-msgstr ""
+msgstr "Alinhar a coluna da tabela à esquerda"
 
 #: source/win-preferences/schema/shortcuts.ts:143
 msgid "Align table column center"
-msgstr ""
+msgstr "Alinhar a coluna da tabela ao centro"
 
 #: source/win-preferences/schema/shortcuts.ts:150
 msgid "Align table column right"
-msgstr ""
+msgstr "Alinhar a coluna da tabela à direita"
 
 #: source/win-preferences/schema/shortcuts.ts:158
 msgid "Transform Shortcuts"
-msgstr ""
+msgstr "Atalhos de transformação"
 
 #: source/win-preferences/schema/shortcuts.ts:159
 msgid "Assign shortcuts to your frequently used text transformations here."
 msgstr ""
+"Atribua atalhos às transformações de texto que você usa com frequência aqui."
 
 #: source/win-preferences/schema/shortcuts.ts:165
 msgid "Zap Gremlins"
-msgstr ""
+msgstr "Acabe com os Gremlins"
 
 #: source/win-preferences/schema/shortcuts.ts:264
 msgid "UI Shortcuts"
-msgstr ""
+msgstr "Atalhos da interface do usuário"
 
 #: source/win-preferences/schema/shortcuts.ts:265
 msgid "Customize general user interface shortcuts here."
-msgstr ""
+msgstr "Personalize aqui os atalhos gerais da interface do usuário."
 
 #: source/win-preferences/schema/shortcuts.ts:271
 msgid "Switch to next tab"
-msgstr ""
+msgstr "Exibir o botão \"Próximo arquivo\""
 
 #: source/win-preferences/schema/shortcuts.ts:278
 msgid "Switch to previous tab"
-msgstr ""
+msgstr "Mudar para ordenação automática"
 
 #: source/win-preferences/schema/advanced.ts:29
 msgid "Beta releases"
@@ -3696,7 +3696,7 @@ msgstr "Geral"
 
 #: source/tmp/win-project-properties/App.vue.ts:68
 msgid "Profiles"
-msgstr ""
+msgstr "Perfis"
 
 #: source/tmp/common/vue/form/elements/TextControl.vue.ts:56
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:50
@@ -3725,21 +3725,21 @@ msgstr "Nenhum item"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:44
 msgid "unassigned"
-msgstr ""
+msgstr "sem atribuição"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:45
 #, javascript-format
 msgid "Default: %s"
-msgstr ""
+msgstr "Padrão: %s"
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:49
 msgid "Recording…"
-msgstr ""
+msgstr "Gravando..."
 
 #: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:54
 #, javascript-format
 msgid "This shortcut conflicts with: %s"
-msgstr ""
+msgstr "Este atalho entra em conflito com: %s"
 
 #: source/tmp/common/vue/form/elements/ListControl.vue.ts:115
 msgid "Add"
@@ -3760,7 +3760,7 @@ msgstr "Sem registros."
 #: source/tmp/common/vue/IrisIndicator.vue.ts:40
 #: source/tmp/win-main/App.vue.ts:461
 msgid "Show tasks"
-msgstr ""
+msgstr "Mostrar tarefas"
 
 #: source/tmp/win-paste-image/App.vue.ts:57
 msgid "Insert Image from Clipboard"
@@ -3803,7 +3803,7 @@ msgstr "Editor"
 
 #: source/tmp/win-preferences/App.vue.ts:179
 msgid "Shortcuts"
-msgstr ""
+msgstr "Atalhos"
 
 #: source/tmp/win-preferences/App.vue.ts:184
 msgid "Zettelkasten"
@@ -3876,7 +3876,7 @@ msgstr ""
 
 #: source/tmp/win-about/General-Tab.vue.ts:25
 msgid "View the Privacy Policy by LanguageTooler GmbH"
-msgstr ""
+msgstr "Consulte a Política de Privacidade da LanguageTooler GmbH"
 
 #: source/tmp/win-about/App.vue.ts:41
 msgid "Other projects"
@@ -3974,7 +3974,7 @@ msgstr "Restringir pesquisa ao diretório"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:62
 msgid "Case insensitive"
-msgstr ""
+msgstr "Sem distinção entre maiúsculas e minúsculas"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:63
 msgid "Choose directory…"
@@ -3990,7 +3990,7 @@ msgstr "Ativar ou desativar resultados"
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:68
 msgid "No results for your search."
-msgstr ""
+msgstr "Não foram encontrados resultados para sua pesquisa."
 
 #: source/tmp/win-main/GlobalSearch.vue.ts:171
 #, javascript-format
@@ -4032,7 +4032,7 @@ msgstr "comando"
 
 #: source/tmp/win-main/PopoverLRT.vue.ts:18
 msgid "Clear finished tasks"
-msgstr ""
+msgstr "Limpar tarefas concluídas"
 
 #: source/tmp/win-main/App.vue.ts:277
 #, javascript-format
@@ -4103,7 +4103,7 @@ msgstr ".classes"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:41
 msgid "key=value"
-msgstr ""
+msgstr "key=value"
 
 #: source/tmp/win-main/PopoverPandoc.vue.ts:43
 msgid "div"
@@ -4366,7 +4366,7 @@ msgstr "Verificar"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
 msgid "Times"
-msgstr ""
+msgstr "Horários"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
 msgid "Info"
@@ -4481,7 +4481,7 @@ msgstr "Biblioteca"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Bug"
-msgstr ""
+msgstr "Erro"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
 msgid "Note"
@@ -4517,11 +4517,11 @@ msgstr "Chave inglesa"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
 msgid "Flame"
-msgstr ""
+msgstr "Fogo"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
 msgid "Hourglass"
-msgstr ""
+msgstr "Ampulheta"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
 msgid "Briefcase"
@@ -4920,6 +4920,8 @@ msgid ""
 "Zettlr will turn on dark mode between %s and %s. You can adjust these times "
 "in the settings."
 msgstr ""
+"Zettlr entrará no Modo Escuro das %s até às %s. Você pode modificar esses "
+"horários nas configurações."
 
 #: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:21
 msgid "Do not automatically toggle light/dark mode"
@@ -5082,7 +5084,7 @@ msgstr "Atualização concluída!"
 
 #: source/tmp/win-onboarding/App.vue.ts:50
 msgid "Zettlr has been updated. You are now running Zettlr"
-msgstr "O Zettlr foi atualizado. Agora você está executando o Zettlr"
+msgstr "O Zettlr foi atualizado. Agora você está utilizando o Zettlr"
 
 #: source/tmp/win-onboarding/App.vue.ts:51
 msgid "Get started"
@@ -5227,11 +5229,11 @@ msgstr "Filtro Lua"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:29
 msgid "No snippet selected."
-msgstr "Nenhum snippet (fragmento) selecionado."
+msgstr "Nenhum trecho selecionado."
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:31
 msgid "Rename snippet"
-msgstr "Renomear snippet (fragmento)"
+msgstr "Renomear fragmento"
 
 #: source/tmp/win-assets/SnippetsTab.vue.ts:32
 msgid "Snippets let you define reusable pieces of text with variables."
