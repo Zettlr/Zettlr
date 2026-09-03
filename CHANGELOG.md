@@ -38,6 +38,9 @@
 ## Under the Hood
 
 - Update Electron to `v43.4.0`.
+- Updates to the translations are now deterministic (#6538). This causes minimal
+  diffs between iterations and should also reduce the risks for merge conflicts
+  between open translation PRs and POT update PRs.
 
 # 4.7.0
 
