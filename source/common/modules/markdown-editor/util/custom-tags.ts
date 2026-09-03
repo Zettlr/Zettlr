@@ -21,6 +21,7 @@ import { Tag, tags } from '@lezer/highlight'
 export const customTags = {
   YAMLFrontmatter: Tag.define(tags.monospace),
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
+  YAMLCodeContainer: Tag.define(),
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),
   // Citations: @citations
   Citation: Tag.define(),
