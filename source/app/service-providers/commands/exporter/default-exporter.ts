@@ -17,6 +17,7 @@ import sanitize from 'sanitize-filename'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/pandoc-util/pandoc-maps'
 import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
+import normalizePath from 'source/common/util/normalize-path'
 
 export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
   if (typeof options.profile === 'string') {
@@ -30,17 +31,23 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // First file determines the name of the exported file.
   const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
-  const target = path.join(options.targetDirectory, `${title}.${extension}`)
+  let target = path.join(options.targetDirectory, `${title}.${extension}`)
 
   // Get the corresponding defaults file
   const defaultKeys = {
     'input-files': sourceFiles,
     'output-file': target
   }
-  const defaultsFile = await ctx.writeDefaults(options.profile.name, defaultKeys)
+  const defaults = await ctx.loadDefaults(options.profile.name, defaultKeys)
+
+  // Update `target` if the defaults profile changed`output-file`
+  if (defaults['output-file'] !== target) {
+    target = normalizePath(defaults['output-file'] as string, options.targetDirectory)
+    defaults['output-file'] = target
+  }
 
   // Run Pandoc
-  const pandocOutput = await ctx.runPandoc(defaultsFile)
+  const pandocOutput = await ctx.runPandoc(defaults)
 
   // Make sure to propagate the results
   return {
