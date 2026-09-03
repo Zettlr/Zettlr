@@ -388,35 +388,36 @@ export default class MarkdownEditor extends EventEmitter {
 
       const cursor = foldedRanges.iter()
       while (cursor.value) {
-        const from = Math.min(cursor.from, docLength)
-        const to = Math.min(cursor.to, docLength)
-        if (to > from) {
-          effects.push(foldEffect.of({ from, to }))
+        if (cursor.from <= docLength && cursor.to <= docLength) {
+          effects.push(foldEffect.of({
+            from: cursor.from,
+            to: cursor.to
+          }))
         }
         cursor.next()
-      } 
-
-      let clampedSelection = selection
-      if (selection.ranges.some(r => r.anchor > docLength || r.head > docLength)) {
-        try {
-          clampedSelection = EditorSelection.create(
-            selection.ranges.map(r => EditorSelection.range(
-              Math.min(r.anchor, docLength),
-              Math.min(r.head, docLength)
-            )),
-            selection.mainIndex
-          )
-        } catch (err: any) {
-        // Clamping can make multiple ranges overlap; fall back to a single
-        // cursor at the end of the (shrunk) document.
-          console.warn(`Could not restore selection after reload: ${String(err.message)}`)
-          clampedSelection = EditorSelection.single(docLength)
-        }
       }
 
-      this._instance.dispatch({ selection: clampedSelection, effects })
-    }
+      const mainRange = selection.ranges[selection.mainIndex]
 
+      const newRanges = selection.ranges.filter(
+        range => range.anchor <= docLength && range.head <= docLength
+      )
+
+      const newMainIndex = newRanges.indexOf(mainRange)
+
+      const restoredSelection = newRanges.length > 0
+        ? EditorSelection.create(
+          newRanges,
+          newMainIndex >= 0 ? newMainIndex : 0
+        )
+        : EditorSelection.single(docLength)
+
+      this._instance.dispatch({
+        selection: restoredSelection,
+        effects
+      })
+    }
+    
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
