@@ -127,6 +127,12 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
             },
             {
               type: 'checkbox',
+              label: trans('Render admonitions'),
+              model: 'display.renderAdmonitions',
+              disabled: config.display.renderingMode === 'raw'
+            },
+            {
+              type: 'checkbox',
               label: trans('Render horizontal rules'),
               model: 'display.renderHorizontalRules',
               disabled: config.display.renderingMode === 'raw'

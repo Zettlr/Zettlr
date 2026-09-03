@@ -48,6 +48,7 @@ export interface EditorConfiguration {
   renderTables: boolean
   renderEmphasis: boolean
   renderPandoc: boolean
+  renderAdmonitions: boolean
   renderHorizontalRules: boolean
   imagePreviewWidth: number
   imagePreviewHeight: number
@@ -117,6 +118,7 @@ export function getDefaultConfig (): EditorConfiguration {
     renderTables: true,
     renderEmphasis: true,
     renderPandoc: true,
+    renderAdmonitions: true,
     renderHorizontalRules: true,
     imagePreviewWidth: 100,
     imagePreviewHeight: 100,

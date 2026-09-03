@@ -503,6 +503,31 @@ export interface TextNode extends MDNode {
 }
 
 /**
+ * Describes a GitHub style admonition (`> [!keyword]`)
+ */
+export interface Admonition extends MDNode {
+  type: 'Admonition',
+  /**
+   * The type of this admonition. There are five central ones, but the type
+   * might also be another one.
+   */
+  admonitionType: 'note'|'tip'|'important'|'warning'|'caution'|string,
+  /**
+   * All children of the node
+   */
+  children: ASTNode[]
+}
+
+/**
+ * This nodes holds an (optional) custom title for an admonition.
+ */
+export interface AdmonitionTitle extends MDNode {
+  type: 'AdmonitionTitle',
+  children: ASTNode[]
+}
+
+
+/**
  * This generic node represents any Lezer node that has no specific role (or can
  * be handled without additional care). This ensures that new nodes will always
  * end up in the resulting AST, even if we forgot to add the node specifically.
@@ -522,7 +547,7 @@ export type ASTNode = Document | Comment | Footnote | FootnoteRef | FootnoteRefL
 | LinkOrImage | TextNode | Heading | CitationNode | Highlight | Superscript
 | Subscript | OrderedList | BulletList | ListItem | GenericNode | FencedCode
 | InlineCode | YAMLFrontmatter | Emphasis | Strikethrough | Table | TableCell | TableRow
-| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan
+| ZettelkastenLink | ZettelkastenTag | PandocDiv | PandocSpan | Admonition | AdmonitionTitle
 /**
  * Extract the "type" properties from the ASTNodes that can differentiate these.
  */
@@ -602,6 +627,40 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
         whitespaceBefore: getWhitespaceBeforeNode(node, markdown),
         url,
         alt: genericTextNode(node.from, node.to, url)
+      }
+      return astNode
+    }
+    case 'AdmonitionNote':
+    case 'AdmonitionTip':
+    case 'AdmonitionImportant':
+    case 'AdmonitionWarning':
+    case 'AdmonitionCaution': {
+      const keywordNode = node.getChild('AdmonitionKeyword')
+      if (keywordNode === null) {
+        throw new Error('Parse error: Could not find Admonition keyword node. This is a bug in the parser.')
+      }
+
+      const astNode: Admonition = {
+        type: 'Admonition',
+        attributes: {},
+        admonitionType: markdown.slice(keywordNode.from, keywordNode.to).toLowerCase(),
+        name: 'Admonition',
+        from: node.from,
+        to: node.to,
+        children: [],
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown)
+      }
+      return parseChildren(astNode, node, markdown)
+    }
+    case 'AdmonitionTitle': {
+      const astNode: AdmonitionTitle = {
+        type: 'AdmonitionTitle',
+        attributes: {},
+        name: node.name,
+        from: node.from,
+        to: node.to,
+        children: [genericTextNode(node.from, node.to, markdown.slice(node.from, node.to))],
+        whitespaceBefore: getWhitespaceBeforeNode(node, markdown)
       }
       return astNode
     }

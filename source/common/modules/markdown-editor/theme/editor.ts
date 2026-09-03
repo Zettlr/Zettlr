@@ -433,4 +433,12 @@ export const editorTheme = EditorView.baseTheme({
     font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-6-size) var(--zettlr-editor-font)',
     '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
   },
+  // Admonitions
+  '.cm-admonition-note': { color: 'var(--zettlr-note-color)' },
+  '.cm-admonition-tip': { color: 'var(--zettlr-tip-color)' },
+  '.cm-admonition-important': { color: 'var(--zettlr-important-color)' },
+  '.cm-admonition-warning': { color: 'var(--zettlr-warning-color)' },
+  '.cm-admonition-caution': { color: 'var(--zettlr-caution-color)' },
+  '.cm-admonition.cm-admonition-mark': { color: 'currentColor', opacity: '0.3' },
+  '.cm-admonition-title': { fontWeight: 'bold' }
 })

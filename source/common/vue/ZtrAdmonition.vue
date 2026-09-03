@@ -35,7 +35,7 @@ const icon = computed(() => {
 .admonition {
   display: flex;
   align-items: center;
-  border: 1px solid #dfdfdf;
+  border: 1px solid transparent;
   border-radius: 5px;
   padding: 5px 10px;
   font-size: 80%;
@@ -44,40 +44,21 @@ const icon = computed(() => {
   cds-icon { margin-right: 10px; }
 
   &.warning {
-    color: #333333;
-    background-color: #ffffa7;
+    color: var(--zettlr-warning-color);
+    background-color: var(--zettlr-warning-bg);
+    border-color: var(--zettlr-warning-color);
   }
 
   &.error {
-    color: #333333;
-    background-color: #ffa7a7;
-    border-color: #333333;
+    color: var(--zettlr-caution-color);
+    background-color: var(--zettlr-caution-bg);
+    border-color: var(--zettlr-caution-color);
   }
 
   &.info {
-    color: #3333aa;
-    background-color: #bad1ff;
-    border-color: #3333aa;
-  }
-}
-
-body.dark .admonition {
-  &.warning {
-    background-color: #515100;
-    color: #ffffaa;
-    border-color: #8c9200;
-  }
-
-  &.error {
-    background-color: #510000;
-    color: #ffaaaa;
-    border-color: #333333;
-  }
-
-  &.info {
-    background-color: #333352;
-    color: #aaaaff;
-    border-color: #333333;
+    color: var(--zettlr-note-color);
+    background-color: var(--zettlr-note-bg);
+    border-color: var(--zettlr-note-color);
   }
 }
 </style>

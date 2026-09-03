@@ -22,6 +22,15 @@ export const customTags = {
   YAMLFrontmatter: Tag.define(tags.monospace),
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),
+  // Admonitions
+  AdmonitionNote: Tag.define(),
+  AdmonitionTip: Tag.define(),
+  AdmonitionImportant: Tag.define(),
+  AdmonitionWarning: Tag.define(),
+  AdmonitionCaution: Tag.define(),
+  AdmonitionKeyword: Tag.define(tags.keyword),
+  AdmonitionMark: Tag.define(tags.meta),
+  AdmonitionTitle: Tag.define(tags.attributeValue),
   // Citations: @citations
   Citation: Tag.define(),
   CitationMark: Tag.define(tags.processingInstruction),

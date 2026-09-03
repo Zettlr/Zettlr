@@ -200,7 +200,10 @@ function addAttribute (node: ASTNode, attributeName: string, ...values: string[]
  * @return  {string}                The HTML string
  */
 export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, indent: number = 0): string {
-  const HIDDEN_GENERIC_NODES = ['Document']
+  const HIDDEN_GENERIC_NODES = [
+    'Document',
+    'AdmonitionKeyword'
+  ]
 
   // Convenience to convert a list of child nodes to HTML
   if (Array.isArray(node)) {
@@ -331,6 +334,12 @@ export function nodeToHTML (node: ASTNode|ASTNode[], options: MD2HTMLOptions, in
   } else if (node.type === 'PandocSpan') {
     const attr = renderNodeAttributes(node)
     return `${node.whitespaceBefore}<span${attr}>${nodeToHTML(node.children, options, indent)}</span>`
+  } else if (node.type === 'Admonition') {
+    const attr = renderNodeAttributes(node)
+    return `${node.whitespaceBefore}<div class="admonition ${node.admonitionType}"${attr}>${nodeToHTML(node.children, options, indent)}</div>`
+  } else if (node.type === 'AdmonitionTitle') {
+    const attr = renderNodeAttributes(node)
+    return `<div class="admonition-title"${attr}>${nodeToHTML(node.children, options, indent)}</div>`
   } else if (node.type === 'Generic') {
     // Generic nodes are differentiated by name. There are a few we can support,
     // but most we wrap in a div.
