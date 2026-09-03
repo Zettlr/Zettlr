@@ -159,7 +159,7 @@ import formatSize from '@common/util/format-size'
 import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
 
-import { ref, computed, toRef, watch, onMounted } from 'vue'
+import { ref, computed, toRef, watch, onMounted, onUnmounted } from 'vue'
 import { type AnyDescriptor, type MDFileDescriptor } from '@dts/common/fsal'
 import { useConfigStore, useTagsStore, useWindowStateStore } from 'source/pinia'
 import { useItemComposable } from './util/item-composable'
@@ -198,43 +198,47 @@ async function fetchChildren (): Promise<void> {
   children.value = await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: props.item.path })
 }
 
+function handleFSALEvent (_event: unknown, payload: FSALEventPayload): void {
+  const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
+    ? payload.path
+    : (payload as FSALEventPayloadChange).descriptor.path
+
+  // Figure out if this event relates to us, which is only the case if the
+  // affected path is a direct descendant of this tree item. If it's itself or
+  // a parent path, another tree item takes over. If it's a nested dependent,
+  // any of the children of this tree item takes over.
+  // How can we figure this out? Easy, by resolving the path from this item
+  // to the affected path and checking if there are any additional path
+  // separators in there.
+  if (!affectedPath.startsWith(props.item.path)) {
+    return
+  }
+
+  if (affectedPath === props.item.path) {
+    return // Taken care of by the parent
+  }
+
+  const relative = relativePath(props.item.path, affectedPath)
+  const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
+  if (relative.includes(PATH_SEP)) {
+    return
+  }
+
+  // Now we can be sure that the event pertains to a direct child of this item
+  // and we need to handle it. We'll make it easy and simply re-fetch the list
+  // of children.
+  fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
+}
+
+const offFSALEvent = ipcRenderer.on('fsal-event', handleFSALEvent)
+
 onMounted(async () => {
-  ipcRenderer.on('fsal-event', (_, payload: FSALEventPayload) => {
-    const affectedPath = payload.event === 'unlink' || payload.event === 'unlinkDir'
-      ? payload.path
-      : (payload as FSALEventPayloadChange).descriptor.path
-    
-    // Figure out if this event relates to us, which is only the case if the
-    // affected path is a direct descendant of this tree item. If it's itself or
-    // a parent path, another tree item takes over. If it's a nested dependent,
-    // any of the children of this tree item takes over.
-    // How can we figure this out? Easy, by resolving the path from this item
-    // to the affected path and checking if there are any additional path
-    // separators in there.
-    if (!affectedPath.startsWith(props.item.path)) {
-      return
-    }
-
-    if (affectedPath === props.item.path) {
-      return // Taken care of by the parent
-    }
-
-    const relative = relativePath(props.item.path, affectedPath)
-    const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
-    if (relative.includes(PATH_SEP)) {
-      return
-    }
-
-    // Now we can be sure that the event pertains to a direct child of this item
-    // and we need to handle it. We'll make it easy and simply re-fetch the list
-    // of children.
-    fetchChildren().catch(err => console.error(`[TreeItem] Could not fetch children for item "${props.item.path}": ${err.message}`, err))
-  })
-
   if (props.item.type === 'directory') {
     await fetchChildren()
   }
 })
+
+onUnmounted(() => { offFSALEvent() })
 
 const {
   nameEditing,
