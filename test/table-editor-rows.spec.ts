@@ -14,23 +14,14 @@
  */
 
 import { strictEqual } from 'assert'
-import { EditorState } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { EditorState, type TransactionSpec } from '@codemirror/state'
+import type { EditorView } from '@codemirror/view'
 import markdownParser from 'source/common/modules/markdown-editor/parser/markdown-parser'
 import { addRowAfter } from 'source/common/modules/markdown-editor/table-editor/commands/rows'
 
-// CodeMirror reads requestAnimationFrame off the view's own window on
-// construction, and jsdom does not put it there (test/setup.js only sets the
-// global).
-window.requestAnimationFrame = (cb: FrameRequestCallback) => setTimeout(cb, 0) as unknown as number
-window.cancelAnimationFrame = (id: number) => clearTimeout(id)
-
 const TABLE = '| A | B |\n| --- | --- |\n| 1 | 2 |\n| 3 | 4 |'
 
-// addRowAfter only moves the selection; the row it inserts is the same either
-// way. So each case pins where the cursor ends up: which line of the new
-// document, and which column within it.
-const table: Array<{
+const tableTests: Array<{
   desc: string
   cursor: number
   newRowLine: number
@@ -58,19 +49,33 @@ const table: Array<{
   }
 ]
 
+function addRowToState (doc: string, cursor: number): { changed: boolean, state: EditorState } {
+  let state = EditorState.create({
+    doc,
+    selection: { anchor: cursor },
+    extensions: [ markdownParser() ]
+  })
+  const target = {
+    get state () { return state },
+    dispatch (...specs: TransactionSpec[]) {
+      state = state.update(...specs).state
+    }
+  } as unknown as EditorView
+
+  return { changed: addRowAfter(target), state }
+}
+
 describe('TableEditor#addRowAfter()', function () {
-  for (let i = 0; i < table.length; i++) {
-    const { desc, cursor, newRowLine, column } = table[i]
+  for (let i = 0; i < tableTests.length; i++) {
+    const { desc, cursor, newRowLine, column } = tableTests[i]
     it(`Should place the cursor in the new row when the cursor is ${desc}`, function () {
-      const state = EditorState.create({ doc: TABLE, extensions: [markdownParser()] })
-      const view = new EditorView({ state, parent: document.body })
-      view.dispatch({ selection: { anchor: cursor } })
+      const { changed, state } = addRowToState(TABLE, cursor)
 
-      strictEqual(addRowAfter(view), true)
-
-      const line = view.state.doc.line(newRowLine)
+      strictEqual(changed, true)
+      const line = state.doc.line(newRowLine)
       strictEqual(line.text, '|  |  |')
-      strictEqual(view.state.selection.main.head, line.from + column)
+      strictEqual(state.selection.main.head, line.from + column)
     })
   }
+
 })
