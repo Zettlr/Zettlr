@@ -1,0 +1,5252 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Hendrik Erz <info@zettlr.com>
+# This file is distributed under the same license as the Zettlr package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Zettlr 4.7.0\n"
+"Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
+"POT-Creation-Date: 2026-08-25 03:14+0000\n"
+"PO-Revision-Date: 2026-09-07 11:00+0400\n"
+"Last-Translator: Jamal Kamaladdin <jamalkamaladdin@gmail.com>\n"
+"Language-Team: \n"
+"Language: az-AZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: source/app/app-service-container.ts:180
+#, javascript-format
+msgid "Indexing %s…"
+msgstr "%s indekslənir…"
+
+#: source/app/app-service-container.ts:302
+#, javascript-format
+msgid "Booting %s…"
+msgstr "%s işə salınır…"
+
+#: source/app/service-providers/citeproc/index.ts:259
+#: source/app/service-providers/citeproc/index.ts:426
+msgid "The citation database could not be loaded"
+msgstr "İstinad bazası yüklənə bilmədi"
+
+#: source/app/service-providers/citeproc/index.ts:413
+msgid "Changes to the library file detected. Reloading …"
+msgstr "Kitabxana faylında dəyişikliklər aşkarlandı. Yenidən yüklənir …"
+
+#. Register a LRT. NOTE: We only do that if "onFile" is not defined, because
+#. this function is called also from within the lifecycle when the FSAL
+#. cache is cleared on startup.
+#: source/app/service-providers/fsal/index.ts:295
+msgid "Indexing files"
+msgstr "Fayllar indekslənir"
+
+#: source/app/service-providers/fsal/index.ts:295
+msgid "Discovering paths to index…"
+msgstr "İndeksləmə üçün yollar axtarılır…"
+
+#: source/app/service-providers/fsal/index.ts:330
+#, javascript-format
+msgid "Indexing %s paths…"
+msgstr "%s yol indekslənir…"
+
+#: source/app/service-providers/fsal/index.ts:349
+msgid "Indexing complete."
+msgstr "İndeksləmə tamamlandı."
+
+#: source/app/service-providers/tray/index.ts:166
+msgid "Show Zettlr"
+msgstr "Zettlr-i göstər"
+
+#: source/app/service-providers/tray/index.ts:172
+#: source/app/service-providers/menu/menu.darwin.ts:123
+#: source/app/service-providers/menu/menu.win32.ts:321
+msgid "Quit"
+msgstr "Çıx"
+
+#: source/app/service-providers/tray/index.ts:179
+msgid "Zettlr"
+msgstr "Zettlr"
+
+#: source/app/service-providers/menu/menu.darwin.ts:43
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/tmp/win-update/App.vue.ts:38
+msgid "Check for updates"
+msgstr "Yeniləmələri yoxla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:65
+#: source/app/service-providers/menu/menu.darwin.ts:651
+#: source/app/service-providers/menu/menu.win32.ts:627
+#: source/tmp/win-about/App.vue.ts:35 source/tmp/win-about/App.vue.ts:76
+msgid "About Zettlr"
+msgstr "Zettlr haqqında"
+
+#: source/app/service-providers/menu/menu.darwin.ts:70
+#: source/app/service-providers/menu/menu.win32.ts:242
+#: source/app/service-providers/menu/menu.win32.ts:246
+msgid "Preferences…"
+msgstr "Parametrlər…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:78
+#: source/app/service-providers/menu/menu.win32.ts:254
+#: source/tmp/win-assets/App.vue.ts:17
+msgid "Assets Manager"
+msgstr "Aktivlər meneceri"
+
+#: source/app/service-providers/menu/menu.darwin.ts:86
+#: source/app/service-providers/menu/menu.win32.ts:262
+#: source/tmp/win-tag-manager/App.vue.ts:34
+msgid "Tags Manager"
+msgstr "Etiketlər meneceri"
+
+#: source/app/service-providers/menu/menu.darwin.ts:96
+msgid "Services"
+msgstr "Xidmətlər"
+
+#: source/app/service-providers/menu/menu.darwin.ts:105
+msgid "Hide"
+msgstr "Gizlət"
+
+#: source/app/service-providers/menu/menu.darwin.ts:110
+msgid "Hide others"
+msgstr "Digərlərini gizlət"
+
+#: source/app/service-providers/menu/menu.darwin.ts:115
+msgid "Show"
+msgstr "Göstər"
+
+#: source/app/service-providers/menu/menu.darwin.ts:132
+#: source/app/service-providers/menu/menu.win32.ts:108
+msgid "File"
+msgstr "Fayl"
+
+#: source/app/service-providers/menu/menu.darwin.ts:135
+#: source/app/service-providers/menu/menu.win32.ts:111
+#: source/win-main/file-manager/util/dir-item-context.ts:38
+#: source/tmp/win-main/App.vue.ts:349
+msgid "New file…"
+msgstr "Yeni fayl…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:174
+#: source/app/service-providers/menu/menu.win32.ts:150
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+msgid "New directory…"
+msgstr "Yeni qovluq…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:184
+#: source/app/service-providers/menu/menu.win32.ts:160
+msgid "Open file…"
+msgstr "Fayl aç…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:193
+#: source/app/service-providers/menu/menu.win32.ts:169
+#: source/tmp/win-main/App.vue.ts:323
+msgid "Open workspace…"
+msgstr "İş sahəsini aç…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:202
+#: source/app/service-providers/menu/menu.win32.ts:57
+#: source/app/service-providers/menu/menu.win32.ts:69
+msgid "Recent files"
+msgstr "Son fayllar"
+
+#: source/app/service-providers/menu/menu.darwin.ts:206
+#: source/app/service-providers/menu/menu.win32.ts:61
+#: source/app/service-providers/menu/menu.win32.ts:73
+msgid "Clear"
+msgstr "Təmizlə"
+
+#. primary: true // It's a primary button
+#: source/app/service-providers/menu/menu.darwin.ts:215
+#: source/app/service-providers/menu/menu.win32.ts:182
+#: source/app/service-providers/commands/export.ts:149
+#: source/tmp/win-paste-image/App.vue.ts:66
+#: source/tmp/win-tag-manager/App.vue.ts:88
+#: source/tmp/win-assets/DefaultsTab.vue.ts:61
+#: source/tmp/win-assets/SnippetsTab.vue.ts:30
+#: source/tmp/win-assets/FilterTab.vue.ts:30
+#: source/tmp/win-assets/CustomCSS.vue.ts:26
+msgid "Save"
+msgstr "Yadda saxla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:226
+#: source/app/service-providers/menu/menu.win32.ts:193
+#: source/tmp/win-main/App.vue.ts:356
+msgid "Previous file"
+msgstr "Əvvəlki fayl"
+
+#: source/app/service-providers/menu/menu.darwin.ts:237
+#: source/app/service-providers/menu/menu.win32.ts:204
+#: source/tmp/win-main/App.vue.ts:364
+msgid "Next file"
+msgstr "Növbəti fayl"
+
+#: source/app/service-providers/menu/menu.darwin.ts:251
+#: source/app/service-providers/menu/menu.win32.ts:218
+msgid "Import files…"
+msgstr "Faylları idxal et…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:259
+#: source/app/service-providers/menu/menu.win32.ts:226
+msgid "Export…"
+msgstr "İxrac et…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:267
+#: source/app/service-providers/menu/menu.win32.ts:234
+#: source/tmp/win-print/App.vue.ts:50 source/tmp/win-print/App.vue.ts:51
+msgid "Print…"
+msgstr "Çap et…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:278
+#: source/app/service-providers/menu/menu.win32.ts:274
+msgid "Import translation…"
+msgstr "Tərcüməni idxal et…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:286
+#: source/app/service-providers/menu/menu.win32.ts:282
+msgid "Import dictionary…"
+msgstr "Lüğəti idxal et…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:305
+#: source/app/service-providers/menu/menu.win32.ts:301
+#: source/win-main/file-manager/util/file-item-context.ts:43
+#: source/tmp/win-assets/DefaultsTab.vue.ts:58
+msgid "Rename file"
+msgstr "Faylın adını dəyiş"
+
+#: source/app/service-providers/menu/menu.darwin.ts:316
+#: source/app/service-providers/menu/menu.win32.ts:312
+#: source/win-main/file-manager/util/file-item-context.ts:54
+msgid "Delete file"
+msgstr "Faylı sil"
+
+#: source/app/service-providers/menu/menu.darwin.ts:327
+#: source/app/service-providers/menu/menu.win32.ts:331
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:114
+msgid "Edit"
+msgstr "Redaktə"
+
+#: source/app/service-providers/menu/menu.darwin.ts:332
+#: source/app/service-providers/menu/menu.win32.ts:336
+msgid "Undo"
+msgstr "Geri al"
+
+#: source/app/service-providers/menu/menu.darwin.ts:338
+#: source/app/service-providers/menu/menu.win32.ts:342
+msgid "Redo"
+msgstr "Təkrarla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:347
+#: source/app/service-providers/menu/menu.win32.ts:351
+#: source/common/modules/window-register/register-default-context.ts:75
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:239
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:49
+msgid "Cut"
+msgstr "Kəs"
+
+#: source/app/service-providers/menu/menu.darwin.ts:353
+#: source/app/service-providers/menu/menu.win32.ts:357
+#: source/common/modules/window-register/register-default-context.ts:82
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:245
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:55
+#: source/tmp/win-main/GlobalSearch.vue.ts:83
+msgid "Copy"
+msgstr "Kopyala"
+
+#: source/app/service-providers/menu/menu.darwin.ts:358
+#: source/app/service-providers/menu/menu.win32.ts:362
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:251
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:61
+msgid "Copy as HTML"
+msgstr "HTML olaraq kopyala"
+
+#: source/app/service-providers/menu/menu.darwin.ts:367
+#: source/app/service-providers/menu/menu.win32.ts:371
+#: source/common/modules/window-register/register-default-context.ts:88
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:257
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:67
+msgid "Paste"
+msgstr "Yapışdır"
+
+#: source/app/service-providers/menu/menu.darwin.ts:372
+#: source/app/service-providers/menu/menu.win32.ts:376
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:263
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:73
+msgid "Paste without style"
+msgstr "Stilsiz yapışdır"
+
+#: source/app/service-providers/menu/menu.darwin.ts:381
+#: source/app/service-providers/menu/menu.win32.ts:385
+#: source/common/modules/window-register/register-default-context.ts:98
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:272
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:82
+msgid "Select all"
+msgstr "Hamısını seç"
+
+#: source/app/service-providers/menu/menu.darwin.ts:389
+#: source/app/service-providers/menu/menu.win32.ts:393
+msgid "Find in current file"
+msgstr "Cari faylda tap"
+
+#: source/app/service-providers/menu/menu.darwin.ts:397
+#: source/app/service-providers/menu/menu.win32.ts:401
+msgid "Search all files"
+msgstr "Bütün fayllarda axtar"
+
+#: source/app/service-providers/menu/menu.darwin.ts:405
+#: source/app/service-providers/menu/menu.win32.ts:409
+#: source/win-preferences/schema/shortcuts.ts:285
+msgid "Filter files"
+msgstr "Faylları süzgəcdən keçir"
+
+#: source/app/service-providers/menu/menu.darwin.ts:416
+#: source/app/service-providers/menu/menu.win32.ts:420
+msgid "Generate new ID"
+msgstr "Yeni ID yarat"
+
+#: source/app/service-providers/menu/menu.darwin.ts:424
+#: source/app/service-providers/menu/menu.win32.ts:428
+#: source/win-main/file-manager/util/file-item-context.ts:73
+#: source/tmp/win-main/DocumentTabs.vue.ts:492
+msgid "Copy ID"
+msgstr "ID-ni kopyala"
+
+#: source/app/service-providers/menu/menu.darwin.ts:435
+msgid "Speech"
+msgstr "Nitq"
+
+#: source/app/service-providers/menu/menu.darwin.ts:439
+msgid "Start speaking"
+msgstr "Danışmağa başla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:444
+msgid "Stop speaking"
+msgstr "Danışmağı dayandır"
+
+#: source/app/service-providers/menu/menu.darwin.ts:454
+#: source/app/service-providers/menu/menu.win32.ts:439
+msgid "View"
+msgstr "Görünüş"
+
+#: source/app/service-providers/menu/menu.darwin.ts:458
+#: source/app/service-providers/menu/menu.win32.ts:443
+#: source/win-preferences/schema/appearance.ts:26
+msgid "Dark mode"
+msgstr "Tünd rejim"
+
+#: source/app/service-providers/menu/menu.darwin.ts:468
+#: source/app/service-providers/menu/menu.win32.ts:453
+msgid "Additional information"
+msgstr "Əlavə məlumat"
+
+#: source/app/service-providers/menu/menu.darwin.ts:478
+#: source/app/service-providers/menu/menu.win32.ts:463
+#: source/win-preferences/schema/editor.ts:225
+msgid "Distraction-free mode"
+msgstr "Diqqət cəmləmə rejimi"
+
+#: source/app/service-providers/menu/menu.darwin.ts:486
+#: source/app/service-providers/menu/menu.win32.ts:471
+msgid "Typewriter mode"
+msgstr "Yazı makinası rejimi"
+
+#: source/app/service-providers/menu/menu.darwin.ts:497
+#: source/app/service-providers/menu/menu.win32.ts:482
+#: source/tmp/win-main/App.vue.ts:310
+msgid "Toggle File Manager"
+msgstr "Fayl menecerini aç/bağla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:505
+#: source/app/service-providers/menu/menu.win32.ts:490
+#: source/tmp/win-main/App.vue.ts:471
+msgid "Toggle Sidebar"
+msgstr "Yan paneli aç/bağla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:519
+#: source/app/service-providers/menu/menu.win32.ts:501
+msgid "Reset zoom"
+msgstr "Miqyası sıfırla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:528
+#: source/app/service-providers/menu/menu.win32.ts:510
+msgid "Zoom in"
+msgstr "Yaxınlaşdır"
+
+#: source/app/service-providers/menu/menu.darwin.ts:535
+#: source/app/service-providers/menu/menu.win32.ts:517
+msgid "Zoom out"
+msgstr "Uzaqlaşdır"
+
+#: source/app/service-providers/menu/menu.darwin.ts:545
+#: source/app/service-providers/menu/menu.win32.ts:527
+msgid "Toggle fullscreen"
+msgstr "Tam ekranı aç/bağla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:553
+#: source/app/service-providers/menu/menu.win32.ts:536
+msgid "Develop"
+msgstr "Tərtibat"
+
+#: source/app/service-providers/menu/menu.darwin.ts:557
+#: source/app/service-providers/menu/menu.win32.ts:540
+msgid "Reload"
+msgstr "Yenidən yüklə"
+
+#: source/app/service-providers/menu/menu.darwin.ts:565
+#: source/app/service-providers/menu/menu.win32.ts:548
+msgid "Toggle developer tools"
+msgstr "Tərtibatçı alətlərini aç/bağla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:573
+#: source/app/service-providers/menu/menu.win32.ts:556
+msgid "View logs"
+msgstr "Jurnallara bax"
+
+#: source/app/service-providers/menu/menu.darwin.ts:584
+#: source/app/service-providers/menu/menu.win32.ts:567
+msgid "Window"
+msgstr "Pəncərə"
+
+#: source/app/service-providers/menu/menu.darwin.ts:589
+#: source/app/service-providers/menu/menu.win32.ts:572
+msgid "Minimize"
+msgstr "Kiçilt"
+
+#: source/app/service-providers/menu/menu.darwin.ts:597
+#: source/app/service-providers/menu/menu.win32.ts:578
+#: source/tmp/win-tag-manager/App.vue.ts:98
+msgid "Close"
+msgstr "Bağla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:603
+msgid "Bring All to Front"
+msgstr "Hamısını önə gətir"
+
+#: source/app/service-providers/menu/menu.darwin.ts:611
+#: source/app/service-providers/menu/menu.win32.ts:587
+msgid "Close Tab"
+msgstr "Tabı bağla"
+
+#: source/app/service-providers/menu/menu.darwin.ts:619
+#: source/app/service-providers/menu/menu.win32.ts:595
+msgid "Previous Tab"
+msgstr "Əvvəlki tab"
+
+#: source/app/service-providers/menu/menu.darwin.ts:627
+#: source/app/service-providers/menu/menu.win32.ts:603
+msgid "Next Tab"
+msgstr "Növbəti tab"
+
+#: source/app/service-providers/menu/menu.darwin.ts:635
+#: source/app/service-providers/menu/menu.win32.ts:611
+msgid "New window"
+msgstr "Yeni pəncərə"
+
+#: source/app/service-providers/menu/menu.darwin.ts:646
+#: source/app/service-providers/menu/menu.win32.ts:622
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:65
+msgid "Help"
+msgstr "Kömək"
+
+#: source/app/service-providers/menu/menu.darwin.ts:662
+#: source/app/service-providers/menu/menu.win32.ts:638
+msgid "Support Zettlr ↗︎"
+msgstr "Zettlr-i dəstəklə ↗︎"
+
+#: source/app/service-providers/menu/menu.darwin.ts:672
+#: source/app/service-providers/menu/menu.win32.ts:648
+msgid "Visit website ↗︎"
+msgstr "Saytı ziyarət et ↗︎"
+
+#: source/app/service-providers/menu/menu.darwin.ts:682
+#: source/app/service-providers/menu/menu.win32.ts:658
+msgid "Open user manual ↗︎"
+msgstr "İstifadəçi təlimatını aç ↗︎"
+
+#: source/app/service-providers/menu/menu.darwin.ts:696
+#: source/app/service-providers/menu/menu.win32.ts:672
+msgid "Open tutorial"
+msgstr "Təlimatı aç"
+
+#: source/app/service-providers/menu/menu.darwin.ts:704
+#: source/app/service-providers/menu/menu.win32.ts:680
+msgid "Clear FSAL cache…"
+msgstr "FSAL keşini təmizlə…"
+
+#: source/app/service-providers/menu/menu.darwin.ts:708
+#: source/app/service-providers/menu/menu.win32.ts:684
+msgid "Clear FSAL Cache"
+msgstr "FSAL keşini təmizlə"
+
+#: source/app/service-providers/menu/menu.darwin.ts:709
+#: source/app/service-providers/menu/menu.win32.ts:685
+msgid "Clearing the FSAL cache requires a restart."
+msgstr "FSAL keşinin təmizlənməsi yenidən başlatma tələb edir."
+
+#: source/app/service-providers/menu/menu.darwin.ts:710
+#: source/app/service-providers/menu/menu.win32.ts:686
+msgid ""
+"After the restart, Zettlr will recreate the entire cache, which may take a "
+"few moments, depending on the amount of files you have loaded and the speed "
+"of your disk. The window(s) will show afterward."
+msgstr ""
+"Yenidən başlatmadan sonra Zettlr bütün keşi yenidən yaradacaq, bu, "
+"yüklədiyiniz faylların sayından və diskinizin sürətindən asılı olaraq bir az "
+"vaxt apara bilər. Pəncərə (və ya pəncərələr) bundan sonra görünəcək."
+
+#: source/app/service-providers/menu/menu.darwin.ts:713
+#: source/app/service-providers/menu/menu.win32.ts:689
+#: source/app/service-providers/config/index.ts:596
+msgid "Restart now"
+msgstr "İndi yenidən başlat"
+
+#. 1: Omit all changes
+#: source/app/service-providers/menu/menu.darwin.ts:714
+#: source/app/service-providers/menu/menu.win32.ts:690
+#: source/app/service-providers/documents/index.ts:396
+#: source/app/service-providers/commands/dir-delete.ts:37
+#: source/app/service-providers/commands/file-delete.ts:38
+#: source/app/service-providers/commands/rename-tag.ts:48
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:36
+#: source/app/service-providers/windows/dialog/should-close-all.ts:36
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/tmp/win-paste-image/App.vue.ts:67
+#: source/tmp/win-main/GlobalSearch.vue.ts:65
+msgid "Cancel"
+msgstr "Ləğv et"
+
+#: source/app/service-providers/updates/index.ts:285
+msgid "Cannot check for update"
+msgstr "Yeniləməni yoxlamaq mümkün olmadı"
+
+#: source/app/service-providers/updates/index.ts:286
+#, javascript-format
+msgid "There was an error while checking for updates. %s: %s"
+msgstr "Yeniləmələr yoxlanılarkən xəta baş verdi. %s: %s"
+
+#: source/app/service-providers/updates/index.ts:345
+#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
+msgid "Update available"
+msgstr "Yeniləmə mövcuddur"
+
+#: source/app/service-providers/updates/index.ts:346
+#, javascript-format
+msgid "An update to version %s is available!"
+msgstr "%s versiyasına yeniləmə mövcuddur!"
+
+#: source/app/service-providers/updates/index.ts:347
+msgid ""
+"Please update at your earliest convenience. You can open the updater now, or "
+"update later."
+msgstr ""
+"Zəhmət olmasa ən qısa zamanda yeniləyin. Yeniləyicini indi aça bilərsiniz və "
+"ya sonra yeniləyə bilərsiniz."
+
+#: source/app/service-providers/updates/index.ts:349
+msgid "Open updater"
+msgstr "Yeniləyicini aç"
+
+#: source/app/service-providers/updates/index.ts:350
+msgid "Not now"
+msgstr "İndi yox"
+
+#: source/app/service-providers/updates/index.ts:387
+#, javascript-format
+msgid "Could not check for updates: Server Error (Status code: %s)"
+msgstr "Yeniləmələr yoxlanıla bilmədi: Server xətası (Status kodu: %s)"
+
+#: source/app/service-providers/updates/index.ts:390
+#, javascript-format
+msgid "Could not check for updates: Client Error (Status code: %s)"
+msgstr "Yeniləmələr yoxlanıla bilmədi: Müştəri xətası (Status kodu: %s)"
+
+#: source/app/service-providers/updates/index.ts:393
+#, javascript-format
+msgid ""
+"Could not check for updates: The server tried to redirect (Status code: %s)"
+msgstr ""
+"Yeniləmələr yoxlanıla bilmədi: Server yönləndirmə cəhdi etdi (Status kodu: "
+"%s)"
+
+#. getaddrinfo has reported that the host has not been found.
+#. This normally only happens if the networking interface is
+#. offline. In this case, no need to inform the user every hour.
+#: source/app/service-providers/updates/index.ts:399
+msgid "Could not check for updates: Could not establish connection"
+msgstr "Yeniləmələr yoxlanıla bilmədi: Əlaqə qurula bilmədi"
+
+#. This can happen if the internet is either really bad or drops during the
+#. connection attempt. In any case, this can happen often with, e.g.,
+#. company VPNs and other firewalls, and would be distracting to see every
+#. hour or so. See #5944 for context.
+#: source/app/service-providers/updates/index.ts:406
+msgid "Could not check for updates: The connection attempt timed out."
+msgstr "Yeniləmələr yoxlanıla bilmədi: Əlaqə cəhdinin vaxtı bitdi."
+
+#. Something else has occurred. GotError objects have a name property.
+#: source/app/service-providers/updates/index.ts:410
+#, javascript-format
+msgid "Could not check for updates. %s: %s"
+msgstr "Yeniləmələr yoxlanıla bilmədi. %s: %s"
+
+#: source/app/service-providers/updates/index.ts:425
+msgid "Could not check for updates: Server hasn't sent any data"
+msgstr "Yeniləmələr yoxlanıla bilmədi: Server heç bir məlumat göndərmədi"
+
+#: source/app/service-providers/updates/index.ts:503
+msgid "The SHA256 checksums file seems to be missing for this release."
+msgstr "Bu buraxılış üçün SHA256 nəzarət cəmi faylı yoxdur kimi görünür."
+
+#: source/app/service-providers/updates/index.ts:526
+#, javascript-format
+msgid "Cannot retrieve SHA256 checksums: %s"
+msgstr "SHA256 nəzarət cəmləri alına bilmədi: %s"
+
+#: source/app/service-providers/updates/index.ts:567
+msgid "Could not accept data for application update: Write stream is gone."
+msgstr ""
+"Tətbiq yeniləməsi üçün məlumat qəbul edilə bilmədi: Yazma axını yoxa çıxdı."
+
+#: source/app/service-providers/updates/index.ts:622
+msgid ""
+"Could not verify the integrity of the downloaded update. Please retry or "
+"update manually."
+msgstr ""
+"Yüklənmiş yeniləmənin bütövlüyü yoxlanıla bilmədi. Zəhmət olmasa yenidən "
+"cəhd edin və ya əl ilə yeniləyin."
+
+#: source/app/service-providers/updates/index.ts:634
+msgid ""
+"The downloaded file has a different checksum than the server reported. "
+"Please retry or update manually."
+msgstr ""
+"Yüklənmiş faylın nəzarət cəmi serverin bildirdiyindən fərqlidir. Zəhmət "
+"olmasa yenidən cəhd edin və ya əl ilə yeniləyin."
+
+#: source/app/service-providers/updates/index.ts:653
+#, javascript-format
+msgid "Could not start update. Please retry or update manually. Error was: %s"
+msgstr ""
+"Yeniləmə başladıla bilmədi. Zəhmət olmasa yenidən cəhd edin və ya əl ilə "
+"yeniləyin. Xəta: %s"
+
+#: source/app/service-providers/config/index.ts:593
+msgid "Changing this option requires a restart to take effect."
+msgstr ""
+"Bu parametrin dəyişikliyinin qüvvəyə minməsi üçün yenidən başlatma tələb "
+"olunur."
+
+#: source/app/service-providers/config/index.ts:597
+msgid "Restart later"
+msgstr "Sonra yenidən başlat"
+
+#: source/app/service-providers/config/index.ts:601
+#: source/app/service-providers/commands/file-rename.ts:159
+#: source/app/service-providers/commands/rename-tag.ts:44
+msgid "Confirm"
+msgstr "Təsdiqlə"
+
+#: source/app/service-providers/config/config-validation.ts:278
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "%s parametri %s tipində olmalıdır."
+
+#: source/app/service-providers/config/config-validation.ts:281
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "%s parametri bunlardan biri olmalıdır: %s."
+
+#: source/app/service-providers/config/config-validation.ts:284
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "%s parametri %s və %s simvol arasında uzunluqda olmalıdır."
+
+#: source/app/service-providers/config/config-validation.ts:287
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "%s parametri %s simvoldan çox ola bilməz."
+
+#: source/app/service-providers/config/config-validation.ts:290
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "%s parametri ən azı %s simvol uzunluğunda olmalıdır."
+
+#: source/app/service-providers/config/config-validation.ts:293
+#, javascript-format
+msgid "Option %s is required."
+msgstr "%s parametri məcburidir."
+
+#: source/app/service-providers/documents/index.ts:394
+msgid "Save changes"
+msgstr "Dəyişiklikləri yadda saxla"
+
+#: source/app/service-providers/documents/index.ts:395
+msgid "Discard changes"
+msgstr "Dəyişikliklərdən imtina et"
+
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/app/service-providers/documents/index.ts:400
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:40
+#: source/tmp/win-tag-manager/App.vue.ts:94
+#: source/tmp/win-assets/DefaultsTab.vue.ts:113
+#: source/tmp/win-assets/SnippetsTab.vue.ts:49
+#: source/tmp/win-assets/FilterTab.vue.ts:62
+#: source/tmp/win-assets/CustomCSS.vue.ts:36
+msgid "Unsaved changes"
+msgstr "Yadda saxlanılmamış dəyişikliklər"
+
+#: source/app/service-providers/documents/index.ts:401
+msgid "There are unsaved changes. Do you want to save or discard them?"
+msgstr ""
+"Yadda saxlanılmamış dəyişikliklər var. Onları yadda saxlamaq yoxsa imtina "
+"etmək istəyirsiniz?"
+
+#: source/app/service-providers/documents/index.ts:948
+#, javascript-format
+msgid "File: %s"
+msgstr "Fayl: %s"
+
+#: source/app/service-providers/documents/index.ts:1111
+msgid "File changed on disk"
+msgstr "Fayl diskdə dəyişdirilib"
+
+#: source/app/service-providers/documents/index.ts:1112
+#, javascript-format
+msgid "%s changed on disk"
+msgstr "%s diskdə dəyişdirilib"
+
+#: source/app/service-providers/documents/index.ts:1114
+#, javascript-format
+msgid ""
+"%s has changed on disk, but the editor contains unsaved changes. Do you want "
+"to keep the current editor contents or load the file from disk?"
+msgstr ""
+"%s diskdə dəyişdirilib, lakin redaktorda yadda saxlanılmamış dəyişikliklər "
+"var. Redaktorun cari məzmununu saxlamaq yoxsa faylı diskdən yükləmək "
+"istəyirsiniz?"
+
+#: source/app/service-providers/documents/index.ts:1115
+msgid ""
+"Do you want to keep the current editor contents or load the file from disk?"
+msgstr ""
+"Redaktorun cari məzmununu saxlamaq yoxsa faylı diskdən yükləmək istəyirsiniz?"
+
+#: source/app/service-providers/documents/index.ts:1118
+msgid "Keep editor contents"
+msgstr "Redaktorun məzmununu saxla"
+
+#: source/app/service-providers/documents/index.ts:1119
+msgid "Load changes from disk"
+msgstr "Dəyişiklikləri diskdən yüklə"
+
+#: source/app/service-providers/documents/index.ts:1122
+msgid ""
+"Always load changes from disk if there are no unsaved changes in the editor"
+msgstr ""
+"Redaktorda yadda saxlanılmamış dəyişiklik yoxdursa, dəyişiklikləri həmişə "
+"diskdən yüklə"
+
+#: source/app/service-providers/documents/index.ts:1592
+msgid "Could not save file"
+msgstr "Fayl yadda saxlanıla bilmədi"
+
+#: source/app/service-providers/documents/index.ts:1592
+#, javascript-format
+msgid "Could not save file %s: %s"
+msgstr "%s faylı yadda saxlanıla bilmədi: %s"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:104
+msgid "The provided name did not contain any allowed letters."
+msgstr "Göstərilən adda icazə verilən hərflər yox idi."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:125
+msgid "The requested directory was not found."
+msgstr "Tələb olunan qovluq tapılmadı."
+
+#: source/app/service-providers/commands/root-open.ts:61
+msgid "Markdown Files"
+msgstr "Markdown faylları"
+
+#: source/app/service-providers/commands/root-open.ts:62
+msgid "Code Files"
+msgstr "Kod faylları"
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/commands/root-open.ts:76
+msgid "Open workspace"
+msgstr "İş sahəsini aç"
+
+#: source/app/service-providers/commands/root-open.ts:85
+msgid "Cannot open workpace"
+msgstr "İş sahəsini açmaq mümkün olmadı"
+
+#: source/app/service-providers/commands/root-open.ts:86
+#, javascript-format
+msgid "Cannot open workspace \"%s\"."
+msgstr "\"%s\" iş sahəsini açmaq mümkün olmadı."
+
+#: source/app/service-providers/commands/request-move.ts:55
+msgid "Cannot move directory"
+msgstr "Qovluğu köçürmək mümkün olmadı"
+
+#: source/app/service-providers/commands/request-move.ts:56
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Qovluğu öz alt qovluqlarından birinə köçürə bilməzsiniz."
+
+#: source/app/service-providers/commands/request-move.ts:66
+msgid "Cannot move directory or file"
+msgstr "Qovluğu və ya faylı köçürmək mümkün olmadı"
+
+#: source/app/service-providers/commands/request-move.ts:67
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "%s fayl/qovluğu artıq hədəfdə mövcuddur."
+
+#. Citekey appears not to have any attachments
+#: source/app/service-providers/commands/open-attachment.ts:153
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "%s açarlı istinadın qoşması yoxdur."
+
+#: source/app/service-providers/commands/open-attachment.ts:159
+#, javascript-format
+msgid ""
+"Could not open attachment for key %s. Check the logs for more information."
+msgstr ""
+"%s açarı üçün qoşmanı açmaq mümkün olmadı. Ətraflı məlumat üçün jurnalları "
+"yoxlayın."
+
+#: source/app/service-providers/commands/open-attachment.ts:163
+#: source/app/service-providers/commands/open-attachment.ts:167
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Qoşmanı açmaq mümkün olmadı. Zotero işləyir?"
+
+#: source/app/service-providers/commands/file-rename.ts:62
+msgid "Change file extension"
+msgstr "Fayl uzantısını dəyiş"
+
+#: source/app/service-providers/commands/file-rename.ts:63
+#, javascript-format
+msgid "Do you want to change the file extension from %s to %s?"
+msgstr "Fayl uzantısını %s-dən %s-ə dəyişmək istəyirsiniz?"
+
+#: source/app/service-providers/commands/file-rename.ts:65
+#, javascript-format
+msgid "Use %s"
+msgstr "%s işlət"
+
+#: source/app/service-providers/commands/file-rename.ts:66
+#, javascript-format
+msgid "Keep %s"
+msgstr "%s saxla"
+
+#: source/app/service-providers/commands/file-rename.ts:160
+#, javascript-format
+msgid "Update %s internal links to file %s?"
+msgstr "%s daxili keçid %s faylına yenilənsin?"
+
+#: source/app/service-providers/commands/file-rename.ts:162
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+msgid "Yes"
+msgstr "Bəli"
+
+#. 0: Save all changes
+#: source/app/service-providers/commands/file-rename.ts:163
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:35
+msgid "No"
+msgstr "Xeyr"
+
+#: source/app/service-providers/commands/file-new.ts:178
+#: source/app/service-providers/commands/file-new.ts:185
+#: source/app/service-providers/commands/file-duplicate.ts:40
+#: source/app/service-providers/commands/file-duplicate.ts:57
+msgid "Could not create file"
+msgstr "Fayl yaratmaq mümkün olmadı"
+
+#: source/app/service-providers/commands/file-new.ts:186
+msgid "An unknown error occurred."
+msgstr "Naməlum xəta baş verdi."
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:69
+#, javascript-format
+msgid "Copy of %s"
+msgstr "%s nüsxəsi"
+
+#: source/app/service-providers/commands/import-lang-file.ts:61
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "Dil faylı idxal edildi: %s"
+
+#: source/app/service-providers/commands/import-lang-file.ts:63
+#: source/app/service-providers/commands/import-lang-file.ts:66
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "%s dil faylını idxal etmək mümkün olmadı!"
+
+#: source/app/service-providers/commands/dir-delete.ts:36
+#: source/app/service-providers/commands/file-delete.ts:37
+#: source/app/service-providers/commands/dir-project-export.ts:95
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/should-close-all.ts:37
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/tmp/win-error/App.vue.ts:43
+msgid "Ok"
+msgstr "Tamam"
+
+#: source/app/service-providers/commands/dir-delete.ts:41
+#: source/app/service-providers/commands/file-delete.ts:42
+msgid "Really delete?"
+msgstr "Doğrudan silinsin?"
+
+#: source/app/service-providers/commands/dir-delete.ts:42
+#: source/app/service-providers/commands/file-delete.ts:43
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Doğrudan %s silmək istəyirsiniz?"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "Import directory"
+msgstr "Qovluğu idxal et"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "Select folder"
+msgstr "Qovluğu seçin"
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "Select import destination"
+msgstr "İdxal təyinatını seçin"
+
+#: source/app/service-providers/commands/import.ts:37
+msgid "You have to select a directory to import to."
+msgstr "İdxal üçün qovluq seçməlisiniz."
+
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/app/service-providers/commands/import.ts:45
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:58
+msgid "All Files"
+msgstr "Bütün fayllar"
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:62
+msgid "Importing. Please wait …"
+msgstr "İdxal edilir. Zəhmət olmasa gözləyin …"
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:70
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "%s faylını idxal etmək mümkün olmadı."
+
+#: source/app/service-providers/commands/import.ts:74
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s uğurla idxal edildi."
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:79
+#, javascript-format
+msgid "The following %s files could not be imported: %s"
+msgstr "Aşağıdakı %s faylı idxal etmək mümkün olmadı: %s"
+
+#: source/app/service-providers/commands/import.ts:86
+#: source/app/service-providers/commands/import.ts:89
+#, javascript-format
+msgid "Could not import files due to an error: %s"
+msgstr "Xəta səbəbindən faylları idxal etmək mümkün olmadı: %s"
+
+#: source/app/service-providers/commands/import.ts:86
+#: source/app/service-providers/commands/import.ts:89
+msgid "Import failed"
+msgstr "İdxal alınmadı"
+
+#: source/app/service-providers/commands/import.ts:89
+msgid "Unknown error"
+msgstr "Naməlum xəta"
+
+#: source/app/service-providers/commands/importer/index.ts:86
+msgid ""
+"Zettlr can import this file, but it requires an import profile. Please "
+"create one first."
+msgstr ""
+"Zettlr bu faylı idxal edə bilər, amma idxal profili tələb olunur. Zəhmət "
+"olmasa əvvəlcə profil yaradın."
+
+#: source/app/service-providers/commands/importer/index.ts:97
+#: source/app/service-providers/commands/importer/index.ts:98
+msgid "Select import profile"
+msgstr "İdxal profilini seçin"
+
+#: source/app/service-providers/commands/importer/index.ts:99
+#, javascript-format
+msgid "There are multiple profiles that can import %s. Please choose one."
+msgstr ""
+"%s faylını idxal edə bilən bir neçə profil var. Zəhmət olmasa birini seçin."
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:68
+#: source/app/service-providers/commands/importer/import-textbundle.ts:75
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Yanlış formatlı Textbundle: %s"
+
+#: source/app/service-providers/commands/language-tool.ts:332
+msgid "Forbidden (are your credentials correct?)"
+msgstr "Qadağandır (giriş məlumatlarınız doğrudurmu?)"
+
+#: source/app/service-providers/commands/language-tool.ts:334
+msgid "Document too long"
+msgstr "Sənəd çox uzundur"
+
+#: source/app/service-providers/commands/language-tool.ts:337
+msgid "Server error"
+msgstr "Server xətası"
+
+#: source/app/service-providers/commands/language-tool.ts:339
+msgid "Client error"
+msgstr "Klient xətası"
+
+#: source/app/service-providers/commands/language-tool.ts:344
+msgid "offline"
+msgstr "oflayn"
+
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:32
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:324
+msgid "Untitled"
+msgstr "Adsız"
+
+#: source/app/service-providers/commands/dir-new.ts:38
+#: source/app/service-providers/commands/dir-new.ts:39
+#: source/app/service-providers/commands/dir-new.ts:51
+msgid "Could not create directory"
+msgstr "Qovluq yaratmaq mümkün olmadı"
+
+#: source/app/service-providers/commands/export.ts:67
+#, javascript-format
+msgid "Exporting file \"%s\""
+msgstr "\\\"%s\\\" faylı ixrac edilir"
+
+#: source/app/service-providers/commands/export.ts:67
+#: source/app/service-providers/commands/dir-project-export.ts:161
+#: source/app/service-providers/commands/dir-project-export.ts:200
+#, javascript-format
+msgid "Exporting using custom command %s"
+msgstr "%s fərdi əmri ilə ixrac edilir"
+
+#: source/app/service-providers/commands/export.ts:75
+#: source/app/service-providers/commands/export.ts:206
+msgid "Export failed"
+msgstr "İxrac alınmadı"
+
+#: source/app/service-providers/commands/export.ts:76
+#, javascript-format
+msgid "An error occurred during export: %s"
+msgstr "İxrac zamanı xəta baş verdi: %s"
+
+#: source/app/service-providers/commands/export.ts:81
+msgid "Exported file successfully."
+msgstr "Fayl uğurla ixrac edildi."
+
+#: source/app/service-providers/commands/export.ts:149
+msgid "Choose export destination"
+msgstr "İxrac təyinatını seçin"
+
+#: source/app/service-providers/commands/export.ts:173
+#, javascript-format
+msgid "Exporting file %s"
+msgstr "%s faylı ixrac edilir"
+
+#: source/app/service-providers/commands/export.ts:173
+#, javascript-format
+msgid "Exporting using profile %s"
+msgstr "%s profili ilə ixrac edilir"
+
+#: source/app/service-providers/commands/export.ts:182
+#, javascript-format
+msgid "Exported to %s"
+msgstr "%s ünvanına ixrac edildi"
+
+#: source/app/service-providers/commands/export.ts:184
+#, javascript-format
+msgid "File %s has been exported"
+msgstr "%s faylı ixrac edildi"
+
+#: source/app/service-providers/commands/export.ts:185
+#, javascript-format
+msgid "File has been exported to %s"
+msgstr "Fayl %s ünvanına ixrac edildi"
+
+#: source/app/service-providers/commands/export.ts:207
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "İxrac zamanı xəta baş verdi: %s"
+
+#: source/app/service-providers/commands/export.ts:215
+msgid "Export error"
+msgstr "İxrac xətası"
+
+#: source/app/service-providers/commands/dir-project-export.ts:87
+msgid "Cannot export project"
+msgstr "Layihəni ixrac etmək mümkün olmadı"
+
+#: source/app/service-providers/commands/dir-project-export.ts:88
+msgid ""
+"There are no files selected for export. Please select files to be included "
+"in the project settings."
+msgstr ""
+"İxrac üçün fayl seçilməyib. Zəhmət olmasa layihə parametrlərində daxil "
+"ediləcək faylları seçin."
+
+#: source/app/service-providers/commands/dir-project-export.ts:93
+msgid "Project File Mismatch"
+msgstr "Layihə faylı uyğunsuzluğu"
+
+#: source/app/service-providers/commands/dir-project-export.ts:94
+msgid ""
+"One or more files specified in the project settings have not been found. "
+"They may have moved or been deleted. Please verify that all files that you "
+"would like to export are included."
+msgstr ""
+"Layihə parametrlərində göstərilən bir və ya bir neçə fayl tapılmadı. Onlar "
+"köçürülmüş və ya silinmiş ola bilər. Zəhmət olmasa ixrac etmək istədiyiniz "
+"bütün faylların daxil olduğunu yoxlayın."
+
+#: source/app/service-providers/commands/dir-project-export.ts:135
+#, javascript-format
+msgid "Project \"%s\" successfully exported. Click to show."
+msgstr "\\\"%s\\\" layihəsi uğurla ixrac edildi. Göstərmək üçün klikləyin."
+
+#: source/app/service-providers/commands/dir-project-export.ts:136
+msgid "Project Export"
+msgstr "Layihə ixracı"
+
+#: source/app/service-providers/commands/dir-project-export.ts:160
+#: source/app/service-providers/commands/dir-project-export.ts:199
+#, javascript-format
+msgid "Exporting project \"%s\""
+msgstr "\\\"%s\\\" layihəsi ixrac edilir"
+
+#: source/app/service-providers/commands/dir-project-export.ts:168
+#, javascript-format
+msgid "Project export failed: %s"
+msgstr "Layihə ixracı alınmadı: %s"
+
+#: source/app/service-providers/commands/dir-project-export.ts:178
+#: source/app/service-providers/commands/dir-project-export.ts:248
+#: source/app/service-providers/commands/dir-project-export.ts:271
+#, javascript-format
+msgid "Could not export project \"%s\"."
+msgstr "\\\"%s\\\" layihəsini ixrac etmək mümkün olmadı."
+
+#: source/app/service-providers/commands/dir-project-export.ts:179
+#, javascript-format
+msgid "Export with command %s was unsuccessful: %s."
+msgstr "%s əmri ilə ixrac uğursuz oldu: %s."
+
+#. Error
+#: source/app/service-providers/commands/dir-project-export.ts:246
+#, javascript-format
+msgid "Export failed: %s"
+msgstr "İxrac alınmadı: %s"
+
+#: source/app/service-providers/commands/dir-project-export.ts:249
+#: source/app/service-providers/commands/dir-project-export.ts:272
+#, javascript-format
+msgid "Export with profile %s was unsuccessful: %s."
+msgstr "%s profili ilə ixrac uğursuz oldu: %s."
+
+#: source/app/service-providers/commands/dir-project-export.ts:256
+#, javascript-format
+msgid "Project \"%s\" has been exported."
+msgstr "\\\"%s\\\" layihəsi ixrac edildi."
+
+#: source/app/service-providers/commands/dir-project-export.ts:257
+#, javascript-format
+msgid "Project has been exported to %s."
+msgstr "Layihə %s ünvanına ixrac edildi."
+
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr "\\\"%s\\\" etiketini \\\"%s\\\" ilə %s faylda əvəz et?"
+
+#: source/app/service-providers/commands/dir-rename.ts:73
+msgid "Could not rename file"
+msgstr "Faylın adını dəyişmək mümkün olmadı"
+
+#: source/app/service-providers/commands/dir-rename.ts:74
+msgid "There was an error renaming the file."
+msgstr "Faylın adını dəyişərkən xəta baş verdi."
+
+#: source/app/service-providers/windows/index.ts:243
+msgid "Open project folder"
+msgstr "Layihə qovluğunu aç"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Faylı əvəz et"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
+msgid ""
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
+msgstr ""
+"%s faylı uzaqdan dəyişdirilib. Yüklənmiş versiya diskdəki daha yeni versiya "
+"ilə əvəz edilsin?"
+
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+#: source/win-preferences/schema/general.ts:97
+msgid "Always load remote changes to the current file"
+msgstr "Cari faylda uzaq dəyişikliklər həmişə yüklənsin"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:41
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr ""
+"Yadda saxlanılmamış dəyişikliklər var. Əvvəlcə onları yadda saxlamaq "
+"istəyirsiniz?"
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:30
+msgid "Close all"
+msgstr "Hamısını bağla"
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:31
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:199
+msgid "Close all files"
+msgstr "Bütün faylları bağla"
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:31
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:277
+msgid "Close all workspaces"
+msgstr "Bütün iş sahələrini bağla"
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:33
+msgid "Do you really want to close all files?"
+msgstr "Doğrudan bütün faylları bağlamaq istəyirsiniz?"
+
+#: source/app/service-providers/windows/dialog/should-close-all.ts:34
+msgid "Do you really want to close all workspaces?"
+msgstr "Doğrudan bütün iş sahələrini bağlamaq istəyirsiniz?"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:54
+msgid "Open file"
+msgstr "Faylı aç"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:58
+msgid "Save file"
+msgstr "Faylı yadda saxla"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Mövcud faylın üzərinə yaz"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "%s faylı artıq bu qovluqda mövcuddur. Üzərinə yazılsın?"
+
+#: source/pinia/workspace-store.ts:267
+msgid "Current folder"
+msgstr "Cari qovluq"
+
+#: source/common/modules/markdown-editor/renderers/index.ts:140
+msgid "Preview"
+msgstr "Önbaxış"
+
+#: source/common/modules/markdown-editor/renderers/index.ts:140
+msgid "Raw"
+msgstr "Xam"
+
+#: source/common/modules/markdown-editor/renderers/index.ts:139
+#, javascript-format
+msgid "Rendering: %s"
+msgstr "Render edilir: %s"
+
+#: source/common/modules/markdown-editor/renderers/index.ts:142
+msgid "Enable or disable the preview mode for Markdown files by clicking"
+msgstr ""
+"Klikləməklə Markdown faylları üçün önbaxış rejimini aktivləşdirin və ya "
+"söndürün"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:50
+msgid "Could not render Graph:"
+msgstr "Qrafı render etmək mümkün olmadı:"
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
+msgid "Could not render Graph."
+msgstr "Qrafı render etmək mümkün olmadı."
+
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
+msgid "Rendering mermaid graph …"
+msgstr "Mermaid qrafı render edilir …"
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:153
+#, javascript-format
+msgid "Image not found: %s"
+msgstr "Şəkil tapılmadı: %s"
+
+#: source/common/modules/markdown-editor/renderers/render-images.ts:228
+msgid "Open image externally"
+msgstr "Şəkli xarici proqramda aç"
+
+#: source/common/modules/markdown-editor/renderers/readability.ts:39
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr "Oxunaqlıq rejimi (%s)"
+
+#: source/common/modules/markdown-editor/statusbar/diagnostics.ts:46
+msgid "Toggle diagnostics panel"
+msgstr "Diaqnostika panelini aç/bağla"
+
+#: source/common/modules/markdown-editor/statusbar/language-tool.ts:144
+msgid "Detect automatically"
+msgstr "Avtomatik aşkarla"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:130
+msgid "Disabled"
+msgstr "Deaktiv"
+
+#: source/common/modules/markdown-editor/statusbar/magic-quotes.ts:136
+msgid "Custom"
+msgstr "Fərdi"
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:53
+#: source/common/modules/markdown-editor/plugins/project-info-field.ts:77
+#: source/tmp/win-main/App.vue.ts:289
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:53
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:158
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:227
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:164
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:56
+#, javascript-format
+msgid "%s words"
+msgstr "%s söz"
+
+#: source/common/modules/markdown-editor/statusbar/info-fields.ts:72
+#: source/common/modules/markdown-editor/plugins/project-info-field.ts:76
+#: source/tmp/win-main/App.vue.ts:288
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:51
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:156
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:225
+#, javascript-format
+msgid "%s characters"
+msgstr "%s simvol"
+
+#: source/common/modules/markdown-editor/plugins/project-info-field.ts:82
+#, javascript-format
+msgid "This file is part of project \"%s\""
+msgstr "Bu fayl \\\"%s\\\" layihəsinin hissəsidir"
+
+#: source/common/modules/markdown-editor/plugins/footnote-gutter.ts:31
+msgid "Go to footnote reference"
+msgstr "Haşiyə istinadına keç"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+msgid "Open link"
+msgstr "Keçidi aç"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+msgid "Copy email address"
+msgstr "E-poçt ünvanını kopyala"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+msgid "Copy link"
+msgstr "Keçidi kopyala"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
+msgid "Remove link"
+msgstr "Keçidi sil"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
+msgid "Copy image to clipboard"
+msgstr "Şəkli mübadilə buferinə kopyala"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
+msgid "Open image"
+msgstr "Şəkli aç"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/win-main/file-manager/util/dir-item-context.ts:72
+#: source/win-main/file-manager/util/file-item-context.ts:82
+#: source/tmp/win-main/DocumentTabs.vue.ts:482
+msgid "Reveal in Finder"
+msgstr "Finder-də göstər"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+msgid "Open in File Browser"
+msgstr "Fayl brauzerində aç"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
+msgid "No suggestions"
+msgstr "Təklif yoxdur"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:160
+msgid "Add to dictionary"
+msgstr "Lüğətə əlavə et"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
+#: source/win-preferences/schema/editor.ts:158
+#: source/win-preferences/schema/editor.ts:159
+msgid "Bold"
+msgstr "Qalın"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:31
+msgid "Italic"
+msgstr "Kursiv"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:204
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:40
+#: source/tmp/win-main/App.vue.ts:402
+msgid "Insert link"
+msgstr "Keçid daxil et"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+msgid "Insert unordered list"
+msgstr "Nişanlı siyahı daxil et"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:215
+msgid "Insert numbered list"
+msgstr "Nömrəli siyahı daxil et"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
+#: source/tmp/win-main/App.vue.ts:416
+msgid "Insert task list"
+msgstr "Tapşırıq siyahısı daxil et"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
+msgid "Insert blockquote"
+msgstr "Sitat bloku daxil et"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/tmp/win-main/App.vue.ts:423
+msgid "Insert table"
+msgstr "Cədvəl daxil et"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:45
+msgid "Transform"
+msgstr "Çevirmə"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:50
+msgid "Zap gremlins"
+msgstr "Gizli simvolları təmizlə"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:56
+#: source/win-preferences/schema/shortcuts.ts:172
+msgid "Strip duplicate spaces"
+msgstr "Təkrarlanan boşluqları sil"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:62
+#: source/win-preferences/schema/shortcuts.ts:179
+msgid "Italics to quotes"
+msgstr "Kursivi dırnaqlara çevir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:68
+#: source/win-preferences/schema/shortcuts.ts:186
+msgid "Quotes to italics"
+msgstr "Dırnaqları kursivə çevir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:74
+#: source/win-preferences/schema/shortcuts.ts:193
+msgid "Remove excess line breaks"
+msgstr "Artıq sətir keçidlərini sil"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
+#: source/win-preferences/schema/shortcuts.ts:200
+msgid "Straighten quotes"
+msgstr "Dırnaqları düzləndir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:89
+#: source/win-preferences/schema/shortcuts.ts:207
+msgid "Convert quotes to Magic Quotes"
+msgstr "Dırnaqları Magic Quotes-a çevir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:95
+#: source/win-preferences/schema/shortcuts.ts:214
+msgid "Ensure double quotes"
+msgstr "Cüt dırnaqları təmin et"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:101
+#: source/win-preferences/schema/shortcuts.ts:221
+msgid "Double quotes to single"
+msgstr "Cüt dırnaqları tək dırnaqlara çevir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:107
+#: source/win-preferences/schema/shortcuts.ts:228
+msgid "Single quotes to double"
+msgstr "Tək dırnaqları cüt dırnaqlara çevir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:116
+#: source/win-preferences/schema/shortcuts.ts:235
+msgid "Emdash — Add spaces around"
+msgstr "Uzun tire: ətrafına boşluq əlavə et"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:122
+#: source/win-preferences/schema/shortcuts.ts:242
+msgid "Emdash — Remove spaces around"
+msgstr "Uzun tire: ətrafındakı boşluqları sil"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:131
+#: source/win-preferences/schema/shortcuts.ts:249
+msgid "To sentence case"
+msgstr "Cümlə formasına çevir"
+
+#: source/common/modules/markdown-editor/context-menu/transform-items.ts:137
+#: source/win-preferences/schema/shortcuts.ts:256
+msgid "To title case"
+msgstr "Başlıq formasına çevir"
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
+msgid "Copy equation code"
+msgstr "Tənlik kodunu kopyala"
+
+#: source/common/modules/markdown-editor/context-menu/citation-menu.ts:60
+#, javascript-format
+msgid "Open PDF for %s"
+msgstr "%s üçün PDF-i aç"
+
+#: source/common/modules/markdown-editor/tooltips/hyperlinks.ts:89
+msgid "Fetching link preview…"
+msgstr "Keçid önbaxışı yüklənir…"
+
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:97
+msgid "No footnote text found."
+msgstr "Haşiyə mətni tapılmadı."
+
+#: source/common/modules/markdown-editor/tooltips/citations.ts:68
+#: source/tmp/win-splash-screen/App.vue.ts:22
+msgid "Loading…"
+msgstr "Yüklənir…"
+
+#: source/common/modules/markdown-editor/tooltips/citations.ts:101
+msgid "Could not fetch bibliography for citation."
+msgstr "İstinad üçün biblioqrafiya yüklənə bilmədi."
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
+#: source/win-preferences/schema/editor.ts:166
+#: source/win-preferences/schema/editor.ts:167
+msgid "Italics"
+msgstr "Kursiv"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:54
+msgid "Underline"
+msgstr "Altından xətt"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
+#: source/win-preferences/schema/editor.ts:174
+#: source/win-preferences/schema/editor.ts:175
+msgid "Highlight"
+msgstr "Vurğulama"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:64
+msgid "Strikethrough"
+msgstr "Üstündən xətt"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:69
+msgid "Link"
+msgstr "Keçid"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:74
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:75
+msgid "Image"
+msgstr "Şəkil"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:79
+msgid "Comment"
+msgstr "Şərh"
+
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:84
+#: source/win-preferences/schema/spellchecking.ts:36
+msgid "Code"
+msgstr "Kod"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:67
+#, javascript-format
+msgid "File %s does not exist."
+msgstr "%s faylı mövcud deyil."
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:97
+msgid "Generating preview…"
+msgstr "Önbaxış yaradılır…"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:124
+msgid "Word count"
+msgstr "Söz sayı"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:126
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:49
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:36
+msgid "Modified"
+msgstr "Dəyişdirilib"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:144
+msgid "Open…"
+msgstr "Aç…"
+
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:165
+msgid "Open in a new tab"
+msgstr "Yeni tabda aç"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
+msgstr "Vurğulama yoxdur"
+
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+msgid "Spelling mistake"
+msgstr "Orfoqrafiya xətası"
+
+#: source/common/modules/markdown-editor/linters/language-tool.ts:269
+msgid "Disable Rule"
+msgstr "Qaydanı söndür"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:96
+msgid "Row"
+msgstr "Sətir"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:101
+msgid "Insert new row above"
+msgstr "Yuxarıya yeni sətir daxil et"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:107
+msgid "Insert new row below"
+msgstr "Aşağıya yeni sətir daxil et"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:114
+msgid "Move row up"
+msgstr "Sətri yuxarı köçür"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:120
+msgid "Move row down"
+msgstr "Sətri aşağı köçür"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:127
+msgid "Clear row"
+msgstr "Sətri təmizlə"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:132
+msgid "Delete row"
+msgstr "Sətri sil"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:139
+msgid "Column"
+msgstr "Sütun"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:143
+msgid "Insert new column left"
+msgstr "Sola yeni sütun daxil et"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:149
+msgid "Insert new column right"
+msgstr "Sağa yeni sütun daxil et"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:156
+msgid "Move column left"
+msgstr "Sütunu sola köçür"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:162
+msgid "Move column right"
+msgstr "Sütunu sağa köçür"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:169
+msgid "Align column text left"
+msgstr "Sütun mətnini sola düzləndir"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:175
+msgid "Align column text center"
+msgstr "Sütun mətnini mərkəzə düzləndir"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:181
+msgid "Align column text right"
+msgstr "Sütun mətnini sağa düzləndir"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:201
+msgid "Clear column"
+msgstr "Sütunu təmizlə"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:206
+msgid "Delete column"
+msgstr "Sütunu sil"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:213
+msgid "Table"
+msgstr "Cədvəl"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:217
+msgid "Clear table"
+msgstr "Cədvəli təmizlə"
+
+#: source/common/modules/markdown-editor/table-editor/context-menu.ts:222
+msgid "Delete table"
+msgstr "Cədvəli sil"
+
+#: source/common/modules/markdown-utils/plain-link-highlighter.ts:25
+msgid "Cmd/Ctrl-click to follow this link"
+msgstr "Bu keçidi izləmək üçün Cmd/Ctrl+klik edin"
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "indicə"
+
+#: source/common/util/map-lang-code.ts:33
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+#: source/common/util/map-lang-code.ts:34
+msgid "Arabic"
+msgstr "Ərəb"
+
+#: source/common/util/map-lang-code.ts:35
+msgid "Asturian"
+msgstr "Astur"
+
+#: source/common/util/map-lang-code.ts:36
+msgid "Belarus"
+msgstr "Belarus"
+
+#: source/common/util/map-lang-code.ts:37
+msgid "Bulgarian"
+msgstr "Bolqar"
+
+#: source/common/util/map-lang-code.ts:38
+msgid "Breton"
+msgstr "Breton"
+
+#: source/common/util/map-lang-code.ts:39
+msgid "Bosnian"
+msgstr "Bosniya"
+
+#: source/common/util/map-lang-code.ts:40
+msgid "Catalan"
+msgstr "Katalan"
+
+#: source/common/util/map-lang-code.ts:41
+msgid "Catalan (Valencia)"
+msgstr "Katalan (Valensiya)"
+
+#: source/common/util/map-lang-code.ts:42
+msgid "Czech"
+msgstr "Çex"
+
+#: source/common/util/map-lang-code.ts:43
+msgid "Danish"
+msgstr "Dan"
+
+#: source/common/util/map-lang-code.ts:44
+msgid "German (Austria)"
+msgstr "Alman (Avstriya)"
+
+#: source/common/util/map-lang-code.ts:45
+msgid "German (Switzerland)"
+msgstr "Alman (İsveçrə)"
+
+#: source/common/util/map-lang-code.ts:46
+msgid "German (simple)"
+msgstr "Alman (sadə)"
+
+#: source/common/util/map-lang-code.ts:47
+msgid "German (Germany)"
+msgstr "Alman (Almaniya)"
+
+#: source/common/util/map-lang-code.ts:48
+msgid "German (Luxembourg)"
+msgstr "Alman (Lüksemburq)"
+
+#: source/common/util/map-lang-code.ts:49
+msgid "German"
+msgstr "Alman"
+
+#: source/common/util/map-lang-code.ts:50
+msgid "Greek"
+msgstr "Yunan"
+
+#: source/common/util/map-lang-code.ts:51
+msgid "English (Australia)"
+msgstr "İngilis (Avstraliya)"
+
+#: source/common/util/map-lang-code.ts:52
+msgid "English (Canada)"
+msgstr "İngilis (Kanada)"
+
+#: source/common/util/map-lang-code.ts:53
+msgid "English (United Kingdom)"
+msgstr "İngilis (Birləşmiş Krallıq)"
+
+#: source/common/util/map-lang-code.ts:54
+msgid "English (India)"
+msgstr "İngilis (Hindistan)"
+
+#: source/common/util/map-lang-code.ts:55
+msgid "English (New Zealand)"
+msgstr "İngilis (Yeni Zelandiya)"
+
+#: source/common/util/map-lang-code.ts:56
+msgid "English (United States)"
+msgstr "İngilis (ABŞ)"
+
+#: source/common/util/map-lang-code.ts:57
+msgid "English (South Africa)"
+msgstr "İngilis (Cənubi Afrika)"
+
+#: source/common/util/map-lang-code.ts:58
+msgid "English"
+msgstr "İngilis"
+
+#: source/common/util/map-lang-code.ts:59
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: source/common/util/map-lang-code.ts:60
+msgid "Spanish (Argentina)"
+msgstr "İspan (Argentina)"
+
+#: source/common/util/map-lang-code.ts:61
+msgid "Spanish (Spain)"
+msgstr "İspan (İspaniya)"
+
+#: source/common/util/map-lang-code.ts:62
+msgid "Spanish"
+msgstr "İspan"
+
+#: source/common/util/map-lang-code.ts:63
+msgid "Estonian"
+msgstr "Eston"
+
+#: source/common/util/map-lang-code.ts:64
+msgid "Basque"
+msgstr "Bask"
+
+#: source/common/util/map-lang-code.ts:65
+msgid "Persian (Farsi)"
+msgstr "Fars (Farsi)"
+
+#: source/common/util/map-lang-code.ts:66
+msgid "Finnish"
+msgstr "Fin"
+
+#: source/common/util/map-lang-code.ts:67
+msgid "Faroese"
+msgstr "Farer"
+
+#: source/common/util/map-lang-code.ts:68
+msgid "French (Belgium)"
+msgstr "Fransız (Belçika)"
+
+#: source/common/util/map-lang-code.ts:69
+msgid "French (Switzerland)"
+msgstr "Fransız (İsveçrə)"
+
+#: source/common/util/map-lang-code.ts:70
+msgid "French (France)"
+msgstr "Fransız (Fransa)"
+
+#: source/common/util/map-lang-code.ts:71
+msgid "French (Luxembourg)"
+msgstr "Fransız (Lüksemburq)"
+
+#: source/common/util/map-lang-code.ts:72
+msgid "French (Principality of Monaco)"
+msgstr "Fransız (Monako Knyazlığı)"
+
+#: source/common/util/map-lang-code.ts:73
+msgid "French"
+msgstr "Fransız"
+
+#: source/common/util/map-lang-code.ts:74
+msgid "Irish"
+msgstr "İrland"
+
+#: source/common/util/map-lang-code.ts:75
+msgid "Scottish (Gaelic)"
+msgstr "Şotland (Qael)"
+
+#: source/common/util/map-lang-code.ts:76
+msgid "Galician"
+msgstr "Qalisiya"
+
+#: source/common/util/map-lang-code.ts:77
+msgid "Hebrew"
+msgstr "İvrit"
+
+#: source/common/util/map-lang-code.ts:78
+msgid "Hindi"
+msgstr "Hind"
+
+#: source/common/util/map-lang-code.ts:79
+msgid "Croatian"
+msgstr "Xorvat"
+
+#: source/common/util/map-lang-code.ts:80
+msgid "Hungarian"
+msgstr "Macar"
+
+#: source/common/util/map-lang-code.ts:81
+msgid "Armenian"
+msgstr "Erməni"
+
+#: source/common/util/map-lang-code.ts:82
+msgid "Indonesian"
+msgstr "İndoneziya"
+
+#: source/common/util/map-lang-code.ts:83
+msgid "Icelandic"
+msgstr "İsland"
+
+#: source/common/util/map-lang-code.ts:84
+msgid "Italian (Switzerland)"
+msgstr "İtalyan (İsveçrə)"
+
+#: source/common/util/map-lang-code.ts:85
+msgid "Italian (Italy)"
+msgstr "İtalyan (İtaliya)"
+
+#: source/common/util/map-lang-code.ts:86
+msgid "Italian"
+msgstr "İtalyan"
+
+#: source/common/util/map-lang-code.ts:87
+msgid "Japanese"
+msgstr "Yapon"
+
+#: source/common/util/map-lang-code.ts:88
+msgid "Georgian"
+msgstr "Gürcü"
+
+#: source/common/util/map-lang-code.ts:89
+msgid "Kazakh"
+msgstr "Qazax"
+
+#: source/common/util/map-lang-code.ts:90
+msgid "Khmer (Cambodia)"
+msgstr "Kxmer (Kamboca)"
+
+#: source/common/util/map-lang-code.ts:91
+msgid "Korean"
+msgstr "Koreya"
+
+#: source/common/util/map-lang-code.ts:92
+msgid "Latin"
+msgstr "Latın"
+
+#: source/common/util/map-lang-code.ts:93
+msgid "Luxembourgian"
+msgstr "Lüksemburq"
+
+#: source/common/util/map-lang-code.ts:94
+msgid "Lithuanian"
+msgstr "Litva"
+
+#: source/common/util/map-lang-code.ts:95
+msgid "Latvian"
+msgstr "Latviya"
+
+#: source/common/util/map-lang-code.ts:96
+msgid "Macedonian"
+msgstr "Makedon"
+
+#: source/common/util/map-lang-code.ts:97
+msgid "Mongolian"
+msgstr "Monqol"
+
+#: source/common/util/map-lang-code.ts:98
+msgid "Malaysian (Brunei Darussalam)"
+msgstr "Malay (Bruney Darüssəlam)"
+
+#: source/common/util/map-lang-code.ts:99
+msgid "Malaysian (Malaysia)"
+msgstr "Malay (Malayziya)"
+
+#: source/common/util/map-lang-code.ts:100
+msgid "Malaysian"
+msgstr "Malay"
+
+#: source/common/util/map-lang-code.ts:101
+msgid "Norwegian (Bokmål)"
+msgstr "Norveç (Bokmål)"
+
+#: source/common/util/map-lang-code.ts:102
+msgid "Nepalese"
+msgstr "Nepal"
+
+#: source/common/util/map-lang-code.ts:103
+msgid "Dutch (Belgium)"
+msgstr "Holland (Belçika)"
+
+#: source/common/util/map-lang-code.ts:104
+msgid "Dutch (Netherlands)"
+msgstr "Holland (Niderland)"
+
+#: source/common/util/map-lang-code.ts:105
+msgid "Dutch"
+msgstr "Holland"
+
+#: source/common/util/map-lang-code.ts:106
+msgid "Norwegian (Nyorsk)"
+msgstr "Norveç (Nynorsk)"
+
+#: source/common/util/map-lang-code.ts:107
+msgid "Norwegian"
+msgstr "Norveç"
+
+#: source/common/util/map-lang-code.ts:108
+msgid "Polish"
+msgstr "Polyak"
+
+#: source/common/util/map-lang-code.ts:109
+msgid "Portuguese (Angola)"
+msgstr "Portuqal (Anqola)"
+
+#: source/common/util/map-lang-code.ts:110
+msgid "Portuguese (Brazil)"
+msgstr "Portuqal (Braziliya)"
+
+#: source/common/util/map-lang-code.ts:111
+msgid "Portuguese (Mozambique)"
+msgstr "Portuqal (Mozambik)"
+
+#: source/common/util/map-lang-code.ts:112
+msgid "Portuguese (Portugal)"
+msgstr "Portuqal (Portuqaliya)"
+
+#: source/common/util/map-lang-code.ts:113
+msgid "Portuguese"
+msgstr "Portuqal"
+
+#: source/common/util/map-lang-code.ts:114
+msgid "Romanian"
+msgstr "Rumın"
+
+#: source/common/util/map-lang-code.ts:115
+msgid "Russian"
+msgstr "Rus"
+
+#: source/common/util/map-lang-code.ts:116
+msgid "Rwandan (Kinyarwanda)"
+msgstr "Ruanda (Kinyarwanda)"
+
+#: source/common/util/map-lang-code.ts:117
+msgid "Slovakian"
+msgstr "Slovak"
+
+#: source/common/util/map-lang-code.ts:118
+msgid "Slovenian"
+msgstr "Sloven"
+
+#: source/common/util/map-lang-code.ts:119
+msgid "Serbian"
+msgstr "Serb"
+
+#: source/common/util/map-lang-code.ts:120
+msgid "Albanian"
+msgstr "Alban"
+
+#: source/common/util/map-lang-code.ts:121
+msgid "Albanian (Albania)"
+msgstr "Alban (Albaniya)"
+
+#: source/common/util/map-lang-code.ts:122
+msgid "Swedish"
+msgstr "İsveç"
+
+#: source/common/util/map-lang-code.ts:123
+msgid "Tamil (India)"
+msgstr "Tamil (Hindistan)"
+
+#: source/common/util/map-lang-code.ts:124
+msgid "Thai"
+msgstr "Tay"
+
+#: source/common/util/map-lang-code.ts:125
+msgid "Tagalog (Filipino)"
+msgstr "Taqaloq (Filippin)"
+
+#: source/common/util/map-lang-code.ts:126
+msgid "Turkish"
+msgstr "Türk"
+
+#: source/common/util/map-lang-code.ts:127
+msgid "Ukrainian"
+msgstr "Ukrayna"
+
+#: source/common/util/map-lang-code.ts:128
+msgid "Urdu"
+msgstr "Urdu"
+
+#: source/common/util/map-lang-code.ts:129
+msgid "Vietnamese"
+msgstr "Vyetnam"
+
+#. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
+#. Sorbian, wen denotes the language family as such
+#: source/common/util/map-lang-code.ts:132
+msgid "Sorbian"
+msgstr "Sorb"
+
+#: source/common/util/map-lang-code.ts:133
+msgid "Chinese (China)"
+msgstr "Çin (Çin)"
+
+#: source/common/util/map-lang-code.ts:134
+msgid "Chinese (Taiwan)"
+msgstr "Çin (Tayvan)"
+
+#: source/common/util/map-lang-code.ts:135
+msgid "Chinese"
+msgstr "Çin"
+
+#: source/common/util/localise-number.ts:32
+msgid ","
+msgstr "."
+
+#: source/common/util/localise-number.ts:33
+msgid "."
+msgstr ","
+
+#: source/win-preferences/schema/spellchecking.ts:26
+#: source/tmp/win-preferences/App.vue.ts:164
+msgid "Spellchecking"
+msgstr "Orfoqrafiya yoxlaması"
+
+#: source/win-preferences/schema/spellchecking.ts:27
+msgid ""
+"The spellchecker checks your words for misspellings. It uses Hunspell-"
+"compatible dictionaries."
+msgstr ""
+"Orfoqrafiya yoxlayıcısı sözlərinizi imla xətalarına görə yoxlayır. Hunspell "
+"ilə uyğun lüğətlərdən istifadə edir."
+
+#: source/win-preferences/schema/spellchecking.ts:36
+msgid "Active"
+msgstr "Aktiv"
+
+#: source/win-preferences/schema/spellchecking.ts:36
+msgid "Language"
+msgstr "Dil"
+
+#: source/win-preferences/schema/spellchecking.ts:37
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr ""
+"Avtomatik orfoqrafiya yoxlamasını aktivləşdirmək istədiyiniz dilləri seçin."
+
+#: source/win-preferences/schema/spellchecking.ts:42
+#: source/win-preferences/schema/spellchecking.ts:233
+#: source/win-preferences/schema/autocorrect.ts:53
+#: source/win-preferences/schema/advanced.ts:305
+msgid "Filter"
+msgstr "Süzgəc"
+
+#: source/win-preferences/schema/spellchecking.ts:48
+msgid "Install Dictionaries"
+msgstr "Lüğətləri quraşdırın"
+
+#: source/win-preferences/schema/spellchecking.ts:49
+msgid ""
+"You can install new Hunspell-compatible dictionaries by placing them in the "
+"dictionary folder. Click the button below to open the dictionary folder. For "
+"more information, please see the manual."
+msgstr ""
+"Yeni Hunspell ilə uyğun lüğətləri lüğət qovluğuna yerləşdirməklə quraşdıra "
+"bilərsiniz. Lüğət qovluğunu açmaq üçün aşağıdakı düyməni klikləyin. Ətraflı "
+"məlumat üçün zəhmət olmasa təlimata baxın."
+
+#: source/win-preferences/schema/spellchecking.ts:54
+msgid "Open dictionary folder"
+msgstr "Lüğət qovluğunu aç"
+
+#: source/win-preferences/schema/spellchecking.ts:64
+msgid "User Dictionary"
+msgstr "İstifadəçi lüğəti"
+
+#: source/win-preferences/schema/spellchecking.ts:65
+msgid "Manage your user dictionary here."
+msgstr "İstifadəçi lüğətinizi burada idarə edin."
+
+#: source/win-preferences/schema/spellchecking.ts:72
+msgid "Dictionary entry"
+msgstr "Lüğət qeydi"
+
+#: source/win-preferences/schema/spellchecking.ts:75
+msgid "Search for entries …"
+msgstr "Qeydləri axtar…"
+
+#: source/win-preferences/schema/spellchecking.ts:81
+msgid "LanguageTool"
+msgstr "LanguageTool"
+
+#: source/win-preferences/schema/spellchecking.ts:82
+msgid ""
+"LanguageTool can check your texts for typos, grammatical, and stylistic "
+"issues. By default, LanguageTool sends your texts to the official servers. "
+"You can also self-host the software."
+msgstr ""
+"LanguageTool mətnlərinizi orfoqrafiya, qrammatika və üslub xətalarına görə "
+"yoxlaya bilər. Standart olaraq LanguageTool mətnlərinizi rəsmi serverlərə "
+"göndərir. Proqramı öz serverinizdə də yerləşdirə bilərsiniz."
+
+#: source/win-preferences/schema/spellchecking.ts:93
+msgid "Strictness"
+msgstr "Sərtlik"
+
+#: source/win-preferences/schema/spellchecking.ts:96
+msgid "Standard"
+msgstr "Standart"
+
+#: source/win-preferences/schema/spellchecking.ts:97
+msgid "Picky"
+msgstr "Tələbkar"
+
+#: source/win-preferences/schema/spellchecking.ts:106
+msgid "Select your native language"
+msgstr "Ana dilinizi seçin"
+
+#: source/win-preferences/schema/spellchecking.ts:112
+msgid "Not set"
+msgstr "Təyin edilməyib"
+
+#: source/win-preferences/schema/spellchecking.ts:121
+msgid "Preferred Language Variants"
+msgstr "Üstünlük verilən dil variantları"
+
+#: source/win-preferences/schema/spellchecking.ts:126
+msgid ""
+"LanguageTool cannot distinguish certain language's variants. These settings "
+"will nudge LanguageTool to auto-detect your preferred variant of these "
+"languages."
+msgstr ""
+"LanguageTool bəzi dillərin variantlarını fərqləndirə bilmir. Bu parametrlər "
+"LanguageTool-un həmin dillərin üstünlük verdiyiniz variantını avtomatik "
+"aşkarlamasına kömək edir."
+
+#: source/win-preferences/schema/spellchecking.ts:131
+msgid "Interpret English as"
+msgstr "İngilis dilini bu kimi qəbul et"
+
+#: source/win-preferences/schema/spellchecking.ts:144
+msgid "Interpret German as"
+msgstr "Alman dilini bu kimi qəbul et"
+
+#: source/win-preferences/schema/spellchecking.ts:154
+msgid "Interpret Portuguese as"
+msgstr "Portuqal dilini bu kimi qəbul et"
+
+#: source/win-preferences/schema/spellchecking.ts:165
+msgid "Interpret Catalan as"
+msgstr "Katalan dilini bu kimi qəbul et"
+
+#: source/win-preferences/schema/spellchecking.ts:174
+msgid "LanguageTool Provider"
+msgstr "LanguageTool provayderi"
+
+#: source/win-preferences/schema/spellchecking.ts:178
+msgid "Custom server"
+msgstr "Fərdi server"
+
+#: source/win-preferences/schema/spellchecking.ts:185
+msgid "Custom server address"
+msgstr "Fərdi server ünvanı"
+
+#: source/win-preferences/schema/spellchecking.ts:194
+msgid "LanguageTool Premium"
+msgstr "LanguageTool Premium"
+
+#: source/win-preferences/schema/spellchecking.ts:199
+msgid ""
+"Zettlr will ignore the \"LanguageTool provider\" settings if you enter any "
+"credentials here."
+msgstr ""
+"Burada hər hansı giriş məlumatı daxil etsəniz, Zettlr \"LanguageTool "
+"provayderi\" parametrlərini nəzərə almayacaq."
+
+#: source/win-preferences/schema/spellchecking.ts:203
+msgid "LanguageTool Username"
+msgstr "LanguageTool istifadəçi adı"
+
+#: source/win-preferences/schema/spellchecking.ts:210
+msgid "LanguageTool API key"
+msgstr "LanguageTool API açarı"
+
+#: source/win-preferences/schema/spellchecking.ts:218
+msgid "LanguageTool: Disabled rules"
+msgstr "LanguageTool: Söndürülmüş qaydalar"
+
+#: source/win-preferences/schema/spellchecking.ts:219
+msgid ""
+"These are LanguageTool rules that you have disabled. You can re-enable them "
+"here."
+msgstr ""
+"Bunlar sizin söndürdüyünüz LanguageTool qaydalarıdır. Onları burada yenidən "
+"aktivləşdirə bilərsiniz."
+
+#: source/win-preferences/schema/spellchecking.ts:227
+#: source/tmp/win-main/PopoverTags.vue.ts:39
+msgid "Name"
+msgstr "Ad"
+
+#: source/win-preferences/schema/spellchecking.ts:227
+msgid "Rule ID"
+msgstr "Qayda ID-si"
+
+#: source/win-preferences/schema/spellchecking.ts:227
+msgid "Category"
+msgstr "Kateqoriya"
+
+#: source/win-preferences/schema/spellchecking.ts:230
+msgid "Re-enable"
+msgstr "Yenidən aktivləşdir"
+
+#: source/win-preferences/schema/spellchecking.ts:235
+msgid "No ignored rules."
+msgstr "Nəzərə alınmayan qayda yoxdur."
+
+#: source/win-preferences/schema/appearance.ts:37
+msgid "Schedule dark mode automatically"
+msgstr "Tünd rejimi avtomatik planlaşdır"
+
+#: source/win-preferences/schema/appearance.ts:41
+msgid "Do not automatically switch"
+msgstr "Avtomatik keçid etmə"
+
+#: source/win-preferences/schema/appearance.ts:42
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:22
+msgid "Follow operating system"
+msgstr "Əməliyyat sistemini izlə"
+
+#: source/win-preferences/schema/appearance.ts:43
+msgid "Follow custom schedule"
+msgstr "Fərdi cədvəli izlə"
+
+#: source/win-preferences/schema/appearance.ts:52
+msgid "Start dark mode at"
+msgstr "Tünd rejimi bu vaxtda başlat"
+
+#: source/win-preferences/schema/appearance.ts:59
+msgid "End dark mode at"
+msgstr "Tünd rejimi bu vaxtda bitir"
+
+#: source/win-preferences/schema/appearance.ts:69
+msgid "Editor Theme"
+msgstr "Redaktor teması"
+
+#: source/win-preferences/schema/appearance.ts:70
+msgid "Select a color and font theme for the editor."
+msgstr "Redaktor üçün rəng və şrift teması seçin."
+
+#: source/win-preferences/schema/appearance.ts:77
+msgid "Follow App"
+msgstr "Tətbiqi izlə"
+
+#: source/win-preferences/schema/appearance.ts:78
+msgid "Light Theme"
+msgstr "Açıq tema"
+
+#: source/win-preferences/schema/appearance.ts:79
+msgid "Dark Theme"
+msgstr "Tünd tema"
+
+#: source/win-preferences/schema/appearance.ts:129
+msgid "Toolbar buttons"
+msgstr "Alətlər paneli düymələri"
+
+#: source/win-preferences/schema/appearance.ts:130
+msgid ""
+"Select which buttons should be shown on the toolbar. Some buttons cannot be "
+"hidden."
+msgstr ""
+"Alətlər panelində hansı düymələrin göstəriləcəyini seçin. Bəzi düymələr "
+"gizlədilə bilməz."
+
+#: source/win-preferences/schema/appearance.ts:138
+msgid "Left section"
+msgstr "Sol bölmə"
+
+#: source/win-preferences/schema/appearance.ts:142
+msgid "Display \"Open settings\" button"
+msgstr "\"Parametrləri aç\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:147
+msgid "Display \"New file\" button"
+msgstr "\"Yeni fayl\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:152
+msgid "Display \"Previous file\" button"
+msgstr "\"Əvvəlki fayl\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:157
+msgid "Display \"Next file\" button"
+msgstr "\"Növbəti fayl\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:164
+msgid "Center section"
+msgstr "Mərkəz bölmə"
+
+#: source/win-preferences/schema/appearance.ts:168
+msgid "Display \"Insert comment\" button"
+msgstr "\"Şərh daxil et\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:173
+msgid "Display \"Insert link\" button"
+msgstr "\"Keçid daxil et\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:178
+msgid "Display \"Insert image\" button"
+msgstr "\"Şəkil daxil et\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:183
+msgid "Display \"Insert task list\" button"
+msgstr "\"Tapşırıq siyahısı daxil et\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:188
+msgid "Display \"Insert table\" button"
+msgstr "\"Cədvəl daxil et\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:193
+msgid "Display \"Insert footnote\" button"
+msgstr "\"Haşiyə daxil et\" düyməsini göstər"
+
+#: source/win-preferences/schema/appearance.ts:200
+msgid "Right section"
+msgstr "Sağ bölmə"
+
+#: source/win-preferences/schema/appearance.ts:204
+msgid "Display word/character counter"
+msgstr "Söz/simvol sayğacını göstər"
+
+#: source/win-preferences/schema/appearance.ts:209
+msgid "Display Pomodoro timer"
+msgstr "Pomodoro taymerini göstər"
+
+#: source/win-preferences/schema/appearance.ts:215
+#: source/tmp/win-assets/App.vue.ts:50
+msgid "Custom CSS"
+msgstr "Fərdi CSS"
+
+#: source/win-preferences/schema/appearance.ts:220
+msgid "Open CSS editor"
+msgstr "CSS redaktorunu aç"
+
+#: source/win-preferences/schema/import-export.ts:24
+msgid "Import and export profiles"
+msgstr "İdxal və ixrac profilləri"
+
+#: source/win-preferences/schema/import-export.ts:30
+msgid "Open import profiles editor"
+msgstr "İdxal profilləri redaktorunu aç"
+
+#: source/win-preferences/schema/import-export.ts:44
+msgid "Open export profiles editor"
+msgstr "İxrac profilləri redaktorunu aç"
+
+#: source/win-preferences/schema/import-export.ts:59
+msgid "Export settings"
+msgstr "İxrac parametrləri"
+
+#. TODO: Must be radio; second option "Use system-wide Pandoc for exports"
+#: source/win-preferences/schema/import-export.ts:65
+msgid "Use Zettlr's internal Pandoc for exports"
+msgstr "İxrac üçün Zettlr-in daxili Pandoc-undan istifadə et"
+
+#: source/win-preferences/schema/import-export.ts:70
+msgid "Automatically open successfully exported files"
+msgstr "Uğurla ixrac edilmiş faylları avtomatik aç"
+
+#: source/win-preferences/schema/import-export.ts:75
+msgid "Enforce highlight extension on export"
+msgstr "İxracda vurğulama uzantısını məcbur et"
+
+#: source/win-preferences/schema/import-export.ts:76
+msgid ""
+"When enabled, Zettlr will automatically enable the \"mark\"-extension when "
+"exporting Markdown files."
+msgstr ""
+"Aktivləşdirildikdə Zettlr Markdown fayllarını ixrac edərkən \"mark\" "
+"uzantısını avtomatik aktivləşdirəcək."
+
+#: source/win-preferences/schema/import-export.ts:82
+msgid "Remove tags from files when exporting"
+msgstr "İxrac edərkən fayllardan etiketləri çıxar"
+
+#: source/win-preferences/schema/import-export.ts:88
+#: source/win-preferences/schema/zettelkasten.ts:46
+msgid "Internal links"
+msgstr "Daxili keçidlər"
+
+#: source/win-preferences/schema/import-export.ts:91
+msgid "Remove internal links completely"
+msgstr "Daxili keçidləri tamamilə sil"
+
+#: source/win-preferences/schema/import-export.ts:92
+msgid "Unlink internal links"
+msgstr "Daxili keçidlərin keçid xüsusiyyətini ləğv et"
+
+#: source/win-preferences/schema/import-export.ts:93
+msgid "Don't touch internal links"
+msgstr "Daxili keçidlərə toxunma"
+
+#: source/win-preferences/schema/import-export.ts:99
+msgid "Destination folder for exported files"
+msgstr "İxrac edilmiş fayllar üçün təyinat qovluğu"
+
+#. TODO: Add info-strings
+#: source/win-preferences/schema/import-export.ts:103
+msgid "Temporary folder"
+msgstr "Müvəqqəti qovluq"
+
+#: source/win-preferences/schema/import-export.ts:104
+msgid "Same as file location"
+msgstr "Fayl ilə eyni yerdə"
+
+#: source/win-preferences/schema/import-export.ts:105
+msgid "Ask for folder when exporting"
+msgstr "İxrac edərkən qovluq soruş"
+
+#: source/win-preferences/schema/import-export.ts:111
+msgid ""
+"Warning! Files in the temporary folder are regularly deleted. Choosing the "
+"same location as the file overwrites files with identical filenames if they "
+"already exist."
+msgstr ""
+"Xəbərdarlıq! Müvəqqəti qovluqdakı fayllar müntəzəm silinir. Fayl ilə eyni "
+"yeri seçmək artıq mövcud olan eyni adlı faylların üzərinə yazır."
+
+#: source/win-preferences/schema/import-export.ts:116
+msgid "Custom export commands"
+msgstr "Fərdi ixrac əmrləri"
+
+#: source/win-preferences/schema/import-export.ts:117
+msgid ""
+"Specify custom commands to run the exporter with. Each command receives as "
+"its first argument the file or project folder to be exported."
+msgstr ""
+"İxrac aləti ilə işlədiləcək fərdi əmrləri təyin edin. Hər əmr ilk arqument "
+"olaraq ixrac ediləcək faylı və ya layihə qovluğunu alır."
+
+#: source/win-preferences/schema/import-export.ts:125
+msgid "Display name"
+msgstr "Görünən ad"
+
+#: source/win-preferences/schema/import-export.ts:125
+msgid "Command"
+msgstr "Əmr"
+
+#: source/win-preferences/schema/file-manager.ts:23
+msgid "Display mode"
+msgstr "Görünüş rejimi"
+
+#: source/win-preferences/schema/file-manager.ts:32
+msgid "Thin"
+msgstr "Dar"
+
+#: source/win-preferences/schema/file-manager.ts:33
+msgid "Expanded"
+msgstr "Genişləndirilmiş"
+
+#: source/win-preferences/schema/file-manager.ts:34
+msgid "Combined"
+msgstr "Birləşdirilmiş"
+
+#: source/win-preferences/schema/file-manager.ts:40
+msgid ""
+"The Thin mode shows your directories and files separately. Select a "
+"directory to have its contents displayed in the file list. Switch between "
+"file list and directory tree by clicking on directories or the arrow button "
+"which appears at the top left corner of the file list."
+msgstr ""
+"Dar rejim qovluqlarınızı və fayllarınızı ayrı göstərir. Məzmununun fayl "
+"siyahısında göstərilməsi üçün qovluq seçin. Fayl siyahısı ilə qovluq ağacı "
+"arasında keçid üçün qovluqlara və ya fayl siyahısının yuxarı sol küncündə "
+"görünən ox düyməsinə klikləyin."
+
+#: source/win-preferences/schema/file-manager.ts:45
+msgid "Show file information"
+msgstr "Fayl məlumatını göstər"
+
+#: source/win-preferences/schema/file-manager.ts:50
+msgid "Show folders above files"
+msgstr "Qovluqları faylların üstündə göstər"
+
+#: source/win-preferences/schema/file-manager.ts:56
+msgid "Markdown document name display"
+msgstr "Markdown sənəd adının göstərilməsi"
+
+#: source/win-preferences/schema/file-manager.ts:57
+msgid ""
+"Determines how Zettlr will display files in various places such as the file "
+"manager."
+msgstr ""
+"Zettlr-in faylları fayl meneceri kimi müxtəlif yerlərdə necə göstərəcəyini "
+"müəyyən edir."
+
+#: source/win-preferences/schema/file-manager.ts:65
+msgid "Filename only"
+msgstr "Yalnız fayl adı"
+
+#: source/win-preferences/schema/file-manager.ts:66
+msgid "Title if applicable"
+msgstr "Mümkünsə başlıq"
+
+#: source/win-preferences/schema/file-manager.ts:67
+msgid "First heading level 1 if applicable"
+msgstr "Mümkünsə ilk 1-ci səviyyə başlıq"
+
+#: source/win-preferences/schema/file-manager.ts:68
+msgid "Title or first heading level 1 if applicable"
+msgstr "Mümkünsə başlıq və ya ilk 1-ci səviyyə başlıq"
+
+#: source/win-preferences/schema/file-manager.ts:74
+msgid "Display Markdown file extensions"
+msgstr "Markdown fayl uzantılarını göstər"
+
+#: source/win-preferences/schema/file-manager.ts:75
+msgid "Only available if name display is set to \"Filename only\""
+msgstr ""
+"Yalnız ad görünüşü \"Yalnız fayl adı\" olaraq təyin edildikdə mövcuddur"
+
+#: source/win-preferences/schema/file-manager.ts:82
+msgid "Time display and sorting"
+msgstr "Vaxtın göstərilməsi və sıralanması"
+
+#: source/win-preferences/schema/file-manager.ts:83
+msgid ""
+"Determine which timestamp Zettlr shows for files. This also affects sorting "
+"by time."
+msgstr ""
+"Zettlr-in fayllar üçün hansı vaxt möhürünü göstərəcəyini müəyyən edin. Bu, "
+"vaxta görə sıralamaya da təsir edir."
+
+#: source/win-preferences/schema/file-manager.ts:91
+msgid "Last modification time"
+msgstr "Son dəyişdirilmə vaxtı"
+
+#: source/win-preferences/schema/file-manager.ts:92
+msgid "File creation time"
+msgstr "Faylın yaradılma vaxtı"
+
+#: source/win-preferences/schema/file-manager.ts:98
+msgid "Filename sorting"
+msgstr "Fayl adına görə sıralama"
+
+#: source/win-preferences/schema/file-manager.ts:99
+msgid "Determines how Zettlr sorts files and folders when sorting by name."
+msgstr ""
+"Zettlr-in faylları və qovluqları ada görə sıralayarkən necə sıralayacağını "
+"müəyyən edir."
+
+#: source/win-preferences/schema/file-manager.ts:105
+msgid "When sorting documents…"
+msgstr "Sənədləri sıralayarkən…"
+
+#: source/win-preferences/schema/file-manager.ts:108
+msgid "Use natural order (2 comes before 10)"
+msgstr "Təbii sıra istifadə et (2, 10-dan əvvəl gəlir)"
+
+#: source/win-preferences/schema/file-manager.ts:109
+msgid "Use ASCII order (2 comes after 10)"
+msgstr "ASCII sıra istifadə et (2, 10-dan sonra gəlir)"
+
+#: source/win-preferences/schema/file-manager.ts:115
+msgid "Workspace sorting"
+msgstr "İş sahəsinin sıralanması"
+
+#: source/win-preferences/schema/file-manager.ts:116
+msgid "Zettlr automatically sorts your workspaces by name."
+msgstr "Zettlr iş sahələrinizi avtomatik olaraq ada görə sıralayır."
+
+#: source/win-preferences/schema/file-manager.ts:122
+msgid "Sort workspaces manually"
+msgstr "İş sahələrini əl ilə sırala"
+
+#: source/win-preferences/schema/file-manager.ts:123
+msgid ""
+"This will be active as soon as you manually change the sort order. Disable "
+"this to reinstate automatic sorting."
+msgstr ""
+"Sıra qaydasını əl ilə dəyişdiyiniz an bu aktivləşəcək. Avtomatik sıralamanı "
+"bərpa etmək üçün bunu söndürün."
+
+#: source/win-preferences/schema/file-manager.ts:129
+msgid "Collapse Workspaces Behavior"
+msgstr "İş sahələrini yığma davranışı"
+
+#: source/win-preferences/schema/file-manager.ts:131
+msgid ""
+"Determine how the context menu item to collapse workspaces in the file "
+"manager behaves. You can choose single-step or two-step."
+msgstr ""
+"Fayl menecerində iş sahələrini yığmaq üçün kontekst menyusu elementinin necə "
+"davranacağını müəyyən edin. Tək addımlı və ya iki addımlı seçə bilərsiniz."
+
+#: source/win-preferences/schema/file-manager.ts:136
+msgid "Require two steps to collapse workspaces"
+msgstr "İş sahələrini yığmaq üçün iki addım tələb et"
+
+#: source/win-preferences/schema/file-manager.ts:137
+msgid ""
+"When this is active, the first collapse workspace will only collapse "
+"subfolders, the second the workspaces."
+msgstr ""
+"Bu aktiv olduqda ilk yığma yalnız alt qovluqları, ikincisi isə iş sahələrini "
+"yığacaq."
+
+#: source/win-preferences/schema/snippets.ts:24
+#: source/tmp/win-preferences/App.vue.ts:189
+#: source/tmp/win-assets/App.vue.ts:44
+msgid "Snippets"
+msgstr "Parçacıqlar"
+
+#: source/win-preferences/schema/snippets.ts:30
+msgid "Open snippets editor"
+msgstr "Parçacıq redaktorunu aç"
+
+#: source/win-preferences/schema/editor.ts:23
+msgid "Input mode"
+msgstr "Daxiletmə rejimi"
+
+#: source/win-preferences/schema/editor.ts:24
+msgid ""
+"The input mode determines how you interact with the editor. We recommend "
+"keeping this setting at \"Normal\". Only choose \"Vim\" or \"Emacs\" if you "
+"know what this implies."
+msgstr ""
+"Daxiletmə rejimi redaktorla necə qarşılıqlı əlaqədə olduğunuzu müəyyən edir. "
+"Bu parametri \\\"Normal\\\" saxlamağı tövsiyə edirik. \\\"Vim\\\" və ya "
+"\\\"Emacs\\\" seçimini yalnız bunun nə demək olduğunu bilirsinizsə edin."
+
+#: source/win-preferences/schema/editor.ts:39
+msgid "Writing direction"
+msgstr "Yazı istiqaməti"
+
+#: source/win-preferences/schema/editor.ts:40
+msgid ""
+"We are currently planning on re-introducing bidirectional writing support, "
+"which will then be configurable here."
+msgstr ""
+"Hazırda ikitərəfli yazı dəstəyini yenidən əlavə etməyi planlaşdırırıq, bu, "
+"sonradan burada tənzimlənə biləcək."
+
+#: source/win-preferences/schema/editor.ts:48
+msgid "Markdown rendering"
+msgstr "Markdown göstərilməsi"
+
+#: source/win-preferences/schema/editor.ts:49
+msgid ""
+"Check to enable live rendering of various Markdown elements to formatted "
+"appearance. This hides formatting characters (such as **text**) or renders "
+"images instead of their link."
+msgstr ""
+"Müxtəlif Markdown elementlərinin formatlı görünüşə canlı render edilməsini "
+"aktivləşdirmək üçün işarələyin. Bu, formatlaşdırma simvollarını (məsələn, "
+"**mətn**) gizlədir və ya şəkilləri keçid əvəzinə göstərir."
+
+#: source/win-preferences/schema/editor.ts:56
+msgid "Choose between preview mode (\"WYSIWYG) or raw mode (\"WYSIWYM\")."
+msgstr ""
+"Önbaxış rejimi (\\\"WYSIWYG) və ya xam rejim (\\\"WYSIWYM\\\") arasında "
+"seçim edin."
+
+#: source/win-preferences/schema/editor.ts:60
+msgid "Preview mode"
+msgstr "Önbaxış rejimi"
+
+#: source/win-preferences/schema/editor.ts:61
+msgid "Raw mode"
+msgstr "Xam rejim"
+
+#: source/win-preferences/schema/editor.ts:68
+msgid "Enable the following renderers in preview mode:"
+msgstr "Önbaxış rejimində aşağıdakı render ediciləri aktivləşdirin:"
+
+#: source/win-preferences/schema/editor.ts:76
+msgid "Render citations"
+msgstr "İstinadları göstər"
+
+#: source/win-preferences/schema/editor.ts:82
+msgid "Render iframes"
+msgstr "iframe-ləri göstər"
+
+#: source/win-preferences/schema/editor.ts:88
+msgid "Render images"
+msgstr "Şəkilləri göstər"
+
+#: source/win-preferences/schema/editor.ts:94
+msgid "Render links"
+msgstr "Keçidləri göstər"
+
+#: source/win-preferences/schema/editor.ts:100
+msgid "Render formulae"
+msgstr "Düsturları göstər"
+
+#: source/win-preferences/schema/editor.ts:106
+msgid "Render tasks"
+msgstr "Tapşırıqları göstər"
+
+#: source/win-preferences/schema/editor.ts:112
+msgid "Hide heading characters"
+msgstr "Başlıq simvollarını gizlət"
+
+#: source/win-preferences/schema/editor.ts:118
+msgid "Render emphasis"
+msgstr "Vurğunu göstər"
+
+#: source/win-preferences/schema/editor.ts:124
+msgid "Render pandoc divs and spans"
+msgstr "Pandoc div və span-larını göstər"
+
+#: source/win-preferences/schema/editor.ts:130
+msgid "Render horizontal rules"
+msgstr "Üfüqi xətləri göstər"
+
+#: source/win-preferences/schema/editor.ts:139
+msgid "Show Markdown syntax when the cursor is adjacent or inside an element"
+msgstr ""
+"Kursor elementə bitişik və ya onun daxilindəykən Markdown sintaksisini göstər"
+
+#: source/win-preferences/schema/editor.ts:140
+msgid ""
+"If disabled, the editor will not show the Markdown syntax if the cursor is "
+"adjacent to the element."
+msgstr ""
+"Söndürülübsə, kursor elementə bitişik olduqda redaktor Markdown sintaksisini "
+"göstərməyəcək."
+
+#: source/win-preferences/schema/editor.ts:146
+msgid "Default Formatting Characters"
+msgstr "Standart formatlaşdırma simvolları"
+
+#: source/win-preferences/schema/editor.ts:147
+msgid ""
+"Select the characters Zettlr should use when marking text as bold or italic."
+msgstr ""
+"Zettlr-in mətni qalın və ya kursiv kimi işarələyərkən istifadə edəcəyi "
+"simvolları seçin."
+
+#: source/win-preferences/schema/editor.ts:183
+msgid "Markdown Style"
+msgstr "Markdown üslubu"
+
+#: source/win-preferences/schema/editor.ts:184
+msgid "Check your Markdown documents for style issues"
+msgstr "Markdown sənədlərinizi üslub problemlərinə görə yoxlayın"
+
+#: source/win-preferences/schema/editor.ts:189
+msgid "Enable Markdown Linter"
+msgstr "Markdown linterini aktivləşdir"
+
+#: source/win-preferences/schema/editor.ts:195
+msgid "Table Editor"
+msgstr "Cədvəl redaktoru"
+
+#: source/win-preferences/schema/editor.ts:207
+msgid ""
+"The Table Editor is an interactive interface that simplifies creation and "
+"editing of tables. It provides buttons for common functionality, and takes "
+"care of Markdown formatting."
+msgstr ""
+"Cədvəl redaktoru cədvəllərin yaradılmasını və redaktəsini asanlaşdıran "
+"interaktiv interfeysdir. O, ümumi funksiyalar üçün düymələr təqdim edir və "
+"Markdown formatlaşdırmasına özü qulluq edir."
+
+#: source/win-preferences/schema/editor.ts:212
+msgid "Status bar"
+msgstr "Vəziyyət paneli"
+
+#: source/win-preferences/schema/editor.ts:213
+msgid ""
+"The status bar is a section for various quick controls and shows information "
+"about the current document. It is shown for both Markdown and code editors."
+msgstr ""
+"Vəziyyət paneli müxtəlif sürətli idarəetmə elementləri üçün bölmədir və cari "
+"sənəd haqqında məlumat göstərir. O, həm Markdown, həm də kod redaktorları "
+"üçün göstərilir."
+
+#: source/win-preferences/schema/editor.ts:219
+msgid "Show status bar"
+msgstr "Vəziyyət panelini göstər"
+
+#: source/win-preferences/schema/editor.ts:226
+msgid ""
+"Customize the appearance of the editor when the distraction-free mode is "
+"active."
+msgstr ""
+"Diqqət cəmləmə rejimi aktiv olduqda redaktorun görünüşünü fərdiləşdirin."
+
+#: source/win-preferences/schema/editor.ts:232
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "Diqqət cəmləmə rejimində fokusda olmayan sətirləri solğunlaşdır"
+
+#: source/win-preferences/schema/editor.ts:237
+msgid "Hide toolbar in distraction-free mode"
+msgstr "Diqqət cəmləmə rejimində alət panelini gizlət"
+
+#: source/win-preferences/schema/editor.ts:243
+msgid "Word counter"
+msgstr "Söz sayğacı"
+
+#: source/win-preferences/schema/editor.ts:249
+msgid "Show character count instead of word count"
+msgstr "Söz sayı əvəzinə simvol sayını göstər"
+
+#: source/win-preferences/schema/editor.ts:255
+msgid "Readability mode"
+msgstr "Oxunaqlıq rejimi"
+
+#: source/win-preferences/schema/editor.ts:256
+msgid "Choose the algorithm to calculate readability scores."
+msgstr "Oxunaqlıq balını hesablamaq üçün alqoritmi seçin."
+
+#: source/win-preferences/schema/editor.ts:263
+msgid "Readability Algorithm:"
+msgstr "Oxunaqlıq alqoritmi:"
+
+#: source/win-preferences/schema/editor.ts:275
+#: source/tmp/win-paste-image/App.vue.ts:58
+msgid "Image size"
+msgstr "Şəkil ölçüsü"
+
+#: source/win-preferences/schema/editor.ts:276
+msgid ""
+"Restrict images to a percentage of the available editor width and height."
+msgstr ""
+"Şəkilləri mövcud redaktor eninin və hündürlüyünün faizi ilə məhdudlaşdırın."
+
+#: source/win-preferences/schema/editor.ts:282
+msgid "Restrict width to %s %"
+msgstr "Eni %s % ilə məhdudlaşdır"
+
+#: source/win-preferences/schema/editor.ts:289
+msgid "Restrict height to %s %"
+msgstr "Hündürlüyü %s % ilə məhdudlaşdır"
+
+#: source/win-preferences/schema/editor.ts:297
+msgid "Font size"
+msgstr "Şrift ölçüsü"
+
+#: source/win-preferences/schema/editor.ts:303
+msgid "Font size in pixels:"
+msgstr "Şrift ölçüsü (piksellə):"
+
+#: source/win-preferences/schema/editor.ts:310
+msgid "Indentation"
+msgstr "Girinti"
+
+#. TODO
+#: source/win-preferences/schema/editor.ts:313
+msgid "Adjust your editor indentation settings"
+msgstr "Redaktorunuzun girinti parametrlərini tənzimləyin"
+
+#: source/win-preferences/schema/editor.ts:317
+msgid "Tab size (in number of spaces)"
+msgstr "Tab ölçüsü (boşluq sayı ilə)"
+
+#: source/win-preferences/schema/editor.ts:324
+msgid "Indent using tabs instead of spaces"
+msgstr "Boşluq əvəzinə tab ilə girintilə"
+
+#: source/win-preferences/schema/editor.ts:329
+msgid "Always indent the current line when pressing Tab"
+msgstr "Tab düyməsinə basdıqda cari sətri həmişə girintilə"
+
+#: source/win-preferences/schema/editor.ts:330
+msgid ""
+"Zettlr always indents the line for list items. Turn this setting on to "
+"always indent any line."
+msgstr ""
+"Zettlr siyahı elementləri üçün sətri həmişə girintiləyir. İstənilən sətri "
+"həmişə girintiləmək üçün bu parametri aktivləşdirin."
+
+#: source/win-preferences/schema/editor.ts:336
+msgid "Snippet Autocompletion"
+msgstr "Parçacıq avtomatik tamamlanması"
+
+#. TODO
+#: source/win-preferences/schema/editor.ts:339
+msgid "Control the snippet autocompletion functionality"
+msgstr "Parçacığın avtomatik tamamlanması funksionallığını idarə edin"
+
+#: source/win-preferences/schema/editor.ts:344
+msgid "Autocomplete trigger character:"
+msgstr "Avtomatik tamamlamanı işə salan simvol:"
+
+#: source/win-preferences/schema/editor.ts:354
+msgid "Suggest emojis during autocompletion"
+msgstr "Avtomatik tamamlama zamanı emoji təklif et"
+
+#: source/win-preferences/schema/editor.ts:360
+msgid "Other settings"
+msgstr "Digər parametrlər"
+
+#: source/win-preferences/schema/editor.ts:366
+msgid "Show formatting toolbar when text is selected"
+msgstr "Mətn seçildikdə formatlaşdırma alət panelini göstər"
+
+#: source/win-preferences/schema/editor.ts:371
+msgid "Show line numbers for Markdown files"
+msgstr "Markdown faylları üçün sətir nömrələrini göstər"
+
+#: source/win-preferences/schema/editor.ts:376
+msgid "Highlight whitespace"
+msgstr "Boşluqları vurğula"
+
+#: source/win-preferences/schema/editor.ts:381
+msgid "Show link previews"
+msgstr "Keçid önbaxışlarını göstər"
+
+#: source/win-preferences/schema/editor.ts:386
+msgid "Accept autocomplete suggestion with Enter"
+msgstr "Avtomatik tamamlama təklifini Enter ilə qəbul et"
+
+#: source/win-preferences/schema/editor.ts:391
+msgid "Accept autocomplete suggestion with Tab"
+msgstr "Avtomatik tamamlama təklifini Tab ilə qəbul et"
+
+#: source/win-preferences/schema/editor.ts:397
+msgid "Automatically close matching character pairs"
+msgstr "Uyğun simvol cütlərini avtomatik bağla"
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "Zettelkasten IDs"
+msgstr "Zettelkasten ID-ləri"
+
+#: source/win-preferences/schema/zettelkasten.ts:24
+msgid ""
+"Specify how Zettlr generates new file IDs for your Zettelkasten, and enable "
+"Zettlr to detect them."
+msgstr ""
+"Zettlr-in Zettelkasten-iniz üçün yeni fayl ID-lərini necə yaratdığını təyin "
+"edin və Zettlr-in onları aşkar etməsini aktivləşdirin."
+
+#: source/win-preferences/schema/zettelkasten.ts:30
+msgid "Pattern for generating new IDs"
+msgstr "Yeni ID-lər yaratmaq üçün şablon"
+
+#: source/win-preferences/schema/zettelkasten.ts:33
+#, javascript-format
+msgid "Available Variables: %s"
+msgstr "Mövcud dəyişənlər: %s"
+
+#: source/win-preferences/schema/zettelkasten.ts:38
+msgid "Pattern to detect Zettelkasten IDs"
+msgstr "Zettelkasten ID-lərini aşkar etmək üçün şablon"
+
+#: source/win-preferences/schema/zettelkasten.ts:39
+msgid "Uses ECMAScript regular expressions"
+msgstr "ECMAScript müntəzəm ifadələrindən istifadə edir"
+
+#: source/win-preferences/schema/zettelkasten.ts:52
+msgid "Always use the file title as label for internal links"
+msgstr "Daxili keçidlər üçün həmişə fayl başlığını etiket kimi istifadə et"
+
+#: source/win-preferences/schema/zettelkasten.ts:57
+msgid "Use the file ID as link target if possible"
+msgstr "Mümkünsə fayl ID-sini keçid hədəfi kimi istifadə et"
+
+#: source/win-preferences/schema/zettelkasten.ts:64
+msgid "Link format"
+msgstr "Keçid formatı"
+
+#: source/win-preferences/schema/zettelkasten.ts:69
+msgid ""
+"Internal links allow you to add an optional title, separated by a vertical "
+"bar character from the actual link target. Here you can define the ordering "
+"of the two."
+msgstr ""
+"Daxili keçidlər əsl keçid hədəfindən şaquli xətt simvolu ilə ayrılmış istəyə "
+"bağlı başlıq əlavə etməyə imkan verir. Burada bu ikisinin sırasını təyin edə "
+"bilərsiniz."
+
+#: source/win-preferences/schema/zettelkasten.ts:75
+msgid "[[Link|Title]]: Link first (recommended)"
+msgstr "[[Keçid|Başlıq]]: Əvvəlcə keçid (tövsiyə olunur)"
+
+#: source/win-preferences/schema/zettelkasten.ts:76
+msgid "[[Title|Link]]: Title first"
+msgstr "[[Başlıq|Keçid]]: Əvvəlcə başlıq"
+
+#: source/win-preferences/schema/zettelkasten.ts:84
+msgid "Start a full-text search when following internal links"
+msgstr "Daxili keçidləri izləyərkən tam mətn axtarışı başlat"
+
+#: source/win-preferences/schema/zettelkasten.ts:85
+msgid "The search string will match the content between the brackets: [[ ]]."
+msgstr "Axtarış sətri mötərizələr arasındakı məzmuna uyğun gələcək: [[ ]]."
+
+#: source/win-preferences/schema/zettelkasten.ts:91
+msgid "Zettelkasten folder"
+msgstr "Zettelkasten qovluğu"
+
+#: source/win-preferences/schema/zettelkasten.ts:92
+msgid ""
+"Choosing a Zettelkasten folder allows Zettlr to automatically create files "
+"when following links to not-yet-existing files. This folder must be open as "
+"a Workspace in Zettlr."
+msgstr ""
+"Zettelkasten qovluğunu seçmək, hələ mövcud olmayan fayllara keçidləri "
+"izləyərkən Zettlr-in faylları avtomatik yaratmasına imkan verir. Bu qovluq "
+"Zettlr-də İş sahəsi kimi açıq olmalıdır."
+
+#: source/win-preferences/schema/zettelkasten.ts:98
+msgid "Path to folder"
+msgstr "Qovluğun yolu"
+
+#: source/win-preferences/schema/autocorrect.ts:22
+#: source/tmp/win-preferences/App.vue.ts:169
+msgid "Autocorrect"
+msgstr "Avtomatik düzəliş"
+
+#: source/win-preferences/schema/autocorrect.ts:23
+msgid ""
+"Autocorrect can automatically replace certain sequences of characters with "
+"others, and use typographical quotes."
+msgstr ""
+"Avtomatik düzəliş müəyyən simvol ardıcıllıqlarını başqaları ilə avtomatik "
+"əvəz edə bilər və tipoqrafik dırnaqlardan istifadə edə bilər."
+
+#: source/win-preferences/schema/autocorrect.ts:33
+msgid "Autocorrect: Replacement Table"
+msgstr "Avtomatik düzəliş: Əvəzetmə cədvəli"
+
+#: source/win-preferences/schema/autocorrect.ts:34
+msgid "Configure which sequences of characters get replaced by which symbols."
+msgstr ""
+"Hansı simvol ardıcıllıqlarının hansı simvollarla əvəz olunacağını "
+"konfiqurasiya edin."
+
+#: source/win-preferences/schema/autocorrect.ts:39
+msgid "Match whole words"
+msgstr "Bütöv sözlərə uyğunlaşdır"
+
+#: source/win-preferences/schema/autocorrect.ts:40
+msgid "When checked, AutoCorrect will never replace parts of words"
+msgstr ""
+"İşarələndikdə, Avtomatik düzəliş heç vaxt sözlərin hissələrini əvəz etməyəcək"
+
+#: source/win-preferences/schema/autocorrect.ts:48
+msgid "Replace"
+msgstr "Əvəz et"
+
+#: source/win-preferences/schema/autocorrect.ts:48
+msgid "With"
+msgstr "İlə"
+
+#: source/win-preferences/schema/autocorrect.ts:59
+msgid "Magic Quotes"
+msgstr "Sehrli dırnaqlar"
+
+#: source/win-preferences/schema/autocorrect.ts:60
+msgid ""
+"This setting allows you to pick which typographical quotes Zettlr will "
+"insert when you insert a quotation mark. Requires Autocorrect to be enabled."
+msgstr ""
+"Bu parametr, dırnaq işarəsi daxil etdiyiniz zaman Zettlr-in hansı tipoqrafik "
+"dırnaqları əlavə edəcəyini seçməyə imkan verir. Avtomatik düzəlişin aktiv "
+"olmasını tələb edir."
+
+#: source/win-preferences/schema/autocorrect.ts:73
+msgid "Double/Primary Quotes"
+msgstr "İkiqat/əsas dırnaqlar"
+
+#: source/win-preferences/schema/autocorrect.ts:76
+#: source/win-preferences/schema/autocorrect.ts:98
+msgid "Disable Magic Quotes"
+msgstr "Sehrli dırnaqları söndür"
+
+#: source/win-preferences/schema/autocorrect.ts:95
+msgid "Single/Secondary Quotes"
+msgstr "Tək/ikinci dərəcəli dırnaqlar"
+
+#: source/win-preferences/schema/general.ts:21
+#: source/win-preferences/schema/general.ts:35
+msgid "Updates"
+msgstr "Yeniləmələr"
+
+#: source/win-preferences/schema/general.ts:22
+msgid "If you installed Zettlr via a package manager, you should disable this."
+msgstr ""
+"Zettlr-i paket meneceri vasitəsilə quraşdırmısınızsa, bunu söndürməlisiniz."
+
+#: source/win-preferences/schema/general.ts:28
+msgid "Automatically check for updates"
+msgstr "Yeniləmələri avtomatik yoxla"
+
+#: source/win-preferences/schema/general.ts:37
+msgid ""
+"Updates for this binary of Zettlr have been disabled at build time. This is "
+"a choice made by the packager and is common when Zettlr is being distributed "
+"via package managers. In these cases, Zettlr will be updated through your "
+"package manager."
+msgstr ""
+"Zettlr-in bu icra faylı üçün yeniləmələr qurma zamanı söndürülüb. Bu, "
+"paketləyicinin seçimidir və Zettlr paket menecerləri vasitəsilə paylandıqda "
+"adi haldır. Bu hallarda Zettlr paket menecerinizin vasitəsilə yenilənəcək."
+
+#: source/win-preferences/schema/general.ts:43
+msgid "Application language"
+msgstr "Tətbiq dili"
+
+#: source/win-preferences/schema/general.ts:54
+msgid "Autosave"
+msgstr "Avtomatik yadda saxlama"
+
+#: source/win-preferences/schema/general.ts:55
+msgid "Should Zettlr automatically save changes to your documents?"
+msgstr "Zettlr sənədlərinizdəki dəyişiklikləri avtomatik yadda saxlasınmı?"
+
+#: source/win-preferences/schema/general.ts:65
+msgid "Never"
+msgstr "Heç vaxt"
+
+#: source/win-preferences/schema/general.ts:66
+msgid "Immediately"
+msgstr "Dərhal"
+
+#: source/win-preferences/schema/general.ts:67
+msgid "After a short delay"
+msgstr "Qısa gecikmədən sonra"
+
+#: source/win-preferences/schema/general.ts:73
+msgid "Default image folder"
+msgstr "Standart şəkil qovluğu"
+
+#: source/win-preferences/schema/general.ts:74
+msgid ""
+"Automatically suggests this folder to save images to, and searches this "
+"folder to propose \"other files\"."
+msgstr ""
+"Şəkilləri yadda saxlamaq üçün bu qovluğu avtomatik təklif edir və \\\"digər "
+"fayllar\\\" təklif etmək üçün bu qovluqda axtarış aparır."
+
+#: source/win-preferences/schema/general.ts:86
+msgid ""
+"Click \"Select folder…\" or type an absolute or relative path directly into "
+"the input field."
+msgstr ""
+"\\\"Qovluq seç…\\\" düyməsini klikləyin və ya mütləq və ya nisbi yolu "
+"birbaşa daxiletmə sahəsinə yazın."
+
+#: source/win-preferences/schema/general.ts:91
+msgid "Behavior"
+msgstr "Davranış"
+
+#: source/win-preferences/schema/general.ts:102
+msgid "Avoid opening files in new tabs if possible"
+msgstr "Mümkünsə faylları yeni tab-larda açmaqdan çəkin"
+
+#: source/win-preferences/schema/citations.ts:22
+#: source/tmp/win-preferences/App.vue.ts:174
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:7
+msgid "Citations"
+msgstr "İstinadlar"
+
+#: source/win-preferences/schema/citations.ts:28
+msgid "How would you like autocomplete to insert your citations?"
+msgstr ""
+"Avtomatik tamamlamanın istinadlarınızı necə daxil etməsini istəyirsiniz?"
+
+#: source/win-preferences/schema/citations.ts:39
+msgid "Citation database (CSL JSON or BibTex)"
+msgstr "İstinad bazası (CSL JSON və ya BibTex)"
+
+#: source/win-preferences/schema/citations.ts:41
+#: source/win-preferences/schema/citations.ts:53
+msgid "Path to file"
+msgstr "Faylın yolu"
+
+#: source/win-preferences/schema/citations.ts:51
+msgid "CSL style (optional)"
+msgstr "CSL üslubu (istəyə bağlı)"
+
+#: source/win-preferences/schema/shortcuts.ts:122
+msgid "Table Shortcuts"
+msgstr "Cədvəl qısayolları"
+
+#: source/win-preferences/schema/shortcuts.ts:123
+msgid "Customize the available table shortcuts for the editor."
+msgstr "Redaktor üçün mövcud cədvəl qısayollarını fərdiləşdirin."
+
+#: source/win-preferences/schema/shortcuts.ts:129
+msgid "Align Markdown table under cursor"
+msgstr "Kursorun altındakı Markdown cədvəlini düzləndir"
+
+#: source/win-preferences/schema/shortcuts.ts:136
+msgid "Align table column left"
+msgstr "Cədvəl sütununu sola düzləndir"
+
+#: source/win-preferences/schema/shortcuts.ts:143
+msgid "Align table column center"
+msgstr "Cədvəl sütununu mərkəzə düzləndir"
+
+#: source/win-preferences/schema/shortcuts.ts:150
+msgid "Align table column right"
+msgstr "Cədvəl sütununu sağa düzləndir"
+
+#: source/win-preferences/schema/shortcuts.ts:158
+msgid "Transform Shortcuts"
+msgstr "Çevirmə qısayolları"
+
+#: source/win-preferences/schema/shortcuts.ts:159
+msgid "Assign shortcuts to your frequently used text transformations here."
+msgstr ""
+"Tez-tez istifadə etdiyiniz mətn çevirmələrinə burada qısayol təyin edin."
+
+#: source/win-preferences/schema/shortcuts.ts:165
+msgid "Zap Gremlins"
+msgstr "Gizli simvolları təmizlə"
+
+#: source/win-preferences/schema/shortcuts.ts:264
+msgid "UI Shortcuts"
+msgstr "UI qısayolları"
+
+#: source/win-preferences/schema/shortcuts.ts:265
+msgid "Customize general user interface shortcuts here."
+msgstr "Ümumi istifadəçi interfeysi qısayollarını burada fərdiləşdirin."
+
+#: source/win-preferences/schema/shortcuts.ts:271
+msgid "Switch to next tab"
+msgstr "Növbəti taba keç"
+
+#: source/win-preferences/schema/shortcuts.ts:278
+msgid "Switch to previous tab"
+msgstr "Əvvəlki taba keç"
+
+#: source/win-preferences/schema/advanced.ts:29
+msgid "Beta releases"
+msgstr "Beta buraxılışlar"
+
+#: source/win-preferences/schema/advanced.ts:31
+msgid "Requires that check for updates is also active."
+msgstr "Yeniləmələrin yoxlanılmasının da aktiv olmasını tələb edir."
+
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Notify me about beta releases"
+msgstr "Beta buraxılışlar haqqında məni xəbərdar et"
+
+#: source/win-preferences/schema/advanced.ts:45
+msgid "Pattern for new file names"
+msgstr "Yeni fayl adları üçün şablon"
+
+#: source/win-preferences/schema/advanced.ts:46
+msgid ""
+"Zettlr uses this pattern to generate new filenames. By default, it just uses "
+"a new Zettelkasten ID."
+msgstr ""
+"Zettlr yeni fayl adları yaratmaq üçün bu şablondan istifadə edir. Standart "
+"olaraq, o, sadəcə yeni Zettelkasten ID-si istifadə edir."
+
+#: source/win-preferences/schema/advanced.ts:53
+#, javascript-format
+msgid "Available variables: %s"
+msgstr "Mövcud dəyişənlər: %s"
+
+#: source/win-preferences/schema/advanced.ts:60
+msgid "Automatically create new files without asking for confirmation."
+msgstr "Təsdiq istəmədən yeni faylları avtomatik yarat."
+
+#: source/win-preferences/schema/advanced.ts:67
+#: source/tmp/win-preferences/App.vue.ts:149
+msgid "Appearance"
+msgstr "Görünüş"
+
+#: source/win-preferences/schema/advanced.ts:73
+msgid "Use native window appearance"
+msgstr "Doğma pəncərə görünüşündən istifadə et"
+
+#: source/win-preferences/schema/advanced.ts:74
+msgid "Only available on Linux; this is the default for macOS and Windows."
+msgstr "Yalnız Linux-da mövcuddur; macOS və Windows üçün standart olan budur."
+
+#: source/win-preferences/schema/advanced.ts:80
+msgid "Enable window vibrancy"
+msgstr "Pəncərənin şəffaflıq effektini aktivləşdir"
+
+#: source/win-preferences/schema/advanced.ts:81
+msgid "Only available on macOS; makes the window background opaque."
+msgstr "Yalnız macOS-da mövcuddur, pəncərənin arxa fonunu qeyri-şəffaf edir."
+
+#: source/win-preferences/schema/advanced.ts:88
+msgid "Show app in the notification area"
+msgstr "Proqramı bildiriş sahəsində göstər"
+
+#: source/win-preferences/schema/advanced.ts:89
+msgid "Leave app running in the notification area"
+msgstr "Proqramı bildiriş sahəsində açıq saxla"
+
+#: source/win-preferences/schema/advanced.ts:98
+msgid "Zoom behavior"
+msgstr "Yaxınlaşdırma davranışı"
+
+#: source/win-preferences/schema/advanced.ts:101
+msgid "Resizes the whole GUI"
+msgstr "Bütün interfeysin ölçüsünü dəyişir"
+
+#: source/win-preferences/schema/advanced.ts:102
+msgid "Changes the editor font size"
+msgstr "Redaktorun şrift ölçüsünü dəyişir"
+
+#: source/win-preferences/schema/advanced.ts:108
+msgid "File Treatment"
+msgstr "Faylların idarə olunması"
+
+#: source/win-preferences/schema/advanced.ts:109
+msgid "Decide where various file types are displayed, and how to open them."
+msgstr ""
+"Müxtəlif fayl növlərinin harada göstəriləcəyini və necə açılacağını seçin."
+
+#: source/win-preferences/schema/advanced.ts:120
+msgid "Display in file manager"
+msgstr "Fayl menecerində göstər"
+
+#: source/win-preferences/schema/advanced.ts:121
+msgid "Display in sidebar"
+msgstr "Yan paneldə göstər"
+
+#: source/win-preferences/schema/advanced.ts:122
+msgid "Open with"
+msgstr "Bununla aç"
+
+#: source/win-preferences/schema/advanced.ts:130
+msgid "Built-in Markdown and Code files"
+msgstr "Daxili Markdown və Kod faylları"
+
+#: source/win-preferences/schema/advanced.ts:153
+msgid "Images"
+msgstr "Şəkillər"
+
+#: source/win-preferences/schema/advanced.ts:167
+#: source/win-preferences/schema/advanced.ts:191
+#: source/win-preferences/schema/advanced.ts:214
+#: source/win-preferences/schema/advanced.ts:235
+#: source/win-preferences/schema/advanced.ts:256
+#: source/win-preferences/schema/advanced.ts:276
+msgid "System default"
+msgstr "Sistem standartı"
+
+#: source/win-preferences/schema/advanced.ts:177
+msgid "PDF documents"
+msgstr "PDF sənədləri"
+
+#: source/win-preferences/schema/advanced.ts:201
+msgid "MS Office Documents"
+msgstr "MS Office sənədləri"
+
+#: source/win-preferences/schema/advanced.ts:222
+msgid "Open Office Documents"
+msgstr "Open Office sənədləri"
+
+#: source/win-preferences/schema/advanced.ts:243
+msgid "Data files (tsv, csv, etc.)"
+msgstr "Data faylları (tsv, csv və s.)"
+
+#: source/win-preferences/schema/advanced.ts:263
+msgid "Dot Files and Folders"
+msgstr "Nöqtə ilə başlayan fayl və qovluqlar"
+
+#: source/win-preferences/schema/advanced.ts:286
+msgid ""
+"Add additional file extensions you wish to see in the file manager and "
+"sidebar below. Include the leading period, e.g., \".xml\"."
+msgstr ""
+"Fayl menecerində və yan paneldə görmək istədiyiniz əlavə fayl uzantılarını "
+"aşağıda daxil edin. Əvvəldəki nöqtəni də yazın, məsələn, \\\".xml\\\"."
+
+#: source/win-preferences/schema/advanced.ts:287
+msgid "Enter an extension and press enter"
+msgstr "Uzantı daxil edin və enter düyməsini basın"
+
+#: source/win-preferences/schema/advanced.ts:293
+msgid "Iframe rendering whitelist"
+msgstr "İframe göstərilməsi üçün etibarlı siyahı"
+
+#: source/win-preferences/schema/advanced.ts:294
+msgid ""
+"Iframes are potentially dangerous and can execute remote code. Each host "
+"listed here is automatically trusted. Iframes from these hosts will be "
+"automatically loaded."
+msgstr ""
+"İframe-lər potensial təhlükəlidir və uzaqdan kod icra edə bilər. Burada "
+"sadalanan hər host avtomatik olaraq etibarlı sayılır. Bu hostlardan olan "
+"iframe-lər avtomatik yüklənəcək."
+
+#: source/win-preferences/schema/advanced.ts:303
+msgid "Hostname"
+msgstr "Host adı"
+
+#: source/win-preferences/schema/advanced.ts:310
+msgid "Watchdog polling"
+msgstr "Nəzarətçi sorğulaması"
+
+#: source/win-preferences/schema/advanced.ts:311
+msgid ""
+"In rare instances, Zettlr may be unable to check for changes to your files. "
+"In that case, you can try activating watchdog polling. Do not use this "
+"option unless necessary: Polling is very slow and resource-heavy."
+msgstr ""
+"Nadir hallarda Zettlr fayllarınızdakı dəyişiklikləri yoxlaya bilmir. Bu "
+"halda nəzarətçi sorğulamasını aktivləşdirməyi sınaya bilərsiniz. Zəruri "
+"olmadıqca bu seçimi işlətməyin: sorğulama çox yavaş və resurs tələb edicidir."
+
+#: source/win-preferences/schema/advanced.ts:317
+msgid "Activate watchdog polling"
+msgstr "Nəzarətçi sorğulamasını aktivləşdir"
+
+#: source/win-preferences/schema/advanced.ts:322
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr ""
+"Fayl yazma əməliyyatının tamamlanmış sayılması üçün gözləmə müddəti (ms)"
+
+#: source/win-preferences/schema/advanced.ts:329
+msgid "Deleting items"
+msgstr "Elementlərin silinməsi"
+
+#: source/win-preferences/schema/advanced.ts:335
+msgid "Delete items irreversibly if moving them to trash fails"
+msgstr ""
+"Zibil qutusuna köçürmə alınmadıqda elementləri geri qaytarılmaz şəkildə sil"
+
+#: source/win-preferences/schema/advanced.ts:341
+msgid "Debug mode"
+msgstr "Sazlama rejimi"
+
+#: source/win-preferences/schema/advanced.ts:347
+msgid "Enable debug mode"
+msgstr "Sazlama rejimini aktivləşdir"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:30
+#: source/win-main/file-manager/util/file-item-context.ts:35
+msgid "Properties"
+msgstr "Xüsusiyyətlər"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:51
+msgid "Rename directory"
+msgstr "Qovluğun adını dəyiş"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:56
+msgid "Delete directory"
+msgstr "Qovluğu sil"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:64
+#: source/win-main/file-manager/util/file-item-context.ts:63
+#: source/tmp/win-main/DocumentTabs.vue.ts:475
+msgid "Copy path"
+msgstr "Yolu kopyala"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:72
+#: source/win-main/file-manager/util/file-item-context.ts:82
+#: source/tmp/win-main/DocumentTabs.vue.ts:482
+msgid "Reveal in Explorer"
+msgstr "Explorer-də göstər"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:72
+#: source/win-main/file-manager/util/file-item-context.ts:82
+#: source/tmp/win-main/DocumentTabs.vue.ts:482
+msgid "Reveal in File Browser"
+msgstr "Fayl brauzerində göstər"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:82
+msgid "Check for directory …"
+msgstr "Qovluğu yoxla …"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:98
+msgid "Export Project"
+msgstr "Layihəni ixrac et"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:110
+msgid "Close workspace"
+msgstr "İş sahəsini bağla"
+
+#: source/win-main/file-manager/util/file-item-context.ts:30
+#: source/tmp/win-main/GlobalSearch.vue.ts:78
+msgid "Open in new tab"
+msgstr "Yeni tabda aç"
+
+#: source/win-main/file-manager/util/file-item-context.ts:49
+msgid "Duplicate file"
+msgstr "Faylın nüsxəsini yarat"
+
+#: source/win-main/file-manager/util/file-item-context.ts:68
+#: source/tmp/win-main/DocumentTabs.vue.ts:468
+msgid "Copy filename"
+msgstr "Fayl adını kopyala"
+
+#: source/win-main/file-manager/util/file-item-context.ts:94
+#: source/tmp/win-main/DocumentTabs.vue.ts:505
+msgid "Close file"
+msgstr "Faylı bağla"
+
+#: source/tmp/win-print/App.vue.ts:71
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:35
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:45
+msgid "References"
+msgstr "İstinadlar"
+
+#: source/tmp/win-project-properties/App.vue.ts:37
+msgid "Export project to:"
+msgstr "Layihəni buraya ixrac et:"
+
+#: source/tmp/win-project-properties/App.vue.ts:38
+msgid "Use"
+msgstr "İstifadə et"
+
+#: source/tmp/win-project-properties/App.vue.ts:39
+#: source/tmp/win-main/PopoverExport.vue.ts:31
+msgid "Format"
+msgstr "Format"
+
+#: source/tmp/win-project-properties/App.vue.ts:40
+msgid "Conversion"
+msgstr "Çevirmə"
+
+#: source/tmp/win-project-properties/App.vue.ts:41
+msgid "Files to be included in the export"
+msgstr "İxraca daxil ediləcək fayllar"
+
+#: source/tmp/win-project-properties/App.vue.ts:42
+msgid "Please select at least one profile to build this project."
+msgstr "Zəhmət olmasa bu layihəni qurmaq üçün ən azı bir profil seçin."
+
+#: source/tmp/win-project-properties/App.vue.ts:43
+msgid "Project Title"
+msgstr "Layihənin başlığı"
+
+#: source/tmp/win-project-properties/App.vue.ts:44
+msgid "CSL Stylesheet"
+msgstr "CSL stil vərəqi"
+
+#: source/tmp/win-project-properties/App.vue.ts:45
+msgid "LaTeX Template"
+msgstr "LaTeX şablonu"
+
+#: source/tmp/win-project-properties/App.vue.ts:46
+msgid "HTML Template"
+msgstr "HTML şablonu"
+
+#: source/tmp/win-project-properties/App.vue.ts:47
+msgid "Remove file from export"
+msgstr "Faylı ixracdan çıxar"
+
+#: source/tmp/win-project-properties/App.vue.ts:48
+msgid "Add file to export"
+msgstr "Faylı ixraca əlavə et"
+
+#: source/tmp/win-project-properties/App.vue.ts:49
+msgid "Move file up"
+msgstr "Faylı yuxarı köçür"
+
+#: source/tmp/win-project-properties/App.vue.ts:50
+msgid "Move file down"
+msgstr "Faylı aşağı köçür"
+
+#: source/tmp/win-project-properties/App.vue.ts:51
+msgid "You have not selected any files for export."
+msgstr "İxrac üçün heç bir fayl seçməmisiniz."
+
+#: source/tmp/win-project-properties/App.vue.ts:52
+msgid ""
+"Some files are selected for export but no longer exist in the directory."
+msgstr "İxrac üçün seçilmiş bəzi fayllar artıq qovluqda mövcud deyil."
+
+#: source/tmp/win-project-properties/App.vue.ts:62
+#: source/tmp/win-preferences/App.vue.ts:144
+msgid "General"
+msgstr "Ümumi"
+
+#: source/tmp/win-project-properties/App.vue.ts:68
+msgid "Profiles"
+msgstr "Profillər"
+
+#: source/tmp/common/vue/form/elements/TextControl.vue.ts:56
+#: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:50
+#: source/tmp/common/vue/form/elements/NumberControl.vue.ts:40
+#: source/tmp/common/vue/form/elements/ColorControl.vue.ts:35
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:60
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:37
+msgid "Reset"
+msgstr "Sıfırla"
+
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
+msgid "Select folder…"
+msgstr "Qovluq seçin…"
+
+#: source/tmp/common/vue/form/elements/FileControl.vue.ts:43
+msgid "Select file…"
+msgstr "Fayl seçin…"
+
+#: source/tmp/common/vue/form/elements/SelectableList.vue.ts:50
+msgid "New item"
+msgstr "Yeni element"
+
+#: source/tmp/common/vue/form/elements/SelectableList.vue.ts:53
+msgid "No items"
+msgstr "Element yoxdur"
+
+#: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:44
+msgid "unassigned"
+msgstr "təyin edilməyib"
+
+#: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:45
+#, javascript-format
+msgid "Default: %s"
+msgstr "Standart: %s"
+
+#: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:49
+msgid "Recording…"
+msgstr "Qeydə alınır…"
+
+#: source/tmp/common/vue/form/elements/ShortcutCaptureControl.vue.ts:54
+#, javascript-format
+msgid "This shortcut conflicts with: %s"
+msgstr "Bu qısayol bununla toqquşur: %s"
+
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:115
+msgid "Add"
+msgstr "Əlavə et"
+
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:116
+msgid "Actions"
+msgstr "Əməliyyatlar"
+
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:117
+msgid "Delete"
+msgstr "Sil"
+
+#: source/tmp/common/vue/form/elements/ListControl.vue.ts:118
+msgid "No records."
+msgstr "Qeyd yoxdur."
+
+#: source/tmp/common/vue/IrisIndicator.vue.ts:40
+#: source/tmp/win-main/App.vue.ts:461
+msgid "Show tasks"
+msgstr "Tapşırıqları göstər"
+
+#: source/tmp/win-paste-image/App.vue.ts:57
+msgid "Insert Image from Clipboard"
+msgstr "Mübadilə buferindən şəkil daxil et"
+
+#: source/tmp/win-paste-image/App.vue.ts:59
+msgid "Retain aspect ratio"
+msgstr "En/boy nisbətini saxla"
+
+#: source/tmp/win-paste-image/App.vue.ts:60
+msgid "Resize image to"
+msgstr "Şəkli bu ölçüyə gətir"
+
+#: source/tmp/win-paste-image/App.vue.ts:61
+msgid "Filename"
+msgstr "Fayl adı"
+
+#: source/tmp/win-paste-image/App.vue.ts:62
+#: source/tmp/win-paste-image/App.vue.ts:63
+msgid "A unique filename"
+msgstr "Unikal fayl adı"
+
+#: source/tmp/win-preferences/App.vue.ts:59
+#, javascript-format
+msgid "No results for \"%s\""
+msgstr "\\\"%s\\\" üçün nəticə yoxdur"
+
+#: source/tmp/win-preferences/App.vue.ts:60
+#: source/tmp/win-main/GlobalSearch.vue.ts:64
+msgid "Search"
+msgstr "Axtarış"
+
+#: source/tmp/win-preferences/App.vue.ts:154
+msgid "File Manager"
+msgstr "Fayl meneceri"
+
+#: source/tmp/win-preferences/App.vue.ts:159
+msgid "Editor"
+msgstr "Redaktor"
+
+#: source/tmp/win-preferences/App.vue.ts:179
+msgid "Shortcuts"
+msgstr "Qısayollar"
+
+#: source/tmp/win-preferences/App.vue.ts:184
+msgid "Zettelkasten"
+msgstr "Zettelkasten"
+
+#: source/tmp/win-preferences/App.vue.ts:194
+msgid "Import and Export"
+msgstr "İdxal və ixrac"
+
+#: source/tmp/win-preferences/App.vue.ts:199
+msgid "Advanced"
+msgstr "Qabaqcıl"
+
+#: source/tmp/win-preferences/App.vue.ts:208
+#, javascript-format
+msgid "Searching: %s"
+msgstr "Axtarılır: %s"
+
+#: source/tmp/win-preferences/App.vue.ts:212
+msgid "Preferences"
+msgstr "Parametrlər"
+
+#: source/tmp/win-about/General-Tab.vue.ts:21
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"Zettlr Hendrik Erz tərəfindən yaradılmış layihədir və GNU GPL v3 lisenziyası "
+"altında yayımlanır. O, açıq mənbəlidir, pulsuzdur və Electron çərçivəsi "
+"üzərində qurulub. Zettlr, Electron, Node.js çərçivəsi və CodeMirror "
+"redaktorunun inkişafçılarına gördükləri iş üçün təşəkkür edir. Onlar "
+"olmasaydı, Zettlr mümkün olmazdı. Aşağıda Zettlr-in istifadə etdiyi bütün "
+"layihələri tapa bilərsiniz."
+
+#: source/tmp/win-about/General-Tab.vue.ts:22
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"Zettlr istinadları birbaşa redaktorda göstərmək üçün citeproc-dan istifadə "
+"edir. Bunun üçün Zettlr CitationStyleLanguage (CSL) dilindən və stil "
+"fayllarından istifadə edir. Fayllar müəllif metaməlumatları ilə birlikdə "
+"dəyişdirilmədən təqdim olunub. Ətraflı məlumat:"
+
+#: source/tmp/win-about/General-Tab.vue.ts:23
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"Bütün loqolar və marka adları öz hüquqi sahiblərinə aiddir. Kodlarından "
+"istifadə etməkdən başqa, Zettlr bu layihələrdən heç biri ilə əlaqəli deyil. "
+"Node.js, Joyent, Inc. şirkətinin ticarət nişanıdır."
+
+#: source/tmp/win-about/General-Tab.vue.ts:24
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+"Zettlr, LanguageTooler GmbH tərəfindən təqdim olunan LanguageTool.org "
+"xidməti ilə inteqrasiya təklif edir. Bu xidmətdən istifadə internet əlaqəsi "
+"tələb edir və LanguageTooler GmbH-nin və ya istifadə etdiyiniz müvafiq "
+"serverin məxfilik siyasətinə tabedir."
+
+#: source/tmp/win-about/General-Tab.vue.ts:25
+msgid "View the Privacy Policy by LanguageTooler GmbH"
+msgstr "LanguageTooler GmbH-nin məxfilik siyasətinə baxın"
+
+#: source/tmp/win-about/App.vue.ts:41
+msgid "Other projects"
+msgstr "Digər layihələr"
+
+#: source/tmp/win-about/App.vue.ts:47
+msgid "Sponsors"
+msgstr "Sponsorlar"
+
+#: source/tmp/win-about/App.vue.ts:53
+msgid "License"
+msgstr "Lisenziya"
+
+#: source/tmp/win-about/Projects-Tab.vue.ts:19
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr həmçinin bu layihələrdən istifadə edir:"
+
+#: source/tmp/win-tag-manager/App.vue.ts:27
+msgid "Assign color"
+msgstr "Rəng təyin et"
+
+#: source/tmp/win-tag-manager/App.vue.ts:28
+msgid "Remove color"
+msgstr "Rəngi çıxar"
+
+#: source/tmp/win-tag-manager/App.vue.ts:29
+msgid "Tag name"
+msgstr "Etiket adı"
+
+#: source/tmp/win-tag-manager/App.vue.ts:30
+msgid "Color"
+msgstr "Rəng"
+
+#: source/tmp/win-tag-manager/App.vue.ts:31
+#: source/tmp/win-main/PopoverTags.vue.ts:40
+msgid "Count"
+msgstr "Say"
+
+#: source/tmp/win-tag-manager/App.vue.ts:32
+msgid "A short description"
+msgstr "Qısa təsvir"
+
+#: source/tmp/win-tag-manager/App.vue.ts:33
+msgid ""
+"Here you can assign colors to different tags. If a tag is found in a file, "
+"its tile in the preview list will receive a colored indicator. The "
+"description will be shown on mouse hover."
+msgstr ""
+"Burada müxtəlif etiketlərə rənglər təyin edə bilərsiniz. Etiket bir faylda "
+"tapılarsa, önbaxış siyahısındakı kartında rəngli indikator görünəcək. Təsvir "
+"siçanı üzərinə gətirdikdə göstəriləcək."
+
+#: source/tmp/win-tag-manager/App.vue.ts:35
+#: source/tmp/win-main/PopoverTags.vue.ts:47
+msgid "Filter tags…"
+msgstr "Etiketləri süz…"
+
+#: source/tmp/win-tag-manager/App.vue.ts:36
+msgid "New tag"
+msgstr "Yeni etiket"
+
+#: source/tmp/win-tag-manager/App.vue.ts:37
+msgid "Rename"
+msgstr "Adını dəyiş"
+
+#: source/tmp/win-tag-manager/App.vue.ts:38
+msgid "Rename tag…"
+msgstr "Etiketin adını dəyiş…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:56
+#: source/tmp/win-main/App.vue.ts:315
+msgid "Search across all files"
+msgstr "Bütün fayllarda axtar"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:57
+msgid "Enter your search terms below"
+msgstr "Axtarış sözlərinizi aşağıda daxil edin"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:58
+msgid "Find…"
+msgstr "Tap…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:59
+#: source/tmp/win-main/file-manager/FileManager.vue.ts:44
+msgid "Filter…"
+msgstr "Süz…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:60
+msgid "Filter search results"
+msgstr "Axtarış nəticələrini süz"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:61
+msgid "Restrict search to directory"
+msgstr "Axtarışı qovluqla məhdudlaşdır"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:62
+msgid "Case insensitive"
+msgstr "Böyük və kiçik hərfə həssas deyil"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:63
+msgid "Choose directory…"
+msgstr "Qovluq seç…"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:66
+msgid "Clear search"
+msgstr "Axtarışı təmizlə"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:67
+msgid "Toggle results"
+msgstr "Nəticələri göstər/gizlət"
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:68
+msgid "No results for your search."
+msgstr "Axtarışınız üçün nəticə yoxdur."
+
+#: source/tmp/win-main/GlobalSearch.vue.ts:171
+#, javascript-format
+msgid "%s matches across %s files"
+msgstr "%s faylda %s uyğunluq"
+
+#: source/tmp/win-main/PopoverTable.vue.ts:30
+#, javascript-format
+msgid "Table size: %s &times; %s"
+msgstr "Cədvəl ölçüsü: %s &times; %s"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:32
+msgid "Open after export"
+msgstr "İxracdan sonra aç"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:33
+msgid "Temporary directory"
+msgstr "Müvəqqəti qovluq"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:34
+msgid "Current directory"
+msgstr "Cari qovluq"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:35
+msgid "Select directory"
+msgstr "Qovluq seç"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:85
+msgid "Exporting…"
+msgstr "İxrac edilir…"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:85
+msgid "Export"
+msgstr "İxrac et"
+
+#: source/tmp/win-main/PopoverExport.vue.ts:98
+msgid "command"
+msgstr "əmr"
+
+#: source/tmp/win-main/PopoverLRT.vue.ts:18
+msgid "Clear finished tasks"
+msgstr "Tamamlanmış tapşırıqları təmizlə"
+
+#: source/tmp/win-main/App.vue.ts:277
+#, javascript-format
+msgid "%s selected"
+msgstr "%s seçildi"
+
+#. Multiple selections --> indicate
+#: source/tmp/win-main/App.vue.ts:283
+#, javascript-format
+msgid "%s selections"
+msgstr "%s seçim"
+
+#: source/tmp/win-main/App.vue.ts:329
+msgid "View writing statistics"
+msgstr "Yazı statistikasını göstər"
+
+#: source/tmp/win-main/App.vue.ts:335
+msgid "View Tag Cloud"
+msgstr "Etiket buluduna bax"
+
+#: source/tmp/win-main/App.vue.ts:342
+msgid "Open settings"
+msgstr "Parametrləri aç"
+
+#: source/tmp/win-main/App.vue.ts:377
+msgid "Export current file"
+msgstr "Cari faylı ixrac et"
+
+#: source/tmp/win-main/App.vue.ts:388
+msgid "Insert Pandoc Div or Span"
+msgstr "Pandoc Div və ya Span daxil et"
+
+#: source/tmp/win-main/App.vue.ts:395
+msgid "Insert comment"
+msgstr "Şərh daxil et"
+
+#: source/tmp/win-main/App.vue.ts:409
+msgid "Insert image"
+msgstr "Şəkil daxil et"
+
+#: source/tmp/win-main/App.vue.ts:430
+msgid "Insert footnote"
+msgstr "Haşiyə daxil et"
+
+#: source/tmp/win-main/App.vue.ts:452
+msgid "Pomodoro timer"
+msgstr "Pomodoro taymeri"
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:21
+msgid "words"
+msgstr "sözlər"
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:22
+msgid "characters"
+msgstr "simvollar"
+
+#: source/tmp/win-main/PopoverDocInfo.vue.ts:23
+msgid "No open document"
+msgstr "Açıq sənəd yoxdur"
+
+#: source/tmp/win-main/PopoverPandoc.vue.ts:35
+msgid "#identifier"
+msgstr "#identifikator"
+
+#: source/tmp/win-main/PopoverPandoc.vue.ts:38
+msgid ".classes"
+msgstr ".siniflər"
+
+#: source/tmp/win-main/PopoverPandoc.vue.ts:41
+msgid "key=value"
+msgstr "açar=dəyər"
+
+#: source/tmp/win-main/PopoverPandoc.vue.ts:43
+msgid "div"
+msgstr "div"
+
+#: source/tmp/win-main/PopoverPandoc.vue.ts:46
+msgid "Div"
+msgstr "Div"
+
+#: source/tmp/win-main/PopoverPandoc.vue.ts:47
+msgid "Span"
+msgstr "Span"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:29
+msgid "words last month"
+msgstr "keçən ay sözlər"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:30
+msgid "daily average"
+msgstr "gündəlik orta"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:31
+msgid "words today"
+msgstr "bu gün sözlər"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:32
+msgid "🔥 You're on fire!"
+msgstr "🔥 Alovlanmısınız!"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:33
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 Gündəlik ortanıza çatmağa yaxınsınız!"
+
+#: source/tmp/win-main/PopoverStats.vue.ts:34
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 Gündəlik ortanızı keçmək üçün yazmağa başlayın."
+
+#: source/tmp/win-main/PopoverStats.vue.ts:35
+msgid "More statistics …"
+msgstr "Daha çox statistika …"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:391
+msgid "Close tab"
+msgstr "Tabı bağla"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:402
+msgid "Close other tabs"
+msgstr "Digər tabları bağla"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:418
+msgid "Close all tabs"
+msgstr "Bütün tabları bağla"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:434
+msgid "Move"
+msgstr "Köçür"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:439
+msgid "Move to start"
+msgstr "Əvvələ köçür"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:445
+msgid "Move to end"
+msgstr "Sona köçür"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:453
+msgid "Unpin tab"
+msgstr "Tabı sancaqdan çıxar"
+
+#: source/tmp/win-main/DocumentTabs.vue.ts:453
+msgid "Pin tab"
+msgstr "Tabı sancaqla"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:33
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:51
+msgid "Related files"
+msgstr "Əlaqəli fayllar"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:34
+msgid "No related files"
+msgstr "Əlaqəli fayl yoxdur"
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a bidirectional link."
+msgstr "Bu əlaqə ikitərəfli keçidə əsaslanır."
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:36
+msgid "This relation is based on an outbound link."
+msgstr "Bu əlaqə çıxan keçidə əsaslanır."
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:37
+msgid "This relation is based on a backlink."
+msgstr "Bu əlaqə geri keçidə əsaslanır."
+
+#: source/tmp/win-main/sidebar/RelatedFilesTab.vue.ts:207
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr "Bu əlaqə %s ortaq etiketə əsaslanır: %s"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:26
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:57
+msgid "Other files"
+msgstr "Digər fayllar"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:27
+msgid "Open directory"
+msgstr "Qovluğu aç"
+
+#: source/tmp/win-main/sidebar/OtherFilesTab.vue.ts:28
+msgid "No other files"
+msgstr "Başqa fayl yoxdur"
+
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:45
+msgid "There are no citations in this document."
+msgstr "Bu sənəddə istinad yoxdur."
+
+#: source/tmp/win-main/sidebar/ReferencesTab.vue.ts:68
+#, javascript-format
+msgid "circa %s words"
+msgstr "təxminən %s söz"
+
+#: source/tmp/win-main/sidebar/ToCTab.vue.ts:41
+#: source/tmp/win-main/sidebar/ToCTab.vue.ts:49
+#: source/tmp/win-main/sidebar/MainSidebar.vue.ts:39
+msgid "Table of contents"
+msgstr "Mündəricat"
+
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:58
+msgid "Open in system viewer"
+msgstr "Sistem baxıcısında aç"
+
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:62
+msgid "Use transparent background"
+msgstr "Şəffaf fon işlət"
+
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:63
+msgid "Use white background"
+msgstr "Ağ fon işlət"
+
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:64
+msgid "Use black background"
+msgstr "Qara fon işlət"
+
+#: source/tmp/win-main/file-viewers/ImageViewer.vue.ts:65
+msgid "Use checkerboard background"
+msgstr "Damalı fon işlət"
+
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:133
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:135
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:48
+msgid "Directories"
+msgstr "Qovluqlar"
+
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:140
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:142
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
+msgid "Files"
+msgstr "Fayllar"
+
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:212
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:39
+msgid "Characters"
+msgstr "Simvollar"
+
+#: source/tmp/win-main/file-manager/FileItem.vue.ts:214
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:34
+msgid "Words"
+msgstr "Sözlər"
+
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:85
+msgid "Enter a name"
+msgstr "Ad daxil edin"
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:62
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
+msgid "No results"
+msgstr "Nəticə yoxdur"
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:63
+msgid "No directory selected"
+msgstr "Qovluq seçilməyib"
+
+#: source/tmp/win-main/file-manager/FileList.vue.ts:64
+msgid "Empty directory"
+msgstr "Boş qovluq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:36
+msgid "Remove the custom color"
+msgstr "Fərdi rəngi sil"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:37
+msgid "Assign a blue accent color"
+msgstr "Mavi vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:38
+msgid "Assign a purple accent color"
+msgstr "Bənövşəyi vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:39
+msgid "Assign a rose accent color"
+msgstr "Çəhrayı vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:40
+msgid "Assign a red accent color"
+msgstr "Qırmızı vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:41
+msgid "Assign a orange accent color"
+msgstr "Narıncı vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:42
+msgid "Assign a yellow accent color"
+msgstr "Sarı vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:43
+msgid "Assign a green accent color"
+msgstr "Yaşıl vurğu rəngi təyin et"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:50
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:35
+msgid "Created"
+msgstr "Yaradılıb"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:52
+msgid "Project Settings…"
+msgstr "Layihə parametrləri…"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:53
+msgid "Enable Project"
+msgstr "Layihəni aktivləşdir"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:54
+msgid "Sort by name"
+msgstr "Ada görə sırala"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:55
+msgid "Sort by time"
+msgstr "Vaxta görə sırala"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:56
+msgid "ascending"
+msgstr "artan"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:57
+msgid "descending"
+msgstr "azalan"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:61
+msgid "Cog"
+msgstr "Dişli çarx"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:62
+msgid "Cloud"
+msgstr "Bulud"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:63
+msgid "Check"
+msgstr "Tik"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:64
+msgid "Times"
+msgstr "Çarpaz"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:66
+msgid "Info"
+msgstr "Məlumat"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:67
+msgid "Success"
+msgstr "Uğur"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:68
+msgid "Error"
+msgstr "Xəta"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
+msgid "Warning"
+msgstr "Xəbərdarlıq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
+msgid "Bell"
+msgstr "Zəng"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:71
+msgid "Person"
+msgstr "Şəxs"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:72
+msgid "People"
+msgstr "İnsanlar"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:73
+msgid "Home"
+msgstr "Ev"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:74
+msgid "Ban"
+msgstr "Qadağan"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:76
+msgid "Eye"
+msgstr "Göz"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:77
+msgid "Eye (crossed)"
+msgstr "Göz (çarpaz)"
+
+#. STATIC VARIABLES
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:78
+#: source/tmp/win-stats/CalendarView.vue.ts:27
+#: source/tmp/win-stats/App.vue.ts:28
+msgid "Calendar"
+msgstr "Təqvim"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:79
+msgid "Calculator"
+msgstr "Kalkulyator"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:80
+msgid "Store"
+msgstr "Mağaza"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:81
+msgid "Shopping bag"
+msgstr "Alış-veriş çantası"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:82
+msgid "Shopping cart"
+msgstr "Alış-veriş səbəti"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:83
+msgid "Factory"
+msgstr "Zavod"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:84
+msgid "Heart"
+msgstr "Ürək"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:85
+msgid "Heart (broken)"
+msgstr "Ürək (qırıq)"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:86
+msgid "Bubbles"
+msgstr "Qabarcıqlar"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:87
+msgid "Bubble"
+msgstr "Qabarcıq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:88
+msgid "Bubble (exclamation)"
+msgstr "Qabarcıq (nida)"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:89
+msgid "Colour Palette"
+msgstr "Rəng palitrası"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:90
+msgid "Bars"
+msgstr "Zolaqlar"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:91
+msgid "Thermometer"
+msgstr "Termometr"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:92
+msgid "Book"
+msgstr "Kitab"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:93
+msgid "Library"
+msgstr "Kitabxana"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
+msgid "Bug"
+msgstr "Böcək"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
+msgid "Note"
+msgstr "Qeyd"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
+msgid "Lightbulb"
+msgstr "Ampul"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:97
+msgid "Trash"
+msgstr "Zibil qutusu"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:98
+msgid "Snowflake"
+msgstr "Qar dənəsi"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:99
+msgid "Asterisk"
+msgstr "Ulduzcuq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:100
+msgid "Key"
+msgstr "Açar"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:101
+msgid "Bolt"
+msgstr "Şimşək"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:102
+msgid "Wrench"
+msgstr "Qayka açarı"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:103
+msgid "Flame"
+msgstr "Alov"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:104
+msgid "Hourglass"
+msgstr "Qum saatı"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:105
+msgid "Briefcase"
+msgstr "Portfel"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:106
+msgid "Tools"
+msgstr "Alətlər"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:107
+msgid "Moon"
+msgstr "Ay"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:108
+msgid "Sun"
+msgstr "Günəş"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:109
+msgid "Tree"
+msgstr "Ağac"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:110
+msgid "Circle (dot)"
+msgstr "Dairə (nöqtə)"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:111
+msgid "Circle"
+msgstr "Dairə"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:112
+msgid "Video camera"
+msgstr "Video kamera"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:113
+msgid "Film strip"
+msgstr "Film lenti"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:114
+msgid "Microphone"
+msgstr "Mikrofon"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:115
+msgid "Crown"
+msgstr "Tac"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:116
+msgid "Star"
+msgstr "Ulduz"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:117
+msgid "Flag"
+msgstr "Bayraq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:118
+msgid "Envelope"
+msgstr "Zərf"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:119
+msgid "Airplane"
+msgstr "Təyyarə"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:120
+msgid "Happy emoji"
+msgstr "Şən emoji"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:121
+msgid "Neutral emoji"
+msgstr "Neytral emoji"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:122
+msgid "Sad emoji"
+msgstr "Kədərli emoji"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:123
+msgid "Thumbs up"
+msgstr "Yuxarı baş barmaq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:124
+msgid "Thumbs down"
+msgstr "Aşağı baş barmaq"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:125
+msgid "Map"
+msgstr "Xəritə"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:126
+msgid "Compass"
+msgstr "Kompas"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:127
+msgid "Map marker"
+msgstr "Xəritə işarəsi"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:128
+msgid "Flask"
+msgstr "Kolba"
+
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:129
+msgid "CD/DVD"
+msgstr "CD/DVD"
+
+#: source/tmp/win-main/file-manager/util/PopoverFileProps.vue.ts:38
+msgid "Set writing target…"
+msgstr "Yazı hədəfini təyin et…"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
+msgid "Workspaces"
+msgstr "İş sahələri"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
+msgid "No open files or folders"
+msgstr "Açıq fayl və ya qovluq yoxdur"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
+msgid "Hide files"
+msgstr "Faylları gizlət"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
+msgid "Show files"
+msgstr "Faylları göstər"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
+msgid "Hide workspaces"
+msgstr "İş sahələrini gizlət"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
+msgid "Show workspaces"
+msgstr "İş sahələrini göstər"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:73
+msgid "Switch to automatic sorting"
+msgstr "Avtomatik sıralamaya keç"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+msgid "Collapse workspaces"
+msgstr "İş sahələrini yığ"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+msgid "Collapse subfolders"
+msgstr "Alt qovluqları yığ"
+
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:269
+msgid "Sort workspaces…"
+msgstr "İş sahələrini sırala…"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:24
+msgid "Start"
+msgstr "Başlat"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:25
+msgid "Stop"
+msgstr "Dayandır"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:26
+msgid "Work"
+msgstr "İş"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:27
+msgid "Short break"
+msgstr "Qısa fasilə"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:28
+msgid "Break"
+msgstr "Fasilə"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:29
+msgid "Sound Effect"
+msgstr "Səs effekti"
+
+#: source/tmp/win-main/PopoverPomodoro.vue.ts:30
+msgid "Volume"
+msgstr "Səs həcmi"
+
+#: source/tmp/win-main/PopoverTags.vue.ts:48
+msgid "Tag Cloud"
+msgstr "Etiket buludu"
+
+#: source/tmp/win-stats/ChartView.vue.ts:24
+msgid "Monday"
+msgstr "Bazar ertəsi"
+
+#: source/tmp/win-stats/ChartView.vue.ts:25
+msgid "Tuesday"
+msgstr "Çərşənbə axşamı"
+
+#: source/tmp/win-stats/ChartView.vue.ts:26
+msgid "Wednesday"
+msgstr "Çərşənbə"
+
+#: source/tmp/win-stats/ChartView.vue.ts:27
+msgid "Thursday"
+msgstr "Cümə axşamı"
+
+#: source/tmp/win-stats/ChartView.vue.ts:28
+msgid "Friday"
+msgstr "Cümə"
+
+#: source/tmp/win-stats/ChartView.vue.ts:29
+msgid "Saturday"
+msgstr "Şənbə"
+
+#: source/tmp/win-stats/ChartView.vue.ts:30
+msgid "Sunday"
+msgstr "Bazar"
+
+#. Static properties
+#: source/tmp/win-stats/ChartView.vue.ts:34 source/tmp/win-stats/App.vue.ts:34
+msgid "Charts"
+msgstr "Diaqramlar"
+
+#: source/tmp/win-stats/ChartView.vue.ts:35
+msgid ""
+"This chart shows your current word count and compares it to the average of "
+"this and the previous year(s)."
+msgstr ""
+"Bu diaqram cari söz sayınızı göstərir və onu bu ilin və əvvəlki il(lər)in "
+"ortalaması ilə müqayisə edir."
+
+#: source/tmp/win-stats/ChartView.vue.ts:36
+msgid "This week"
+msgstr "Bu həftə"
+
+#: source/tmp/win-stats/ChartView.vue.ts:37
+msgid "This year"
+msgstr "Bu il"
+
+#: source/tmp/win-stats/ChartView.vue.ts:38
+msgid "Last year"
+msgstr "Keçən il"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:29
+msgid "January"
+msgstr "Yanvar"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:29
+msgid "February"
+msgstr "Fevral"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:29
+msgid "March"
+msgstr "Mart"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:29
+msgid "April"
+msgstr "Aprel"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:30
+msgid "May"
+msgstr "May"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:30
+msgid "June"
+msgstr "İyun"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:30
+msgid "July"
+msgstr "İyul"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:30
+msgid "August"
+msgstr "Avqust"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:31
+msgid "September"
+msgstr "Sentyabr"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:31
+msgid "October"
+msgstr "Oktyabr"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:31
+msgid "November"
+msgstr "Noyabr"
+
+#: source/tmp/win-stats/CalendarView.vue.ts:31
+msgid "December"
+msgstr "Dekabr"
+
+#: source/tmp/win-stats/App.vue.ts:40
+msgid "FSAL Stats"
+msgstr "FSAL statistikası"
+
+#: source/tmp/win-stats/App.vue.ts:62
+msgid "Writing statistics"
+msgstr "Yazı statistikası"
+
+#: source/tmp/win-onboarding/SupportLogos.vue.ts:4
+msgid "Support the development of Zettlr"
+msgstr "Zettlr-in inkişafını dəstəklə"
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:5
+msgid "Writing Markdown"
+msgstr "Markdown yazmaq"
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:6
+msgid ""
+"The core of Zettlr is writing Markdown, which can be shown using either its "
+"raw syntax, or in a WYSIWYG mode. Which one do you prefer?"
+msgstr ""
+"Zettlr-in əsası Markdown yazmaqdır, bu, ya xam sintaksislə, ya da WYSIWYG "
+"rejimində göstərilə bilər. Hansını üstün tutursunuz?"
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:7
+msgid "Raw Syntax"
+msgstr "Xam sintaksis"
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:8
+msgid ""
+"Some people prefer an app automatically saving your work; others want to "
+"manually save. Which do you prefer?"
+msgstr ""
+"Bəziləri işinizin proqram tərəfindən avtomatik yadda saxlanmasını üstün "
+"tutur, digərləri əl ilə yadda saxlamaq istəyir. Hansını üstün tutursunuz?"
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:9
+msgid "Save manually"
+msgstr "Əl ilə yadda saxla"
+
+#: source/tmp/win-onboarding/pages/WritingMarkdownPage.vue.ts:10
+msgid "Activate Autosave"
+msgstr "Avtomatik yadda saxlamanı aktivləşdir"
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:4
+msgid "Hello!"
+msgstr "Salam!"
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:5
+msgid ""
+"Thank your for choosing Zettlr as your new one-stop publication workbench."
+msgstr ""
+"Zettlr-i yeni hərtərəfli nəşr iş masanız kimi seçdiyiniz üçün təşəkkür "
+"edirik."
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:6
+msgid ""
+"Before we get started, let us first make sure Zettlr looks and feels as you "
+"expect it to."
+msgstr ""
+"Başlamazdan əvvəl, gəlin Zettlr-in gözlədiyiniz kimi görünüb hiss olunduğuna "
+"əmin olaq."
+
+#: source/tmp/win-onboarding/pages/WelcomePage.vue.ts:7
+msgid ""
+"On the following pages, we guide you through adjusting a set of vital "
+"settings for a great writing experience. Zettlr ships with sensible "
+"defaults, so you may skip this wizard at any time, and adjust your settings "
+"later on."
+msgstr ""
+"Növbəti səhifələrdə sizi yaxşı yazı təcrübəsi üçün vacib parametrlərin "
+"tənzimlənməsi boyunca istiqamətləndirəcəyik. Zettlr ağlabatan standart "
+"dəyərlərlə gəlir, ona görə bu sehrbazı istənilən vaxt keçə bilər və "
+"parametrlərinizi sonra tənzimləyə bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:8
+msgid "Images and PDFs in Zettlr"
+msgstr "Zettlr-də şəkillər və PDF-lər"
+
+#: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:9
+msgid ""
+"Zettlr can preview images and PDF files directly in Zettlr. This allows you "
+"to reference plots or literature directly while writing. If you do not "
+"activate this, images and PDF files will only be shown in the sidebar and "
+"open with your computer's default viewer."
+msgstr ""
+"Zettlr şəkilləri və PDF fayllarını birbaşa Zettlr daxilində önbaxışla "
+"göstərə bilər. Bu, yazarkən qrafiklərə və ya ədəbiyyata birbaşa istinad "
+"etməyə imkan verir. Bunu aktivləşdirmirsinizsə, şəkillər və PDF faylları "
+"yalnız yan paneldə göstəriləcək və kompüterinizin standart göstərici "
+"proqramı ilə açılacaq."
+
+#: source/tmp/win-onboarding/pages/OtherFilesPage.vue.ts:10
+msgid "Activate Image and PDF Previews in Zettlr"
+msgstr "Zettlr-də şəkil və PDF önbaxışını aktivləşdir"
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:8
+msgid "Look and Feel"
+msgstr "Görünüş"
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:9
+msgid ""
+"Zettlr supports both light and dark mode. You can turn it on manually here."
+msgstr ""
+"Zettlr həm açıq, həm də tünd rejimi dəstəkləyir. Bunu burada əl ilə "
+"aktivləşdirə bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:10
+msgid "Activate dark mode"
+msgstr "Tünd rejimi aktivləşdir"
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:11
+msgid "Do you wish to let Zettlr automatically switch to dark mode?"
+msgstr "Zettlr-in tünd rejimə avtomatik keçməsini istəyirsiniz?"
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:18
+#, javascript-format
+msgid ""
+"Zettlr will turn on dark mode between %s and %s. You can adjust these times "
+"in the settings."
+msgstr ""
+"Zettlr tünd rejimi %s ilə %s arasında aktivləşdirəcək. Bu vaxtları "
+"parametrlərdə tənzimləyə bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:21
+msgid "Do not automatically toggle light/dark mode"
+msgstr "Açıq/tünd rejimi avtomatik dəyişmə"
+
+#: source/tmp/win-onboarding/pages/LookAndFeelPage.vue.ts:23
+msgid "Schedule dark mode"
+msgstr "Tünd rejimi planlaşdır"
+
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:5
+msgid "You're All Set!"
+msgstr "Hər şey hazırdır!"
+
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:6
+msgid ""
+"We wish you a great writing experience! Remember to take a look at the "
+"preferences to tweak Zettlr even more."
+msgstr ""
+"Sizə əla yazı təcrübəsi arzulayırıq. Zettlr-i daha da tənzimləmək üçün "
+"parametrlərə baxmağı unutmayın."
+
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:7
+msgid ""
+"If anything comes up, and you need help, encounter a bug, or have an idea "
+"for a new feature, please get in touch with us. Zettlr is maintained by a "
+"global community of excellent volunteers who will help you out."
+msgstr ""
+"Hər hansı bir problem yaransa, köməyə ehtiyacınız olsa, baq tapsanız və ya "
+"yeni funksiya ideyanız olsa, zəhmət olmasa bizimlə əlaqə saxlayın. Zettlr "
+"sizə kömək edəcək əla könüllülərdən ibarət qlobal icma tərəfindən "
+"dəstəklənir."
+
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:9
+msgid "Join our Discord Server"
+msgstr "Discord serverimizə qoşulun"
+
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:10
+msgid "Join our Community Forum"
+msgstr "İcma forumumuza qoşulun"
+
+#: source/tmp/win-onboarding/pages/FinishPage.vue.ts:11
+msgid "View Source Code on GitHub"
+msgstr "GitHub-da mənbə kodunu göstər"
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:8
+msgid ""
+"If you already have a library of references, you can select it here to make "
+"all your stored reference items available to Zettlr."
+msgstr ""
+"Artıq istinad kitabxananız varsa, saxlanılan bütün istinad elementlərinizi "
+"Zettlr-də əlçatan etmək üçün onu burada seçə bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:9
+msgid "Learn how to export your Zotero library"
+msgstr "Zotero kitabxananızı necə ixrac etməyi öyrənin"
+
+#: source/tmp/win-onboarding/pages/CitingPage.vue.ts:10
+msgid ""
+"Different academic fields have different citation styles. Here you choose "
+"which one Zettlr uses when you autocomplete citations."
+msgstr ""
+"Fərqli akademik sahələrin fərqli istinad üslubları var. Burada Zettlr-in "
+"istinadları avtomatik tamamlayarkən hansını istifadə edəcəyini seçirsiniz."
+
+#. Just as with the navigation, we have to re-translate the page's strings
+#. once the user toggles the app lang.
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:21
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:28
+msgid "Which Language do you speak?"
+msgstr "Hansı dildə danışırsınız?"
+
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:22
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:30
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:50
+#, javascript-format
+msgid ""
+"Based on your operating system settings, we have selected %s as the "
+"application language. If you wish, you can select a different language here."
+msgstr ""
+"Əməliyyat sisteminizin parametrlərinə əsasən, tətbiq dili olaraq %s seçdik. "
+"İstəsəniz, burada fərqli dil seçə bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:23
+#: source/tmp/win-onboarding/pages/SetAppLang.vue.ts:29
+msgid "The changes apply from the next slide."
+msgstr "Dəyişikliklər növbəti slayddan etibarən tətbiq olunur."
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:6
+msgid "Staying Up To Date"
+msgstr "Yenilənmələrdən xəbərdar olmaq"
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:7
+msgid ""
+"Zettlr will from time to time check for updates. If you installed Zettlr via "
+"a package manager (e.g., APT or Pacman, Homebrew, or winget or chocolatey), "
+"you should turn this off."
+msgstr ""
+"Zettlr vaxtaşırı yeniləmələri yoxlayacaq. Zettlr-i paket meneceri ilə "
+"quraşdırmısınızsa (məsələn, APT və ya Pacman, Homebrew, ya da winget və ya "
+"chocolatey), bunu söndürməlisiniz."
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:8
+msgid "Check for Updates"
+msgstr "Yeniləmələri yoxla"
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:9
+msgid ""
+"From time to time, we also release beta updates. The more users test these "
+"early versions, the better the app becomes."
+msgstr ""
+"Vaxtaşırı biz həmçinin beta yeniləmələr də buraxırıq. Bu erkən versiyaları "
+"nə qədər çox istifadəçi sınasa, tətbiq bir o qədər yaxşılaşır."
+
+#: source/tmp/win-onboarding/pages/UpdatingPage.vue.ts:10
+msgid "Test Beta Versions"
+msgstr "Beta versiyaları sına"
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:8
+msgid "Check your writing"
+msgstr "Yazınızı yoxlayın"
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:9
+msgid ""
+"Here you can configure how you wish to check for spelling errors. You can "
+"select a built-in dictionary, or set up LanguageTool."
+msgstr ""
+"Burada orfoqrafiya xətalarının necə yoxlanmasını istədiyinizi tənzimləyə "
+"bilərsiniz. Daxili lüğət seçə bilər, ya da LanguageTool qura bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:11
+#, javascript-format
+msgid "Set %s as a spellchecking dictionary"
+msgstr "%s-i orfoqrafiya yoxlaması lüğəti kimi təyin et"
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:13
+msgid ""
+"Zettlr integrates with LanguageTool, a free grammar and spellchecker. You "
+"can turn it on with simple defaults."
+msgstr ""
+"Zettlr, pulsuz qrammatika və orfoqrafiya yoxlayıcısı olan LanguageTool ilə "
+"inteqrasiya olunur. Onu sadə standart dəyərlərlə aktivləşdirə bilərsiniz."
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:14
+msgid "Activate LanguageTool (uses online service)"
+msgstr "LanguageTool-u aktivləşdir (onlayn xidmətdən istifadə edir)"
+
+#: source/tmp/win-onboarding/pages/WritingCheckPage.vue.ts:15
+msgid ""
+"You can choose a custom server and provide your LanguageTool username later "
+"in the settings."
+msgstr ""
+"Fərdi server seçə və LanguageTool istifadəçi adınızı parametrlərdə sonra "
+"daxil edə bilərsiniz."
+
+#. Update labels
+#: source/tmp/win-onboarding/App.vue.ts:49
+msgid "Update complete!"
+msgstr "Yeniləmə tamamlandı!"
+
+#: source/tmp/win-onboarding/App.vue.ts:50
+msgid "Zettlr has been updated. You are now running Zettlr"
+msgstr "Zettlr yeniləndi. İndi siz Zettlr-i işlədirsiniz"
+
+#: source/tmp/win-onboarding/App.vue.ts:51
+msgid "Get started"
+msgstr "Başla"
+
+#: source/tmp/win-onboarding/App.vue.ts:52
+msgid "See what's changed"
+msgstr "Nə dəyişdiyinə bax"
+
+#: source/tmp/win-onboarding/App.vue.ts:54
+#, javascript-format
+msgid "Build date: %s"
+msgstr "Yaradılma tarixi: %s"
+
+#. Onboarding workflow labels
+#: source/tmp/win-onboarding/App.vue.ts:57
+#: source/tmp/win-onboarding/App.vue.ts:68
+msgid "Start setup"
+msgstr "Quraşdırmaya başla"
+
+#: source/tmp/win-onboarding/App.vue.ts:58
+#: source/tmp/win-onboarding/App.vue.ts:69
+msgid "Skip"
+msgstr "Keç"
+
+#: source/tmp/win-onboarding/App.vue.ts:59
+#: source/tmp/win-onboarding/App.vue.ts:70
+msgid "Previous"
+msgstr "Əvvəlki"
+
+#: source/tmp/win-onboarding/App.vue.ts:60
+#: source/tmp/win-onboarding/App.vue.ts:71
+msgid "Next"
+msgstr "Növbəti"
+
+#: source/tmp/win-onboarding/App.vue.ts:61
+#: source/tmp/win-onboarding/App.vue.ts:72
+msgid "Finish"
+msgstr "Bitir"
+
+#: source/tmp/win-update/App.vue.ts:32
+msgid "Updater"
+msgstr "Yeniləyici"
+
+#: source/tmp/win-update/App.vue.ts:33
+msgid "New update available"
+msgstr "Yeni yeniləmə mövcuddur"
+
+#: source/tmp/win-update/App.vue.ts:34
+msgid "Your version"
+msgstr "Sizin versiyanız"
+
+#: source/tmp/win-update/App.vue.ts:35
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr ""
+"Zettlr-in yüklənmək üçün yeni versiyası mövcuddur. Zəhmət olmasa aşağıdakı "
+"dəyişiklik jurnalını oxuyun."
+
+#: source/tmp/win-update/App.vue.ts:36
+msgid "Downloading your update"
+msgstr "Yeniləməniz yüklənir"
+
+#: source/tmp/win-update/App.vue.ts:37
+msgid "No update available. You have the most recent version."
+msgstr "Mövcud yeniləmə yoxdur. Ən son versiyaya sahibsiniz."
+
+#: source/tmp/win-update/App.vue.ts:45
+msgid "Click to start update"
+msgstr "Yeniləməni başlatmaq üçün klikləyin"
+
+#: source/tmp/win-update/App.vue.ts:48
+msgid "never"
+msgstr "heç vaxt"
+
+#: source/tmp/win-update/App.vue.ts:48 source/tmp/win-update/App.vue.ts:51
+#, javascript-format
+msgid "Last checked: %s"
+msgstr "Son yoxlama: %s"
+
+#: source/tmp/win-update/App.vue.ts:127
+msgid "Starting update …"
+msgstr "Yeniləmə başlayır…"
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:56
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
+msgstr ""
+"Bu profil qorunur. Bu o deməkdir ki, onu silsəniz və ya adını dəyişsəniz "
+"belə bərpa olunacaq."
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:57
+msgid ""
+"This profile is invalid. It may contain errors, or it may be missing the "
+"writer or reader property."
+msgstr ""
+"Bu profil etibarsızdır. Onda xətalar ola bilər və ya writer və ya reader "
+"xüsusiyyəti çatışmaya bilər."
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:59
+msgid "Open defaults folder"
+msgstr "Standart parametrlər qovluğunu aç"
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:60
+msgid "Edit the default settings for imports or exports here."
+msgstr "İdxal və ya ixrac üçün standart parametrləri burada redaktə edin."
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:178
+#: source/tmp/win-assets/SnippetsTab.vue.ts:108
+#: source/tmp/win-assets/FilterTab.vue.ts:134
+#: source/tmp/win-assets/CustomCSS.vue.ts:58
+msgid "Saving …"
+msgstr "Yadda saxlanılır…"
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:188
+#: source/tmp/win-assets/SnippetsTab.vue.ts:118
+#: source/tmp/win-assets/FilterTab.vue.ts:145
+#: source/tmp/win-assets/CustomCSS.vue.ts:65
+msgid "Saved!"
+msgstr "Yadda saxlanıldı!"
+
+#: source/tmp/win-assets/DefaultsTab.vue.ts:193
+#: source/tmp/win-assets/SnippetsTab.vue.ts:122
+#: source/tmp/win-assets/FilterTab.vue.ts:149
+#: source/tmp/win-assets/CustomCSS.vue.ts:69
+msgid "Could not save changes"
+msgstr "Dəyişikliklər yadda saxlanıla bilmədi"
+
+#: source/tmp/win-assets/App.vue.ts:26
+msgid "Exporting"
+msgstr "İxrac olunur"
+
+#: source/tmp/win-assets/App.vue.ts:32
+msgid "Importing"
+msgstr "İdxal olunur"
+
+#: source/tmp/win-assets/App.vue.ts:38
+msgid "Lua Filter"
+msgstr "Lua filtri"
+
+#: source/tmp/win-assets/SnippetsTab.vue.ts:29
+msgid "No snippet selected."
+msgstr "Heç bir parçacıq seçilməyib."
+
+#: source/tmp/win-assets/SnippetsTab.vue.ts:31
+msgid "Rename snippet"
+msgstr "Parçacığın adını dəyiş"
+
+#: source/tmp/win-assets/SnippetsTab.vue.ts:32
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+"Parçacıqlar dəyişənlərlə yenidən istifadə oluna bilən mətn hissələri müəyyən "
+"etməyə imkan verir."
+
+#: source/tmp/win-assets/SnippetsTab.vue.ts:33
+msgid "Open snippets folder"
+msgstr "Parçacıqlar qovluğunu aç"
+
+#: source/tmp/win-assets/FilterTab.vue.ts:28
+msgid "No filter selected."
+msgstr "Heç bir filtr seçilməyib."
+
+#: source/tmp/win-assets/FilterTab.vue.ts:29
+msgid ""
+"This filter is protected. It will be restored if you rename or remove this "
+"file."
+msgstr ""
+"Bu filtr qorunur. Bu faylın adını dəyişsəniz və ya silsəniz belə bərpa "
+"olunacaq."
+
+#: source/tmp/win-assets/FilterTab.vue.ts:31
+msgid "Rename filter"
+msgstr "Filtrin adını dəyiş"
+
+#: source/tmp/win-assets/FilterTab.vue.ts:32
+msgid "Lua filters allow customization of your Pandoc exports."
+msgstr "Lua filtrləri Pandoc ixraclarınızı fərdiləşdirməyə imkan verir."
+
+#: source/tmp/win-assets/FilterTab.vue.ts:33
+msgid "Open filters folder"
+msgstr "Filtrlər qovluğunu aç"
+
+#: source/tmp/win-assets/CustomCSS.vue.ts:24
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further."
+msgstr ""
+"Burada onu daha da fərdiləşdirmək üçün Zettlr-in stillərini üstələyə "
+"bilərsiniz."
+
+#: source/tmp/win-assets/CustomCSS.vue.ts:25
+msgid ""
+"Attention: This file overrides all CSS directives! Never alter the geometry "
+"of elements, otherwise the app may expose unwanted behaviour!"
+msgstr ""
+"Diqqət: Bu fayl bütün CSS direktivlərini üstələyir. Elementlərin ölçüsünü və "
+"yerləşməsini heç vaxt dəyişməyin, əks halda tətbiq arzuolunmaz davranış "
+"göstərə bilər!"
