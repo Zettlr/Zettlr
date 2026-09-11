@@ -50,7 +50,7 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (node.type.name !== 'Admonition') {
+        if (!node.type.is('Admonition')) {
           return
         }
 
