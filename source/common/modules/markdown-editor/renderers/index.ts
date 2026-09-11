@@ -34,6 +34,7 @@ import type { StatusbarItem } from '../statusbar'
 import { renderHorizontalRules } from './render-hr'
 import { renderBlockquotes } from './render-blockquotes'
 import { renderAdmonitions } from './render-admonitions'
+import { renderRawAdmonitions } from '../plugins/admonitions-raw'
 
 const renderCompartment = new Compartment()
 
@@ -51,30 +52,30 @@ function updateExtension (renderer: Extension, enabled: boolean|undefined, ext: 
 
 /* Configures the enabled renderer extensions, optionally updating an existing set of extensions */
 function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extension[]) {
-  if (ext === undefined || config.renderingMode === 'raw') {
-    // Default extensions to always include
-    ext = [
-      renderCode
-    ]
-  }
+  ext = ext ?? []
+  const isRaw = config.renderingMode === 'raw'
+  const isPreview = config.renderingMode === 'preview'
 
-  if (config.renderingMode === 'preview') {
-    updateExtension(renderMermaid, true, ext)
-    updateExtension(renderCode, true, ext)
-    updateExtension(renderImages, config.renderImages, ext)
-    updateExtension(renderLinks, config.renderLinks, ext)
-    updateExtension(renderMath, config.renderMath, ext)
-    updateExtension(renderTasks, config.renderTasks, ext)
-    updateExtension(renderHeadings, config.renderHeadings, ext)
-    updateExtension(renderCitations, config.renderCitations, ext)
-    updateExtension(renderTables, config.renderTables, ext)
-    updateExtension(renderIframes, config.renderIframes, ext)
-    updateExtension(renderEmphasis, config.renderEmphasis, ext)
-    updateExtension(renderBlockquotes, config.renderEmphasis, ext)
-    updateExtension(renderPandoc, config.renderPandoc, ext)
-    updateExtension(renderAdmonitions, config.renderAdmonitions, ext)
-    updateExtension(renderHorizontalRules, config.renderHorizontalRules, ext)
-  }
+  updateExtension(renderCode, true, ext)
+
+  updateExtension(renderMermaid, isPreview, ext)
+
+  updateExtension(renderImages, isPreview && config.renderImages, ext)
+  updateExtension(renderLinks, isPreview && config.renderLinks, ext)
+  updateExtension(renderMath, isPreview && config.renderMath, ext)
+  updateExtension(renderTasks, isPreview && config.renderTasks, ext)
+  updateExtension(renderHeadings, isPreview && config.renderHeadings, ext)
+  updateExtension(renderCitations, isPreview && config.renderCitations, ext)
+  updateExtension(renderTables, isPreview && config.renderTables, ext)
+  updateExtension(renderIframes, isPreview && config.renderIframes, ext)
+  updateExtension(renderEmphasis, isPreview && config.renderEmphasis, ext)
+  updateExtension(renderBlockquotes, isPreview && config.renderEmphasis, ext)
+  updateExtension(renderPandoc, isPreview && config.renderPandoc, ext)
+  updateExtension(renderHorizontalRules, isPreview && config.renderHorizontalRules, ext)
+
+  // One of the two admonition renderers must always be on
+  updateExtension(renderAdmonitions, isPreview && config.renderAdmonitions, ext)
+  updateExtension(renderRawAdmonitions, isRaw || config.renderAdmonitions !== true, ext)
 
   return ext
 }
