@@ -12,7 +12,8 @@
  * END HEADER
  */
 
-import { compileBooleanQuery, type BooleanTerm } from '../source/app/service-providers/search/util/boolean-search'
+import { MDFileDescriptor } from 'source/types/common/fsal'
+import { compileBooleanQuery, searchFileBoolean, SearchQueryBoolean, type BooleanTerm } from '../source/app/service-providers/search/util/boolean-search'
 import assert from 'assert'
 
 const testSearches: Array<{ query: string, expected: BooleanTerm[] }> = [
@@ -76,3 +77,135 @@ describe('SearchProvider#compileBooleanQuery()', function () {
     })
   }
 })
+
+describe('SearchProvider#searchFileBoolean()', function () {
+  const descriptor: MDFileDescriptor = {
+    dir: '/home/laurent/Documents/Zettlr Tutorial',
+    path: '/home/laurent/Documents/Zettlr Tutorial/references.md',
+    name: 'references.md',
+    ext: '.md',
+    size: 6348,
+    id: '',
+    tags: ['zotero', 'jabref', 'csl json', 'bibtex', 'reference management'],
+    links: [],
+    citekeys: [],
+    bom: '',
+    type: 'file',
+    wordCount: 833,
+    charCount: 5181,
+    modtime: 1787142034211.494,
+    creationtime: 1787142034211.494,
+    linefeed: ``,
+    firstHeading: 'Les références avec Zettlr 💬',
+    yamlTitle: 'Les références avec Zettlr',
+    frontmatter: {
+      title: 'Les références avec Zettlr',
+      keywords: [
+        'Zotero',
+        'JabRef',
+        'CSL JSON',
+        'BibTex',
+        'Reference Management',
+      ],
+    },
+  };
+  const fileContent: string = `---
+title: "Les références avec Zettlr"
+keywords:
+- Zotero
+- JabRef
+- Reference Management
+...
+
+# Les références avec Zettlr
+Dans ce dernier guide, nous nous plongerons dans l'art de citer des références automatiquement en utilisant Zettlr !
+`;
+
+  it('should return correct count excerpt of simple search', function () {
+    const query: SearchQueryBoolean = {
+      type: 'boolean',
+      caseInsensitive: true,
+      terms: [
+        {
+          words: ['zettlr'],
+          operator: 'AND',
+        },
+      ],
+    };
+
+    const searchResult = searchFileBoolean(descriptor, fileContent, query);
+    assert.equal(searchResult.length, 3);
+  });
+
+  it('should return correct count excerpt of NOT search', function () {
+    const query: SearchQueryBoolean = {
+      type: 'boolean',
+      caseInsensitive: true,
+      terms: [
+        {
+          words: ['NOT zettlr'],
+          operator: 'AND',
+        },
+      ],
+    };
+
+    const searchResult = searchFileBoolean(descriptor, fileContent, query);
+    assert.equal(searchResult.length, 0);
+  });
+
+  it('should return correct count excerpt of OR search', function () {
+    const query: SearchQueryBoolean = {
+      type: 'boolean',
+      caseInsensitive: true,
+      terms: [
+        {
+          words: ['zettlr', 'azerty'],
+          operator: 'OR',
+        },
+      ],
+    };
+
+    const searchResult = searchFileBoolean(descriptor, fileContent, query);
+    assert.equal(searchResult.length, 3);
+  });
+
+  it('should return correct count excerpt of AND search (two words are present)', function () {
+    const query: SearchQueryBoolean = {
+      type: 'boolean',
+      caseInsensitive: true,
+      terms: [
+        {
+          words: ['zettlr'],
+          operator: 'AND',
+        },
+        {
+          words: ['guide'],
+          operator: 'AND',
+        },
+      ],
+    };
+
+    const searchResult = searchFileBoolean(descriptor, fileContent, query);
+    assert.equal(searchResult.length, 4);
+  });
+
+  it('should return correct count excerpt of AND search (only one word is present)', function () {
+    const query: SearchQueryBoolean = {
+      type: 'boolean',
+      caseInsensitive: true,
+      terms: [
+        {
+          words: ['zettlr'],
+          operator: 'AND',
+        },
+        {
+          words: ['azerty'],
+          operator: 'AND',
+        },
+      ],
+    };
+
+    const searchResult = searchFileBoolean(descriptor, fileContent, query);
+    assert.equal(searchResult.length, 0);
+  });
+});

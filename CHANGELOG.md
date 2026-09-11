@@ -5,6 +5,13 @@
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
+- **Change**: Fixed a fundamental issue with the full-text search that would
+  turn **AND**-searches implicitly into **OR** searches. If you relied on how
+  the full-text search actually worked, and not how it was described in the
+  documentation, you will now have to explicitly add pipe-operators (`|`)
+  between your search terms to mark them as alternatives. By default, the full-
+  text search now requires all operators separated by a space to be present in a
+  file to be considered a valid result (#6517).
 - Fixed an issue where in some places instead of showing you a proper file
   title, the app would default to only showing you the filename, and neither a
   heading or YAML title, if you specified it as such. Now, the logic has been
@@ -22,11 +29,22 @@
   - `de-DE`.
   - `ja-JP` (#6480).
   - `ca-ES` (#6530).
+  - `pt-BR` (#6537).
+  - `tr-TR` (#6533).
 - Renamed "Remove line breaks" to "Remove excess line breaks."
+- Fixed an issue in full text search where multiple search terms separated by
+  whitespace would use an 'OR' operator rather than the documented 'AND'
+  operator. Now, search terms separated by whitespace correctly use the 'AND'
+  operator (#6517).
+- Fixed an issue that prevented inserting a new row when the cursor is placed in
+  the final row of the table (#6512; #6513).
 
 ## Under the Hood
 
 - Update Electron to `v43.4.0`.
+- Updates to the translations are now deterministic (#6538). This causes minimal
+  diffs between iterations and should also reduce the risks for merge conflicts
+  between open translation PRs and POT update PRs.
 
 # 4.7.0
 
