@@ -66,7 +66,6 @@ And some text.</p>`
 describe('MarkdownAST#md2HTML()', function () {
   for (const test of tests) {
     it(`should: ${test.description}`, async () => {
-      console.log(await md2html(test.input, parserOptions))
       deepStrictEqual(test.output, await md2html(test.input, parserOptions))
     })
   }

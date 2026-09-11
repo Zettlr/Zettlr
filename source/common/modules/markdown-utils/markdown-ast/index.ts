@@ -630,11 +630,7 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
       }
       return astNode
     }
-    case 'AdmonitionNote':
-    case 'AdmonitionTip':
-    case 'AdmonitionImportant':
-    case 'AdmonitionWarning':
-    case 'AdmonitionCaution': {
+    case 'Admonition': {
       const keywordNode = node.getChild('AdmonitionKeyword')
       if (keywordNode === null) {
         throw new Error('Parse error: Could not find Admonition keyword node. This is a bug in the parser.')

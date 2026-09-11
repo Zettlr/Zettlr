@@ -19,8 +19,8 @@ import { BlockWrapper, Decoration, EditorView, ViewPlugin, WidgetType, type View
 import { rangeInSelection } from '../util/range-in-selection'
 import type { SyntaxNode } from '@lezer/common'
 import { configField } from '../util/configuration'
-import { type AdmonitionNode, admonitionNodes } from '../parser/admonition-parser'
 import { trans } from 'source/common/i18n-renderer'
+import { validAdmonitionKeywords } from '../parser/admonition-parser'
 
 class AdmonitionTitleWidget extends WidgetType {
   constructor (private readonly title: string) {
@@ -50,11 +50,11 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
     syntaxTree(view.state).iterate({
       from, to,
       enter: (node) => {
-        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
+        if (node.type.name !== 'Admonition') {
           return
         }
 
-        if (!admonitionNodes.includes(node.name as AdmonitionNode)) {
+        if (rangeInSelection(view.state.selection, node.from, node.to, includeAdjacent)) {
           return
         }
 
@@ -63,11 +63,17 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
           return
         }
 
+        const keyword = view.state.sliceDoc(keywordMarker.from, keywordMarker.to).toLowerCase()
+
+        if (!validAdmonitionKeywords.includes(keyword)) {
+          return
+        }
+
         let parent: SyntaxNode|null = node.node.parent
         let parentNode
 
         while (parent) {
-          if (admonitionNodes.includes(parent.name as AdmonitionNode)) {
+          if (parent.name === 'Admonition') {
             parentNode = parent.node
           }
           parent = parent.parent
@@ -77,23 +83,13 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
           return
         }
 
-        const classes = ['admonition-wrapper']
-        let genericKeywordTranslated = trans('Note')
-        if (node.type.name === 'AdmonitionNote') {
-          classes.push('note')
-        } else if (node.type.name === 'AdmonitionTip') {
-          classes.push('tip')
-          genericKeywordTranslated = trans('Tip')
-        } else if (node.type.name === 'AdmonitionImportant') {
-          classes.push('important')
-          genericKeywordTranslated = trans('Important')
-        } else if (node.type.name === 'AdmonitionWarning') {
-          classes.push('warning')
-          genericKeywordTranslated = trans('Warning')
-        } else if (node.type.name === 'AdmonitionCaution') {
-          classes.push('caution')
-          genericKeywordTranslated = trans('Caution')
-        }
+        const genericKeywordTranslated = {
+          note: trans('Note'),
+          tip: trans('Tip'),
+          important: trans('Important'),
+          warning: trans('Warning'),
+          caution: trans('Caution')
+        }[keyword] ?? trans('Note')
 
         // Then, we may have a custom title in the AdmonitionTitle element.
         const titleMarker = node.node.getChild('AdmonitionTitle')
@@ -128,7 +124,7 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
         const wrapper = BlockWrapper.create({
           tagName: 'admonition-wrapper',
           attributes: {
-            class: classes.join(' '),
+            class: [ 'admonition-wrapper', keyword ].join(' '),
           }
         })
 

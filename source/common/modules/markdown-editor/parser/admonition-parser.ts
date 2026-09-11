@@ -18,23 +18,9 @@ import type { BlockContext, BlockParser, Line } from '@lezer/markdown'
 const admonitionRE = /^>(?<ws>\s*)\[!(?<keyword>note|tip|important|warning|caution|)\](?:\s*|(?<title>(.+)))$/id
 const admonitionStartRE = /^(>\s*)+/
 
-export const admonitionNodes = [
-  'AdmonitionNote',
-  'AdmonitionTip',
-  'AdmonitionImportant',
-  'AdmonitionWarning',
-  'AdmonitionCaution'
+export const validAdmonitionKeywords: string[] = [
+  'note', 'tip', 'important', 'warning', 'caution'
 ] as const
-
-export type AdmonitionNode = typeof admonitionNodes[number]
-
-const admonitionTypes: Record<AdmonitionNode, string[]> = {
-  AdmonitionNote: ['note'],
-  AdmonitionTip: ['tip'],
-  AdmonitionImportant: ['important'],
-  AdmonitionWarning: ['warning'],
-  AdmonitionCaution: ['caution']
-}
 
 /**
  * Helper function to determine the number of parent Admonitions
@@ -64,73 +50,72 @@ function getNestingLevel (text: string): number {
  *
  * @return  {BlockParser}                     The block parser
  */
-export function admonitionParserFactory (admonitionType: AdmonitionNode): BlockParser {
-  return {
-    name: `admonition-${admonitionType}`, before: 'Blockquote',
-    parse: (ctx, line) => {
-      // The line needs to be a valid admonition start
-      if (!admonitionStartRE.test(line.text)) {
-        return false
-      }
+export const admonitionParser: BlockParser = {
+  name: 'admonition',
+  before: 'Blockquote',
+  parse: (ctx, line) => {
+    // The line needs to be a valid admonition start
+    if (!admonitionStartRE.test(line.text)) {
+      return false
+    }
 
-      // Ensure that even in nested admonitions, we execute on only the relevant
-      // bit. The parent's composite parser will have moved the base accordingly.
-      const linetext = line.text.slice(line.pos)
-      const match = admonitionRE.exec(linetext)
+    // Ensure that even in nested admonitions, we execute on only the relevant
+    // bit. The parent's composite parser will have moved the base accordingly.
+    const linetext = line.text.slice(line.pos)
+    const match = admonitionRE.exec(linetext)
 
-      // Valid lines have the pattern `> [!KEYWORD]`.
-      if (!match?.indices?.groups) {
-        return false
-      }
+    // Valid lines have the pattern `> [!KEYWORD]`.
+    if (!match?.indices?.groups) {
+      return false
+    }
 
-      // Admonitions require a keyword and, optionally a title.
-      if (match.groups?.keyword === undefined) {
-        return false
-      }
+    // Admonitions require a keyword and, optionally a title.
+    if (match.groups?.keyword === undefined) {
+      return false
+    }
 
-      if (!admonitionTypes[admonitionType].includes(match.groups.keyword.toLowerCase())) {
-        return false // Wrong admonition type
-      }
+    if (!validAdmonitionKeywords.includes(match.groups.keyword.toLowerCase())) {
+      return false // Wrong admonition type
+    }
 
-      // Start a composite block, similar to blockquotes. This enables the node to
-      // contain other blocks as children. By setting `value` to the nesting
-      // depth, we can track nesting level. This comes in handy in the node
-      // `composite` method when we need to decide whether a block is closed by a
-      // closing mark.
-      ctx.startComposite(admonitionType, line.pos, getNestingLevel(line.text))
+    // Start a composite block, similar to blockquotes. This enables the node to
+    // contain other blocks as children. By setting `value` to the nesting
+    // depth, we can track nesting level. This comes in handy in the node
+    // `composite` method when we need to decide whether a block is closed by a
+    // closing mark.
+    ctx.startComposite('Admonition', line.pos, getNestingLevel(line.text))
 
-      // Place the required initial elements to mark:
-      //     >        [!     keyword     ]        optional title
-      // QuoteMark CodeMark {keyword} CodeMark   AdmonitionTitle
-      const linestart = ctx.lineStart + line.pos
-      ctx.addElement(ctx.elt('QuoteMark', linestart, linestart + 1))
+    // Place the required initial elements to mark:
+    //     >        [!     keyword     ]        optional title
+    // QuoteMark CodeMark {keyword} CodeMark   AdmonitionTitle
+    const linestart = ctx.lineStart + line.pos
+    ctx.addElement(ctx.elt('QuoteMark', linestart, linestart + 1))
 
-      const skippedSpace = ctx.lineStart + line.skipSpace(line.pos + 1)
-      const [ kwStart, kwEnd ] = match.indices.groups.keyword
-      // The admonition marker encompasses both the keyword and the two code
-      // marks, because this way it can be styled in its entirety.
-      ctx.addElement(ctx.elt('AdmonitionMark', skippedSpace, skippedSpace + 2))
-      ctx.addElement(ctx.elt('AdmonitionKeyword', linestart + kwStart, linestart + kwEnd))
-      ctx.addElement(ctx.elt('AdmonitionMark', linestart + kwEnd, linestart + kwEnd + 1))
-      
-      // We need to move the line position after parsing, so we track the offset
-      // as we calculate markers. This is a line-relative position, not document-
-      // relative.
-      let lineBasePos = line.pos + kwEnd + 1
+    const skippedSpace = ctx.lineStart + line.skipSpace(line.pos + 1)
+    const [ kwStart, kwEnd ] = match.indices.groups.keyword
+    // The admonition marker encompasses both the keyword and the two code
+    // marks, because this way it can be styled in its entirety.
+    ctx.addElement(ctx.elt('AdmonitionMark', skippedSpace, skippedSpace + 2))
+    ctx.addElement(ctx.elt('AdmonitionKeyword', linestart + kwStart, linestart + kwEnd))
+    ctx.addElement(ctx.elt('AdmonitionMark', linestart + kwEnd, linestart + kwEnd + 1))
+    
+    // We need to move the line position after parsing, so we track the offset
+    // as we calculate markers. This is a line-relative position, not document-
+    // relative.
+    let lineBasePos = line.pos + kwEnd + 1
 
-      if (match.groups?.title !== undefined) {
-        const [ titleFrom, titleTo ] = match.indices.groups.title
-        const skipped = line.skipSpace(titleFrom)
-        ctx.addElement(ctx.elt('AdmonitionTitle', linestart + skipped, linestart + titleTo))
-        lineBasePos = line.pos + titleTo
-      }
+    if (match.groups?.title !== undefined) {
+      const [ titleFrom, titleTo ] = match.indices.groups.title
+      const skipped = line.skipSpace(titleFrom)
+      ctx.addElement(ctx.elt('AdmonitionTitle', linestart + skipped, linestart + titleTo))
+      lineBasePos = line.pos + titleTo
+    }
 
-      // Move the base position to avoid infinite loops
-      line.moveBase(line.skipSpace(lineBasePos))
+    // Move the base position to avoid infinite loops
+    line.moveBase(line.skipSpace(lineBasePos))
 
-      return null // composite blocks require returning `null` on success
-    },
-  }
+    return null // composite blocks require returning `null` on success
+  },
 }
 
 // This function is used in the node [composite](https://github.com/lezer-parser/markdown?tab=readme-ov-file#user-content-nodespec.composite) method:

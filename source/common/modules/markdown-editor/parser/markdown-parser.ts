@@ -95,7 +95,7 @@ import { pandocAttributesParser } from './pandoc-attributes-parser'
 import { highlightParser } from './highlight-parser'
 import { zknTagParser } from './zkn-tag-parser'
 import { pandocDivComposite, pandocDivParser, pandocSpanParser } from './pandoc-div-span-parser'
-import { admonitionComposite, admonitionNodes, admonitionParserFactory } from './admonition-parser'
+import { admonitionComposite, admonitionParser } from './admonition-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   { mode: markdownLanguage, selectors: [ 'markdown', 'md' ] },
@@ -230,7 +230,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       parseBlock: [
         pandocDivParser,
         // Parse GitHub/Obsidian style admonitions/callouts
-        ...admonitionNodes.map(node => admonitionParserFactory(node)),
+        admonitionParser,
         // This BlockParser parses YAML frontmatters
         frontmatterParser,
         // This BlockParser parses math blocks
@@ -260,13 +260,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
         // Admonitions
-        ...admonitionNodes.map(node => {
-          const styleName = `${node}/...`
-          return {
-            name: node, block: true, composite: admonitionComposite,
-            style: { [styleName]: customTags[node] }
-          }
-        }),
+        { name: 'Admonition', block: true, style: { 'Admonition/...': customTags.Admonition }, composite: admonitionComposite },
         { name: 'AdmonitionTitle', style: customTags.AdmonitionTitle },
         { name: 'AdmonitionKeyword', style: customTags.AdmonitionKeyword },
         { name: 'AdmonitionMark', style: customTags.AdmonitionMark },

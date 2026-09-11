@@ -45,13 +45,9 @@ const EMPTY_NODES = new Set([
   'PandocAttribute',
   // Ignore the five classes of admonitions since they are parsed via their
   // children.
+  'Admonition',
   'AdmonitionKeyword',
   'AdmonitionMark',
-  'AdmonitionNote',
-  'AdmonitionTip',
-  'AdmonitionImportant',
-  'AdmonitionWarning',
-  'AdmonitionCaution',
   // Formatting marks
   'CodeMark',
   'EmphasisMark',
