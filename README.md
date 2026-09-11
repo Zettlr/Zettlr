@@ -107,6 +107,7 @@ opportunities via package managers:
 * [Homebrew (macOS)](https://formulae.brew.sh/cask/zettlr)
 * [Aptitude (Ubuntu/Debian)](https://apt.zettlr.com)
 * [Flathub (Linux)](https://flathub.org/apps/details/com.zettlr.Zettlr)
+* [WinGet (Windows)](https://winstall.app/apps/Zettlr.Zettlr)
 * [Chocolatey (Windows)](https://community.chocolatey.org/packages/zettlr/)
 * [Arch Linux](https://wiki.archlinux.org/title/Zettlr)
 

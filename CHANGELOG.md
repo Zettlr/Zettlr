@@ -32,9 +32,12 @@
   - `pt-BR` (#6537).
   - `tr-TR` (#6533).
 - Renamed "Remove line breaks" to "Remove excess line breaks."
-- Fixed an issue in full text search where multiple search terms separated by whitespace
-  would use an 'OR' operator rather than the documented 'AND' operator. Now, search
-  terms separated by whitespace correctly use the 'AND' operator (#6517).
+- Fixed an issue in full text search where multiple search terms separated by
+  whitespace would use an 'OR' operator rather than the documented 'AND'
+  operator. Now, search terms separated by whitespace correctly use the 'AND'
+  operator (#6517).
+- Fixed an issue that prevented inserting a new row when the cursor is placed in
+  the final row of the table (#6512; #6513).
 
 ## Under the Hood
 
