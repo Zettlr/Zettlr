@@ -24,6 +24,10 @@ export interface PandocReaderWriter {
    */
   name: PandocReader|PandocWriter|string
   /**
+   * Whether the reader is a custom lua reader.
+   */
+  isCustom: boolean
+  /**
    * Extensions that have been explicitly enabled (e.g., `+raw_html`). NOTE that
    * this is separate from extensions that are by default enabled or disabled.
    */
@@ -73,14 +77,15 @@ export type PandocWriter = typeof pandocWriters[number]
  * @return  {PandocReaderWriter}                The parsed info
  */
 export function parseReaderWriter (readerWriter: string): PandocReaderWriter {
-  if (!readerWriter.includes('-') && !readerWriter.includes('+')) {
-    return { name: readerWriter, enabledExtensions: [], disabledExtensions: [] }
-  }
-
   const parsed: PandocReaderWriter = {
     name: readerWriter.split(/[+-]/g)[0],
+    isCustom: false,
     enabledExtensions: [],
     disabledExtensions: []
+  }
+
+  if (parsed.name.endsWith('.lua')) {
+    parsed.isCustom = true
   }
 
   for (const match of readerWriter.matchAll(/([+-][a-z0-9_]+)/gi)) {
