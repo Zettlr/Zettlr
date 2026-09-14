@@ -38,31 +38,48 @@ export interface PandocReaderWriter {
   disabledExtensions: string[]
 }
 
+/**
+ * A list of all supported readers (input formats) for Pandoc.
+ *
+ * NOTE: Last date of updating: September 14, 2026.
+ *
+ * @var {string[]}
+ */
 export const pandocReaders = [
-  'bibtex', 'biblatex', 'bits', 'commonmark', 'commonmark_x',
-  'creole', 'csljson', 'csv', 'tsv', 'djot', 'docbook', 'docx', 'dokuwiki',
-  'endnotexml', 'epub', 'fb2', 'gfm', 'haddock', 'html', 'ipynb', 'jats', 'jira',
-  'json', 'latex', 'markdown', 'markdown_mmd', 'markdown_phpextra',
-  'markdown_strict', 'mediawiki', 'man', 'muse', 'native', 'odt', 'opml', 'org',
-  'ris', 'rtf', 'rst', 't2t', 'textile', 'tikiwiki', 'twiki', 'typst', 'vimwiki',
-  'markdown_github'
+  'asciidoc', 'biblatex', 'bibtex', 'bits', 'commonmark_x', 'commonmark',
+  'creole', 'csljson', 'csv', 'djot', 'docbook', 'docx', 'dokuwiki',
+  'endnotexml', 'epub', 'fb2', 'gfm', 'haddock', 'html', 'ipynb', 'jats',
+  'jira', 'json', 'latex', 'man', 'markdown_github', 'markdown_mmd',
+  'markdown_phpextra', 'markdown_strict', 'markdown', 'mdoc', 'mediawiki',
+  'muse', 'native', 'odt', 'opml', 'org', 'pod', 'pptx', 'ris', 'rst', 'rtf',
+  't2t', 'textile', 'tikiwiki', 'tsv', 'twiki', 'typst', 'vimwiki', 'xlsx',
+  'xml',
 ] as const
 // "as const" allows us to construct a corresponding type from this list, see
 // https://steveholgado.com/typescript-types-from-arrays/
 
 export type PandocReader = typeof pandocReaders[number]
 
+/**
+ * A list of all supported writers (output formats) for Pandoc.
+ *
+ * NOTE: Last date of updating: September 14, 2026.
+ *
+ * @var {string[]}
+ */
 export const pandocWriters = [
-  'asciidoc', 'asciidoc_legacy', 'asciidoctor', 'beamer', 'bibtex', 'biblatex',
-  'chunkedhtml', 'commonmark', 'commonmark_x', 'context', 'csljson', 'djot',
-  'docbook', 'docbook4', 'doocbook5', 'docx', 'dokuwiki', 'epub', 'epub3',
-  'epub2', 'fb2', 'gfm', 'haddock', 'html', 'html5', 'html4', 'icml', 'ipynb',
+  'ansi', 'asciidoc_legacy', 'asciidoc', 'asciidoctor', 'bbcode',
+  'bbcode_fluxbb', 'bbcode_hubzilla', 'bbcode_phpbb', 'bbcode_steam',
+  'bbcode_xenforo', 'beamer', 'biblatex', 'bibtex', 'chunkedhtml',
+  'commonmark_x', 'commonmark', 'context', 'csljson', 'djot', 'docbook',
+  'docbook4', 'doocbook5', 'docx', 'dokuwiki', 'dzslides', 'epub', 'epub2',
+  'epub3', 'fb2', 'gfm', 'haddock', 'html', 'html4', 'html5', 'icml', 'ipynb',
   'jats_archiving', 'jats_articleauthoring', 'jats_publishing', 'jats', 'jira',
-  'json', 'latex', 'man', 'markdown', 'markdown_mmd', 'markdown_phpextra',
-  'markdown_strict', 'markua', 'mediawiki', 'ms', 'muse', 'native', 'odt',
-  'opml', 'opendocument', 'org', 'pdf', 'plain', 'pptx', 'rst', 'rtf',
-  'texinfo', 'textile', 'slideous', 'slidy', 'dzslides', 'revealjs', 's5',
-  'tei', 'typst', 'xwiki', 'zimwiki', 'markdown_github'
+  'json', 'latex', 'man', 'markdown_github', 'markdown_mmd',
+  'markdown_phpextra', 'markdown_strict', 'markdown', 'markua', 'mediawiki',
+  'ms', 'muse', 'native', 'odt', 'opendocument', 'opml', 'org', 'pdf', 'plain',
+  'pptx', 'revealjs', 'rst', 'rtf', 's5', 'slideous', 'slidy', 't2t', 'tei',
+  'texinfo', 'textile', 'typst', 'vimdoc', 'xml', 'xwiki', 'zimwiki',
 ] as const
 
 export type PandocWriter = typeof pandocWriters[number]
