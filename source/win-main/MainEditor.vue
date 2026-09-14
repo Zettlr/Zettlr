@@ -13,6 +13,17 @@
     <div v-bind:id="`cm-text-${props.leafId}`">
       <!-- This element will be replaced with Codemirror's wrapper element on mount -->
     </div>
+    <Transition name="remote-reload-cue">
+      <div
+        v-if="showRemoteReloadCue"
+        class="remote-reload-cue"
+        role="status"
+        v-bind:aria-label="trans('Reloaded from disk')"
+      >
+        <clr-icon shape="sync"></clr-icon>
+        {{ trans('Reloaded from disk') }}
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -36,6 +47,7 @@
 import MarkdownEditor, { type EditorViewPersistentState } from '@common/modules/markdown-editor'
 
 import { ref, computed, onMounted, onBeforeUnmount, watch, toRef, onUpdated } from 'vue'
+import { trans } from '@common/i18n-renderer'
 import { type EditorCommands } from './App.vue'
 import { hasMarkdownExt } from '@common/util/file-extention-checks'
 import { DP_EVENTS, type OpenDocument } from '@dts/common/documents'
@@ -122,6 +134,15 @@ ipcRenderer.on('shortcut', (event, command) => {
         }
       })
       .catch(e => console.error(e))
+  } else if (command === 'revert-file') {
+    // Force-reload the active file from disk, discarding the in-memory buffer.
+    // The visible reload cue is driven by the FILE_REMOTELY_CHANGED broadcast
+    // that revertFile -> notifyRemoteChange emits.
+    ipcRenderer.invoke('documents-provider', {
+      command: 'revert-file',
+      payload: { path: props.file.path }
+    } as DocumentManagerIPCAPI)
+      .catch(e => console.error(e))
   } else if (command === 'search') {
     currentEditor.toggleSearchPanel()
   } else if (command === 'toggle-typewriter-mode') {
@@ -140,6 +161,16 @@ ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context: Doc
     // that the document provider has already reloaded the document and we only
     // need to tell the main editor to reload it as well.
     currentEditor?.reload().catch(e => console.error(e))
+    // Surface a brief visual cue so the user notices the buffer was swapped
+    // out from under them (e.g., after an external tool edited the file).
+    showRemoteReloadCue.value = true
+    if (remoteReloadCueTimeout !== null) {
+      clearTimeout(remoteReloadCueTimeout)
+    }
+    remoteReloadCueTimeout = setTimeout(() => {
+      showRemoteReloadCue.value = false
+      remoteReloadCueTimeout = null
+    }, 2500)
   } else if (event === DP_EVENTS.FILE_SAVED && context.filePath === props.file.path) {
     // The file has been saved to disk. This means we should probably update the
     // descriptor to know of, e.g., library changes.
@@ -183,6 +214,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  if (remoteReloadCueTimeout !== null) {
+    clearTimeout(remoteReloadCueTimeout)
+    remoteReloadCueTimeout = null
+  }
   if (currentEditor !== null) {
     props.persistentStateMap.set(props.file.path, currentEditor.persistentState)
     // Clear out the table of contents before unmounting the component.
@@ -216,6 +251,8 @@ onUpdated(() => {
 
 // DATA SETUP
 const mainEditorWrapper = ref<HTMLDivElement|null>(null)
+const showRemoteReloadCue = ref<boolean>(false)
+let remoteReloadCueTimeout: ReturnType<typeof setTimeout>|null = null
 
 // COMPUTED PROPERTIES
 const useH1 = computed<boolean>(() => configStore.config.fileNameDisplay.includes('heading'))
@@ -700,6 +737,40 @@ function maybeHighlightSearchResults (): void {
   background-color: #ffffff;
   transition: 0.2s background-color ease;
   position: relative;
+
+  .remote-reload-cue {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background-color: rgba(40, 40, 40, 0.92);
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+    clr-icon { color: #ffffff; }
+  }
+
+  // Fade in / fade out the remote-reload cue. The cue itself is only
+  // mounted for ~2.5s after an external reload (see ipc handler above).
+  .remote-reload-cue-enter-active,
+  .remote-reload-cue-leave-active {
+    transition: opacity 250ms ease, transform 250ms ease;
+  }
+
+  .remote-reload-cue-enter-from,
+  .remote-reload-cue-leave-to {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
 
   .cm-editor {
     .cm-scroller { padding: 50px 50px; }

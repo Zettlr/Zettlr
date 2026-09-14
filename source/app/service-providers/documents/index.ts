@@ -138,6 +138,7 @@ export type DocumentManagerIPCAPI = IPCAPI<{
   'set-pinned': LeafLoc & { path: string, pinned: boolean }
   'retrieve-tab-config': { windowId: string }
   'save-file': { path: string }
+  'revert-file': { path: string }
   'open-file': LeafLoc & { path: string, newTab: boolean }
   'close-file': LeafLoc & { path: string }
   'close-file-everywhere': { path: string }
@@ -295,6 +296,9 @@ export default class DocumentManager extends ProviderContract {
         }
         case 'save-file': {
           return await this.saveFile(payload.path)
+        }
+        case 'revert-file': {
+          return await this.revertFile(payload.path)
         }
         case 'open-file': {
           const { windowId, leafId, path, newTab } = payload
@@ -1295,6 +1299,33 @@ current contents from the editor somewhere else, and restart the application.`
     leaf.tabMan.setPinnedStatus(filePath, shouldBePinned)
     this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { windowId, leafId, filePath, status: 'pinned' })
     this.syncToConfig()
+  }
+
+  /**
+   * Force-reloads the given file from disk, discarding any in-memory buffer.
+   * Intended for the user-initiated "Revert" command, which is needed when
+   * the watcher missed an external change (or when the modtime guard in
+   * handleRemoteChange short-circuited).
+   *
+   * @param {string} filePath The file in question
+   */
+  public async revertFile (filePath: string): Promise<boolean> {
+    const doc = this.documents.find(d => d.filePath === filePath)
+    if (doc === undefined) {
+      return false
+    }
+
+    // Refresh the descriptor so the next getDocument() call sees the
+    // current on-disk modtime/content rather than the stale cached one.
+    try {
+      const metadata = await this._app.fsal.getFilesystemMetadata(filePath)
+      doc.descriptor.modtime = metadata.modtime
+    } catch (err: any) {
+      this._app.log.warning(`[DocumentManager] Could not refresh descriptor for ${filePath} during revert: ${err.message as string}`)
+    }
+
+    await this.notifyRemoteChange(filePath)
+    return true
   }
 
   /**

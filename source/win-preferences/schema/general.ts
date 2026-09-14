@@ -94,8 +94,13 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
       fields: [
         {
           type: 'checkbox',
-          label: trans('Always load remote changes to the current file'),
+          label: trans('Automatically reload files changed externally'),
           model: 'alwaysReloadFiles'
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('When enabled, Zettlr silently reloads the editor buffer if the file changes on disk and you have no unsaved changes. A brief notification appears so you know the buffer was refreshed. If you have unsaved changes, Zettlr will always ask before discarding them.')
         },
         {
           type: 'checkbox',
