@@ -63,6 +63,10 @@ Zettlr ships if you are affected by this change.
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
+- **Change**: The old `mark` setting has been replaced by a new settings
+  category that enforces support for several Pandoc extensions during export. If
+  you have disabled the `mark` support in the import/export settings previously,
+  you will need to disable this again after updating Zettlr.
 - **Change**: Fixed a fundamental issue with the full-text search that would
   turn **AND**-searches implicitly into **OR** searches. If you relied on how
   the full-text search actually worked, and not how it was described in the
@@ -75,7 +79,7 @@ Zettlr ships if you are affected by this change.
 - Improved the custom title bar style on both Linux (if native appearance is
   turned off) and Windows. Here's what changed:
   1. The logo is now an actual element rather than background, and has been
-     scaled down to better fit into the menu bar
+     scaled down to better fit into the menu bar.
   2. The window controls now use a transparent background and a light/dark color
      depending on which theme the app is currently using.
   3. Improved the spacing around the menu items to make them less menacing.
@@ -114,6 +118,9 @@ Zettlr ships if you are affected by this change.
 ## Under the Hood
 
 - Update Electron to `v43.6.0`.
+- Zettlr now checks whether a Pandoc extension it seeks to enable during export
+  is actually supported by the reader to avoid errors when, e.g., using the
+  `commonmark` reader which does not support the `mark` extension.
 - Updates to the translations are now deterministic (#6538). This causes minimal
   diffs between iterations and should also reduce the risks for merge conflicts
   between open translation PRs and POT update PRs.

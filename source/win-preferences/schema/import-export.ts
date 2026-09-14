@@ -70,12 +70,6 @@ export function getImportExportFields (): PreferencesFieldset[] {
           label: trans('Automatically open successfully exported files'),
           model: 'export.autoOpenExportedFiles'
         },
-        {
-          type: 'checkbox',
-          label: trans('Enforce highlight extension on export'),
-          info: trans('When enabled, Zettlr will automatically enable the "mark"-extension when exporting Markdown files.'),
-          model: 'export.enforceMarkSupport'
-        },
         { type: 'separator' },
         {
           type: 'checkbox',
@@ -128,6 +122,26 @@ export function getImportExportFields (): PreferencesFieldset[] {
           searchable: true,
           addable: true,
           editable: true
+        }
+      ]
+    },
+    {
+      title: trans('Pandoc Extensions'),
+      infoString: trans('Add support for certain Markdown syntax elements during exports. We recommend to keep all enabled, unless you know what you are doing.'),
+      group: PreferencesGroups.ImportExport,
+      help: undefined,
+      fields: [
+        {
+          type: 'checkbox',
+          label: trans('Mark extension'),
+          info: trans('Enable support for ==highlighted== text.'),
+          model: 'export.forceEnableExtensions.mark'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Alerts extension'),
+          info: trans('Enable support for admonitions (also known as alerts or callouts).'),
+          model: 'export.forceEnableExtensions.alerts'
         }
       ]
     }
