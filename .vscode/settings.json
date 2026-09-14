@@ -12,5 +12,8 @@
         // Better: A custom schema that helps remember the correct variables to
         // use.
         "static/defaults/pandoc-defaults-schema.json": "static/defaults/*.yaml"
-    }
+    },
+    "Lua.diagnostics.globals": [
+        "pandoc"
+    ]
 }

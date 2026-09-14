@@ -172,6 +172,82 @@ This iss a *file* with two tpyos in here. asdaa *ss* adas word word.`,
         }
       ], attributes: {}
     }
+  },
+  {
+    description: 'Parse Blockquotes',
+    input: `# Blockquote file
+
+> This is a **blockquote**`,
+    output: {
+        attributes: {}, from: 0, name: "Document", to: 45, type: "Document", whitespaceBefore: "",
+        children: [
+          {
+            attributes: {}, content: "Blockquote file", from: 0, level: 1, name: "ATXHeading1", to: 17, type: "Heading", whitespaceBefore: "",
+            children: [
+              { attributes: {}, children: [], from: 0, name: "HeaderMark", to: 1, type: "Generic", whitespaceBefore: "" },
+              { attributes: {}, from: 2, name: "text", to: 17, type: "Text", value: "Blockquote file", whitespaceBefore: " " }
+            ]
+          },
+          {
+            attributes: {}, from: 19, name: "Blockquote", to: 45, type: "Generic", whitespaceBefore: "\n\n",
+            children: [
+              { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "", },
+              {
+                attributes: {}, from: 21, name: "Paragraph", to: 45, type: "Generic", whitespaceBefore: " ",
+                children: [
+                  { attributes: {}, from: 21, name: "text", to: 31, type: "Text", value: "This is a ", whitespaceBefore: "", },
+                  {
+                    attributes: {}, from: 31, name: "Emphasis", to: 45, type: "Emphasis", which: "bold", whitespaceBefore: " ",
+                    children: [
+                      { attributes: {}, children: [], from: 31, name: "EmphasisMark", to: 33, type: "Generic", whitespaceBefore: "" },
+                      { attributes: {}, from: 33, name: "text", to: 43, type: "Text", value: "blockquote", whitespaceBefore: "" },
+                      { attributes: {}, children: [], from: 43, name: "EmphasisMark", to: 45, type: "Generic", whitespaceBefore: "" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+  },
+  {
+    description: 'Parse Admonitions',
+    input: `# Admonition file
+
+> [!NOTE] A Custom Note
+> This is a note admonition with a custom title.`,
+    output:  {
+    attributes: {}, from: 0, name: "Document", to: 91, type: "Document", whitespaceBefore: "",
+    children: [
+      {
+        attributes: {}, content: "Admonition file", from: 0, level: 1, name: "ATXHeading1", to: 17, type: "Heading", whitespaceBefore: "",
+        children: [
+          { attributes: {}, children: [], from: 0, name: "HeaderMark", to: 1, type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, from: 2, name: "text", to: 17, type: "Text", value: "Admonition file", whitespaceBefore: " " }
+        ]
+      },
+      {
+        type: "Admonition", from: 19, to: 91, whitespaceBefore: "\n\n", name: "Admonition",
+        admonitionType: "note", attributes: {},
+        children: [
+          { attributes: {}, children: [], from: 19, name: "QuoteMark", to: 20, type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, children: [], from: 21, name: "AdmonitionMark", to: 23, type: "Generic", whitespaceBefore: " " },
+          { attributes: {}, children: [], from: 23, to: 27, name: "AdmonitionKeyword", type: "Generic", whitespaceBefore: "" },
+          { attributes: {}, children: [], from: 27, name: "AdmonitionMark", to: 28, type: "Generic", whitespaceBefore: "" },
+          {
+            attributes: {}, from: 29, name: "AdmonitionTitle", to: 42, type: "AdmonitionTitle", whitespaceBefore: " ",
+            children: [{ attributes: {}, from: 29, name: "text", to: 42, type: "Text", value: "A Custom Note", whitespaceBefore: "" }]
+          },
+          { attributes: {}, children: [], from: 43, name: "QuoteMark", to: 44, type: "Generic", whitespaceBefore: "\n" },
+          {
+            attributes: {}, from: 45, name: "Paragraph", to: 91, type: "Generic", whitespaceBefore: " ",
+            children: [{ attributes: {}, from: 45, name: "text", to: 91, type: "Text", value: "This is a note admonition with a custom title.", whitespaceBefore: " " }]
+          }
+        ]
+      }
+    ]
+  }
   }
 ]
 

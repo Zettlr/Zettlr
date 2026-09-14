@@ -11,6 +11,7 @@
 -- in the editor. Notably, escaped tags such as \#this-is-not-a-tag will be
 -- considered tags nevertheless because Pandoc removes backslashes in front of
 -- the #-sign, so we cannot check for that.
+---@module "pandoc-types-annotations"
 
 -- Allowed characters before a hashtag (note we're not checking for whitespace
 -- since that's already being removed by Pandoc)
@@ -20,24 +21,29 @@ local pattern_before = "([%(%[{]+)"
 local tag_pattern = "#(#?[^%s,.:;…!?\"'`»«“”‘’—–@%$%%&*#^+~÷\\/|<=>[%](){}]+#?)"
 -- This variable will be set to true if the user has set the corresponding
 -- option in the preferences.
-local strip_tags = false
+local strip_tags = false ---@type boolean
 
 return {
   {
-    -- First, extract our metadata property
+    ---Extract our metadata property
+    ---@param meta Meta
+    ---@return Meta
     Meta = function (meta)
-      if meta.zettlr and meta.zettlr.strip_tags == true then
+      -- if meta.zettlr and meta.zettlr.strip_tags == true then
+      if meta["zettlr"] ~= nil and meta.zettlr["strip_tags"] ~= nil and meta.zettlr["strip_tags"] == true then
         strip_tags = true
       end
       return meta
     end
   },
   {
-    -- Then, iterate over all Str elements and remove those that look like tags.
-    -- NOTE: Due to Pandoc stripping away escape characters, any \# will become
-    -- just # in the AST. If you use \\, then we will have \# here, *but* also
-    -- in the output. So it's best to avoid any situation where you have to
-    -- write (whitespace)#(non-whitespace) since that *will* also be removed.
+    ---Iterate over all Str elements and remove those that look like tags.
+    ---NOTE: Due to Pandoc stripping away escape characters, any \# will become
+    ---just # in the AST. If you use \\, then we will have \# here, *but* also
+    ---in the output. So it's best to avoid any situation where you have to
+    ---write (whitespace)#(non-whitespace) since that *will* also be removed.
+    ---@param elem Str
+    ---@return nil|Str
     Str = function (elem)
       if not strip_tags then
         -- Do not alter if we shouldn't remove tags.
