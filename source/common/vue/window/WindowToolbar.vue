@@ -195,6 +195,7 @@ body div#toolbar {
   height: 40px;
   padding: 5px 10px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   position: relative;
 
@@ -242,6 +243,10 @@ body div#toolbar {
 
   button {
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
   }
 }
 
@@ -272,7 +277,6 @@ body.darwin {
       border-radius: 4px;
       background-color: transparent;
       border: none;
-      padding: 4px 8px;
 
       &:hover, &.toolbar-overflow {
         background-color: rgb(230, 230, 230);
@@ -311,7 +315,6 @@ body.win32 {
     button {
       background-color: transparent;
       border: none;
-      padding: 4px 8px;
 
       &:hover, &.toolbar-overflow {
         background-color: rgb(230, 230, 230);
@@ -355,10 +358,7 @@ body.linux {
     button {
       background-color: transparent;
       border: 1px solid rgb(180, 180, 180);
-      padding: 0px;
       border-radius: @border-radius;
-      width: 35px;
-      height: 25px;
       margin: 0 4px;
 
       &:hover, &.toolbar-overflow {

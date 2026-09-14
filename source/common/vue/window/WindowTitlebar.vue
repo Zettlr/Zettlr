@@ -81,7 +81,8 @@ body.win32 {
 // Linux styles
 body.linux {
   div#titlebar {
-    height: 30px;
+    height: env(titlebar-area-height, var(--fallback-title-bar-height));
+    line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
     line-height: 30px;
     text-align: center;
     font-weight: bold;

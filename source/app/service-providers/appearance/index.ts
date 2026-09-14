@@ -14,10 +14,30 @@
  */
 
 import type ConfigProvider from '@providers/config'
-import { ipcMain, nativeTheme, systemPreferences } from 'electron'
+import { BrowserWindow, ipcMain, nativeTheme, systemPreferences } from 'electron'
 import type LogProvider from '../log'
 import ProviderContract from '../provider-contract'
 import { getSystemColors } from '@common/util/get-system-colors'
+
+/**
+ * Controls the height (in px) of the custom menubar. Will be picked up by the
+ * CSS that also controls the titlebar height.
+ *
+ * @var {number}
+ */
+export const CUSTOM_WINDOW_CONTROLS_HEIGHT = 35
+/**
+ * Controls the color of the window control symbols in light mode
+ *
+ * @var {string}
+ */
+export const CUSTOM_WINDOW_CONTROLS_LIGHT_FOREGROUND = '#333333ff'
+/**
+ * Controls the color of the window control symbols in dark mode
+ *
+ * @var {string}
+ */
+export const CUSTOM_WINDOW_CONTROLS_DARK_FOREGROUND = '#ddddddff'
 
 /**
  * This class manages automatic changes in the appearance of the app. It won't
@@ -93,7 +113,10 @@ export default class AppearanceProvider extends ProviderContract {
 
     // Subscribe to configuration updates
     this._config.on('update', (option: string) => {
-      const { autoDarkMode, darkMode } = this._config.get()
+      const { autoDarkMode, darkMode, window } = this._config.get()
+      const isLinuxWithoutNativeAppearance = process.platform === 'linux' && !window.nativeAppearance
+      const isWindows = process.platform === 'win32'
+
       if (option === 'autoDarkMode') {
         this._mode = autoDarkMode
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
@@ -121,6 +144,18 @@ export default class AppearanceProvider extends ProviderContract {
           nativeTheme.themeSource = darkMode ? 'dark' : 'light'
         } else {
           nativeTheme.themeSource = 'system'
+        }
+      } else if (option === 'darkMode' && (isLinuxWithoutNativeAppearance || isWindows)) {
+        // For both Linux with custom title bar and Windows, we have to adjust the
+        // custom window control overlays whenever the theme changed
+        for (const window of BrowserWindow.getAllWindows()) {
+          window.setTitleBarOverlay({
+            symbolColor: darkMode
+              ? CUSTOM_WINDOW_CONTROLS_DARK_FOREGROUND
+              : CUSTOM_WINDOW_CONTROLS_LIGHT_FOREGROUND,
+            color: '#00000000', // Transparent background
+            height: CUSTOM_WINDOW_CONTROLS_HEIGHT
+          })
         }
       }
     })

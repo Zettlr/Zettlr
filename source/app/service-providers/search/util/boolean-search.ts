@@ -245,7 +245,7 @@ export function searchFileBoolean (descriptor: MDFileDescriptor|CodeFileDescript
   }
 
   // Save the info on whether all terms have been matched in the metadata alone.
-  const hasAllTermsMatchedInMetadata = termsMatched !== termsToSearch.length
+  const hasAllTermsMatchedInMetadata = termsMatched === termsToSearch.length
 
   // Now, regardless of whether we have already matched everything in the
   // metadata, perform a search over the full text. This way we can show

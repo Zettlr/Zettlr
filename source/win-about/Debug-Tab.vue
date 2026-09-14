@@ -40,8 +40,18 @@
     </ul>
     <h2>Environment Variables</h2>
     <ul>
-      <li v-for="(key, value, idx) in env" v-bind:key="idx">
-        <strong>{{ value }}</strong>: {{ key }}
+      <li v-for="(value, key, idx) in env" v-bind:key="idx">
+        <strong>{{ key }}</strong>:
+        <template v-if="key === 'PATH'">
+          <ul>
+            <li v-for="segment in value?.split(PATH_SEP)" v-bind:key="segment">
+              {{ segment }}
+            </li>
+          </ul>
+        </template>
+        <template v-else>
+          {{ value }}
+        </template>
       </li>
     </ul>
   </div>
@@ -67,6 +77,8 @@ import { useConfigStore } from 'source/pinia'
 
 const configStore = useConfigStore()
 
+const PATH_SEP = process.platform === 'win32' ? ';' : ':'
+
 const versions = process.versions
 const argv = process.argv
 const arch = process.arch
@@ -84,9 +96,10 @@ const programVersions = {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 div#debug-tab {
   user-select: text;
+  word-break: break-word;
   * {
     margin: revert;
   }

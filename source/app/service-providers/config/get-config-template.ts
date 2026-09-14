@@ -221,6 +221,7 @@ export interface ConfigOptions {
     renderHTags: boolean
     renderEmphasis: boolean
     renderPandoc: boolean
+    renderAdmonitions: boolean
     renderHorizontalRules: boolean
   }
   files: {
@@ -509,6 +510,7 @@ export function getConfigTemplate (): ConfigOptions {
       renderHTags: true,
       renderEmphasis: true,
       renderPandoc: true,
+      renderAdmonitions: true,
       renderHorizontalRules: true
     },
     files: {

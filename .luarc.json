@@ -1,0 +1,14 @@
+{
+  "diagnostics.globals": [
+    "FORMAT",
+    "PANDOC_READER_OPTIONS",
+    "PANDOC_WRITER_OPTIONS",
+    "PANDOC_VERSION",
+    "PANDOC_API_VERSION",
+    "PANDOC_SCRIPT_FILE",
+    "PANDOC_STATE",
+    "pandoc",
+    "lpeg",
+    "re"
+  ]
+}

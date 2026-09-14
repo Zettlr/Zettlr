@@ -1,14 +1,17 @@
 <template>
   <div id="menubar">
-    <span
+    <img id="app-logo" src="../../img/image-preview.png" />
+    <div
       v-for="(item, idx) in menu"
       v-bind:key="idx"
       class="top-level-item"
       v-on:mousedown.stop.prevent="getSubmenu(item.id!, $event.target as HTMLElement)"
       v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)"
     >
-      {{ item.label }}
-    </span>
+      <span>
+        {{ item.label }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -132,39 +135,39 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
 }
 </script>
 
-<style lang="less">
-// Styles for the menubar (for Windows and Linux)
-:root {
-  --fallback-title-bar-height: 31px;
-}
-
+<style lang="css" scoped>
 #menubar {
-  height: env(titlebar-area-height, var(--fallback-title-bar-height));
-  line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
+  height: env(titlebar-area-height, 30px);
+  line-height: env(titlebar-area-height, 30px);
   width: 100%;
   background-color: var(--grey-0);
   color: var(--grey-6);
-  // Use the system font with a somewhat smaller font-size
+  /* Use the system font with a somewhat smaller font-size */
   font-family: inherit;
   font-size: 12px;
-  padding-left: env(titlebar-area-height, var(--fallback-title-bar-height));
-  // Use the Zettlr logo as fixed background to enable branding in the menubar
-  background-image: url("../../img/image-preview.png");
-  background-position: left center;
-  background-repeat: no-repeat;
-  background-size: contain;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
 
-  // If the menubar is shown, this indicates there's no title bar, hence we
-  // need the menubar to be draggable.
+  /* If the menubar is shown, this indicates there's no title bar, hence we
+  need the menubar to be draggable. */
   -webkit-app-region: drag;
 
-  span.top-level-item {
-    display: inline-block;
-    padding: 3px;
-    height: env(titlebar-area-height, var(--fallback-title-bar-height));
-    line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
+  img#app-logo {
+    height: 18px;
+    margin-left: 8px;
+    width: auto;
+  }
+
+  div.top-level-item {
     padding: 0 10px;
-    // Don't drag the top-level menubar items
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    /* Don't drag the top-level menubar items */
     -webkit-app-region: no-drag;
 
     &:hover {

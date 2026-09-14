@@ -1,7 +1,65 @@
 # Upcoming
 
+## Admonitions
+
+After more than six years in the making, we are proud to announce admonitions as
+a new feature for Zettlr. The app now supports the more and more common syntax
+that GitHub and other Markdown editors already support, using Blockquotes with a
+custom header. You can create `note`s, `tip`s, `warning`s, `important` blocks,
+and `caution` blocks like so:
+
+```markdown
+> [!note] This is the note's title
+> This is the content of the note.
+```
+
+The title after the keyword is optional, and you can use both uppercase keywords
+and lowercase keywords.
+
+Zettlr comes with a built-in renderer so that you can immediately see what the
+admonitions might look like upon export (note that the final styling depends on
+the export option chosen and support for this type of element). The renderer can
+be enabled or disabled exactly like the existing renderers.
+
+When you "copy" a selection that contains an admonition using the "with style"
+option, Zettlr will transform the admonition correctly, but whether the
+admonition retains its styles depend on the application into which you paste
+this code.
+
+Note that admonition support upon exporting requires the `alerts` extension. You
+can enable it manually in your export profile configuration, or enforce support
+(where available) via the export settings.
+
+## Deprecation Note: Dropping Support for OS Versions in Next Release
+
+This is the last Zettlr release shipping with Electron version 43. The next
+release will switch to Electrion version 44, which drops support for the
+following operating systems:
+
+* Ubuntu 17.04 or earlier
+* macOS 12 (Monterey)
+
+Please make sure to update your operating system before the next version of
+Zettlr ships if you are affected by this change.
+
 ## GUI and Functionality
 
+- **Feature**: Admonitions are here! Zettlr now supports a broad range of
+  admonitions (sometimes also referred to as alerts or callouts). You can use
+  admonitions to emphasize certain content in your documents using Blockquote
+  syntax with a special header (see PR. #6497 for details). This closes a long-
+  standing feature request (#532). Some notes:
+  * Admonitions come with support of five keywords: `note` (gray), `tip`
+    (green), `warning` (yellow), `important` (purple), and `caution` (red).
+  * Zettlr supports custom titles for admonitions (full compatibility with other
+    popular Markdown editors).
+  * The app ships with a renderer for admonitions that you can turn on and off
+    just like any other renderer.
+  * Note that, to make admonitions survive exports, you will need to enable the
+    `alerts`-extension of Pandoc in the `reader` of the profile in question.
+  * Zettlr will use similar HTML-syntax when you copy text with admonitions
+    using the "Copy with Styles" option, but whether this survives pasting into
+    other applications depends on support on their side.
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
@@ -9,6 +67,26 @@
   category that enforces support for several Pandoc extensions during export. If
   you have disabled the `mark` support in the import/export settings previously,
   you will need to disable this again after updating Zettlr.
+- **Change**: Fixed a fundamental issue with the full-text search that would
+  turn **AND**-searches implicitly into **OR** searches. If you relied on how
+  the full-text search actually worked, and not how it was described in the
+  documentation, you will now have to explicitly add pipe-operators (`|`)
+  between your search terms to mark them as alternatives. By default, the full-
+  text search now requires all operators separated by a space to be present in a
+  file to be considered a valid result (#6517).
+- **New Translation**: Zettlr now ships with an additional language:
+  Azerbaijani. See PR #6548 for details.
+- Improved the custom title bar style on both Linux (if native appearance is
+  turned off) and Windows. Here's what changed:
+  1. The logo is now an actual element rather than background, and has been
+     scaled down to better fit into the menu bar
+  2. The window controls now use a transparent background and a light/dark color
+     depending on which theme the app is currently using.
+  3. Improved the spacing around the menu items to make them less menacing.
+- Fixed the about window's debug tab: No more horizontal scrolling, and the
+  `PATH`-variable is properly split into segments.
+- Fixed some alignment issues with custom symbols on toolbar buttons; now the
+  buttons should all be properly centered.
 - Fixed an issue where in some places instead of showing you a proper file
   title, the app would default to only showing you the filename, and neither a
   heading or YAML title, if you specified it as such. Now, the logic has been
@@ -26,14 +104,26 @@
   - `de-DE`.
   - `ja-JP` (#6480).
   - `ca-ES` (#6530).
+  - `pt-BR` (#6537).
+  - `tr-TR` (#6533).
+  - `az-AZ` (#6548).
 - Renamed "Remove line breaks" to "Remove excess line breaks."
+- Fixed an issue in full text search where multiple search terms separated by
+  whitespace would use an 'OR' operator rather than the documented 'AND'
+  operator. Now, search terms separated by whitespace correctly use the 'AND'
+  operator (#6517).
+- Fixed an issue that prevented inserting a new row when the cursor is placed in
+  the final row of the table (#6512; #6513).
 
 ## Under the Hood
 
-- Update Electron to `v43.4.0`.
+- Update Electron to `v43.6.0`.
 - Zettlr now checks whether a Pandoc extension it seeks to enable during export
   is actually supported by the reader to avoid errors when, e.g., using the
   `commonmark` reader which does not support the `mark` extension.
+- Updates to the translations are now deterministic (#6538). This causes minimal
+  diffs between iterations and should also reduce the risks for merge conflicts
+  between open translation PRs and POT update PRs.
 
 # 4.7.0
 
