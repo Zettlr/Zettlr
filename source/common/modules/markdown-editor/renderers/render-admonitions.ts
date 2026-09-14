@@ -46,8 +46,9 @@ function renderAdmonitionWrappers (view: EditorView): { wrappers: RangeSet<Block
   const inlineRanges: Range<Decoration>[] = []
   const includeAdjacent = view.state.field(configField, false)?.previewModeShowSyntaxWhenCursorIsAdjacent ?? true
 
+  const tree = syntaxTree(view.state)
   for (const { from, to } of view.visibleRanges) {
-    syntaxTree(view.state).iterate({
+    tree.iterate({
       from, to,
       enter: (node) => {
         if (!node.type.is('Admonition')) {
