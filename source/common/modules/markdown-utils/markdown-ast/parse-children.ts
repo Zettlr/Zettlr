@@ -25,14 +25,6 @@ import { genericTextNode } from './generic-text-node'
  * marks) which can be reconstructed without the verbatim value, as well as
  * larger container nodes (whose contents is represented via their children).
  *
- * Essentially, what this means is that these nodes will be ignored by the
- * `parseChildren` function, meaning they don't end up in the AST. This makes
- * the AST a bit cleaner, but this also means that you should treat these nodes
- * in the `parseNode` function. For example, we ignore all child nodes of the
- * admonitions here, which means that `parseChildren` will simply ignore them
- * (and any of their children), but in turn this implies that you should have
- * already treated them in the `parseNode` function.
- *
  * @var {string[]}
  */
 const EMPTY_NODES = new Set([
