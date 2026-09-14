@@ -1,6 +1,36 @@
 # Upcoming
 
-## Note: Dropping Support for OS Versions in Next Release
+## Admonitions
+
+After more than six years in the making, we are proud to announce admonitions as
+a new feature for Zettlr. The app now supports the more and more common syntax
+that GitHub and other Markdown editors already support, using Blockquotes with a
+custom header. You can create `note`s, `tip`s, `warning`s, `important` blocks,
+and `caution` blocks like so:
+
+```markdown
+> [!note] This is the note's title
+> This is the content of the note.
+```
+
+The title after the keyword is optional, and you can use both uppercase keywords
+and lowercase keywords.
+
+Zettlr comes with a built-in renderer so that you can immediately see what the
+admonitions might look like upon export (note that the final styling depends on
+the export option chosen and support for this type of element). The renderer can
+be enabled or disabled exactly like the existing renderers.
+
+When you "copy" a selection that contains an admonition using the "with style"
+option, Zettlr will transform the admonition correctly, but whether the
+admonition retains its styles depend on the application into which you paste
+this code.
+
+Note that admonition support upon exporting requires the `alerts` extension. You
+can enable it manually in your export profile configuration, or enforce support
+(where available) via the export settings.
+
+## Deprecation Note: Dropping Support for OS Versions in Next Release
 
 This is the last Zettlr release shipping with Electron version 43. The next
 release will switch to Electrion version 44, which drops support for the
@@ -14,6 +44,22 @@ Zettlr ships if you are affected by this change.
 
 ## GUI and Functionality
 
+- **Feature**: Admonitions are here! Zettlr now supports a broad range of
+  admonitions (sometimes also referred to as alerts or callouts). You can use
+  admonitions to emphasize certain content in your documents using Blockquote
+  syntax with a special header (see PR. #6497 for details). This closes a long-
+  standing feature request (#532). Some notes:
+  * Admonitions come with support of five keywords: `note` (gray), `tip`
+    (green), `warning` (yellow), `important` (purple), and `caution` (red).
+  * Zettlr supports custom titles for admonitions (full compatibility with other
+    popular Markdown editors).
+  * The app ships with a renderer for admonitions that you can turn on and off
+    just like any other renderer.
+  * Note that, to make admonitions survive exports, you will need to enable the
+    `alerts`-extension of Pandoc in the `reader` of the profile in question.
+  * Zettlr will use similar HTML-syntax when you copy text with admonitions
+    using the "Copy with Styles" option, but whether this survives pasting into
+    other applications depends on support on their side.
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
