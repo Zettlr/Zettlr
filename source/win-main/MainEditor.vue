@@ -666,13 +666,23 @@ function maybeHighlightSearchResults (): void {
     return
   }
 
+  // NOTE: We have to filter out "whole-file" results
+  const contentResults = result.result
+    .filter((res): res is FileContentSearchResult => {
+      return res.type === 'content' && res.line > -1
+    })
+
   // Construct CodeMirror.Ranges from the results
   const rangesToHighlight = []
-  // NOTE: We have to filter out "whole-file" results
-  for (const res of result.result.filter((res): res is FileContentSearchResult => res.type === 'content' && res.line > -1)) {
-    const startIdx = currentEditor.instance.state.doc.line(res.line + 1).from
-    for (const range of res.ranges) {
-      const { from, to } = range
+  for (const { line, ranges } of contentResults) {
+    const lineCount = currentEditor.instance.state.doc.lines
+    if (line > lineCount) {
+      console.warn(`[maybeHighlightSearchResults()] Cannot highlight line ${line}: Document only has ${lineCount} lines.`)
+      continue
+    }
+
+    const startIdx = currentEditor.instance.state.doc.line(line).from
+    for (const { from, to } of ranges) {
       rangesToHighlight.push(EditorSelection.range(startIdx + from, startIdx + to))
     }
   }

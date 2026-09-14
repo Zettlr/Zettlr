@@ -254,6 +254,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
       defineNodes: [
         { name: 'YAMLFrontmatter', block: true },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
+        { name: 'YAMLCodeContainer', block: true },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
         // Citation elements
         { name: 'Citation', style: { 'Citation/...': customTags.Citation } },
