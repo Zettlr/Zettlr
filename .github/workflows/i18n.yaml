@@ -9,9 +9,6 @@ permissions:
   contents: write
   pull-requests: write
 
-env:
-  NODE_VERSION: '22'
-
 # Ensure only a single build workflow runs at any one time
 concurrency:
   group: ${{ github.workflow }}
@@ -26,16 +23,8 @@ jobs:
         with:
           ref: develop
           fetch-depth: 0
-      - name: Enable Yarn 4.x
-        run: corepack enable
-      - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
-      # The scripts require some modules that we need to install.
-      - name: Install dependencies
-        run: yarn install --immutable
+      - name: Setup Node and Yarn
+        uses: ./.github/actions/setup-yarn
       # Gettext is not installed on Ubuntu by default, so we have to do it here
       - name: Install gettext
         run: |
