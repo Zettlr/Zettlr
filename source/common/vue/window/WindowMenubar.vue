@@ -59,13 +59,18 @@ onBeforeMount(() => {
   ipcRenderer.send('menu-provider', { command: 'get-application-menu' })
 
   // Also make sure to reset the internal state if necessary
-  window.addEventListener('mousedown', (_event) => {
+  const resetState = (event?: Event) => {
+    if (event instanceof KeyboardEvent && event.key !== 'Escape') {
+      return
+    }
     // The closing will be handled automatically by the menu handler
     if (menuCloseCallback.value !== null) {
       menuCloseCallback.value = null
       currentSubmenu.value = null
     }
-  })
+  }
+  window.addEventListener('mousedown', resetState)
+  window.addEventListener('keydown', resetState)
 })
 
 function getSubmenu (menuID: string, target: HTMLElement): void {

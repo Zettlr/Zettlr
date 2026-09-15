@@ -221,6 +221,8 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   appMenu.classList.add('application-menu')
   appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
+  let activeSubmenuClose: null | (() => void) = null
+
   for (const item of items) {
     const menuItem = renderMenuItem(item)
 
@@ -240,13 +242,11 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
       })
     } else if (item.type === 'submenu' && item.enabled !== false) {
       // Enable displaying the sub menu
-      let closeSubmenu: null|(() => void) = null
-
       appMenu.addEventListener('mousemove', (event: MouseEvent) => {
         const point = { x: event.clientX, y: event.clientY }
         const rect: DOMRect = menuItem.getBoundingClientRect()
         const menuRect: DOMRect = appMenu.getBoundingClientRect()
-        if (pointInRect(point, rect) && closeSubmenu === null) {
+        if (pointInRect(point, rect) && activeSubmenuClose === null) {
           // It's on the menu item, so display the submenu. We need to pass a
           // rect for eventual moving to the other side of the menu item.
           const target: Rect = {
@@ -265,15 +265,15 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
             appMenu.parentElement?.removeChild(appMenu)
           }
 
-          closeSubmenu = showPopupMenu(target, item.submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
+          activeSubmenuClose = showPopupMenu(target, item.submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
         } else if (
           pointInRect(point, menuRect) &&
           !pointInRect(point, rect) &&
-          closeSubmenu !== null
+          activeSubmenuClose !== null
         ) {
           // It's within the menu but not over our item, so hide again
-          closeSubmenu()
-          closeSubmenu = null
+          activeSubmenuClose()
+          activeSubmenuClose = null
         } // Else: Keep it open
       })
 
@@ -328,16 +328,32 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   // on the window, because this indicates that the menu should be closed.
   // Clicks on any menu item will be handled before the event bubbles up to the
   // window so we don't need additional checks.
-  const clickCallback = (event?: MouseEvent): void => {
+  const closeMenu = (event?: Event): void => {
+    if (event instanceof KeyboardEvent && event.key !== 'Escape') {
+      return
+    }
+
+    if (activeSubmenuClose !== null) {
+      activeSubmenuClose()
+      activeSubmenuClose = null
+    }
+
     appMenu.parentElement?.removeChild(appMenu)
-    window.removeEventListener('mousedown', clickCallback)
+    window.removeEventListener('mousedown', closeMenu)
+    if (cleanup) {
+      window.removeEventListener('keydown', closeMenu)
+    }
   }
-  window.addEventListener('mousedown', clickCallback)
+
+  window.addEventListener('mousedown', closeMenu)
+  if (cleanup) {
+    window.addEventListener('keydown', closeMenu)
+  }
 
   // Return a close-callback for the caller to programmatically close the menu
   return () => {
     // When the closing function is called, remove the menu again
-    clickCallback()
+    closeMenu()
   }
 }
 
