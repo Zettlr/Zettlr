@@ -242,11 +242,13 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
       })
     } else if (item.type === 'submenu' && item.enabled !== false) {
       // Enable displaying the sub menu
+      let closeSubmenu: null|(() => void) = null
+
       appMenu.addEventListener('mousemove', (event: MouseEvent) => {
         const point = { x: event.clientX, y: event.clientY }
         const rect: DOMRect = menuItem.getBoundingClientRect()
         const menuRect: DOMRect = appMenu.getBoundingClientRect()
-        if (pointInRect(point, rect) && activeSubmenuClose === null) {
+        if (pointInRect(point, rect) && closeSubmenu === null) {
           // It's on the menu item, so display the submenu. We need to pass a
           // rect for eventual moving to the other side of the menu item.
           const target: Rect = {
@@ -265,14 +267,16 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
             appMenu.parentElement?.removeChild(appMenu)
           }
 
-          activeSubmenuClose = showPopupMenu(target, item.submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
+          closeSubmenu = showPopupMenu(target, item.submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
+          activeSubmenuClose = closeSubmenu
         } else if (
           pointInRect(point, menuRect) &&
           !pointInRect(point, rect) &&
-          activeSubmenuClose !== null
+          closeSubmenu !== null
         ) {
           // It's within the menu but not over our item, so hide again
-          activeSubmenuClose()
+          closeSubmenu()
+          closeSubmenu = null
           activeSubmenuClose = null
         } // Else: Keep it open
       })
@@ -341,13 +345,13 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     appMenu.parentElement?.removeChild(appMenu)
     window.removeEventListener('mousedown', closeMenu)
     if (cleanup) {
-      window.removeEventListener('keydown', closeMenu)
+      window.removeEventListener('keydown', closeMenu, true)
     }
   }
 
   window.addEventListener('mousedown', closeMenu)
   if (cleanup) {
-    window.addEventListener('keydown', closeMenu)
+    window.addEventListener('keydown', closeMenu, true)
   }
 
   // Return a close-callback for the caller to programmatically close the menu
