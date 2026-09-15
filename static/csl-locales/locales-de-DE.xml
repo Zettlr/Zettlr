@@ -23,7 +23,7 @@
       <name>Nicolas Chachereau</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-09-10T03:24:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -514,12 +514,12 @@
       <multiple>Herausgeber</multiple>
     </term>
     <term name="editor-translator">
-      <single>Herausgeber&#160;&amp; Übersetzer</single>
-      <multiple>Herausgeber&#160;&amp; Übersetzer</multiple>
+      <single>Herausgeber&#160;und Übersetzer</single>
+      <multiple>Herausgeber&#160;und Übersetzer</multiple>
     </term>
     <term name="editortranslator">
-      <single>Herausgeber&#160;&amp; Übersetzer</single>
-      <multiple>Herausgeber&#160;&amp; Übersetzer</multiple>
+      <single>Herausgeber&#160;und Übersetzer</single>
+      <multiple>Herausgeber&#160;und Übersetzer</multiple>
     </term>
     <term name="editorial-director">
       <single>Herausgeber</single>
@@ -600,12 +600,12 @@
       <multiple>Hrsg.</multiple>
     </term>
     <term name="editor-translator" form="short">
-      <single>Hrsg.&#160;&amp; Übers.</single>
-      <multiple>Hrsg.&#160;&amp; Übers.</multiple>
+      <single>Hrsg.&#160;u. Übers.</single>
+      <multiple>Hrsg.&#160;u. Übers.</multiple>
     </term>
     <term name="editortranslator" form="short">
-      <single>Hrsg.&#160;&amp; Übers.</single>
-      <multiple>Hrsg.&#160;&amp; Übers.</multiple>
+      <single>Hrsg.&#160;u. Übers.</single>
+      <multiple>Hrsg.&#160;u. Übers.</multiple>
     </term>
     <term name="editorial-director" form="short">
       <single>Hrsg.</single>
@@ -682,8 +682,8 @@
     <term name="curator" form="verb-short">kur. von</term>
     <term name="director" form="verb-short">Reg.</term>
     <term name="editor" form="verb-short">hrsg. von</term>
-    <term name="editor-translator" form="verb-short">hg.&#160;&amp; übers. von</term>
-    <term name="editortranslator" form="verb-short">hg.&#160;&amp; übers. von</term>
+    <term name="editor-translator" form="verb-short">hg.&#160;u. übers. von</term>
+    <term name="editortranslator" form="verb-short">hg.&#160;u. übers. von</term>
     <term name="editorial-director" form="verb-short">hrsg. von</term>
     <term name="executive-producer" form="verb-short">Prod. gel. v.</term>
     <term name="guest" form="verb-short">w. guest</term>

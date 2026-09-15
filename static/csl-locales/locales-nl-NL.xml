@@ -8,8 +8,15 @@
     <translator>
       <name>K. Avonts</name>
     </translator>
+	<translator>
+      <name>ZambiblasianOgre</name>
+      <uri>https://github.com/ZambiblasianOgre</uri>
+    </translator>
+    <translator>
+      <name>H. Stroom</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-01-10T00:00:00+00:00</updated>
+    <updated>2026-09-01T11:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -48,9 +55,9 @@
     <term name="letter">brief</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no date">zonder datum</term>
-    <term name="no-place">no place</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="on">on</term>
+    <term name="no-place">geen locatie</term>
+    <term name="no-publisher">geen uitgever</term> <!-- sine nomine -->
+    <term name="on">op</term>
     <term name="online">online</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="original-work-published">original work published</term>
@@ -59,9 +66,9 @@
     <term name="podcast-episode">podcast episode</term>
     <term name="preprint">preprint</term>
     <term name="presented at">gepresenteerd bij</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
+    <term name="radio-broadcast">radio uitzending</term>
+    <term name="radio-series">radio serie</term>
+    <term name="radio-series-episode">radio serie episode</term>
     <term name="reference">
       <single>referentie</single>
       <multiple>referenties</multiple>
@@ -69,20 +76,20 @@
     <term name="retrieved">geraadpleegd</term>
     <term name="review-of">review of</term>
     <term name="scale">schaal</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
+    <term name="special-issue">speciale uitgave</term>
+    <term name="special-section">speciale sectie</term>
     <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
+    <term name="television-series">televisie serie</term>
+    <term name="television-series-episode">televisie serie episode</term>
     <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="working-paper">werkdocument</term>
 
     <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">anon.</term>
-    <term name="circa" form="short">c.</term>
+    <term name="circa" form="short">ca.</term>
     <term name="no date" form="short">z.d.</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-place" form="short">g.p.</term>
+    <term name="no-publisher" form="short">g.ui.</term>
     <term name="reference" form="short">
       <single>ref.</single>
       <multiple>refs.</multiple>
@@ -93,15 +100,15 @@
 
     <!-- LONG ITEM TYPE FORMS -->
     <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
+    <term name="article-journal">wetenschappelijke publicatie</term>
+    <term name="article-magazine">tijdschriftpublicatie</term>
+    <term name="article-newspaper">krantenartikel</term>
     <term name="bill">bill</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">uitzending</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
+    <term name="classic">klassiek</term>
+    <term name="collection">collectie</term>
     <term name="dataset">dataset</term>
     <term name="document">document</term>
     <term name="entry">entry</term>
@@ -109,57 +116,57 @@
     <term name="entry-encyclopedia">encyclopedia entry</term>
     <term name="event">event</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">figuur</term>
+    <term name="hearing">hoorzitting</term>
     <term name="interview">interview</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
+    <term name="legal_case">juridische casus</term>
+    <term name="legislation">wetgeving</term>
     <term name="manuscript">manuscript</term>
     <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
+    <term name="motion_picture">video-opname</term>
+    <term name="musical_score">filmmuziek</term>
+    <term name="pamphlet">pamflet</term>
+    <term name="paper-conference">conferentieartikel</term>
     <term name="patent">patent</term>
-    <term name="performance">performance</term>
+    <term name="performance">uitvoering</term>
     <term name="periodical">periodical</term>
     <term name="personal_communication">persoonlijke communicatie</term>
     <term name="post">post</term>
     <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
+    <term name="regulation">regelgeving</term>
+    <term name="report">raport</term>
     <term name="review">review</term>
-    <term name="review-book">book review</term>
+    <term name="review-book">boek review</term>
     <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="song">audio-opname</term>
+    <term name="speech">presentatie</term>
+    <term name="standard">standaard</term>
+    <term name="thesis">scriptie</term>
+    <term name="treaty">overeenkomst</term>
+    <term name="webpage">webpagina</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
+    <term name="article-journal" form="short">wetensch. art.</term>
     <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-newspaper" form="short">krantenart.</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
+    <term name="graphic" form="short">fig.</term>
     <term name="interview" form="short">interv.</term>
     <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
+    <term name="motion_picture" form="short">video-opn.</term>
+    <term name="report" form="short">rapp.</term>
     <term name="review" form="short">rev.</term>
     <term name="review-book" form="short">bk. rev.</term>
     <term name="song" form="short">audio rec.</term>
 
     <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">hoorzitting van</term>
+    <term name="review" form="verb">review van</term>
+    <term name="review-book" form="verb">review van een boek</term>
 
     <!-- SHORT VERB ITEM TYPE FORMS -->
 
@@ -222,8 +229,8 @@
       <multiple>appendices</multiple>
     </term>
     <term name="article-locator">
-      <single>article</single>
-      <multiple>articles</multiple>
+      <single>artikel</single>
+      <multiple>artikelen</multiple>
     </term>
     <term name="book">
       <single>boek</single>
@@ -242,12 +249,12 @@
       <multiple>columns</multiple>
     </term>
     <term name="elocation">
-      <single>location</single>
-      <multiple>locations</multiple>
+      <single>locatie</single>
+      <multiple>locaties</multiple>
     </term>
     <term name="equation">
-      <single>equation</single>
-      <multiple>equations</multiple>
+      <single>vergelijking</single>
+      <multiple>vergelijkingen</multiple>
     </term>
     <term name="figure">
       <single>figuur</single>
@@ -286,8 +293,8 @@
       <multiple>delen</multiple>
     </term>
     <term name="rule">
-      <single>rule</single>
-      <multiple>rules</multiple>
+      <single>regel</single>
+      <multiple>regels</multiple>
     </term>
     <term name="scene">
       <single>scene</single>
@@ -303,19 +310,19 @@
     </term>
     <term name="supplement">
       <single>supplement</single>
-      <multiple>supplements</multiple>
+      <multiple>supplementen</multiple>
     </term>
     <term name="table">
-      <single>table</single>
-      <multiple>tables</multiple>
+      <single>tabel</single>
+      <multiple>tabellen</multiple>
     </term>
     <term name="timestamp"> <!-- generally blank -->
-      <single/>
-      <multiple/>
+      <single>tijdstempel</single>
+      <multiple>tijdstempels</multiple>
     </term>
     <term name="title-locator">
-      <single>title</single>
-      <multiple>titles</multiple>
+      <single>titel</single>
+      <multiple>titels</multiple>
     </term>
     <term name="verse">
       <single>vers</single>
@@ -343,8 +350,8 @@
       <multiple>locs.</multiple>
     </term>
     <term name="equation" form="short">
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
+      <single>vgl.</single>
+      <multiple>vgln.</multiple>
     </term>
     <term name="figure" form="short">fig.</term>
     <term name="folio" form="short">f.</term>
@@ -377,11 +384,11 @@
     </term>
     <term name="table" form="short">
       <single>tbl.</single>
-      <multiple>tbls.</multiple>
+      <multiple>tbln.</multiple>
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
-      <single/>
-      <multiple/>
+      <single>tijdstempel</single>
+      <multiple>tijdstempels</multiple>
     </term>
     <term name="title-locator" form="short">
       <single>tit.</single>
@@ -408,16 +415,16 @@
 
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>hoofdstuk</single>
+      <multiple>hoofdstukken</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>citatie</single>
+      <multiple>citaties</multiple>
     </term>
     <term name="collection-number">
-      <single>nummer</single>
-      <multiple>nummers</multiple>
+      <single>collectienummer</single>
+      <multiple>collectienummers</multiple>
     </term>
     <term name="edition">
       <single>druk</single>
@@ -440,19 +447,19 @@
       <multiple>volumes</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>eerste pagina</single>
+      <multiple>eerste pagina's</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>afdruk</single>
+      <multiple>afdrukken</multiple>
     </term>
     <term name="version">versie</term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>hfdst.</single>
+      <multiple>hfdstn.</multiple>
     </term>
     <term name="citation-number" form="short">
       <single>cit.</single>
@@ -485,12 +492,12 @@
     <!-- LONG ROLE FORMS -->
     <term name="author"/> <!-- generally blank -->
     <term name="chair">
-      <single>chair</single>
-      <multiple>chairs</multiple>
+      <single>voorzitter</single>
+      <multiple>voorzitters</multiple>
     </term>
     <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>red.</single>
+      <multiple>redn.</multiple>
     </term>
     <term name="compiler">
       <single>compiler</single>
@@ -499,8 +506,8 @@
     <term name="composer"/> <!-- generally blank -->
     <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
-      <single>contributor</single>
-      <multiple>contributors</multiple>
+      <single>bijdrage</single>
+      <multiple>bijdragers</multiple>
     </term>
     <term name="curator">
       <single>curator</single>
@@ -527,12 +534,12 @@
       <multiple>redacteuren</multiple>
     </term>
     <term name="executive-producer">
-      <single>executive producer</single>
-      <multiple>executive producers</multiple>
+      <single>uitvoerend producent</single>
+      <multiple>uitvoerend producenten</multiple>
     </term>
     <term name="guest">
-      <single>guest</single>
-      <multiple>guests</multiple>
+      <single>gast</single>
+      <multiple>gasten</multiple>
     </term>
     <term name="host">
       <single>host</single>
@@ -544,12 +551,12 @@
     </term>
     <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
-      <single>narrator</single>
-      <multiple>narrators</multiple>
+      <single>verteller</single>
+      <multiple>vertellers</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>organisator</single>
+      <multiple>organisators</multiple>
     </term>
     <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
@@ -557,18 +564,18 @@
       <multiple>performers</multiple>
     </term>
     <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
+      <single>producent</single>
+      <multiple>producenten</multiple>
     </term>
     <term name="recipient"/> <!-- generally blank -->
     <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>scriptschrijver</single>
+      <multiple>scriptschrijvers</multiple>
     </term>
     <term name="series-creator">
-      <single>series creator</single>
-      <multiple>series creators</multiple>
+      <single>bedenker van de serie</single>
+      <multiple>bedenkers van de serie</multiple>
     </term>
     <term name="translator">
       <single>vertaler</single>
@@ -581,8 +588,8 @@
       <multiple>comps.</multiple>
     </term>
     <term name="contributor" form="short">
-      <single>contrib.</single>
-      <multiple>contribs.</multiple>
+      <single>bijdr.</single>
+      <multiple>bijdrs.</multiple>
     </term>
     <term name="curator" form="short">
       <single>cur.</single>
@@ -594,23 +601,23 @@
     </term>
     <term name="editor" form="short">
       <single>red.</single>
-      <multiple>red.</multiple>
+      <multiple>redn.</multiple>
     </term>
     <term name="editor-translator" form="short">
       <single>red. &amp; vert.</single>
-      <multiple>red. &amp; vert.</multiple>
+      <multiple>redn. &amp; verts.</multiple>
     </term>
     <term name="editortranslator" form="short">
       <single>red. &amp; vert.</single>
-      <multiple>red. &amp; vert.</multiple>
+      <multiple>redn. &amp; verts.</multiple>
     </term>
     <term name="editorial-director" form="short">
       <single>red.</single>
-      <multiple>red.</multiple>
+      <multiple>redn.</multiple>
     </term>
     <term name="executive-producer" form="short">
-      <single>exec. prod.</single>
-      <multiple>exec. prods.</multiple>
+      <single>uitv. produc.</single>
+      <multiple>uitv. producn.</multiple>
     </term>
     <term name="illustrator" form="short">
       <single>ill.</single>
@@ -622,7 +629,7 @@
     </term>
     <term name="organizer" form="short">
       <single>org.</single>
-      <multiple>orgs.</multiple>
+      <multiple>orgn.</multiple>
     </term>
     <term name="performer" form="short">
       <single>perf.</single>
@@ -630,69 +637,69 @@
     </term>
     <term name="producer" form="short">
       <single>prod.</single>
-      <multiple>prods.</multiple>
+      <multiple>prodn.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
+      <single>schr.</single>
+      <multiple>schrs.</multiple>
     </term>
     <term name="series-creator" form="short">
-      <single>cre.</single>
-      <multiple>cres.</multiple>
+      <single>crea.</single>
+      <multiple>crean.</multiple>
     </term>
     <term name="translator" form="short">
       <single>vert.</single>
-      <multiple>vert.</multiple>
+      <multiple>verts.</multiple>
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="chair" form="verb">chaired by</term>
-    <term name="collection-editor" form="verb">edited by</term>
-    <term name="compiler" form="verb">compiled by</term>
-    <term name="container-author" form="verb">door</term>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
+    <term name="chair" form="verb">voorgezeten door</term>
+    <term name="collection-editor" form="verb">geredigeerd door</term>
+    <term name="compiler" form="verb">gecompileerd door</term>
+    <term name="container-author" form="verb">geschreven door</term>
+    <term name="contributor" form="verb">door</term>
+    <term name="curator" form="verb">gecureerd door</term>
     <term name="director" form="verb">geregisseerd door</term>
     <term name="editor" form="verb">onder redactie van</term>
-    <term name="editor-translator" form="verb">bewerkt &amp; vertaald door</term>
-    <term name="editortranslator" form="verb">bewerkt &amp; vertaald door</term>
+    <term name="editor-translator" form="verb">redactie &amp; vertaald door</term>
+    <term name="editortranslator" form="verb">redactie &amp; vertaald door</term>
     <term name="editorial-director" form="verb">onder redactie van</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
+    <term name="executive-producer" form="verb">uitvoerende productie door</term>
+    <term name="guest" form="verb">met gast</term>
+    <term name="host" form="verb">presentatie door</term>
     <term name="illustrator" form="verb">geïllustreerd door</term>
     <term name="interviewer" form="verb">geïnterviewd door</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
+    <term name="narrator" form="verb">verteld door</term>
+    <term name="organizer" form="verb">georganiseerd door</term>
+    <term name="performer" form="verb">uitgevoerd door</term>
+    <term name="producer" form="verb">geproduceerd door</term>
     <term name="recipient" form="verb">ontvangen door</term>
     <term name="reviewed-author" form="verb">door</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="script-writer" form="verb">script geschreven door</term>
+    <term name="series-creator" form="verb">serie gecreëerd door</term>
     <term name="translator" form="verb">vertaald door</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
-    <term name="director" form="verb-short">geregisseerd door</term>
-    <term name="editor" form="verb-short">onder redactie van</term>
-    <term name="editor-translator" form="verb-short">bewerkt &amp; vertaald door</term>
-    <term name="editortranslator" form="verb-short">bewerkt &amp; vertaald door</term>
+    <term name="collection-editor" form="verb-short">red. door</term>
+    <term name="compiler" form="verb-short">gecomp. door</term>
+    <term name="contributor" form="verb-short">bijdr.</term>
+    <term name="curator" form="verb-short">cur. door</term>
+    <term name="director" form="verb-short">gereg. door</term>
+    <term name="editor" form="verb-short">red. door</term>
+    <term name="editor-translator" form="verb-short">red. &amp; vert. door</term>
+    <term name="editortranslator" form="verb-short">red. &amp; vert. door</term>
     <term name="editorial-director" form="verb-short">bewerkt door</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
-    <term name="illustrator" form="verb-short">geïllustreerd door</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
-    <term name="translator" form="verb-short">vertaald door</term>
+    <term name="executive-producer" form="verb-short">uitv. prod. door</term>
+    <term name="guest" form="verb-short">m. gast</term>
+    <term name="host" form="verb-short">pres. door</term>
+    <term name="illustrator" form="verb-short">illust. door</term>
+    <term name="narrator" form="verb-short">stem van</term>
+    <term name="organizer" form="verb-short">org. door</term>
+    <term name="performer" form="verb-short">uitv. door</term>
+    <term name="producer" form="verb-short">prod. door</term>
+    <term name="script-writer" form="verb-short">geschr. door</term>
+    <term name="series-creator" form="verb-short">cr.serie door</term>
+    <term name="translator" form="verb-short">vert. door</term>
 
     <!-- LONG MONTH FORMS -->
     <term name="month-01">januari</term>
