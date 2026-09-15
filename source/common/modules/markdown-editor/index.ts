@@ -29,7 +29,7 @@ import EventEmitter from 'events'
 // CodeMirror imports
 import { Decoration, type DecorationSet, EditorView } from '@codemirror/view'
 import {
-  type EditorSelection,
+  EditorSelection,
   EditorState,
   Text,
   type StateEffect,
@@ -382,18 +382,42 @@ export default class MarkdownEditor extends EventEmitter {
       // Now that the correct document has been loaded, there will be content
       // and we can restore the persisted information.
       const { scrollSnapshot, selection, foldedRanges } = persistentState
+      const docLength = this._instance.state.doc.length
 
       const effects: StateEffect<any>[] = [scrollSnapshot]
 
       const cursor = foldedRanges.iter()
       while (cursor.value) {
-        effects.push(foldEffect.of({ from: cursor.from, to: cursor.to }))
+        if (cursor.from <= docLength && cursor.to <= docLength) {
+          effects.push(foldEffect.of({
+            from: cursor.from,
+            to: cursor.to
+          }))
+        }
         cursor.next()
       }
 
-      this._instance.dispatch({ selection, effects })
-    }
+      const mainRange = selection.ranges[selection.mainIndex]
 
+      const newRanges = selection.ranges.filter(
+        range => range.anchor <= docLength && range.head <= docLength
+      )
+
+      const newMainIndex = newRanges.indexOf(mainRange)
+
+      const restoredSelection = newRanges.length > 0
+        ? EditorSelection.create(
+          newRanges,
+          newMainIndex >= 0 ? newMainIndex : 0
+        )
+        : EditorSelection.single(docLength)
+
+      this._instance.dispatch({
+        selection: restoredSelection,
+        effects
+      })
+    }
+    
     // Ensure the theme switcher picks the state change up; this somehow doesn't
     // properly work after the document has been mounted to the DOM.
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
@@ -437,7 +461,7 @@ export default class MarkdownEditor extends EventEmitter {
    * a setting has changed that requires extensions to be fully reloaded.
    */
   async reload (): Promise<void> {
-    await this.loadDocument()
+    await this.loadDocument(this.persistentState)
   }
 
   /**
