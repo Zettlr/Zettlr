@@ -6,9 +6,6 @@ on: [push, pull_request, workflow_call]
 permissions:
   contents: read
 
-env:
-  NODE_VERSION: '22'
-
 # Ensure only a single unit test workflow runs at any one time for any event and
 # ref. This allows multiple unit tests/linters to run, but at most one per ref.
 # NOTE: Changed `ref` to `sha`, since even for PRs, `ref` will be `develop`.
@@ -25,15 +22,8 @@ jobs:
       with:
         # Always fetch the branch that triggered the event (develop or master)
         ref: ${{ github.ref }}
-    - name: Enable Yarn 4.x
-      run: corepack enable
-    - name: Setup NodeJS ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'yarn'
-    - name: Install packages
-      run: yarn install --immutable
+    - name: Setup Node and Yarn
+      uses: ./.github/actions/setup-yarn
     - name: Run ESLint
       run: yarn lint
     - name: Run unit tests
