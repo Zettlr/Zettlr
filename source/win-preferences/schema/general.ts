@@ -4,7 +4,7 @@
  *
  * Contains:        General Preferences Schema
  * CVM-Role:        Model
- * Maintainer:      Hendrik Erz
+ * Maintainer:      Zilu Wang
  * License:         GNU GPL v3
  *
  * Description:     Exports the general tab schema.
@@ -98,9 +98,18 @@ export function getGeneralFields (appLangOptions: Record<string, string>): Prefe
           model: 'alwaysReloadFiles'
         },
         {
-          type: 'checkbox',
-          label: trans('Avoid opening files in new tabs if possible'),
-          model: 'system.avoidNewTabs'
+          type: 'form-text',
+          display: 'sub-heading',
+          contents: trans('Opening files behavior')
+        },
+        {
+          type: 'radio',
+          model: 'system.tabOpeningBehavior',
+          options: {
+            next_to_current: trans('Open next to the current file'),
+            replace_current: trans('Replace the current tab'),
+            end_of_bar: trans('Open at the end')
+          }
         }
       ]
     },
