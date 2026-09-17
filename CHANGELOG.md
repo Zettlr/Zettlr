@@ -114,6 +114,9 @@ Zettlr ships if you are affected by this change.
   operator (#6517).
 - Fixed an issue that prevented inserting a new row when the cursor is placed in
   the final row of the table (#6512; #6513).
+- Fixed an issue where literal curly braces at the end of a table cell (or a
+  line) were swallowed as invalid Pandoc attributes, causing the text inside
+  them to disappear (#6563).
 
 ## Under the Hood
 
