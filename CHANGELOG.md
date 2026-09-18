@@ -114,6 +114,8 @@ Zettlr ships if you are affected by this change.
   operator (#6517).
 - Fixed an issue that prevented inserting a new row when the cursor is placed in
   the final row of the table (#6512; #6513).
+- Fixed a startup crash when a workspace contains an Electron `.asar` archive
+  (#6551).
 
 ## Under the Hood
 
