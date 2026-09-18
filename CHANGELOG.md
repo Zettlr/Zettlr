@@ -1,5 +1,15 @@
 # Upcoming
 
+## GUI and Functionality
+
+(Nothing here)
+
+## Under the Hood
+
+(Nothing here)
+
+# 4.8.0
+
 ## Admonitions
 
 After more than six years in the making, we are proud to announce admonitions as
