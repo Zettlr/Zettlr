@@ -289,10 +289,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chevrotain/types@npm:~11.1.2":
+"@chevrotain/cst-dts-gen@npm:11.1.2":
+  version: 11.1.2
+  resolution: "@chevrotain/cst-dts-gen@npm:11.1.2"
+  dependencies:
+    "@chevrotain/gast": "npm:11.1.2"
+    "@chevrotain/types": "npm:11.1.2"
+    lodash-es: "npm:4.17.23"
+  checksum: 10/04a84285fd4d26129f44f8e20b99fd6ab51cb1ee4c7eb104baa4842413b9e18bb171046a665583b94ff29e2c06a2e1a65205940a75cda848aa2a5e847b99bbb6
+  languageName: node
+  linkType: hard
+
+"@chevrotain/gast@npm:11.1.2":
+  version: 11.1.2
+  resolution: "@chevrotain/gast@npm:11.1.2"
+  dependencies:
+    "@chevrotain/types": "npm:11.1.2"
+    lodash-es: "npm:4.17.23"
+  checksum: 10/8733cbadfcb982f5afe0e1825446ad8e82de3044c9ae22a69771ec20292facce25e459da23c16061c894ef49ca381ad53c0796171fa0dfce08fc25305850eeca
+  languageName: node
+  linkType: hard
+
+"@chevrotain/regexp-to-ast@npm:11.1.2":
+  version: 11.1.2
+  resolution: "@chevrotain/regexp-to-ast@npm:11.1.2"
+  checksum: 10/9ba399b2c23ae1a86f1bcb1db4b07fd3191d0f491b63303b824850ef5f8b455f8f8a39c4d7876271c23ca06f7e03b7273b07014cd9c8ccb2328bff5dc6c9df00
+  languageName: node
+  linkType: hard
+
+"@chevrotain/types@npm:11.1.2, @chevrotain/types@npm:~11.1.2":
   version: 11.1.2
   resolution: "@chevrotain/types@npm:11.1.2"
   checksum: 10/ad39d7651a20b05ead9b4374f98afc39915118dda29678c2b623571aa3da3018a0f3fb799d1809605cafcae59cba637d640855ea0f97b9b01d0900d77d6781fe
+  languageName: node
+  linkType: hard
+
+"@chevrotain/utils@npm:11.1.2":
+  version: 11.1.2
+  resolution: "@chevrotain/utils@npm:11.1.2"
+  checksum: 10/a5ba5886547665726e6680bdc6e1c939e643c8c606d8eb3806ed178ebb2c3a8a1a581db558412374f230babfe9d8c1c37f2c3edf260c63729dbe6ff9ca4f0223
   languageName: node
   linkType: hard
 
@@ -2118,12 +2153,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mermaid-js/parser@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@mermaid-js/parser@npm:1.2.1"
+"@mermaid-js/parser@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@mermaid-js/parser@npm:2.0.0"
   dependencies:
     "@chevrotain/types": "npm:~11.1.2"
-  checksum: 10/54c0de01f9d260d83f43921a9c739604fbe05e45b26ac645f5965ac6652d54cb28dae4021d4660b7bffcb455e9162c87a2cde91325c6cd5f698017178e052238
+  checksum: 10/26447a8150902dde6858863b626d6ad355560eb864cc34eeeb45f0c9e604a49f821b55f790cdb8f86372231aa1450eed73b80dca885d217d671fe1e9c61957cf
   languageName: node
   linkType: hard
 
@@ -4700,6 +4735,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chevrotain@npm:~11.1.2":
+  version: 11.1.2
+  resolution: "chevrotain@npm:11.1.2"
+  dependencies:
+    "@chevrotain/cst-dts-gen": "npm:11.1.2"
+    "@chevrotain/gast": "npm:11.1.2"
+    "@chevrotain/regexp-to-ast": "npm:11.1.2"
+    "@chevrotain/types": "npm:11.1.2"
+    "@chevrotain/utils": "npm:11.1.2"
+    lodash-es: "npm:4.17.23"
+  checksum: 10/67caa47a3d38eeb4a584960bbf5fdc83894a1419a6428f7dcf8a07f5937c1bda4c8e1acf628fe80d3be8f4c1a84426942c0a8f6bcf44a5958f1df0cf4225bc4d
+  languageName: node
+  linkType: hard
+
 "chokidar@npm:^3.5.3":
   version: 3.6.0
   resolution: "chokidar@npm:3.6.0"
@@ -6082,7 +6131,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.3.3, dompurify@npm:^3.4.14":
+"dompurify@npm:^3.4.12, dompurify@npm:^3.4.14":
   version: 3.4.15
   resolution: "dompurify@npm:3.4.15"
   dependencies:
@@ -6297,6 +6346,13 @@ __metadata:
     electron: cli.js
     install-electron: install.js
   checksum: 10/948afc84b0d4bca426a3e17d9fbe8a322948fd5f5ed696b5ecce747b51c0dcfdd803e7bba957ea138829865c75809fe068ce611f6d79ed022bc30f016eacfd3f
+  languageName: node
+  linkType: hard
+
+"elkjs@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "elkjs@npm:0.9.3"
+  checksum: 10/397986e271827a5e13d2722b1883aea3557006d2777be8c34568f8fe743e81f4f71210e4e81b9958f597b0af8e96afaa883d2705eba84a3d5d0973bcb02fa59e
   languageName: node
   linkType: hard
 
@@ -7214,15 +7270,6 @@ __metadata:
   version: 3.1.7
   resolution: "fast-uri@npm:3.1.7"
   checksum: 10/6d62ea818841e1b460f60482fd31582faa23ea9d9b33f856412b24c42da11fd72bd003be6696390ec896dbe4e9e78d3bb8d93bf70a511c7f69e5e807ac9b284f
-  languageName: node
-  linkType: hard
-
-"fastdom@npm:1.0.12":
-  version: 1.0.12
-  resolution: "fastdom@npm:1.0.12"
-  dependencies:
-    strictdom: "npm:^1.0.1"
-  checksum: 10/e87d67aaed413de24680c9ec735231b6568b62e2b7740f320c3c9f0bc57ed8079ed16aaf8c83a1c27e14948f1a87a7dab98d83a375b85bf77f8bffc2ae55777f
   languageName: node
   linkType: hard
 
@@ -9660,6 +9707,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash-es@npm:4.17.23":
+  version: 4.17.23
+  resolution: "lodash-es@npm:4.17.23"
+  checksum: 10/1feae200df22eb0bd93ca86d485e77784b8a9fb1d13e91b66e9baa7a7e5e04be088c12a7e20c2250fc0bd3db1bc0ef0affc7d9e3810b6af2455a3c6bf6dde59e
+  languageName: node
+  linkType: hard
+
 "lodash-es@npm:^4.17.21":
   version: 4.18.1
   resolution: "lodash-es@npm:4.18.1"
@@ -10216,15 +10270,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^11.17.2":
-  version: 11.17.2
-  resolution: "mermaid@npm:11.17.2"
+"mermaid@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "mermaid@npm:12.0.0"
   dependencies:
     "@braintree/sanitize-url": "npm:^7.1.2"
     "@iconify/utils": "npm:^3.0.2"
-    "@mermaid-js/parser": "npm:^1.2.1"
+    "@mermaid-js/parser": "npm:^2.0.0"
     "@types/d3": "npm:^7.4.3"
     "@upsetjs/venn.js": "npm:^2.0.0"
+    chevrotain: "npm:~11.1.2"
     cytoscape: "npm:^3.34.0"
     cytoscape-cose-bilkent: "npm:^4.1.0"
     cytoscape-fcose: "npm:^2.2.0"
@@ -10232,9 +10287,9 @@ __metadata:
     d3-sankey: "npm:^0.12.3"
     dagre-d3-es: "npm:7.0.14"
     dayjs: "npm:^1.11.21"
-    dompurify: "npm:^3.3.3"
+    dompurify: "npm:^3.4.12"
+    elkjs: "npm:^0.9.3"
     es-toolkit: "npm:^1.45.1"
-    fastdom: "npm:1.0.12"
     katex: "npm:^0.16.47"
     khroma: "npm:^2.1.0"
     marked: "npm:^16.3.0"
@@ -10242,7 +10297,7 @@ __metadata:
     stylis: "npm:^4.3.6"
     ts-dedent: "npm:^2.2.0"
     uuid: "npm:^11.1.0 || ^12 || ^13 || ^14.0.0"
-  checksum: 10/4a6930587ebc4027357de00a960bf9c963d4a5d290b3b70bc5ff7a8259eeb5d4ae7f4609d73dcbab8f533ad0b772ff8b35b5683c287bb23fafc21f4e6d766508
+  checksum: 10/3f533abd52537ea3f69e7f9196a4237aa3057348af3d90608e1ba103129b2819abcefd2278744f3ff7177038787262f9455479c26d61eb6a05b584ae168a4c69
   languageName: node
   linkType: hard
 
@@ -13639,13 +13694,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strictdom@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "strictdom@npm:1.0.1"
-  checksum: 10/e9e030dd9b14eaee81e698044e405aaaceec6e09f32c920fa24c2ee9fe8153bf30780a06028b6c185dc6348b54cc803addb4bfa498246b9d26583b23b359b9fa
-  languageName: node
-  linkType: hard
-
 "string-width-cjs@npm:string-width@^4.2.0, string-width@npm:^4.1.0, string-width@npm:^4.2.0, string-width@npm:^4.2.3":
   version: 4.2.3
   resolution: "string-width@npm:4.2.3"
@@ -15539,7 +15587,7 @@ __metadata:
     less-loader: "npm:^13.0.0"
     luxon: "npm:^3.7.2"
     md5: "npm:^2.3.0"
-    mermaid: "npm:^11.17.2"
+    mermaid: "npm:^12.0.0"
     mocha: "npm:^11.8.0"
     node-loader: "npm:^2.1.0"
     nodehun: "npm:^3.0.2"
