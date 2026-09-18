@@ -61,6 +61,44 @@ And some text.</p>`
 
 <div class="admonition note"><div class="admonition-title">This is a custom note</div> <p> Hi there, this is a note.</p></div>`
   },
+  {
+    description: 'Keeps literal curly braces at the end of a table cell',
+    input: `| Field | Notes |
+|---|---|
+| Status | One of {Active, Pending Approval, Removed} |`,
+    output: `<table>
+<thead>
+<tr>
+<th> Field</th>
+<th> Notes</th>
+</tr>
+</thead>
+<tr>
+<td> Status</td>
+<td> One of {Active, Pending Approval, Removed}</td>
+</tr>
+</table>`
+  },
+  {
+    description: 'Keeps literal curly braces at the end of a paragraph',
+    input: 'Status One of {Active, Pending Approval, Removed}',
+    output: '<p>Status One of {Active, Pending Approval, Removed}</p>'
+  },
+  {
+    description: 'Keeps consuming the unnumbered-heading shorthand {-}',
+    input: '# Heading {-}',
+    output: '<h1> Heading </h1>'
+  },
+  {
+    description: 'Keeps consuming the raw-format shorthand {=html}',
+    input: 'Some text {=html}',
+    output: '<p>Some text </p>'
+  },
+  {
+    description: 'Keeps consuming empty Pandoc attribute braces {}',
+    input: 'Some text {}',
+    output: '<p>Some text </p>'
+  },
 ]
 
 describe('MarkdownAST#md2HTML()', function () {

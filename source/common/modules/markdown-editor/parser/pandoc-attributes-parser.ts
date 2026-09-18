@@ -23,6 +23,12 @@ import type { DelimiterType, InlineParser } from '@lezer/markdown'
 
 const PandocAttributeDelimiter: DelimiterType = {}
 
+// A valid Pandoc attribute list is made up of any number of #id, .class, or
+// key=value (optionally quoted) pairs, or the `-`/`=format` shorthands, or is
+// empty. Anything else (e.g. free-form text) is not a Pandoc attribute and
+// must be left as literal text instead of being consumed.
+const attributeContentRE = /^\s*(?:(?:#[\w\-:.]+|\.[\w\-]+|[\w\-]+=(?:"[^"]*"|[^\s"}]+)|-|=[\w\-]+)\s*)*$/
+
 /**
  * Parses Pandoc attribute strings (e.g. `{.unnumbered}`) in the code
  */
@@ -50,6 +56,8 @@ export const pandocAttributesParser: InlineParser = {
     // (then they basically apply to the whole line, i.e. with code block meta),
     // or directly preceeded by a non-whitespace symbol.
     if (whitespaceBefore && !whitespaceAfter) { return - 1 }
+
+    if (!attributeContentRE.test(ctx.slice(delim.to, pos))) { return -1 }
 
     ctx.takeContent(opening)
     ctx.addDelimiter(PandocAttributeDelimiter, pos, pos + 1, false, true)
