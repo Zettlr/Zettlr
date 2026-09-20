@@ -189,8 +189,6 @@ async function loadDefaults (
   // First step: Reader treatment. Zettlr can modify the reader to align with
   // the user preferences.
   const parsedReader = parseReaderWriter(defaults.reader as string)
-  
-  const readsMarkdown = EXT2READER['md'].includes(parsedReader.name)
 
   // The user can choose to use [[link|title]] or [[title|link]] syntax. In
   // order for the Lua filter to work properly and respect the link removal
