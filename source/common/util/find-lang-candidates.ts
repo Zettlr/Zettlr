@@ -66,9 +66,16 @@ export default function findLangCandidates<T> (lang: string, candidates: Array<T
       continue
     }
 
-    // If given, the extended subtag must also be given.
+    // If given, the extended subtag must also be given. Compared element by
+    // element: these are arrays, and `!==` on two arrays compares identities,
+    // which are never equal, so every candidate used to be rejected as soon as
+    // the query carried an extended subtag - including a candidate whose tag
+    // was identical to the query.
     if (parsedLang.extendedLanguageSubtags.length > 0) {
-      if (parsedLang.extendedLanguageSubtags !== cand.extendedLanguageSubtags) {
+      const sameSubtags = parsedLang.extendedLanguageSubtags.length === cand.extendedLanguageSubtags.length &&
+        parsedLang.extendedLanguageSubtags.every((tag, i) => tag === cand.extendedLanguageSubtags[i])
+
+      if (!sameSubtags) {
         // Nope, sorry.
         continue
       }
