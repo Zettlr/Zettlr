@@ -97,7 +97,7 @@ export async function makeExport (
       return await runPandoc(logger, defaults, options.cwd)
     },
     loadDefaults: async (filename: string, overrides: PandocDefaults = {}) => {
-      return await loadDefaults(filename, overrides, logger, config, assets, options.defaultsOverride)
+      return await loadDefaults(filename, overrides, config, logger, assets, options.defaultsOverride)
     },
     listDefaults: async () => {
       return await assets.listDefaults()
@@ -174,7 +174,6 @@ async function runPandoc (logger: LogProvider, defaults: PandocDefaults, cwd?: s
 async function loadDefaults (
   filename: string, // The profile to use
   properties: PandocDefaults, // Contains properties that will be written to the defaults
-  logger: LogProvider,
   config: ConfigProvider,
   logger: LogProvider,
   assets: AssetsProvider,
@@ -288,7 +287,7 @@ async function loadDefaults (
       defaults[key] = properties[key]
       logger.warning(`Overriding \`${key}\`: \`${properties[key]}\``)
       logger.warning(`Ignoring default property \`${key}\`: \`${defaults[key]}\``)
-    // If the defaults file does not define a key, set it to the plugin value.
+      // If the defaults file does not define a key, set it to the plugin value.
     } else if (defaults[key] === undefined) {
       defaults[key] = properties[key]
     } else {
