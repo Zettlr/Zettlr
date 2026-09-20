@@ -58,7 +58,14 @@ export function hasMdOrCodeExt (p: string): boolean {
  * @return  {boolean}               Whether the file has one of these extensions
  */
 export function hasExt (filePath: string, extensions: string[]): boolean {
-  return extensions.some(ext => filePath.endsWith(ext))
+  // Compared case-insensitively, as everywhere else that this codebase looks at
+  // a file extension (see is-attachment.ts, database-loader.ts,
+  // save-image-from-clipboard.ts). Windows and macOS both hand us names such as
+  // IMG_1234.JPG or README.MD, and those are the same file type as their
+  // lowercase spelling. The extension list is lowercased too, since
+  // `attachmentExtensions` comes from the user's config.
+  const lowerPath = filePath.toLowerCase()
+  return extensions.some(ext => lowerPath.endsWith(ext.toLowerCase()))
 }
 
 /**
