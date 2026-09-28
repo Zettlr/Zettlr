@@ -43,6 +43,7 @@ import { spellcheck } from './linters/spellcheck'
 import { mdLint } from './linters/md-lint'
 import { countField, countPlugin } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
+import { autocorrectOnWindows } from './util/autocorrect'
 import { typewriter } from './plugins/typewriter'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
 import { type EditorConfiguration, configField } from './util/configuration'
@@ -166,6 +167,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
 
   return [
     EditorView.cursorScrollMargin.of({ x: 50, y: 50 }), // Corresponds to the padding set to the MainEditor.vue for now
+    // Windows: keep the symbol and emoji panel able to insert (issue #6547).
+    autocorrectOnWindows(),
     // Both vim and emacs modes need to be included first, before any other
     // keymap.
     inputModeCompartment.of(inputMode),
