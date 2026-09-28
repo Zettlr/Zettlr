@@ -323,7 +323,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget | u
 
   // alt-text can contain URLs, so if the URL node is within the alt-text,
   // don't treat it as the image source
-  if (urlNode.from < marks[1].to) {
+  if (urlNode.from < marks[1].from) {
     return undefined
   }
 
