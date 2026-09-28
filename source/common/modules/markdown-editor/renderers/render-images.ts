@@ -67,7 +67,7 @@ function resolveImageUrl (filePath: string, imageUrl: string): string {
  *
  * @return  {string|undefined}        The normalized size if recognized, or undefined.
  */
-function normalizeSize (size?: string): string|undefined {
+function normalizeSize (size?: string): string | undefined {
   if (size === undefined || !/[\d\.]+(?:cm|mm|in|px|pt|pc|em|ex|ch|rem|vw|vh|vmin|vmax|%)/i.test(size)) {
     return undefined
   }
@@ -193,7 +193,7 @@ class ImageWidget extends WidgetType {
     caption.contentEditable = 'true'
 
     // Define a quick inline function that takes care of applying a new caption
-    const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
+    const updateCaptionFunction = function (event: KeyboardEvent | FocusEvent): void {
       if (event instanceof KeyboardEvent && event.key !== 'Enter') {
         // If this is a KeyboardEvent, only perform the action on Enter
         return
@@ -308,14 +308,22 @@ function shouldHandleNode (node: SyntaxNodeRef): boolean {
   return node.type.name === 'Image'
 }
 
-function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|undefined {
+function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget | undefined {
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
   const marks = node.node.getChildren('LinkMark')
   const titleNode = node.node.getChild('LinkTitle')
-  const urlNode = node.node.getChild('URL')
+  // Since alt-text can potentially contain multiple URLs,
+  // the last one should be the image source
+  const urlNode = node.node.getChildren('URL').pop()
 
-  if (urlNode === null || marks.length < 2) {
+  if (urlNode === undefined || marks.length < 2) {
+    return undefined
+  }
+
+  // alt-text can contain URLs, so if the URL node is within the alt-text,
+  // don't treat it as the image source
+  if (urlNode.from < marks[1].from) {
     return undefined
   }
 
