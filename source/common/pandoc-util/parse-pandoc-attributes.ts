@@ -37,7 +37,8 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
     const properties = Object.entries(attributes.properties)
       .map(([ key, value ]) => {
         if (value !== undefined) {
-          return (`${key}="${value}"`)
+          // Values containing double quotes can only round-trip single-quoted
+          return value.includes('"') ? `${key}='${value}'` : `${key}="${value}"`
         }
 
         return key
@@ -50,15 +51,17 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
   return parts.join(' ')
 }
 
-/** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
+/** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value" -}
  *
- *  #(?<id>[\w\-_]+)       => id
- *  \.(?<class>[\w\-_]+)   => class
- *  (?<key>[\w\-_]+)       => key
- *  "(?<quoted>[^"]*)"     => quoted values
- *  (?<unquoted>[^\s"]+)   => unquoted values
+ *  #(?<id>[\w\-:.]+)            => id
+ *  \.(?<class>[\w\-:.]+)         => class
+ *  (?<key>[\w\-_]+)             => key
+ *  "(?<quoted>[^"]*)"           => double-quoted values
+ *  '(?<singleQuoted>[^']*)'     => single-quoted values
+ *  (?<unquoted>[^\s"]+)        => unquoted values
+ *  (?<unnumbered>-+)            => bare `-` (or `--`, ...), shorthand for `.unnumbered`
  */
-const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
+export const pandocAttributeRe = /#(?<id>[\w\-:.]+)|\.(?<class>[\w\-:.]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|'(?<singleQuoted>[^']*)'|(?<unquoted>[^\s"]+)))|(?<unnumbered>(?<![\w-])-+(?![\w-]))/g
 
 /**
  * Parses a Pandoc link attribute string, as defined in
@@ -96,9 +99,16 @@ export function parsePandocAttributes (attrString: string): ParsedPandocAttribut
       parsed.classes.push(match.groups.class)
     }
 
+    if (match.groups.unnumbered) {
+      if (parsed.classes === undefined) {
+        parsed.classes = []
+      }
+      parsed.classes.push('unnumbered')
+    }
+
     if (match.groups.attr) {
       const key = match.groups.key
-      let value = match.groups.unquoted ?? match.groups.quoted ?? ''
+      let value = match.groups.unquoted ?? match.groups.quoted ?? match.groups.singleQuoted ?? ''
 
       if (key.toLowerCase() === 'width') {
         if (/^\d+$/.test(value)) {

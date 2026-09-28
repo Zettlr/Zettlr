@@ -164,7 +164,7 @@ function renderNodeAttributes (node: ASTNode): string {
       }
     }
 
-    attr.push(`${key}="${sanitizedValue}"`)
+    attr.push(`${key}="${String(sanitizedValue).replaceAll('"', '&quot;')}"`)
   }
 
   return ' ' + attr.join(' ')
