@@ -147,6 +147,19 @@
     v-bind:file="item"
     v-on:close="showPopover = false"
   ></PopoverFileProps>
+  <Teleport to="body">
+    <div
+      v-if="showFolderPicker && item.type !== 'directory'"
+      class="folder-picker-overlay"
+      v-on:click.self="showFolderPicker = false"
+    >
+      <FolderPickerModal
+        v-bind:verb="folderPickerVerb"
+        v-on:confirm="handleFolderPick"
+        v-on:cancel="showFolderPicker = false"
+      />
+    </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -168,6 +181,7 @@ import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 import PopoverDirProps from './util/PopoverDirProps.vue'
 import PopoverFileProps from './util/PopoverFileProps.vue'
+import FolderPickerModal from './FolderPickerModal.vue'
 
 import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, ref, computed, watch, onMounted, toRef } from 'vue'
@@ -222,6 +236,9 @@ const workspaceStore = useWorkspaceStore()
 const {
   nameEditing,
   showPopover,
+  showFolderPicker,
+  folderPickerVerb,
+  handleFolderPick,
   operationType,
   onDragHandler,
   handleContextMenu,
@@ -742,6 +759,16 @@ function maybeUncollapse (): void {
 </script>
 
 <style lang="less">
+.folder-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
 body {
   div.tree-item-container {
     font-size: 13px;

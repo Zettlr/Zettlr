@@ -50,6 +50,19 @@ export function displayFileContext (event: MouseEvent, fileObject: MDFileDescrip
       id: 'menu.duplicate_file',
       type: 'normal'
     },
+    { type: 'separator' },
+    {
+      label: trans('Copy to…'),
+      id: 'menu.copy_to',
+      type: 'normal',
+      enabled: true,
+    },
+    {
+      label: trans('Move to…'),
+      id: 'menu.move_file',
+      type: 'normal',
+      enabled: true,
+    },
     {
       label: trans('Delete file'),
       id: 'menu.delete_file',
