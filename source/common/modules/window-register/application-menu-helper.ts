@@ -221,6 +221,8 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   appMenu.classList.add('application-menu')
   appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
+  let activeSubmenuClose: null | (() => void) = null
+
   for (const item of items) {
     const menuItem = renderMenuItem(item)
 
@@ -266,6 +268,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
           }
 
           closeSubmenu = showPopupMenu(target, item.submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
+          activeSubmenuClose = closeSubmenu
         } else if (
           pointInRect(point, menuRect) &&
           !pointInRect(point, rect) &&
@@ -274,6 +277,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
           // It's within the menu but not over our item, so hide again
           closeSubmenu()
           closeSubmenu = null
+          activeSubmenuClose = null
         } // Else: Keep it open
       })
 
@@ -328,16 +332,32 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   // on the window, because this indicates that the menu should be closed.
   // Clicks on any menu item will be handled before the event bubbles up to the
   // window so we don't need additional checks.
-  const clickCallback = (event?: MouseEvent): void => {
+  const closeMenu = (event?: Event): void => {
+    if (event instanceof KeyboardEvent && event.key !== 'Escape') {
+      return
+    }
+
+    if (activeSubmenuClose !== null) {
+      activeSubmenuClose()
+      activeSubmenuClose = null
+    }
+
     appMenu.parentElement?.removeChild(appMenu)
-    window.removeEventListener('mousedown', clickCallback)
+    window.removeEventListener('mousedown', closeMenu)
+    if (cleanup) {
+      window.removeEventListener('keydown', closeMenu, true)
+    }
   }
-  window.addEventListener('mousedown', clickCallback)
+
+  window.addEventListener('mousedown', closeMenu)
+  if (cleanup) {
+    window.addEventListener('keydown', closeMenu, true)
+  }
 
   // Return a close-callback for the caller to programmatically close the menu
   return () => {
     // When the closing function is called, remove the menu again
-    clickCallback()
+    closeMenu()
   }
 }
 

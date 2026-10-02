@@ -31,7 +31,7 @@
  */
 
 import showPopupMenu, { type AnyMenuItem, type SubmenuItem } from '@common/modules/window-register/application-menu-helper'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -41,6 +41,17 @@ const menuCloseCallback = ref<null|(() => void)|null>(null)
 
 // Can contain a target if a submenu is right now being requested
 const targetElement = ref<HTMLElement|null>(null)
+
+const resetState = (event?: Event) => {
+  if (event instanceof KeyboardEvent && event.key !== 'Escape') {
+    return
+  }
+  // The closing will be handled automatically by the menu handler
+  if (menuCloseCallback.value !== null) {
+    menuCloseCallback.value = null
+    currentSubmenu.value = null
+  }
+}
 
 onBeforeMount(() => {
   // Listen to messages from the menu provider
@@ -59,13 +70,13 @@ onBeforeMount(() => {
   ipcRenderer.send('menu-provider', { command: 'get-application-menu' })
 
   // Also make sure to reset the internal state if necessary
-  window.addEventListener('mousedown', (_event) => {
-    // The closing will be handled automatically by the menu handler
-    if (menuCloseCallback.value !== null) {
-      menuCloseCallback.value = null
-      currentSubmenu.value = null
-    }
-  })
+  window.addEventListener('mousedown', resetState)
+  window.addEventListener('keydown', resetState)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('mousedown', resetState)
+  window.removeEventListener('keydown', resetState)
 })
 
 function getSubmenu (menuID: string, target: HTMLElement): void {
