@@ -15532,7 +15532,7 @@ __metadata:
     gettext-parser: "npm:^9.1.1"
     got: "npm:^11.8.6"
     jsdom: "npm:^30.0.1"
-    katex: "npm:^0.18.6"
+    katex: "npm:^0.18.7"
     ky: "npm:^2.1.0"
     lang-criticmarkup: "npm:^0.3.0"
     less: "npm:^4.9.1"
