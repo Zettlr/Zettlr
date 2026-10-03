@@ -186,6 +186,14 @@ export default function getMenu (
           }
         },
         {
+          id: 'menu.revert_file',
+          label: trans('Revert (reload from disk)'),
+          accelerator: 'Ctrl+Alt+R',
+          click: function (_menuItem, focusedWindow) {
+            (focusedWindow as BrowserWindow|undefined)?.webContents.send('shortcut', 'revert-file')
+          }
+        },
+        {
           type: 'separator'
         },
         {
