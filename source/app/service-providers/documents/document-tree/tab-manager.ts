@@ -131,7 +131,7 @@ export class TabManager {
    *
    * @return  {Promise<boolean>}        True upon successful opening
    */
-  public openFile (filePath: string, modifyHistory?: boolean): boolean {
+  public openFile (filePath: string, modifyHistory?: boolean, openAtEnd?: boolean): boolean {
     if (this.activeFile?.path === filePath) {
       return false
     }
@@ -158,7 +158,7 @@ export class TabManager {
 
     const file: OpenDocument = { path: filePath, pinned: false }
 
-    if (this._activeFile !== null) {
+    if (this._activeFile !== null && openAtEnd !== true) {
       // ... behind our active file
       const idx = this._openFiles.indexOf(this._activeFile)
       this._openFiles.splice(idx + 1, 0, file)
