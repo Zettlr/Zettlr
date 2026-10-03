@@ -36,6 +36,7 @@ const RULES = {
   'editor.boldFormatting': 'required|string|in:__,**|default:**',
   'editor.italicFormatting': 'required|string|in:_,*|default:_',
   'editor.readabilityAlgorithm': 'required|string|in:dale-chall,gunning-fog,coleman-liau,automated-readability|default:dale-chall',
+  'editor.textDirection': 'required|string|in:ltr,rtl,auto|default:auto',
   cslLibrary: 'optional|string|default:',
   'display.imageWidth': 'required|number|min:1|max:100|default:100',
   'display.imageHeight': 'required|number|min:1|max:100|default:100',
