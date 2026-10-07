@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-- Fixed an issue where a URL in an image caption would  be improperly treated as the image source (#6594)
+- Fixed an issue where a URL in an image caption would be improperly treated as
+  the image source (#6594).
 
 ## Under the Hood
 
