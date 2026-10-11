@@ -15,7 +15,6 @@
 import {
   createWriteStream,
   promises as fs,
-  type ReadStream,
   type WriteStream
 } from 'fs'
 
@@ -36,6 +35,8 @@ import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
 import { showNativeNotification } from '@common/util/show-notification'
 import type WindowProvider from '../windows'
+import { pipeline } from 'stream/promises'
+import { Transform } from 'stream'
 
 /**
  * Struct which represents a single asset provided for by the updater
@@ -207,7 +208,6 @@ function getUpdateState (): UpdateState {
 export default class UpdateProvider extends ProviderContract {
   private readonly _sha256Data: Map<string, string>
   private _updateState: UpdateState
-  private _downloadReadStream: undefined|ReadStream
   private _downloadWriteStream: undefined|WriteStream
 
   constructor (
@@ -225,7 +225,6 @@ export default class UpdateProvider extends ProviderContract {
     this._updateState = getUpdateState()
 
     // Initialize the write/read streams used during downloads
-    this._downloadReadStream = undefined
     this._downloadWriteStream = undefined
 
     // Handle events
@@ -240,7 +239,7 @@ export default class UpdateProvider extends ProviderContract {
       } else if (command === 'request-app-update') {
         // We shall download the URL which is in the content variable
         this._logger.info('[Update Provider] Requesting update ' + (payload as string))
-        this._downloadAppUpdate(payload as string)
+        await this._downloadAppUpdate(payload as string)
       } else if (command === 'begin-update') {
         // Begin the actual update process NOTE We're not blocking the handler
         this._beginUpdate()
@@ -541,7 +540,7 @@ export default class UpdateProvider extends ProviderContract {
    *
    * @param {string} url The URL to download
    */
-  private _downloadAppUpdate (url: string): void {
+  private async _downloadAppUpdate (url: string): Promise<void> {
     // First, let's find the update
     const updateToPull = this._updateState.compatibleAssets.find((elem) => {
       return elem.browser_download_url === url
@@ -555,11 +554,6 @@ export default class UpdateProvider extends ProviderContract {
     // Save to downloads folder
     const destination = path.join(app.getPath('downloads'), updateToPull.name)
 
-    // The read stream reads the remote binary file, the write stream pipes that
-    // data through to the local file.
-    this._downloadWriteStream = createWriteStream(destination)
-    this._downloadReadStream = got.stream(updateToPull.browser_download_url) as unknown as ReadStream
-
     // Preset the appropriate values on the internal state
     this._updateState.name = updateToPull.name
     this._updateState.full_path = destination
@@ -570,45 +564,51 @@ export default class UpdateProvider extends ProviderContract {
 
     broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
-    this._downloadReadStream.on('data', (chunk) => {
-      if (this._downloadWriteStream === undefined) {
-        this._cleanup(true)
-        this._reportError('EWRITESTREAM', trans('Could not accept data for application update: Write stream is gone.'), true)
-        return
-      }
+    // Initiate the transfer
+    const response = await fetch(updateToPull.browser_download_url)
+    if (!response.ok || response.body === null) {
+      throw new Error('Could not download update!')
+    }
 
-      const now = Date.now()
-      this._updateState.size_downloaded += chunk.length
-      const secondsPassed = (now - this._updateState.start_time) / 1000
-      const bytesPerSecond = this._updateState.size_downloaded / secondsPassed
-      const bytesRemaining = this._updateState.size_total - this._updateState.size_downloaded
-      this._updateState.eta_seconds = Math.round(bytesRemaining / bytesPerSecond)
-      broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
-      this._downloadWriteStream.write(chunk)
-    })
-
-    this._downloadReadStream.on('end', () => {
-      // Close the write stream. This will free the file handle, which is
-      // important on Windows for the next step, because if this is not done,
-      // Windows will refuse to open the file and emit an error that the file is
-      // still in use.
-      this._downloadWriteStream?.end()
-      this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
-      showNativeNotification(`Download of ${this._updateState.name} successful!`, 'Update', () => {
-        // The user has clicked the notification, so we can show the update window here
-        this._commands.run('open-update-window', undefined)
-          .catch(e => this._logger.error(String(e.message), e))
-      })
-    })
-
-    this._downloadReadStream.on('error', (err) => {
-      this._cleanup(true)
-      this._reportError('EREADSTREAM', `Download Read Stream Error: ${err.message}`, true)
-    })
+    // The read stream reads the remote binary file, the write stream pipes that
+    // data through to the local file.
+    this._downloadWriteStream = createWriteStream(destination)
 
     this._downloadWriteStream.on('error', (err) => {
       this._cleanup(true)
       this._reportError('EWRITESTREAM', `Download Write Stream Error: ${err.message}`, true)
+    })
+
+    // We implement the progress callback as a transform that sits in between
+    // the download stream and the write stream. It passes the data unchanged,
+    // but inspects it to update the progress of the file download.
+    const progress = new Transform({
+      transform: (chunk, encoding, callback) => {
+        const now = Date.now()
+        this._updateState.size_downloaded += chunk.length
+        const secondsPassed = (now - this._updateState.start_time) / 1000
+        const bytesPerSecond = this._updateState.size_downloaded / secondsPassed
+        const bytesRemaining = this._updateState.size_total - this._updateState.size_downloaded
+        this._updateState.eta_seconds = Math.round(bytesRemaining / bytesPerSecond)
+        broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
+        callback(null, chunk)
+      }
+    })
+
+    // Begin downloading the binary data. The promise will resolve once the
+    // readable stream has been fully drained and the write stream has ingested
+    // all data and released the file pointer.
+    await pipeline(
+      response.body,
+      progress,
+      this._downloadWriteStream
+    )
+
+    this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
+    showNativeNotification(`Download of ${this._updateState.name} successful!`, 'Update', () => {
+      // The user has clicked the notification, so we can show the update window here
+      this._commands.run('open-update-window', undefined)
+        .catch(e => this._logger.error(String(e.message), e))
     })
   }
 
@@ -677,16 +677,6 @@ export default class UpdateProvider extends ProviderContract {
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : 'Unknown error'
         this._logger.warning(`[Update Provider] Could not close write stream: ${message}`, err)
-      }
-      this._downloadWriteStream = undefined
-    }
-    // Second the read stream
-    if (this._downloadReadStream !== undefined) {
-      try {
-        this._downloadReadStream.close()
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Unknown error'
-        this._logger.warning(`[Update Provider] Could not close read stream: ${message}`, err)
       }
       this._downloadWriteStream = undefined
     }
