@@ -21,6 +21,7 @@ import {
 import path from 'path'
 import crypto from 'crypto'
 import got, { RequestError, type Response } from 'got'
+import ky from 'ky'
 import semver from 'semver'
 import { net } from 'electron'
 
@@ -513,7 +514,7 @@ export default class UpdateProvider extends ProviderContract {
 
     // Let's download the SHA256 data as well
     try {
-      const response = await got(
+      const response = await ky(
         this._updateState.checksumFile.browser_download_url,
         { method: 'GET', timeout: 5000 }
       )
@@ -521,12 +522,13 @@ export default class UpdateProvider extends ProviderContract {
       // Now we need to parse the data. It looks like this:
       // [sha256 sum]  [binary name]
       // So we first need to split on newlines and then on spaces
-      response.body
+      const contents = await response.text()
+      contents
         .split('\n')
         .map(release => release.split(/\s+/))
         .filter(release => release.length === 2)
         .map(release => {
-          this._logger.info(`[Update Provider] Found SHA256 checksum for ${release[1]}`)
+          this._logger.info(`[Update Provider] SHA256 checksum for ${release[1]}: ${release[0]}`)
           this._sha256Data.set(release[1], release[0])
         })
     } catch (err: unknown) {
