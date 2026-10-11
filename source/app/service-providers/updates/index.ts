@@ -294,14 +294,23 @@ export default class UpdateProvider extends ProviderContract {
    * @return {Promise} Resolves only when there is an update available.
    */
   async check (): Promise<void> {
+    // (1) We do not check for updates upon hard limits, that is: if the
+    // internet connection is down or if updates have been disabled at build
+    // time.
     if (!net.online || __UPDATES_DISABLED__ === '1') {
-      // Don't check if we don't have an internet connection; preserve the last
-      // state so that the user sees what the most recent result was. We also
-      // never check if updates have been disabled at build time.
       return
     }
 
-    // First, reset the update state
+    // (2) We also do not check upon soft limits, that is: if the user has
+    // disabled update checks, or if there has been a check and an update is
+    // available.
+    const { checkForUpdates } = this._config.get().system
+    if (!checkForUpdates || this.applicationUpdateAvailable()) {
+      return
+    }
+
+    // In both cases, we retain the last update state. If none of these guards
+    // hold, we can reset the update state and (re-)check.
     this._resetState()
 
     try {
@@ -699,21 +708,10 @@ export default class UpdateProvider extends ProviderContract {
   async boot (): Promise<void> {
     // Initiate the update check
     setInterval(() => {
-      // Only check if the user wants to, and if there is not yet a new version.
-      const { checkForUpdates } = this._config.get().system
-      if (!checkForUpdates || this.applicationUpdateAvailable()) {
-        return
-      }
-
       this.check().catch(err => {
         this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err)
       })
     }, UPDATE_CHECK_INTERVAL)
-
-    // One initial check (if applicable)
-    if (!this._config.get().system.checkForUpdates) {
-      return
-    }
 
     this.check().catch(err => {
       this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err)

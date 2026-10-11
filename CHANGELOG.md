@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-(Nothing here)
+- Centralized update check logic.
 
 # 4.8.0
 
