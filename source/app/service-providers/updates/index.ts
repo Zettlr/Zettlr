@@ -20,8 +20,7 @@ import {
 
 import path from 'path'
 import crypto from 'crypto'
-import got, { RequestError, type Response } from 'got'
-import ky from 'ky'
+import ky, { isHTTPError, isKyError, isNetworkError } from 'ky'
 import semver from 'semver'
 import { net } from 'electron'
 
@@ -177,6 +176,48 @@ class UpdateError extends Error {
   }
 }
 
+/**
+ * Verifies an unknown JSON payload that it conforms to the ServerAPIResponse
+ * interface and is not malformed.
+ *
+ * @param   {unknown}  response  The untrusted JSON
+ *
+ * @return  {boolean}            True if the response corresponds to ServerAPIResponse.
+ */
+function verifyUpdateServerResponse (response: unknown): response is ServerAPIResponse {
+  if (response == null || Array.isArray(response) || typeof response !== 'object') {
+    return false
+  }
+
+  for (const prop of [ 'tag_name', 'name', 'html_url', 'body', 'published_at' ]) {
+    // @ts-expect-error TypeScript doesn't know this is perfectly valid JS.
+    if (!(prop in response) || typeof response[prop] !== 'string') {
+      return false
+    }
+  }
+
+  if (!('prerelease' in response) || typeof response.prerelease !== 'boolean') {
+    return false
+  }
+
+  if (!('id' in response) || typeof response.id !== 'number') {
+    return false
+  }
+
+  if (!('assets' in response) || !Array.isArray(response.assets)) {
+    return false
+  }
+
+  return response.assets.every(asset => {
+    return asset != null
+      && typeof asset === 'object'
+      && !Array.isArray(asset)
+      && ('name' in asset) && typeof asset.name === 'string'
+      && ('size' in asset) && typeof asset.size === 'number'
+      && ('browser_download_url' in asset) && typeof asset.browser_download_url === 'string'
+  })
+}
+
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'
 const RELEASE_PAGE = 'https://github.com/Zettlr/Zettlr/releases'
@@ -326,8 +367,8 @@ export default class UpdateProvider extends ProviderContract {
         platformString = `Linux ${process.arch === 'x64' ? 'x86_64' : process.arch}`
       }
 
-      const response: Response<string> = await got(REPO_URL, {
-        timeout: { request: 5000 },
+      const response = await ky(REPO_URL, {
+        timeout:  5000,
         method: 'GET',
         headers: {
           'User-Agent': `Zettlr/${CUR_VER} (${platformString})`
@@ -338,7 +379,8 @@ export default class UpdateProvider extends ProviderContract {
       })
 
       // Next: Parse the result
-      this._updateState = await this._parseResponse(response)
+      const jsonData = await response.json()
+      this._updateState = await this._parseResponse(jsonData)
       broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
       // At this point, notify the user if applicable
@@ -369,55 +411,41 @@ export default class UpdateProvider extends ProviderContract {
         this._logger.verbose(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
       }
     } catch (err: unknown) {
+      // First, check for errors thrown after the update response has been received.
       if (err instanceof UpdateError) {
         this._reportError(err.code, err.message, true)
         return
       }
 
-      if (!(err instanceof RequestError)) {
-        // Report this error
+      // Next, report unexpected errors. (We only expect UpdateErrors that we throw, and KyErrors)
+      if (!isKyError(err)) {
         this._reportError('Unexpected error', 'An unexpected error occurred while checking for updates', true)
         return
       }
 
-      const statusCode = err.response?.statusCode ?? -1
+      // Third, check for HTTP errors, for which we can give a more detailed error message.
+      if (isHTTPError(err)) {
+        const { status } = err.response
+        if (status >= 500) {
+          const msg = trans('Could not check for updates: Server Error (Status code: %s)', status)
+          this._reportError(`Error ${status}`, msg, false)
+        } else if (status >= 400 && status < 500) {
+          const msg = trans('Could not check for updates: Client Error (Status code: %s)', status)
+          this._reportError(`Error ${status}`, msg, false)
+        } else if (status >= 300 && status < 400) {
+          const msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', status)
+          this._reportError(`Error ${status}`, msg, true) // This is odd and should be reported
+        } else {
+          // Something else has occurred. GotError objects have a name property.
+          const msg = trans('Could not check for updates. %s: %s', err.name, err.message)
+          this._reportError(err.name, msg, true) // This is odd and should be reported
+        }
+      }
 
-      // See for all errors https://github.com/sindresorhus/got/blob/main/documentation/8-errors.md
-      // If we have an ENOTFOUND error there is no response and no statusCode
-      // so we'll use TypeScript shortcuts to save us from ugly errors.
-      const notFoundError = err.code === 'ENOTFOUND'
-      const timeoutError = err.code === 'ETIMEDOUT'
-      const serverError = statusCode >= 500
-      const clientError = statusCode >= 400 && statusCode < 500
-      const redirectError = statusCode >= 300 && statusCode < 400
-
-      // Give a more detailed error message.
-      if (serverError) {
-        const msg = trans('Could not check for updates: Server Error (Status code: %s)', statusCode)
-        this._reportError(err.code as string, msg, false)
-      } else if (clientError) {
-        const msg = trans('Could not check for updates: Client Error (Status code: %s)', statusCode)
-        this._reportError(err.code as string, msg, false)
-      } else if (redirectError) {
-        const msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', statusCode)
-        this._reportError(err.code as string, msg, true) // This is odd and should be reported
-      } else if (notFoundError) {
-        // getaddrinfo has reported that the host has not been found.
-        // This normally only happens if the networking interface is
-        // offline. In this case, no need to inform the user every hour.
-        const msg = trans('Could not check for updates: Could not establish connection')
-        this._reportError(err.code as string, msg, false)
-      } else if (timeoutError) {
-        // This can happen if the internet is either really bad or drops during the
-        // connection attempt. In any case, this can happen often with, e.g.,
-        // company VPNs and other firewalls, and would be distracting to see every
-        // hour or so. See #5944 for context.
-        const msg = trans('Could not check for updates: The connection attempt timed out.')
-        this._reportError(err.code as string, msg, false)
-      } else {
-        // Something else has occurred. GotError objects have a name property.
-        const msg = trans('Could not check for updates. %s: %s', err.name, err.message)
-        this._reportError(err.code as string, msg, true) // This is odd and should be reported
+      // Finally, report potential network errors.
+      if (isNetworkError(err)) {
+        const msg = trans('Could not check for updates: %s', err.cause ?? err.message)
+        this._reportError(err.name, msg, false)
       }
     }
   }
@@ -428,14 +456,14 @@ export default class UpdateProvider extends ProviderContract {
    *
    * @param {Response} response The response from the server
    */
-  private async _parseResponse (response: Response<string>): Promise<UpdateState> {
-    // Error handling
-    if (response.body.trim() === '') {
-      throw new UpdateError('ERR_BODY_PARSE_FAILURE', trans('Could not check for updates: Server hasn\'t sent any data'))
+  private async _parseResponse (parsedResponse: unknown): Promise<UpdateState> {
+    if (!verifyUpdateServerResponse(parsedResponse)) {
+      console.log(parsedResponse)
+      throw new UpdateError('ERR_BODY_PARSE_FAILURE', trans('Could not check for updates: Server has sent invalid data'))
     }
 
     // First we need to parse the JSON data.
-    const parsedResponse = JSON.parse(response.body) as ServerAPIResponse
+    // const parsedResponse = JSON.parse(response.body) as ServerAPIResponse
     const state = getUpdateState()
 
     const localVersion = semver.parse(CUR_VER) // localVersion

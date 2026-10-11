@@ -8,6 +8,8 @@
 ## Under the Hood
 
 - Centralized update check logic.
+- Fully switched the update provider from the outdated `got` dependency to both
+  pure `fetch` (where necessary) or `ky` (where convenient).
 
 # 4.8.0
 
