@@ -1,5 +1,12 @@
 # Upcoming
 
+## Deprecation: macOS 12 and Ubuntu 17.04 no longer supported
+
+This release updates Electron, Zettlr's underlying application framework, to
+version 44. This means that Zettlr will no longer run on macOS 12 or Ubuntu
+17.04 or earlier. If you run such a system, please consider updating your
+computer to continue using Zettlr.
+
 ## GUI and Functionality
 
 - Fixed an issue where a URL in an image caption would be improperly treated as
@@ -7,6 +14,7 @@
 
 ## Under the Hood
 
+- Update Electron to `v44.5.1`. This drops macOS 12 and Ubuntu 17.04.
 - Centralized update check logic.
 - Fully switched the update provider from the outdated `got` dependency to both
   pure `fetch` (where necessary) or `ky` (where convenient).

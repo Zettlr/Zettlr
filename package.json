@@ -192,7 +192,7 @@
     "cross-env": "^10.1.0",
     "css-loader": "^7.1.5",
     "csso": "^5.0.5",
-    "electron": "^43.6.0",
+    "electron": "^44.5.1",
     "electron-builder": "^26.16.0",
     "electron-devtools-installer": "^4.0.0",
     "eslint": "^10.10.0",
