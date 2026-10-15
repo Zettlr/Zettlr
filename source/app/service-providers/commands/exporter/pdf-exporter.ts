@@ -21,14 +21,15 @@ import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
+import normalizePath from 'source/common/util/normalize-path'
 
 export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
   // First file determines the name of the output path, EXCEPT a title is
   // explicitly set.
   const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
-  const pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
-  const htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
+  let pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
+  let htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
 
   // Get the corresponding defaults file
   const defaultKeys = {
@@ -45,10 +46,26 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   }
 
   // Write to an intermediary HTML file which we will convert to PDF below.
-  const defaultsFile = await ctx.writeDefaults(allDefaults[0].name, defaultKeys)
+  const defaults = await ctx.loadDefaults(allDefaults[0].name, defaultKeys)
+
+  // Since the PDF exporter is a two-stage process, `htmlFilePath` is what
+  // is actually passed to pandoc, however, a user provided `output-file`
+  // likely refers to the path of the output PDF. So, if `output-file` has
+  // changed, normalize the path based on the PDF and set `output-file` to
+  // the updated `htmlFilePath`.
+  if (defaults['output-file'] !== htmlFilePath) {
+    pdfFilePath = normalizePath(defaults['output-file'] as string, options.targetDirectory)
+
+    // This is a temporary file, so potentially duplicating the extension as
+    // `.pdf.html` doesn't really matter. We probably could disregard updating
+    // this path entirely, but here it is done for consistency.
+    htmlFilePath = pdfFilePath + '.html'
+
+    defaults['output-file'] = htmlFilePath
+  }
 
   // Run Pandoc
-  const pandocOutput = await ctx.runPandoc(defaultsFile)
+  const pandocOutput = await ctx.runPandoc(defaults)
 
   // Without XeLaTeX, people can still export to PDF using Chromium's print
   // API. Chromium's PDF abilities are actually quite good.
