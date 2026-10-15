@@ -67,8 +67,8 @@ export default class SaveImage extends ZettlrCommand {
     // ridiculous amount of code it takes to get that exact information with
     // only browser APIs, and (b) circumvent permission issues (since in the
     // browser, reading from clipboard often requires the user to do something).
-    ipcMain.handleOnce('paste-image-retrieve-data', (event) => {
-      const text = clipboard.readText()
+    ipcMain.handleOnce('paste-image-retrieve-data', async (event) => {
+      const text = await clipboard.readText()
 
       const dataUrl = arg.imageData
 
