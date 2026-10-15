@@ -11,6 +11,9 @@ computer to continue using Zettlr.
 
 - Fixed an issue where a URL in an image caption would be improperly treated as
   the image source (#6594).
+- Fixed an issue where toggling a task mark would scroll the viewport back to the
+  cursor position. Now, the viewport does not scroll when a task mark is toggled,
+  though the cursor position is retained (#6603).
 
 ## Under the Hood
 
