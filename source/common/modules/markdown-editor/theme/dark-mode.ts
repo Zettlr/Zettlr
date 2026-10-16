@@ -65,26 +65,18 @@ const darkModeThemeField = StateField.define<DarkModeConfiguration>({
       darkMode: false
     }
   },
-  update (val, transaction) {
-    let updated = false
+  update (value, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(darkModeEffect)) {
-        if (effect.value.darkMode !== undefined) {
-          val.darkMode = effect.value.darkMode
-          updated = true
-        }
-        if (effect.value.darkThemes !== undefined) {
-          val.darkThemes = effect.value.darkThemes
-          updated = true
-        }
-        if (effect.value.lightThemes !== undefined) {
-          val.lightThemes = effect.value.lightThemes
-          updated = true
+        value = {
+          darkMode: effect.value.darkMode ?? value.darkMode,
+          darkThemes: effect.value.darkThemes ?? value.darkThemes,
+          lightThemes: effect.value.lightThemes ?? value.lightThemes
         }
       }
     }
 
-    return updated ? { ...val } : val
+    return value
   }
 })
 

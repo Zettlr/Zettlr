@@ -37,13 +37,8 @@ export const countField = StateField.define<{ chars: number, words: number }>({
   },
 
   update (value, transaction) {
-    for (const e of transaction.effects) {
-      if (e.is(updateWordCountEffect)) {
-        return e.value
-      }
-    }
-
-    return value
+    const effect = transaction.effects.findLast(effect => effect.is(updateWordCountEffect))
+    return effect !== undefined ? effect.value : value
   },
 
   compare (a, b): boolean {

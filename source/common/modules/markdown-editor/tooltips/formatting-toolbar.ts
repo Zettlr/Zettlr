@@ -137,7 +137,7 @@ const formattingToolbarPlugin = StateField.define<readonly Tooltip[]>({
     return getToolbar(state)
   },
 
-  update (tooltips, transaction) {
+  update (_value, transaction) {
     return getToolbar(transaction.state)
   },
 
