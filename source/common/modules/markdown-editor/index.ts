@@ -168,7 +168,7 @@ export interface EditorViewPersistentState {
    * A scroll snapshot from the editor. Used to properly restore the scroll
    * position.
    */
-  scrollSnapshot: StateEffect<any>
+  scrollSnapshot: StateEffect<unknown>
   /**
    * A selection object. Used to properly restore the cursor position and any
    * selections within the editor.
@@ -378,16 +378,17 @@ export default class MarkdownEditor extends EventEmitter {
 
     this._instance.setState(state)
 
+    // If a persistent state has been passed to the function, we can restore a
+    // set of information, such as fold regions or editor selections to
+    // reconstruct a document after, e.g., switching tabs or reloading it.
     if (persistentState !== undefined) {
-      // Now that the correct document has been loaded, there will be content
-      // and we can restore the persisted information.
       const { scrollSnapshot, selection, foldedRanges } = persistentState
       const docLength = this._instance.state.doc.length
 
-      const effects: StateEffect<any>[] = [scrollSnapshot]
+      const effects: StateEffect<unknown>[] = [scrollSnapshot]
 
       const cursor = foldedRanges.iter()
-      while (cursor.value) {
+      while (cursor.value !== null) {
         if (cursor.from <= docLength && cursor.to <= docLength) {
           effects.push(foldEffect.of({
             from: cursor.from,
@@ -397,25 +398,25 @@ export default class MarkdownEditor extends EventEmitter {
         cursor.next()
       }
 
-      const mainRange = selection.ranges[selection.mainIndex]
+      const oldMainRange = selection.ranges[selection.mainIndex]
 
+      // Remove ranges that now lie outside of the new document's length
+      // (primarily relevant if a document has been changed externally).
       const newRanges = selection.ranges.filter(
-        range => range.anchor <= docLength && range.head <= docLength
+        ({ anchor, head }) => anchor <= docLength && head <= docLength
       )
 
-      const newMainIndex = newRanges.indexOf(mainRange)
+      const idx = newRanges.indexOf(oldMainRange)
 
+      // Either restore the selection if some ranges were still valid, using
+      // either the existing main index, or resetting it, or create a new
+      // pristine selection set to the document start if all ranges were
+      // invalid.
       const restoredSelection = newRanges.length > 0
-        ? EditorSelection.create(
-          newRanges,
-          newMainIndex >= 0 ? newMainIndex : 0
-        )
-        : EditorSelection.single(docLength)
+        ? EditorSelection.create(newRanges, idx > -1 ? idx : 0)
+        : EditorSelection.single(0)
 
-      this._instance.dispatch({
-        selection: restoredSelection,
-        effects
-      })
+      this._instance.dispatch({ selection: restoredSelection, effects })
     }
     
     // Ensure the theme switcher picks the state change up; this somehow doesn't
