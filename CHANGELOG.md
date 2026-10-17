@@ -33,6 +33,8 @@ computer to continue using Zettlr.
 - Centralized update check logic.
 - Fully switched the update provider from the outdated `got` dependency to both
   pure `fetch` (where necessary) or `ky` (where convenient).
+- Move the link preview generation to `ky`.
+- Fully remove all dependencies on `got`, and remove the module entirely.
 
 # 4.8.0
 
