@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-09-08 02:34+0000\n"
+"POT-Creation-Date: 2026-09-22 02:36+0000\n"
 "PO-Revision-Date: 2026-08-10 22:37+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -907,7 +907,7 @@ msgstr "追加情報"
 
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/app/service-providers/menu/menu.win32.ts:463
-#: source/win-preferences/schema/editor.ts:225
+#: source/win-preferences/schema/editor.ts:231
 msgid "Distraction-free mode"
 msgstr "集中モード"
 
@@ -1269,8 +1269,8 @@ msgstr "辞書に追加"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
-#: source/win-preferences/schema/editor.ts:158
-#: source/win-preferences/schema/editor.ts:159
+#: source/win-preferences/schema/editor.ts:164
+#: source/win-preferences/schema/editor.ts:165
 msgid "Bold"
 msgstr "太字"
 
@@ -1458,20 +1458,20 @@ msgstr "%s 単語"
 msgid "This file is part of project \"%s\""
 msgstr "このファイルはプロジェクト \"%s\" の一部です"
 
-#: source/common/modules/markdown-editor/renderers/index.ts:140
+#: source/common/modules/markdown-editor/renderers/index.ts:144
 msgid "Preview"
 msgstr "プレビュー"
 
-#: source/common/modules/markdown-editor/renderers/index.ts:140
+#: source/common/modules/markdown-editor/renderers/index.ts:144
 msgid "Raw"
 msgstr "Raw"
 
-#: source/common/modules/markdown-editor/renderers/index.ts:139
+#: source/common/modules/markdown-editor/renderers/index.ts:143
 #, javascript-format
 msgid "Rendering: %s"
 msgstr "レンダリング : %s"
 
-#: source/common/modules/markdown-editor/renderers/index.ts:142
+#: source/common/modules/markdown-editor/renderers/index.ts:146
 msgid "Enable or disable the preview mode for Markdown files by clicking"
 msgstr ""
 "クリックすると、Markdown ファイルのプレビューモードを有効または無効にできます"
@@ -1480,6 +1480,29 @@ msgstr ""
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr "可読性モード (%s)"
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:88
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:93
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
+msgid "Note"
+msgstr "メモ"
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:89
+msgid "Tip"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:90
+msgid "Important"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:91
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
+msgid "Warning"
+msgstr "警告"
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:92
+msgid "Caution"
+msgstr ""
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:153
 #, javascript-format
@@ -1640,8 +1663,8 @@ msgid "No footnote text found."
 msgstr "脚注テキストが見つかりません。"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
-#: source/win-preferences/schema/editor.ts:166
-#: source/win-preferences/schema/editor.ts:167
+#: source/win-preferences/schema/editor.ts:172
+#: source/win-preferences/schema/editor.ts:173
 msgid "Italics"
 msgstr "斜体"
 
@@ -1650,8 +1673,8 @@ msgid "Underline"
 msgstr "下線"
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
-#: source/win-preferences/schema/editor.ts:174
-#: source/win-preferences/schema/editor.ts:175
+#: source/win-preferences/schema/editor.ts:180
+#: source/win-preferences/schema/editor.ts:181
 msgid "Highlight"
 msgstr "強調表示"
 
@@ -1710,396 +1733,400 @@ msgid "Asturian"
 msgstr "アストゥリアス語"
 
 #: source/common/util/map-lang-code.ts:36
+msgid "Azerbaijani"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:37
 msgid "Belarus"
 msgstr "ベラルーシ語"
 
-#: source/common/util/map-lang-code.ts:37
+#: source/common/util/map-lang-code.ts:38
 msgid "Bulgarian"
 msgstr "ブルガリア語"
 
-#: source/common/util/map-lang-code.ts:38
+#: source/common/util/map-lang-code.ts:39
 msgid "Breton"
 msgstr "ブルトン語"
 
-#: source/common/util/map-lang-code.ts:39
+#: source/common/util/map-lang-code.ts:40
 msgid "Bosnian"
 msgstr "ボスニア語"
 
-#: source/common/util/map-lang-code.ts:40
+#: source/common/util/map-lang-code.ts:41
 msgid "Catalan"
 msgstr "カタルーニャ語"
 
-#: source/common/util/map-lang-code.ts:41
+#: source/common/util/map-lang-code.ts:42
 msgid "Catalan (Valencia)"
 msgstr "カタロニア語 (バレンシア)"
 
-#: source/common/util/map-lang-code.ts:42
+#: source/common/util/map-lang-code.ts:43
 msgid "Czech"
 msgstr "チェコ語"
 
-#: source/common/util/map-lang-code.ts:43
+#: source/common/util/map-lang-code.ts:44
 msgid "Danish"
 msgstr "デンマーク語"
 
-#: source/common/util/map-lang-code.ts:44
+#: source/common/util/map-lang-code.ts:45
 msgid "German (Austria)"
 msgstr "ドイツ語 (オーストリア)"
 
-#: source/common/util/map-lang-code.ts:45
+#: source/common/util/map-lang-code.ts:46
 msgid "German (Switzerland)"
 msgstr "ドイツ語 (スイス)"
 
-#: source/common/util/map-lang-code.ts:46
+#: source/common/util/map-lang-code.ts:47
 msgid "German (simple)"
 msgstr "ドイツ語 (シンプル)"
 
-#: source/common/util/map-lang-code.ts:47
+#: source/common/util/map-lang-code.ts:48
 msgid "German (Germany)"
 msgstr "ドイツ語 (ドイツ)"
 
-#: source/common/util/map-lang-code.ts:48
+#: source/common/util/map-lang-code.ts:49
 msgid "German (Luxembourg)"
 msgstr "ドイツ語 (ルクセンブルク)"
 
-#: source/common/util/map-lang-code.ts:49
+#: source/common/util/map-lang-code.ts:50
 msgid "German"
 msgstr "ドイツ語"
 
-#: source/common/util/map-lang-code.ts:50
+#: source/common/util/map-lang-code.ts:51
 msgid "Greek"
 msgstr "ギリシャ語"
 
-#: source/common/util/map-lang-code.ts:51
+#: source/common/util/map-lang-code.ts:52
 msgid "English (Australia)"
 msgstr "英語 (オーストラリア)"
 
-#: source/common/util/map-lang-code.ts:52
+#: source/common/util/map-lang-code.ts:53
 msgid "English (Canada)"
 msgstr "英語 (カナダ)"
 
-#: source/common/util/map-lang-code.ts:53
+#: source/common/util/map-lang-code.ts:54
 msgid "English (United Kingdom)"
 msgstr "英語 (イギリス)"
 
-#: source/common/util/map-lang-code.ts:54
+#: source/common/util/map-lang-code.ts:55
 msgid "English (India)"
 msgstr "英語 (インド)"
 
-#: source/common/util/map-lang-code.ts:55
+#: source/common/util/map-lang-code.ts:56
 msgid "English (New Zealand)"
 msgstr "英語 (ニュージーランド)"
 
-#: source/common/util/map-lang-code.ts:56
+#: source/common/util/map-lang-code.ts:57
 msgid "English (United States)"
 msgstr "英語 (米国)"
 
-#: source/common/util/map-lang-code.ts:57
+#: source/common/util/map-lang-code.ts:58
 msgid "English (South Africa)"
 msgstr "英語 (南アフリカ)"
 
-#: source/common/util/map-lang-code.ts:58
+#: source/common/util/map-lang-code.ts:59
 msgid "English"
 msgstr "英語"
 
-#: source/common/util/map-lang-code.ts:59
+#: source/common/util/map-lang-code.ts:60
 msgid "Esperanto"
 msgstr "エスペラント"
 
-#: source/common/util/map-lang-code.ts:60
+#: source/common/util/map-lang-code.ts:61
 msgid "Spanish (Argentina)"
 msgstr "スペイン語 (アルゼンチン)"
 
-#: source/common/util/map-lang-code.ts:61
+#: source/common/util/map-lang-code.ts:62
 msgid "Spanish (Spain)"
 msgstr "スペイン語 (スペイン)"
 
-#: source/common/util/map-lang-code.ts:62
+#: source/common/util/map-lang-code.ts:63
 msgid "Spanish"
 msgstr "スペイン語"
 
-#: source/common/util/map-lang-code.ts:63
+#: source/common/util/map-lang-code.ts:64
 msgid "Estonian"
 msgstr "エストニア語"
 
-#: source/common/util/map-lang-code.ts:64
+#: source/common/util/map-lang-code.ts:65
 msgid "Basque"
 msgstr "バスク語"
 
-#: source/common/util/map-lang-code.ts:65
+#: source/common/util/map-lang-code.ts:66
 msgid "Persian (Farsi)"
 msgstr "ペルシア語 (ファールシー語)"
 
-#: source/common/util/map-lang-code.ts:66
+#: source/common/util/map-lang-code.ts:67
 msgid "Finnish"
 msgstr "フィンランド語"
 
-#: source/common/util/map-lang-code.ts:67
+#: source/common/util/map-lang-code.ts:68
 msgid "Faroese"
 msgstr "フェロー語"
 
-#: source/common/util/map-lang-code.ts:68
+#: source/common/util/map-lang-code.ts:69
 msgid "French (Belgium)"
 msgstr "フランス語 (ベルギー)"
 
-#: source/common/util/map-lang-code.ts:69
+#: source/common/util/map-lang-code.ts:70
 msgid "French (Switzerland)"
 msgstr "フランス語 (スイス)"
 
-#: source/common/util/map-lang-code.ts:70
+#: source/common/util/map-lang-code.ts:71
 msgid "French (France)"
 msgstr "フランス語 (フランス)"
 
-#: source/common/util/map-lang-code.ts:71
+#: source/common/util/map-lang-code.ts:72
 msgid "French (Luxembourg)"
 msgstr "フランス語 (ルクセンブルク)"
 
-#: source/common/util/map-lang-code.ts:72
+#: source/common/util/map-lang-code.ts:73
 msgid "French (Principality of Monaco)"
 msgstr "フランス語 (モナコ公国)"
 
-#: source/common/util/map-lang-code.ts:73
+#: source/common/util/map-lang-code.ts:74
 msgid "French"
 msgstr "フランス語"
 
-#: source/common/util/map-lang-code.ts:74
+#: source/common/util/map-lang-code.ts:75
 msgid "Irish"
 msgstr "アイルランド語"
 
-#: source/common/util/map-lang-code.ts:75
+#: source/common/util/map-lang-code.ts:76
 msgid "Scottish (Gaelic)"
 msgstr "スコットランド語 (ゲール語)"
 
-#: source/common/util/map-lang-code.ts:76
+#: source/common/util/map-lang-code.ts:77
 msgid "Galician"
 msgstr "ガリシア語"
 
-#: source/common/util/map-lang-code.ts:77
+#: source/common/util/map-lang-code.ts:78
 msgid "Hebrew"
 msgstr "ヘブライ語"
 
-#: source/common/util/map-lang-code.ts:78
+#: source/common/util/map-lang-code.ts:79
 msgid "Hindi"
 msgstr "ヒンディー語"
 
-#: source/common/util/map-lang-code.ts:79
+#: source/common/util/map-lang-code.ts:80
 msgid "Croatian"
 msgstr "クロアチア語"
 
-#: source/common/util/map-lang-code.ts:80
+#: source/common/util/map-lang-code.ts:81
 msgid "Hungarian"
 msgstr "ハンガリー語"
 
-#: source/common/util/map-lang-code.ts:81
+#: source/common/util/map-lang-code.ts:82
 msgid "Armenian"
 msgstr "アルメニア語"
 
-#: source/common/util/map-lang-code.ts:82
+#: source/common/util/map-lang-code.ts:83
 msgid "Indonesian"
 msgstr "インドネシア語"
 
-#: source/common/util/map-lang-code.ts:83
+#: source/common/util/map-lang-code.ts:84
 msgid "Icelandic"
 msgstr "アイスランド語"
 
-#: source/common/util/map-lang-code.ts:84
+#: source/common/util/map-lang-code.ts:85
 msgid "Italian (Switzerland)"
 msgstr "イタリア語 (スイス)"
 
-#: source/common/util/map-lang-code.ts:85
+#: source/common/util/map-lang-code.ts:86
 msgid "Italian (Italy)"
 msgstr "イタリア語 (イタリア)"
 
-#: source/common/util/map-lang-code.ts:86
+#: source/common/util/map-lang-code.ts:87
 msgid "Italian"
 msgstr "イタリア語"
 
-#: source/common/util/map-lang-code.ts:87
+#: source/common/util/map-lang-code.ts:88
 msgid "Japanese"
 msgstr "日本語"
 
-#: source/common/util/map-lang-code.ts:88
+#: source/common/util/map-lang-code.ts:89
 msgid "Georgian"
 msgstr "ジョージア語"
 
-#: source/common/util/map-lang-code.ts:89
+#: source/common/util/map-lang-code.ts:90
 msgid "Kazakh"
 msgstr "カザフ語"
 
-#: source/common/util/map-lang-code.ts:90
+#: source/common/util/map-lang-code.ts:91
 msgid "Khmer (Cambodia)"
 msgstr "クメール語 (カンボジア)"
 
-#: source/common/util/map-lang-code.ts:91
+#: source/common/util/map-lang-code.ts:92
 msgid "Korean"
 msgstr "韓国語"
 
-#: source/common/util/map-lang-code.ts:92
+#: source/common/util/map-lang-code.ts:93
 msgid "Latin"
 msgstr "ラテン語"
 
-#: source/common/util/map-lang-code.ts:93
+#: source/common/util/map-lang-code.ts:94
 msgid "Luxembourgian"
 msgstr "ルクセンブルク語"
 
-#: source/common/util/map-lang-code.ts:94
+#: source/common/util/map-lang-code.ts:95
 msgid "Lithuanian"
 msgstr "リトアニア語"
 
-#: source/common/util/map-lang-code.ts:95
+#: source/common/util/map-lang-code.ts:96
 msgid "Latvian"
 msgstr "ラトビア語"
 
-#: source/common/util/map-lang-code.ts:96
+#: source/common/util/map-lang-code.ts:97
 msgid "Macedonian"
 msgstr "マケドニア語"
 
-#: source/common/util/map-lang-code.ts:97
+#: source/common/util/map-lang-code.ts:98
 msgid "Mongolian"
 msgstr "モンゴル語"
 
-#: source/common/util/map-lang-code.ts:98
+#: source/common/util/map-lang-code.ts:99
 msgid "Malaysian (Brunei Darussalam)"
 msgstr "マレーシア語 (ブルネイ ダルサラーム)"
 
-#: source/common/util/map-lang-code.ts:99
+#: source/common/util/map-lang-code.ts:100
 msgid "Malaysian (Malaysia)"
 msgstr "マレーシア語 (マレーシア)"
 
-#: source/common/util/map-lang-code.ts:100
+#: source/common/util/map-lang-code.ts:101
 msgid "Malaysian"
 msgstr "マレーシア語"
 
-#: source/common/util/map-lang-code.ts:101
+#: source/common/util/map-lang-code.ts:102
 msgid "Norwegian (Bokmål)"
 msgstr "ノルウェー語 (ブークモール)"
 
-#: source/common/util/map-lang-code.ts:102
+#: source/common/util/map-lang-code.ts:103
 msgid "Nepalese"
 msgstr "ネパール語"
 
-#: source/common/util/map-lang-code.ts:103
+#: source/common/util/map-lang-code.ts:104
 msgid "Dutch (Belgium)"
 msgstr "オランダ語 (ベルギー)"
 
-#: source/common/util/map-lang-code.ts:104
+#: source/common/util/map-lang-code.ts:105
 msgid "Dutch (Netherlands)"
 msgstr "オランダ語 (オランダ)"
 
-#: source/common/util/map-lang-code.ts:105
+#: source/common/util/map-lang-code.ts:106
 msgid "Dutch"
 msgstr "オランダ語"
 
-#: source/common/util/map-lang-code.ts:106
+#: source/common/util/map-lang-code.ts:107
 msgid "Norwegian (Nyorsk)"
 msgstr "ノルウェー語 (ニーノシュク)"
 
-#: source/common/util/map-lang-code.ts:107
+#: source/common/util/map-lang-code.ts:108
 msgid "Norwegian"
 msgstr "ノルウェー語"
 
-#: source/common/util/map-lang-code.ts:108
+#: source/common/util/map-lang-code.ts:109
 msgid "Polish"
 msgstr "ポーランド語"
 
-#: source/common/util/map-lang-code.ts:109
+#: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Angola)"
 msgstr "ポルトガル語 (アンゴラ)"
 
-#: source/common/util/map-lang-code.ts:110
+#: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Brazil)"
 msgstr "ポルトガル語 (ブラジル)"
 
-#: source/common/util/map-lang-code.ts:111
+#: source/common/util/map-lang-code.ts:112
 msgid "Portuguese (Mozambique)"
 msgstr "ポルトガル語 (モザンビーク)"
 
-#: source/common/util/map-lang-code.ts:112
+#: source/common/util/map-lang-code.ts:113
 msgid "Portuguese (Portugal)"
 msgstr "ポルトガル語 (ポルトガル)"
 
-#: source/common/util/map-lang-code.ts:113
+#: source/common/util/map-lang-code.ts:114
 msgid "Portuguese"
 msgstr "ポルトガル語"
 
-#: source/common/util/map-lang-code.ts:114
+#: source/common/util/map-lang-code.ts:115
 msgid "Romanian"
 msgstr "ルーマニア語"
 
-#: source/common/util/map-lang-code.ts:115
+#: source/common/util/map-lang-code.ts:116
 msgid "Russian"
 msgstr "ロシア語"
 
-#: source/common/util/map-lang-code.ts:116
+#: source/common/util/map-lang-code.ts:117
 msgid "Rwandan (Kinyarwanda)"
 msgstr "ルワンダ語 (ルワンダ)"
 
-#: source/common/util/map-lang-code.ts:117
+#: source/common/util/map-lang-code.ts:118
 msgid "Slovakian"
 msgstr "スロバキア語"
 
-#: source/common/util/map-lang-code.ts:118
+#: source/common/util/map-lang-code.ts:119
 msgid "Slovenian"
 msgstr "スロベニア語"
 
-#: source/common/util/map-lang-code.ts:119
+#: source/common/util/map-lang-code.ts:120
 msgid "Serbian"
 msgstr "セルビア語"
 
-#: source/common/util/map-lang-code.ts:120
+#: source/common/util/map-lang-code.ts:121
 msgid "Albanian"
 msgstr "アルバニア語"
 
-#: source/common/util/map-lang-code.ts:121
+#: source/common/util/map-lang-code.ts:122
 msgid "Albanian (Albania)"
 msgstr "アルバニア語 (アルバニア)"
 
-#: source/common/util/map-lang-code.ts:122
+#: source/common/util/map-lang-code.ts:123
 msgid "Swedish"
 msgstr "スウェーデン語"
 
-#: source/common/util/map-lang-code.ts:123
+#: source/common/util/map-lang-code.ts:124
 msgid "Tamil (India)"
 msgstr "タミル語 (インド)"
 
-#: source/common/util/map-lang-code.ts:124
+#: source/common/util/map-lang-code.ts:125
 msgid "Thai"
 msgstr "タイ語"
 
-#: source/common/util/map-lang-code.ts:125
+#: source/common/util/map-lang-code.ts:126
 msgid "Tagalog (Filipino)"
 msgstr "タガログ語 (フィリピン語)"
 
-#: source/common/util/map-lang-code.ts:126
+#: source/common/util/map-lang-code.ts:127
 msgid "Turkish"
 msgstr "トルコ語"
 
-#: source/common/util/map-lang-code.ts:127
+#: source/common/util/map-lang-code.ts:128
 msgid "Ukrainian"
 msgstr "ウクライナ語"
 
-#: source/common/util/map-lang-code.ts:128
+#: source/common/util/map-lang-code.ts:129
 msgid "Urdu"
 msgstr "ウルドゥー語"
 
-#: source/common/util/map-lang-code.ts:129
+#: source/common/util/map-lang-code.ts:130
 msgid "Vietnamese"
 msgstr "ベトナム語"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
-#: source/common/util/map-lang-code.ts:132
+#: source/common/util/map-lang-code.ts:133
 msgid "Sorbian"
 msgstr "ソルブ語"
 
-#: source/common/util/map-lang-code.ts:133
+#: source/common/util/map-lang-code.ts:134
 msgid "Chinese (China)"
 msgstr "中国語 (簡体字)"
 
-#: source/common/util/map-lang-code.ts:134
+#: source/common/util/map-lang-code.ts:135
 msgid "Chinese (Taiwan)"
 msgstr "中国語 (繁体字)"
 
-#: source/common/util/map-lang-code.ts:135
+#: source/common/util/map-lang-code.ts:136
 msgid "Chinese"
 msgstr "中国語"
 
@@ -2854,10 +2881,6 @@ msgstr "成功"
 msgid "Error"
 msgstr "エラー"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
-msgid "Warning"
-msgstr "警告"
-
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Bell"
 msgstr "ベル"
@@ -2956,10 +2979,6 @@ msgstr "ライブラリ"
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Bug"
 msgstr "バグ"
-
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
-msgid "Note"
-msgstr "メモ"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Lightbulb"
@@ -3511,7 +3530,7 @@ msgid "Insert Image from Clipboard"
 msgstr "クリップボードから画像を挿入"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
-#: source/win-preferences/schema/editor.ts:275
+#: source/win-preferences/schema/editor.ts:281
 msgid "Image size"
 msgstr "画像サイズ"
 
@@ -4369,15 +4388,19 @@ msgid "Render pandoc divs and spans"
 msgstr "Pandoc の div と span をレンダリングする"
 
 #: source/win-preferences/schema/editor.ts:130
+msgid "Render admonitions"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:136
 msgid "Render horizontal rules"
 msgstr "水平線をレンダリングする"
 
-#: source/win-preferences/schema/editor.ts:139
+#: source/win-preferences/schema/editor.ts:145
 msgid "Show Markdown syntax when the cursor is adjacent or inside an element"
 msgstr ""
 "カーソルが要素に隣接しているか要素内にあるときに Markdown 構文を表示する"
 
-#: source/win-preferences/schema/editor.ts:140
+#: source/win-preferences/schema/editor.ts:146
 msgid ""
 "If disabled, the editor will not show the Markdown syntax if the cursor is "
 "adjacent to the element."
@@ -4385,34 +4408,34 @@ msgstr ""
 "無効にすると、カーソルが要素に隣接している場合、エディタは Markdown 構文を表"
 "示しません。"
 
-#: source/win-preferences/schema/editor.ts:146
+#: source/win-preferences/schema/editor.ts:152
 msgid "Default Formatting Characters"
 msgstr "既定の書式設定文字"
 
-#: source/win-preferences/schema/editor.ts:147
+#: source/win-preferences/schema/editor.ts:153
 msgid ""
 "Select the characters Zettlr should use when marking text as bold or italic."
 msgstr ""
 "テキストを太字または斜体としてマークするときに Zettlr が使用する文字を選択し"
 "ます。"
 
-#: source/win-preferences/schema/editor.ts:183
+#: source/win-preferences/schema/editor.ts:189
 msgid "Markdown Style"
 msgstr "Markdown スタイル"
 
-#: source/win-preferences/schema/editor.ts:184
+#: source/win-preferences/schema/editor.ts:190
 msgid "Check your Markdown documents for style issues"
 msgstr "Markdown ドキュメントにスタイルの問題がないかどうかを確認します"
 
-#: source/win-preferences/schema/editor.ts:189
+#: source/win-preferences/schema/editor.ts:195
 msgid "Enable Markdown Linter"
 msgstr "Markdown Linter を有効にする"
 
-#: source/win-preferences/schema/editor.ts:195
+#: source/win-preferences/schema/editor.ts:201
 msgid "Table Editor"
 msgstr "表エディタを有効にする"
 
-#: source/win-preferences/schema/editor.ts:207
+#: source/win-preferences/schema/editor.ts:213
 msgid ""
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
@@ -4422,11 +4445,11 @@ msgstr ""
 "す。よく使う機能のボタンが用意されており、Markdown の書式設定にも対応していま"
 "す。"
 
-#: source/win-preferences/schema/editor.ts:212
+#: source/win-preferences/schema/editor.ts:218
 msgid "Status bar"
 msgstr "ステータスバー"
 
-#: source/win-preferences/schema/editor.ts:213
+#: source/win-preferences/schema/editor.ts:219
 msgid ""
 "The status bar is a section for various quick controls and shows information "
 "about the current document. It is shown for both Markdown and code editors."
@@ -4435,87 +4458,87 @@ msgstr ""
 "キュメントに関する情報を表示します。Markdown エディタとコードエディタの両方に"
 "表示されます。"
 
-#: source/win-preferences/schema/editor.ts:219
+#: source/win-preferences/schema/editor.ts:225
 msgid "Show status bar"
 msgstr "ステータスバーを表示"
 
-#: source/win-preferences/schema/editor.ts:226
+#: source/win-preferences/schema/editor.ts:232
 msgid ""
 "Customize the appearance of the editor when the distraction-free mode is "
 "active."
 msgstr "集中モードがアクティブな場合のエディタの外観をカスタマイズします。"
 
-#: source/win-preferences/schema/editor.ts:232
+#: source/win-preferences/schema/editor.ts:238
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "集中モード時にフォーカスされていない行の表示を薄くする"
 
-#: source/win-preferences/schema/editor.ts:237
+#: source/win-preferences/schema/editor.ts:243
 msgid "Hide toolbar in distraction-free mode"
 msgstr "集中モード時にツールバーを隠す"
 
-#: source/win-preferences/schema/editor.ts:243
+#: source/win-preferences/schema/editor.ts:249
 msgid "Word counter"
 msgstr "単語数"
 
-#: source/win-preferences/schema/editor.ts:249
+#: source/win-preferences/schema/editor.ts:255
 msgid "Show character count instead of word count"
 msgstr "単語数ではなく文字数を表示する"
 
-#: source/win-preferences/schema/editor.ts:255
+#: source/win-preferences/schema/editor.ts:261
 msgid "Readability mode"
 msgstr "可読性モード"
 
-#: source/win-preferences/schema/editor.ts:256
+#: source/win-preferences/schema/editor.ts:262
 msgid "Choose the algorithm to calculate readability scores."
 msgstr "可読性スコアを計算するアルゴリズムを選択してください。"
 
-#: source/win-preferences/schema/editor.ts:263
+#: source/win-preferences/schema/editor.ts:269
 msgid "Readability Algorithm:"
 msgstr "可読性アルゴリズム :"
 
-#: source/win-preferences/schema/editor.ts:276
+#: source/win-preferences/schema/editor.ts:282
 msgid ""
 "Restrict images to a percentage of the available editor width and height."
 msgstr "画像を、使用可能なエディタの幅と高さのパーセンテージに制限する。"
 
-#: source/win-preferences/schema/editor.ts:282
+#: source/win-preferences/schema/editor.ts:288
 msgid "Restrict width to %s %"
 msgstr "幅を %s % に制限"
 
-#: source/win-preferences/schema/editor.ts:289
+#: source/win-preferences/schema/editor.ts:295
 msgid "Restrict height to %s %"
 msgstr "高さを %s % に制限"
 
-#: source/win-preferences/schema/editor.ts:297
+#: source/win-preferences/schema/editor.ts:303
 msgid "Font size"
 msgstr "フォントサイズ"
 
-#: source/win-preferences/schema/editor.ts:303
+#: source/win-preferences/schema/editor.ts:309
 msgid "Font size in pixels:"
 msgstr "フォントサイズ (ピクセル) :"
 
-#: source/win-preferences/schema/editor.ts:310
+#: source/win-preferences/schema/editor.ts:316
 msgid "Indentation"
 msgstr "インデント"
 
 #. TODO
-#: source/win-preferences/schema/editor.ts:313
+#: source/win-preferences/schema/editor.ts:319
 msgid "Adjust your editor indentation settings"
 msgstr "エディタのインデント設定を調整してください"
 
-#: source/win-preferences/schema/editor.ts:317
+#: source/win-preferences/schema/editor.ts:323
 msgid "Tab size (in number of spaces)"
 msgstr "タブサイズ (スペース数)"
 
-#: source/win-preferences/schema/editor.ts:324
+#: source/win-preferences/schema/editor.ts:330
 msgid "Indent using tabs instead of spaces"
 msgstr "スペースの代わりにタブを使用してインデントする"
 
-#: source/win-preferences/schema/editor.ts:329
+#: source/win-preferences/schema/editor.ts:335
 msgid "Always indent the current line when pressing Tab"
 msgstr "Tabキーを押したときに常に現在の行をインデントする"
 
-#: source/win-preferences/schema/editor.ts:330
+#: source/win-preferences/schema/editor.ts:336
 msgid ""
 "Zettlr always indents the line for list items. Turn this setting on to "
 "always indent any line."
@@ -4523,52 +4546,52 @@ msgstr ""
 "Zettlr は、リスト項目の行を常にインデントします。任意の行を常にインデントする"
 "には、この設定をオンにします。"
 
-#: source/win-preferences/schema/editor.ts:336
+#: source/win-preferences/schema/editor.ts:342
 msgid "Snippet Autocompletion"
 msgstr "スニペットの自動補完"
 
 #. TODO
-#: source/win-preferences/schema/editor.ts:339
+#: source/win-preferences/schema/editor.ts:345
 msgid "Control the snippet autocompletion functionality"
 msgstr "スニペットの自動補完機能を設定してください"
 
-#: source/win-preferences/schema/editor.ts:344
+#: source/win-preferences/schema/editor.ts:350
 msgid "Autocomplete trigger character:"
 msgstr "自動補完のトリガー文字 :"
 
-#: source/win-preferences/schema/editor.ts:354
+#: source/win-preferences/schema/editor.ts:360
 msgid "Suggest emojis during autocompletion"
 msgstr "自動補完中に絵文字を提案する"
 
-#: source/win-preferences/schema/editor.ts:360
+#: source/win-preferences/schema/editor.ts:366
 msgid "Other settings"
 msgstr "その他の設定"
 
-#: source/win-preferences/schema/editor.ts:366
+#: source/win-preferences/schema/editor.ts:372
 msgid "Show formatting toolbar when text is selected"
 msgstr "テキストを選択したときに書式設定ツールバーを表示する"
 
-#: source/win-preferences/schema/editor.ts:371
+#: source/win-preferences/schema/editor.ts:377
 msgid "Show line numbers for Markdown files"
 msgstr "Markdown ファイルの行番号を表示する"
 
-#: source/win-preferences/schema/editor.ts:376
+#: source/win-preferences/schema/editor.ts:382
 msgid "Highlight whitespace"
 msgstr "空白を強調表示"
 
-#: source/win-preferences/schema/editor.ts:381
+#: source/win-preferences/schema/editor.ts:387
 msgid "Show link previews"
 msgstr "リンク先のプレビューを表示する"
 
-#: source/win-preferences/schema/editor.ts:386
+#: source/win-preferences/schema/editor.ts:392
 msgid "Accept autocomplete suggestion with Enter"
 msgstr "Enterキーで自動補完の候補を確定する"
 
-#: source/win-preferences/schema/editor.ts:391
+#: source/win-preferences/schema/editor.ts:397
 msgid "Accept autocomplete suggestion with Tab"
 msgstr "Tabキーで自動補完の候補を確定する"
 
-#: source/win-preferences/schema/editor.ts:397
+#: source/win-preferences/schema/editor.ts:403
 msgid "Automatically close matching character pairs"
 msgstr "対応する括弧を自動的に入力する"
 
@@ -4832,57 +4855,45 @@ msgstr "エクスポートには Zettlr の内部 Pandoc を使用する"
 msgid "Automatically open successfully exported files"
 msgstr "正常にエクスポートされたファイルを自動的に開く"
 
-#: source/win-preferences/schema/import-export.ts:75
-msgid "Enforce highlight extension on export"
-msgstr "エクスポート時にハイライト拡張を強制する"
-
 #: source/win-preferences/schema/import-export.ts:76
-msgid ""
-"When enabled, Zettlr will automatically enable the \"mark\"-extension when "
-"exporting Markdown files."
-msgstr ""
-"有効にすると、Markdown ファイルをエクスポートする際に、Zettlr は自動的に"
-"\"mark\"拡張を有効にします。"
-
-#: source/win-preferences/schema/import-export.ts:82
 msgid "Remove tags from files when exporting"
 msgstr "エクスポート時にファイルからタグを削除する"
 
-#: source/win-preferences/schema/import-export.ts:88
+#: source/win-preferences/schema/import-export.ts:82
 #: source/win-preferences/schema/zettelkasten.ts:46
 msgid "Internal links"
 msgstr "内部リンク"
 
-#: source/win-preferences/schema/import-export.ts:91
+#: source/win-preferences/schema/import-export.ts:85
 msgid "Remove internal links completely"
 msgstr "内部リンクを完全に削除する"
 
-#: source/win-preferences/schema/import-export.ts:92
+#: source/win-preferences/schema/import-export.ts:86
 msgid "Unlink internal links"
 msgstr "内部リンクを解除する"
 
-#: source/win-preferences/schema/import-export.ts:93
+#: source/win-preferences/schema/import-export.ts:87
 msgid "Don't touch internal links"
 msgstr "内部リンクを保持する"
 
-#: source/win-preferences/schema/import-export.ts:99
+#: source/win-preferences/schema/import-export.ts:93
 msgid "Destination folder for exported files"
 msgstr "エクスポートファイルの保存先フォルダー"
 
 #. TODO: Add info-strings
-#: source/win-preferences/schema/import-export.ts:103
+#: source/win-preferences/schema/import-export.ts:97
 msgid "Temporary folder"
 msgstr "一時フォルダー"
 
-#: source/win-preferences/schema/import-export.ts:104
+#: source/win-preferences/schema/import-export.ts:98
 msgid "Same as file location"
 msgstr "ファイルの場所と同じ"
 
-#: source/win-preferences/schema/import-export.ts:105
+#: source/win-preferences/schema/import-export.ts:99
 msgid "Ask for folder when exporting"
 msgstr "エクスポート時にフォルダーを尋ねる"
 
-#: source/win-preferences/schema/import-export.ts:111
+#: source/win-preferences/schema/import-export.ts:105
 msgid ""
 "Warning! Files in the temporary folder are regularly deleted. Choosing the "
 "same location as the file overwrites files with identical filenames if they "
@@ -4891,11 +4902,11 @@ msgstr ""
 "警告！一時フォルダー内のファイルは定期的に削除されます。ファイルと同じ場所を"
 "指定すると、同じ名前のファイルが既に存在する場合は上書きされます。"
 
-#: source/win-preferences/schema/import-export.ts:116
+#: source/win-preferences/schema/import-export.ts:110
 msgid "Custom export commands"
 msgstr "カスタムエクスポートコマンド"
 
-#: source/win-preferences/schema/import-export.ts:117
+#: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
 "its first argument the file or project folder to be exported."
@@ -4904,13 +4915,39 @@ msgstr ""
 "初の引数としてエクスポートするファイルまたはプロジェクトフォルダーを受け取り"
 "ます。"
 
-#: source/win-preferences/schema/import-export.ts:125
+#: source/win-preferences/schema/import-export.ts:119
 msgid "Display name"
 msgstr "表示"
 
-#: source/win-preferences/schema/import-export.ts:125
+#: source/win-preferences/schema/import-export.ts:119
 msgid "Command"
 msgstr "コマンド"
+
+#: source/win-preferences/schema/import-export.ts:129
+msgid "Pandoc Extensions"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:130
+msgid ""
+"Add support for certain Markdown syntax elements during exports. We "
+"recommend to keep all enabled, unless you know what you are doing."
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:136
+msgid "Mark extension"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:137
+msgid "Enable support for ==highlighted== text."
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:142
+msgid "Alerts extension"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:143
+msgid "Enable support for admonitions (also known as alerts or callouts)."
+msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
@@ -5231,6 +5268,16 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "フォルダーへのパス"
+
+#~ msgid "Enforce highlight extension on export"
+#~ msgstr "エクスポート時にハイライト拡張を強制する"
+
+#~ msgid ""
+#~ "When enabled, Zettlr will automatically enable the \"mark\"-extension "
+#~ "when exporting Markdown files."
+#~ msgstr ""
+#~ "有効にすると、Markdown ファイルをエクスポートする際に、Zettlr は自動的に"
+#~ "\"mark\"拡張を有効にします。"
 
 #~ msgid "Remove line breaks"
 #~ msgstr "改行を削除"

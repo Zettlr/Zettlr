@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-09-08 02:34+0000\n"
+"POT-Creation-Date: 2026-09-22 02:36+0000\n"
 "PO-Revision-Date: 2024-04-28 18:07+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -911,7 +911,7 @@ msgstr "Yderligere information"
 
 #: source/app/service-providers/menu/menu.darwin.ts:478
 #: source/app/service-providers/menu/menu.win32.ts:463
-#: source/win-preferences/schema/editor.ts:225
+#: source/win-preferences/schema/editor.ts:231
 #, fuzzy
 msgid "Distraction-free mode"
 msgstr "Distraktionsfri tilstand"
@@ -1279,8 +1279,8 @@ msgstr "Tilføj til ordbog"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
-#: source/win-preferences/schema/editor.ts:158
-#: source/win-preferences/schema/editor.ts:159
+#: source/win-preferences/schema/editor.ts:164
+#: source/win-preferences/schema/editor.ts:165
 msgid "Bold"
 msgstr "Fed"
 
@@ -1470,20 +1470,20 @@ msgstr "%s ord"
 msgid "This file is part of project \"%s\""
 msgstr "Denne fil er en del af projektet \"%s\""
 
-#: source/common/modules/markdown-editor/renderers/index.ts:140
+#: source/common/modules/markdown-editor/renderers/index.ts:144
 msgid "Preview"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/index.ts:140
+#: source/common/modules/markdown-editor/renderers/index.ts:144
 msgid "Raw"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/index.ts:139
+#: source/common/modules/markdown-editor/renderers/index.ts:143
 #, javascript-format
 msgid "Rendering: %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/index.ts:142
+#: source/common/modules/markdown-editor/renderers/index.ts:146
 msgid "Enable or disable the preview mode for Markdown files by clicking"
 msgstr ""
 
@@ -1491,6 +1491,29 @@ msgstr ""
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr "Læsbarhedstilstand (%s)"
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:88
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:93
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
+msgid "Note"
+msgstr "Note"
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:89
+msgid "Tip"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:90
+msgid "Important"
+msgstr ""
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:91
+#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
+msgid "Warning"
+msgstr "Advarsel"
+
+#: source/common/modules/markdown-editor/renderers/render-admonitions.ts:92
+msgid "Caution"
+msgstr ""
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:153
 #, javascript-format
@@ -1653,8 +1676,8 @@ msgid "No footnote text found."
 msgstr "Ingen foodnotetekst fundet."
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:49
-#: source/win-preferences/schema/editor.ts:166
-#: source/win-preferences/schema/editor.ts:167
+#: source/win-preferences/schema/editor.ts:172
+#: source/win-preferences/schema/editor.ts:173
 msgid "Italics"
 msgstr "Kursiv"
 
@@ -1663,8 +1686,8 @@ msgid "Underline"
 msgstr ""
 
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:59
-#: source/win-preferences/schema/editor.ts:174
-#: source/win-preferences/schema/editor.ts:175
+#: source/win-preferences/schema/editor.ts:180
+#: source/win-preferences/schema/editor.ts:181
 msgid "Highlight"
 msgstr ""
 
@@ -1723,413 +1746,417 @@ msgid "Asturian"
 msgstr "Østrigsk"
 
 #: source/common/util/map-lang-code.ts:36
+msgid "Azerbaijani"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:37
 msgid "Belarus"
 msgstr "Hviderussisk"
 
-#: source/common/util/map-lang-code.ts:37
+#: source/common/util/map-lang-code.ts:38
 msgid "Bulgarian"
 msgstr "Bulgarsk"
 
-#: source/common/util/map-lang-code.ts:38
+#: source/common/util/map-lang-code.ts:39
 msgid "Breton"
 msgstr "Bretonsk"
 
-#: source/common/util/map-lang-code.ts:39
+#: source/common/util/map-lang-code.ts:40
 msgid "Bosnian"
 msgstr "Bosnisk"
 
-#: source/common/util/map-lang-code.ts:40
+#: source/common/util/map-lang-code.ts:41
 msgid "Catalan"
 msgstr "Catalansk"
 
-#: source/common/util/map-lang-code.ts:41
+#: source/common/util/map-lang-code.ts:42
 msgid "Catalan (Valencia)"
 msgstr "Catalansk (Valendia)"
 
-#: source/common/util/map-lang-code.ts:42
+#: source/common/util/map-lang-code.ts:43
 msgid "Czech"
 msgstr "Tjekkisk"
 
-#: source/common/util/map-lang-code.ts:43
+#: source/common/util/map-lang-code.ts:44
 msgid "Danish"
 msgstr "Dansk"
 
-#: source/common/util/map-lang-code.ts:44
+#: source/common/util/map-lang-code.ts:45
 msgid "German (Austria)"
 msgstr "Tysk (Østrig)"
 
-#: source/common/util/map-lang-code.ts:45
+#: source/common/util/map-lang-code.ts:46
 msgid "German (Switzerland)"
 msgstr "Tysk (Schweiz)"
 
-#: source/common/util/map-lang-code.ts:46
+#: source/common/util/map-lang-code.ts:47
 #, fuzzy
 msgid "German (simple)"
 msgstr "Tysk (simpelt)"
 
-#: source/common/util/map-lang-code.ts:47
+#: source/common/util/map-lang-code.ts:48
 msgid "German (Germany)"
 msgstr "Tysk (Tyskland)"
 
-#: source/common/util/map-lang-code.ts:48
+#: source/common/util/map-lang-code.ts:49
 #, fuzzy
 msgid "German (Luxembourg)"
 msgstr "Tysk (Østrig)"
 
-#: source/common/util/map-lang-code.ts:49
+#: source/common/util/map-lang-code.ts:50
 msgid "German"
 msgstr "Tysk"
 
-#: source/common/util/map-lang-code.ts:50
+#: source/common/util/map-lang-code.ts:51
 msgid "Greek"
 msgstr "Græsk"
 
-#: source/common/util/map-lang-code.ts:51
+#: source/common/util/map-lang-code.ts:52
 msgid "English (Australia)"
 msgstr "Engelsk (Australien)"
 
-#: source/common/util/map-lang-code.ts:52
+#: source/common/util/map-lang-code.ts:53
 msgid "English (Canada)"
 msgstr "Engelsk (Canada)"
 
-#: source/common/util/map-lang-code.ts:53
+#: source/common/util/map-lang-code.ts:54
 msgid "English (United Kingdom)"
 msgstr "Engelsk (Storbrittanien)"
 
-#: source/common/util/map-lang-code.ts:54
+#: source/common/util/map-lang-code.ts:55
 msgid "English (India)"
 msgstr "Engelsk (Indien)"
 
-#: source/common/util/map-lang-code.ts:55
+#: source/common/util/map-lang-code.ts:56
 msgid "English (New Zealand)"
 msgstr "Engelsk (New Zealand)"
 
-#: source/common/util/map-lang-code.ts:56
+#: source/common/util/map-lang-code.ts:57
 msgid "English (United States)"
 msgstr "Engelsk (USA)"
 
-#: source/common/util/map-lang-code.ts:57
+#: source/common/util/map-lang-code.ts:58
 msgid "English (South Africa)"
 msgstr "Engelsk (Sydafrika)"
 
-#: source/common/util/map-lang-code.ts:58
+#: source/common/util/map-lang-code.ts:59
 #, fuzzy
 msgid "English"
 msgstr "Engelsk (Indien)"
 
-#: source/common/util/map-lang-code.ts:59
+#: source/common/util/map-lang-code.ts:60
 msgid "Esperanto"
 msgstr "Esperanto"
 
-#: source/common/util/map-lang-code.ts:60
+#: source/common/util/map-lang-code.ts:61
 #, fuzzy
 msgid "Spanish (Argentina)"
 msgstr "Spansk (Argentina)"
 
-#: source/common/util/map-lang-code.ts:61
+#: source/common/util/map-lang-code.ts:62
 msgid "Spanish (Spain)"
 msgstr "Spansk (Spanien)"
 
-#: source/common/util/map-lang-code.ts:62
+#: source/common/util/map-lang-code.ts:63
 #, fuzzy
 msgid "Spanish"
 msgstr "Spansk"
 
-#: source/common/util/map-lang-code.ts:63
+#: source/common/util/map-lang-code.ts:64
 msgid "Estonian"
 msgstr "Estonsk"
 
-#: source/common/util/map-lang-code.ts:64
+#: source/common/util/map-lang-code.ts:65
 msgid "Basque"
 msgstr "Baskisk"
 
-#: source/common/util/map-lang-code.ts:65
+#: source/common/util/map-lang-code.ts:66
 msgid "Persian (Farsi)"
 msgstr "Persisk (Farsi)"
 
-#: source/common/util/map-lang-code.ts:66
+#: source/common/util/map-lang-code.ts:67
 msgid "Finnish"
 msgstr "Finsk"
 
-#: source/common/util/map-lang-code.ts:67
+#: source/common/util/map-lang-code.ts:68
 msgid "Faroese"
 msgstr "Færøsk"
 
-#: source/common/util/map-lang-code.ts:68
+#: source/common/util/map-lang-code.ts:69
 #, fuzzy
 msgid "French (Belgium)"
 msgstr "Hollandsk (Belgien)"
 
-#: source/common/util/map-lang-code.ts:69
+#: source/common/util/map-lang-code.ts:70
 #, fuzzy
 msgid "French (Switzerland)"
 msgstr "Tysk (Schweiz)"
 
-#: source/common/util/map-lang-code.ts:70
+#: source/common/util/map-lang-code.ts:71
 msgid "French (France)"
 msgstr "Fransk (Frankrig)"
 
-#: source/common/util/map-lang-code.ts:71
+#: source/common/util/map-lang-code.ts:72
 msgid "French (Luxembourg)"
 msgstr "Fransk (Luxemborg)"
 
-#: source/common/util/map-lang-code.ts:72
+#: source/common/util/map-lang-code.ts:73
 msgid "French (Principality of Monaco)"
 msgstr "Fransk (Monaco)"
 
-#: source/common/util/map-lang-code.ts:73
+#: source/common/util/map-lang-code.ts:74
 msgid "French"
 msgstr "Fransk"
 
-#: source/common/util/map-lang-code.ts:74
+#: source/common/util/map-lang-code.ts:75
 msgid "Irish"
 msgstr "Irsk"
 
-#: source/common/util/map-lang-code.ts:75
+#: source/common/util/map-lang-code.ts:76
 msgid "Scottish (Gaelic)"
 msgstr "Skotsk (Gælisk)"
 
-#: source/common/util/map-lang-code.ts:76
+#: source/common/util/map-lang-code.ts:77
 msgid "Galician"
 msgstr "Galicisk (Spanien)"
 
-#: source/common/util/map-lang-code.ts:77
+#: source/common/util/map-lang-code.ts:78
 msgid "Hebrew"
 msgstr "Hebræisk"
 
-#: source/common/util/map-lang-code.ts:78
+#: source/common/util/map-lang-code.ts:79
 msgid "Hindi"
 msgstr "Hindi"
 
-#: source/common/util/map-lang-code.ts:79
+#: source/common/util/map-lang-code.ts:80
 msgid "Croatian"
 msgstr "Kroatisk"
 
-#: source/common/util/map-lang-code.ts:80
+#: source/common/util/map-lang-code.ts:81
 msgid "Hungarian"
 msgstr "Ungarsk"
 
-#: source/common/util/map-lang-code.ts:81
+#: source/common/util/map-lang-code.ts:82
 msgid "Armenian"
 msgstr "Armensk"
 
-#: source/common/util/map-lang-code.ts:82
+#: source/common/util/map-lang-code.ts:83
 msgid "Indonesian"
 msgstr "Indonesisk"
 
-#: source/common/util/map-lang-code.ts:83
+#: source/common/util/map-lang-code.ts:84
 msgid "Icelandic"
 msgstr "Islandsk"
 
-#: source/common/util/map-lang-code.ts:84
+#: source/common/util/map-lang-code.ts:85
 msgid "Italian (Switzerland)"
 msgstr "Tysk (Schweiz)"
 
-#: source/common/util/map-lang-code.ts:85
+#: source/common/util/map-lang-code.ts:86
 msgid "Italian (Italy)"
 msgstr "Italiensk (Italien)"
 
-#: source/common/util/map-lang-code.ts:86
+#: source/common/util/map-lang-code.ts:87
 msgid "Italian"
 msgstr "Italiensk"
 
-#: source/common/util/map-lang-code.ts:87
+#: source/common/util/map-lang-code.ts:88
 msgid "Japanese"
 msgstr "Japansk"
 
-#: source/common/util/map-lang-code.ts:88
+#: source/common/util/map-lang-code.ts:89
 msgid "Georgian"
 msgstr "Georgisk"
 
-#: source/common/util/map-lang-code.ts:89
+#: source/common/util/map-lang-code.ts:90
 msgid "Kazakh"
 msgstr ""
 
-#: source/common/util/map-lang-code.ts:90
+#: source/common/util/map-lang-code.ts:91
 msgid "Khmer (Cambodia)"
 msgstr "Khmer (Cambodia)"
 
-#: source/common/util/map-lang-code.ts:91
+#: source/common/util/map-lang-code.ts:92
 msgid "Korean"
 msgstr "Koreansk"
 
-#: source/common/util/map-lang-code.ts:92
+#: source/common/util/map-lang-code.ts:93
 msgid "Latin"
 msgstr "Latin"
 
-#: source/common/util/map-lang-code.ts:93
+#: source/common/util/map-lang-code.ts:94
 msgid "Luxembourgian"
 msgstr "Luxemborgsk"
 
-#: source/common/util/map-lang-code.ts:94
+#: source/common/util/map-lang-code.ts:95
 msgid "Lithuanian"
 msgstr "Littauisk"
 
-#: source/common/util/map-lang-code.ts:95
+#: source/common/util/map-lang-code.ts:96
 msgid "Latvian"
 msgstr "Lettisk"
 
-#: source/common/util/map-lang-code.ts:96
+#: source/common/util/map-lang-code.ts:97
 msgid "Macedonian"
 msgstr "Makedonsk"
 
-#: source/common/util/map-lang-code.ts:97
+#: source/common/util/map-lang-code.ts:98
 msgid "Mongolian"
 msgstr "Mongolsk"
 
-#: source/common/util/map-lang-code.ts:98
+#: source/common/util/map-lang-code.ts:99
 #, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
 msgstr "Malaysisk (Brunei Darussalam)"
 
-#: source/common/util/map-lang-code.ts:99
+#: source/common/util/map-lang-code.ts:100
 msgid "Malaysian (Malaysia)"
 msgstr "Malaysisk (Malaysia)"
 
-#: source/common/util/map-lang-code.ts:100
+#: source/common/util/map-lang-code.ts:101
 #, fuzzy
 msgid "Malaysian"
 msgstr "Malaysisk"
 
-#: source/common/util/map-lang-code.ts:101
+#: source/common/util/map-lang-code.ts:102
 msgid "Norwegian (Bokmål)"
 msgstr "Norsk (Bokmål)"
 
-#: source/common/util/map-lang-code.ts:102
+#: source/common/util/map-lang-code.ts:103
 msgid "Nepalese"
 msgstr "Nepalesisk"
 
-#: source/common/util/map-lang-code.ts:103
+#: source/common/util/map-lang-code.ts:104
 msgid "Dutch (Belgium)"
 msgstr "Hollandsk (Belgien)"
 
-#: source/common/util/map-lang-code.ts:104
+#: source/common/util/map-lang-code.ts:105
 msgid "Dutch (Netherlands)"
 msgstr "Hollandsk (Holland)"
 
-#: source/common/util/map-lang-code.ts:105
+#: source/common/util/map-lang-code.ts:106
 msgid "Dutch"
 msgstr "Hollandsk"
 
-#: source/common/util/map-lang-code.ts:106
+#: source/common/util/map-lang-code.ts:107
 msgid "Norwegian (Nyorsk)"
 msgstr "Norsk (Nynorsk)"
 
-#: source/common/util/map-lang-code.ts:107
+#: source/common/util/map-lang-code.ts:108
 msgid "Norwegian"
 msgstr "Norsk"
 
-#: source/common/util/map-lang-code.ts:108
+#: source/common/util/map-lang-code.ts:109
 msgid "Polish"
 msgstr "Polsk"
 
-#: source/common/util/map-lang-code.ts:109
+#: source/common/util/map-lang-code.ts:110
 #, fuzzy
 msgid "Portuguese (Angola)"
 msgstr "Portugisisk (Portugal)"
 
-#: source/common/util/map-lang-code.ts:110
+#: source/common/util/map-lang-code.ts:111
 msgid "Portuguese (Brazil)"
 msgstr "Portugisisk (Brazilien)"
 
-#: source/common/util/map-lang-code.ts:111
+#: source/common/util/map-lang-code.ts:112
 #, fuzzy
 msgid "Portuguese (Mozambique)"
 msgstr "Portugisisk (Brazilien)"
 
-#: source/common/util/map-lang-code.ts:112
+#: source/common/util/map-lang-code.ts:113
 msgid "Portuguese (Portugal)"
 msgstr "Portugisisk (Portugal)"
 
-#: source/common/util/map-lang-code.ts:113
+#: source/common/util/map-lang-code.ts:114
 #, fuzzy
 msgid "Portuguese"
 msgstr "Portugisisk"
 
-#: source/common/util/map-lang-code.ts:114
+#: source/common/util/map-lang-code.ts:115
 msgid "Romanian"
 msgstr "Rumænsk"
 
-#: source/common/util/map-lang-code.ts:115
+#: source/common/util/map-lang-code.ts:116
 msgid "Russian"
 msgstr "Russisk"
 
-#: source/common/util/map-lang-code.ts:116
+#: source/common/util/map-lang-code.ts:117
 msgid "Rwandan (Kinyarwanda)"
 msgstr "Rwanda (Kinyarwanda)"
 
-#: source/common/util/map-lang-code.ts:117
+#: source/common/util/map-lang-code.ts:118
 msgid "Slovakian"
 msgstr "Slovakisk"
 
-#: source/common/util/map-lang-code.ts:118
+#: source/common/util/map-lang-code.ts:119
 msgid "Slovenian"
 msgstr "Slovensk"
 
-#: source/common/util/map-lang-code.ts:119
+#: source/common/util/map-lang-code.ts:120
 msgid "Serbian"
 msgstr "Serbisk"
 
-#: source/common/util/map-lang-code.ts:120
+#: source/common/util/map-lang-code.ts:121
 #, fuzzy
 msgid "Albanian"
 msgstr "Albansk"
 
-#: source/common/util/map-lang-code.ts:121
+#: source/common/util/map-lang-code.ts:122
 #, fuzzy
 msgid "Albanian (Albania)"
 msgstr "Albansk (Albanien)"
 
-#: source/common/util/map-lang-code.ts:122
+#: source/common/util/map-lang-code.ts:123
 msgid "Swedish"
 msgstr "Svensk"
 
-#: source/common/util/map-lang-code.ts:123
+#: source/common/util/map-lang-code.ts:124
 #, fuzzy
 msgid "Tamil (India)"
 msgstr "Tamil (Indien)"
 
-#: source/common/util/map-lang-code.ts:124
+#: source/common/util/map-lang-code.ts:125
 msgid "Thai"
 msgstr "Thai"
 
-#: source/common/util/map-lang-code.ts:125
+#: source/common/util/map-lang-code.ts:126
 msgid "Tagalog (Filipino)"
 msgstr "Tagalog (Filipinerne)"
 
-#: source/common/util/map-lang-code.ts:126
+#: source/common/util/map-lang-code.ts:127
 msgid "Turkish"
 msgstr "Tyrkisk"
 
-#: source/common/util/map-lang-code.ts:127
+#: source/common/util/map-lang-code.ts:128
 msgid "Ukrainian"
 msgstr "Ukrainsk"
 
-#: source/common/util/map-lang-code.ts:128
+#: source/common/util/map-lang-code.ts:129
 msgid "Urdu"
 msgstr "Urdu"
 
-#: source/common/util/map-lang-code.ts:129
+#: source/common/util/map-lang-code.ts:130
 msgid "Vietnamese"
 msgstr "Vietnamesisk"
 
 #. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
 #. Sorbian, wen denotes the language family as such
-#: source/common/util/map-lang-code.ts:132
+#: source/common/util/map-lang-code.ts:133
 #, fuzzy
 msgid "Sorbian"
 msgstr "Serbisk"
 
-#: source/common/util/map-lang-code.ts:133
+#: source/common/util/map-lang-code.ts:134
 msgid "Chinese (China)"
 msgstr "Kinesisk (Kina)"
 
-#: source/common/util/map-lang-code.ts:134
+#: source/common/util/map-lang-code.ts:135
 #, fuzzy
 msgid "Chinese (Taiwan)"
 msgstr "Kinesisk (Taiwan)"
 
-#: source/common/util/map-lang-code.ts:135
+#: source/common/util/map-lang-code.ts:136
 #, fuzzy
 msgid "Chinese"
 msgstr "Kinesisk"
@@ -2884,10 +2911,6 @@ msgstr "Succes"
 msgid "Error"
 msgstr "Fejl"
 
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
-msgid "Warning"
-msgstr "Advarsel"
-
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:70
 msgid "Bell"
 msgstr "Klokke"
@@ -2986,10 +3009,6 @@ msgstr "Bibliotek"
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:94
 msgid "Bug"
 msgstr "Insekt"
-
-#: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:95
-msgid "Note"
-msgstr "Note"
 
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:96
 msgid "Lightbulb"
@@ -3500,7 +3519,7 @@ msgid "Insert Image from Clipboard"
 msgstr "Indsæt Billede fra Udklipsholder"
 
 #: source/tmp/win-paste-image/App.vue.ts:58
-#: source/win-preferences/schema/editor.ts:275
+#: source/win-preferences/schema/editor.ts:281
 #, fuzzy
 msgid "Image size"
 msgstr "Billedstørrelse"
@@ -4342,46 +4361,50 @@ msgid "Render pandoc divs and spans"
 msgstr ""
 
 #: source/win-preferences/schema/editor.ts:130
+msgid "Render admonitions"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:136
 msgid "Render horizontal rules"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:139
+#: source/win-preferences/schema/editor.ts:145
 msgid "Show Markdown syntax when the cursor is adjacent or inside an element"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:140
+#: source/win-preferences/schema/editor.ts:146
 msgid ""
 "If disabled, the editor will not show the Markdown syntax if the cursor is "
 "adjacent to the element."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:146
+#: source/win-preferences/schema/editor.ts:152
 msgid "Default Formatting Characters"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:147
+#: source/win-preferences/schema/editor.ts:153
 msgid ""
 "Select the characters Zettlr should use when marking text as bold or italic."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:183
+#: source/win-preferences/schema/editor.ts:189
 msgid "Markdown Style"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:184
+#: source/win-preferences/schema/editor.ts:190
 msgid "Check your Markdown documents for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:189
+#: source/win-preferences/schema/editor.ts:195
 msgid "Enable Markdown Linter"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:195
+#: source/win-preferences/schema/editor.ts:201
 #, fuzzy
 msgid "Table Editor"
 msgstr "Slå tabel editor til"
 
-#: source/win-preferences/schema/editor.ts:207
+#: source/win-preferences/schema/editor.ts:213
 msgid ""
 "The Table Editor is an interactive interface that simplifies creation and "
 "editing of tables. It provides buttons for common functionality, and takes "
@@ -4391,153 +4414,153 @@ msgstr ""
 "redigering af tabeller. Det har knapper til almindelig funktionalitet og "
 "håndterer Markdown formattering."
 
-#: source/win-preferences/schema/editor.ts:212
+#: source/win-preferences/schema/editor.ts:218
 msgid "Status bar"
 msgstr "Statuslinje"
 
-#: source/win-preferences/schema/editor.ts:213
+#: source/win-preferences/schema/editor.ts:219
 msgid ""
 "The status bar is a section for various quick controls and shows information "
 "about the current document. It is shown for both Markdown and code editors."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:219
+#: source/win-preferences/schema/editor.ts:225
 msgid "Show status bar"
 msgstr "Vis statuslinje"
 
-#: source/win-preferences/schema/editor.ts:226
+#: source/win-preferences/schema/editor.ts:232
 msgid ""
 "Customize the appearance of the editor when the distraction-free mode is "
 "active."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:232
+#: source/win-preferences/schema/editor.ts:238
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "Nedton ikke-fokuserede linjer i distraktionsfri tilstand"
 
-#: source/win-preferences/schema/editor.ts:237
+#: source/win-preferences/schema/editor.ts:243
 msgid "Hide toolbar in distraction-free mode"
 msgstr "Skjul værktøjslinje i distraktionsfri tilstand"
 
-#: source/win-preferences/schema/editor.ts:243
+#: source/win-preferences/schema/editor.ts:249
 #, fuzzy
 msgid "Word counter"
 msgstr "Ordoptælling"
 
-#: source/win-preferences/schema/editor.ts:249
+#: source/win-preferences/schema/editor.ts:255
 msgid "Show character count instead of word count"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:255
+#: source/win-preferences/schema/editor.ts:261
 msgid "Readability mode"
 msgstr "Læsbarhedstilstand"
 
-#: source/win-preferences/schema/editor.ts:256
+#: source/win-preferences/schema/editor.ts:262
 msgid "Choose the algorithm to calculate readability scores."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:263
+#: source/win-preferences/schema/editor.ts:269
 msgid "Readability Algorithm:"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:276
+#: source/win-preferences/schema/editor.ts:282
 msgid ""
 "Restrict images to a percentage of the available editor width and height."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:282
+#: source/win-preferences/schema/editor.ts:288
 msgid "Restrict width to %s %"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:289
+#: source/win-preferences/schema/editor.ts:295
 msgid "Restrict height to %s %"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:297
+#: source/win-preferences/schema/editor.ts:303
 #, fuzzy
 msgid "Font size"
 msgstr "Redigerings skriftstørrelse"
 
-#: source/win-preferences/schema/editor.ts:303
+#: source/win-preferences/schema/editor.ts:309
 msgid "Font size in pixels:"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:310
+#: source/win-preferences/schema/editor.ts:316
 msgid "Indentation"
 msgstr ""
 
 #. TODO
-#: source/win-preferences/schema/editor.ts:313
+#: source/win-preferences/schema/editor.ts:319
 msgid "Adjust your editor indentation settings"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:317
+#: source/win-preferences/schema/editor.ts:323
 msgid "Tab size (in number of spaces)"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:324
+#: source/win-preferences/schema/editor.ts:330
 #, fuzzy
 msgid "Indent using tabs instead of spaces"
 msgstr "Indryk med det følgende antal mellemrum"
 
-#: source/win-preferences/schema/editor.ts:329
+#: source/win-preferences/schema/editor.ts:335
 msgid "Always indent the current line when pressing Tab"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:330
+#: source/win-preferences/schema/editor.ts:336
 msgid ""
 "Zettlr always indents the line for list items. Turn this setting on to "
 "always indent any line."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:336
+#: source/win-preferences/schema/editor.ts:342
 msgid "Snippet Autocompletion"
 msgstr ""
 
 #. TODO
-#: source/win-preferences/schema/editor.ts:339
+#: source/win-preferences/schema/editor.ts:345
 msgid "Control the snippet autocompletion functionality"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:344
+#: source/win-preferences/schema/editor.ts:350
 msgid "Autocomplete trigger character:"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:354
+#: source/win-preferences/schema/editor.ts:360
 #, fuzzy
 msgid "Suggest emojis during autocompletion"
 msgstr "Acceptér emojis ved autofuldførelse"
 
-#: source/win-preferences/schema/editor.ts:360
+#: source/win-preferences/schema/editor.ts:366
 #, fuzzy
 msgid "Other settings"
 msgstr "Andre filer"
 
-#: source/win-preferences/schema/editor.ts:366
+#: source/win-preferences/schema/editor.ts:372
 msgid "Show formatting toolbar when text is selected"
 msgstr "Vis formatteringsværktøjslinjen når tekst er valgt"
 
-#: source/win-preferences/schema/editor.ts:371
+#: source/win-preferences/schema/editor.ts:377
 msgid "Show line numbers for Markdown files"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:376
+#: source/win-preferences/schema/editor.ts:382
 msgid "Highlight whitespace"
 msgstr "Fremhæv mellemrum"
 
-#: source/win-preferences/schema/editor.ts:381
+#: source/win-preferences/schema/editor.ts:387
 msgid "Show link previews"
 msgstr "Vis link forhåndsvisning"
 
-#: source/win-preferences/schema/editor.ts:386
+#: source/win-preferences/schema/editor.ts:392
 msgid "Accept autocomplete suggestion with Enter"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:391
+#: source/win-preferences/schema/editor.ts:397
 msgid "Accept autocomplete suggestion with Tab"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:397
+#: source/win-preferences/schema/editor.ts:403
 msgid "Automatically close matching character pairs"
 msgstr "Luk automatisk matchende karaktér par"
 
@@ -4784,56 +4807,46 @@ msgstr "Brug den interne Pandoc til eksporter"
 msgid "Automatically open successfully exported files"
 msgstr ""
 
-#: source/win-preferences/schema/import-export.ts:75
-msgid "Enforce highlight extension on export"
-msgstr ""
-
 #: source/win-preferences/schema/import-export.ts:76
-msgid ""
-"When enabled, Zettlr will automatically enable the \"mark\"-extension when "
-"exporting Markdown files."
-msgstr ""
-
-#: source/win-preferences/schema/import-export.ts:82
 #, fuzzy
 msgid "Remove tags from files when exporting"
 msgstr "Fjern mærkater fra filer"
 
-#: source/win-preferences/schema/import-export.ts:88
+#: source/win-preferences/schema/import-export.ts:82
 #: source/win-preferences/schema/zettelkasten.ts:46
 msgid "Internal links"
 msgstr "Interne links"
 
-#: source/win-preferences/schema/import-export.ts:91
+#: source/win-preferences/schema/import-export.ts:85
 msgid "Remove internal links completely"
 msgstr "Fjern interne links fuldstændigt"
 
-#: source/win-preferences/schema/import-export.ts:92
+#: source/win-preferences/schema/import-export.ts:86
 msgid "Unlink internal links"
 msgstr "Af-link interne links"
 
-#: source/win-preferences/schema/import-export.ts:93
+#: source/win-preferences/schema/import-export.ts:87
 msgid "Don't touch internal links"
 msgstr "Lav ingen ændringer på interne links"
 
-#: source/win-preferences/schema/import-export.ts:99
+#: source/win-preferences/schema/import-export.ts:93
 msgid "Destination folder for exported files"
 msgstr "Destinaationsmappe for eksporterede filer"
 
 #. TODO: Add info-strings
-#: source/win-preferences/schema/import-export.ts:103
+#: source/win-preferences/schema/import-export.ts:97
 msgid "Temporary folder"
 msgstr "Midlertidig mappe"
 
-#: source/win-preferences/schema/import-export.ts:104
+#: source/win-preferences/schema/import-export.ts:98
 msgid "Same as file location"
 msgstr "Samme som fillokation"
 
-#: source/win-preferences/schema/import-export.ts:105
+#: source/win-preferences/schema/import-export.ts:99
 msgid "Ask for folder when exporting"
 msgstr "Spørgs efter mappe ved eksport"
 
-#: source/win-preferences/schema/import-export.ts:111
+#: source/win-preferences/schema/import-export.ts:105
 msgid ""
 "Warning! Files in the temporary folder are regularly deleted. Choosing the "
 "same location as the file overwrites files with identical filenames if they "
@@ -4843,24 +4856,50 @@ msgstr ""
 "samme lokation som filen, overskrives filer med identiske filnavne hvis de "
 "allerede eksisterer."
 
-#: source/win-preferences/schema/import-export.ts:116
+#: source/win-preferences/schema/import-export.ts:110
 msgid "Custom export commands"
 msgstr "Tilpassede eksport kommandoer"
 
-#: source/win-preferences/schema/import-export.ts:117
+#: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
 "its first argument the file or project folder to be exported."
 msgstr ""
 
-#: source/win-preferences/schema/import-export.ts:125
+#: source/win-preferences/schema/import-export.ts:119
 msgid "Display name"
 msgstr "Vis navn"
 
-#: source/win-preferences/schema/import-export.ts:125
+#: source/win-preferences/schema/import-export.ts:119
 #, fuzzy
 msgid "Command"
 msgstr "Kommando"
+
+#: source/win-preferences/schema/import-export.ts:129
+msgid "Pandoc Extensions"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:130
+msgid ""
+"Add support for certain Markdown syntax elements during exports. We "
+"recommend to keep all enabled, unless you know what you are doing."
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:136
+msgid "Mark extension"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:137
+msgid "Enable support for ==highlighted== text."
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:142
+msgid "Alerts extension"
+msgstr ""
+
+#: source/win-preferences/schema/import-export.ts:143
+msgid "Enable support for admonitions (also known as alerts or callouts)."
+msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
