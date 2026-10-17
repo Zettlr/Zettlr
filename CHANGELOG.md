@@ -9,6 +9,10 @@ computer to continue using Zettlr.
 
 ## GUI and Functionality
 
+- **Feature**: Zettlr now correctly renders images that have been defined using
+  the reference-style variant. So instead of only rendering images in the form
+  `![alt text](url)`, it can now also render reference style images in the form
+  `![alt text][reference]`, with the reference being defined elsewhere (#663).
 - Fixed an issue where a URL in an image caption would be improperly treated as
   the image source (#6594).
 - Fixed an issue where toggling a task mark would scroll the viewport back to
