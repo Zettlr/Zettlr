@@ -16,6 +16,8 @@ computer to continue using Zettlr.
   toggled, though the cursor position is retained (#6603).
 - Fixed an issue that would cause jumping of the editor content upon externally
   modifying a file (#6531; #6543).
+- Fixed an issue that caused excessive "failed to check for updates" errors
+  (#6574).
 
 ## Under the Hood
 
