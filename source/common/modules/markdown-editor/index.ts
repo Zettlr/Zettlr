@@ -101,6 +101,9 @@ import { moveSection } from './commands/move-section'
 import { parsePandocAttributes } from 'source/common/pandoc-util/parse-pandoc-attributes'
 import { closeSearchPanel, openSearchPanel, searchPanelOpen } from '@codemirror/search'
 import { clickListeners } from './plugins/click-listeners'
+import { type SnippetRecord } from './autocomplete/snippets'
+import { type CitationRecord } from './autocomplete/citations'
+import { type FileRecord } from './autocomplete/files'
 
 export interface DocumentWrapper {
   path: string
@@ -574,6 +577,7 @@ export default class MarkdownEditor extends EventEmitter {
     // Third: The input mode, if applicable
     if (inputModeChanged) {
       if (newOptions.inputMode === 'emacs') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(emacs()) })
       } else if (newOptions.inputMode === 'vim') {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vimPlugin()) })
@@ -705,26 +709,29 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {Object}  database  The show-hint-addon compatible database
    */
   setCompletionDatabase (type: 'tags', database: TagRecord[]): void
-  setCompletionDatabase (type: 'citations', database: Array<{ citekey: string, displayText: string }>): void
-  setCompletionDatabase (type: 'snippets', database: Array<{ name: string, content: string }>): void
-  setCompletionDatabase (type: 'files', database: Array<{ filename: string, displayName: string, id: string }>): void
-  setCompletionDatabase (type: string, database: any): void {
+  setCompletionDatabase (type: 'citations', database: CitationRecord[]): void
+  setCompletionDatabase (type: 'snippets', database: SnippetRecord[]): void
+  setCompletionDatabase (type: 'files', database: FileRecord[]): void
+  setCompletionDatabase (
+    type: 'tags'|'citations'|'snippets'|'files',
+    database: TagRecord[]|CitationRecord[]|SnippetRecord[]|FileRecord[]
+  ): void {
     switch (type) {
       case 'tags':
-        this.databaseCache.tags = database
+        this.databaseCache.tags = database as TagRecord[]
         this._instance.dispatch({ effects: tagsUpdate.of(database as TagRecord[]) })
         break
       case 'citations':
-        this.databaseCache.citations = database
-        this._instance.dispatch({ effects: citekeyUpdate.of(database as Array<{ citekey: string, displayText: string }>) })
+        this.databaseCache.citations = database as CitationRecord[]
+        this._instance.dispatch({ effects: citekeyUpdate.of(database as CitationRecord[]) })
         break
       case 'snippets':
-        this.databaseCache.snippets = database
-        this._instance.dispatch({ effects: snippetsUpdate.of(database as Array<{ name: string, content: string }>) })
+        this.databaseCache.snippets = database as SnippetRecord[]
+        this._instance.dispatch({ effects: snippetsUpdate.of(database as SnippetRecord[]) })
         break
       case 'files':
-        this.databaseCache.files = database
-        this._instance.dispatch({ effects: filesUpdate.of(database as Array<{ filename: string, displayName: string, id: string }>) })
+        this.databaseCache.files = database as FileRecord[]
+        this._instance.dispatch({ effects: filesUpdate.of(database as FileRecord[]) })
         break
     }
   }
