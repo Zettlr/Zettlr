@@ -20,8 +20,36 @@
  */
 
 import type { DelimiterType, InlineParser } from '@lezer/markdown'
+import { pandocAttributeRe } from 'source/common/pandoc-util/parse-pandoc-attributes'
 
 const PandocAttributeDelimiter: DelimiterType = {}
+
+const attributeTokenRE = new RegExp(pandocAttributeRe.source, 'y')
+
+/**
+ * Whether the content between the braces is made up only of Pandoc attributes,
+ * optionally separated by whitespace. Walks the tokens with a sticky regex so
+ * that each one must start where the previous one ended.
+ *
+ * @param   {string}   content  The text between `{` and `}`
+ *
+ * @return  {boolean}           True if the content is a valid attribute list
+ */
+function isAttributeContent (content: string): boolean {
+  let pos = content.length - content.trimStart().length
+  while (pos < content.length) {
+    attributeTokenRE.lastIndex = pos
+    const match = attributeTokenRE.exec(content)
+    if (match === null || match[0] === '') {
+      return false
+    }
+    pos = attributeTokenRE.lastIndex
+    while (pos < content.length && /\s/.test(content[pos])) {
+      pos++
+    }
+  }
+  return true
+}
 
 /**
  * Parses Pandoc attribute strings (e.g. `{.unnumbered}`) in the code
@@ -50,6 +78,8 @@ export const pandocAttributesParser: InlineParser = {
     // (then they basically apply to the whole line, i.e. with code block meta),
     // or directly preceeded by a non-whitespace symbol.
     if (whitespaceBefore && !whitespaceAfter) { return - 1 }
+
+    if (!isAttributeContent(ctx.slice(delim.to, pos))) { return -1 }
 
     ctx.takeContent(opening)
     ctx.addDelimiter(PandocAttributeDelimiter, pos, pos + 1, false, true)
