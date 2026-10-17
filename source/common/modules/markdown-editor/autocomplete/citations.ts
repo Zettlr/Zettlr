@@ -61,7 +61,7 @@ export const citekeyUpdateField = StateField.define<Completion[]>({
  *
  * @return  {Completion[]}        The sorted completions
  */
-function sortCitationKeysByUsage (state: EditorState): Completion[] {
+function getCitationEntries (state: EditorState): Completion[] {
   // First, get our existing entries in the database, and re-transform them into
   // what the update effect expects
   const entries = state.field(citekeyUpdateField)
@@ -133,30 +133,30 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 }
 
 export const citations: AutocompletePlugin = {
+  filter: false,
+  fields: [citekeyUpdateField],
   applies (ctx) {
-    // A valid citekey position is: Beginning of the line (citekey without square
-    // brackets), after a square bracket open (regular citation without prefix),
-    // or after a space (either a standalone citation or within square brackets
-    // but with a prefix). Also, the citekey can be prefixed with a -.
-    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
-    const textBefore = text.slice(0, ctx.pos - from)
-    if (text.startsWith('@') && ctx.pos - from === 1) {
-      // The line starts with an @ and the cursor is directly behind it
-      return ctx.pos
-    } else if (/(?<=[-[\s(])@[^[\]]*$/.test(textBefore)) {
-      // The text immediately before the cursor matches a valid citation
-      return from + textBefore.lastIndexOf('@') + 1
-    } else {
-      // Nopey
+    const token = ctx.tokenBefore([ 'CitationCitekey', 'CitationAtSign' ])
+
+    if (token === null) {
       return false
     }
+
+    if (token.type.is('CitationCitekey')) {
+      return token.from
+    }
+
+    if (token.type.is('CitationAtSign')) {
+      return ctx.pos
+    }
+
+    return false
   },
   entries (ctx, query) {
     query = query.toLowerCase()
-    const entries = sortCitationKeysByUsage(ctx.state)
+    const entries = getCitationEntries(ctx.state)
     return entries.filter(entry => {
       return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
     })
   },
-  fields: [citekeyUpdateField]
 }
