@@ -18,6 +18,8 @@ computer to continue using Zettlr.
   modifying a file (#6531; #6543).
 - Fixed an issue that caused excessive "failed to check for updates" errors
   (#6574).
+- Fixed an issue preventing files with non-lowercase extensions from showing up
+  and being correctly treated by Zettlr (#6613).
 
 ## Under the Hood
 
