@@ -286,6 +286,22 @@ export default class ConfigProvider extends ProviderContract {
         }
       }
     } // END: openPaths migration
+
+    // Migrate old tab opening booleans to the unified enum setting.
+    if ('system' in readConfig && typeof readConfig.system === 'object') {
+      const { avoidNewTabs, openTabsAtEnd } = readConfig.system
+      if (!('tabOpeningBehavior' in readConfig.system)) {
+        if (avoidNewTabs === true) {
+          readConfig.system.tabOpeningBehavior = 'replace_current'
+        } else if (openTabsAtEnd === true) {
+          readConfig.system.tabOpeningBehavior = 'end_of_bar'
+        } else {
+          readConfig.system.tabOpeningBehavior = 'next_to_current'
+        }
+      }
+      delete readConfig.system.avoidNewTabs
+      delete readConfig.system.openTabsAtEnd
+    }
   }
 
   /**

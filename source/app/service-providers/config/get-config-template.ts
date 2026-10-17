@@ -20,6 +20,7 @@ import type { EditorShortcutName } from 'source/common/modules/markdown-editor/k
 import { type MenuShortcutName } from '../menu/shortcuts'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
+export type TabOpeningBehavior = 'next-to-current'|'replace-current'|'end'
 
 // This is a handy interface to add groups of file types to the settings in
 // order to allow users to display them in filemanager and/or sidebar, and open
@@ -257,7 +258,7 @@ export interface ConfigOptions {
   system: {
     deleteOnFail: boolean
     leaveAppRunning: boolean
-    avoidNewTabs: boolean
+    tabOpeningBehavior: TabOpeningBehavior
     iframeWhitelist: string[]
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
@@ -533,7 +534,7 @@ export function getConfigTemplate (): ConfigOptions {
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
-      avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
+      tabOpeningBehavior: 'next-to-current',
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
       checkForUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor

@@ -893,15 +893,17 @@ current contents from the editor somewhere else, and restart the application.`
     // (previously) active file *before* opening the new one. See bug #5065 for
     // context.
     const activeFile = leaf.tabMan.activeFile
-    const ret = leaf.tabMan.openFile(filePath)
+    const { tabOpeningBehavior } = this._app.config.get().system
+    const openAtEnd = tabOpeningBehavior === 'end_of_bar'
+    const replaceCurrentTab = tabOpeningBehavior === 'replace_current'
+    const ret = leaf.tabMan.openFile(filePath, undefined, openAtEnd)
     if (ret) {
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
     }
 
-    // Close the (formerly active) file if we should avoid new tabs and have not
-    // gotten a specific request to open it in a *new* tab
-    const { avoidNewTabs } = this._app.config.get().system
-    if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
+    // In replace mode we close the previously active tab unless explicitly
+    // requested to keep it by opening the target in a new tab.
+    if (activeFile !== null && replaceCurrentTab && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
       this.syncWatchedFilePaths()
       this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath: activeFile.path })
