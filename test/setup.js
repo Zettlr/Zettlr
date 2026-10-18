@@ -19,7 +19,9 @@ import path from 'path'
  * Code is essentially taken from https://github.com/enzymejs/enzyme/blob/master/docs/guides/jsdom.md.
  */
 function mockBrowser () {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const jsdom = new JSDOM('<!doctype html><html><body></body></html>')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { window } = jsdom
 
   function copyProps (src, target) {

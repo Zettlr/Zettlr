@@ -432,7 +432,7 @@ function startSimulation (): void {
               command: 'open-file',
               payload: {
                 path: vertex.id,
-                newTab: (event.altKey === true) ? true : undefined
+                newTab: event.altKey ? true : undefined
               }
             } as DocumentManagerIPCAPI).catch(err => console.error(err))
           })
