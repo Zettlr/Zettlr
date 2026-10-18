@@ -106,8 +106,8 @@ export function getImportExportFields (): PreferencesFieldset[] {
         },
         {
           type: 'checkbox',
-          label: trans('Always overwrite files on export.'),
-          model: 'alwaysExportOverwrite'
+          label: trans('Always warn if exports would overwrite a file.'),
+          model: 'confirmExportOverwrite'
         },
       ]
     },

@@ -20,12 +20,12 @@ import path from 'path'
 import { ZipArchive } from 'archiver'
 import { rimraf } from 'rimraf'
 import isFile from '@common/util/is-file'
-import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExportResult, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
 
 const ASSETS_FOLDER_NAME = 'assets'
 
-export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles, _ctx: ExporterAPI): Promise<ExporterOutput> {
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles, ctx: ExporterAPI): Promise<ExportResult> {
   const output: ExporterOutput = {
     code: 0,
     stdout: [],
@@ -41,6 +41,13 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
   const ext = options.profile.writer === 'textpack' ? '.textpack' : '.textbundle'
   const targetPath = path.join(options.targetDirectory, title + ext)
+  if (!await ctx.confirmOverwrite(targetPath)) {
+    return { status: 'cancelled' }
+  }
+  // Textpack creation also replaces and removes its intermediate bundle.
+  if (options.profile.writer === 'textpack' && !await ctx.confirmOverwrite(targetPath.replace('.textpack', '.textbundle'))) {
+    return { status: 'cancelled' }
+  }
   try {
     output.targetFile = await makeTextbundle(
       sourceFiles[0],
@@ -57,7 +64,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
     }
   }
 
-  return output
+  return { status: 'completed', output }
 }
 
 /**

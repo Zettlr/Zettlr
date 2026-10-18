@@ -110,6 +110,10 @@ export interface ExporterOutput {
   targetFile: string
 }
 
+export type ExportResult =
+  | { status: 'cancelled' }
+  | { status: 'completed', output: ExporterOutput }
+
 export interface PandocRunnerOutput {
   code: number
   stdout: string[]
@@ -120,6 +124,9 @@ export interface PandocRunnerOutput {
  * This is the exporter API that the plugins will have access to.
  */
 export interface ExporterAPI {
+  /** Ask before replacing an existing export target. */
+  confirmOverwrite: (target: string) => Promise<boolean>
+
   /**
    * Runs Pandoc with the given defaults file
    *
@@ -151,6 +158,6 @@ export interface ExporterAPI {
  * @param   {string[]}             sourceFiles    These are the actual, pre-processed source files, named <file-name>.intermediary.<file-ext>
  * @param   {any}                  context        This is a small API that can be used to retrieve defaults and call Pandoc.
  *
- * @return  {Promise<ExporterOutput>}             Returns an ExporterOutput after finishing the export.
+ * @return  {Promise<ExportResult>}               Returns the export output or cancellation.
  */
-export type ExporterPlugin = (options: ExporterOptions, sourceFiles: string[], context: ExporterAPI) => Promise<ExporterOutput>
+export type ExporterPlugin = (options: ExporterOptions, sourceFiles: string[], context: ExporterAPI) => Promise<ExportResult>

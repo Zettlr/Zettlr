@@ -26,12 +26,12 @@ import type ConfigProvider from '@providers/config'
  * @return  {Promise<boolean>}            Resolves to true, if the file should be replaced
  */
 export default async function shouldExportOverwrite (config: ConfigProvider, win: BrowserWindow, filename: string): Promise<boolean> {
-  let options: MessageBoxOptions = {
+  const options: MessageBoxOptions = {
     type: 'warning',
     title: trans('Export'),
     message: trans('This will overwrite file %s. Proceed?', filename),
-    checkboxLabel: trans('Always overwrite files on export.'),
-    checkboxChecked: config.get('alwaysExportOverwrite'),
+    checkboxLabel: trans('Always warn if exports would overwrite a file.'),
+    checkboxChecked: config.get().confirmExportOverwrite,
     buttons: [
       trans('Cancel'),
       trans('Overwrite')
@@ -46,7 +46,7 @@ export default async function shouldExportOverwrite (config: ConfigProvider, win
   // platform check again.
   const response = await dialog.showMessageBox(win, options)
 
-  config.set('alwaysExportOverwrite', response.checkboxChecked)
+  config.set('confirmExportOverwrite', response.checkboxChecked)
 
   return response.response === 1
 }

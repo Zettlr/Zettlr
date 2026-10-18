@@ -23,7 +23,7 @@ import { promises as fs } from 'fs'
 import isFile from '@common/util/is-file'
 
 // Exporters
-import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocDefaults, PandocRunnerOutput } from './types'
+import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExportResult, PandocDefaults, PandocRunnerOutput } from './types'
 import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
@@ -82,22 +82,37 @@ const PLUGINS = {
  * @param   {ExporterOptions}  options             The options needed to facilitate the export.
  * @param   {any}              [formatOptions={}]  These are options possibly required by a plugin.
  *
- * @return  {Promise<ExporterOutput>}              Resolves with an info object.
+ * @return  {Promise<ExportResult>}                Resolves with export output or cancellation.
  */
 export async function makeExport (
   options: ExporterOptions,
   logger: LogProvider,
   config: ConfigProvider,
   assets: AssetsProvider,
-  windows: WindowProvider 
-): Promise<ExporterOutput> {
+  windows: WindowProvider
+): Promise<ExportResult> {
   // We already know where the exported file will end up, so set the property
   const inputFiles = options.sourceFiles.map(file => file.path)
 
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
+    confirmOverwrite: async (target: string) => {
+      const relativeTarget = path.relative(app.getPath('temp'), target)
+      const isTemporary = relativeTarget !== '..' &&
+        !relativeTarget.startsWith(`..${path.sep}`) && !path.isAbsolute(relativeTarget)
+
+      if (isTemporary) {
+        return true
+      }
+
+      if (!config.get().confirmExportOverwrite || !await pathExists(target)) {
+        return true
+      }
+
+      return await windows.shouldOverwriteExport(target)
+    },
     runPandoc: async (defaults: PandocDefaults) => {
-      return await runPandoc(logger, windows, config, defaults, options.cwd)
+      return await runPandoc(logger, defaults, options.cwd)
     },
     loadDefaults: async (filename: string, overrides: PandocDefaults = {}) => {
       return await loadDefaults(filename, overrides, config, logger, assets, options.defaultsOverride)
@@ -120,27 +135,13 @@ export async function makeExport (
 
 async function runPandoc (
   logger: LogProvider,
-  windows: WindowProvider,
-  config: ConfigProvider,
   defaults: PandocDefaults,
   cwd?: string
 ): Promise<PandocRunnerOutput> {
-  const target = defaults['output-file'] ?? ''
-  const tempPath = app.getPath('temp')
-  const isTemp = target.startsWith(tempPath)
-
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
     stderr: []
-  }
-
-  const { alwaysExportOverwrite } = config.get()
-
-  const promptOverwrite = !isTemp && !alwaysExportOverwrite && await pathExists(target)
-  if (promptOverwrite && !await windows.shouldOverwriteExport(target)) {
-    output.code = 33
-    return output
   }
 
   const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')

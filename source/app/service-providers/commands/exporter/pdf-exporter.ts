@@ -18,18 +18,18 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import { BrowserWindow } from 'electron'
-import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import { app, BrowserWindow } from 'electron'
+import type { ExporterOptions, ExporterPlugin, ExportResult, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
 import normalizePath from 'source/common/util/normalize-path'
 
-export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExportResult> {
   // First file determines the name of the output path, EXCEPT a title is
   // explicitly set.
   const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
   let pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
-  let htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
+  let htmlFilePath = path.join(app.getPath('temp'), `${title}.html`)
 
   // Get the corresponding defaults file
   const defaultKeys = {
@@ -55,42 +55,37 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // the updated `htmlFilePath`.
   if (defaults['output-file'] !== undefined && defaults['output-file'] !== htmlFilePath) {
     pdfFilePath = normalizePath(defaults['output-file'], options.targetDirectory)
-
-    // This is a temporary file, so potentially duplicating the extension as
-    // `.pdf.html` doesn't really matter. We probably could disregard updating
-    // this path entirely, but here it is done for consistency.
-    htmlFilePath = pdfFilePath + '.html'
-
-    defaults['output-file'] = htmlFilePath
   }
 
-  // Run Pandoc
-  const pandocOutput = await ctx.runPandoc(defaults)
+  defaults['output-file'] = htmlFilePath
 
-  // Without XeLaTeX, people can still export to PDF using Chromium's print
-  // API. Chromium's PDF abilities are actually quite good.
-  const printer = new BrowserWindow({
-    width: 600,
-    height: 800,
-    show: false
-  })
+  if (!await ctx.confirmOverwrite(pdfFilePath)) {
+    return { status: 'cancelled' }
+  }
 
-  await printer.loadFile(htmlFilePath)
-  const pdfData = await printer.webContents.printToPDF({
-    printBackground: false,
-    landscape: false,
-    pageSize: 'A4'
-  })
-  printer.close()
+  try {
+    const pandocOutput = await ctx.runPandoc(defaults)
+    if (pandocOutput.code !== 0) {
+      return { status: 'completed', output: { ...pandocOutput, targetFile: pdfFilePath } }
+    }
 
-  await fs.writeFile(pdfFilePath, pdfData)
-  await fs.unlink(htmlFilePath) // Remove the intermediary HTML file
+    // Without XeLaTeX, people can still export to PDF using Chromium's print
+    // API. Chromium's PDF abilities are actually quite good.
+    const printer = new BrowserWindow({ width: 600, height: 800, show: false })
+    try {
+      await printer.loadFile(htmlFilePath)
+      const pdfData = await printer.webContents.printToPDF({
+        printBackground: false,
+        landscape: false,
+        pageSize: 'A4'
+      })
+      await fs.writeFile(pdfFilePath, pdfData)
+    } finally {
+      printer.destroy()
+    }
 
-  // Make sure to propagate the results
-  return {
-    code: pandocOutput.code,
-    stdout: pandocOutput.stdout,
-    stderr: pandocOutput.stderr,
-    targetFile: pdfFilePath
+    return { status: 'completed', output: { ...pandocOutput, targetFile: pdfFilePath } }
+  } finally {
+    await fs.rm(htmlFilePath, { force: true })
   }
 }

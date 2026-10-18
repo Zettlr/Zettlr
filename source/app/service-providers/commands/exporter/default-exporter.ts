@@ -14,12 +14,12 @@
 
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import type { ExporterOptions, ExporterPlugin, ExportResult, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/pandoc-util/pandoc-maps'
 import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 import normalizePath from 'source/common/util/normalize-path'
 
-export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExportResult> {
   if (typeof options.profile === 'string') {
     throw new Error('Cannot run default exporter plugin: Wrong profile provided!')
   }
@@ -46,14 +46,16 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
     defaults['output-file'] = target
   }
 
+  if (!await ctx.confirmOverwrite(target)) {
+    return { status: 'cancelled' }
+  }
+
   // Run Pandoc
   const pandocOutput = await ctx.runPandoc(defaults)
 
   // Make sure to propagate the results
   return {
-    code: pandocOutput.code,
-    stdout: pandocOutput.stdout,
-    stderr: pandocOutput.stderr,
-    targetFile: target
+    status: 'completed',
+    output: { ...pandocOutput, targetFile: target }
   }
 }
