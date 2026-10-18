@@ -126,9 +126,17 @@ const snippetTabsEffect = StateEffect.define<EditorSelection[]>()
 const shiftNextTabEffect = StateEffect.define()
 
 /**
+ * Describes a snippet Autocomplete record.
+ */
+export interface SnippetRecord {
+  name: string
+  content: string
+}
+
+/**
  * Use this effect to provide the editor state with a set of new snippets to autocomplete
  */
-export const snippetsUpdate = StateEffect.define<Array<{ name: string, content: string }>>()
+export const snippetsUpdate = StateEffect.define<SnippetRecord[]>()
 
 interface SnippetStateField {
   availableSnippets: Completion[]

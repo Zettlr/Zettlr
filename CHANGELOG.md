@@ -9,8 +9,21 @@ computer to continue using Zettlr.
 
 ## GUI and Functionality
 
+- **Feature**: Zettlr now correctly renders images that have been defined using
+  the reference-style variant. So instead of only rendering images in the form
+  `![alt text](url)`, it can now also render reference style images in the form
+  `![alt text][reference]`, with the reference being defined elsewhere (#663).
 - Fixed an issue where a URL in an image caption would be improperly treated as
   the image source (#6594).
+- Fixed an issue where toggling a task mark would scroll the viewport back to
+  the cursor position. Now, the viewport does not scroll when a task mark is
+  toggled, though the cursor position is retained (#6603).
+- Fixed an issue that would cause jumping of the editor content upon externally
+  modifying a file (#6531; #6543).
+- Fixed an issue that caused excessive "failed to check for updates" errors
+  (#6574).
+- Fixed an issue preventing files with non-lowercase extensions from showing up
+  and being correctly treated by Zettlr (#6613).
 
 ## Under the Hood
 
@@ -20,6 +33,8 @@ computer to continue using Zettlr.
 - Centralized update check logic.
 - Fully switched the update provider from the outdated `got` dependency to both
   pure `fetch` (where necessary) or `ky` (where convenient).
+- Move the link preview generation to `ky`.
+- Fully remove all dependencies on `got`, and remove the module entirely.
 
 # 4.8.0
 

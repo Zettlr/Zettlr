@@ -20,9 +20,17 @@ import { configField } from '../util/configuration'
 import { extractCitationNodes, nodeToCiteItem } from '../parser/citation-parser'
 
 /**
+ * Describes a Citation Autocomplete record.
+ */
+export interface CitationRecord {
+  citekey: string
+  displayText: string
+}
+
+/**
  * Use this effect to provide the editor state with a set of new citekeys
  */
-export const citekeyUpdate = StateEffect.define<Array<{ citekey: string, displayText: string }>>()
+export const citekeyUpdate = StateEffect.define<CitationRecord[]>()
 export const citekeyUpdateField = StateField.define<Completion[]>({
   create (_state) {
     return []

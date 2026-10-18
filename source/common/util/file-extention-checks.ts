@@ -58,7 +58,8 @@ export function hasMdOrCodeExt (p: string): boolean {
  * @return  {boolean}               Whether the file has one of these extensions
  */
 export function hasExt (filePath: string, extensions: string[]): boolean {
-  return extensions.some(ext => filePath.endsWith(ext))
+  const lower = filePath.toLowerCase()
+  return extensions.some(ext => lower.endsWith(ext.toLowerCase()))
 }
 
 /**
