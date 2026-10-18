@@ -23,7 +23,7 @@ import { promises as fs } from 'fs'
 import isFile from '@common/util/is-file'
 
 // Exporters
-import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocDefaults, PandocRunnerOutput } from './types'
+import type { DefaultsOverride, ExporterAPI, ExporterOptions, ExportResult, PandocDefaults, PandocRunnerOutput } from './types'
 import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
@@ -33,6 +33,8 @@ import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
 import { enableExtension, parseReaderWriter, readerWriterToString } from '@common/pandoc-util/parse-reader-writer'
 import { supportsExtension } from 'source/common/pandoc-util/pandoc-extensions'
+import type WindowProvider from '@providers/windows'
+import pathExists from 'source/common/util/path-exists'
 
 /**
  * This function returns faux metadata for the custom export formats the
@@ -80,19 +82,50 @@ const PLUGINS = {
  * @param   {ExporterOptions}  options             The options needed to facilitate the export.
  * @param   {any}              [formatOptions={}]  These are options possibly required by a plugin.
  *
- * @return  {Promise<ExporterOutput>}              Resolves with an info object.
+ * @return  {Promise<ExportResult>}                Resolves with export output or cancellation.
  */
 export async function makeExport (
   options: ExporterOptions,
   logger: LogProvider,
   config: ConfigProvider,
-  assets: AssetsProvider
-): Promise<ExporterOutput> {
+  assets: AssetsProvider,
+  windows: WindowProvider
+): Promise<ExportResult> {
   // We already know where the exported file will end up, so set the property
   const inputFiles = options.sourceFiles.map(file => file.path)
 
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
+    resolveTargetPath: async (target: string) => {
+      // Output is to a custom or temporary directory,
+      // in which case, ignore any custom-set output path
+      // and output to `targetDirectory + basename`
+      if (options.targetDirectory !== options.cwd) {
+        target = path.join(options.targetDirectory,  path.basename(target))
+      // The user set a relative `output-file` path, so resolve
+      // it relative to the `targetDirectory`, which is the cwd.
+      } else if (!path.isAbsolute(target)) {
+        target = path.resolve(options.targetDirectory, target)
+      // Otherwise, since the user provided an absolute path,
+      // normalize it, resolving internal `..` and `.` segments.
+      } else {
+        target = path.normalize(target)
+      }
+
+      return target
+    },
+    confirmTargetOverwrite: async (target: string) => {
+      // Always overwrite temporary files
+      if (options.targetDirectory === app.getPath('temp')) {
+        return true
+      }
+
+      if (!config.get().confirmExportOverwrite || !await pathExists(target)) {
+        return true
+      }
+
+      return await windows.shouldOverwriteExport(target)
+    },
     runPandoc: async (defaults: PandocDefaults) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
@@ -115,15 +148,19 @@ export async function makeExport (
   }
 }
 
-async function runPandoc (logger: LogProvider, defaults: PandocDefaults, cwd?: string): Promise<PandocRunnerOutput> {
-  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
-  await fs.writeFile(defaultsFile, YAML.stringify(defaults), { encoding: 'utf8' })
-
+async function runPandoc (
+  logger: LogProvider,
+  defaults: PandocDefaults,
+  cwd?: string
+): Promise<PandocRunnerOutput> {
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
     stderr: []
   }
+
+  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
+  await fs.writeFile(defaultsFile, YAML.stringify(defaults), { encoding: 'utf8' })
 
   await new Promise<void>((resolve, reject) => {
     const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], {
