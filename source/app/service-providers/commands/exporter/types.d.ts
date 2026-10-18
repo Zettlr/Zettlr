@@ -16,6 +16,8 @@
 import { type PandocProfileMetadata } from '@providers/assets'
 
 export type PandocDefaults = Record<string, unknown> & {
+  'input-files'?: Array<string>
+  'output-file'?: string
   filters?: Array<string>
   metadata?: Record<string, unknown> & {
     zettlr?: Record<string, unknown>

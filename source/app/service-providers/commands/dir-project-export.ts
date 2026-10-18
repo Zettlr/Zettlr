@@ -240,7 +240,7 @@ async function exportUsingProfile (app: AppServiceContainer, dir: DirDescriptor,
 
   try {
     app.log.info(`[Project] Exporting ${projectTitle} using profile ${profile.name}.`)
-    const result = await makeExport(opt, app.log, app.config, app.assets)
+    const result = await makeExport(opt, app.log, app.config, app.assets, app.windows)
     if (result.code !== 0) {
       // Error
       const err = new Error(trans('Export failed: %s', result.stderr.join('\n')))

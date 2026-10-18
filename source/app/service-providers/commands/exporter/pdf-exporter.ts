@@ -53,8 +53,8 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // likely refers to the path of the output PDF. So, if `output-file` has
   // changed, normalize the path based on the PDF and set `output-file` to
   // the updated `htmlFilePath`.
-  if (defaults['output-file'] !== htmlFilePath) {
-    pdfFilePath = normalizePath(defaults['output-file'] as string, options.targetDirectory)
+  if (defaults['output-file'] !== undefined && defaults['output-file'] !== htmlFilePath) {
+    pdfFilePath = normalizePath(defaults['output-file'], options.targetDirectory)
 
     // This is a temporary file, so potentially duplicating the extension as
     // `.pdf.html` doesn't really matter. We probably could disregard updating

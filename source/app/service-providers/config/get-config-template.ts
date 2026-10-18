@@ -86,6 +86,7 @@ export interface ConfigOptions {
   openDirectory: string|null
   attachmentExtensions: string[]
   alwaysReloadFiles: boolean
+  alwaysExportOverwrite: boolean
   muteLines: boolean
 
   // NOTE to everyone: These options (and possibly others) that pertain to the
@@ -333,6 +334,7 @@ export function getConfigTemplate (): ConfigOptions {
     darkMode: nativeTheme.shouldUseDarkColors,
     darkModeEditor: 'match', // Possible values: 'match', 'light', 'dark'
     alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
+    alwaysExportOverwrite: false, // Should Zettlr always overwrite existing files on export?
     autoDarkMode: 'system', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '21:00', // Switch into dark mode at this time
     autoDarkModeEnd: '06:00', // Switch to light mode at this time

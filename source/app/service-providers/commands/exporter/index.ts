@@ -33,6 +33,8 @@ import { type PandocProfileMetadata } from '@providers/assets'
 import type ConfigProvider from '@providers/config'
 import { enableExtension, parseReaderWriter, readerWriterToString } from '@common/pandoc-util/parse-reader-writer'
 import { supportsExtension } from 'source/common/pandoc-util/pandoc-extensions'
+import type WindowProvider from '@providers/windows'
+import pathExists from 'source/common/util/path-exists'
 
 /**
  * This function returns faux metadata for the custom export formats the
@@ -86,7 +88,8 @@ export async function makeExport (
   options: ExporterOptions,
   logger: LogProvider,
   config: ConfigProvider,
-  assets: AssetsProvider
+  assets: AssetsProvider,
+  windows: WindowProvider 
 ): Promise<ExporterOutput> {
   // We already know where the exported file will end up, so set the property
   const inputFiles = options.sourceFiles.map(file => file.path)
@@ -94,7 +97,7 @@ export async function makeExport (
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
     runPandoc: async (defaults: PandocDefaults) => {
-      return await runPandoc(logger, defaults, options.cwd)
+      return await runPandoc(logger, windows, config, defaults, options.cwd)
     },
     loadDefaults: async (filename: string, overrides: PandocDefaults = {}) => {
       return await loadDefaults(filename, overrides, config, logger, assets, options.defaultsOverride)
@@ -115,15 +118,33 @@ export async function makeExport (
   }
 }
 
-async function runPandoc (logger: LogProvider, defaults: PandocDefaults, cwd?: string): Promise<PandocRunnerOutput> {
-  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
-  await fs.writeFile(defaultsFile, YAML.stringify(defaults), { encoding: 'utf8' })
+async function runPandoc (
+  logger: LogProvider,
+  windows: WindowProvider,
+  config: ConfigProvider,
+  defaults: PandocDefaults,
+  cwd?: string
+): Promise<PandocRunnerOutput> {
+  const target = defaults['output-file'] ?? ''
+  const tempPath = app.getPath('temp')
+  const isTemp = target.startsWith(tempPath)
 
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
     stderr: []
   }
+
+  const { alwaysExportOverwrite } = config.get()
+
+  const promptOverwrite = !isTemp && !alwaysExportOverwrite && await pathExists(target)
+  if (promptOverwrite && !await windows.shouldOverwriteExport(target)) {
+    output.code = 33
+    return output
+  }
+
+  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
+  await fs.writeFile(defaultsFile, YAML.stringify(defaults), { encoding: 'utf8' })
 
   await new Promise<void>((resolve, reject) => {
     const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], {
