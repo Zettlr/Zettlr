@@ -36,6 +36,8 @@ computer to continue using Zettlr.
   pure `fetch` (where necessary) or `ky` (where convenient).
 - Move the link preview generation to `ky`.
 - Fully remove all dependencies on `got`, and remove the module entirely.
+- Ensure VS Code uses the workspace's TypeScript version instead of the built-in
+  one to avoid issues where the linter sees different isues than VS Code.
 
 # 4.8.0
 

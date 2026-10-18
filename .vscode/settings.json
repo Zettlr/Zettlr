@@ -15,5 +15,9 @@
     },
     "Lua.diagnostics.globals": [
         "pandoc"
-    ]
+    ],
+    // Ensure VS Code runs using the workspace's TypeScript version, rather than
+    // the built-in one, to avoid issues where the linting step sees different
+    // errors/issues than the VS Code language server.
+    "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
