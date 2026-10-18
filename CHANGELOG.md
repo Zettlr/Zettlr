@@ -30,6 +30,7 @@ computer to continue using Zettlr.
 - Update Electron to `v44.7.0`. This drops macOS 12 and Ubuntu 17.04.
 - Update Pandoc to `v3.12.1`. This changes how admonitions/alerts are rendered
   and may require updates to your custom template CSS for HTML exports.
+- Upgrade Mermaid to `v12.1.0`.
 - Centralized update check logic.
 - Fully switched the update provider from the outdated `got` dependency to both
   pure `fetch` (where necessary) or `ky` (where convenient).
