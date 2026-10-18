@@ -36,7 +36,7 @@ import { md2html } from '@common/modules/markdown-utils'
 import { showNativeNotification } from '@common/util/show-notification'
 import type WindowProvider from '../windows'
 import { pipeline } from 'stream/promises'
-import { Transform } from 'stream'
+import { type PipelineSource, Transform } from 'stream'
 
 /**
  * Struct which represents a single asset provided for by the updater
@@ -629,7 +629,14 @@ export default class UpdateProvider extends ProviderContract {
     // readable stream has been fully drained and the write stream has ingested
     // all data and released the file pointer.
     await pipeline(
-      response.body,
+      // For reasons unbenknownst to me, after an update on Oct 17, 2026,
+      // TypeScript started complaining that the response.body has the wrong
+      // type. The code runs fine, but for this reason we have to manually cast
+      // the response here to silence TypeScript. This will become superfluous
+      // at some point in the future, so if you stumble upon this code, simply
+      // remove the type cast, and see if TS still complains. If it doesn't,
+      // please remove it (and this comment) again.
+      response.body as unknown as PipelineSource<Uint8Array>,
       progress,
       this._downloadWriteStream
     )
