@@ -103,7 +103,12 @@ export function getImportExportFields (): PreferencesFieldset[] {
           type: 'form-text',
           display: 'info',
           contents: trans('Warning! Files in the temporary folder are regularly deleted. Choosing the same location as the file overwrites files with identical filenames if they already exist.')
-        }
+        },
+        {
+          type: 'checkbox',
+          label: trans('Always warn if exports would overwrite a file.'),
+          model: 'confirmExportOverwrite'
+        },
       ]
     },
     {
