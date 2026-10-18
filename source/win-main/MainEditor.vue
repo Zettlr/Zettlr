@@ -727,6 +727,7 @@ body.dark .main-editor-wrapper {
   // This makes the editor pane show "fullscreen" on top over the rest of the UI
   // except the toolbar (due to a position: relative on the window content div).
   position: absolute;
+  z-index: 300;
   top: 0;
 
   .cm-scroller {

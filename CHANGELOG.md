@@ -24,6 +24,8 @@ computer to continue using Zettlr.
   (#6574).
 - Fixed an issue preventing files with non-lowercase extensions from showing up
   and being correctly treated by Zettlr (#6613).
+- Fixed a bug that would cause the statusbars of split views visible on top of
+  distraction-free views when using a split-view layout (#6581).
 
 ## Under the Hood
 
