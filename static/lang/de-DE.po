@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.7.8\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-13 02:50+0000\n"
+"POT-Creation-Date: 2026-10-20 02:36+0000\n"
 "PO-Revision-Date: 2026-07-28 12:02+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -1145,7 +1145,7 @@ msgstr "Die SHA256 Prüfsummendatei scheint bei diesem Update zu fehlen."
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "Kann SHA256 Prüfsummen nicht finden: %s"
 
-#: source/app/service-providers/updates/index.ts:661
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1153,7 +1153,7 @@ msgstr ""
 "Kann die Integrität der Update-Datei nicht verifizieren. Bitte erneut "
 "versuchen oder manuell updaten."
 
-#: source/app/service-providers/updates/index.ts:673
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1161,7 +1161,7 @@ msgstr ""
 "Die heruntergeladene Datei hat eine andere Prüfsumme als vom Server "
 "angegeben. Bitte erneut versuchen oder manuell updaten."
 
-#: source/app/service-providers/updates/index.ts:692
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1487,12 +1487,12 @@ msgstr "Warnung"
 msgid "Caution"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:153
+#: source/common/modules/markdown-editor/renderers/render-images.ts:165
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Bild konnte nicht geladen werden: %s"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:228
+#: source/common/modules/markdown-editor/renderers/render-images.ts:253
 msgid "Open image externally"
 msgstr "Bild extern öffnen"
 
