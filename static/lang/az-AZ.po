@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-13 02:50+0000\n"
+"POT-Creation-Date: 2026-10-20 02:36+0000\n"
 "PO-Revision-Date: 2026-09-07 11:00+0400\n"
 "Last-Translator: Jamal Kamaladdin <jamalkamaladdin@gmail.com>\n"
 "Language-Team: \n"
@@ -1148,7 +1148,7 @@ msgstr "Bu buraxılış üçün SHA256 nəzarət cəmi faylı yoxdur kimi görü
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "SHA256 nəzarət cəmləri alına bilmədi: %s"
 
-#: source/app/service-providers/updates/index.ts:661
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1156,7 +1156,7 @@ msgstr ""
 "Yüklənmiş yeniləmənin bütövlüyü yoxlanıla bilmədi. Zəhmət olmasa yenidən "
 "cəhd edin və ya əl ilə yeniləyin."
 
-#: source/app/service-providers/updates/index.ts:673
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1164,7 +1164,7 @@ msgstr ""
 "Yüklənmiş faylın nəzarət cəmi serverin bildirdiyindən fərqlidir. Zəhmət "
 "olmasa yenidən cəhd edin və ya əl ilə yeniləyin."
 
-#: source/app/service-providers/updates/index.ts:692
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1494,12 +1494,12 @@ msgstr "Xəbərdarlıq"
 msgid "Caution"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:153
+#: source/common/modules/markdown-editor/renderers/render-images.ts:165
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Şəkil tapılmadı: %s"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:228
+#: source/common/modules/markdown-editor/renderers/render-images.ts:253
 msgid "Open image externally"
 msgstr "Şəkli xarici proqramda aç"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-13 02:50+0000\n"
+"POT-Creation-Date: 2026-10-20 02:36+0000\n"
 "PO-Revision-Date: 2024-06-14 15:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1149,13 +1149,13 @@ msgstr "Il file del checksum SHA256 è mancante in questa versione."
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "Impossibile recuperare i checksum SHA256: %s"
 
-#: source/app/service-providers/updates/index.ts:661
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:673
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1163,7 +1163,7 @@ msgstr ""
 "Impossibile verificare l'integrità dell'aggiornamento scaricato. Riprova o "
 "aggiorna manualmente."
 
-#: source/app/service-providers/updates/index.ts:692
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1488,12 +1488,12 @@ msgstr "Attenzione"
 msgid "Caution"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:153
+#: source/common/modules/markdown-editor/renderers/render-images.ts:165
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Immagine non trovata: %s"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:228
+#: source/common/modules/markdown-editor/renderers/render-images.ts:253
 msgid "Open image externally"
 msgstr "Apri immagine esternamente"
 

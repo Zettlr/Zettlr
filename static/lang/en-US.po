@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.8.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-13 02:50+0000\n"
+"POT-Creation-Date: 2026-10-20 02:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1139,7 +1139,7 @@ msgstr "The SHA256 checksums file seems to be missing for this release."
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "Cannot retrieve SHA256 checksums: %s"
 
-#: source/app/service-providers/updates/index.ts:661
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1147,7 +1147,7 @@ msgstr ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 
-#: source/app/service-providers/updates/index.ts:673
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1155,7 +1155,7 @@ msgstr ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
 
-#: source/app/service-providers/updates/index.ts:692
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr "Could not start update. Please retry or update manually. Error was: %s"
@@ -1479,12 +1479,12 @@ msgstr "Warning"
 msgid "Caution"
 msgstr "Caution"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:153
+#: source/common/modules/markdown-editor/renderers/render-images.ts:165
 #, javascript-format
 msgid "Image not found: %s"
 msgstr "Image not found: %s"
 
-#: source/common/modules/markdown-editor/renderers/render-images.ts:228
+#: source/common/modules/markdown-editor/renderers/render-images.ts:253
 msgid "Open image externally"
 msgstr "Open image externally"
 
