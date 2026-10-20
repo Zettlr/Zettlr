@@ -15,6 +15,16 @@
 
 import { type PandocProfileMetadata } from '@providers/assets'
 
+export type PandocDefaults = Record<string, unknown> & {
+  'input-files'?: Array<string>
+  'output-file'?: string
+  filters?: Array<string>
+  metadata?: Record<string, unknown> & {
+    zettlr?: Record<string, unknown>
+  }
+  bibliography?: string|Array<string>
+}
+
 // The exporter only needs a few properties, so by defining a minimal type here
 // we can make the exporter more flexible to accept also objects that only
 // contain path information
@@ -100,6 +110,10 @@ export interface ExporterOutput {
   targetFile: string
 }
 
+export type ExportResult =
+  | { status: 'cancelled' }
+  | { status: 'completed', output: ExporterOutput }
+
 export interface PandocRunnerOutput {
   code: number
   stdout: string[]
@@ -110,6 +124,9 @@ export interface PandocRunnerOutput {
  * This is the exporter API that the plugins will have access to.
  */
 export interface ExporterAPI {
+  /** Ask before replacing an existing export target. */
+  confirmOverwrite: (target: string) => Promise<boolean>
+
   /**
    * Runs Pandoc with the given defaults file
    *
@@ -117,7 +134,7 @@ export interface ExporterAPI {
    *
    * @return  {Promise<PandocRunnerOutput>}                Any output produced by Pandoc.
    */
-  runPandoc: (defaultsFile: string) => Promise<PandocRunnerOutput>
+  runPandoc: (defaults: PandocDefaults) => Promise<PandocRunnerOutput>
 
   /**
    * Retrieves a user-customised defaults file, adds the given properties and
@@ -126,9 +143,10 @@ export interface ExporterAPI {
    * @param   {string}                   filename    The filename for which the defaults apply
    * @param   {Record<string, unknown>}  properties  Any additional properties to add to the defaults.
    *
-   * @return  {Promise<string>}                      Resolves with an absolute path to the written file.
+   * @return  {Promise<string>}                  Resolves with an absolute path to the written file
+   *                                             and the parsed content of the defaults file.
    */
-  writeDefaults: (writer: string, properties: Record<string, unknown> = {}) => Promise<string>
+  loadDefaults: (writer: string, properties: PandocDefaults = {}) => Promise<PandocDefaults>
   listDefaults: () => Promise<PandocProfileMetadata[]>
 }
 
@@ -140,6 +158,6 @@ export interface ExporterAPI {
  * @param   {string[]}             sourceFiles    These are the actual, pre-processed source files, named <file-name>.intermediary.<file-ext>
  * @param   {any}                  context        This is a small API that can be used to retrieve defaults and call Pandoc.
  *
- * @return  {Promise<ExporterOutput>}             Returns an ExporterOutput after finishing the export.
+ * @return  {Promise<ExportResult>}               Returns the export output or cancellation.
  */
-export type ExporterPlugin = (options: ExporterOptions, sourceFiles: string[], context: ExporterAPI) => Promise<ExporterOutput>
+export type ExporterPlugin = (options: ExporterOptions, sourceFiles: string[], context: ExporterAPI) => Promise<ExportResult>
