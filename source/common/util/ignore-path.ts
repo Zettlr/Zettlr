@@ -32,7 +32,9 @@ const WATCHDOG_IGNORE_PATHS: string[] = [
   '\\.~lock.*', // LibreOffice lockfiles
   '~\\$.*\\.(?:doc|dot|xls|ppt)x?', // MS Office temporary files
   '.*\\.~.*', // Nextcloud temporary files
-  '.*\\.asar', // Electron archives (Electron's fs shim reports them as directories)
+  // Electron's fs shim reports .asar archives as directories, which crashes
+  // the FSAL if an archive is inside a workspace (#6551).
+  '.*\\.asar', // Electron archives
 ]
 
 // A list of path names that should be ignored

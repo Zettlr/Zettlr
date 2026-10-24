@@ -21,8 +21,6 @@ const ignorePathTesters = [
   { input: 'some/dir/notes.md', expected: false },
   { input: '.ztr-directory', expected: true },
   { input: '.DS_Store', expected: true },
-  // Electron reports .asar archives as directories, which crashes the FSAL
-  // if the archive is inside a workspace (#6551).
   { input: 'app.asar', expected: true },
   { input: 'some/dir/app.asar', expected: true },
   { input: 'C:\\Users\\dir\\app.asar', expected: true },
