@@ -15,13 +15,12 @@
 import {
   createWriteStream,
   promises as fs,
-  type ReadStream,
   type WriteStream
 } from 'fs'
 
 import path from 'path'
 import crypto from 'crypto'
-import got, { RequestError, type Response } from 'got'
+import ky, { isHTTPError, isKyError, isNetworkError } from 'ky'
 import semver from 'semver'
 import { net } from 'electron'
 
@@ -36,6 +35,8 @@ import type ConfigProvider from '@providers/config'
 import { md2html } from '@common/modules/markdown-utils'
 import { showNativeNotification } from '@common/util/show-notification'
 import type WindowProvider from '../windows'
+import { pipeline } from 'stream/promises'
+import { type PipelineSource, Transform } from 'stream'
 
 /**
  * Struct which represents a single asset provided for by the updater
@@ -175,6 +176,48 @@ class UpdateError extends Error {
   }
 }
 
+/**
+ * Verifies an unknown JSON payload that it conforms to the ServerAPIResponse
+ * interface and is not malformed.
+ *
+ * @param   {unknown}  response  The untrusted JSON
+ *
+ * @return  {boolean}            True if the response corresponds to ServerAPIResponse.
+ */
+function verifyUpdateServerResponse (response: unknown): response is ServerAPIResponse {
+  if (response == null || Array.isArray(response) || typeof response !== 'object') {
+    return false
+  }
+
+  for (const prop of [ 'tag_name', 'name', 'html_url', 'body', 'published_at' ]) {
+    // @ts-expect-error TypeScript doesn't know this is perfectly valid JS.
+    if (!(prop in response) || typeof response[prop] !== 'string') {
+      return false
+    }
+  }
+
+  if (!('prerelease' in response) || typeof response.prerelease !== 'boolean') {
+    return false
+  }
+
+  if (!('id' in response) || typeof response.id !== 'number') {
+    return false
+  }
+
+  if (!('assets' in response) || !Array.isArray(response.assets)) {
+    return false
+  }
+
+  return response.assets.every(asset => {
+    return asset != null
+      && typeof asset === 'object'
+      && !Array.isArray(asset)
+      && ('name' in asset) && typeof asset.name === 'string'
+      && ('size' in asset) && typeof asset.size === 'number'
+      && ('browser_download_url' in asset) && typeof asset.browser_download_url === 'string'
+  })
+}
+
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'
 const RELEASE_PAGE = 'https://github.com/Zettlr/Zettlr/releases'
@@ -207,7 +250,6 @@ function getUpdateState (): UpdateState {
 export default class UpdateProvider extends ProviderContract {
   private readonly _sha256Data: Map<string, string>
   private _updateState: UpdateState
-  private _downloadReadStream: undefined|ReadStream
   private _downloadWriteStream: undefined|WriteStream
 
   constructor (
@@ -225,7 +267,6 @@ export default class UpdateProvider extends ProviderContract {
     this._updateState = getUpdateState()
 
     // Initialize the write/read streams used during downloads
-    this._downloadReadStream = undefined
     this._downloadWriteStream = undefined
 
     // Handle events
@@ -240,7 +281,7 @@ export default class UpdateProvider extends ProviderContract {
       } else if (command === 'request-app-update') {
         // We shall download the URL which is in the content variable
         this._logger.info('[Update Provider] Requesting update ' + (payload as string))
-        this._downloadAppUpdate(payload as string)
+        await this._downloadAppUpdate(payload as string)
       } else if (command === 'begin-update') {
         // Begin the actual update process NOTE We're not blocking the handler
         this._beginUpdate()
@@ -294,14 +335,23 @@ export default class UpdateProvider extends ProviderContract {
    * @return {Promise} Resolves only when there is an update available.
    */
   async check (): Promise<void> {
+    // (1) We do not check for updates upon hard limits, that is: if the
+    // internet connection is down or if updates have been disabled at build
+    // time.
     if (!net.online || __UPDATES_DISABLED__ === '1') {
-      // Don't check if we don't have an internet connection; preserve the last
-      // state so that the user sees what the most recent result was. We also
-      // never check if updates have been disabled at build time.
       return
     }
 
-    // First, reset the update state
+    // (2) We also do not check upon soft limits, that is: if the user has
+    // disabled update checks, or if there has been a check and an update is
+    // available.
+    const { checkForUpdates } = this._config.get().system
+    if (!checkForUpdates || this.applicationUpdateAvailable()) {
+      return
+    }
+
+    // In both cases, we retain the last update state. If none of these guards
+    // hold, we can reset the update state and (re-)check.
     this._resetState()
 
     try {
@@ -317,8 +367,8 @@ export default class UpdateProvider extends ProviderContract {
         platformString = `Linux ${process.arch === 'x64' ? 'x86_64' : process.arch}`
       }
 
-      const response: Response<string> = await got(REPO_URL, {
-        timeout: { request: 5000 },
+      const response = await ky(REPO_URL, {
+        timeout:  5000,
         method: 'GET',
         headers: {
           'User-Agent': `Zettlr/${CUR_VER} (${platformString})`
@@ -329,7 +379,8 @@ export default class UpdateProvider extends ProviderContract {
       })
 
       // Next: Parse the result
-      this._updateState = await this._parseResponse(response)
+      const jsonData = await response.json()
+      this._updateState = await this._parseResponse(jsonData)
       broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
       // At this point, notify the user if applicable
@@ -360,55 +411,41 @@ export default class UpdateProvider extends ProviderContract {
         this._logger.verbose(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
       }
     } catch (err: unknown) {
+      // First, check for errors thrown after the update response has been received.
       if (err instanceof UpdateError) {
         this._reportError(err.code, err.message, true)
         return
       }
 
-      if (!(err instanceof RequestError)) {
-        // Report this error
+      // Next, report unexpected errors. (We only expect UpdateErrors that we throw, and KyErrors)
+      if (!isKyError(err)) {
         this._reportError('Unexpected error', 'An unexpected error occurred while checking for updates', true)
         return
       }
 
-      const statusCode = err.response?.statusCode ?? -1
+      // Third, check for HTTP errors, for which we can give a more detailed error message.
+      if (isHTTPError(err)) {
+        const { status } = err.response
+        if (status >= 500) {
+          const msg = trans('Could not check for updates: Server Error (Status code: %s)', status)
+          this._reportError(`Error ${status}`, msg, false)
+        } else if (status >= 400 && status < 500) {
+          const msg = trans('Could not check for updates: Client Error (Status code: %s)', status)
+          this._reportError(`Error ${status}`, msg, false)
+        } else if (status >= 300 && status < 400) {
+          const msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', status)
+          this._reportError(`Error ${status}`, msg, true) // This is odd and should be reported
+        } else {
+          // Something else has occurred. GotError objects have a name property.
+          const msg = trans('Could not check for updates. %s: %s', err.name, err.message)
+          this._reportError(err.name, msg, true) // This is odd and should be reported
+        }
+      }
 
-      // See for all errors https://github.com/sindresorhus/got/blob/main/documentation/8-errors.md
-      // If we have an ENOTFOUND error there is no response and no statusCode
-      // so we'll use TypeScript shortcuts to save us from ugly errors.
-      const notFoundError = err.code === 'ENOTFOUND'
-      const timeoutError = err.code === 'ETIMEDOUT'
-      const serverError = statusCode >= 500
-      const clientError = statusCode >= 400 && statusCode < 500
-      const redirectError = statusCode >= 300 && statusCode < 400
-
-      // Give a more detailed error message.
-      if (serverError) {
-        const msg = trans('Could not check for updates: Server Error (Status code: %s)', statusCode)
-        this._reportError(err.code as string, msg, false)
-      } else if (clientError) {
-        const msg = trans('Could not check for updates: Client Error (Status code: %s)', statusCode)
-        this._reportError(err.code as string, msg, false)
-      } else if (redirectError) {
-        const msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', statusCode)
-        this._reportError(err.code as string, msg, true) // This is odd and should be reported
-      } else if (notFoundError) {
-        // getaddrinfo has reported that the host has not been found.
-        // This normally only happens if the networking interface is
-        // offline. In this case, no need to inform the user every hour.
-        const msg = trans('Could not check for updates: Could not establish connection')
-        this._reportError(err.code as string, msg, false)
-      } else if (timeoutError) {
-        // This can happen if the internet is either really bad or drops during the
-        // connection attempt. In any case, this can happen often with, e.g.,
-        // company VPNs and other firewalls, and would be distracting to see every
-        // hour or so. See #5944 for context.
-        const msg = trans('Could not check for updates: The connection attempt timed out.')
-        this._reportError(err.code as string, msg, false)
-      } else {
-        // Something else has occurred. GotError objects have a name property.
-        const msg = trans('Could not check for updates. %s: %s', err.name, err.message)
-        this._reportError(err.code as string, msg, true) // This is odd and should be reported
+      // Finally, report potential network errors.
+      if (isNetworkError(err)) {
+        const msg = trans('Could not check for updates: %s', err.cause ?? err.message)
+        this._reportError(err.name, msg, false)
       }
     }
   }
@@ -419,14 +456,14 @@ export default class UpdateProvider extends ProviderContract {
    *
    * @param {Response} response The response from the server
    */
-  private async _parseResponse (response: Response<string>): Promise<UpdateState> {
-    // Error handling
-    if (response.body.trim() === '') {
-      throw new UpdateError('ERR_BODY_PARSE_FAILURE', trans('Could not check for updates: Server hasn\'t sent any data'))
+  private async _parseResponse (parsedResponse: unknown): Promise<UpdateState> {
+    if (!verifyUpdateServerResponse(parsedResponse)) {
+      console.log(parsedResponse)
+      throw new UpdateError('ERR_BODY_PARSE_FAILURE', trans('Could not check for updates: Server has sent invalid data'))
     }
 
     // First we need to parse the JSON data.
-    const parsedResponse = JSON.parse(response.body) as ServerAPIResponse
+    // const parsedResponse = JSON.parse(response.body) as ServerAPIResponse
     const state = getUpdateState()
 
     const localVersion = semver.parse(CUR_VER) // localVersion
@@ -505,7 +542,7 @@ export default class UpdateProvider extends ProviderContract {
 
     // Let's download the SHA256 data as well
     try {
-      const response = await got(
+      const response = await ky(
         this._updateState.checksumFile.browser_download_url,
         { method: 'GET', timeout: 5000 }
       )
@@ -513,12 +550,13 @@ export default class UpdateProvider extends ProviderContract {
       // Now we need to parse the data. It looks like this:
       // [sha256 sum]  [binary name]
       // So we first need to split on newlines and then on spaces
-      response.body
+      const contents = await response.text()
+      contents
         .split('\n')
         .map(release => release.split(/\s+/))
         .filter(release => release.length === 2)
         .map(release => {
-          this._logger.info(`[Update Provider] Found SHA256 checksum for ${release[1]}`)
+          this._logger.info(`[Update Provider] SHA256 checksum for ${release[1]}: ${release[0]}`)
           this._sha256Data.set(release[1], release[0])
         })
     } catch (err: unknown) {
@@ -532,7 +570,7 @@ export default class UpdateProvider extends ProviderContract {
    *
    * @param {string} url The URL to download
    */
-  private _downloadAppUpdate (url: string): void {
+  private async _downloadAppUpdate (url: string): Promise<void> {
     // First, let's find the update
     const updateToPull = this._updateState.compatibleAssets.find((elem) => {
       return elem.browser_download_url === url
@@ -546,11 +584,6 @@ export default class UpdateProvider extends ProviderContract {
     // Save to downloads folder
     const destination = path.join(app.getPath('downloads'), updateToPull.name)
 
-    // The read stream reads the remote binary file, the write stream pipes that
-    // data through to the local file.
-    this._downloadWriteStream = createWriteStream(destination)
-    this._downloadReadStream = got.stream(updateToPull.browser_download_url) as unknown as ReadStream
-
     // Preset the appropriate values on the internal state
     this._updateState.name = updateToPull.name
     this._updateState.full_path = destination
@@ -561,45 +594,58 @@ export default class UpdateProvider extends ProviderContract {
 
     broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
-    this._downloadReadStream.on('data', (chunk) => {
-      if (this._downloadWriteStream === undefined) {
-        this._cleanup(true)
-        this._reportError('EWRITESTREAM', trans('Could not accept data for application update: Write stream is gone.'), true)
-        return
-      }
+    // Initiate the transfer
+    const response = await fetch(updateToPull.browser_download_url)
+    if (!response.ok || response.body === null) {
+      throw new Error('Could not download update!')
+    }
 
-      const now = Date.now()
-      this._updateState.size_downloaded += chunk.length
-      const secondsPassed = (now - this._updateState.start_time) / 1000
-      const bytesPerSecond = this._updateState.size_downloaded / secondsPassed
-      const bytesRemaining = this._updateState.size_total - this._updateState.size_downloaded
-      this._updateState.eta_seconds = Math.round(bytesRemaining / bytesPerSecond)
-      broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
-      this._downloadWriteStream.write(chunk)
-    })
-
-    this._downloadReadStream.on('end', () => {
-      // Close the write stream. This will free the file handle, which is
-      // important on Windows for the next step, because if this is not done,
-      // Windows will refuse to open the file and emit an error that the file is
-      // still in use.
-      this._downloadWriteStream?.end()
-      this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
-      showNativeNotification(`Download of ${this._updateState.name} successful!`, 'Update', () => {
-        // The user has clicked the notification, so we can show the update window here
-        this._commands.run('open-update-window', undefined)
-          .catch(e => this._logger.error(String(e.message), e))
-      })
-    })
-
-    this._downloadReadStream.on('error', (err) => {
-      this._cleanup(true)
-      this._reportError('EREADSTREAM', `Download Read Stream Error: ${err.message}`, true)
-    })
+    // The read stream reads the remote binary file, the write stream pipes that
+    // data through to the local file.
+    this._downloadWriteStream = createWriteStream(destination)
 
     this._downloadWriteStream.on('error', (err) => {
       this._cleanup(true)
       this._reportError('EWRITESTREAM', `Download Write Stream Error: ${err.message}`, true)
+    })
+
+    // We implement the progress callback as a transform that sits in between
+    // the download stream and the write stream. It passes the data unchanged,
+    // but inspects it to update the progress of the file download.
+    const progress = new Transform({
+      transform: (chunk, encoding, callback) => {
+        const now = Date.now()
+        this._updateState.size_downloaded += chunk.length
+        const secondsPassed = (now - this._updateState.start_time) / 1000
+        const bytesPerSecond = this._updateState.size_downloaded / secondsPassed
+        const bytesRemaining = this._updateState.size_total - this._updateState.size_downloaded
+        this._updateState.eta_seconds = Math.round(bytesRemaining / bytesPerSecond)
+        broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
+        callback(null, chunk)
+      }
+    })
+
+    // Begin downloading the binary data. The promise will resolve once the
+    // readable stream has been fully drained and the write stream has ingested
+    // all data and released the file pointer.
+    await pipeline(
+      // For reasons unbenknownst to me, after an update on Oct 17, 2026,
+      // TypeScript started complaining that the response.body has the wrong
+      // type. The code runs fine, but for this reason we have to manually cast
+      // the response here to silence TypeScript. This will become superfluous
+      // at some point in the future, so if you stumble upon this code, simply
+      // remove the type cast, and see if TS still complains. If it doesn't,
+      // please remove it (and this comment) again.
+      response.body as unknown as PipelineSource<Uint8Array>,
+      progress,
+      this._downloadWriteStream
+    )
+
+    this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
+    showNativeNotification(`Download of ${this._updateState.name} successful!`, 'Update', () => {
+      // The user has clicked the notification, so we can show the update window here
+      this._commands.run('open-update-window', undefined)
+        .catch(e => this._logger.error(String(e.message), e))
     })
   }
 
@@ -671,16 +717,6 @@ export default class UpdateProvider extends ProviderContract {
       }
       this._downloadWriteStream = undefined
     }
-    // Second the read stream
-    if (this._downloadReadStream !== undefined) {
-      try {
-        this._downloadReadStream.close()
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Unknown error'
-        this._logger.warning(`[Update Provider] Could not close read stream: ${message}`, err)
-      }
-      this._downloadWriteStream = undefined
-    }
 
     // Also reset the state
     this._resetState()
@@ -699,21 +735,10 @@ export default class UpdateProvider extends ProviderContract {
   async boot (): Promise<void> {
     // Initiate the update check
     setInterval(() => {
-      // Only check if the user wants to, and if there is not yet a new version.
-      const { checkForUpdates } = this._config.get().system
-      if (!checkForUpdates || this.applicationUpdateAvailable()) {
-        return
-      }
-
       this.check().catch(err => {
         this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err)
       })
     }, UPDATE_CHECK_INTERVAL)
-
-    // One initial check (if applicable)
-    if (!this._config.get().system.checkForUpdates) {
-      return
-    }
 
     this.check().catch(err => {
       this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err)

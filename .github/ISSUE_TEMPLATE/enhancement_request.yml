@@ -1,6 +1,5 @@
 name: Enhancement Request
 description: Do you miss that one inch of performance? Go this way!
-labels: [enhancement]
 type: Enhancement
 body:
   - type: markdown
@@ -96,8 +95,6 @@ body:
         - label: Windows
         - label: macOS
         - label: Linux
-    validations:
-      required: true
   - type: input
     id: os-version
     attributes:
@@ -118,7 +115,6 @@ body:
         screenshots, or whatever helps make your request easier for us to
         understand!
   - type: markdown
-    id: outro
     attributes:
       value: |
         Thank you for filing this enhancement request! We will be looking into it

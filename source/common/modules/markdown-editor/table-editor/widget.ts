@@ -127,7 +127,7 @@ export class TableWidget extends WidgetType {
       const cacheKey = this.cacheKey
       view.requestMeasure({
         read () {
-          const height = table.getBoundingClientRect().height
+          const height = wrapper.getBoundingClientRect().height
           TABLE_HEIGHT_CACHE.set(cacheKey, height)
         },
         key: cacheKey

@@ -5,19 +5,24 @@ coding to help out. For the most part, a (free) GitHub account suffices. In this
 document, you can find information on how to get started.
 
 > [!TIP]
-> Also see our [Code of Conduct](./CODE_OF_CONDUCT.md) to know how you can
-> interact with our community and maintainers.
+> Please view our [Code of Conduct](./CODE_OF_CONDUCT.md) to know how you should
+> interact with our community and maintainers. Please note that maintainers may
+> close issues, pull requests, or comments at their discretion without providing
+> any reasons.
 
 **Table of Contents**
 
-- [Community (Discussions/Support)](#community-discussionssupport)
-- [Report Issues \& Request Features](#report-issues--request-features)
-- [Contributing to Zettlr](#contributing-to-zettlr-1)
-  - [Code Contributions](#code-contributions)
-  - [Translations](#translations)
-  - [Documentation](#documentation)
-  - [Support Others](#support-others)
-- [AI Usage Policy](#ai-usage-policy)
+- [Contributing to Zettlr](#contributing-to-zettlr)
+  - [Community (Discussions/Support)](#community-discussionssupport)
+  - [Report Issues \& Request Features](#report-issues--request-features)
+  - [Contributing to Zettlr](#contributing-to-zettlr-1)
+    - [Code Contributions](#code-contributions)
+    - [Test Preview Versions](#test-preview-versions)
+    - [Translations](#translations)
+    - [Documentation](#documentation)
+    - [Support Others](#support-others)
+  - [AI Usage Policy](#ai-usage-policy)
+  - [Questions \& Concerns](#questions--concerns)
 
 ## Community (Discussions/Support)
 
@@ -41,7 +46,8 @@ here:
 > [!IMPORTANT]
 > Do not open GitHub issues to ask questions or for help. We are happy to
 > answer questions on the community forum and/or Discord. Only use issues for
-> bug reports and feature requests.
+> bug reports and feature requests. The maintainers may close or delete issues
+> at any time without providing reasons.
 
 ## Report Issues & Request Features
 
@@ -55,7 +61,8 @@ implement it.
 
 > [!IMPORTANT]
 > Keep your GitHub notifications active. We often have to ask follow-up
-> questions. If you do not answer them, we cannot proceed with helping you.
+> questions. If you do not answer them, we cannot proceed with helping you. We
+> may close issues that lack activity.
 
 ## Contributing to Zettlr
 
@@ -76,11 +83,31 @@ in which you can help!):
 We welcome PRs that fix bugs, improve behavior, or implement new features. You
 can find all information to get started in the [README.md](./README.md) file.
 
-> [!WARNING]
+To contribute code to the repository, please open a Pull Request. The technical
+details can be found in the README.md file. Please note the following
+additional requirements for opening pull requests:
+
+1. This repository includes a pull request template. When you open a PR via the
+   web interface, it will already be loaded into the text box for your
+   convenience. You are **required** to fill in this form. Please read through
+   the instructions in the form and fill in every section.
+   **Pull requests that do not use the template or fail to fill in all sections will be closed.**
+   We use this form for transparency and accountability purposes, and because it
+   streamlines our understanding of the open PRs and managing the contributions.
+2. After opening the PR, keep your notifications active. If we require
+   additional information, we will comment on your PR. If you do not respond, we
+   will close your PR for inactivity.
+3. The PR will automatically be checked by our automated pipelines. If there are
+   errors, you are expected to fix these errors yourself without being reminded.
+   You are not required, however, to fix any linter warnings and/or errors that
+   you did not cause.
+
+> [!caution]
 > We require every contributor to use and fill in the PR issue template by hand.
 > Failure to use the provided template, or letting an LLM write the description
-> for you will lead to a closure of your PR. See also the Code of Conduct for
-> more information on the AI usage in communication.
+> for you will lead to a closure of your PR. See also the
+> [Code of Conduct](./CODE_OF_CONDUCT.md) for more information on the AI usage
+> in communication, as well as our [AI Policy](#ai-usage-policy) below.
 
 ### Test Preview Versions
 
@@ -165,13 +192,13 @@ and keep a few limits in mind.
 By contributing to the repository, **you agree to abide by our AI Usage Policy**:
 
 * Wherever you have consulted GPT models (ChatGPT, Claude, Gemini, Apple
-  Intelligence, or local models), you disclose the extent of the usage. "Usage"
-  in the context of this policy refers to you letting it write code or (docs)
-  text that you use in your contribution. This also includes letting it improve
-  a paragraph of text or block of code that you have written. A coarse statement
-  provided when you open a PR is sufficient ("AI was used to improve this
-  text/code"). We may ask you to specify further, but by default, we only expect
-  general disclosure.
+  Intelligence, local models, etc.), you disclose the extent of the usage.
+  "Usage" in the context of this policy refers to you letting it write code or
+  (documentation) text that you use in your contribution. This also includes
+  letting it improve a paragraph of text or block of code that you have written.
+  A coarse statement provided when you open a PR is sufficient ("AI was used to
+  improve this text/code"). We may ask you to specify further, but by default,
+  we only expect general disclosure.
 * You agree to check and proof-read any text/code that AI has generated to
   ensure you understand it. We do not require you to provide perfect code; but
   we do require you to understand everything you wish to contribute to Zettlr
@@ -184,4 +211,12 @@ By contributing to the repository, **you agree to abide by our AI Usage Policy**
   holds true for "Respect for persons": You are interacting with humans here,
   and we expect you to respect them. This means that nobody wishes to talk to a
   GPT-model. Communicate on your own, regardless of how much AI you use to help
-  you contribute.
+  you contribute. Failure to do so constitutes a breach of our
+  [code of conduct](./CODE_OF_CONDUCT.md).
+
+## Questions & Concerns
+
+If you have any questions or concerns regarding this contributor's guide, please
+let us know. You can reach both community and maintainers on the Community Forum
+or Discord. We are happy to answer any questions you may have, and respond to
+your concerns.

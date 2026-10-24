@@ -1,6 +1,5 @@
 name: Feature Request
 description: Something missing? Come along!
-labels: [feature]
 type: Feature
 body:
   - type: markdown
@@ -30,8 +29,6 @@ body:
         - label: Zettlr's current features cannot be used to approximate this behaviour (otherwise, propose an enhancement instead.)
         - label: I have searched the documentation to make sure I did not overlook it.
         - label: I have searched both open and closed issues to see if someone has already proposed this.
-    validations:
-      required: true
   # First let's ask the user about their proposal
   - type: textarea
     id: description
@@ -95,8 +92,6 @@ body:
         - label: Windows
         - label: macOS
         - label: Linux
-    validations:
-      required: true
   - type: textarea
     id: more-info
     attributes:
@@ -106,7 +101,6 @@ body:
         screenshots, or whatever helps make your request easier for us to
         understand!
   - type: markdown
-    id: outro
     attributes:
       value: |
         Thank you for filing this feature request! We will be looking into it

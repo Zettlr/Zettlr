@@ -8,6 +8,52 @@
 
 (Nothing here)
 
+# 4.9.0
+
+## Deprecation: macOS 12 and Ubuntu 17.04 no longer supported
+
+This release updates Electron, Zettlr's underlying application framework, to
+version 44. This means that Zettlr will no longer run on macOS 12 or Ubuntu
+17.04 or earlier. If you run such a system, please consider updating your
+computer to continue using Zettlr.
+
+## GUI and Functionality
+
+- **Feature**: Zettlr now correctly renders images that have been defined using
+  the reference-style variant. So instead of only rendering images in the form
+  `![alt text](url)`, it can now also render reference style images in the form
+  `![alt text][reference]`, with the reference being defined elsewhere (#663).
+- Fixed an issue where a URL in an image caption would be improperly treated as
+  the image source (#6594).
+- Fixed an issue where toggling a task mark would scroll the viewport back to
+  the cursor position. Now, the viewport does not scroll when a task mark is
+  toggled, though the cursor position is retained (#6603).
+- Fixed an issue that would cause jumping of the editor content upon externally
+  modifying a file (#6531; #6543).
+- Fixed an issue that caused excessive "failed to check for updates" errors
+  (#6574).
+- Fixed an issue preventing files with non-lowercase extensions from showing up
+  and being correctly treated by Zettlr (#6613).
+- Fixed a bug that would cause the statusbars of split views visible on top of
+  distraction-free views when using a split-view layout (#6581).
+- The Table Editor now uses the wrapper element's height instead of just the
+  table element's. This might further improve issues with the editor jumping
+  around as large tables and documents with many tables are edited (#5732).
+
+## Under the Hood
+
+- Update Electron to `v44.7.0`. This drops macOS 12 and Ubuntu 17.04.
+- Update Pandoc to `v3.12.1`. This changes how admonitions/alerts are rendered
+  and may require updates to your custom template CSS for HTML exports.
+- Upgrade Mermaid to `v12.1.0`.
+- Centralized update check logic.
+- Fully switched the update provider from the outdated `got` dependency to both
+  pure `fetch` (where necessary) or `ky` (where convenient).
+- Move the link preview generation to `ky`.
+- Fully remove all dependencies on `got`, and remove the module entirely.
+- Ensure VS Code uses the workspace's TypeScript version instead of the built-in
+  one to avoid issues where the linter sees different issues than VS Code.
+
 # 4.8.0
 
 ## Admonitions

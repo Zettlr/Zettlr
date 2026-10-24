@@ -52,6 +52,8 @@ import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citepr
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 import type { FileContentSearchResult } from 'source/app/service-providers/search'
 import type { CustomEditorShortcut } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
+import type { CitationRecord } from 'source/common/modules/markdown-editor/autocomplete/citations'
+import type { FileRecord } from 'source/common/modules/markdown-editor/autocomplete/files'
 import getDocumentTitle from './util/get-document-title'
 
 const ipcRenderer = window.ipc
@@ -574,7 +576,7 @@ function jtl (lineNumber: number): void {
 }
 
 async function updateCitationKeys (library: string): Promise<void> {
-  const items: Array<{ citekey: string, displayText: string }> = (await ipcRenderer.invoke('citeproc-provider', {
+  const items: CitationRecord[] = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
     payload: { database: library }
   } as CiteprocProviderIPCAPI))
@@ -629,7 +631,7 @@ async function updateCitationKeys (library: string): Promise<void> {
 
 async function updateFileDatabase (): Promise<void> {
   // Get all our files ...
-  const fileDatabase: Array<{ filename: string, displayName: string, id: string }> = []
+  const fileDatabase: FileRecord[] = []
 
   // ... and the unique links that are part of the link database
   const rawLinks: Record<string, string[]> = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
@@ -725,6 +727,7 @@ body.dark .main-editor-wrapper {
   // This makes the editor pane show "fullscreen" on top over the rest of the UI
   // except the toolbar (due to a position: relative on the window content div).
   position: absolute;
+  z-index: 300;
   top: 0;
 
   .cm-scroller {
