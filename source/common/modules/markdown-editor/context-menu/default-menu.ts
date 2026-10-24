@@ -18,10 +18,8 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu, { type AnyMenuItem } from '@common/modules/window-register/application-menu-helper'
 import { type SyntaxNode } from '@lezer/common'
 import { forEachDiagnostic, type Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
-import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
-import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
-import { getTransformSubmenu } from './transform-items'
 import { extractLTSpellcheckSuggestionsFrom, isLanguageToolMisspelling } from '../linters/language-tool'
+import { getFormatMenuItems } from './format-items'
 
 const ipcRenderer = window.ipc
 const suggestionCache = new Map<string, string[]>()
@@ -184,101 +182,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     { type: 'separator' }
   )
 
-  const tpl: AnyMenuItem[] = [
-    {
-      label: trans('Bold'),
-      accelerator: 'CmdOrCtrl+B',
-      type: 'normal',
-      action () { applyBold(view) }
-    },
-    {
-      label: trans('Italic'),
-      accelerator: 'CmdOrCtrl+I',
-      type: 'normal',
-      action () { applyItalic(view) }
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: trans('Insert link'),
-      accelerator: 'CmdOrCtrl+K',
-      type: 'normal',
-      action () { insertLink(view) }
-    },
-    {
-      label: trans('Insert unordered list'),
-      type: 'normal',
-      action () { applyBulletList(view) }
-    },
-    {
-      label: trans('Insert numbered list'),
-      type: 'normal',
-      action () { applyOrderedList(view) }
-    },
-    {
-      label: trans('Insert task list'),
-      accelerator: 'CmdOrCtrl+T',
-      type: 'normal',
-      action () { applyTaskList(view) }
-    },
-    {
-      label: trans('Insert blockquote'),
-      type: 'normal',
-      action () { applyBlockquote(view) }
-    },
-    {
-      label: trans('Insert table'),
-      type: 'normal',
-      action () { view.dispatch(view.state.replaceSelection('| | |\n|-|-|\n| | |\n')) }
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: trans('Cut'),
-      accelerator: 'CmdOrCtrl+X',
-      type: 'normal',
-      action () { cut(view) }
-    },
-    {
-      label: trans('Copy'),
-      accelerator: 'CmdOrCtrl+C',
-      type: 'normal',
-      action () { copyAsPlain(view) }
-    },
-    {
-      label: trans('Copy as HTML'),
-      accelerator: 'CmdOrCtrl+Alt+C',
-      type: 'normal',
-      action () { copyAsHTML(view) }
-    },
-    {
-      label: trans('Paste'),
-      accelerator: 'CmdOrCtrl+V',
-      type: 'normal',
-      action () { paste(view) }
-    },
-    {
-      label: trans('Paste without style'),
-      accelerator: 'CmdOrCtrl+Shift+V',
-      type: 'normal',
-      action () { pasteAsPlain(view) }
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: trans('Select all'),
-      accelerator: 'CmdOrCtrl+A',
-      type: 'normal',
-      action () { view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } }) }
-    },
-    {
-      type: 'separator'
-    },
-    getTransformSubmenu(view)
-  ]
+  const tpl: AnyMenuItem[] = getFormatMenuItems(view)
 
   // If we found a diagnostic earlier and a word, add the suggestion items
   if (diagnostic !== undefined && misspelledWord !== undefined) {
