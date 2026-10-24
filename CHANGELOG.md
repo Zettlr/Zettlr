@@ -26,6 +26,9 @@ computer to continue using Zettlr.
   and being correctly treated by Zettlr (#6613).
 - Fixed a bug that would cause the statusbars of split views visible on top of
   distraction-free views when using a split-view layout (#6581).
+- The Table Editor now uses the wrapper element's height instead of just the
+  table element's. This might further improve issues with the editor jumping
+  around as large tables and documents with many tables are edited (#5732).
 
 ## Under the Hood
 
@@ -39,7 +42,7 @@ computer to continue using Zettlr.
 - Move the link preview generation to `ky`.
 - Fully remove all dependencies on `got`, and remove the module entirely.
 - Ensure VS Code uses the workspace's TypeScript version instead of the built-in
-  one to avoid issues where the linter sees different isues than VS Code.
+  one to avoid issues where the linter sees different issues than VS Code.
 
 # 4.8.0
 
