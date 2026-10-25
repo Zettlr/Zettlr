@@ -2,8 +2,7 @@
 
 ## GUI and Functionality
 
-- Fixed a startup crash when a workspace contains an Electron `.asar` archive
-  (#6551).
+(Nothing here)
 
 ## Under the Hood
 
@@ -40,10 +39,14 @@ computer to continue using Zettlr.
 - The Table Editor now uses the wrapper element's height instead of just the
   table element's. This might further improve issues with the editor jumping
   around as large tables and documents with many tables are edited (#5732).
+- Fixed a startup crash when a workspace contains an Electron `.asar` archive
+  (#6551).
 
 ## Under the Hood
 
-- Update Electron to `v44.7.0`. This drops macOS 12 and Ubuntu 17.04.
+- Update Electron to `v44.9.1`. This drops macOS 12 and Ubuntu 17.04.
+  Furthermore, this includes a mitigation for the vulnerable eMudhra
+  certificates (see GitHub Advisory `GHSA-jr5w-w6x2-84p9`).
 - Update Pandoc to `v3.12.1`. This changes how admonitions/alerts are rendered
   and may require updates to your custom template CSS for HTML exports.
 - Upgrade Mermaid to `v12.1.0`.
