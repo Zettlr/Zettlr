@@ -53,12 +53,12 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // changed, normalize the path based on the PDF and set `output-file` to
   // the updated `htmlFilePath`.
   if (defaults['output-file'] !== undefined && defaults['output-file'] !== htmlFilePath) {
-    pdfFilePath = await ctx.resolveTarget(defaults['output-file'])
+    pdfFilePath = await ctx.resolveTargetPath(defaults['output-file'])
   }
 
   defaults['output-file'] = htmlFilePath
 
-  if (!await ctx.confirmOverwrite(pdfFilePath)) {
+  if (!await ctx.confirmTargetOverwrite(pdfFilePath)) {
     return { status: 'cancelled' }
   }
 
