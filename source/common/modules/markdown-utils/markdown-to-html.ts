@@ -26,6 +26,7 @@ import type { CitationNode, ASTNode, GenericNode, FootnoteRef } from './markdown
 import { type MarkdownParserConfig } from '../markdown-editor/parser/markdown-parser'
 import _ from 'underscore'
 import { katexToHTML } from '@common/util/mathtex-to-html'
+import { pandocAttributeRe } from '@common/pandoc-util/parse-pandoc-attributes'
 
 /**
  * Represents an HTML tag. This is a purposefully shallow representation
@@ -49,6 +50,33 @@ interface HTMLTag {
    * and (b) that it should not have a surrounding tag.
    */
   containsHTML: boolean
+}
+
+const attributeTokenRE = new RegExp(pandocAttributeRe.source, 'y')
+
+/**
+ * Whether the content between the braces is made up only of Pandoc attributes,
+ * optionally separated by whitespace. Walks the tokens with a sticky regex so
+ * that each one must start where the previous one ended.
+ *
+ * @param   {string}   content  The text between `{` and `}`
+ *
+ * @return  {boolean}           True if the content is a valid attribute list
+ */
+export function isAttributeContent (content: string): boolean {
+  let pos = content.length - content.trimStart().length
+  while (pos < content.length) {
+    attributeTokenRE.lastIndex = pos
+    const match = attributeTokenRE.exec(content)
+    if (match === null || match[0] === '') {
+      return false
+    }
+    pos = attributeTokenRE.lastIndex
+    while (pos < content.length && /\s/.test(content[pos])) {
+      pos++
+    }
+  }
+  return true
 }
 
 export type CitationCallback = (citations: CiteItem[], composite: boolean) => string|undefined
