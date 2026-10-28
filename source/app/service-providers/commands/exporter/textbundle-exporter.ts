@@ -43,7 +43,7 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   const ext = options.profile.writer === 'textpack' ? '.textpack' : '.textbundle'
   const targetPath = path.join(options.targetDirectory, title + ext)
 
-  if (!await ctx.confirmOverwrite(targetPath)) {
+  if (!await ctx.confirmTargetOverwrite(targetPath)) {
     return { status: 'cancelled' }
   }
 
