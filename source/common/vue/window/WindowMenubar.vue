@@ -1,13 +1,9 @@
 <template>
   <div id="menubar">
     <img id="app-logo" src="../../img/image-preview.png" />
-    <div
-      v-for="(item, idx) in menu"
-      v-bind:key="idx"
-      class="top-level-item"
+    <div v-for="(item, idx) in menu" v-bind:key="idx" class="top-level-item"
       v-on:mousedown.stop.prevent="getSubmenu(item.id!, $event.target as HTMLElement)"
-      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)"
-    >
+      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)">
       <span>
         {{ item.label }}
       </span>
@@ -36,18 +32,18 @@ import { ref, onBeforeMount } from 'vue'
 const ipcRenderer = window.ipc
 
 const menu = ref<SubmenuItem[]>([])
-const currentSubmenu = ref<string|null>(null)
-const menuCloseCallback = ref<null|(() => void)|null>(null)
+const currentSubmenu = ref<string | null>(null)
+const menuCloseCallback = ref<null | (() => void) | null>(null)
 
 // Can contain a target if a submenu is right now being requested
-const targetElement = ref<HTMLElement|null>(null)
+const targetElement = ref<HTMLElement | null>(null)
 
 onBeforeMount(() => {
   // Listen to messages from the menu provider
   type MenuMessage = { command: 'application-menu', payload: SubmenuItem[] }
   type SubmenuMessage = { command: 'application-submenu', payload: { id: string, submenu: SubmenuItem[] } }
 
-  ipcRenderer.on('menu-provider', (event, { command, payload }: MenuMessage|SubmenuMessage) => {
+  ipcRenderer.on('menu-provider', (event, { command, payload }: MenuMessage | SubmenuMessage) => {
     if (command === 'application-menu') {
       menu.value = payload
     } else if (command === 'application-submenu') {
@@ -150,6 +146,8 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
   align-items: center;
   gap: 6px;
   padding: 4px 0;
+  padding-left: env(titlebar-area-x, 0px);
+  padding-right: calc(100% - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100%));
 
   /* If the menubar is shown, this indicates there's no title bar, hence we
   need the menubar to be draggable. */
