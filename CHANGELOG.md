@@ -41,6 +41,8 @@ computer to continue using Zettlr.
   around as large tables and documents with many tables are edited (#5732).
 - Fixed a startup crash when a workspace contains an Electron `.asar` archive
   (#6551).
+- Fixed an issue where the menubar controls would overlap the window controls on
+  Linux (#6633)
 
 ## Under the Hood
 
