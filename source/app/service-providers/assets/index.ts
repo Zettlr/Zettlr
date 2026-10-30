@@ -21,7 +21,7 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract, { type IPCAPI } from '../provider-contract'
 import type LogProvider from '../log'
 import { getCustomProfiles } from '@providers/commands/exporter'
-import { SUPPORTED_READERS } from '@common/pandoc-util/pandoc-maps'
+import { PANDOC_READERS, PANDOC_WRITERS } from '@common/pandoc-util/pandoc-maps'
 import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
 export interface PandocProfileMetadata {
@@ -37,6 +37,10 @@ export interface PandocProfileMetadata {
    * The reader, can be an empty string
    */
   reader: string
+  /**
+   * The output file, can be an empty string
+   */
+  outputFile: string
   /**
    * Since Zettlr has a few requirements, we must have writers and readers.
    * While we strive to even support unknown readers and writers, those fields
@@ -531,16 +535,20 @@ export default class AssetsProvider extends ProviderContract {
         // A defaults file needs to fulfill three conditions in order to be
         // considered valid: (1) has a writer, (2) has a reader, (3) either
         // reader or writer must be a supported Markdown format.
-        const hasWriter = yaml.writer !== undefined
-        const hasReader = yaml.reader !== undefined
-        const validWriter = hasWriter && SUPPORTED_READERS.includes(parseReaderWriter(yaml.writer as string).name)
-        const validReader = hasReader && SUPPORTED_READERS.includes(parseReaderWriter(yaml.reader as string).name)
+        const writer = yaml.writer !== undefined ? parseReaderWriter(yaml.writer as string) : parseReaderWriter('')
+        const reader = yaml.reader !== undefined ? parseReaderWriter(yaml.reader as string) : parseReaderWriter('')
+
+        const validWriter = writer.isCustom || PANDOC_WRITERS[writer.name] !== undefined
+        const validReader = reader.isCustom || PANDOC_READERS[reader.name] !== undefined
+
+        const outputFile = yaml['output-file'] ?? ''
 
         profiles.push({
           name: file,
-          writer: yaml.writer,
-          reader: yaml.reader,
-          isInvalid: !(hasWriter && hasReader && (validWriter || validReader)),
+          writer: yaml.writer ?? '',
+          reader: yaml.reader ?? '',
+          outputFile: outputFile,
+          isInvalid: !(validWriter && validReader),
           isProtected: this._protectedDefaults.includes(file)
         })
       } catch (err) {
@@ -549,6 +557,7 @@ export default class AssetsProvider extends ProviderContract {
           name: file,
           writer: '',
           reader: '',
+          outputFile: '',
           isInvalid: true,
           isProtected: this._protectedDefaults.includes(file)
         })
