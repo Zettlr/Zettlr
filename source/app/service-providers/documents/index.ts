@@ -398,7 +398,12 @@ export default class DocumentManager extends ProviderContract {
           defaultId: 0,
           cancelId: 2,
           title: trans('Unsaved changes'),
-          message: trans('There are unsaved changes. Do you want to save or discard them?')
+          message: trans('There are unsaved changes. Do you want to save or discard them?'),
+          // Tell the user which files the choice will apply to (#6486)
+          detail: this.documents
+            .filter(doc => this.isModified(doc.filePath))
+            .map(doc => trans('File: %s', doc.descriptor.name))
+            .join('\n')
         }
 
         dialog.showMessageBox(opt)
