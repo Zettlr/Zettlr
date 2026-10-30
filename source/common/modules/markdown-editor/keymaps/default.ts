@@ -278,6 +278,7 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
 
     // searchKeymap
     { key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' },
+    { key: 'F3', run: findNext, shift: findPrevious, scope: 'editor search-panel', preventDefault: true },
     { key: sc('search-find-next'), run: findNext, scope: 'editor search-panel', preventDefault: true },
     { key: sc('search-find-previous'), run: findPrevious, scope: 'editor search-panel', preventDefault: true },
     { key: sc('search-select-matches'), run: selectSelectionMatches },
