@@ -149,13 +149,17 @@ export default class AppearanceProvider extends ProviderContract {
         // For both Linux with custom title bar and Windows, we have to adjust the
         // custom window control overlays whenever the theme changed
         for (const window of BrowserWindow.getAllWindows()) {
-          window.setTitleBarOverlay({
-            symbolColor: darkMode
-              ? CUSTOM_WINDOW_CONTROLS_DARK_FOREGROUND
-              : CUSTOM_WINDOW_CONTROLS_LIGHT_FOREGROUND,
-            color: '#00000000', // Transparent background
-            height: CUSTOM_WINDOW_CONTROLS_HEIGHT
-          })
+          try {
+            window.setTitleBarOverlay({
+              symbolColor: darkMode
+                ? CUSTOM_WINDOW_CONTROLS_DARK_FOREGROUND
+                : CUSTOM_WINDOW_CONTROLS_LIGHT_FOREGROUND,
+              color: '#00000000', // Transparent background
+              height: CUSTOM_WINDOW_CONTROLS_HEIGHT
+            })
+          } catch (err: unknown) {
+            this._logger.warning(`[Appearance Provider] Could not set titleBarOverlay for window ${window.id} -- it probably did not have a titleBarOverlay set in the first place.`)
+          }
         }
       }
     })
