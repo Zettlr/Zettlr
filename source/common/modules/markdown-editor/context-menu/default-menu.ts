@@ -186,7 +186,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
 
   // If we found a diagnostic earlier and a word, add the suggestion items
   if (diagnostic !== undefined && misspelledWord !== undefined) {
-    tpl.unshift(...suggestionItems)
+    tpl.unshift(...suggestionItems, { type: 'separator' })
   }
 
   showPopupMenu(coords, tpl)

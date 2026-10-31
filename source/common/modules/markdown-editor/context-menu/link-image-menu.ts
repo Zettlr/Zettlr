@@ -128,6 +128,9 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
         }
       }
     },
+    {
+      type: 'separator'
+    },
     ...defaultTpl
   ]
 

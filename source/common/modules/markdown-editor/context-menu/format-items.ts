@@ -23,9 +23,6 @@ import { getInsertSubmenu } from './insert-items'
 export function getFormatMenuItems (view: EditorView): AnyMenuItem[] {
   return [
     {
-      type: 'separator'
-    },
-    {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
       type: 'normal',
