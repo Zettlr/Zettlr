@@ -11,7 +11,7 @@
  *
  * END HEADER
  */
-import { type BiblatexParseResult } from 'biblatex-csl-converter'
+import { type BiblatexParseResult } from 'bibliojson'
 import path from 'path'
 import pdfSorter from '@common/util/sort-by-pdf'
 

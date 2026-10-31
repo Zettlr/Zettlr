@@ -4388,12 +4388,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"biblatex-csl-converter@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "biblatex-csl-converter@npm:3.6.0"
+"bibliojson@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "bibliojson@npm:4.1.0"
   dependencies:
     xregexp: "npm:^5.1.2"
-  checksum: 10/b540099369cec7367b113b3d589891cf29e12fa9a4d6e869d884388fadf0a7ccdcc7098ed60c2b27d2f15cc7e8066ab273080354ae37d4978d9967f5e5917788
+  checksum: 10/dcae8e8b76cf346223c46ded3c2f7e267c6d5bbfe4f52163d78941195ee0dcb6a614783b13b0287a5d9f435189fe9c66c25231dfe50fd7d8f4f63581a6de951b
   languageName: node
   linkType: hard
 
@@ -15082,7 +15082,7 @@ __metadata:
     archiver: "npm:^8.0.0"
     astrocite: "npm:^0.16.4"
     bcp-47: "npm:^2.1.1"
-    biblatex-csl-converter: "npm:^3.6.0"
+    bibliojson: "npm:^4.1.0"
     chalk: "npm:^6.0.1"
     chokidar: "npm:^5.0.0"
     citeproc: "npm:^2.4.63"

@@ -15,7 +15,7 @@
 import type { DatabaseRecord } from '..'
 import extractBibTexAttachments from './extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
-import { BibLatexParser, CSLExporter } from 'biblatex-csl-converter'
+import { BibLatexParser, CSLExporter } from 'bibliojson'
 import YAML from 'yaml'
 import { promises as fs } from 'fs'
 import path from 'path'
