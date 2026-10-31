@@ -46,11 +46,11 @@ export async function loadDatabase (databasePath: string, logger?: LogProvider):
       // endings, we first attempt to load it as BibLaTeX and if it throws we
       // fall back to BibTeX.
       try {
-        logger?.info(`Loading database ${path.basename(databasePath)} as BibTeX.`)
-        return await loadBibTeX(databasePath, logger)
-      } catch (err) {
-        logger?.info(`Loading database ${path.basename(databasePath)} as BibTeX failed. Attempting to load as BibLaTeX.`)
+        logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX.`)
         return await loadBibLaTeX(databasePath, logger)
+      } catch (err) {
+        logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX failed. Attempting to load as BibTeX.`)
+        return await loadBibTeX(databasePath, logger)
       }
     default:
       throw new Error(`Could not load database ${databasePath}: Unknown extension`)
@@ -211,7 +211,7 @@ async function loadBibLaTeX (databasePath: string, logger?: LogProvider): Promis
   // Finally, extract the attachments where applicable
   record.bibtexAttachments = extractBibLaTeXAttachments(bib)
 
-  logger?.info(`BibLaTeX database loaded, ${Object.keys(record.cslData).length} items.`)
+  logger?.info(`BibLaTeX database loaded, ${Object.keys(record.cslData).length} items; ${Object.keys(record.bibtexAttachments).length} attachments found.`)
   
   // NOTE: The bib parser will encounter strange data and define them as errors.
   // HOWEVER this does NOT mean that the entries are invalid; just that some
