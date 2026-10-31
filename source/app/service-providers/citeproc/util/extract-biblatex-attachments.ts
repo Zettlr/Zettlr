@@ -20,13 +20,10 @@ export function extractBibLaTeXAttachments (bib: BiblatexParseResult) {
 
   const basePath = bib?.jabref?.meta?.fileDirectory ?? undefined
 
-  console.log({ basePath })
-
   // Now we also have to extract file fields (if they have been exported). The
   // BibLaTeX parser counts it as an unexpected field, accessible from
   // bib.entries[idx].unexpected_fields.file
   for (const [ _, item ] of Object.entries(bib.entries)) {
-    console.log({ item })
     if (!('unexpected_fields' in item)) {
       attachments[item.entry_key] = false
       continue
@@ -43,7 +40,10 @@ export function extractBibLaTeXAttachments (bib: BiblatexParseResult) {
     // Reference: https://github.com/JabRef/jabref/blob/93f47c9069d01247375cabbe6e1328f0a477472b/src/main/java/org/jabref/gui/filelist/FileListEntry.java#L46
     const fileAttachments = item.unexpected_fields.file.split(';')
     const files = fileAttachments
-      .map(val => val.split(':')[1])
+      // Zotero just writes the full absolute path to the file into the field,
+      // while JabRef uses a global fileDirectory field + relative paths +
+      // filetypes separated by colons.
+      .map(val => val.includes(':') ? val.split(':')[1] : val)
       .map(filePath => !path.isAbsolute(filePath) && basePath ? path.join(basePath, filePath) : filePath)
 
     // Now sort so that PDF-files are at the top
