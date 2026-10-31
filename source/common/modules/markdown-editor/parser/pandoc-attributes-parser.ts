@@ -20,6 +20,7 @@
  */
 
 import type { DelimiterType, InlineParser } from '@lezer/markdown'
+import { isAttributeContent } from '@common/modules/markdown-utils/markdown-to-html'
 
 const PandocAttributeDelimiter: DelimiterType = {}
 
@@ -50,6 +51,8 @@ export const pandocAttributesParser: InlineParser = {
     // (then they basically apply to the whole line, i.e. with code block meta),
     // or directly preceeded by a non-whitespace symbol.
     if (whitespaceBefore && !whitespaceAfter) { return - 1 }
+
+    if (!isAttributeContent(ctx.slice(delim.to, pos))) { return -1 }
 
     ctx.takeContent(opening)
     ctx.addDelimiter(PandocAttributeDelimiter, pos, pos + 1, false, true)
