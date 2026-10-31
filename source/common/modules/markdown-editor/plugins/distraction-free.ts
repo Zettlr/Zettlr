@@ -46,7 +46,7 @@ const mutedLines = StateField.define<DecorationSet>({
   create (state: EditorState) {
     return renderMutedLines(state)
   },
-  update (oldDecoSet, transaction) {
+  update (_value, transaction) {
     return renderMutedLines(transaction.state)
   },
   provide: f => EditorView.decorations.from(f)

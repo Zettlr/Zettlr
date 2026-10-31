@@ -68,8 +68,8 @@ export const renderTables = [
     create (state: EditorState) {
       return TableWidget.createForState(state)
     },
-    update (field, tr) {
-      return TableWidget.createForState(tr.state)
+    update (_value, transaction) {
+      return TableWidget.createForState(transaction.state)
     },
     provide: f => EditorView.decorations.from(f)
   }),
