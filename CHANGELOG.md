@@ -8,7 +8,8 @@
 
 ## Under the Hood
 
-(Nothing here)
+- Added error-handling code in case titlebar overlays cannot be set for windows
+  (see #6417).
 
 # 4.9.0
 
