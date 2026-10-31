@@ -2,7 +2,9 @@
 
 ## GUI and Functionality
 
-(Nothing here)
+- **Feature**: The context menus for links and images now also feature various
+  items that may be useful for formatting aspects of the link/image descriptions
+  (#6417).
 
 ## Under the Hood
 
