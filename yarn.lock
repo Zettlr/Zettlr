@@ -10158,9 +10158,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^12.1.0":
-  version: 12.1.0
-  resolution: "mermaid@npm:12.1.0"
+"mermaid@npm:^12.2.0":
+  version: 12.2.0
+  resolution: "mermaid@npm:12.2.0"
   dependencies:
     "@braintree/sanitize-url": "npm:^7.1.2"
     "@iconify/utils": "npm:^3.0.2"
@@ -10178,14 +10178,14 @@ __metadata:
     dompurify: "npm:^3.4.12"
     elkjs: "npm:^0.9.3"
     es-toolkit: "npm:^1.45.1"
-    katex: "npm:^0.16.47"
+    katex: "npm:^0.18.0"
     khroma: "npm:^2.1.0"
     marked: "npm:^16.3.0"
     roughjs: "npm:^4.6.6"
     stylis: "npm:^4.3.6"
     ts-dedent: "npm:^2.2.0"
     uuid: "npm:^11.1.0 || ^12 || ^13 || ^14.0.0"
-  checksum: 10/eb2a61522ebe9ec0dd5e6cb197fc35411aeffdfc6c68a98bc6fc21f1198350411d534b9372f7b994811ae6d6515b9d0bf1132450d9fdc54c20fd0a875da29697
+  checksum: 10/1455be6bdd83826b1b70925998bcc6ed85e915de90b49ee9758e7644a88fd16bf78f84ac1a209435089e7ca21d6b5926c18077b4183fb219541102f43da34584
   languageName: node
   linkType: hard
 
@@ -15114,7 +15114,7 @@ __metadata:
     less-loader: "npm:^13.0.0"
     luxon: "npm:^3.7.2"
     md5: "npm:^2.3.0"
-    mermaid: "npm:^12.1.0"
+    mermaid: "npm:^12.2.0"
     mocha: "npm:^12.0.3"
     node-loader: "npm:^2.1.0"
     nodehun: "npm:^3.0.2"
