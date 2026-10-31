@@ -10,6 +10,9 @@
   logical error made the relevant code for retrieving attachments never find the
   database in memory and thus would always fall back to attempting to contact
   Zotero, which would, logically, fail for JabRef users (#6619).
+- Library loading on boot is now asynchronous, also we register a
+  long-running task during database loads to visualize especially the loading of
+  large library files.
 
 ## Under the Hood
 

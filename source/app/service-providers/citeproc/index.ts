@@ -28,6 +28,7 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { showNativeNotification } from '@common/util/show-notification'
 import { loadDatabase } from './util/database-loader'
+import type LongRunningTaskProvider from '../long-running-tasks'
 
 export interface DatabaseRecord {
   path: string
@@ -109,7 +110,8 @@ export default class CiteprocProvider extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _windows: WindowProvider
+    private readonly _windows: WindowProvider,
+    private readonly _lrtProvider: LongRunningTaskProvider
   ) {
     super()
 
@@ -275,13 +277,12 @@ export default class CiteprocProvider extends ProviderContract {
       return
     }
 
-    try {
-      await this.loadDatabase(this.mainLibrary)
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'unknown error'
-      this._logger.error(`[Citeproc Provider] Could not load main library: ${msg}`, err)
-      this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg, msg)
-    }
+    this.loadDatabase(this.mainLibrary)
+      .catch(err => {
+        const msg = err instanceof Error ? err.message : 'unknown error'
+        this._logger.error(`[Citeproc Provider] Could not load main library: ${msg}`, err)
+        this._windows.showErrorMessage(trans('The citation database could not be loaded'), msg, msg)
+      })
   }
 
   /**
@@ -353,16 +354,30 @@ export default class CiteprocProvider extends ProviderContract {
       throw new Error(`File "${databasePath}" does not exist or is not visible to the app.`)
     }
 
-    const record = await loadDatabase(databasePath, this._logger)
-
-    // Add the database to the list of available databases
-    this.databases.set(databasePath, record)
-
-    // Now that the database has been successfully loaded, watch it for changes.
-    if (watch) {
-      this._watcher.add(databasePath)
+    try {
+      const lrt = this._lrtProvider.registerTask(
+        trans('Loading database'),
+        trans('Loading database %s', path.basename(databasePath))
+      )
+      const record = await loadDatabase(databasePath, this._logger)
+      lrt.update({
+        title: trans('Database loaded'),
+        info: trans('Database %s has been loaded. It contains %s items.', path.basename(databasePath), Object.keys(record.cslData).length)
+      })
+      lrt.endTask('success')
+      // Add the database to the list of available databases
+      this.databases.set(databasePath, record)
+  
+      // Now that the database has been successfully loaded, watch it for changes.
+      if (watch) {
+        this._watcher.add(databasePath)
+      }
+      broadcastIpcMessage('citeproc-database-updated', databasePath)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      this._logger.error(`[Citeproc Provider] Could not load database ${databasePath}: ${message}`)
     }
-    broadcastIpcMessage('citeproc-database-updated', databasePath)
+
   }
 
   /**
