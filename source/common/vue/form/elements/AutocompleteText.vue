@@ -86,6 +86,10 @@ function onInputBlur () {
 }
 
 function onKeyPress (event: KeyboardEvent) {
+  if (event.isComposing) {
+    return // Keys belong to the IME while it is composing
+  }
+
   if (visibleSuggestions.value.length === 0) {
     return // Can't navigate an empty list
   }

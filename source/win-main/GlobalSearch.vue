@@ -9,7 +9,7 @@
       v-bind:label="queryInputLabel"
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
-      v-on:keydown.enter="startSearch()"
+      v-on:keydown.enter="onEnter"
     ></AutocompleteText>
 
     <CheckboxControl
@@ -26,7 +26,7 @@
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions.map(s => s.displayValue)"
       v-bind:placeholder="restrictDirPlaceholder"
-      v-on:keydown.enter="startSearch()"
+      v-on:keydown.enter="onEnter"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
     <p>
@@ -370,6 +370,17 @@ onMounted(() => {
 onBeforeUnmount(() => {
   stopListeningForSearchResults()
 })
+
+/**
+ * Starts a search on Enter, unless the Enter confirms an IME composition.
+ *
+ * @param  {KeyboardEvent}  event  The keydown event
+ */
+function onEnter (event: KeyboardEvent): void {
+  if (!event.isComposing) {
+    startSearch()
+  }
+}
 
 /**
  * Starts a new search
