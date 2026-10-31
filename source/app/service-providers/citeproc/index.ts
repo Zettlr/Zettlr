@@ -33,7 +33,7 @@ export interface DatabaseRecord {
   path: string
   // We basically have CSL databases (do not contain attachments) or BibTex
   // (contain attachments).
-  type: 'csl'|'bibtex'|'biblatex'
+  type: 'csl'|'bibtex'|'biblatex'|string
   cslData: Record<string, CSLItem>
   bibtexAttachments: Record<string, string[]|false>
 }
