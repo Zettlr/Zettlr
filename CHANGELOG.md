@@ -5,6 +5,11 @@
 - **Feature**: The context menus for links and images now also feature various
   items that may be useful for formatting aspects of the link/image descriptions
   (#6417).
+- Fixed a bug where Zettlr would *never* load attachments from your main
+  database if that database was in `BibTeX` or `BibLaTeX` format, as a small
+  logical error made the relevant code for retrieving attachments never find the
+  database in memory and thus would always fall back to attempting to contact
+  Zotero, which would, logically, fail for JabRef users (#6619).
 
 ## Under the Hood
 

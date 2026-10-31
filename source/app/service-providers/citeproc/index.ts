@@ -223,7 +223,19 @@ export default class CiteprocProvider extends ProviderContract {
     })
   } // END constructor
 
+  /**
+   * Checks if the library identified with `dbPath` has bibtex attachments. Pass
+   * `CITEPROC_MAIN_DB` for `dbPath` to retrieve the main database's files.
+   *
+   * @param   {string}   dbPath  The database file path
+   *
+   * @return  {boolean}          Whether there are bibtex attachments registered.
+   */
   public hasBibTexAttachments (dbPath: string): boolean {
+    if (dbPath === CITEPROC_MAIN_DB) {
+      dbPath = this.mainLibrary
+    }
+
     const db = this.databases.get(dbPath)
     if (db === undefined) {
       return false
@@ -232,7 +244,19 @@ export default class CiteprocProvider extends ProviderContract {
     return Object.keys(db.bibtexAttachments).length > 0
   }
 
+  /**
+   * Returns the registered attachments for the citekey with `id` from the `dbPath` database.
+   *
+   * @param   {string}          dbPath  The database path. Use `CITEPROC_MAIN_DB` for the main library
+   * @param   {string}          id      The citekey of the item to retrieve attachments for
+   *
+   * @return  {string[]|false}          The registered attachments
+   */
   public getBibTexAttachments (dbPath: string, id: string): string[]|false {
+    if (dbPath === CITEPROC_MAIN_DB) {
+      dbPath = this.mainLibrary
+    }
+
     const db = this.databases.get(dbPath)
     if (db === undefined) {
       return false
