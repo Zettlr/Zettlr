@@ -40,7 +40,7 @@
           ref="editorSidebarSplitComponent"
           v-bind:initial-size-percent="editorSidebarSplitComponentInitialSize"
           v-bind:minimum-size-percent="[ 50, 10 ]"
-          v-bind:reset-size-percent="[ 80, 20 ]"
+          v-bind:reset-size-percent="[ 75, 25 ]"
           v-bind:split="'horizontal'"
           v-on:views-resized="editorSidebarSplitComponentResized($event)"
         >

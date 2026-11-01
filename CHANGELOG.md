@@ -9,6 +9,12 @@
   across all operating systems.
 - **Change**: The file tree styling has been adjusted. It now looks mostly the
   same across all operating systems.
+- Fixed a misaligned size distribution between the file manager, editor view,
+  and sidebar. Now, when double-clicking the dividers between these three
+  components, they will resize so that both sidebars take up 20% of the window
+  width, as opposed to a distribution of 20% for the file manager and ca. 15%
+  for the sidebar. This way, both sidebars of the main window are visually
+  equally sized.
 - Fixed a bug where Zettlr would *never* load attachments from your main
   database if that database was in `BibTeX` or `BibLaTeX` format, as a small
   logical error made the relevant code for retrieving attachments never find the
