@@ -192,7 +192,7 @@ async function loadBibLaTeX (databasePath: string, logger?: LogProvider): Promis
 
   const record: DatabaseRecord = {
     path: databasePath,
-    type: parser.bibType(),
+    type: 'biblatex',
     cslData: {},
     bibtexAttachments: {}
   }

@@ -32,9 +32,9 @@ import type LongRunningTaskProvider from '../long-running-tasks'
 
 export interface DatabaseRecord {
   path: string
-  // We basically have CSL databases (do not contain attachments) or BibTex
+  // We basically have CSL databases (do not contain attachments) or Bib(La)Tex
   // (contain attachments).
-  type: 'csl'|'bibtex'|'biblatex'|string
+  type: 'csl'|'bibtex'|'biblatex'
   cslData: Record<string, CSLItem>
   bibtexAttachments: Record<string, string[]|false>
 }

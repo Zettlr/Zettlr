@@ -41,24 +41,27 @@ const dbTesters: Test[] = [
   isbn = {978-0-521-40088-6 978-0-521-40938-4 978-1-139-17383-4},
   file = {[redacted]}
 }`,
-    type: 'bibtex',
+    type: 'biblatex',
     expected: {
       path: '', // NOTE: Must be filled in by the test
-      type: 'bibtex',
+      type: 'biblatex',
       cslData: {
         'Skocpol1994:SRM': {
           DOI: '10.1017/CBO9781139173834',
           ISBN: '978-0-521-40088-6 978-0-521-40938-4 978-1-139-17383-4',
           URL: 'https://www.cambridge.org/core/product/identifier/9781139173834/type/book',
           author: [{ family: 'Skocpol', given: 'Theda' }],
-          edition: '1',
+          abstract: 'In this collection of essays...',
+          accessed: { 'date-parts': [[ 2021, 4, 5 ]] },
+          issued: { 'date-parts': [[ 1994, 9, 30 ]] },
+          edition: 1,
           id: 'Skocpol1994:SRM',
           publisher: 'Cambridge University Press',
-          title: 'Social Revolutions in the Modern World',
+          title: 'Social <span class="nocase">Revolutions</span> in the <span class="nocase">Modern World</span>',
           type: 'book'
         }
       },
-      bibtexAttachments: { 'Skocpol1994:SRM': ['/tmp/[redacted]'] }
+      bibtexAttachments: { 'Skocpol1994:SRM': ['[redacted]'] }
     }
   },
   // Test 2: BibLaTeX file
@@ -78,19 +81,20 @@ const dbTesters: Test[] = [
 @Comment{jabref-meta: databaseType:biblatex;}
 
 @Comment{jabref-meta: fileDirectory:/Users/private/Zettlr Main;}`,
-    type: 'bib',
+    type: 'biblatex',
     expected: {
       path: '', // NOTE: Must be filled in by the test
-      type: 'bibtex',
+      type: 'biblatex',
       cslData: {
         'ruesen2023': {
           id: 'ruesen2023',
           DOI: '10.51686/hbl.2023.1.1',
           ISSN: '1660-5403',
           author: [{ family: 'Rüsen', given: 'Jörn' }],
-          publisher: 'Hermeneutische Blatter',
-          page: '11–17',
-          title: 'Nachdenkliches zum Sinn der Geschichte',
+          issued: { 'date-parts': [[ 2023, 11 ]] },
+          page: '11-17',
+          'container-title': 'Hermeneutische blätter',
+          title: 'Nachdenkliches zum sinn der geschichte',
           type: 'article'
         }
       },
