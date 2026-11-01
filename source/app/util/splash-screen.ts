@@ -23,17 +23,26 @@ import { BrowserWindow } from 'electron'
 
 let splashScreen: BrowserWindow|undefined
 
-// These two properties always hold the last message/percent that has been
-// provided via updateSplashScreen. This is necessary if progress already
-// happens before the splash screen has actually opened.
-let initSplashScreenMessage = ''
-let initSplashScreenPercent = 0
+export interface SplashScreenInfo {
+  currentStepMessage: string
+  currentStepPercentage: number
+}
+
+// This variable contains the information that should be shown on the splash
+// screen. We use a separate variable for this so that update events can be
+// cached while the boot sequence is running, but before the splash screen
+// actually shows on screen.
+let splashScreenInfo: SplashScreenInfo = {
+  currentStepMessage: '',
+  currentStepPercentage: 0
+}
 
 let debounceTimeout: NodeJS.Timeout|undefined
 
 /**
  * Shows a splash screen for Zettlr. NOTE: Remember to call `closeSplashScreen`
- * once your startup procedure is done!
+ * once your startup procedure is done! Otherwise the splash screen becomes
+ * unclosable.
  *
  * @param   {LogProvider}  logger  The logger for potential error messages.
  */
@@ -69,12 +78,22 @@ export function showSplashScreen (logger: LogProvider): void {
 
   splashScreen.loadURL(SPLASH_SCREEN_WEBPACK_ENTRY)
     .catch(e => {
-      logger.error(`Could not load URL ${SPLASH_SCREEN_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      // We only log the error if splashScreen is not undefined. This is due to
+      // a small race condition, where the timer would fire to open the splash
+      // screen shortly before the boot sequence is finished, and the close
+      // method will be called after `loadURL` has been called, but before the
+      // window actually shows. Destroying a window during its boot process will
+      // throw an error, which we swallow in this way.
+      if (splashScreen !== undefined) {
+        const message = e instanceof Error ? e.message : 'Unknown error'
+        logger.error(`Could not load URL ${SPLASH_SCREEN_WEBPACK_ENTRY}: ${message}`, e)
+      }
     })
 
   splashScreen.once('ready-to-show', () => {
     splashScreen?.show()
-    updateSplashScreen(initSplashScreenMessage, initSplashScreenPercent)
+    const { currentStepMessage, currentStepPercentage } = splashScreenInfo
+    updateSplashScreen(currentStepMessage, currentStepPercentage)
   })
 
   splashScreen.once('closed', () => {
@@ -84,14 +103,16 @@ export function showSplashScreen (logger: LogProvider): void {
 
 /**
  * Updates the splash screen's info panel with a step message and a step
- * percentage.
+ * percentage. This function can also be called independently of whether the
+ * splash screen is already shown. This way, messages won't be sent to the
+ * window but instead cached, and once the splash screen is open, it will be
+ * updated to reflect the last update call.
  *
  * @param   {string}  currentStepMessage     The current step message.
  * @param   {number}  currentStepPercentage  The step percentage (0-100).
  */
 export function updateSplashScreen (currentStepMessage: string, currentStepPercentage: number): void {
-  initSplashScreenMessage = currentStepMessage
-  initSplashScreenPercent = currentStepPercentage
+  splashScreenInfo = { currentStepMessage, currentStepPercentage }
 
   if (debounceTimeout !== undefined) {
     return
@@ -101,7 +122,7 @@ export function updateSplashScreen (currentStepMessage: string, currentStepPerce
 
   debounceTimeout = setTimeout(() => {
     debounceTimeout = undefined
-  }, 1000/60)
+  }, 1000/60) // Debounce timeout: 60 fps
 }
 
 /**

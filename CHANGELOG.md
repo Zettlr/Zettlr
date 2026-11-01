@@ -23,6 +23,8 @@
 - Added error-handling code in case titlebar overlays cannot be set for windows
   (see #6417).
 - Exchanged `biblatex-csl-converter` with `bibliojson`.
+- Refactor the splash screen to silence an error caused by a benign race
+  condition during the boot sequence.
 
 # 4.9.0
 
