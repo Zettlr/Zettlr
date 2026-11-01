@@ -91,6 +91,8 @@ export interface ThemeVars {
   '--zettlr-editor-opacity': string|number
   /** CSS `text-decoration` value */
   '--zettlr-editor-line-decoration': string
+  /** CSS `text-decoration` value */
+  '--zettlr-editor-lint-decoration': string
 }
 
 const primaryColor = '#1cb27e'
@@ -153,6 +155,7 @@ const opacity = 0.65
 
 const linkDecoration = 'none'
 
+const lintDecoration = 'underline wavy'
 export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-primary-color': primaryColor,
   '--zettlr-editor-secondary-color': secondaryColor,
@@ -184,6 +187,7 @@ export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-error-color': errorColor,
   '--zettlr-editor-opacity': opacity,
   '--zettlr-editor-line-decoration': linkDecoration,
+  '--zettlr-editor-lint-decoration': lintDecoration,
 }
 
 export const defaultVarsDark: ThemeVars = {
@@ -217,6 +221,7 @@ export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-error-color': errorColor,
   '--zettlr-editor-opacity': opacity,
   '--zettlr-editor-line-decoration': linkDecoration,
+  '--zettlr-editor-lint-decoration': lintDecoration,
 }
 
 export const defaultLight = EditorView.theme({
@@ -434,5 +439,25 @@ export const editorTheme = EditorView.baseTheme({
     '--zettlr-editor-code-style': 'var(--zettlr-editor-header-style)',
   },
   // Admonitions (generic styles)
-  '.cm-admonition-title': { fontWeight: 'bold' }
+  '.cm-admonition-title': { fontWeight: 'bold' },
+  // Lint marks
+  '.cm-lintRange': {
+    textDecoration: 'var(--zettlr-editor-lint-decoration)',
+  },
+  '.cm-lintRange-error': {
+    backgroundImage: 'none',
+    textDecorationColor: 'var(--zettlr-caution-color)',
+  },
+  '.cm-lintRange-warning': {
+    backgroundImage: 'none',
+    textDecorationColor: 'var(--zettlr-warning-color)',
+  },
+  '.cm-lintRange-info': {
+    backgroundImage: 'none',
+    textDecorationColor: 'var(--zettlr-note-color)',
+  },
+  '.cm-lintRange-hint': {
+    backgroundImage: 'none',
+    textDecorationColor: 'var(--zettlr-tip-color)',
+  },
 })
