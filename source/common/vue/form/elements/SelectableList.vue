@@ -87,7 +87,7 @@ export interface SelectableListItem {
   infoStringClass?: 'error'
   icon?: string
   solidIcon?: boolean
-  [key: string]: any // Allow arbitrary items
+  [key: string]: unknown // Allow arbitrary items
 }
 
 const props = defineProps<{

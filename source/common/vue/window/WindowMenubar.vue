@@ -1,9 +1,11 @@
 <template>
   <div id="menubar">
     <img id="app-logo" src="../../img/image-preview.png" />
-    <div v-for="(item, idx) in menu" v-bind:key="idx" class="top-level-item"
+    <div
+      v-for="(item, idx) in menu" v-bind:key="idx" class="top-level-item"
       v-on:mousedown.stop.prevent="getSubmenu(item.id!, $event.target as HTMLElement)"
-      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)">
+      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)"
+    >
       <span>
         {{ item.label }}
       </span>
