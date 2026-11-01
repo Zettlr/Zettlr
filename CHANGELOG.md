@@ -7,6 +7,8 @@
   (#6417).
 - **Change**: The toolbar styling has now been adjusted. It now looks the same
   across all operating systems.
+- **Change**: The file tree styling has been adjusted. It now looks mostly the
+  same across all operating systems.
 - Fixed a bug where Zettlr would *never* load attachments from your main
   database if that database was in `BibTeX` or `BibLaTeX` format, as a small
   logical error made the relevant code for retrieving attachments never find the
