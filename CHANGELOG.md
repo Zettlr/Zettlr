@@ -13,6 +13,8 @@
 - Library loading on boot is now asynchronous, also we register a
   long-running task during database loads to visualize especially the loading of
   large library files.
+- Fixed a bug that prevented Mermaid diagrams from rendering due to an
+  underlying bug in the new API (#6625).
 
 ## Under the Hood
 

@@ -26,6 +26,7 @@ const DEFAULT_MERMAID_OPTIONS: MermaidConfig = {
   securityLevel: 'strict',
   htmlLabels: false,
   theme: 'default',
+  layout: 'dagre',
   startOnLoad: false, // Do not immediately scan the document
   suppressErrorRendering: true // Never render unasked error codes
 }
@@ -45,12 +46,9 @@ mermaid.initialize(DEFAULT_MERMAID_OPTIONS)
 
 function onError (err: unknown, container: HTMLElement) {
   container.classList.add('error')
-  if (err instanceof Error) {
-    console.error(err)
-    container.innerText = `${trans('Could not render Graph:')}\n\n${err.message}`
-  } else {
-    container.innerText = trans('Could not render Graph.')
-  }
+  const message = err instanceof Error ? err.message : 'Unknown error'
+  container.innerText = `${trans('Could not render Graph:')}\n\n${message}`
+  console.error(err)
 }
 
 class MermaidWidget extends WidgetType {
