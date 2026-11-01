@@ -99,7 +99,7 @@
     "dompurify": "^3.4.17",
     "fix-path": "^5.0.0",
     "gemoji": "^8.1.0",
-    "gettext-parser": "^9.1.1",
+    "gettext-parser": "^10.0.0",
     "katex": "^0.19.1",
     "ky": "^2.2.0",
     "lang-criticmarkup": "^0.3.0",
