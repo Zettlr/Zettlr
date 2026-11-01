@@ -16,6 +16,7 @@
 
 ## Under the Hood
 
+- Update Electron to `v44.9.3`.
 - Added error-handling code in case titlebar overlays cannot be set for windows
   (see #6417).
 - Exchanged `biblatex-csl-converter` with `bibliojson`.
