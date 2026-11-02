@@ -189,6 +189,7 @@ import { getSorter } from 'source/common/util/directory-sorter'
 import type { WritingTarget } from 'source/app/service-providers/targets'
 import { filterDescriptorChildren } from './util/filter-children'
 import getDocumentTitle from '../util/get-document-title'
+import { DocumentType } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -706,7 +707,8 @@ function handleOperationFinish (newName: string): void {
       command: 'file-new',
       payload: {
         path: props.item.path,
-        name: newName.trim()
+        name: newName.trim(),
+        type: DocumentType.Markdown,
       }
     }).catch(e => console.error(e))
   } else if (operationType.value === 'createDir' && newName.trim() !== '') {
