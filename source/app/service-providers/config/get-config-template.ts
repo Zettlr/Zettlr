@@ -349,7 +349,7 @@ export function getConfigTemplate (): ConfigOptions {
       twoStepCollapseWorkspaces: false,
       sortWorkspacesManually: false // By default, let Zettlr sort workspaces
     },
-    newFileNamePattern: '%id.md',
+    newFileNamePattern: '%id',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
