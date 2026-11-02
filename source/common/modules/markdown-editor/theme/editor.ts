@@ -156,6 +156,7 @@ const opacity = 0.65
 const linkDecoration = 'none'
 
 const lintDecoration = 'underline wavy'
+
 export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-primary-color': primaryColor,
   '--zettlr-editor-secondary-color': secondaryColor,
