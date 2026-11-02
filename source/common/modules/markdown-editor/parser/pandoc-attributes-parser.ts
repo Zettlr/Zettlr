@@ -20,7 +20,7 @@
  */
 
 import type { DelimiterType, InlineParser } from '@lezer/markdown'
-import { isAttributeContent } from '@common/modules/markdown-utils/markdown-to-html'
+import { isAttributeContent } from '@common/pandoc-util/parse-pandoc-attributes'
 
 const PandocAttributeDelimiter: DelimiterType = {}
 

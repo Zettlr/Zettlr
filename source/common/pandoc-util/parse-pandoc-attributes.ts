@@ -61,7 +61,34 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
  *  (?<unquoted>[^\s"]+)        => unquoted values
  *  (?<unnumbered>-+)            => bare `-` (or `--`, ...), shorthand for `.unnumbered`
  */
-export const pandocAttributeRe = /#(?<id>[\w\-:.]+)|\.(?<class>[\w\-:.]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|'(?<singleQuoted>[^']*)'|(?<unquoted>[^\s"]+)))|(?<unnumbered>(?<![\w-])-+(?![\w-]))/g
+const pandocAttributeRe = /#(?<id>[\w\-:.]+)|\.(?<class>[\w\-:.]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|'(?<singleQuoted>[^']*)'|(?<unquoted>[^\s"]+)))|(?<unnumbered>(?<![\w-])-+(?![\w-]))/g
+
+const attributeTokenRE = new RegExp(pandocAttributeRe.source, 'y')
+
+/**
+ * Whether the content between the braces is made up only of Pandoc attributes,
+ * optionally separated by whitespace. Walks the tokens with a sticky regex so
+ * that each one must start where the previous one ended.
+ *
+ * @param   {string}   content  The text between `{` and `}`
+ *
+ * @return  {boolean}           True if the content is a valid attribute list
+ */
+export function isAttributeContent (content: string): boolean {
+  let pos = content.length - content.trimStart().length
+  while (pos < content.length) {
+    attributeTokenRE.lastIndex = pos
+    const match = attributeTokenRE.exec(content)
+    if (match === null || match[0] === '') {
+      return false
+    }
+    pos = attributeTokenRE.lastIndex
+    while (pos < content.length && /\s/.test(content[pos])) {
+      pos++
+    }
+  }
+  return true
+}
 
 /**
  * Parses a Pandoc link attribute string, as defined in
