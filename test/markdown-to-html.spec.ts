@@ -61,6 +61,74 @@ And some text.</p>`
 
 <div class="admonition note"><div class="admonition-title">This is a custom note</div> <p> Hi there, this is a note.</p></div>`
   },
+  {
+    description: 'Keeps literal curly braces at the end of a table cell',
+    input: `| Field | Notes |
+|---|---|
+| Status | One of {Active, Pending Approval, Removed} |`,
+    output: `<table>
+<thead>
+<tr>
+<th> Field</th>
+<th> Notes</th>
+</tr>
+</thead>
+<tr>
+<td> Status</td>
+<td> One of {Active, Pending Approval, Removed}</td>
+</tr>
+</table>`
+  },
+  {
+    description: 'Keeps literal curly braces at the end of a paragraph',
+    input: 'Status One of {Active, Pending Approval, Removed}',
+    output: '<p>Status One of {Active, Pending Approval, Removed}</p>'
+  },
+  {
+    description: 'Treats the shorthand {-} like {.unnumbered}',
+    input: '# Heading {-}',
+    output: '<h1 class="unnumbered"> Heading </h1>'
+  },
+  {
+    description: 'Escapes double quotes from single-quoted attribute values',
+    input: "# H {key='a\"b'}",
+    output: '<h1 key="a&quot;b"> H </h1>'
+  },
+  {
+    description: 'Keeps braces with an unterminated single quote literal',
+    input: "Text {key='x y}",
+    output: "<p>Text {key='x y}</p>"
+  },
+  {
+    description: 'Accepts a class, a single-quoted value, and {-} together',
+    input: "# H {.a key='x y' -}",
+    output: '<h1 class="a unnumbered" key="x y"> H </h1>'
+  },
+  {
+    description: 'Keeps long unquoted-value lookalikes literal without backtracking',
+    input: 'Text {' + 'a='.repeat(40) + '"}',
+    output: '<p>Text {' + 'a='.repeat(40) + '"}</p>'
+  },
+  {
+    description: 'Treats {--} like {-}, as Pandoc does',
+    input: '# Heading {--}',
+    output: '<h1 class="unnumbered"> Heading </h1>'
+  },
+  {
+    description: 'Accepts attributes without whitespace between them',
+    input: '# H {-.a#b}',
+    output: '<h1 id="b" class="unnumbered a"> H </h1>'
+  },
+  {
+    description: 'Keeps the raw-format syntax {=html} literal outside code',
+    input: 'Some text {=html}',
+    output: '<p>Some text {=html}</p>'
+  },
+  {
+    description: 'Keeps consuming empty Pandoc attribute braces {}',
+    input: 'Some text {}',
+    output: '<p>Some text </p>'
+  },
 ]
 
 describe('MarkdownAST#md2HTML()', function () {
