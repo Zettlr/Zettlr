@@ -25,6 +25,13 @@
   large library files.
 - Fixed a bug that prevented Mermaid diagrams from rendering due to an
   underlying bug in the new API (#6625).
+- Removed the `.md` extension from the default new filename pattern in the
+  Advanced Preferences menu. This pattern is used as the filename, so the
+  extension is unnecessary. Previously, creating a new file with the default
+  pattern would result in the `.md` extension being added twice to markdown
+  files or added incorrectly to non-markdown files. This only impacts new
+  installations of Zettlr. Existing users will have to update the pattern
+  manually (#6638).
 
 ## Under the Hood
 
