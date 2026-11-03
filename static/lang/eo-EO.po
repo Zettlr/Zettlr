@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-20 02:36+0000\n"
+"POT-Creation-Date: 2026-11-03 02:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,12 +27,30 @@ msgstr ""
 msgid "Booting %s…"
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:259
-#: source/app/service-providers/citeproc/index.ts:426
+#: source/app/service-providers/citeproc/index.ts:284
+#: source/app/service-providers/citeproc/index.ts:465
 msgid "The citation database could not be loaded"
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:413
+#: source/app/service-providers/citeproc/index.ts:359
+msgid "Loading database"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:360
+#, javascript-format
+msgid "Loading database %s"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:364
+msgid "Database loaded"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:365
+#, javascript-format
+msgid "Database %s has been loaded. It contains %s items."
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:452
 msgid "Changes to the library file detected. Reloading …"
 msgstr ""
 
@@ -76,7 +94,7 @@ msgstr ""
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:324
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:325
 msgid "Untitled"
 msgstr "Sentitola"
 
@@ -788,7 +806,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:347
 #: source/app/service-providers/menu/menu.win32.ts:351
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:239
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:38
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:49
 #: source/common/modules/window-register/register-default-context.ts:75
 msgid "Cut"
@@ -796,7 +814,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:353
 #: source/app/service-providers/menu/menu.win32.ts:357
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:245
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:55
 #: source/common/modules/window-register/register-default-context.ts:82
 #: source/tmp/win-main/GlobalSearch.vue.ts:83
@@ -805,14 +823,14 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:358
 #: source/app/service-providers/menu/menu.win32.ts:362
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:251
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:50
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:61
 msgid "Copy as HTML"
 msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:367
 #: source/app/service-providers/menu/menu.win32.ts:371
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:257
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:56
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:67
 #: source/common/modules/window-register/register-default-context.ts:88
 msgid "Paste"
@@ -820,14 +838,14 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:372
 #: source/app/service-providers/menu/menu.win32.ts:376
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:263
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:62
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:73
 msgid "Paste without style"
 msgstr ""
 
 #: source/app/service-providers/menu/menu.darwin.ts:381
 #: source/app/service-providers/menu/menu.win32.ts:385
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:272
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:71
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:82
 #: source/common/modules/window-register/register-default-context.ts:98
 msgid "Select all"
@@ -1156,12 +1174,12 @@ msgid "Close all"
 msgstr ""
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:199
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:198
 msgid "Close all files"
 msgstr ""
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:277
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:276
 msgid "Close all workspaces"
 msgstr ""
 
@@ -1211,15 +1229,19 @@ msgstr ""
 msgid "Open PDF for %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:149
 msgid "No suggestions"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:160
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:158
 msgid "Add to dictionary"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
+msgid "Copy equation code"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:26
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/win-preferences/schema/editor.ts:164
@@ -1227,76 +1249,76 @@ msgstr ""
 msgid "Bold"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:32
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:31
 msgid "Italic"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:204
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:22
+msgid "Insert"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:27
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:40
 #: source/tmp/win-main/App.vue.ts:402
 msgid "Insert link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:33
 msgid "Insert unordered list"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:215
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:38
 msgid "Insert numbered list"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:43
 #: source/tmp/win-main/App.vue.ts:416
 msgid "Insert task list"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:49
 msgid "Insert blockquote"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:54
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
-msgid "Copy equation code"
-msgstr ""
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
 msgid "Open link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:120
 msgid "Remove link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:143
 msgid "Copy image to clipboard"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:149
 #, fuzzy
 msgid "Open image"
 msgstr "Reprodukti bildojn"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 #: source/tmp/win-main/DocumentTabs.vue.ts:482
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 #: source/win-main/file-manager/util/file-item-context.ts:82
 msgid "Reveal in Finder"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 msgid "Open in File Browser"
 msgstr ""
 
@@ -1470,12 +1492,8 @@ msgstr ""
 msgid "Could not render Graph:"
 msgstr ""
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
-msgid "Could not render Graph."
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:73
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:88
 msgid "Rendering mermaid graph …"
 msgstr ""
 
@@ -2681,7 +2699,7 @@ msgstr ""
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:140
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:142
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:64
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Files"
 msgstr ""
@@ -2697,7 +2715,7 @@ msgid "Words"
 msgstr ""
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:62
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
 msgid "No results"
 msgstr ""
 
@@ -2709,47 +2727,47 @@ msgstr ""
 msgid "Empty directory"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
 msgid "Workspaces"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
 msgid "No open files or folders"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:73
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse workspaces"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse subfolders"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:269
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 msgid "Sort workspaces…"
 msgstr ""
 
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:85
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:86
 msgid "Enter a name"
 msgstr ""
 
