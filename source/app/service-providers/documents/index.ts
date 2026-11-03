@@ -1503,23 +1503,41 @@ current contents from the editor somewhere else, and restart the application.`
   }
 
   public async navigateForward (windowId: string, leafId: string): Promise<void> {
-    const leaf = this._windows[windowId].findLeaf(leafId)
-    if (leaf === undefined) {
-      return
-    }
-
-    leaf.tabMan.forward()
-    this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
-    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
+    return await this.navigateHistory(windowId, leafId, 'forward')
   }
 
   public async navigateBack (windowId: string, leafId: string): Promise<void> {
+    return await this.navigateHistory(windowId, leafId, 'back')
+  }
+
+  /**
+   * Navigates through the session history of a leaf. When "avoid new tabs" is
+   * enabled, the previously active file is closed if the navigation target has
+   * to be opened in a new tab.
+   *
+   * @param  {string}  windowId   The window ID
+   * @param  {string}  leafId     The leaf ID
+   * @param  {'back'|'forward'}  direction  The navigation direction
+   */
+  private async navigateHistory (windowId: string, leafId: string, direction: 'back'|'forward'): Promise<void> {
     const leaf = this._windows[windowId].findLeaf(leafId)
     if (leaf === undefined) {
       return
     }
 
-    leaf.tabMan.back()
+    const { avoidNewTabs } = this._app.config.get().system
+    const activeFile = leaf.tabMan.activeFile
+    const replaceActiveTab = avoidNewTabs && activeFile !== null && !this.isModified(activeFile.path)
+
+    const closedFile = direction === 'back'
+      ? leaf.tabMan.back(replaceActiveTab)
+      : leaf.tabMan.forward(replaceActiveTab)
+
+    if (closedFile !== null) {
+      this.syncWatchedFilePaths()
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath: closedFile.path })
+    }
+
     this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
   }
