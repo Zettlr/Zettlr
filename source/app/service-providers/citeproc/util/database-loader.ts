@@ -15,11 +15,12 @@
 import type { DatabaseRecord } from '..'
 import extractBibTexAttachments from './extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
-import { BibLatexParser, CSLExporter } from 'biblatex-csl-converter'
+import { BibLatexParser, CSLExporter } from 'bibliojson'
 import YAML from 'yaml'
 import { promises as fs } from 'fs'
 import path from 'path'
 import type LogProvider from '../../log'
+import { extractBibLaTeXAttachments } from './extract-biblatex-attachments'
 
 /**
  * Load the provided database into a DatabaseRecord.
@@ -39,6 +40,8 @@ export async function loadDatabase (databasePath: string, logger?: LogProvider):
       logger?.info(`Loading database ${path.basename(databasePath)} as CSL YAML.`)
       return await loadYAML(databasePath, logger)
     case '.bib':
+    case '.bibtex':
+    case '.biblatex':
       // NOTE: ASSUMPTION: Since BibTeX and BibLaTeX share the same file
       // endings, we first attempt to load it as BibLaTeX and if it throws we
       // fall back to BibTeX.
@@ -46,7 +49,7 @@ export async function loadDatabase (databasePath: string, logger?: LogProvider):
         logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX.`)
         return await loadBibLaTeX(databasePath, logger)
       } catch (err) {
-        logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX failed. Falling back to loading as BibTeX.`)
+        logger?.info(`Loading database ${path.basename(databasePath)} as BibLaTeX failed. Attempting to load as BibTeX.`)
         return await loadBibTeX(databasePath, logger)
       }
     default:
@@ -182,17 +185,17 @@ async function loadBibTeX (databasePath: string, logger?: LogProvider): Promise<
  * @return  {Promise<DatabaseRecord>}                The record
  */
 async function loadBibLaTeX (databasePath: string, logger?: LogProvider): Promise<DatabaseRecord> {
+  const data = await fs.readFile(databasePath, 'utf8')
+
+  const parser = new BibLatexParser(data, { processUnexpected: true, processUnknown: true })
+  const bib = await parser.parseAsync()
+
   const record: DatabaseRecord = {
     path: databasePath,
     type: 'biblatex',
     cslData: {},
     bibtexAttachments: {}
   }
-
-  const data = await fs.readFile(databasePath, 'utf8')
-
-  const parser = new BibLatexParser(data, { processUnexpected: true, processUnknown: true })
-  const bib = await parser.parseAsync()
 
   const cslExporter = new CSLExporter(bib.entries, false, {
     useEntryKeys: true
@@ -205,24 +208,10 @@ async function loadBibLaTeX (databasePath: string, logger?: LogProvider): Promis
     record.cslData[key] = item as CSLItem
   }
 
-  // Now we also have to extract file fields (if they have been exported). The
-  // BibLaTeX parser counts it as an unexpected field, accessible from
-  // bib.entries[idx].unexpected_fields.file
-  for (const [ key, item ] of Object.entries(bib.entries)) {
-    if (!('unexpected_fields' in item)) {
-      record.bibtexAttachments[key] = false
-      continue
-    }
+  // Finally, extract the attachments where applicable
+  record.bibtexAttachments = extractBibLaTeXAttachments(bib)
 
-    if (typeof item.unexpected_fields?.file !== 'string') {
-      record.bibtexAttachments[key] = false
-      continue
-    }
-
-    record.bibtexAttachments[key] = [item.unexpected_fields.file]
-  }
-
-  logger?.info(`BibLaTeX database loaded, ${Object.keys(record.cslData).length} items.`)
+  logger?.info(`BibLaTeX database loaded, ${Object.keys(record.cslData).length} items; ${Object.keys(record.bibtexAttachments).length} attachments found.`)
   
   // NOTE: The bib parser will encounter strange data and define them as errors.
   // HOWEVER this does NOT mean that the entries are invalid; just that some

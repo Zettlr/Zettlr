@@ -117,7 +117,7 @@ const emit = defineEmits<{
   (e: 'toolbar-click', value?: string): void
   (e: 'toolbar-toggle', value: { id?: string, state?: string|boolean }): void
   (e: 'tab', value: number): void
-  (e: 'statusbar-click', value: any): void // TODO
+  (e: 'statusbar-click', value: string): void
 }>()
 
 // NOTE: This is solely for debug purposes so that we can adapt any styles for

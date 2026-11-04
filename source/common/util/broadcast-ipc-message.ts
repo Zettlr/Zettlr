@@ -19,10 +19,10 @@ import { BrowserWindow } from 'electron'
 /**
  * Broadcasts an IPC message to all open windows
  *
- * @param   {string}  channel  The channel to broadcast on
- * @param   {any[]}   args     Any amount of arguments to be passed to the call
+ * @param   {string}     channel  The channel to broadcast on
+ * @param   {unknown[]}  args     Any amount of arguments to be passed to the call
  */
-export default function broadcastIPCMessage (channel: string, ...args: any[]): void {
+export default function broadcastIPCMessage (channel: string, ...args: unknown[]): void {
   const allWindows = BrowserWindow.getAllWindows()
 
   for (const window of allWindows) {

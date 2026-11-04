@@ -27,12 +27,6 @@
             v-bind:direction="showFilesSection ? 'down' : 'right'"
           ></cds-icon>
 
-          <cds-icon
-            v-if="platform !== 'darwin'"
-            shape="file"
-            role="presentation"
-          ></cds-icon>
-
           {{ fileSectionHeading }}
 
           <cds-icon
@@ -70,12 +64,6 @@
             role="presentation"
             shape="angle"
             v-bind:direction="showWorkspacesSection ? 'down' : 'right'"
-          ></cds-icon>
-
-          <cds-icon
-            v-if="platform !== 'darwin'"
-            shape="tree-view"
-            role="presentation"
           ></cds-icon>
 
           {{ workspaceSectionHeading }}
@@ -205,7 +193,6 @@ const showFilesSection = computed(() => configStore.config.fileManagerShowFiles)
 const showWorkspacesSection = computed(() => configStore.config.fileManagerShowWorkspaces)
 const lastLeafId = computed(() => documentTreeStore.lastLeafId)
 
-const platform = process.platform
 const fileSectionHeading = trans('Files')
 const workspaceSectionHeading = trans('Workspaces')
 const noRootsMessage = trans('No open files or folders')
@@ -643,6 +630,11 @@ body {
     &.hidden { left:-100%; }
 
     #directories-dirs-header, #directories-files-header {
+      border: none;
+      color: rgb(160, 160, 160);
+      font-weight: bold;
+      font-size: inherit;
+      margin: 20px 0px 5px 10px;
       display: flex;
       gap: 10px;
       align-items: center;
@@ -693,57 +685,6 @@ body {
             background-color: var(--grey-3);
           }
       }
-    }
-  }
-}
-
-body.darwin {
-  #file-tree {
-    // On macOS, a file-tree will be a sidebar, cf.:
-    // https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/sidebars/
-
-    #directories-dirs-header, #directories-files-header {
-      border: none; // TODO: This comes from a theme
-      color: rgb(160, 160, 160);
-      font-weight: bold;
-      font-size: inherit;
-      margin: 20px 0px 5px 10px;
-
-      clr-icon { display: none; }
-    }
-  }
-}
-
-body.win32 {
-  #file-tree {
-    #directories-dirs-header, #directories-files-header {
-      border-bottom: 1px solid rgb(160, 160, 160);
-      font-size: 11px;
-      padding: 5px 0px 5px 10px;
-      margin: 0px 0px 5px 0px;
-    }
-  }
-
-  &.dark {
-    #file-tree {
-      background-color: rgb(30, 30, 40);
-    }
-  }
-}
-
-body.linux {
-  #file-tree {
-    #directories-dirs-header, #directories-files-header {
-      border-bottom: 1px solid rgb(160, 160, 160);
-      font-size: 11px;
-      padding: 5px 0px 5px 10px;
-      margin: 0px 0px 5px 0px;
-    }
-  }
-
-  &.dark {
-    #file-tree {
-      background-color: rgb(rgb(40, 40, 50));
     }
   }
 }

@@ -2,11 +2,46 @@
 
 ## GUI and Functionality
 
-(Nothing here)
+- **Feature**: The context menus for links and images now also feature various
+  items that may be useful for formatting aspects of the link/image descriptions
+  (#6417).
+- **Change**: The toolbar styling has now been adjusted. It now looks the same
+  across all operating systems.
+- **Change**: The file tree styling has been adjusted. It now looks mostly the
+  same across all operating systems.
+- Fixed a misaligned size distribution between the file manager, editor view,
+  and sidebar. Now, when double-clicking the dividers between these three
+  components, they will resize so that both sidebars take up 20% of the window
+  width, as opposed to a distribution of 20% for the file manager and ca. 15%
+  for the sidebar. This way, both sidebars of the main window are visually
+  equally sized.
+- Fixed a bug where Zettlr would *never* load attachments from your main
+  database if that database was in `BibTeX` or `BibLaTeX` format, as a small
+  logical error made the relevant code for retrieving attachments never find the
+  database in memory and thus would always fall back to attempting to contact
+  Zotero, which would, logically, fail for JabRef users (#6619).
+- Library loading on boot is now asynchronous, also we register a
+  long-running task during database loads to visualize especially the loading of
+  large library files.
+- Fixed a bug that prevented Mermaid diagrams from rendering due to an
+  underlying bug in the new API (#6625).
+- Removed the `.md` extension from the default new filename pattern in the
+  Advanced Preferences menu. This pattern is used as the filename, so the
+  extension is unnecessary. Previously, creating a new file with the default
+  pattern would result in the `.md` extension being added twice to markdown
+  files or added incorrectly to non-markdown files. This only impacts new
+  installations of Zettlr. Existing users will have to update the pattern
+  manually (#6638).
 
 ## Under the Hood
 
-(Nothing here)
+- Update Electron to `v44.9.3`.
+- Update the `gettext-parser` to `v10`.
+- Added error-handling code in case titlebar overlays cannot be set for windows
+  (see #6417).
+- Exchanged `biblatex-csl-converter` with `bibliojson`.
+- Refactor the splash screen to silence an error caused by a benign race
+  condition during the boot sequence.
 
 # 4.9.0
 
@@ -41,6 +76,8 @@ computer to continue using Zettlr.
   around as large tables and documents with many tables are edited (#5732).
 - Fixed a startup crash when a workspace contains an Electron `.asar` archive
   (#6551).
+- Fixed an issue where the menubar controls would overlap the window controls on
+  Linux (#6633)
 
 ## Under the Hood
 
@@ -174,6 +211,9 @@ Zettlr ships if you are affected by this change.
   operator (#6517).
 - Fixed an issue that prevented inserting a new row when the cursor is placed in
   the final row of the table (#6512; #6513).
+- Fixed an issue where literal curly braces at the end of a table cell (or a
+  line) were swallowed as invalid Pandoc attributes, causing the text inside
+  them to disappear (#6563).
 
 ## Under the Hood
 

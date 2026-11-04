@@ -125,7 +125,7 @@ export class AppServiceContainer {
     this._tagProvider = new TagProvider(this._logProvider, this._documentManager, this._configProvider, this._fsal)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
 
-    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._windowProvider)
+    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._windowProvider, this._lrtProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
 
     // The command provider only needs the container for running the commands,
@@ -191,13 +191,13 @@ export class AppServiceContainer {
 
     await this._informativeBoot(this._tagProvider, 'TagProvider')
     await this._informativeBoot(this._trayProvider, 'TrayProvider')
+    await this._informativeBoot(this._lrtProvider, 'Long-Running Tasks Provider')
     await this._informativeBoot(this._citeprocProvider, 'CiteprocProvider')
     
     await this._informativeBoot(this._documentManager, 'DocumentManager')
     await this._informativeBoot(this._menuProvider, 'MenuProvider')
     await this._informativeBoot(this._updateProvider, 'UpdateProvider')
 
-    await this._informativeBoot(this._lrtProvider, 'Long-Running Tasks Provider')
 
     this._menuProvider.set() // TODO
 

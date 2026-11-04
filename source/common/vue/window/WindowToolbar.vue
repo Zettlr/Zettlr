@@ -190,12 +190,21 @@ function handleDoubleClick (event: MouseEvent): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body div#toolbar {
-  height: 40px;
+  --toolbar-height: 40px;
+  --font-size: 14px;
+  --border-radius: 4px;
+
+  height: var(--toolbar-height);
+  font-size: var(--font-size);
+  background-color: rgb(245, 245, 245);
+  color: rgb(100, 100, 100);
+
+  height: var(--toolbar-height);
   padding: 5px 10px;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   position: relative;
 
@@ -247,23 +256,40 @@ body div#toolbar {
     justify-content: center;
     align-items: center;
     padding: 0 10px;
+    margin: 0 4px;
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    border: none;
+
+    &:hover, &.toolbar-overflow {
+      background-color: rgb(230, 230, 230);
+    }
+  }
+
+  &:window-inactive {
+    background-color: rgb(34, 34, 34);
+    color: rgb(100, 100, 100);
+  }
+}
+
+body.dark div#toolbar {
+  background-color: rgb(51, 51, 51);
+  color: rgb(172, 172, 172);
+
+  button {
+    &:hover, &.toolbar-overflow {
+      background-color: rgb(60, 60, 60);
+    }
   }
 }
 
 body.darwin {
-  @toolbar-height: 40px;
-  @font-size: 14px;
-
   div#toolbar {
-    // On macOS, there is no titlebar, and as such we need to make the toolbar draggable
+    /* On macOS, there is no titlebar, and as such we need to make the toolbar draggable */
     -webkit-app-region: drag;
     button, .toolbar-text { -webkit-app-region: no-drag; }
 
-    height: @toolbar-height;
-    font-size: @font-size;
-    background-color: rgb(245, 245, 245);
-
-    // Make space for the traffic lights, either on the left side or the right.
+    /* Make space for the traffic lights, either on the left side or the right. */
     &:not(.has-rtl-traffic-lights) {
       padding-left: 80px;
     }
@@ -272,120 +298,6 @@ body.darwin {
     }
 
     color: rgb(100, 100, 100);
-
-    button {
-      border-radius: 4px;
-      background-color: transparent;
-      border: none;
-
-      &:hover, &.toolbar-overflow {
-        background-color: rgb(230, 230, 230);
-      }
-    }
-  }
-
-  &.dark {
-    // Dark styling
-    div#toolbar {
-      background-color: rgb(51, 51, 51);
-      color: rgb(172, 172, 172);
-
-      button:hover, button.toolbar-overflow {
-        background-color: rgb(60, 60, 60);
-      }
-
-      &:window-inactive {
-        background-color: rgb(34, 34, 34);
-        color: rgb(100, 100, 100);
-      }
-    }
-  }
-}
-
-body.win32 {
-  @toolbar-height: 40px;
-  @font-size: 14px;
-
-  div#toolbar {
-    height: @toolbar-height;
-    font-size: @font-size;
-    background-color: rgb(245, 245, 245);
-    color: rgb(100, 100, 100);
-
-    button {
-      background-color: transparent;
-      border: none;
-
-      &:hover, &.toolbar-overflow {
-        background-color: rgb(230, 230, 230);
-      }
-    }
-  }
-
-  &.dark {
-    // Dark styling
-    div#toolbar {
-      background-color: rgb(51, 51, 51);
-      color: rgb(172, 172, 172);
-
-      button {
-        color: white;
-
-        &:hover, &.toolbar-overflow {
-          background-color: rgb(60, 60, 60,);
-        }
-      }
-
-      &:window-inactive {
-        background-color: rgb(34, 34, 34);
-        color: rgb(100, 100, 100);
-      }
-    }
-  }
-}
-
-body.linux {
-  @toolbar-height: 40px;
-  @font-size: 14px;
-  @border-radius: 4px;
-
-  div#toolbar {
-    height: @toolbar-height;
-    font-size: @font-size;
-    background-color: rgb(245, 245, 245);
-    color: rgb(100, 100, 100);
-
-    button {
-      background-color: transparent;
-      border: 1px solid rgb(180, 180, 180);
-      border-radius: @border-radius;
-      margin: 0 4px;
-
-      &:hover, &.toolbar-overflow {
-        background-color: rgb(230, 230, 230);
-      }
-    }
-  }
-
-  &.dark {
-    // Dark styling
-    div#toolbar {
-      background-color: rgb(51, 51, 51);
-      color: rgb(172, 172, 172);
-
-      button{
-        color: white;
-
-        &:hover, &.toolbar-overflow {
-          background-color: rgb(60, 60, 60,);
-        }
-      }
-
-      &:window-inactive {
-        background-color: rgb(34, 34, 34);
-        color: rgb(100, 100, 100);
-      }
-    }
   }
 }
 </style>

@@ -31,17 +31,14 @@ contextBridge.exposeInMainWorld('ipc', {
   // API object that JS in the renderer can call. This would get rid of the
   // no-unsafe-argument problems we have here.
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  send: (channel: string, ...args: any[]) => ipcRenderer.send(channel, ...args),
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  sendSync: (event: string, ...args: any[]) => ipcRenderer.sendSync(event, ...args),
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  invoke: async (channel: string, ...args: any[]) => await ipcRenderer.invoke(channel, ...args),
-  on: (channel: string, listener: (...args: any[]) => void) => {
+  send: (channel: string, ...args: unknown[]) => ipcRenderer.send(channel, ...args),
+  sendSync: (event: string, ...args: unknown[]) => ipcRenderer.sendSync(event, ...args),
+  invoke: async (channel: string, ...args: unknown[]) => await ipcRenderer.invoke(channel, ...args),
+  on: (channel: string, listener: (...args: unknown[]) => void) => {
     // NOTE: We're returning a stopListening() callback here since the function
     // will be cloned across the context bridge, so not the same object, hence
     // it cannot be removed otherwise.
-    const callback = (event: any, ...args: any[]): void => {
+    const callback = (event: unknown, ...args: unknown[]): void => {
       // Omit the event when calling the listener
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       listener(undefined, ...args)
@@ -59,7 +56,7 @@ contextBridge.exposeInMainWorld('config', {
       payload: { key: property }
     })
   },
-  set: function (property: string, value: any) {
+  set: function (property: string, value: unknown) {
     ipcRenderer.sendSync('config-provider', {
       command: 'set-config-single',
       payload: { key: property, val: value }

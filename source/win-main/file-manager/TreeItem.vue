@@ -189,6 +189,7 @@ import { getSorter } from 'source/common/util/directory-sorter'
 import type { WritingTarget } from 'source/app/service-providers/targets'
 import { filterDescriptorChildren } from './util/filter-children'
 import getDocumentTitle from '../util/get-document-title'
+import { DocumentType } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -706,7 +707,8 @@ function handleOperationFinish (newName: string): void {
       command: 'file-new',
       payload: {
         path: props.item.path,
-        name: newName.trim()
+        name: newName.trim(),
+        type: DocumentType.Markdown,
       }
     }).catch(e => console.error(e))
   } else if (operationType.value === 'createDir' && newName.trim() !== '') {
@@ -780,13 +782,24 @@ body {
       // These inputs should be more or less "invisible"
       input.filename-input {
         border: none;
-        border-radius: 0;
+        border-radius: 4px;
         font-family: inherit;
         font-size: inherit;
         background-color: inherit;
+        color: currentColor;
         width: auto;
         field-sizing: content;
         padding: 1px 3px;
+      }
+
+      .display-text {
+        border-radius: 4px;
+
+        &.highlight {
+          outline-width: 2px;
+          outline-color: var(--system-accent-color, --c-primary);
+          outline-style: solid;
+        }
       }
 
       .display-text {
@@ -818,6 +831,7 @@ body {
       &.selected .display-text {
         background-color: var(--system-accent-color, --c-primary);
         color: var(--system-accent-color-contrast, --c-primary-contrast);
+        background-image: linear-gradient(#00000000, #00000022);
       }
 
       &.active .display-text {
@@ -851,24 +865,6 @@ body.darwin {
 
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
-
-    input.filename-input {
-      border-radius: 4px;
-    }
-
-    .display-text {
-      border-radius: 4px;
-
-      &.highlight {
-        outline-width: 2px;
-        outline-color: var(--system-accent-color, --c-primary);
-        outline-style: solid;
-      }
-    }
-
-    &.selected .display-text {
-      background-image: linear-gradient(#00000000, #00000022);
-    }
   }
 
   &.dark {
@@ -918,7 +914,7 @@ body.linux {
   }
 
   &.dark .tree-item.directory:not(.collapsed) {
-    background-color: #282832;
+    background-color: #1e1e1e;
   }
 }
 </style>
