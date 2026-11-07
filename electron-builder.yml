@@ -27,6 +27,11 @@ fileAssociations:
   isPackage: false
 directories:
   output: release
+# DEBUG: Remove once Electron Builder has been updated to v27 such that we can
+# once more move with their update cadence.
+# reference: https://www.electron.build/v26/docs/appimage#toolsets
+toolsets:
+  appimage: 1.0.3
 #
 # Generic macOS options
 #

@@ -5,8 +5,18 @@
 - **Feature**: The context menus for links and images now also feature various
   items that may be useful for formatting aspects of the link/image descriptions
   (#6417).
-- **Change**: The toolbar styling has now been adjusted. It now looks the same
-  across all operating systems.
+- **Feature**: Make the "find next" and "find previous" commands of the editor
+  search configurable. Previously, both `Mod-g` and `F3` would move to the next
+  search result, but after implementing custom shortcuts, these two commands
+  were left unconfigurable and hard-coded to `Mod-g`. These are now configurable
+  so that you can change the default keybinding of `Mod-g` to `F3` if you wish
+  (#6575).
+- **Change**: The styles and layouts of various UI components have been
+  adjusted. The following components should now look mostly the same across all
+  operating systems:
+    - Toolbar
+    - File Tree
+    - Sidebar
 - **Change**: The file tree styling has been adjusted. It now looks mostly the
   same across all operating systems.
 - Fixed a misaligned size distribution between the file manager, editor view,
@@ -25,6 +35,8 @@
   large library files.
 - Fixed a bug that prevented Mermaid diagrams from rendering due to an
   underlying bug in the new API (#6625).
+- Fixed an issue that would cause full-text searches to start even as the input
+  field was still composing non-latin text (#6597; #6604).
 - Removed the `.md` extension from the default new filename pattern in the
   Advanced Preferences menu. This pattern is used as the filename, so the
   extension is unnecessary. Previously, creating a new file with the default
@@ -42,6 +54,9 @@
 - Exchanged `biblatex-csl-converter` with `bibliojson`.
 - Refactor the splash screen to silence an error caused by a benign race
   condition during the boot sequence.
+- Pin the AppImage toolset in Electron builder to use a more modern one which
+  depends on fuse3 instead of the depcecated fuse2 library. This change must be
+  reverted once Electron builder is updated to v27 (#6632).
 
 # 4.9.0
 
