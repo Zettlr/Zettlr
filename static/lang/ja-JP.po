@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-20 02:36+0000\n"
+"POT-Creation-Date: 2026-11-03 02:25+0000\n"
 "PO-Revision-Date: 2026-08-10 22:37+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -28,12 +28,30 @@ msgstr "%s のインデックスを作成中…"
 msgid "Booting %s…"
 msgstr "%s を起動…"
 
-#: source/app/service-providers/citeproc/index.ts:259
-#: source/app/service-providers/citeproc/index.ts:426
+#: source/app/service-providers/citeproc/index.ts:284
+#: source/app/service-providers/citeproc/index.ts:465
 msgid "The citation database could not be loaded"
 msgstr "引用データベースを読み込めませんでした"
 
-#: source/app/service-providers/citeproc/index.ts:413
+#: source/app/service-providers/citeproc/index.ts:359
+msgid "Loading database"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:360
+#, javascript-format
+msgid "Loading database %s"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:364
+msgid "Database loaded"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:365
+#, javascript-format
+msgid "Database %s has been loaded. It contains %s items."
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:452
 msgid "Changes to the library file detected. Reloading …"
 msgstr "ライブラリファイルの変更が検出されました。再読み込み中…"
 
@@ -77,7 +95,7 @@ msgstr "本当に %s を削除してもよろしいですか?"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:324
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:325
 msgid "Untitled"
 msgstr "無題"
 
@@ -804,7 +822,7 @@ msgstr "やり直し"
 
 #: source/app/service-providers/menu/menu.darwin.ts:347
 #: source/app/service-providers/menu/menu.win32.ts:351
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:239
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:38
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:49
 #: source/common/modules/window-register/register-default-context.ts:75
 msgid "Cut"
@@ -812,7 +830,7 @@ msgstr "切り取り"
 
 #: source/app/service-providers/menu/menu.darwin.ts:353
 #: source/app/service-providers/menu/menu.win32.ts:357
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:245
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:55
 #: source/common/modules/window-register/register-default-context.ts:82
 #: source/tmp/win-main/GlobalSearch.vue.ts:83
@@ -821,14 +839,14 @@ msgstr "コピー"
 
 #: source/app/service-providers/menu/menu.darwin.ts:358
 #: source/app/service-providers/menu/menu.win32.ts:362
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:251
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:50
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:61
 msgid "Copy as HTML"
 msgstr "HTML としてコピー"
 
 #: source/app/service-providers/menu/menu.darwin.ts:367
 #: source/app/service-providers/menu/menu.win32.ts:371
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:257
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:56
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:67
 #: source/common/modules/window-register/register-default-context.ts:88
 msgid "Paste"
@@ -836,14 +854,14 @@ msgstr "貼り付け"
 
 #: source/app/service-providers/menu/menu.darwin.ts:372
 #: source/app/service-providers/menu/menu.win32.ts:376
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:263
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:62
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:73
 msgid "Paste without style"
 msgstr "スタイルなしで貼り付け"
 
 #: source/app/service-providers/menu/menu.darwin.ts:381
 #: source/app/service-providers/menu/menu.win32.ts:385
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:272
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:71
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:82
 #: source/common/modules/window-register/register-default-context.ts:98
 msgid "Select all"
@@ -1185,12 +1203,12 @@ msgid "Close all"
 msgstr "すべて閉じる"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:199
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:198
 msgid "Close all files"
 msgstr "すべてのファイルを閉じる"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:277
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:276
 msgid "Close all workspaces"
 msgstr "すべてのワークスペースを閉じる"
 
@@ -1242,15 +1260,19 @@ msgstr "強調表示なし"
 msgid "Open PDF for %s"
 msgstr "%s の PDF を開く"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:149
 msgid "No suggestions"
 msgstr "提案はありません"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:160
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:158
 msgid "Add to dictionary"
 msgstr "辞書に追加"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
+msgid "Copy equation code"
+msgstr "数式コードをコピー"
+
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:26
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/win-preferences/schema/editor.ts:164
@@ -1258,75 +1280,75 @@ msgstr "辞書に追加"
 msgid "Bold"
 msgstr "太字"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:32
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:31
 msgid "Italic"
 msgstr "斜体"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:204
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:22
+msgid "Insert"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:27
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:40
 #: source/tmp/win-main/App.vue.ts:402
 msgid "Insert link"
 msgstr "リンクを挿入"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:33
 msgid "Insert unordered list"
 msgstr "箇条書きリストを挿入"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:215
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:38
 msgid "Insert numbered list"
 msgstr "番号付きリストを挿入"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:43
 #: source/tmp/win-main/App.vue.ts:416
 msgid "Insert task list"
 msgstr "タスクリストを挿入"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:49
 msgid "Insert blockquote"
 msgstr "引用を挿入"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:54
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "表を挿入"
 
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
-msgid "Copy equation code"
-msgstr "数式コードをコピー"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
 msgid "Open link"
 msgstr "リンクを開く"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
 msgstr "メールアドレスをコピー"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy link"
 msgstr "リンクをコビー"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:120
 msgid "Remove link"
 msgstr "リンクを削除"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:143
 msgid "Copy image to clipboard"
 msgstr "画像をクリップボードにコピー"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:149
 msgid "Open image"
 msgstr "画像を開く"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 #: source/tmp/win-main/DocumentTabs.vue.ts:482
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 #: source/win-main/file-manager/util/file-item-context.ts:82
 msgid "Reveal in Finder"
 msgstr "Finder で表示"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 msgid "Open in File Browser"
 msgstr "ファイルブラウザで開く"
 
@@ -1501,12 +1523,8 @@ msgstr "画像を外部で開く"
 msgid "Could not render Graph:"
 msgstr "グラフをレンダリングできませんでした :"
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
-msgid "Could not render Graph."
-msgstr "グラフをレンダリングできませんでした。"
-
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:73
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:88
 msgid "Rendering mermaid graph …"
 msgstr "Mermaid グラフをレンダリング中 …"
 
@@ -2704,7 +2722,7 @@ msgstr "ディレクトリ"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:140
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:142
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:64
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Files"
 msgstr "ファイル"
@@ -2720,7 +2738,7 @@ msgid "Words"
 msgstr "単語"
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:62
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
 msgid "No results"
 msgstr "検索結果なし"
 
@@ -2732,47 +2750,47 @@ msgstr "ディレクトリが選択されていません"
 msgid "Empty directory"
 msgstr "空のディレクトリ"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
 msgid "No open files or folders"
 msgstr "開いているファイルまたはフォルダーはありません"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
 msgstr "ファイルを隠す"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
 msgstr "ファイルを表示"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
 msgstr "ワークスペースを隠す"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
 msgstr "ワークスペースを表示"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:73
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
 msgstr "自動並べ替えの切り替え"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse workspaces"
 msgstr "ワークスペースを折りたたむ"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse subfolders"
 msgstr "サブフォルダーを折りたたむ"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:269
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 msgid "Sort workspaces…"
 msgstr "ワークスペースの並べ替え…"
 
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:85
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:86
 msgid "Enter a name"
 msgstr "名前の入力"
 
@@ -5252,6 +5270,9 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "フォルダーへのパス"
+
+#~ msgid "Could not render Graph."
+#~ msgstr "グラフをレンダリングできませんでした。"
 
 #~ msgid "Could not check for updates: Could not establish connection"
 #~ msgstr "更新の確認ができませんでした : 接続の確立に失敗しました"
