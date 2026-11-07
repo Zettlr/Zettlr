@@ -17,8 +17,6 @@
     - Toolbar
     - File Tree
     - Sidebar
-- **Change**: The file tree styling has been adjusted. It now looks mostly the
-  same across all operating systems.
 - Fixed a misaligned size distribution between the file manager, editor view,
   and sidebar. Now, when double-clicking the dividers between these three
   components, they will resize so that both sidebars take up 20% of the window
