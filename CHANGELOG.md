@@ -5,6 +5,12 @@
 - **Feature**: The context menus for links and images now also feature various
   items that may be useful for formatting aspects of the link/image descriptions
   (#6417).
+- **Feature**: Make the "find next" and "find previous" commands of the editor
+  search configurable. Previously, both `Mod-g` and `F3` would move to the next
+  search result, but after implementing custom shortcuts, these two commands
+  were left unconfigurable and hard-coded to `Mod-g`. These are now configurable
+  so that you can change the default keybinding of `Mod-g` to `F3` if you wish
+  (#6575).
 - **Change**: The toolbar styling has now been adjusted. It now looks the same
   across all operating systems.
 - **Change**: The file tree styling has been adjusted. It now looks mostly the

@@ -45,7 +45,8 @@ export type ConfigurableEditorShortcuts = Extends<
   'tr-ensure-double-quotes'|'tr-italics-to-quotes'|'tr-quotes-to-italics'|
   'tr-quotes-to-magic'|'tr-remove-line-breaks'|'tr-sentence-case'|
   'tr-single-quotes-to-double'|'tr-straighten-quotes'|
-  'tr-strip-duplicate-spaces'|'tr-title-case'
+  'tr-strip-duplicate-spaces'|'tr-title-case'|
+  'search-find-next'|'search-find-previous'
 >
 export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'|'filter-files'>
 
@@ -578,7 +579,9 @@ export function getConfigTemplate (): ConfigOptions {
         'tr-straighten-quotes': '',
         'tr-strip-duplicate-spaces': '',
         'tr-title-case': '',
-        'tr-zap-gremlins': ''
+        'tr-zap-gremlins': '',
+        'search-find-next': '',
+        'search-find-previous': ''
       }
     },
     uuid: uuid4() // The app's unique anonymous identifier
