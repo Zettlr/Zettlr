@@ -471,6 +471,7 @@ export const snippets: AutocompletePlugin = {
     if (start === -1 || (start > 0 && text[start - 1] !== ' ')) {
       return false
     }
+
     return line.from + start + trigger.length
   },
   entries (ctx, query) {

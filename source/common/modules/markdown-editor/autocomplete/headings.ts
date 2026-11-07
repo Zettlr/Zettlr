@@ -33,11 +33,11 @@ export const headings: AutocompletePlugin = {
   applies (ctx) {
     const token = ctx.tokenBefore(['URL'])
 
-    if (token !== null && token.text.startsWith('#')) {
-      return token.from + 1
+    if (token === null || !token.text.startsWith('#')) {
+      return false
     }
 
-    return false
+    return token.from + 1
   },
   entries (ctx) {
     return getHeadingEntries(ctx.state)
