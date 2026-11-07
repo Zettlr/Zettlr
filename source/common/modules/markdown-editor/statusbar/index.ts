@@ -121,9 +121,11 @@ const statusbarState = StateField.define<boolean>({
       effect.is(showStatusbarEffect) ||
         (effect.is(configUpdateEffect) && typeof effect.value.showStatusbar === 'boolean')
     )
+
     if (effect?.is(showStatusbarEffect) === true) {
       return effect.value
     }
+
     if (effect?.is(configUpdateEffect) === true &&
         typeof effect.value.showStatusbar === 'boolean') {
       return effect.value.showStatusbar
