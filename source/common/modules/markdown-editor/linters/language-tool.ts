@@ -124,6 +124,7 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
     }
   },
   update (value, transaction) {
+    // Merge LT updates, which may only update a subset of the settings
     for (const e of transaction.effects) {
       if (e.is(updateLTState)) {
         value = {

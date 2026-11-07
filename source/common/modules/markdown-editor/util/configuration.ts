@@ -170,17 +170,9 @@ export const configField = StateField.define<EditorConfiguration>({
   },
   update (value, transaction) {
     for (const effect of transaction.effects) {
+      // Merge all configuration updates
       if (effect.is(configUpdateEffect)) {
         value = safeAssign(effect.value, value)
-        // Perform some housekeeping
-        // Make sure the replacements are sorted longest-key-first
-        value = {
-          ...value,
-          autocorrect: {
-            ...value.autocorrect,
-            replacements: [...value.autocorrect.replacements].sort((a, b) => b.key.length - a.key.length)
-          }
-        }
       }
     }
 

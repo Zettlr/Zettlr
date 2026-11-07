@@ -37,18 +37,19 @@ export const filesUpdateField = StateField.define<Completion[]>({
   },
   update (value, transaction) {
     const effect = transaction.effects.findLast(effect => effect.is(filesUpdate))
-    if (effect !== undefined) {
-      // Convert the files into completion objects
-      return effect.value.map(entry => {
-        return {
-          label: entry.displayName,
-          detail: entry.id !== '' ? entry.id : undefined,
-          apply: apply(entry.filename, entry.id, entry.displayName)
-        }
-      })
+
+    if (effect === undefined) {
+      return value
     }
 
-    return value
+    // Convert the files into completion objects
+    return effect.value.map(entry => {
+      return {
+        label: entry.displayName,
+        detail: entry.id !== '' ? entry.id : undefined,
+        apply: apply(entry.filename, entry.id, entry.displayName)
+      }
+    })
   }
 })
 
