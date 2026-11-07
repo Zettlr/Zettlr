@@ -168,16 +168,22 @@ export const configField = StateField.define<EditorConfiguration>({
   create (_state) {
     return getDefaultConfig()
   },
-  update (val, transaction) {
+  update (value, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(configUpdateEffect)) {
-        const newConfig = safeAssign(effect.value, val)
+        value = safeAssign(effect.value, value)
         // Perform some housekeeping
         // Make sure the replacements are sorted longest-key-first
-        newConfig.autocorrect.replacements.sort((a, b) => b.key.length - a.key.length)
-        return newConfig
+        value = {
+          ...value,
+          autocorrect: {
+            ...value.autocorrect,
+            replacements: [...value.autocorrect.replacements].sort((a, b) => b.key.length - a.key.length)
+          }
+        }
       }
     }
-    return val
+
+    return value
   }
 })

@@ -126,14 +126,17 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
   update (value, transaction) {
     for (const e of transaction.effects) {
       if (e.is(updateLTState)) {
-        value.running = e.value.running ?? value.running
-        value.lastDetectedLanguage = e.value.lastDetectedLanguage ?? value.lastDetectedLanguage
-        value.lastError = e.value.lastError
-        value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages
-        value.overrideLanguage = e.value.overrideLanguage ?? value.overrideLanguage
-        value.disabledRules = e.value.disabledRules ?? value.disabledRules
+        value = {
+          running: e.value.running ?? value.running,
+          lastDetectedLanguage: e.value.lastDetectedLanguage ?? value.lastDetectedLanguage,
+          lastError: e.value.lastError,
+          supportedLanguages: e.value.supportedLanguages ?? value.supportedLanguages,
+          overrideLanguage: e.value.overrideLanguage ?? value.overrideLanguage,
+          disabledRules: e.value.disabledRules ?? value.disabledRules
+        }
       }
     }
+
     return value
   }
 })

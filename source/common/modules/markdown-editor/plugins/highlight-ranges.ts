@@ -24,18 +24,15 @@ export const highlightRanges = StateField.define<DecorationSet>({
   create (_state: EditorState) {
     return Decoration.none
   },
-  update (oldVal, transaction) {
-    for (const effect of transaction.effects) {
-      if (effect.is(highlightRangesEffect)) {
-        const newDecos = []
-        for (const range of effect.value) {
-          newDecos.push(highlightDeco.range(range.from, range.to))
-        }
-        return Decoration.set(newDecos)
-      }
+  update (value, transaction) {
+    const effect = transaction.effects.findLast(effect => effect.is(highlightRangesEffect))
+    if (effect !== undefined) {
+      return Decoration.set(
+        effect.value.map(range => highlightDeco.range(range.from, range.to))
+      )
     }
 
-    return oldVal.map(transaction.changes)
+    return transaction.docChanged ? value.map(transaction.changes) : value
   },
   provide: f => EditorView.decorations.from(f)
 })

@@ -117,15 +117,16 @@ function createStatusbar (_view: EditorView): Panel {
 const statusbarState = StateField.define<boolean>({
   create: (_state: EditorState) => false,
   update (value, transaction) {
-    // Determine if we have to switch our toggle
-    for (const effect of transaction.effects) {
-      if (effect.is(configUpdateEffect)) {
-        if (typeof effect.value.showStatusbar === 'boolean') {
-          value = effect.value.showStatusbar
-        }
-      } else if (effect.is(showStatusbarEffect)) {
-        value = effect.value
-      }
+    const effect = transaction.effects.findLast(effect =>
+      effect.is(showStatusbarEffect) ||
+        (effect.is(configUpdateEffect) && typeof effect.value.showStatusbar === 'boolean')
+    )
+    if (effect?.is(showStatusbarEffect) === true) {
+      return effect.value
+    }
+    if (effect?.is(configUpdateEffect) === true &&
+        typeof effect.value.showStatusbar === 'boolean') {
+      return effect.value.showStatusbar
     }
 
     return value

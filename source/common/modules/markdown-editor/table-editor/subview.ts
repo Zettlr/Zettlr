@@ -132,22 +132,22 @@ export const hiddenSpanField = StateField.define<hiddenSpanState>({
       cellRange: [ 0, state.doc.length ]
     }
   },
-  update (value, tr) {
-    if (!tr.docChanged) {
+  update (value, transaction) {
+    if (!transaction.docChanged) {
       return value
-    } else {
-      // Ensure the range always stays the same
-      return {
-        decorations: value.decorations.map(tr.changes),
-        cellRange: [
-          // The assocs ensure that it's really an "outer" bound and any text
-          // inserted in there stays within this cell range. If we didn't
-          // provide it, inserting a character in an empty range (from === to)
-          // would cause that inserted character to end up right to the `to`.
-          tr.changes.mapPos(value.cellRange[0], -1),
-          tr.changes.mapPos(value.cellRange[1], 1)
-        ]
-      }
+    }
+
+    // Ensure the range always stays the same
+    return {
+      decorations: value.decorations.map(transaction.changes),
+      cellRange: [
+        // The assocs ensure that it's really an "outer" bound and any text
+        // inserted in there stays within this cell range. If we didn't
+        // provide it, inserting a character in an empty range (from === to)
+        // would cause that inserted character to end up right to the `to`.
+        transaction.changes.mapPos(value.cellRange[0], -1),
+        transaction.changes.mapPos(value.cellRange[1], 1)
+      ]
     }
   },
   provide: f => EditorView.decorations.from(f, (value) => value.decorations)
