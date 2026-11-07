@@ -105,19 +105,14 @@ export const codeBlocks: AutocompletePlugin = {
   applies (ctx) {
     const token = ctx.tokenBefore([ 'CodeInfo', 'CodeMark' ])
 
-    if (token === null) {
-      return false
-    }
-
-    if (token.type.is('CodeInfo')) {
+    if (token?.type.is('CodeInfo') === true) {
       const offset = token.text.startsWith('{') ? 1 : 0
 
       return token.from + offset
     }
 
-    if (token.type.is('CodeMark') && token.text.length >= 3) {
+    if (token?.type.is('CodeMark') === true && token.text.length >= 3) {
       return ctx.pos
-
     }
 
     return false

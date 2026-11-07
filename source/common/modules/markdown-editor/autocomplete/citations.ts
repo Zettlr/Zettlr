@@ -138,15 +138,11 @@ export const citations: AutocompletePlugin = {
   applies (ctx) {
     const token = ctx.tokenBefore([ 'CitationCitekey', 'CitationAtSign' ])
 
-    if (token === null) {
-      return false
-    }
-
-    if (token.type.is('CitationCitekey')) {
+    if (token?.type.is('CitationCitekey') === true) {
       return token.from
     }
 
-    if (token.type.is('CitationAtSign')) {
+    if (token?.type.is('CitationAtSign') === true) {
       return ctx.pos
     }
 
