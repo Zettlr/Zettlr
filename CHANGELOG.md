@@ -25,6 +25,8 @@
   large library files.
 - Fixed a bug that prevented Mermaid diagrams from rendering due to an
   underlying bug in the new API (#6625).
+- Fixed an issue that would cause full-text searches to start even as the input
+  field was still composing non-latin text (#6597; #6604).
 - Removed the `.md` extension from the default new filename pattern in the
   Advanced Preferences menu. This pattern is used as the filename, so the
   extension is unnecessary. Previously, creating a new file with the default
