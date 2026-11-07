@@ -258,6 +258,7 @@ export default function markdownParser (config?: MarkdownParserConfig): Language
         // YAML frontmatter
         { name: 'YAMLFrontmatter', block: true },
         { name: 'YAMLFrontmatterStart', style: customTags.YAMLFrontmatterStart },
+        { name: 'YAMLCodeContainer', block: true },
         { name: 'YAMLFrontmatterEnd', style: customTags.YAMLFrontmatterEnd },
         // Admonitions
         { name: 'Admonition', block: true, style: { 'Admonition/...': customTags.Admonition }, composite: admonitionComposite },

@@ -22,11 +22,27 @@ import { yaml } from '@codemirror/lang-yaml'
 export function yamlCodeParse (): ParseWrapper {
   const parser = yaml().language.parser
   return parseMixed((node, _input) => {
-    if (node.type.name === 'YAMLFrontmatter') {
-      return { parser, overlay: node => node.type.name === 'CodeText' }
+    // NOTE: Previously, we would check if the node.type.name is "YAMLFrontmatter"
+    // and would provide an overlay property with the function
+    // `node => node.type.name === 'CodeText'`. This then essentially parsed the
+    // entire contents of the CodeText, but mounted them as an overlay, which
+    // means that the tree was inaccessible to the syntaxTree iterators. Now, we
+    // reversed the logic and checked for a node of type CodeText that has a
+    // parent of YAMLFrontmatter, and do not provide the overlay property. This
+    // way, the entire tree replaces the CodeText node. This makes styling a bit
+    // more difficult since we can't just target the CodeText node anymore to
+    // apply a background color to the YAML frontmatter, but makes available the
+    // entirety of the frontmatter to other parts of our code.
+    if (node.type.name === 'YAMLCodeContainer' && node.node.parent?.name === 'CodeText' && node.node.parent?.parent?.name === 'YAMLFrontmatter') {
+      return { parser }
     } else {
       return null
     }
+    // if (node.type.name === 'YAMLFrontmatter') {
+    //   return { parser, overlay: node => node.type.name === 'CodeText' }
+    // } else {
+    //   return null
+    // }
   })
 }
 
@@ -81,7 +97,7 @@ export const frontmatterParser: BlockParser = {
 
     const wrapperNode = ctx.elt('YAMLFrontmatter', 0, ctx.lineStart + 3, [
       ctx.elt('YAMLFrontmatterStart', 0, 3),
-      ctx.elt('CodeText', 4, ctx.lineStart - 1),
+      ctx.elt('CodeText', 4, ctx.lineStart - 1, [ctx.elt('YAMLCodeContainer', 4, ctx.lineStart - 1)]),
       ctx.elt('YAMLFrontmatterEnd', ctx.lineStart, ctx.lineStart + 3)
     ])
 
