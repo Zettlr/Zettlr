@@ -50,6 +50,9 @@
 - Exchanged `biblatex-csl-converter` with `bibliojson`.
 - Refactor the splash screen to silence an error caused by a benign race
   condition during the boot sequence.
+- Pin the AppImage toolset in Electron builder to use a more modern one which
+  depends on fuse3 instead of the depcecated fuse2 library. This change must be
+  reverted once Electron builder is updated to v27 (#6632).
 
 # 4.9.0
 
