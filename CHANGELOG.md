@@ -11,8 +11,12 @@
   were left unconfigurable and hard-coded to `Mod-g`. These are now configurable
   so that you can change the default keybinding of `Mod-g` to `F3` if you wish
   (#6575).
-- **Change**: The toolbar styling has now been adjusted. It now looks the same
-  across all operating systems.
+- **Change**: The styles and layouts of various UI components have been
+  adjusted. The following components should now look mostly the same across all
+  operating systems:
+    - Toolbar
+    - File Tree
+    - Sidebar
 - **Change**: The file tree styling has been adjusted. It now looks mostly the
   same across all operating systems.
 - Fixed a misaligned size distribution between the file manager, editor view,

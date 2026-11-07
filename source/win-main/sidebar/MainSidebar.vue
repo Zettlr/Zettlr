@@ -1,10 +1,12 @@
 <template>
   <div id="sidebar">
-    <TabBar
-      v-bind:tabs="tabs"
-      v-bind:current-tab="currentTab"
-      v-on:tab="setCurrentTab($event)"
-    ></TabBar>
+    <div style="padding: 10px 20px 0px 20px">
+      <TabBar
+        v-bind:tabs="tabs"
+        v-bind:current-tab="currentTab"
+        v-on:tab="setCurrentTab($event)"
+      ></TabBar>
+    </div>
 
     <!-- Now the tab containers -->
     <div id="sidebar-tab-container">
@@ -93,7 +95,7 @@ body {
   @button-icon-size: 5px;
 
   #sidebar {
-    background-color: rgb(230, 230, 230);
+    background-color: transparent;
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -122,68 +124,6 @@ body {
       font-size: 16px;
       margin: 10px 0;
     }
-
-    // Table of Contents entries
-    div.toc-entry-container {
-      // Clever calculation based on the data-level property
-      // margin-left: calc(attr(data-level) * 10px);
-      display: flex;
-      margin-bottom: 10px;
-
-      div.toc-level {
-        flex-shrink: 1;
-        padding: 0px 5px;
-        font-weight: bold;
-        color: var(--system-accent-color, --c-primary);
-      }
-
-      div.toc-entry {
-        flex-grow: 3;
-        cursor: pointer;
-        &:hover { text-decoration: underline; }
-      }
-
-      div.toc-entry-active {
-        font-weight: bold;
-        color: var(--system-accent-color);
-      }
-    }
-
-    div.related-files-container {
-      div.related-file {
-        // NOTE: The margin + height equal 42, which was the automatic height
-        // before we fixed it here. We have to fix it because the Recycle
-        // scroller requires completely fixed heights.
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        padding: 5px 5px;
-        height: 35px;
-        overflow: hidden;
-
-        &:hover { background-color: rgb(200, 200, 200); }
-
-        span.filename {
-          font-size: 11px;
-          flex-grow: 8;
-          // The next four properties together ensure that we show at most two
-          // lines with a nice ellipsis (…) to indicate cut-off lines.
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-        }
-
-        span.icons {
-          display: inline-block;
-          border-radius: 4px;
-          padding: 2px;
-          flex-grow: 2;
-          flex-shrink: 0;
-          text-align: right;
-        }
-      }
-    }
   }
 
   &.dark {
@@ -194,22 +134,6 @@ body {
       div.related-files-container div.related-file:hover {
         background-color: rgb(80, 80, 80);
       }
-    }
-  }
-}
-
-body.darwin, body.linux {
-  div#sidebar {
-    background-color: transparent;
-
-    div.related-files-container {
-      div.related-file { border-radius: 4px; }
-    }
-  }
-
-  &.dark {
-    div#sidebar {
-      background-color: transparent;
     }
   }
 }
