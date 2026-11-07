@@ -148,6 +148,7 @@ export interface ConfigOptions {
     linkWithIDIfPossible: boolean
     linkFormat: 'link|title'|'title|link'
     autoSearch: boolean
+    newFileLocation: 'default'|'workspaceRoot'|'currentFolder'|'customFolder'
     customDirectory: string
   }
   editor: {
@@ -376,6 +377,12 @@ export function getConfigTemplate (): ConfigOptions {
       linkWithIDIfPossible: false,
       linkFormat: 'link|title', // Determines what internal links ([[link|title]]) look like
       autoSearch: true, // Automatically start a search upon following a link?
+      // Where to create files when following links to non-existing files:
+      // 'default' (do not create files), 'workspaceRoot' (root of
+      // the workspace containing the file with the link), 'currentFolder'
+      // (folder of the file containing the link), or 'customFolder'
+      // (customDirectory)
+      newFileLocation: 'default',
       customDirectory: '' // If present, saves auto-created files here
     },
     // Editor related stuff

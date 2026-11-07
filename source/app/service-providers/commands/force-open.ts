@@ -15,6 +15,7 @@
 
 import type { AppServiceContainer } from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
+import getNewLinkedFileDirectory from '@common/util/get-new-linked-file-directory'
 
 export interface ForceOpenAPI {
   windowId?: string
@@ -22,6 +23,14 @@ export interface ForceOpenAPI {
   linkContents: string
   newTab?: boolean
 }
+
+/**
+ * The outcome of a force-open: An existing file was opened, a new file was
+ * created, or neither happened (e.g., because the user does not want files to
+ * be created automatically). For opened and created files, filePath contains
+ * the file's path.
+ */
+export type ForceOpenResult = { action: 'opened'|'created', filePath: string }|{ action: 'none' }
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: AppServiceContainer) {
@@ -33,19 +42,14 @@ export default class ForceOpen extends ZettlrCommand {
     *
     * @param   {string}        evt      The event name
     * @param   {ForceOpenAPI}  payload  the parameters of the file to be opened
-    * @return  {boolean}                Whether the file was successfully opened.
+    * @return  {ForceOpenResult}        Whether a file was opened, created, or neither.
     */
-  async run (evt: string, payload: ForceOpenAPI): Promise<void> {
+  async run (evt: string, payload: ForceOpenAPI): Promise<ForceOpenResult> {
     let { windowId, linkContents, newTab, leafId } = payload
 
     if (windowId === undefined) {
       windowId = this._app.documents.windowKeys()[0]
     }
-
-    // Determine if the file should be created, if it can't be found. For this
-    // we need both the respective preferences setting and an auto-search
-    // command.
-    const { customDirectory } = this._app.config.get().zkn
 
     const filename = linkContents.includes('#') ? linkContents.slice(0, linkContents.indexOf('#')) : linkContents
 
@@ -54,10 +58,32 @@ export default class ForceOpen extends ZettlrCommand {
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file !== undefined) {
       await this._app.documents.openFile(windowId, leafId, file.path, newTab)
-    } else if (await this._app.fsal.isDir(customDirectory)) {
-      // Call the file-new command on the application, which'll do all
-      // necessary steps for us.
-      await this._app.commands.run('file-new', { windowId, leafId, name: linkContents, path: customDirectory })
+      return { action: 'opened', filePath: file.path }
+    } else {
+      // Determine if and where the file should be created, according to the
+      // user's preferences.
+      const config = this._app.config.get()
+      const { newFileLocation, customDirectory } = config.zkn
+
+      // The file containing the link is the active file of the leaf from which
+      // the link was followed (or the last focused leaf, if unknown).
+      const sourceLeafId = leafId ?? this._app.documents.getLastFocusedLeafId()
+      const sourceFile = sourceLeafId !== undefined
+        ? this._app.documents.getActiveFile(sourceLeafId)
+        : null
+
+      const targetDir = getNewLinkedFileDirectory(newFileLocation, customDirectory, sourceFile, config.app.openWorkspaces)
+
+      if (targetDir !== undefined && await this._app.fsal.isDir(targetDir)) {
+        // Call the file-new command on the application, which'll do all
+        // necessary steps for us.
+        const createdPath = await this._app.commands.run('file-new', { windowId, leafId, name: linkContents, path: targetDir })
+        if (typeof createdPath === 'string') {
+          return { action: 'created', filePath: createdPath }
+        }
+      }
+
+      return { action: 'none' }
     }
   }
 }

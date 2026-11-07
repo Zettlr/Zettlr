@@ -53,6 +53,7 @@
               v-bind:editor-commands="editorCommands"
               v-bind:window-id="windowId"
               v-on:global-search="startGlobalSearch($event)"
+              v-on:reveal-file="revealFileInFileManager($event)"
             ></EditorPane>
             <EditorBranch
               v-else-if="paneConfiguration !== undefined"
@@ -61,6 +62,7 @@
               v-bind:editor-commands="editorCommands"
               v-bind:is-last="true"
               v-on:global-search="startGlobalSearch($event)"
+              v-on:reveal-file="revealFileInFileManager($event)"
             ></EditorBranch>
           </template>
           <template #view2>
@@ -185,6 +187,7 @@ import { type AnyDescriptor } from 'source/types/common/fsal'
 import type { DocumentManagerIPCAPI } from 'source/app/service-providers/documents'
 import { TaskStatus } from 'source/pinia/lrt-store'
 import PopoverLRT from './PopoverLRT.vue'
+import getDirectoriesToReveal from '@common/util/get-directories-to-reveal'
 
 const ipcRenderer = window.ipc
 
@@ -877,6 +880,32 @@ function startGlobalSearch (terms: string): void {
       globalSearchComponent.value?.startSearch(terms)
     })
     .catch(err => console.error(err))
+}
+
+/**
+ * Shows the file manager (instead of the global search), and reveals the given
+ * file in it. The file must already be open, since the file manager highlights
+ * the active file and scrolls it into view.
+ *
+ * @param   {string}  filePath  The file to reveal
+ */
+function revealFileInFileManager (filePath: string): void {
+  mainSplitViewVisibleComponent.value = 'fileManager'
+  configStore.setConfigValue('window.fileManagerVisible', true)
+
+  // Uncollapse all directories from the workspace root down to the file
+  const dirs = getDirectoriesToReveal(filePath, configStore.config.app.openWorkspaces)
+  for (const dir of dirs) {
+    if (!windowStateStore.uncollapsedDirectories.includes(dir)) {
+      windowStateStore.uncollapsedDirectories.push(dir)
+    }
+  }
+
+  // Select the file's directory so that the file list (in thin and expanded
+  // mode) displays the file, too. This also removes the highlight from any
+  // previously selected directory. Files outside any workspace are shown among
+  // the root files, so for them we only deselect the previous directory.
+  configStore.setConfigValue('openDirectory', dirs.length > 0 ? dirs[dirs.length - 1] : null)
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

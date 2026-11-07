@@ -137,6 +137,26 @@ Dans ce dernier guide, nous nous plongerons dans l'art de citer des références
     assert.equal(searchResult.length, 3);
   });
 
+  it('should return 1-based line numbers and line-relative ranges', function () {
+    const query: SearchQueryBoolean = {
+      type: 'boolean',
+      caseInsensitive: true,
+      terms: [{ words: ['zettlr'], operator: 'AND' }]
+    }
+
+    const lines = fileContent.split('\n')
+    const searchResult = searchFileBoolean(descriptor, fileContent, query)
+    const contentResults = searchResult.filter(r => r.type === 'content')
+    assert.deepStrictEqual(contentResults.map(r => r.line), [ 2, 9, 10 ])
+    for (const res of contentResults) {
+      const line = lines[res.line - 1]
+      assert.ok(res.lineRanges.length > 0)
+      for (const { from, to } of res.lineRanges) {
+        assert.equal(line.slice(from, to).toLowerCase(), 'zettlr')
+      }
+    }
+  })
+
   it('should return correct count excerpt of NOT search', function () {
     const query: SearchQueryBoolean = {
       type: 'boolean',

@@ -51,6 +51,7 @@
             v-bind:editor-commands="editorCommands"
             v-bind:persistent-state-map="persistentStateMap"
             v-on:global-search="emit('globalSearch', $event)"
+            v-on:reveal-file="emit('revealFile', $event)"
           ></MainEditor>
         </Teleport>
       </template>
@@ -157,7 +158,10 @@ const props = defineProps<{
 
 type DragTargetAreas = 'editor'|'top'|'left'|'right'|'bottom'
 
-const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
+const emit = defineEmits<{
+  (e: 'globalSearch', query: string): void
+  (e: 'revealFile', filePath: string): void
+}>()
 
 // UNREFFED SCROLL MAP
 // Each individual editor pane has its own persistent state map so that the

@@ -81,7 +81,7 @@ export function getZettelkastenFields (_config: ConfigOptions): PreferencesField
         },
         {
           type: 'checkbox',
-          label: trans('Start a full-text search when following internal links'),
+          label: trans('Start a full-text search when following internal links to nonexistent files'),
           info: trans('The search string will match the content between the brackets: [[ ]].'),
           model: 'zkn.autoSearch'
         },
@@ -89,9 +89,24 @@ export function getZettelkastenFields (_config: ConfigOptions): PreferencesField
     },
     {
       title: trans('Zettelkasten folder'),
-      infoString: trans('Choosing a Zettelkasten folder allows Zettlr to automatically create files when following links to not-yet-existing files. This folder must be open as a Workspace in Zettlr.'),
+      infoString: trans('Choose where Zettlr should automatically create files when following links to not-yet-existing files.'),
       group: PreferencesGroups.Zettelkasten,
       fields: [
+        {
+          type: 'radio',
+          model: 'zkn.newFileLocation',
+          options: {
+            default: trans('Default behavior - do not create notes'),
+            workspaceRoot: trans('Use root folder of current workspace'),
+            currentFolder: trans('Use folder of current note'),
+            customFolder: trans('Use specific folder')
+          }
+        },
+        {
+          type: 'form-text',
+          display: 'info',
+          contents: trans('The folder below is only used with "Use specific folder" and must be open as a Workspace in Zettlr.')
+        },
         {
           type: 'directory',
           model: 'zkn.customDirectory',

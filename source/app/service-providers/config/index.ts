@@ -286,6 +286,17 @@ export default class ConfigProvider extends ProviderContract {
         }
       }
     } // END: openPaths migration
+
+    // The option `zkn.newFileLocation` was introduced to choose where files
+    // are auto-created when following links to non-existing files. Users who
+    // previously had set a custom directory should keep using it.
+    const zkn = readConfig.zkn
+    if (
+      typeof zkn === 'object' && zkn !== null && !('newFileLocation' in zkn) &&
+      typeof zkn.customDirectory === 'string' && zkn.customDirectory.trim() !== ''
+    ) {
+      zkn.newFileLocation = 'customFolder'
+    } // END: zkn.newFileLocation migration
   }
 
   /**

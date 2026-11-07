@@ -1452,6 +1452,15 @@ current contents from the editor somewhere else, and restart the application.`
     return null
   }
 
+  /**
+   * Returns the ID of the leaf that was most recently focused, if any.
+   *
+   * @return  {string|undefined}  The leaf ID
+   */
+  public getLastFocusedLeafId (): string|undefined {
+    return this._lastEditor.leafId
+  }
+
   public isModified (filePath: string): boolean {
     const doc = this.documents.find(doc => doc.filePath === filePath)
     if (doc !== undefined) {

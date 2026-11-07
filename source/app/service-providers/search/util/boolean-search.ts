@@ -51,15 +51,21 @@ export interface FileContentSearchResult {
    */
   excerpt: string
   /**
-   * The line number where the match was found. If line is -1, this indicates a
-   * match in the filename or the file's tags.
+   * The (1-based) line number where the match was found. If line is -1, this
+   * indicates a match in the filename or the file's tags.
    */
   line: number
   /**
-   * Wherever on this line something matched, the ranges indicate from which
-   * character to which something matched. Can be used for highlighting.
+   * Wherever in the excerpt something matched, the ranges indicate from which
+   * character to which something matched. These are relative to the excerpt
+   * and can be used for highlighting the excerpt.
    */
   ranges: Array<{ from: number, to: number }>
+  /**
+   * The same matches as in ranges, but relative to the start of the line. Can
+   * be used for highlighting matches in the document itself.
+   */
+  lineRanges: Array<{ from: number, to: number }>
 }
 
 /**
@@ -273,8 +279,11 @@ export function searchFileBoolean (descriptor: MDFileDescriptor|CodeFileDescript
         // Then map those to the actual results
         .map(({ ranges, line }) => {
           const { relativeRanges, excerpt } = getTextSurrounding(ranges, fileContent)
+          // All ranges are on the same line, so they share the line start
+          const lineStart = fileContent.lastIndexOf('\n', ranges[0].from - 1) + 1
+          const lineRanges = ranges.map(r => ({ from: r.from - lineStart, to: r.to - lineStart }))
           return {
-            type: 'content', line, ranges: relativeRanges, weight: 1,
+            type: 'content', line, ranges: relativeRanges, lineRanges, weight: 1,
             excerpt
           } satisfies FileContentSearchResult
         })

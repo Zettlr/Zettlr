@@ -51,6 +51,7 @@ import type { DocumentManagerIPCAPI, DocumentsUpdateContext } from 'source/app/s
 import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citeproc'
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 import type { FileContentSearchResult } from 'source/app/service-providers/search'
+import type { ForceOpenResult } from 'source/app/service-providers/commands/force-open'
 import type { CustomEditorShortcut } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
 import type { CitationRecord } from 'source/common/modules/markdown-editor/autocomplete/citations'
 import type { FileRecord } from 'source/common/modules/markdown-editor/autocomplete/files'
@@ -82,7 +83,10 @@ const props = defineProps<{
   persistentStateMap: Map<string, EditorViewPersistentState>
 }>()
 
-const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
+const emit = defineEmits<{
+  (e: 'globalSearch', query: string): void
+  (e: 'revealFile', filePath: string): void
+}>()
 
 const windowStateStore = useWindowStateStore()
 const documentTreeStore = useDocumentTreeStore()
@@ -516,11 +520,18 @@ async function getEditorFor (doc: string): Promise<MarkdownEditor> {
         windowId: props.windowId
       }
     })
+      .then((result: ForceOpenResult) => {
+        if (result.action === 'opened' || result.action === 'created') {
+          // The linked file exists or has just been created: Show it in the
+          // file manager
+          emit('revealFile', result.filePath)
+        } else if (configStore.config.zkn.autoSearch) {
+          // No file has been found or created, so start a search if the user
+          // wishes so. (A search for a newly created, empty file is pointless.)
+          emit('globalSearch', linkContents)
+        }
+      })
       .catch(err => console.error(err))
-
-    if (configStore.config.zkn.autoSearch) {
-      emit('globalSearch', linkContents)
-    }
   })
 
   editor.on('zettelkasten-tag', (tag: string) => {
@@ -671,12 +682,22 @@ function maybeHighlightSearchResults (): void {
 
   // Construct CodeMirror.Ranges from the results
   const rangesToHighlight = []
+  const doc = currentEditor.instance.state.doc
   // NOTE: We have to filter out "whole-file" results
   for (const res of result.result.filter((res): res is FileContentSearchResult => res.type === 'content' && res.line > -1)) {
-    const startIdx = currentEditor.instance.state.doc.line(res.line + 1).from
-    for (const range of res.ranges) {
-      const { from, to } = range
-      rangesToHighlight.push(EditorSelection.range(startIdx + from, startIdx + to))
+    // NOTE: Search result line numbers are 1-based, just like CodeMirror's.
+    // The search runs on the file contents on disk, which may differ from the
+    // editor contents (e.g., unsaved changes), so we must guard against
+    // out-of-range positions.
+    if (res.line < 1 || res.line > doc.lines) {
+      continue
+    }
+    const line = doc.line(res.line)
+    for (const { from, to } of res.lineRanges) {
+      if (from < 0 || to > line.length || from > to) {
+        continue
+      }
+      rangesToHighlight.push(EditorSelection.range(line.from + from, line.from + to))
     }
   }
   currentEditor.highlightRanges(rangesToHighlight)

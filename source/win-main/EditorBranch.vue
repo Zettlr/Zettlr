@@ -22,6 +22,7 @@
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
         v-bind:is-last="index === node.nodes.length - 1 || node.nodes.length === 1"
         v-on:global-search="emit('globalSearch', $event)"
+        v-on:reveal-file="emit('revealFile', $event)"
       ></EditorBranch>
       <EditorPane
         v-else
@@ -36,6 +37,7 @@
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
         v-on:global-search="emit('globalSearch', $event)"
+        v-on:reveal-file="emit('revealFile', $event)"
       ></EditorPane>
       <!-- Here comes the resizing (for every but the last child) -->
       <div
@@ -65,7 +67,10 @@ const props = defineProps<{
   editorCommands: EditorCommands
 }>()
 
-const emit = defineEmits<(e: 'globalSearch', query: string) => void>()
+const emit = defineEmits<{
+  (e: 'globalSearch', query: string): void
+  (e: 'revealFile', filePath: string): void
+}>()
 
 const sizes = ref<number[]>(props.node.sizes.map(s => s))
 const currentResizerIndex = ref<number>(-1)
