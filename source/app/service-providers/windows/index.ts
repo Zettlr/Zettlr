@@ -41,6 +41,7 @@ import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldCloseAllDialog from './dialog/should-close-all'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
+import shouldExportOverwrite from './dialog/should-export-overwrite'
 import askDirectoryDialog from './dialog/ask-directory'
 import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
@@ -989,6 +990,22 @@ export default class WindowProvider extends ProviderContract {
     return await shouldOverwriteFileDialog(firstMainWin, filename)
   }
 
+  /**
+    * Ask whether the user wants to overwrite an existing file when exporting.
+    *
+    * @param  {string}   filePath  The filename to show in the prompt message.
+    * @return {boolean}             Resolves to `true` if the file should be overwritten.
+    */
+  async shouldOverwriteExport (filePath: string): Promise<boolean> {
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
+      return true
+    }
+
+    const filename = path.basename(filePath)
+
+    return await shouldExportOverwrite(this._config, firstMainWin, filename)
+  }
 
   /**
     * Ask whether or not the user wants to close all open workspaces or files
