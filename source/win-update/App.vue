@@ -220,7 +220,7 @@ function openReleasesPage (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body.darwin, body.win32, body.linux {
   #update {
     padding: 10px;

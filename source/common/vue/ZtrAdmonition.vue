@@ -31,7 +31,7 @@ const icon = computed(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 .admonition {
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@ const icon = computed(() => {
   padding: 5px 10px;
   font-size: 80%;
 
-  // More spacing between the icon and the text
+  /* More spacing between the icon and the text */
   cds-icon { margin-right: 10px; }
 
   &.warning {

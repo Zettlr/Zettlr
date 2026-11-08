@@ -72,7 +72,7 @@ const props = defineProps<{
 const emit = defineEmits<(e: 'tab', value: string) => void>()
 </script>
 
-<style lang="less">
+<style lang="css">
 body {
   .system-tablist {
     display: flex;
@@ -87,7 +87,7 @@ body {
       &:not(:first-child) {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
-        border-left: 0px; // We only want 1px border between the buttons
+        border-left: 0px; /* We only want 1px border between the buttons */
       }
 
       &:not(:last-child) {
@@ -102,7 +102,7 @@ body {
       &.active { background-color: rgb(120, 120, 120); }
 
       &:not(:last-child) {
-        // We need a border here
+        /* We need a border here */
         border-right: 1px solid rgb(120, 120, 120);
       }
     }
