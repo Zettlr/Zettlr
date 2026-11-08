@@ -49,7 +49,7 @@ const emit = defineEmits<(e: 'update:modelValue', value: string) => void>()
 const fieldID = computed<string>(() => 'field-input-' + (props.name ?? ''))
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 input[type="time"] {
   font-family: system-ui, sans-serif;
 }

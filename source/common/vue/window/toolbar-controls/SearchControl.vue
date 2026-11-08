@@ -56,21 +56,21 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
 })
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .toolbar-search-container {
     position: relative;
 
-    clr-icon {
+    cds-icon {
       position: absolute;
       top: 2px;
       left: 2px;
     }
 
     .toolbar-search {
-      // Make the search input itself invisible
+      /* Make the search input itself invisible */
       background-color: transparent !important;
-      border: none !important; // TODO: Remove once the styles have been migrated
+      border: none !important;
       padding-left: 24px;
     }
   }
@@ -80,7 +80,7 @@ body.darwin {
     border-radius: 4px;
     background-color: rgb(245, 245, 245);
     padding-left: 5px;
-    width: 32px; // Hide the search bar initially, and reveal on focus
+    width: 32px; /* Hide the search bar initially, and reveal on focus */
     height: 26px;
     transition: width 0.2s ease;
 
@@ -89,7 +89,7 @@ body.darwin {
     &:not(:focus-within) {
       padding: 4px 8px;
 
-      // While the input is hidden anyway, we must reset the CLR-ICON's position
+      /* While the input is hidden anyway, we must reset the CLR-ICON's position */
       cds-icon { position: initial; }
     }
 
@@ -100,7 +100,7 @@ body.darwin {
     }
 
     &:focus-within {
-      width: initial; // Reset the width of the container
+      width: initial;
       height: initial;
       display: flex;
       align-items: center;
