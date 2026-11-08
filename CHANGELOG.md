@@ -43,6 +43,9 @@
   installations of Zettlr. Existing users will have to update the pattern
   manually (#6638).
 - Fixed the spacing on the changelog entries to make it more pleasant to read.
+- Fixed an issue that could, under the right circumstances, write unusual values
+  for resized split views into the configuration, necessitating a configuration
+  modification to render Zettlr usable again (#5829).
 
 ## Under the Hood
 
