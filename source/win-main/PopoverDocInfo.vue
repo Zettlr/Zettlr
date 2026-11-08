@@ -98,7 +98,7 @@ function getWdSelectedLabel (wordsOrChars: number): string {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .document-info {
     padding: 5px;

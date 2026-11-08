@@ -684,18 +684,15 @@ function maybeHighlightSearchResults (): void {
 
 </script>
 
-<style lang="less">
-// Editor Geometry
-
-// Editor margins left and right for all breakpoints in both fullscreen and
-// normal mode.
-@editor-margin-fullscreen-sm:  50px;
-@editor-margin-fullscreen-md:   5vw;
-@editor-margin-fullscreen-lg:  10vw;
-@editor-margin-fullscreen-xl:  20vw;
-@editor-margin-fullscreen-xxl: 30vw;
-
+<style lang="css">
 .main-editor-wrapper {
+  /* Editor margins left and right for all breakpoints in both fullscreen and
+  normal mode. */
+  --editor-margin-fullscreen-sm:  50px;
+  --editor-margin-fullscreen-md:   5vw;
+  --editor-margin-fullscreen-lg:  10vw;
+  --editor-margin-fullscreen-xl:  20vw;
+  --editor-margin-fullscreen-xxl: 30vw;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
@@ -709,35 +706,34 @@ function maybeHighlightSearchResults (): void {
     .cm-content { min-width: 0; }
   }
 
-  // If a code file is loaded, we need to display the editor contents in monospace.
+  /* If a code file is loaded, we need to display the editor contents in monospace. */
   &.code-file .cm-editor {
     font-family: Inconsolata, monospace;
 
-    // Reset the margins for code files
+    /* Reset the margins for code files */
     .cm-scroller { padding: 0px; }
+  }
+
+  &.fullscreen {
+    /* This makes the editor pane show "fullscreen" on top over the rest of the UI
+    except the toolbar (due to a position: relative on the window content div). */
+    position: absolute;
+    z-index: 300;
+    top: 0;
+
+    .cm-scroller {
+      @media(min-width: 1301px) { padding: 0 var(--editor-margin-fullscreen-xxl); }
+      @media(max-width: 1300px) { padding: 0 var(--editor-margin-fullscreen-xl); }
+      @media(max-width: 1100px) { padding: 0 var(--editor-margin-fullscreen-lg); }
+      @media(max-width: 1000px) { padding: 0 var(--editor-margin-fullscreen-md); }
+      @media(max-width:  800px) { padding: 0 var(--editor-margin-fullscreen-sm); }
+
+    }
   }
 }
 
 body.dark .main-editor-wrapper {
   background-color: #2b2b2c;
-}
-
-// CodeMirror fullscreen
-.main-editor-wrapper.fullscreen {
-  // This makes the editor pane show "fullscreen" on top over the rest of the UI
-  // except the toolbar (due to a position: relative on the window content div).
-  position: absolute;
-  z-index: 300;
-  top: 0;
-
-  .cm-scroller {
-    @media(min-width: 1301px) { padding: 0 @editor-margin-fullscreen-xxl; }
-    @media(max-width: 1300px) { padding: 0 @editor-margin-fullscreen-xl; }
-    @media(max-width: 1100px) { padding: 0 @editor-margin-fullscreen-lg; }
-    @media(max-width: 1000px) { padding: 0 @editor-margin-fullscreen-md; }
-    @media(max-width:  800px) { padding: 0 @editor-margin-fullscreen-sm; }
-
-  }
 }
 
 body.darwin {
