@@ -87,6 +87,12 @@ export interface ThemeVars {
   '--zettlr-editor-header-6-size': string
   /** CSS `<color>` value */
   '--zettlr-editor-error-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-warning-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-info-color': string
+  /** CSS `<color>` value */
+  '--zettlr-editor-hint-color': string
   /** CSS `opacity` value */
   '--zettlr-editor-opacity': string|number
   /** CSS `text-decoration` value */
@@ -149,7 +155,10 @@ const headerSize4 = '1.3em'
 const headerSize5 = '1em'
 const headerSize6 = '1em'
 
-const errorColor = 'var(--red-2)'
+const errorColor = 'var(--zettlr-caution-color)'
+const warningColor = 'var(--zettlr-warning-color)'
+const infoColor = 'var(--zettlr-info-color)'
+const hintColor = 'var(--zettlr-note-color)'
 
 const opacity = 0.65
 
@@ -186,6 +195,9 @@ export const defaultVarsLight: ThemeVars = {
   '--zettlr-editor-header-5-size': headerSize5,
   '--zettlr-editor-header-6-size': headerSize6,
   '--zettlr-editor-error-color': errorColor,
+  '--zettlr-editor-warning-color': warningColor,
+  '--zettlr-editor-info-color': infoColor,
+  '--zettlr-editor-hint-color': hintColor,
   '--zettlr-editor-opacity': opacity,
   '--zettlr-editor-line-decoration': linkDecoration,
   '--zettlr-editor-lint-decoration': lintDecoration,
@@ -220,6 +232,9 @@ export const defaultVarsDark: ThemeVars = {
   '--zettlr-editor-header-5-size': headerSize5,
   '--zettlr-editor-header-6-size': headerSize6,
   '--zettlr-editor-error-color': errorColor,
+  '--zettlr-editor-warning-color': warningColor,
+  '--zettlr-editor-info-color': infoColor,
+  '--zettlr-editor-hint-color': hintColor,
   '--zettlr-editor-opacity': opacity,
   '--zettlr-editor-line-decoration': linkDecoration,
   '--zettlr-editor-lint-decoration': lintDecoration,
@@ -447,18 +462,18 @@ export const editorTheme = EditorView.baseTheme({
   },
   '.cm-lintRange-error': {
     backgroundImage: 'none',
-    textDecorationColor: 'var(--zettlr-caution-color)',
+    textDecorationColor: 'var(--zettlr-editor-error-color)',
   },
   '.cm-lintRange-warning': {
     backgroundImage: 'none',
-    textDecorationColor: 'var(--zettlr-warning-color)',
+    textDecorationColor: 'var(--zettlr-editor-warning-color)',
   },
   '.cm-lintRange-info': {
     backgroundImage: 'none',
-    textDecorationColor: 'var(--zettlr-note-color)',
+    textDecorationColor: 'var(--zettlr-editor-info-color)',
   },
   '.cm-lintRange-hint': {
     backgroundImage: 'none',
-    textDecorationColor: 'var(--zettlr-tip-color)',
+    textDecorationColor: 'var(--zettlr-editor-hint-color)',
   },
 })
