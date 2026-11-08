@@ -542,10 +542,7 @@ export default class UpdateProvider extends ProviderContract {
 
     // Let's download the SHA256 data as well
     try {
-      const response = await ky(
-        this._updateState.checksumFile.browser_download_url,
-        { method: 'GET', timeout: 5000 }
-      )
+      const response = await ky.get(this._updateState.checksumFile.browser_download_url)
 
       // Now we need to parse the data. It looks like this:
       // [sha256 sum]  [binary name]

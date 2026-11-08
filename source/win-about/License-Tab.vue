@@ -922,8 +922,8 @@
  */
 </script>
 
-<style lang="less">
-// Restore the margin which is being taken away by the generics rule in the geometry css
+<style lang="css">
+/* Restore the margin which is being taken away by the generics rule in the geometry css */
 div#gnu-gpl-3-0-text * {
   margin: revert;
 }

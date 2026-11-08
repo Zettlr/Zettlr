@@ -95,11 +95,11 @@ const LanguageToolInfo = trans('Zettlr offers an integration with LanguageTool.o
 const ltPrivacyLinkLabel = trans('View the Privacy Policy by LanguageTooler GmbH')
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 div#about-general {
   * {
-    // Reset the default removed margin on simple p-elements etc., which is
-    // currently applied in the geometry CSS.
+    /* Reset the default removed margin on simple p-elements etc., which is
+    currently applied in the geometry CSS. */
     margin: revert;
   }
 

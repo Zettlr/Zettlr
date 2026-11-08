@@ -227,6 +227,9 @@ body.darwin, body.win32, body.linux {
 
     p { margin: 10px 0px; }
 
+    /* Restore the margin which is being taken away by the generics rule in the geometry css */
+    #changelog * { margin: revert; }
+
     #changelog {
       padding: 10px;
       h1 { font-size: 110%; }
