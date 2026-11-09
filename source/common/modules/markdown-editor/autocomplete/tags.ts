@@ -63,11 +63,16 @@ export const tags: AutocompletePlugin = {
   applies (ctx) {
     const token = ctx.tokenBefore(['ZknTag'])
 
-    if (token === null) {
-      return false
+    if (token !== null) {
+      return token.from + 1
     }
 
-    return token.from + 1
+    // Allow bare `#` to trigger autocomplete
+    if (ctx.matchBefore(/(?:^|[\s({[])#/)) {
+      return ctx.pos
+    }
+
+    return false
   },
   entries (ctx) {
     return ctx.state.field(tagsUpdateField)
