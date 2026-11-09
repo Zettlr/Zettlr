@@ -101,12 +101,11 @@ function getCitationEntries (state: EditorState): Completion[] {
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   const citeStyle = view.state.field(configField).citeStyle
 
-  // The possible previous characters are `{[}{-}@`.
+  // The possible leading characters are `[` and/or `-`, and `@`.
   // Possible tailing characters are `]`
-  // Trim whitespace to make the `startsWith` test simpler.
-  const charBefore = view.state.sliceDoc(from - 3, from).trim()
-  const charAfter = view.state.sliceDoc(to, to + 1).trim()
-  const noBrackets = !charBefore.startsWith('[') && !charAfter.startsWith(']')
+  // Trim whitespace to make the tests simpler.
+  const slice = view.state.sliceDoc(from - 3, to + 1).trim()
+  const noBrackets = !(slice.startsWith('[-@') || slice.startsWith('[@')) && !slice.endsWith(']')
 
   if (citeStyle === 'regular' && noBrackets) {
     const prefix = charBefore.slice(-2, -1) === '-' ? '-@' : '@'
