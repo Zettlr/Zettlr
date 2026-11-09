@@ -100,22 +100,21 @@ function getCitationEntries (state: EditorState): Completion[] {
  */
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   const citeStyle = view.state.field(configField).citeStyle
-  const lineObject = view.state.doc.lineAt(from)
-  const line = lineObject.text
-  const fromCh = from - lineObject.from
-  const toCh = to - lineObject.from
 
-  const afterOpen = line.lastIndexOf('[', fromCh) > line.lastIndexOf(']', fromCh)
-  // Either no open and 1 close bracket or a close bracket after an open bracket
-  const beforeClose = (!line.includes('[', toCh) && line.includes(']', toCh)) || (line.indexOf(']', toCh) < line.indexOf('[', toCh))
-  const noBrackets = !afterOpen && !beforeClose
+  // The possible previous characters are `{[}{-}@`.
+  // Possible tailing characters are `]`
+  // Trim whitespace to make the `startsWith` test simpler.
+  const charBefore = view.state.sliceDoc(from - 3, from).trim()
+  const charAfter = view.state.sliceDoc(to, to + 1).trim()
+  const noBrackets = !charBefore.startsWith('[') && !charAfter.startsWith(']')
 
   if (citeStyle === 'regular' && noBrackets) {
-    const insert = `[@${completion.label}]`
+    const prefix = charBefore.slice(-2, -1) === '-' ? '-@' : '@'
+    const insert = `[${prefix}${completion.label}]`
     view.dispatch({
-      // Minus 1 is important since we have to overwrite the @-sign with [@
-      changes: [{ from: from - 1, to, insert }],
-      selection: { anchor: from - 1 + insert.length - 1 } // Between citekey and ]
+      // Overwrite any previous citekey
+      changes: [{ from: from - prefix.length, to, insert }],
+      selection: { anchor: from + insert.length - 1 } // Between citekey and ]
     })
   } else if (citeStyle === 'in-text-suffix' && noBrackets) {
     // We should add square brackets after the completion text
@@ -143,6 +142,10 @@ export const citations: AutocompletePlugin = {
     }
 
     if (token?.type.is('CitationAtSign') === true) {
+      return ctx.pos
+    }
+
+    if (ctx.matchBefore(/(?:^|\s)-?@/)) {
       return ctx.pos
     }
 

@@ -106,11 +106,11 @@ export const files: AutocompletePlugin = {
   applies (ctx) {
     const token = ctx.tokenBefore(['ZknLinkContent'])
 
-    if (token === null) {
-      return false
+    if (token !== null) {
+      return token.from
     }
 
-    return token.from
+    return false
   },
   entries (ctx) {
     return ctx.state.field(filesUpdateField)
