@@ -82,7 +82,7 @@ const autoOpenLabel = trans('Open after export')
 const tempDirLabel = trans('Temporary directory')
 const cwdLabel = trans('Current directory')
 const askLabel = trans('Select directory')
-const outputFileIsAbsoluteLable = trans('Directory selection is disabled because the profile specifies an absolute path')
+const outputFileIsAbsoluteLable = trans('Directory selection is limited because the profile specifies an absolute path')
 
 // This is used to limit the number of selected
 // profile to filename mappings in the config
