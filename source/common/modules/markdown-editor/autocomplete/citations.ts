@@ -145,6 +145,7 @@ export const citations: AutocompletePlugin = {
       return ctx.pos
     }
 
+    // Allow bare `@` or `-@` to trigger autocomplete.
     if (ctx.matchBefore(/(?:^|\s)-?@/)) {
       return ctx.pos
     }
