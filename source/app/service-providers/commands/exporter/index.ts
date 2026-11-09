@@ -97,20 +97,24 @@ export async function makeExport (
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
     resolveTargetPath: async (target: string) => {
-      // Output is to a custom or temporary directory,
-      // in which case, ignore any custom-set output path
-      // and output to `targetDirectory + basename`
-      if (options.targetDirectory !== options.cwd) {
-        target = path.join(options.targetDirectory,  path.basename(target))
+      const filePath = path.normalize(target)
+
+      console.log('NORMAL PATH', filePath)
+      // Output is to a temporary directory, in which case,
+      // ignore any custom-set output path and output to
+      // `targetDirectory + basename`
+      if (options.targetDirectory === app.getPath('temp')) {
+        target = path.join(options.targetDirectory,  path.basename(filePath))
       // The user set a relative `output-file` path, so resolve
-      // it relative to the `targetDirectory`, which is the cwd.
+      // it relative to the `targetDirectory`.
       } else if (!path.isAbsolute(target)) {
-        target = path.resolve(options.targetDirectory, target)
-      // Otherwise, since the user provided an absolute path,
-      // normalize it, resolving internal `..` and `.` segments.
+        target = path.resolve(options.targetDirectory, filePath)
+      // Otherwise, the user provided an absolute path, so return it as is.
       } else {
-        target = path.normalize(target)
+        target = filePath
       }
+
+      console.log('EXPORT PATH', target)
 
       return target
     },

@@ -11,14 +11,21 @@
       <!-- The choice of working directory vs. temporary applies to all exporters -->
       <hr>
       <RadioControl
+        v-if="!outputFilenameIsAbsolute"
         v-model="exportDirectory"
-        v-bind:disabled="outputFilenameIsAbsolute"
         v-bind:options="{
           'temp': tempDirLabel,
           'cwd': cwdLabel,
           'ask': askLabel
         }"
       ></RadioControl>
+      <CheckboxControl
+        v-else
+        v-bind:model-value="exportDirectory === 'temp'"
+        v-bind:label="tempDirLabel"
+        v-bind:name="'temporary-export-checkbox'"
+        v-on:update:model-value="exportDirectory = $event ? 'temp' : preferredExportDirectory"
+      ></CheckboxControl>
       <ZtrAdmonition v-if="outputFilenameIsAbsolute" type="info" class="disable-directory-admonition">
         {{ outputFileIsAbsoluteLable }}: <strong>{{ outputFilename }}</strong>
       </ZtrAdmonition>
@@ -118,6 +125,7 @@ onMounted(() => {
 const isExporting = ref(false)
 const format = ref('')
 const exportDirectory = ref(configStore.config.export.dir)
+const preferredExportDirectory = ref<'ask' | 'cwd'>(configStore.config.export.dir === 'ask' ? 'ask' : 'cwd')
 const autoOpenExport = ref(configStore.config.export.autoOpenExportedFiles)
 const profileMetadata = ref<PandocProfileMetadata[]>([])
 
@@ -158,6 +166,10 @@ watch(autoOpenExport, function (value) {
 })
 
 watch(exportDirectory, function (value) {
+  if (value === 'ask' || value === 'cwd') {
+    preferredExportDirectory.value = value
+  }
+
   // This watcher allows the user to set the export directory from here
   configStore.setConfigValue('export.dir', value)
 })
