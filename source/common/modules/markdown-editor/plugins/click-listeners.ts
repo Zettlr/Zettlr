@@ -46,19 +46,19 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   // BlockSequence -> list of Item/Literal nodes (long list)
   // FlowSequence -> list of Item/Literal nodes (one-line array-style list)
 
-  if (node.type.name !== 'Literal' && node.type.name !== 'QuotedLiteral') {
+  if (!node.type.is('Literal') && !node.type.is('QuotedLiteral')) {
     return false
   }
 
   let parent = node.node.parent
   while (parent !== null) {
-    if (parent.type.name === 'YAMLFrontmatter') {
+    if (parent.type.is('YAMLFrontmatter')) {
       break
     }
     parent = parent.parent
   }
 
-  if (parent?.type.name !== 'YAMLFrontmatter') {
+  if (!parent || !parent.type.is('YAMLFrontmatter')) {
     return false
   }
 
@@ -73,7 +73,7 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
 
   // It's a literal in a flow or block sequence, or direct part of a pair.
   const maybePair = valueContainer.type.name === 'Pair' ? valueContainer : valueContainer.parent
-  if (maybePair?.type.name !== 'Pair') {
+  if (!maybePair || !maybePair.type.is('Pair')) {
     return false
   }
 
@@ -93,7 +93,10 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   // must be the top-level element. Thus, the parent chain of the Pair must be:
   // Pair -> BlockMapping -> Document
   // (The frontmatter is one large BlockMapping)
-  if (maybePair.parent?.name !== 'BlockMapping' || maybePair.parent?.parent?.name !== 'Document') {
+  if (
+    !maybePair.parent || !maybePair.parent.type.is('BlockMapping')
+    || !maybePair.parent?.parent || !maybePair.parent.parent.type.is('Document')
+  ) {
     return false
   }
 
