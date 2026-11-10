@@ -22,8 +22,8 @@ import { genericTextNode } from './generic-text-node'
 /**
  * This list contains all Node names that do not themselves have any content.
  * These are either purely formatting nodes (such as heading marks or link
- * marks) who can be reconstructed without the verbatim value, as well as larger
- * container nodes (whose contents is represented via their children).
+ * marks) which can be reconstructed without the verbatim value, as well as
+ * larger container nodes (whose contents is represented via their children).
  *
  * @var {string[]}
  */
@@ -35,6 +35,11 @@ const EMPTY_NODES = new Set([
   'List',
   'ListItem',
   'PandocAttribute',
+  // Ignore the five classes of admonitions since they are parsed via their
+  // children.
+  'Admonition',
+  'AdmonitionKeyword',
+  'AdmonitionMark',
   // Formatting marks
   'CodeMark',
   'EmphasisMark',

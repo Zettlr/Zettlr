@@ -3,17 +3,22 @@ import tsESLintPlugin from '@typescript-eslint/eslint-plugin'
 import stylisticTSLint from '@stylistic/eslint-plugin'
 import vueParser from 'vue-eslint-parser'
 import pluginVue from 'eslint-plugin-vue'
+import { defineConfig } from "eslint/config"
 
-export default [
+export default defineConfig([
   {
-    // With the new flat configs, we unfortunately have to ignore everything
-    // manually that we don't want linted.
+    // Specify any files matching our file types (JS/TS/Vue) that should be
+    // exempt from linting.
     ignores: [
+      // Ignore all *.mjs files, and top-level JavaScript files
       '**/*.mjs',
       '*.js',
+      // Ignore our script files
       'scripts/**/*.js',
+      // Ignore any utility scripts
       'resources/**/*.js',
-      '.webpack/**/*.js'
+      // Ignore all generated code
+      '.webpack/**/*',
     ]
   },
   // This extends the following configs:
@@ -41,7 +46,7 @@ export default [
         parser: tsESLintParser,
         project: './tsconfig.json',
         extraFileExtensions: ['.vue'],
-        ecmaVersion: 2018
+        ecmaVersion: 2025
       },
       parser: vueParser
     },
@@ -197,4 +202,4 @@ export default [
       ////////////////////////// END VUE RULES /////////////////////////////////
     }
   }
-]
+])

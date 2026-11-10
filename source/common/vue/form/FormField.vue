@@ -212,9 +212,9 @@ const props = defineProps<{ field: FormField, model: any }>()
 const emit = defineEmits<(e: 'update:modelValue', newValue: any) => void>()
 </script>
 
-<style lang="less">
+<style lang="css">
 .form-field-info-text {
-  // This is some faint hint text
+  /* This is some faint hint text */
   font-size: 11px;
   margin-bottom: 10px;
   color: rgb(150, 150, 150);

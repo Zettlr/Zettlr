@@ -14,8 +14,7 @@
  * END HEADER
  */
 
-import got from 'got'
-import { type IncomingHttpHeaders } from 'http2'
+import ky from 'ky'
 
 /**
  * This is the result that we
@@ -53,40 +52,24 @@ interface MediaWikiAPIResponse {
  * keeps the data rate relatively low (albeit there is no way to prevent the
  * download altogether, so a few chunks will possibly always be downloaded).
  *
- * @param   {string}                        rawUrl  The URL to fetch headers for
+ * @param   {string}            rawUrl  The URL to fetch headers for
  *
- * @return  {Promise<IncomingHttpHeaders>}          Resolves with the headers
+ * @return  {Promise<Headers>}          Resolves with the headers
  */
-async function fetchHeaders (rawUrl: string): Promise<IncomingHttpHeaders> {
-  return await new Promise((resolve, reject) => {
-    // Initiate request
-    const promise = got(rawUrl)
-
-    // Hook three listeners: As soon as 'response' is fired the headers are
-    // available and the download begins. At that point, resolve with the
-    // headers and cancel the request to abort the download. Add an additional
-    // then in case there is no body (because the promise resolution and the
-    // event response will be simultaneous), and finally add a catch for good
-    // measure.
-    promise
-      .on('response', response => {
-        resolve(response.headers)
-        promise.cancel()
-      })
-      .then(response => resolve(response.headers))
-      .catch(err => reject(err))
-  })
+async function fetchHeaders (rawUrl: string): Promise<Headers> {
+  const response = await ky.head(rawUrl)
+  return response.headers
 }
 
 /**
  * Takes the headers of a HTTP response and returns true if the content type
  * field indicates that we can generate a preview for this.
  *
- * @param   {IncomingHttpHeaders}  headers  The headers
+ * @param   {Headers}  headers  The headers
  *
- * @return  {boolean}                       Whether the content type is supported
+ * @return  {boolean}           Whether the content type is supported
  */
-function isPreviewableContent (headers: IncomingHttpHeaders): boolean {
+function isPreviewableContent (headers: Headers): boolean {
   const PREVIEWABLE_CONTENT_TYPES = [
     'text/html' // Regular HTML content
     // TODO: Also allow images at some point (requires a larger amount of
@@ -94,8 +77,8 @@ function isPreviewableContent (headers: IncomingHttpHeaders): boolean {
     // Full list of mime types: https://www.iana.org/assignments/media-types/media-types.xhtml
   ]
 
-  const contentType = headers['content-type']
-  if (contentType === undefined) {
+  const contentType = headers.get('content-type')
+  if (contentType === null) {
     return false // Possibly a misconfigured webserver
   }
 
@@ -132,8 +115,13 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
   // First, inspect the headers to see if we can even preview this piece of
   // information.
   const responseHeaders = await fetchHeaders(rawUrl)
+  console.log(responseHeaders)
 
   if (!isPreviewableContent(responseHeaders)) {
+    // TODO: Instead of just not rendering ANYTHING, decide based on the content
+    // type what to display. For example, for PDF files we may want to show the
+    // content size header (if available), for images, we may want to show them
+    // here.
     throw new Error('Unsupported content type')
   }
 
@@ -143,8 +131,8 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
   const url = new URL(rawUrl)
 
   // First, we need to fetch the HTML of the page
-  const result = await got(rawUrl)
-  const body = result.body
+  const result = await ky(rawUrl)
+  const body = await result.text()
 
   // Next, we can retrieve the title of the website
   const title = body.match(/<title\s*>(.+?)<\/title\s*>/i)
@@ -184,8 +172,8 @@ export async function fetchLinkPreview (rawUrl: string): Promise<LinkPreviewResu
     url.search = `format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${title}`
     // We have a Wikipedia page. Here, we can get a better description by using
     // the API
-    const result = await got(url.href)
-    const body: MediaWikiAPIResponse = JSON.parse(result.body)
+    const result = await ky(url.href)
+    const body: MediaWikiAPIResponse = await result.json()
     returnValue.summary = Object.values(body.query.pages)[0].extract
   } else {
     // Otherwise, regular treatment

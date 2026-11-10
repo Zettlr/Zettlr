@@ -48,7 +48,7 @@ import UpdateUserDictionary from './update-user-dictionary'
 import ProviderContract from '@providers/provider-contract'
 import { type AppServiceContainer } from 'source/app/app-service-container'
 import type ZettlrCommand from './zettlr-command'
-import { clipboard, ipcMain, nativeImage } from 'electron'
+import { clipboard, ClipboardItem, ipcMain, nativeImage } from 'electron'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
 import RenameTag from './rename-tag'
@@ -157,7 +157,11 @@ export default class CommandProvider extends ProviderContract {
       const img = nativeImage.createFromPath(imgPath)
 
       if (!img.isEmpty()) {
-        clipboard.writeImage(img)
+        await clipboard.write([
+          new ClipboardItem({
+            'image/png': new Blob([new Uint8Array(img.toPNG())], { type: 'image/png' })
+          })
+        ])
       }
       return true
     } else if (command === 'get-file-contents' && typeof payload === 'string') {

@@ -45,7 +45,8 @@ export type ConfigurableEditorShortcuts = Extends<
   'tr-ensure-double-quotes'|'tr-italics-to-quotes'|'tr-quotes-to-italics'|
   'tr-quotes-to-magic'|'tr-remove-line-breaks'|'tr-sentence-case'|
   'tr-single-quotes-to-double'|'tr-straighten-quotes'|
-  'tr-strip-duplicate-spaces'|'tr-title-case'
+  'tr-strip-duplicate-spaces'|'tr-title-case'|
+  'search-find-next'|'search-find-previous'
 >
 export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'|'filter-files'>
 
@@ -128,7 +129,6 @@ export interface ConfigOptions {
     dir: 'temp'|'cwd'|'ask'
     stripTags: boolean
     autoOpenExportedFiles: boolean
-    enforceMarkSupport: boolean
     stripLinks: 'full'|'unlink'|'no'
     cslLibrary: string
     cslStyle: string
@@ -137,6 +137,10 @@ export interface ConfigOptions {
     customCommands: Array<{ displayName: string, command: string }>
     selectedProfiles: Array<{ filePath: string, profile: string }>
     lastUsedProfile: string
+    forceEnableExtensions: {
+      mark: boolean
+      alerts: boolean
+    }
   }
   zkn: {
     idRE: string
@@ -218,6 +222,7 @@ export interface ConfigOptions {
     renderHTags: boolean
     renderEmphasis: boolean
     renderPandoc: boolean
+    renderAdmonitions: boolean
     renderHorizontalRules: boolean
   }
   files: {
@@ -345,13 +350,12 @@ export function getConfigTemplate (): ConfigOptions {
       twoStepCollapseWorkspaces: false,
       sortWorkspacesManually: false // By default, let Zettlr sort workspaces
     },
-    newFileNamePattern: '%id.md',
+    newFileNamePattern: '%id',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
       stripTags: false, // Strip tags a.k.a. #tag
       autoOpenExportedFiles: true,
-      enforceMarkSupport: true,
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file
       cslStyle: '', // Path to a CSL Style file
@@ -359,7 +363,11 @@ export function getConfigTemplate (): ConfigOptions {
       exportQmdWithQuarto: false, // Whether .qmd-files should be exported with Quarto
       customCommands: [], // Custom commands that the user can use to run arbitrary exports
       selectedProfiles: [], // Remembers the last chosen exporter per file for easy re-exporting
-      lastUsedProfile: 'HTML.yaml' // Remembers the last chosen exporter for easy re-exporting
+      lastUsedProfile: 'HTML.yaml', // Remembers the last chosen exporter for easy re-exporting
+      forceEnableExtensions: {
+        mark: true,
+        alerts: true
+      }
     },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
@@ -503,6 +511,7 @@ export function getConfigTemplate (): ConfigOptions {
       renderHTags: true,
       renderEmphasis: true,
       renderPandoc: true,
+      renderAdmonitions: true,
       renderHorizontalRules: true
     },
     files: {
@@ -570,7 +579,9 @@ export function getConfigTemplate (): ConfigOptions {
         'tr-straighten-quotes': '',
         'tr-strip-duplicate-spaces': '',
         'tr-title-case': '',
-        'tr-zap-gremlins': ''
+        'tr-zap-gremlins': '',
+        'search-find-next': '',
+        'search-find-previous': ''
       }
     },
     uuid: uuid4() // The app's unique anonymous identifier

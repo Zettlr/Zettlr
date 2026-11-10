@@ -34,8 +34,8 @@ export type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: So
  * @return  {Function}                             Function compatible with
  *                                                 array.sort()
  */
-function getDateSorter (whichTime: 'modtime'|'creationtime'): (a: any, b: any) => number {
-  return function sortDate<T extends RequiredSortingProps> (a: T, b: T): number {
+function getDateSorter<T extends RequiredSortingProps> (whichTime: 'modtime'|'creationtime'): (a: T, b: T) => number {
+  return function sortDate (a: T, b: T): number {
     let aDate = a.modtime
     let bDate = b.modtime
 
@@ -63,8 +63,8 @@ function getDateSorter (whichTime: 'modtime'|'creationtime'): (a: any, b: any) =
  * @return  {Function}                          Function compatible with
  *                                              array.sort()
  */
-function getNaturalSorter (fileNameDisplay: FilenameDisplay, appLang: string): (a: any, b: any) => number {
-  return function sortNatural <T extends RequiredSortingProps> (a: T, b: T): number {
+function getNaturalSorter<T extends RequiredSortingProps> (fileNameDisplay: FilenameDisplay, appLang: string): (a: T, b: T) => number {
+  return function sortNatural (a: T, b: T): number {
     let aSort = a.name.toLowerCase()
     let bSort = b.name.toLowerCase()
 
@@ -109,8 +109,8 @@ function getNaturalSorter (fileNameDisplay: FilenameDisplay, appLang: string): (
  * @return  {number}                            Function compatible with
  *                                              array.sort()
  */
-function getAsciiSorter (fileNameDisplay: FilenameDisplay): (a: any, b: any) => number {
-  return function sortAscii <T extends RequiredSortingProps> (a: T, b: T): number {
+function getAsciiSorter<T extends RequiredSortingProps> (fileNameDisplay: FilenameDisplay): (a: T, b: T) => number {
+  return function sortAscii (a: T, b: T): number {
     let aSort = a.name.toLowerCase()
     let bSort = b.name.toLowerCase()
 

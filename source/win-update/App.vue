@@ -220,12 +220,15 @@ function openReleasesPage (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body.darwin, body.win32, body.linux {
   #update {
     padding: 10px;
 
     p { margin: 10px 0px; }
+
+    /* Restore the margin which is being taken away by the generics rule in the geometry css */
+    #changelog * { margin: revert; }
 
     #changelog {
       padding: 10px;

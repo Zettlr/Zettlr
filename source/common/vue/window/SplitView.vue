@@ -107,7 +107,13 @@ function recalculateSizes (): void {
   const newWidth1Percent = view1Width.value / availableSize.value
   if (hasHiddenView.value === 0 && newWidth1Percent !== view1Percent) {
     const intWidth = Math.round(view1Percent * 100)
-    emit('views-resized', [ intWidth, 100 - intWidth ])
+
+    // Do not emit events (which would cause this to save to the config) if the
+    // size of any of the two panes goes below its minimum value
+    const [ min1, min2 ] = props.minimumSizePercent
+    if (intWidth >= min1 && 100 - intWidth >= min2) {
+      emit('views-resized', [ intWidth, 100 - intWidth ])
+    }
   }
 }
 
@@ -158,7 +164,13 @@ function onViewResizing (event: MouseEvent): void {
   const view1Percent = view1Width.value / availableSize.value
   if (hasHiddenView.value === 0 && oldView1Percent !== view1Percent) {
     const intWidth = Math.round(view1Percent * 100)
-    emit('views-resized', [ intWidth, 100 - intWidth ])
+
+    // Do not emit events (which would cause this to save to the config) if the
+    // size of any of the two panes goes below its minimum value
+    const [ min1, min2 ] = props.minimumSizePercent
+    if (intWidth >= min1 && 100 - intWidth >= min2) {
+      emit('views-resized', [ intWidth, 100 - intWidth ])
+    }
   }
 }
 

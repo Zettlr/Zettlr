@@ -239,26 +239,31 @@ export function addRowAfter (target: EditorView): boolean {
         return undefined
       }
 
-      // Places the selection to the same column in the next line (does not yet exist)
-      let selectionOffset = thisLine.length
-
       const lineCount = target.state.doc.lines
       let isHeader = false
       let nextLine = thisLine.number < lineCount ? target.state.doc.line(thisLine.number + 1) : undefined
       if (nextLine !== undefined && isPipeTableDelimRow(nextLine.text) && nextLine.number < lineCount) {
         // Next line is the header, so we have to add a line thereafter
         isHeader = true
-        selectionOffset += nextLine.length + 1
       }
+
+      const newRow = thisLine.text.replace(/[^\s\|]/g, '')
+      // The new row begins right after the inserted newline character
+      const newRowStart = (isHeader && nextLine !== undefined ? nextLine.to : thisLine.to) + 1
+      // Place the selection at the same column in the new row, clamped to its
+      // length. The new row can be shorter than the current one (cell contents
+      // are removed), so the same column may lie past its end.
+      const anchorOffset = Math.max(0, Math.min(focusRange.anchor - thisLine.from, newRow.length))
+      const headOffset = Math.max(0, Math.min(focusRange.head - thisLine.from, newRow.length))
 
       return {
         selection: {
-          anchor: focusRange.anchor + selectionOffset,
-          head: focusRange.head + selectionOffset
+          anchor: newRowStart + anchorOffset,
+          head: newRowStart + headOffset
         },
         changes: {
           from: isHeader && nextLine !== undefined ? nextLine.to : thisLine.to,
-          insert: '\n' + thisLine.text.replace(/[^\s\|]/g, '')
+          insert: '\n' + newRow
         }
       }
     } else {

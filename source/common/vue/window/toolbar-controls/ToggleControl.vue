@@ -69,7 +69,7 @@ function toggle (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body.darwin div#toolbar {
   button.toggle {
     &.active {

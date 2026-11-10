@@ -72,29 +72,22 @@ const props = defineProps<{
 const emit = defineEmits<(e: 'tab', value: string) => void>()
 </script>
 
-<style lang="less">
-body .system-tablist {
-  display: flex;
-  justify-content: space-evenly;
-
-  .system-tab {
-    flex-grow: 1;
-    text-align: center;
-  }
-}
-
-body.darwin {
+<style lang="css">
+body {
   .system-tablist {
+    display: flex;
     justify-content: space-around;
-    padding: 10px 20px 0px 20px;
 
     .system-tab {
+      flex-grow: 1;
+      text-align: center;
+
       &.active { background-color: rgb(230, 230, 230); }
 
       &:not(:first-child) {
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
-        border-left: 0px; // We only want 1px border between the buttons
+        border-left: 0px; /* We only want 1px border between the buttons */
       }
 
       &:not(:last-child) {
@@ -109,20 +102,10 @@ body.darwin {
       &.active { background-color: rgb(120, 120, 120); }
 
       &:not(:last-child) {
-        // We need a border here
+        /* We need a border here */
         border-right: 1px solid rgb(120, 120, 120);
       }
     }
-  }
-}
-
-body.win32 {
-  .system-tablist .system-tab.active {
-    background-color: rgb(230, 230, 230);
-  }
-
-  &.dark .system-tablist .system-tab.active {
-    background-color: rgb(120, 120, 120);
   }
 }
 </style>

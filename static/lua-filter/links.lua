@@ -15,25 +15,32 @@
 -- 3.) You can programmatically steer this filter on a per-file basis (even
 --     inside Zettlr) by setting the YAML frontmatter property
 --     `zettlr.strip_links` to either "no", "full", or "unlink".
+---@module "pandoc-types-annotations"
 
 -- Prepare our setting variable
-local strip_links = 'no' -- Can be 'full'|'unlink'|'no'
+local strip_links = 'no' ---@type 'full'|'unlink'|'no'
 
 return {
   {
+    ---Retrieves the zettlr.strip_links option from the metadata, if applicable.
+    ---@param meta Meta
+    ---@return Meta
     Meta = function (meta)
       -- Retrieve the option required for this filter if they exist.
-      if meta.zettlr then
-        if meta.zettlr.strip_links then
-          strip_links = meta.zettlr.strip_links
+      if meta.zettlr and meta["zettlr"] ~= nil then
+        if meta.zettlr["strip_links"] ~= nil then
+          strip_links = meta.zettlr["strip_links"]
         end
       end
       return meta
     end
   },
   {
-    -- Zettelkasten/internal/wiki links are represent as Link nodes on Pandoc's
-    -- AST.
+    ---Check links for whether there are wikilinks in the document, and treat
+    ---them accordingly. NOTE: Pandoc understands Wikilinks and parses them as
+    ---a regular Link.
+    ---@param elem Link
+    ---@return Link|Inlines|nil
     Link = function (elem)
       -- NOTE: Wikilinks are distinguished from regular links by having the
       -- class "wikilink" (cf. https://github.com/jgm/pandoc/commit/97b36ecb7703b434ed4325cc128402a9eb32418d)

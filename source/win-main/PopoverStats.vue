@@ -126,7 +126,7 @@ function buttonClick (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body div#stats-popover {
   padding: 10px;
   table {

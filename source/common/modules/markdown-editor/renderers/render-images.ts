@@ -67,7 +67,7 @@ function resolveImageUrl (filePath: string, imageUrl: string): string {
  *
  * @return  {string|undefined}        The normalized size if recognized, or undefined.
  */
-function normalizeSize (size?: string): string|undefined {
+function normalizeSize (size?: string): string | undefined {
   if (size === undefined || !/[\d\.]+(?:cm|mm|in|px|pt|pc|em|ex|ch|rem|vw|vh|vmin|vmax|%)/i.test(size)) {
     return undefined
   }
@@ -76,12 +76,24 @@ function normalizeSize (size?: string): string|undefined {
 }
 
 class ImageWidget extends WidgetType {
+  /**
+   * Creates a new image widget.
+   *
+   * @param  {SyntaxNode}              node                   The image's Node
+   * @param  {string}                  imageTitle             The parsed image title (can be the ALT text)
+   * @param  {string}                  imageUrl               The original raw image url
+   * @param  {string}                  resolvedImageUrl       The resolved, absolute path to the image
+   * @param  {string}                  altText                The alt text
+   * @param  {boolean}                 isReferenceStyleImage  True for ref-style images, false for inlines.
+   * @param  {ParsedPandocAttributes}  data                   Parsed Pandoc attributes
+   */
   constructor (
     readonly node: SyntaxNode,
     readonly imageTitle: string,
     readonly imageUrl: string,
     readonly resolvedImageUrl: string,
     readonly altText: string,
+    readonly isReferenceStyleImage: boolean,
     readonly data: ParsedPandocAttributes
   ) {
     super()
@@ -190,23 +202,27 @@ class ImageWidget extends WidgetType {
     //////////////////////////////////////////
     const caption = document.createElement('figcaption')
     caption.textContent = this.imageTitle.replace(/\\"/g, '"') // Un-escape title
-    caption.contentEditable = 'true'
 
     // Define a quick inline function that takes care of applying a new caption
-    const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
+    const updateCaptionFunction = function (event: KeyboardEvent | FocusEvent): void {
       if (event instanceof KeyboardEvent && event.key !== 'Enter') {
         // If this is a KeyboardEvent, only perform the action on Enter
         return
       }
 
       const { from, to, attributes, originalUrl } = img.dataset
-      const nodeFrom = parseInt(from ?? '-1', 10)
-      const nodeTo = parseInt(to ?? '-1', 10)
+      if (from === undefined || to === undefined) {
+        return
+      }
+
+      const nodeFrom = parseInt(from, 10)
+      const nodeTo = parseInt(to, 10)
 
       event.preventDefault()
       event.stopPropagation()
+
       // Escape quotes to prevent breaking of the image
-      const newCaption = caption.textContent?.replace(/"/g, '\\"') ?? ''
+      const newCaption = caption.textContent.replace(/"/g, '\\"')
       // "Why are you setting the caption both as the image description and title?"
       // Well, since all exports sometimes use this, sometimes the other value.
       const newImageTag = `![${newCaption}](${originalUrl} "${newCaption}")${attributes ?? ''}`
@@ -216,9 +232,18 @@ class ImageWidget extends WidgetType {
       view.dispatch({ changes: { from: nodeFrom, to: nodeTo, insert: newImageTag } })
     }
 
-    // Should work on these events
-    caption.addEventListener('keydown', updateCaptionFunction)
-    caption.addEventListener('focusout', updateCaptionFunction)
+    // If this is NOT a reference style image (hence, an inline image), we can
+    // automagically update the title.
+    if (!this.isReferenceStyleImage) {
+      caption.contentEditable = 'true'
+      caption.addEventListener('keydown', updateCaptionFunction)
+      caption.addEventListener('focusout', updateCaptionFunction)
+    } else {
+      // Indicate to the user that they cannot edit the caption of a reference
+      // style image in the render. It will automatically be updated as the user
+      // updates the title.
+      caption.style.cursor = 'not-allowed'
+    }
 
     //////////////////////////////////////////
     // OPEN EXTERNALLY
@@ -308,41 +333,133 @@ function shouldHandleNode (node: SyntaxNodeRef): boolean {
   return node.type.name === 'Image'
 }
 
-function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|undefined {
-  // Get the actual link contents, extract title and URL and create a
-  // replacement widget
+function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget | undefined {
+  // First, every valid image node reference contains a set of LinkMarks
   const marks = node.node.getChildren('LinkMark')
-  const titleNode = node.node.getChild('LinkTitle')
-  const urlNode = node.node.getChild('URL')
 
-  if (urlNode === null || marks.length < 2) {
+  if (marks.length < 2) {
+    console.warn('Found an image node with fewer than two LinkMarks. This should not happen and indicates an error in the parser.')
     return undefined
   }
 
-  // Images (particularly captions) can include newlines and still be valid.
-  // However, the current implementation as an inline-plugin does not allow for
-  // that, and attempting to render such an image would crash the editor.
-  if (state.sliceDoc(node.from, node.to).includes('\n')) {
-    return undefined
-  }
-
+  // Alt text is everything between the first and second LinkMark. It is shared
+  // by both inline and reference-style images.
   const alt = state.sliceDoc(marks[0].to, marks[1].from)
-  const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
-  const url = state.sliceDoc(urlNode.from, urlNode.to)
 
-  let data: ParsedPandocAttributes = {}
-  const nextSibling = node.node.nextSibling
-  if (nextSibling !== null && nextSibling.name === 'PandocAttribute') {
-    try {
-      const text = state.sliceDoc(nextSibling.from, nextSibling.to)
-      data = parsePandocAttributes(text)
-    } catch (err) {
-      // Silently ignore error
+  // We distinguish between reference style images and inline images using the
+  // presence of a LinkLabel node. Inline images do not have such a node, but
+  // both types of images can contain URL nodes in the ALT text.
+  const labelNode = node.node.getChild('LinkLabel')
+
+  if (labelNode !== null) {
+    // This is a reference-style image (URL defined elsewhere). We need to find
+    // it. Due to the way iterating over syntax trees work, we store an outside
+    // reference to imageWidget. NOTE that label matching is case-insensitive.
+    const label = state.sliceDoc(labelNode.from, labelNode.to).toLowerCase()
+    let imageWidget: ImageWidget|undefined = undefined
+    const tree = syntaxTree(state)
+
+    tree.iterate({
+      enter (node) {
+        if (imageWidget !== undefined) {
+          return false // Short-circuit if we have already found the image.
+        }
+
+        // We only consider LinkReferences.
+        if (node.name !== 'LinkReference') {
+          return
+        }
+
+        const refLabel = node.node.getChild('LinkLabel')
+        if (refLabel === null) {
+          return
+        }
+
+        // Link matching is case-insensitive: https://spec.commonmark.org/0.31.2/#example-205
+        if (state.sliceDoc(refLabel.from, refLabel.to).toLowerCase() !== label) {
+          return // Wrong link reference
+        }
+
+        // At this point, we have found a link reference whose label value
+        // matches the image's, meaning that this should contain the correct
+        // URL. The format of references is: [LinkLabel]: URL "Optional title"
+        // so the first URL is the actual URL.
+        const urlNode = node.node.getChild('URL')
+        if (urlNode === null) {
+          return
+        }
+
+        // Get and resolve the image URL
+        const url = state.sliceDoc(urlNode.from, urlNode.to)
+        if (url === '<>') {
+          // As per the spec, angled brackets denote an empty link
+          // See: https://spec.commonmark.org/0.31.2/#example-200
+          return
+        }
+        const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
+
+        // We require a title, which is either the title node (if available), or the alt.
+        const titleNode = node.node.getChild('LinkTitle')
+        let title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
+
+        // The parser excludes the required quotation marks for titles in inline
+        // images, but keeps them in reference style images. NOTE: The additional
+        // startsWith checks are here for the case that CodeMirror updates its
+        // parser logic in the future so we don't accidentally cut off the titles.
+        if (titleNode !== null && title.startsWith('"') || title.startsWith("'")) {
+          title = title.substring(1, title.length - 1)
+        }
+
+        // Set the imageWidget
+        imageWidget = new ImageWidget(node.node, title, url, resolvedImageSrc, alt, true, {})
+      }
+    })
+
+    // Return the imageWidget which is undefined except we have found a matching
+    // and valid LinkReference.
+    return imageWidget
+  } else {
+    // This is a simple inline image (URL follows alt text).
+
+    // Inline images can contain multiple URLs, some of which can be part of the
+    // ALT text. Only the last one will be the actual image, and it should be
+    // after the ALT text.
+    const urls = node.node.getChildren('URL')
+    const urlNode = urls.filter(urlNode => urlNode.from > marks[1].from).pop()
+    if (urlNode === undefined) {
+      return undefined
     }
-  }
 
-  const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
-  return new ImageWidget(node.node, title, url, resolvedImageSrc, alt, data)
+    // Images (particularly captions) can include newlines and still be valid.
+    // However, the current implementation as an inline-plugin does not allow
+    // for that, and attempting to render such an image would crash the editor.
+    if (state.sliceDoc(node.from, node.to).includes('\n')) {
+      return undefined
+    }
+
+    // Get and resolve the image URL
+    const url = state.sliceDoc(urlNode.from, urlNode.to)
+    const resolvedImageSrc = resolveImageUrl(state.field(configField).metadata.path, url)
+
+    // We require a title, which is either the title node (if available), or the alt.
+    const titleNode = node.node.getChild('LinkTitle')
+    const title = titleNode === null ? alt : state.sliceDoc(titleNode.from, titleNode.to)
+
+    // Inline images can be followed by a Pandoc Attributes span that can, e.g.,
+    // constrain the image size.
+    let data: ParsedPandocAttributes = {}
+    const nextSibling = node.node.nextSibling
+    if (nextSibling !== null && nextSibling.name === 'PandocAttribute') {
+      try {
+        const text = state.sliceDoc(nextSibling.from, nextSibling.to)
+        data = parsePandocAttributes(text)
+      } catch (err) {
+        // Silently ignore error
+      }
+    }
+
+    return new ImageWidget(node.node, title, url, resolvedImageSrc, alt, false, data)
+  }
 }
 
 export const renderImages = [

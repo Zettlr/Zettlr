@@ -248,7 +248,7 @@ export default class WindowProvider extends ProviderContract {
       return await this.shouldCloseAll(rootType)
     })
 
-    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (_ctx: any) => {
+    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (_ctx) => {
       // Always update the main window's flag depending on whether the document
       // manager is clean or not
       for (const key in this._mainWindows) {
@@ -321,7 +321,7 @@ export default class WindowProvider extends ProviderContract {
    * @param   {string}    evt       The event to listen to
    * @param   {Function}  callback  The callback to call
    */
-  on (evt: string, callback: (...args: any[]) => void): void {
+  on (evt: string, callback: (...args: unknown[]) => void): void {
     this._emitter.on(evt, callback)
   }
 
@@ -331,7 +331,7 @@ export default class WindowProvider extends ProviderContract {
    * @param   {string}    evt       The event to listen to
    * @param   {Function}  callback  The callback to call
    */
-  off (evt: string, callback: (...args: any[]) => void): void {
+  off (evt: string, callback: (...args: unknown[]) => void): void {
     this._emitter.off(evt, callback)
   }
 

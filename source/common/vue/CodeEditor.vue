@@ -205,25 +205,7 @@ function markClean (): void {
 defineExpose({ markClean, isClean })
 </script>
 
-<style lang="less">
-// We're using this solarized theme here: https://ethanschoonover.com/solarized/
-@base03:    #002b36;
-@base02:    #073642;
-@base01:    #586e75;
-@base00:    #657b83;
-@base0:     #839496;
-@base1:     #93a1a1;
-@base2:     #eee8d5;
-@base3:     #fdf6e3;
-@yellow:    #b58900;
-@orange:    #cb4b16;
-@red:       #dc322f;
-@magenta:   #d33682;
-@violet:    #6c71c4;
-@blue:      #268bd2;
-@cyan:      #2aa198;
-@green:     #859900;
-
+<style lang="css">
 body {
   .code-editor-wrapper {
     overflow: auto;
@@ -238,60 +220,74 @@ body {
   }
 
   .cm-editor {
+    /* We're using this solarized theme here: https://ethanschoonover.com/solarized/ */
+    --base03:    #002b36;
+    --base02:    #073642;
+    --base01:    #586e75;
+    --base00:    #657b83;
+    --base0:     #839496;
+    --base1:     #93a1a1;
+    --base2:     #eee8d5;
+    --base3:     #fdf6e3;
+    --yellow:    #b58900;
+    --orange:    #cb4b16;
+    --red:       #dc322f;
+    --magenta:   #d33682;
+    --violet:    #6c71c4;
+    --blue:      #268bd2;
+    --cyan:      #2aa198;
+    --green:     #859900;
     .cm-scroller { overflow: auto; }
     .cm-content { cursor: text; }
     height: 100%;
 
-    // margin: 20px 0px;
-    // background-color: white;
-    // border: 1px solid rgb(173, 173, 173);
-    color: @base00;
-    .cm-separator         { color: @base00; }
-    .cm-punctuation       { color: @base00; }
+    color: var(--base00);
+    .cm-separator         { color: var(--base00); }
+    .cm-punctuation       { color: var(--base00); }
 
-    .cm-content-span      { color: @base0; }
-    .cm-brace             { color: @base0; }
-    .cm-square-bracket    { color: @base0; }
+    .cm-content-span      { color: var(--base0); }
+    .cm-brace             { color: var(--base0); }
+    .cm-square-bracket    { color: var(--base0); }
 
-    .cm-comment           { color: @base1; }
-    .cm-line-comment      { color: @base1; }
-    .cm-block-comment     { color: @base1; }
-    .cm-unit              { color: @base1; }
+    .cm-comment           { color: var(--base1); }
+    .cm-line-comment      { color: var(--base1); }
+    .cm-block-comment     { color: var(--base1); }
+    .cm-unit              { color: var(--base1); }
 
-    .cm-string            { color: @green; }
-    .cm-string-2          { color: @green; }
-    .cm-keyword           { color: @green; }
-    .cm-operator-keyword  { color: @green; }
-    .cm-atom              { color: @green; }
+    .cm-string            { color: var(--green); }
+    .cm-string-2          { color: var(--green); }
+    .cm-keyword           { color: var(--green); }
+    .cm-operator-keyword  { color: var(--green); }
+    .cm-atom              { color: var(--green); }
 
-    .cm-property-name     { color: @blue; }
-    .cm-tag               { color: @blue; }
-    .cm-qualifier         { color: @blue; }
-    .cm-builtin           { color: @blue; }
+    .cm-property-name     { color: var(--blue); }
+    .cm-tag               { color: var(--blue); }
+    .cm-qualifier         { color: var(--blue); }
+    .cm-builtin           { color: var(--blue); }
 
-    .cm-number            { color: @violet; }
-    .cm-class-name        { color: @violet; }
-    .cm-label-name        { color: @violet; }
+    .cm-number            { color: var(--violet); }
+    .cm-class-name        { color: var(--violet); }
+    .cm-label-name        { color: var(--violet); }
 
-    .cm-code-mark         { color: @magenta; }
-    .cm-property          { color: @magenta; }
+    .cm-code-mark         { color: var(--magenta); }
+    .cm-property          { color: var(--magenta); }
 
-    .cm-variable-2        { color: @yellow; }
-    .cm-variable          { color: @yellow; }
+    .cm-variable-2        { color: var(--yellow); }
+    .cm-variable          { color: var(--yellow); }
 
-    .cm-tag-name          { color: @cyan; }
-    .cm-deref-operator    { color: @cyan; }
+    .cm-tag-name          { color: var(--cyan); }
+    .cm-deref-operator    { color: var(--cyan); }
 
-    .cm-attribute         { color: @orange; }
+    .cm-attribute         { color: var(--orange); }
 
-    .cm-type              { color: @red; }
+    .cm-type              { color: var(--red); }
 
     .cm-gutters {
-      background-color: @base2;
-      color: @base1;
+      background-color: var(--base2);
+      color: var(--base1);
     }
 
-    // Hide pilcrows
+    /* Hide pilcrows */
     .cm-pilcrow {
       opacity: 0;
     }
@@ -304,13 +300,13 @@ body {
 
     .cm-editor {
       background-color: rgb(65, 65, 65);
-      color: @base3;
-      .cm-comment    { color: @base00; }
-      .cm-line-comment { color: @base00; }
-      .cm-block-comment { color: @base00; }
+      color: var(--base3);
+      .cm-comment    { color: var(--base00); }
+      .cm-line-comment { color: var(--base00); }
+      .cm-block-comment { color: var(--base00); }
       .cm-gutters {
-        background-color: @base03;
-        color: @base00;
+        background-color: var(--base03);
+        color: var(--base00);
         border-color: rgb(100, 100, 100);
       }
     }

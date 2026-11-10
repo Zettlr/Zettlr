@@ -223,19 +223,39 @@ function findEndOfEntry (originalToLine: number): number|undefined {
 </script>
 
 <style lang="less">
-// Add a neat little effect to the table of content entries as you drag them
-.toc-entry-container {
+div.toc-entry-container {
+  display: flex;
+  margin-bottom: 10px;
   border-bottom: 2px solid transparent;
-
+  
   &.toc-heading-1 { margin-left: 0px; }
   &.toc-heading-2 { margin-left: 10px; }
   &.toc-heading-3 { margin-left: 20px; }
   &.toc-heading-4 { margin-left: 30px; }
   &.toc-heading-5 { margin-left: 40px; }
   &.toc-heading-6 { margin-left: 50px; }
-
+  
+  // Add a neat little effect to the table of content entries as you drag them
   &.toc-drop-effect {
     border-bottom-color: rgb(40, 100, 255);
+  }
+
+  div.toc-level {
+    flex-shrink: 1;
+    padding: 0px 5px;
+    font-weight: bold;
+    color: var(--system-accent-color, --c-primary);
+  }
+
+  div.toc-entry {
+    flex-grow: 3;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
+  }
+
+  div.toc-entry-active {
+    font-weight: bold;
+    color: var(--system-accent-color);
   }
 }
 </style>

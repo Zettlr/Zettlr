@@ -23,6 +23,11 @@ export const customTags = {
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
   YAMLCodeContainer: Tag.define(),
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),
+  // Admonitions
+  Admonition: Tag.define(),
+  AdmonitionKeyword: Tag.define(tags.keyword),
+  AdmonitionMark: Tag.define(tags.meta),
+  AdmonitionTitle: Tag.define(tags.attributeValue),
   // Citations: @citations
   Citation: Tag.define(),
   CitationMark: Tag.define(tags.processingInstruction),

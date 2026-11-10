@@ -142,7 +142,7 @@
     <term name="document">document</term>
     <term name="entry">entry</term>
     <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
+    <term name="entry-encyclopedia">encyclopaedia entry</term>
     <term name="event">event</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic">graphic</term>
@@ -655,8 +655,8 @@
       <multiple>narrators</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>organiser</single>
+      <multiple>organisers</multiple>
     </term>
     <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
@@ -783,7 +783,7 @@
     <term name="illustrator" form="verb">illustrated by</term>
     <term name="interviewer" form="verb">interview by</term>
     <term name="narrator" form="verb">read by</term> <!-- verb role form in Oxford Style Manual, MHRA -->
-    <term name="organizer" form="verb">organized by</term>
+    <term name="organizer" form="verb">organised by</term>
     <term name="original-author" form="verb">by</term>
     <term name="performer" form="verb">performed by</term>
     <term name="producer" form="verb">produced by</term>

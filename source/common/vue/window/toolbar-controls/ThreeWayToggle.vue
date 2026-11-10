@@ -112,18 +112,19 @@ function toggle (state: 'stateOne'|'stateTwo'): void {
 }
 </script>
 
-<style lang="less">
-body.darwin {
+<style lang="css">
+body {
   div#toolbar div.three-way-toggle {
     border-radius: 4px;
     margin: 0 10px;
     border: 1px solid transparent;
     display: flex;
 
+    &.active { border-color: rgb(230, 230, 230); }
     &:hover { border-color: rgb(180, 180, 180); }
-    &.active { background-color: rgb(230, 230, 230); }
 
     button {
+      margin: 0;
       &:first-child {
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
@@ -138,54 +139,8 @@ body.darwin {
   }
 
   &.dark div#toolbar div.three-way-toggle {
+    &.active { border-color: rgb(60, 60, 60); }
     &:hover { border-color: rgb(80, 80, 80); }
-    &.active { background-color: rgb(60, 60, 60); }
-    button.active { background-color: rgb(50, 50, 50); }
-  }
-}
-
-body.win32 {
-  div#toolbar div.three-way-toggle {
-    margin: 0 10px;
-    border: 2px solid transparent;
-    display: flex;
-
-    &:hover { border-color: rgb(180, 180, 180); }
-    &.active { background-color: rgb(230, 230, 230); }
-    button.active { background-color: rgb(200, 200, 200); }
-  }
-
-  &.dark div#toolbar div.three-way-toggle {
-    &:hover { border-color: rgb(80, 80, 80); }
-    &.active { background-color: rgb(60, 60, 60); }
-    button.active { background-color: rgb(50, 50, 50); }
-  }
-}
-
-body.linux {
-  div#toolbar div.three-way-toggle {
-    display: flex;
-
-    button {
-      margin: 0;
-      border-radius: 0;
-    }
-
-    button:first-child {
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-      border-right: none;
-    }
-
-    button:last-child {
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
-    }
-
-    button.active { background-color: rgb(228, 228, 228); }
-  }
-
-  &.dark div#toolbar div.three-way-toggle {
     button.active { background-color: rgb(50, 50, 50); }
   }
 }

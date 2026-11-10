@@ -1,14 +1,15 @@
 <template>
   <div id="menubar">
-    <span
-      v-for="(item, idx) in menu"
-      v-bind:key="idx"
-      class="top-level-item"
+    <img id="app-logo" src="../../img/image-preview.png" />
+    <div
+      v-for="(item, idx) in menu" v-bind:key="idx" class="top-level-item"
       v-on:mousedown.stop.prevent="getSubmenu(item.id!, $event.target as HTMLElement)"
       v-on:mouseenter.stop="maybeExchangeSubmenu(item.id!, $event.target as HTMLElement)"
     >
-      {{ item.label }}
-    </span>
+      <span>
+        {{ item.label }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -33,18 +34,18 @@ import { ref, onBeforeMount } from 'vue'
 const ipcRenderer = window.ipc
 
 const menu = ref<SubmenuItem[]>([])
-const currentSubmenu = ref<string|null>(null)
-const menuCloseCallback = ref<null|(() => void)|null>(null)
+const currentSubmenu = ref<string | null>(null)
+const menuCloseCallback = ref<null | (() => void) | null>(null)
 
 // Can contain a target if a submenu is right now being requested
-const targetElement = ref<HTMLElement|null>(null)
+const targetElement = ref<HTMLElement | null>(null)
 
 onBeforeMount(() => {
   // Listen to messages from the menu provider
   type MenuMessage = { command: 'application-menu', payload: SubmenuItem[] }
   type SubmenuMessage = { command: 'application-submenu', payload: { id: string, submenu: SubmenuItem[] } }
 
-  ipcRenderer.on('menu-provider', (event, { command, payload }: MenuMessage|SubmenuMessage) => {
+  ipcRenderer.on('menu-provider', (event, { command, payload }: MenuMessage | SubmenuMessage) => {
     if (command === 'application-menu') {
       menu.value = payload
     } else if (command === 'application-submenu') {
@@ -132,39 +133,41 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
 }
 </script>
 
-<style lang="less">
-// Styles for the menubar (for Windows and Linux)
-:root {
-  --fallback-title-bar-height: 31px;
-}
-
+<style lang="css" scoped>
 #menubar {
-  height: env(titlebar-area-height, var(--fallback-title-bar-height));
-  line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
+  height: env(titlebar-area-height, 30px);
+  line-height: env(titlebar-area-height, 30px);
   width: 100%;
   background-color: var(--grey-0);
   color: var(--grey-6);
-  // Use the system font with a somewhat smaller font-size
+  /* Use the system font with a somewhat smaller font-size */
   font-family: inherit;
   font-size: 12px;
-  padding-left: env(titlebar-area-height, var(--fallback-title-bar-height));
-  // Use the Zettlr logo as fixed background to enable branding in the menubar
-  background-image: url("../../img/image-preview.png");
-  background-position: left center;
-  background-repeat: no-repeat;
-  background-size: contain;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  padding-left: env(titlebar-area-x, 0px);
+  padding-right: calc(100% - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100%));
 
-  // If the menubar is shown, this indicates there's no title bar, hence we
-  // need the menubar to be draggable.
+  /* If the menubar is shown, this indicates there's no title bar, hence we
+  need the menubar to be draggable. */
   -webkit-app-region: drag;
 
-  span.top-level-item {
-    display: inline-block;
-    padding: 3px;
-    height: env(titlebar-area-height, var(--fallback-title-bar-height));
-    line-height: env(titlebar-area-height, var(--fallback-title-bar-height));
+  img#app-logo {
+    height: 18px;
+    margin-left: 8px;
+    width: auto;
+  }
+
+  div.top-level-item {
     padding: 0 10px;
-    // Don't drag the top-level menubar items
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    /* Don't drag the top-level menubar items */
     -webkit-app-region: no-drag;
 
     &:hover {

@@ -52,6 +52,8 @@ import type { CiteprocProviderIPCAPI } from 'source/app/service-providers/citepr
 import type { ProjectInfo } from 'source/common/modules/markdown-editor/plugins/project-info-field'
 import type { FileContentSearchResult } from 'source/app/service-providers/search'
 import type { CustomEditorShortcut } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
+import type { CitationRecord } from 'source/common/modules/markdown-editor/autocomplete/citations'
+import type { FileRecord } from 'source/common/modules/markdown-editor/autocomplete/files'
 import getDocumentTitle from './util/get-document-title'
 
 const ipcRenderer = window.ipc
@@ -274,6 +276,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     renderTables: editor.enableTableHelper,
     renderEmphasis: display.renderEmphasis,
     renderPandoc: display.renderPandoc,
+    renderAdmonitions: display.renderAdmonitions,
     renderHorizontalRules: display.renderHorizontalRules,
     zknLinkFormat: zkn.linkFormat,
     zknAddFileTitle: zkn.linkAddFileTitle,
@@ -573,7 +576,7 @@ function jtl (lineNumber: number): void {
 }
 
 async function updateCitationKeys (library: string): Promise<void> {
-  const items: Array<{ citekey: string, displayText: string }> = (await ipcRenderer.invoke('citeproc-provider', {
+  const items: CitationRecord[] = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
     payload: { database: library }
   } as CiteprocProviderIPCAPI))
@@ -628,7 +631,7 @@ async function updateCitationKeys (library: string): Promise<void> {
 
 async function updateFileDatabase (): Promise<void> {
   // Get all our files ...
-  const fileDatabase: Array<{ filename: string, displayName: string, id: string }> = []
+  const fileDatabase: FileRecord[] = []
 
   // ... and the unique links that are part of the link database
   const rawLinks: Record<string, string[]> = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
@@ -691,18 +694,15 @@ function maybeHighlightSearchResults (): void {
 
 </script>
 
-<style lang="less">
-// Editor Geometry
-
-// Editor margins left and right for all breakpoints in both fullscreen and
-// normal mode.
-@editor-margin-fullscreen-sm:  50px;
-@editor-margin-fullscreen-md:   5vw;
-@editor-margin-fullscreen-lg:  10vw;
-@editor-margin-fullscreen-xl:  20vw;
-@editor-margin-fullscreen-xxl: 30vw;
-
+<style lang="css">
 .main-editor-wrapper {
+  /* Editor margins left and right for all breakpoints in both fullscreen and
+  normal mode. */
+  --editor-margin-fullscreen-sm:  50px;
+  --editor-margin-fullscreen-md:   5vw;
+  --editor-margin-fullscreen-lg:  10vw;
+  --editor-margin-fullscreen-xl:  20vw;
+  --editor-margin-fullscreen-xxl: 30vw;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
@@ -716,34 +716,34 @@ function maybeHighlightSearchResults (): void {
     .cm-content { min-width: 0; }
   }
 
-  // If a code file is loaded, we need to display the editor contents in monospace.
+  /* If a code file is loaded, we need to display the editor contents in monospace. */
   &.code-file .cm-editor {
     font-family: Inconsolata, monospace;
 
-    // Reset the margins for code files
+    /* Reset the margins for code files */
     .cm-scroller { padding: 0px; }
+  }
+
+  &.fullscreen {
+    /* This makes the editor pane show "fullscreen" on top over the rest of the UI
+    except the toolbar (due to a position: relative on the window content div). */
+    position: absolute;
+    z-index: 300;
+    top: 0;
+
+    .cm-scroller {
+      @media(min-width: 1301px) { padding: 0 var(--editor-margin-fullscreen-xxl); }
+      @media(max-width: 1300px) { padding: 0 var(--editor-margin-fullscreen-xl); }
+      @media(max-width: 1100px) { padding: 0 var(--editor-margin-fullscreen-lg); }
+      @media(max-width: 1000px) { padding: 0 var(--editor-margin-fullscreen-md); }
+      @media(max-width:  800px) { padding: 0 var(--editor-margin-fullscreen-sm); }
+
+    }
   }
 }
 
 body.dark .main-editor-wrapper {
   background-color: #2b2b2c;
-}
-
-// CodeMirror fullscreen
-.main-editor-wrapper.fullscreen {
-  // This makes the editor pane show "fullscreen" on top over the rest of the UI
-  // except the toolbar (due to a position: relative on the window content div).
-  position: absolute;
-  top: 0;
-
-  .cm-scroller {
-    @media(min-width: 1301px) { padding: 0 @editor-margin-fullscreen-xxl; }
-    @media(max-width: 1300px) { padding: 0 @editor-margin-fullscreen-xl; }
-    @media(max-width: 1100px) { padding: 0 @editor-margin-fullscreen-lg; }
-    @media(max-width: 1000px) { padding: 0 @editor-margin-fullscreen-md; }
-    @media(max-width:  800px) { padding: 0 @editor-margin-fullscreen-sm; }
-
-  }
 }
 
 body.darwin {

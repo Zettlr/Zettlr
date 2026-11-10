@@ -366,7 +366,7 @@ function getModelValue (model: string): any {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 .form-container {
   .fieldset-category {
     color: rgb(114, 114, 114);
@@ -402,8 +402,6 @@ function getModelValue (model: string): any {
         margin-top: 2px;
         padding: 0;
       }
-
-      // .form-header-field {}
     }
 
     .form-help {

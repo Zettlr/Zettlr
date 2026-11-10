@@ -19,9 +19,18 @@ import { type AutocompletePlugin } from '.'
 import { configField } from '../util/configuration'
 
 /**
+ * Describes a file Autocomplete record.
+ */
+export interface FileRecord {
+  filename: string
+  displayName: string
+  id: string
+}
+
+/**
  * Use this effect to provide the editor state with a set of new citekeys
  */
-export const filesUpdate = StateEffect.define<Array<{ filename: string, displayName: string, id: string }>>()
+export const filesUpdate = StateEffect.define<FileRecord[]>()
 export const filesUpdateField = StateField.define<Completion[]>({
   create (_state) {
     return []

@@ -17,7 +17,7 @@
 import { promises as fs, constants as FSConstants } from 'fs'
 import { parse as parseYAML, stringify as stringifyYAML } from 'yaml'
 
-export default class PersistentDataContainer<T = any> {
+export default class PersistentDataContainer<T = unknown> {
   /**
    * The absolute path to the data file. Must include the file extension (e.g.,
    * yaml or json).

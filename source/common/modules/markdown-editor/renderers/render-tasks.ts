@@ -35,7 +35,7 @@ class TaskWidget extends WidgetType {
     elem.addEventListener('click', (event) => {
       const insert = this.isChecked ? '[ ]' : '[x]'
       view.dispatch({ changes: [{ from: this.node.from, to: this.node.to, insert }] })
-      view.contentDOM.focus()
+      view.focus()
     })
     return elem
   }

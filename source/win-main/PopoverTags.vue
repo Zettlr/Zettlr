@@ -117,7 +117,7 @@ function searchAndClose (tagName: string): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .tag-cloud {
     padding: 5px;

@@ -2,9 +2,205 @@
 
 ## GUI and Functionality
 
+- **Feature**: The context menus for links and images now also feature various
+  items that may be useful for formatting aspects of the link/image descriptions
+  (#6417).
+- **Feature**: Make the "find next" and "find previous" commands of the editor
+  search configurable. Previously, both `Mod-g` and `F3` would move to the next
+  search result, but after implementing custom shortcuts, these two commands
+  were left unconfigurable and hard-coded to `Mod-g`. These are now configurable
+  so that you can change the default keybinding of `Mod-g` to `F3` if you wish
+  (#6575).
+- **Change**: The styles and layouts of various UI components have been
+  adjusted. The following components should now look mostly the same across all
+  operating systems:
+    - Toolbar
+    - File Tree
+    - Sidebar
+- Fixed a misaligned size distribution between the file manager, editor view,
+  and sidebar. Now, when double-clicking the dividers between these three
+  components, they will resize so that both sidebars take up 20% of the window
+  width, as opposed to a distribution of 20% for the file manager and ca. 15%
+  for the sidebar. This way, both sidebars of the main window are visually
+  equally sized.
+- Fixed a bug where Zettlr would *never* load attachments from your main
+  database if that database was in `BibTeX` or `BibLaTeX` format, as a small
+  logical error made the relevant code for retrieving attachments never find the
+  database in memory and thus would always fall back to attempting to contact
+  Zotero, which would, logically, fail for JabRef users (#6619).
+- Library loading on boot is now asynchronous, also we register a
+  long-running task during database loads to visualize especially the loading of
+  large library files.
+- Fixed a bug that prevented Mermaid diagrams from rendering due to an
+  underlying bug in the new API (#6625).
+- Fixed an issue that would cause full-text searches to start even as the input
+  field was still composing non-latin text (#6597; #6604).
+- Removed the `.md` extension from the default new filename pattern in the
+  Advanced Preferences menu. This pattern is used as the filename, so the
+  extension is unnecessary. Previously, creating a new file with the default
+  pattern would result in the `.md` extension being added twice to markdown
+  files or added incorrectly to non-markdown files. This only impacts new
+  installations of Zettlr. Existing users will have to update the pattern
+  manually (#6638).
+- Fixed the spacing on the changelog entries to make it more pleasant to read.
+- Fixed an issue that could, under the right circumstances, write unusual values
+  for resized split views into the configuration, necessitating a configuration
+  modification to render Zettlr usable again (#5829).
+
+## Under the Hood
+
+- Update Electron to `v44.9.3`.
+- Update the `gettext-parser` to `v10`.
+- Added error-handling code in case titlebar overlays cannot be set for windows
+  (see #6417).
+- Exchanged `biblatex-csl-converter` with `bibliojson`.
+- Refactor the splash screen to silence an error caused by a benign race
+  condition during the boot sequence.
+- Pin the AppImage toolset in Electron builder to use a more modern one which
+  depends on fuse3 instead of the depcecated fuse2 library. This change must be
+  reverted once Electron builder is updated to v27 (#6632).
+
+# 4.9.0
+
+## Deprecation: macOS 12 and Ubuntu 17.04 no longer supported
+
+This release updates Electron, Zettlr's underlying application framework, to
+version 44. This means that Zettlr will no longer run on macOS 12 or Ubuntu
+17.04 or earlier. If you run such a system, please consider updating your
+computer to continue using Zettlr.
+
+## GUI and Functionality
+
+- **Feature**: Zettlr now correctly renders images that have been defined using
+  the reference-style variant. So instead of only rendering images in the form
+  `![alt text](url)`, it can now also render reference style images in the form
+  `![alt text][reference]`, with the reference being defined elsewhere (#663).
+- Fixed an issue where a URL in an image caption would be improperly treated as
+  the image source (#6594).
+- Fixed an issue where toggling a task mark would scroll the viewport back to
+  the cursor position. Now, the viewport does not scroll when a task mark is
+  toggled, though the cursor position is retained (#6603).
+- Fixed an issue that would cause jumping of the editor content upon externally
+  modifying a file (#6531; #6543).
+- Fixed an issue that caused excessive "failed to check for updates" errors
+  (#6574).
+- Fixed an issue preventing files with non-lowercase extensions from showing up
+  and being correctly treated by Zettlr (#6613).
+- Fixed a bug that would cause the statusbars of split views visible on top of
+  distraction-free views when using a split-view layout (#6581).
+- The Table Editor now uses the wrapper element's height instead of just the
+  table element's. This might further improve issues with the editor jumping
+  around as large tables and documents with many tables are edited (#5732).
+- Fixed a startup crash when a workspace contains an Electron `.asar` archive
+  (#6551).
+- Fixed an issue where the menubar controls would overlap the window controls on
+  Linux (#6633)
+
+## Under the Hood
+
+- Update Electron to `v44.9.1`. This drops macOS 12 and Ubuntu 17.04.
+  Furthermore, this includes a mitigation for the vulnerable eMudhra
+  certificates (see GitHub Advisory `GHSA-jr5w-w6x2-84p9`).
+- Update Pandoc to `v3.12.1`. This changes how admonitions/alerts are rendered
+  and may require updates to your custom template CSS for HTML exports.
+- Upgrade Mermaid to `v12.1.0`.
+- Centralized update check logic.
+- Fully switched the update provider from the outdated `got` dependency to both
+  pure `fetch` (where necessary) or `ky` (where convenient).
+- Move the link preview generation to `ky`.
+- Fully remove all dependencies on `got`, and remove the module entirely.
+- Ensure VS Code uses the workspace's TypeScript version instead of the built-in
+  one to avoid issues where the linter sees different issues than VS Code.
+
+# 4.8.0
+
+## Admonitions
+
+After more than six years in the making, we are proud to announce admonitions as
+a new feature for Zettlr. The app now supports the more and more common syntax
+that GitHub and other Markdown editors already support, using Blockquotes with a
+custom header. You can create `note`s, `tip`s, `warning`s, `important` blocks,
+and `caution` blocks like so:
+
+```markdown
+> [!note] This is the note's title
+> This is the content of the note.
+```
+
+The title after the keyword is optional, and you can use both uppercase keywords
+and lowercase keywords.
+
+Zettlr comes with a built-in renderer so that you can immediately see what the
+admonitions might look like upon export (note that the final styling depends on
+the export option chosen and support for this type of element). The renderer can
+be enabled or disabled exactly like the existing renderers.
+
+When you "copy" a selection that contains an admonition using the "with style"
+option, Zettlr will transform the admonition correctly, but whether the
+admonition retains its styles depend on the application into which you paste
+this code.
+
+Note that admonition support upon exporting requires the `alerts` extension. You
+can enable it manually in your export profile configuration, or enforce support
+(where available) via the export settings.
+
+## Deprecation Note: Dropping Support for OS Versions in Next Release
+
+This is the last Zettlr release shipping with Electron version 43. The next
+release will switch to Electrion version 44, which drops support for the
+following operating systems:
+
+* Ubuntu 17.04 or earlier
+* macOS 12 (Monterey)
+
+Please make sure to update your operating system before the next version of
+Zettlr ships if you are affected by this change.
+
+## GUI and Functionality
+
+- **Feature**: Admonitions are here! Zettlr now supports a broad range of
+  admonitions (sometimes also referred to as alerts or callouts). You can use
+  admonitions to emphasize certain content in your documents using Blockquote
+  syntax with a special header (see PR. #6497 for details). This closes a long-
+  standing feature request (#532). Some notes:
+  * Admonitions come with support of five keywords: `note` (gray), `tip`
+    (green), `warning` (yellow), `important` (purple), and `caution` (red).
+  * Zettlr supports custom titles for admonitions (full compatibility with other
+    popular Markdown editors).
+  * The app ships with a renderer for admonitions that you can turn on and off
+    just like any other renderer.
+  * Note that, to make admonitions survive exports, you will need to enable the
+    `alerts`-extension of Pandoc in the `reader` of the profile in question.
+  * Zettlr will use similar HTML-syntax when you copy text with admonitions
+    using the "Copy with Styles" option, but whether this survives pasting into
+    other applications depends on support on their side.
 - **Feature**: You can now choose whether you want to automatically accept the
   selected autocomplete suggestion when pressing `Tab`, `Enter`, both, or
   disable automatic accepting entirely (#6485).
+- **Change**: The old `mark` setting has been replaced by a new settings
+  category that enforces support for several Pandoc extensions during export. If
+  you have disabled the `mark` support in the import/export settings previously,
+  you will need to disable this again after updating Zettlr.
+- **Change**: Fixed a fundamental issue with the full-text search that would
+  turn **AND**-searches implicitly into **OR** searches. If you relied on how
+  the full-text search actually worked, and not how it was described in the
+  documentation, you will now have to explicitly add pipe-operators (`|`)
+  between your search terms to mark them as alternatives. By default, the full-
+  text search now requires all operators separated by a space to be present in a
+  file to be considered a valid result (#6517).
+- **New Translation**: Zettlr now ships with an additional language:
+  Azerbaijani. See PR #6548 for details.
+- Improved the custom title bar style on both Linux (if native appearance is
+  turned off) and Windows. Here's what changed:
+  1. The logo is now an actual element rather than background, and has been
+     scaled down to better fit into the menu bar.
+  2. The window controls now use a transparent background and a light/dark color
+     depending on which theme the app is currently using.
+  3. Improved the spacing around the menu items to make them less menacing.
+- Fixed the about window's debug tab: No more horizontal scrolling, and the
+  `PATH`-variable is properly split into segments.
+- Fixed some alignment issues with custom symbols on toolbar buttons; now the
+  buttons should all be properly centered.
 - Fixed an issue where in some places instead of showing you a proper file
   title, the app would default to only showing you the filename, and neither a
   heading or YAML title, if you specified it as such. Now, the logic has been
@@ -21,11 +217,30 @@
   - `ko-KO` (#6478).
   - `de-DE`.
   - `ja-JP` (#6480).
+  - `ca-ES` (#6530).
+  - `pt-BR` (#6537).
+  - `tr-TR` (#6533).
+  - `az-AZ` (#6548).
 - Renamed "Remove line breaks" to "Remove excess line breaks."
+- Fixed an issue in full text search where multiple search terms separated by
+  whitespace would use an 'OR' operator rather than the documented 'AND'
+  operator. Now, search terms separated by whitespace correctly use the 'AND'
+  operator (#6517).
+- Fixed an issue that prevented inserting a new row when the cursor is placed in
+  the final row of the table (#6512; #6513).
+- Fixed an issue where literal curly braces at the end of a table cell (or a
+  line) were swallowed as invalid Pandoc attributes, causing the text inside
+  them to disappear (#6563).
 
 ## Under the Hood
 
-- Update Electron to `v43.2.0`.
+- Update Electron to `v43.6.0`.
+- Zettlr now checks whether a Pandoc extension it seeks to enable during export
+  is actually supported by the reader to avoid errors when, e.g., using the
+  `commonmark` reader which does not support the `mark` extension.
+- Updates to the translations are now deterministic (#6538). This causes minimal
+  diffs between iterations and should also reduce the risks for merge conflicts
+  between open translation PRs and POT update PRs.
 
 # 4.7.0
 

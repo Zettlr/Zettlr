@@ -119,7 +119,7 @@ function sanitizeValue (newValue: number|''): number {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body.darwin {
   label {
     font-family: system-ui, sans-serif;

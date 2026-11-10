@@ -51,7 +51,7 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
           type: 'text',
           model: 'newFileNamePattern',
           info: trans('Available variables: %s', '%id, %Y, %y, %M, %D, %W, %h, %m, %s, %o, %X, %uuid4'),
-          reset: '%id.md',
+          reset: '%id',
           group: 'advanced'
         },
         { type: 'separator' },

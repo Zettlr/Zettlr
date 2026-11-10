@@ -7,8 +7,12 @@
     <translator>
       <name>Miren BZ</name>
     </translator>
+    <translator>
+      <name>Inigo Urrestarazu-Porta</name>
+      <email>inigo.urrestarazu@ehu.eus</email>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2026-01-10T00:00:00+00:00</updated>
+    <updated>2026-09-10T12:40:00+02:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -30,135 +34,135 @@
     <term name="and others">eta beste</term>
     <term name="anonymous">ezezaguna</term>
     <term name="at">-(e)n</term>
-    <term name="audio-recording">audio recording</term>
-    <term name="available at">available at</term>
+    <term name="audio-recording">audio grabazioa</term>
+    <term name="available at">-(e)n eskuragarri</term>
     <term name="by">-(e)k egina</term>
     <term name="circa">inguru</term>
     <term name="cited">aipatua</term>
     <term name="et-al">et al.</term>
     <term name="film">film</term>
     <term name="forthcoming">bidean</term>
-    <term name="from">hemendik: </term>
-    <term name="henceforth">henceforth</term>
+    <term name="from">hemendik</term>
+    <term name="henceforth">aurrerantzean</term>
     <term name="ibid">ibíd.</term>
     <term name="in">in</term>
-    <term name="in press">moldiztegian</term>
+    <term name="in press">inprimategian</term>
     <term name="internet">internet</term>
     <term name="letter">gutuna</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
     <term name="no date">datarik gabe</term>
-    <term name="no-place">no place</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
+    <term name="no-place">lekurik gabe</term>
+    <term name="no-publisher">argitaratzailerik ez</term> <!-- sine nomine -->
     <term name="on">on</term>
     <term name="online">sarean</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">sortzeko lana hemen argitaratua</term>
     <term name="personal-communication">komunikazio pertsonala</term>
     <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
+    <term name="podcast-episode">podcast atal</term>
     <term name="preprint">preprint</term>
     <term name="presented at">-(e)n aurkeztua</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
+    <term name="radio-broadcast">irrati broadcast</term>
+    <term name="radio-series">irrati programa</term>
+    <term name="radio-series-episode">irratsaio</term>
     <term name="reference">
       <single>aipamena</single>
       <multiple>aipamenak</multiple>
     </term>
     <term name="retrieved">berreskuratua</term>
-    <term name="review-of">review of</term>
-    <term name="scale">scale</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
-    <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="review-of">-(e)n berrikuspena</term>
+    <term name="scale">eskala</term>
+    <term name="special-issue">ale berezi</term>
+    <term name="special-section">atal berezi</term>
+    <term name="television-broadcast">telebista broadcast</term>
+    <term name="television-series">telebista serie</term>
+    <term name="television-series-episode">telebistako seriearen atal</term>
+    <term name="video">bideoa</term>
+    <term name="working-paper">behin-behineko artikulu</term>
 
     <!-- SHORT GENERAL TERMS -->
     <term name="anonymous" form="short">ezez.</term>
     <term name="circa" form="short">ing.</term>
     <term name="no date" form="short">d. g.</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher" form="short">n.p.</term>
+    <term name="no-place" form="short">l. g.</term>
+    <term name="no-publisher" form="short">a. g.</term>
     <term name="reference" form="short">
       <single>aip.</single>
       <multiple>aip.</multiple>
     </term>
-    <term name="review-of" form="short">rev. of</term>
+    <term name="review-of" form="short">berrik.</term>
 
     <!-- SYMBOLIC GENERAL FORMS -->
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article">artikulu</term>
+    <term name="article-journal">aldizkariko artikulu</term>
+    <term name="article-magazine">magazin artikulu</term>
+    <term name="article-newspaper">egunkari artikulu</term>
+    <term name="bill">lege</term>
     <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
-    <term name="dataset">dataset</term>
-    <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="classic">klasiko</term>
+    <term name="collection">bilduma</term>
+    <term name="dataset">datu multzo</term>
+    <term name="document">fitxategia</term>
+    <term name="entry">sarrera</term>
+    <term name="entry-dictionary">hiztegi sarrera</term>
+    <term name="entry-encyclopedia">entziklopedia sarrera</term>
+    <term name="event">gertaera</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">grafikoa</term>
+    <term name="hearing">bista</term>
     <term name="interview">elkarrizketa</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
-    <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="legal_case">auzi</term>
+    <term name="legislation">araudi</term>
+    <term name="manuscript">eskuizkribu</term>
+    <term name="map">mapa</term>
+    <term name="motion_picture">bideo grabazio</term>
+    <term name="musical_score">partitura</term>
+    <term name="pamphlet">liburuxka</term>
+    <term name="paper-conference">biltzar paper</term>
+    <term name="patent">patente</term>
+    <term name="performance">emankizun</term>
+    <term name="periodical">aldizkako</term>
     <term name="personal_communication">komunikazio pertsonala</term>
     <term name="post">post</term>
     <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
+    <term name="regulation">araudi</term>
+    <term name="report">txosten</term>
+    <term name="review">berrikuspen</term>
+    <term name="review-book">liburu erreseina</term>
     <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
-    <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="song">abesti</term>
+    <term name="speech">aurkezpen</term>
+    <term name="standard">estandar</term>
+    <term name="thesis">tesi</term>
+    <term name="treaty">itun</term>
+    <term name="webpage">web orri</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
+    <term name="article-journal" form="short">aldizkari art.</term>
     <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-newspaper" form="short">egunkari art.</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
-    <term name="document" form="short">doc.</term>
+    <term name="document" form="short">dok.</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
-    <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
-    <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="graphic" form="short">graf.</term>
+    <term name="interview" form="short">elk.</term>
+    <term name="manuscript" form="short">eskuiz.</term>
+    <term name="motion_picture" form="short">bideo grab.</term>
+    <term name="report" form="short">txost.</term>
+    <term name="review" form="short">berrik.</term>
+    <term name="review-book" form="short">lib. berrik.</term>
+    <term name="song" form="short">abest.</term>
 
     <!-- LONG VERB ITEM TYPE FORMS -->
     <!-- Only where applicable -->
-    <term name="hearing" form="verb">testimony of</term>
-    <term name="review" form="verb">review of</term>
-    <term name="review-book" form="verb">review of the book</term>
+    <term name="hearing" form="verb">-(e)n bista</term>
+    <term name="review" form="verb">-(e)n berrikuspen</term>
+    <term name="review-book" form="verb">liburuaren berrikuspen</term>
 
     <!-- SHORT VERB ITEM TYPE FORMS -->
 
@@ -195,16 +199,16 @@
 
     <!-- LONG LOCATOR FORMS -->
     <term name="act">
-      <single>act</single>
-      <multiple>acts</multiple>
+      <single>atal</single>
+      <multiple>atal</multiple>
     </term>
     <term name="appendix">
-      <single>appendix</single>
-      <multiple>appendices</multiple>
+      <single>eranskin</single>
+      <multiple>eranskin</multiple>
     </term>
     <term name="article-locator">
-      <single>article</single>
-      <multiple>articles</multiple>
+      <single>artikulu</single>
+      <multiple>artikulu</multiple>
     </term>
     <term name="book">
       <single>liburua</single>
@@ -212,7 +216,7 @@
     </term>
     <term name="canon">
       <single>canon</single>
-      <multiple>canons</multiple>
+      <multiple>canon</multiple>
     </term>
     <term name="chapter">
       <single>kapitulua</single>
@@ -223,12 +227,12 @@
       <multiple>zutabeak</multiple>
     </term>
     <term name="elocation">
-      <single>location</single>
-      <multiple>locations</multiple>
+      <single>kokapen</single>
+      <multiple>kokapen</multiple>
     </term>
     <term name="equation">
-      <single>equation</single>
-      <multiple>equations</multiple>
+      <single>ekuazio</single>
+      <multiple>ekuazio</multiple>
     </term>
     <term name="figure">
       <single>irudia</single>
@@ -267,12 +271,12 @@
       <multiple>zatiak</multiple>
     </term>
     <term name="rule">
-      <single>rule</single>
-      <multiple>rules</multiple>
+      <single>arau</single> 
+      <multiple>arau</multiple>
     </term>
     <term name="scene">
-      <single>scene</single>
-      <multiple>scenes</multiple>
+      <single>eszena</single>
+      <multiple>eszena</multiple>
     </term>
     <term name="section">
       <single>atala</single>
@@ -283,20 +287,20 @@
       <multiple>sub vocem</multiple>
     </term>
     <term name="supplement">
-      <single>supplement</single>
-      <multiple>supplements</multiple>
+      <single>eranskin</single>
+      <multiple>eranskin</multiple>
     </term>
     <term name="table">
-      <single>table</single>
-      <multiple>tables</multiple>
+      <single>taula</single>
+      <multiple>taula</multiple>
     </term>
     <term name="timestamp"> <!-- generally blank -->
       <single/>
       <multiple/>
     </term>
     <term name="title-locator">
-      <single>title</single>
-      <multiple>titles</multiple>
+      <single>izenburu</single>
+      <multiple>izenburu</multiple>
     </term>
     <term name="verse">
       <single>bertsoa</single>
@@ -309,30 +313,30 @@
 
     <!-- SHORT LOCATOR FORMS -->
     <term name="appendix" form="short">
-      <single>app.</single>
-      <multiple>apps.</multiple>
+      <single>er.</single>
+      <multiple>er.</multiple>
     </term>
     <term name="article-locator" form="short">
       <single>art.</single>
-      <multiple>arts.</multiple>
+      <multiple>art.</multiple>
     </term>
     <term name="book" form="short">lib.</term>
     <term name="chapter" form="short">kap.</term>
     <term name="column" form="short">zut.</term>
     <term name="elocation" form="short">
-      <single>loc.</single>
-      <multiple>locs.</multiple>
+      <single>kok.</single>
+      <multiple>kok.</multiple>
     </term>
     <term name="equation" form="short">
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
+      <single>ek.</single>
+      <multiple>ek.</multiple>
     </term>
     <term name="figure" form="short">iru.</term>
     <term name="folio" form="short">or.</term>
     <term name="issue" form="short">zenb.</term>
     <term name="line" form="short">l.</term>
-    <term name="note" form="short">n.</term>
-    <term name="opus" form="short">op.</term>
+    <term name="note" form="short">oh.</term>
+    <term name="opus" form="short">ob.</term>
     <term name="page" form="short">
       <single>or.</single>
       <multiple>or.</multiple>
@@ -340,12 +344,12 @@
     <term name="paragraph" form="short">par.</term>
     <term name="part" form="short">zt.</term>
     <term name="rule" form="short">
-      <single>r.</single>
-      <multiple>rr.</multiple>
+      <single>ar.</single>
+      <multiple>ar.</multiple>
     </term>
     <term name="scene" form="short">
-      <single>sc.</single>
-      <multiple>scs.</multiple>
+      <single>esz.</single>
+      <multiple>esz.</multiple>
     </term>
     <term name="section" form="short">atal.</term>
     <term name="sub-verbo" form="short">
@@ -353,24 +357,24 @@
       <multiple>s.v.</multiple>
     </term>
     <term name="supplement" form="short">
-      <single>supp.</single>
-      <multiple>supps.</multiple>
+      <single>er.</single>
+      <multiple>er.</multiple>
     </term>
     <term name="table" form="short">
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>
+      <single>taula</single>
+      <multiple>taula</multiple>
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
       <single/>
       <multiple/>
     </term>
     <term name="title-locator" form="short">
-      <single>tit.</single>
-      <multiple>tits.</multiple>
+      <single>iz.</single>
+      <multiple>iz.</multiple>
     </term>
     <term name="verse" form="short">
       <single>b.</single>
-      <multiple>bb.</multiple>
+      <multiple>b.</multiple>
     </term>
     <term name="volume" form="short">
       <single>libk.</single>
@@ -389,12 +393,12 @@
 
     <!-- LONG NUMBER VARIABLE FORMS -->
     <term name="chapter-number">
-      <single>chapter</single>
-      <multiple>chapters</multiple>
+      <single>kapitulu</single>
+      <multiple>kapitulu</multiple>
     </term>
     <term name="citation-number">
-      <single>citation</single>
-      <multiple>citations</multiple>
+      <single>aipamen</single>
+      <multiple>aipamen</multiple>
     </term>
     <term name="collection-number">
       <single>zenbakia</single>
@@ -409,87 +413,87 @@
       <multiple>oharrak</multiple>
     </term>
     <term name="number">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>zenbaki</single>
+      <multiple>zenbaki</multiple>
     </term>
     <term name="number-of-pages">
       <single>orrialdea</single>
       <multiple>orrialdeak</multiple>
     </term>
     <term name="number-of-volumes">
-      <single>volume</single>
-      <multiple>volumes</multiple>
+      <single>liburuki</single>
+      <multiple>liburuki</multiple>
     </term>
     <term name="page-first">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>orri</single>
+      <multiple>orri</multiple>
     </term>
     <term name="printing">
-      <single>printing</single>
-      <multiple>printings</multiple>
+      <single>inprimazio</single>
+      <multiple>inprimazio</multiple>
     </term>
     <term name="version">bertsioa</term>
 
     <!-- SHORT NUMBER VARIABLE FORMS -->
     <term name="chapter-number" form="short">
-      <single>chap.</single>
-      <multiple>chaps.</multiple>
+      <single>kap.</single>
+      <multiple>kap.</multiple>
     </term>
     <term name="citation-number" form="short">
-      <single>cit.</single>
-      <multiple>cits.</multiple>
+      <single>aip.</single>
+      <multiple>aip.</multiple>
     </term>
     <term name="collection-number" form="short">zenb.</term>
     <term name="edition" form="short">arg.</term>
-    <term name="first-reference-note-number" form="short">n.</term>
+    <term name="first-reference-note-number" form="short">oh.</term>
     <term name="number" form="short">
-      <single>no.</single>
-      <multiple>nos.</multiple>
+      <single>zbk.</single>
+      <multiple>zbk.</multiple>
     </term>
     <term name="number-of-pages" form="short">
       <single>or.</single>
       <multiple>or.</multiple>
     </term>
     <term name="number-of-volumes" form="short">
-      <single>vol.</single>
-      <multiple>vols.</multiple>
+      <single>liburuki</single>
+      <multiple>liburuki</multiple>
     </term>
     <term name="page-first" form="short">
-      <single>p.</single>
-      <multiple>pp.</multiple>
+      <single>or.</single>
+      <multiple>or.</multiple>
     </term>
     <term name="printing" form="short">
-      <single>print.</single>
-      <multiple>prints.</multiple>
+      <single>inpr.</single>
+      <multiple>inpr.</multiple>
     </term>
 
     <!-- LONG ROLE FORMS -->
     <term name="author"/> <!-- generally blank -->
     <term name="chair">
-      <single>chair</single>
-      <multiple>chairs</multiple>
+      <single>arduradun</single>
+      <multiple>arduradun</multiple>
     </term>
     <term name="collection-editor">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>arg.</single>
+      <multiple>arg.</multiple>
     </term>
     <term name="compiler">
-      <single>compiler</single>
-      <multiple>compilers</multiple>
+      <single>biltzaile</single>
+      <multiple>biltzaile</multiple>
     </term>
     <term name="composer"/> <!-- generally blank -->
     <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
-      <single>contributor</single>
-      <multiple>contributors</multiple>
+      <single>laguntzaile</single>
+      <multiple>laguntzaile</multiple>
     </term>
     <term name="curator">
-      <single>curator</single>
-      <multiple>curators</multiple>
+      <single>arduradun</single>
+      <multiple>arduradun</multiple>
     </term>
     <term name="director">
-      <single>director</single>
-      <multiple>directors</multiple>
+      <single>zuzendari</single>
+      <multiple>zuzendari</multiple>
     </term>
     <term name="editor">
       <single>argitaratzailea</single>
@@ -508,48 +512,48 @@
       <multiple>argitaratzaileak</multiple>
     </term>
     <term name="executive-producer">
-      <single>executive producer</single>
-      <multiple>executive producers</multiple>
+      <single>ekoizle exekutibo</single>
+      <multiple>ekoizle exekutibo</multiple>
     </term>
     <term name="guest">
-      <single>guest</single>
-      <multiple>guests</multiple>
+      <single>gonbidatu</single>
+      <multiple>gonbidatu</multiple>
     </term>
     <term name="host">
-      <single>host</single>
-      <multiple>hosts</multiple>
+      <single>anfitrioi</single>
+      <multiple>anfitrioi</multiple>
     </term>
     <term name="illustrator">
-      <single>illustrator</single>
-      <multiple>illustrators</multiple>
+      <single>irudigile</single>
+      <multiple>irudigile</multiple>
     </term>
     <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
-      <single>narrator</single>
-      <multiple>narrators</multiple>
+      <single>esatari</single>
+      <multiple>esatari</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>antolatzaile</single>
+      <multiple>antolatzaile</multiple>
     </term>
     <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
-      <single>performer</single>
-      <multiple>performers</multiple>
+      <single>interpretatzaile</single>
+      <multiple>interpretatzaile</multiple>
     </term>
     <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
+      <single>ekoizle</single>
+      <multiple>ekoizle</multiple>
     </term>
     <term name="recipient"/> <!-- generally blank -->
     <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>idazle</single>
+      <multiple>idazle</multiple>
     </term>
     <term name="series-creator">
-      <single>series creator</single>
-      <multiple>series creators</multiple>
+      <single>seriearen sortzaile</single>
+      <multiple>seriaren sortzaile</multiple>
     </term>
     <term name="translator">
       <single>itzultzailea</single>
@@ -558,20 +562,20 @@
 
     <!-- SHORT ROLE FORMS -->
     <term name="compiler" form="short">
-      <single>comp.</single>
-      <multiple>comps.</multiple>
+      <single>biltz.</single>
+      <multiple>biltz.</multiple>
     </term>
     <term name="contributor" form="short">
-      <single>contrib.</single>
-      <multiple>contribs.</multiple>
+      <single>laguntz.</single>
+      <multiple>laguntz.</multiple>
     </term>
     <term name="curator" form="short">
-      <single>cur.</single>
-      <multiple>curs.</multiple>
+      <single>ard.</single>
+      <multiple>ard.</multiple>
     </term>
     <term name="director" form="short">
-      <single>dir.</single>
-      <multiple>dirs.</multiple>
+      <single>zuz.</single>
+      <multiple>zuz.</multiple>
     </term>
     <term name="editor" form="short">
       <single>arg.</single>
@@ -590,36 +594,36 @@
       <multiple>arg.</multiple>
     </term>
     <term name="executive-producer" form="short">
-      <single>exec. prod.</single>
-      <multiple>exec. prods.</multiple>
+      <single>exek. ek.</single>
+      <multiple>exek. ek.</multiple>
     </term>
     <term name="illustrator" form="short">
-      <single>ill.</single>
-      <multiple>ills.</multiple>
+      <single>irudig.</single>
+      <multiple>irudig.</multiple>
     </term>
     <term name="narrator" form="short">
-      <single>narr.</single>
-      <multiple>narrs.</multiple>
+      <single>esat.</single>
+      <multiple>esat.</multiple>
     </term>
     <term name="organizer" form="short">
-      <single>org.</single>
-      <multiple>orgs.</multiple>
+      <single>ant.</single>
+      <multiple>ant.</multiple>
     </term>
     <term name="performer" form="short">
-      <single>perf.</single>
-      <multiple>perfs.</multiple>
+      <single>interpret.</single>
+      <multiple>interpret.</multiple>
     </term>
     <term name="producer" form="short">
-      <single>prod.</single>
-      <multiple>prods.</multiple>
+      <single>ek.</single>
+      <multiple>ek.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
+      <single>id.</single>
+      <multiple>id.</multiple>
     </term>
     <term name="series-creator" form="short">
-      <single>cre.</single>
-      <multiple>cres.</multiple>
+      <single>sort.</single>
+      <multiple>sort.</multiple>
     </term>
     <term name="translator" form="short">
       <single>itzul.</single>
@@ -627,52 +631,52 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="chair" form="verb">chaired by</term>
-    <term name="collection-editor" form="verb">edited by</term>
-    <term name="compiler" form="verb">compiled by</term>
+    <term name="chair" form="verb">-(e)k gidatua</term>
+    <term name="collection-editor" form="verb">-(e)k argitaratua</term>
+    <term name="compiler" form="verb">-(e)k bildua</term>
     <term name="container-author" form="verb"/>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
-    <term name="director" form="verb">directed by</term>
+    <term name="contributor" form="verb">-(e)kin</term>
+    <term name="curator" form="verb">-(r)en ardurapean</term>
+    <term name="director" form="verb">-(e)k zuzendua</term>
     <term name="editor" form="verb">-(e)k argitaratua</term>
     <term name="editor-translator" form="verb">-(e)k argitaratu eta itzulia</term>
     <term name="editortranslator" form="verb">-(e)k argitaratu eta itzulia</term>
     <term name="editorial-director" form="verb">-(e)k argitaratua</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
-    <term name="illustrator" form="verb">illustrated by</term>
+    <term name="executive-producer" form="verb">-(r)en ekoizpen exekutiboa</term>
+    <term name="guest" form="verb">gonbidatuarekin</term>
+    <term name="host" form="verb">anfitrioi</term>
+    <term name="illustrator" form="verb">-(r)en irudiak</term>
     <term name="interviewer" form="verb">-(e)k elkarrizketatua</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
+    <term name="narrator" form="verb">esatari</term>
+    <term name="organizer" form="verb">-(e)k antolatua</term>
+    <term name="performer" form="verb">-(e)k egina</term>
+    <term name="producer" form="verb">-(e)k ekoitzia</term>
     <term name="recipient" form="verb">-(r)entzat</term>
-    <term name="reviewed-author" form="verb">by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="reviewed-author" form="verb">-(e)k berrikusia</term>
+    <term name="script-writer" form="verb">-(e)k idatzia</term>
+    <term name="series-creator" form="verb">-(e)k sortua</term>
     <term name="translator" form="verb">-(e)k itzulia</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
-    <term name="director" form="verb-short">dir.</term>
+    <term name="collection-editor" form="verb-short">-(e)k arg.</term>
+    <term name="compiler" form="verb-short">-(e)k bild.</term>
+    <term name="contributor" form="verb-short">-(r)ekin</term>
+    <term name="curator" form="verb-short">-(e)n ard.</term>
+    <term name="director" form="verb-short">zuz.</term>
     <term name="editor" form="verb-short">arg.</term>
     <term name="editor-translator" form="verb-short">-(e)k arg. eta itzul.</term>
     <term name="editortranslator" form="verb-short">-(e)k arg. eta itzul.</term>
     <term name="editorial-director" form="verb-short">arg.</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
-    <term name="illustrator" form="verb-short">illus.</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="executive-producer" form="verb-short">-(r)en ek. exek.</term>
+    <term name="guest" form="verb-short">gonb.arekin</term>
+    <term name="host" form="verb-short">anf.</term>
+    <term name="illustrator" form="verb-short">-(r)en irud.</term>
+    <term name="narrator" form="verb-short">esat.</term>
+    <term name="organizer" form="verb-short">-(e)k ant.</term>
+    <term name="performer" form="verb-short">-(e)k eg.</term>
+    <term name="producer" form="verb-short">-(e)k ek.</term>
+    <term name="script-writer" form="verb-short">-(e)k id.</term>
+    <term name="series-creator" form="verb-short">-(e)k sor.</term>
     <term name="translator" form="verb-short">itzul.</term>
 
     <!-- LONG MONTH FORMS -->

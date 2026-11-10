@@ -64,12 +64,5 @@ const labelWithFallback = computed<string>(() => {
 })
 </script>
 
-<style lang="less">
-.toolbar-group button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-}
+<style lang="css" scoped>
 </style>

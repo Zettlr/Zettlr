@@ -37,7 +37,8 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
     const properties = Object.entries(attributes.properties)
       .map(([ key, value ]) => {
         if (value !== undefined) {
-          return (`${key}="${value}"`)
+          // Values containing double quotes can only round-trip single-quoted
+          return value.includes('"') ? `${key}='${value}'` : `${key}="${value}"`
         }
 
         return key
@@ -50,15 +51,44 @@ export function formatPandocAttributes (attributes: ParsedPandocAttributes): str
   return parts.join(' ')
 }
 
-/** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value"}
+/** Pandoc Attribute Regex: {#my-id .classes .other-classes key=value attr="other value" -}
  *
- *  #(?<id>[\w\-_]+)       => id
- *  \.(?<class>[\w\-_]+)   => class
- *  (?<key>[\w\-_]+)       => key
- *  "(?<quoted>[^"]*)"     => quoted values
- *  (?<unquoted>[^\s"]+)   => unquoted values
+ *  #(?<id>[\w\-:.]+)            => id
+ *  \.(?<class>[\w\-:.]+)         => class
+ *  (?<key>[\w\-_]+)             => key
+ *  "(?<quoted>[^"]*)"           => double-quoted values
+ *  '(?<singleQuoted>[^']*)'     => single-quoted values
+ *  (?<unquoted>[^\s"]+)        => unquoted values
+ *  (?<unnumbered>-+)            => bare `-` (or `--`, ...), shorthand for `.unnumbered`
  */
-const pandocAttributeRe = /#(?<id>[\w\-_]+)|\.(?<class>[\w\-_]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|(?<unquoted>[^\s"]+)))/g
+const pandocAttributeRe = /#(?<id>[\w\-:.]+)|\.(?<class>[\w\-:.]+)|(?<attr>(?<key>[\w\-_]+)=(?:"(?<quoted>[^"]*)"|'(?<singleQuoted>[^']*)'|(?<unquoted>[^\s"]+)))|(?<unnumbered>(?<![\w-])-+(?![\w-]))/g
+
+const attributeTokenRE = new RegExp(pandocAttributeRe.source, 'y')
+
+/**
+ * Whether the content between the braces is made up only of Pandoc attributes,
+ * optionally separated by whitespace. Walks the tokens with a sticky regex so
+ * that each one must start where the previous one ended.
+ *
+ * @param   {string}   content  The text between `{` and `}`
+ *
+ * @return  {boolean}           True if the content is a valid attribute list
+ */
+export function isAttributeContent (content: string): boolean {
+  let pos = content.length - content.trimStart().length
+  while (pos < content.length) {
+    attributeTokenRE.lastIndex = pos
+    const match = attributeTokenRE.exec(content)
+    if (match === null || match[0] === '') {
+      return false
+    }
+    pos = attributeTokenRE.lastIndex
+    while (pos < content.length && /\s/.test(content[pos])) {
+      pos++
+    }
+  }
+  return true
+}
 
 /**
  * Parses a Pandoc link attribute string, as defined in
@@ -96,9 +126,16 @@ export function parsePandocAttributes (attrString: string): ParsedPandocAttribut
       parsed.classes.push(match.groups.class)
     }
 
+    if (match.groups.unnumbered) {
+      if (parsed.classes === undefined) {
+        parsed.classes = []
+      }
+      parsed.classes.push('unnumbered')
+    }
+
     if (match.groups.attr) {
       const key = match.groups.key
-      let value = match.groups.unquoted ?? match.groups.quoted ?? ''
+      let value = match.groups.unquoted ?? match.groups.quoted ?? match.groups.singleQuoted ?? ''
 
       if (key.toLowerCase() === 'width') {
         if (/^\d+$/.test(value)) {

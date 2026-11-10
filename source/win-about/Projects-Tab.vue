@@ -124,10 +124,7 @@ import { trans } from '@common/i18n-renderer'
 const projectsIntro = trans('Zettlr also makes use of these projects:')
 </script>
 
-<style lang="less">
-// Project boxes on the about panel
-
-// About dialog project boxes
+<style lang="css" scoped>
 div#project-container {
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +139,6 @@ div#project-container {
     padding: 10px;
     cursor: pointer;
     transition: 0.2s all ease;
-    // width: 200px doesn't work as expected in flexbox
     min-width: 200px;
     max-width: 200px;
     border-color: var(--grey-2);

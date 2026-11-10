@@ -21,6 +21,7 @@ import { computed, ref, type Ref } from 'vue'
 import { type WritingTarget } from '@providers/targets'
 import type { AssetsProviderIPCAPI } from 'source/app/service-providers/assets'
 import type { SearchResultWrapper } from 'source/win-main/GlobalSearch.vue'
+import { type SnippetRecord } from 'source/common/modules/markdown-editor/autocomplete/snippets'
 
 const ipcRenderer = window.ipc
 
@@ -51,7 +52,7 @@ export const useWindowStateStore = defineStore('window-state', () => {
   const distractionFreeMode = ref<undefined|string>(undefined)
   const activeDocumentInfo = ref<undefined|DocumentInfo>(undefined)
   const tableOfContents = ref<ToCEntry[]|undefined>(undefined)
-  const snippets = ref<Array<{ name: string, content: string }>>([])
+  const snippets = ref<SnippetRecord[]>([])
   const writingTargets = ref<WritingTarget[]>([])
 
   /**

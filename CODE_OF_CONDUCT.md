@@ -13,6 +13,33 @@ social origin, socio-economic position, level of education, or other status. The
 same privileges of participation are extended to everyone who participates in
 good faith and in accordance with this Covenant.
 
+## General Rules
+
+These are general rules that we expect as a basic foundation for productive and
+efficient conduct within the community spaces.
+
+* The language of communication is English. We mandate this to ensure that the
+  maximum amount of people have the chance to communicate and participate in
+  this community. Posts in other languages may be deleted at the discretion of
+  the maintainers.
+* Entirely AI-generated communication in issues, pull request descriptions, and
+  comments is prohibited. We require you to communicate yourself. AI-generated
+  comments will be deleted without warning and repeat transgression may lead to
+  permanent bans. Note that this does not include translating a text you wrote
+  into English, or using an LLM to improve upon your contribution. See more in
+  our [AI Policy](#usage-of-ai-in-communication) below.
+* The Zettlr project is not restricted to just this repository. It also includes
+  a forum, a Discord channel, and various other spaces. By participating in the
+  Zettlr community here or in any other space, you recognize that serious
+  transgressions in other spaces may also lead to your exclusion from
+  participating in this space, and vice versa.
+
+> [!caution]
+> The maintainers of this project have wide leverage to change or delete texts,
+> close PRs, and prosecute behaviors that may have a detrimental effect on the
+> community. They are not required to provide any reasons or engage in any way
+> besides the action they themselves perform.
+
 ## Encouraged Behaviors
 
 While acknowledging differences in social norms, we all strive to meet our
@@ -74,11 +101,21 @@ everyday life. However, when communicating among each other, we prefer to
 communicate with humans directly. We encourage all community members to
 **refrain from using generative AI to formulate messages**. As part of the
 restricted behaviors, making fun of people for missing grammatical rules or
-making typos is strictly forbidden and will be prosecuted. We prefer seeing
-non-perfect language in communication as a sign of honest participation in this
-community. However, we do acknowledge that for some people, it can be stressful
-to communicate without the help of AI. This is why we **encourage** and not
-strictly require communicating without the help of LLMs.
+making typos is strictly forbidden and will be prosecuted.
+
+We prefer seeing non-perfect language in communication as a sign of honest
+participation in this community. However, we do acknowledge that for some
+people, it can be stressful to communicate without the help of AI. This is why
+we **encourage** and not strictly require communicating without the help of
+LLMs.
+
+Note, however, that letting an LLM write a comment on your behalf is
+**prohibited**. We require you to formulate a contribution (an issue, a comment,
+or a pull request description) yourself. You may write it in your native
+language and translate it using an AI tool, and you may also peruse an LLM to
+improve your contributions. But the basic content of your communicative
+contribution must be written by yourself. (Assistive technologies are,
+naturally, excluded from these restrictions.)
 
 ## Reporting an Issue
 

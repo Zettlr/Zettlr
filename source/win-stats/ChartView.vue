@@ -65,7 +65,7 @@
  * END HEADER
  */
 
-import { DateTime, type DateTimeMaybeValid } from 'luxon'
+import { DateTime } from 'luxon'
 import { trans } from '@common/i18n-renderer'
 import { computed } from 'vue'
 import { useStatisticsStore } from '../pinia/statistics-store'
@@ -119,7 +119,7 @@ const meansByWeekday = computed(() => {
   // Take our words ...
   const words = Object.entries(statisticsStore.stats.wordCount)
     // ... map them to DateTimes ...
-    .map<[ isoDate: DateTimeMaybeValid, count: number ]>(val => [ DateTime.fromISO(val[0]), val[1] ])
+    .map<[ isoDate: DateTime, count: number ]>(val => [ DateTime.fromISO(val[0]), val[1] ])
     // ... and filter out invalids.
 
   // Then, we need three arrays: this week, this year, and previous year.
