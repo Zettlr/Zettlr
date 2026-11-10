@@ -46,6 +46,10 @@
 - Fixed an issue that could, under the right circumstances, write unusual values
   for resized split views into the configuration, necessitating a configuration
   modification to render Zettlr usable again (#5829).
+- Fixes various issues pertaining to keywords/tags which are present in YAML
+  frontmatters of files. Zettlr now again correctly detects these and they are
+  clickable, yielding a search for keywords, which also includes keywords with
+  spaces (#2443; #2590; #4498; see PR #6496).
 
 ## Under the Hood
 
