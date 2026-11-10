@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.7.8\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-20 02:36+0000\n"
+"POT-Creation-Date: 2026-11-10 02:24+0000\n"
 "PO-Revision-Date: 2026-07-28 12:02+0200\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
@@ -27,12 +27,30 @@ msgstr "Indiziere %s…"
 msgid "Booting %s…"
 msgstr "Starte %s…"
 
-#: source/app/service-providers/citeproc/index.ts:259
-#: source/app/service-providers/citeproc/index.ts:426
+#: source/app/service-providers/citeproc/index.ts:284
+#: source/app/service-providers/citeproc/index.ts:465
 msgid "The citation database could not be loaded"
 msgstr "Die Zitationsdatenbank konnte nicht geladen werden"
 
-#: source/app/service-providers/citeproc/index.ts:413
+#: source/app/service-providers/citeproc/index.ts:359
+msgid "Loading database"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:360
+#, javascript-format
+msgid "Loading database %s"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:364
+msgid "Database loaded"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:365
+#, javascript-format
+msgid "Database %s has been loaded. It contains %s items."
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:452
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Änderung in der Bibliothek entdeckt. Lade neu …"
 
@@ -76,7 +94,7 @@ msgstr "Möchtest du %s wirklich löschen?"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:324
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:325
 msgid "Untitled"
 msgstr "Unbenannt"
 
@@ -804,7 +822,7 @@ msgstr "Wiederholen"
 
 #: source/app/service-providers/menu/menu.darwin.ts:347
 #: source/app/service-providers/menu/menu.win32.ts:351
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:239
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:38
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:49
 #: source/common/modules/window-register/register-default-context.ts:75
 msgid "Cut"
@@ -812,7 +830,7 @@ msgstr "Ausschneiden"
 
 #: source/app/service-providers/menu/menu.darwin.ts:353
 #: source/app/service-providers/menu/menu.win32.ts:357
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:245
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:55
 #: source/common/modules/window-register/register-default-context.ts:82
 #: source/tmp/win-main/GlobalSearch.vue.ts:83
@@ -821,14 +839,14 @@ msgstr "Kopieren"
 
 #: source/app/service-providers/menu/menu.darwin.ts:358
 #: source/app/service-providers/menu/menu.win32.ts:362
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:251
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:50
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:61
 msgid "Copy as HTML"
 msgstr "Als HTML kopieren"
 
 #: source/app/service-providers/menu/menu.darwin.ts:367
 #: source/app/service-providers/menu/menu.win32.ts:371
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:257
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:56
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:67
 #: source/common/modules/window-register/register-default-context.ts:88
 msgid "Paste"
@@ -836,14 +854,14 @@ msgstr "Einfügen"
 
 #: source/app/service-providers/menu/menu.darwin.ts:372
 #: source/app/service-providers/menu/menu.win32.ts:376
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:263
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:62
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:73
 msgid "Paste without style"
 msgstr "Ohne Format einfügen"
 
 #: source/app/service-providers/menu/menu.darwin.ts:381
 #: source/app/service-providers/menu/menu.win32.ts:385
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:272
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:71
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:82
 #: source/common/modules/window-register/register-default-context.ts:98
 msgid "Select all"
@@ -861,7 +879,7 @@ msgstr "Alle Dateien durchsuchen"
 
 #: source/app/service-providers/menu/menu.darwin.ts:405
 #: source/app/service-providers/menu/menu.win32.ts:409
-#: source/win-preferences/schema/shortcuts.ts:285
+#: source/win-preferences/schema/shortcuts.ts:307
 msgid "Filter files"
 msgstr "Dateien filtern"
 
@@ -1140,12 +1158,12 @@ msgstr ""
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr "Die SHA256 Prüfsummendatei scheint bei diesem Update zu fehlen."
 
-#: source/app/service-providers/updates/index.ts:564
+#: source/app/service-providers/updates/index.ts:561
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "Kann SHA256 Prüfsummen nicht finden: %s"
 
-#: source/app/service-providers/updates/index.ts:668
+#: source/app/service-providers/updates/index.ts:665
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1153,7 +1171,7 @@ msgstr ""
 "Kann die Integrität der Update-Datei nicht verifizieren. Bitte erneut "
 "versuchen oder manuell updaten."
 
-#: source/app/service-providers/updates/index.ts:680
+#: source/app/service-providers/updates/index.ts:677
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1161,7 +1179,7 @@ msgstr ""
 "Die heruntergeladene Datei hat eine andere Prüfsumme als vom Server "
 "angegeben. Bitte erneut versuchen oder manuell updaten."
 
-#: source/app/service-providers/updates/index.ts:699
+#: source/app/service-providers/updates/index.ts:696
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1185,12 +1203,12 @@ msgid "Close all"
 msgstr "Alle schließen"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:199
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:198
 msgid "Close all files"
 msgstr "Alle Dateien schließen"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:277
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:276
 msgid "Close all workspaces"
 msgstr "Alle Arbeitsverzeichnisse schließen"
 
@@ -1242,15 +1260,19 @@ msgstr "Keine Syntax"
 msgid "Open PDF for %s"
 msgstr "Öffne PDF für %s"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:149
 msgid "No suggestions"
 msgstr "Keine Vorschläge"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:160
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:158
 msgid "Add to dictionary"
 msgstr "Zum Wörterbuch hinzufügen"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
+msgid "Copy equation code"
+msgstr "Formel-Code kopieren"
+
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:26
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/win-preferences/schema/editor.ts:164
@@ -1258,75 +1280,75 @@ msgstr "Zum Wörterbuch hinzufügen"
 msgid "Bold"
 msgstr "Fett"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:32
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:31
 msgid "Italic"
 msgstr "Kursiv"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:204
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:22
+msgid "Insert"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:27
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:40
 #: source/tmp/win-main/App.vue.ts:402
 msgid "Insert link"
 msgstr "Link einfügen"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:33
 msgid "Insert unordered list"
 msgstr "Ungeordnete Liste einfügen"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:215
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:38
 msgid "Insert numbered list"
 msgstr "Numerierte Liste einfügen"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:43
 #: source/tmp/win-main/App.vue.ts:416
 msgid "Insert task list"
 msgstr "Aufgabenliste einfügen"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:49
 msgid "Insert blockquote"
 msgstr "Blockzitat einfügen"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:54
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "Tabelle einfügen"
 
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
-msgid "Copy equation code"
-msgstr "Formel-Code kopieren"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
 msgid "Open link"
 msgstr "Link öffnen"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
 msgstr "E-Mail-Adresse kopieren"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy link"
 msgstr "Link kopieren"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:120
 msgid "Remove link"
 msgstr "Link entfernen"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:143
 msgid "Copy image to clipboard"
 msgstr "Bild in Zwischenablage kopieren"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:149
 msgid "Open image"
 msgstr "Bild öffnen"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 #: source/tmp/win-main/DocumentTabs.vue.ts:482
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 #: source/win-main/file-manager/util/file-item-context.ts:82
 msgid "Reveal in Finder"
 msgstr "In Finder zeigen"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 msgid "Open in File Browser"
 msgstr "Im Dateibrowser anzeigen"
 
@@ -1339,67 +1361,67 @@ msgid "Zap gremlins"
 msgstr "Zap gremlins"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:56
-#: source/win-preferences/schema/shortcuts.ts:172
+#: source/win-preferences/schema/shortcuts.ts:194
 msgid "Strip duplicate spaces"
 msgstr "Überzählige Leerzeichen entfernen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:62
-#: source/win-preferences/schema/shortcuts.ts:179
+#: source/win-preferences/schema/shortcuts.ts:201
 msgid "Italics to quotes"
 msgstr "Kursiv zu Anführungszeichen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:68
-#: source/win-preferences/schema/shortcuts.ts:186
+#: source/win-preferences/schema/shortcuts.ts:208
 msgid "Quotes to italics"
 msgstr "Anführungszeichen zu kursiv"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:74
-#: source/win-preferences/schema/shortcuts.ts:193
+#: source/win-preferences/schema/shortcuts.ts:215
 msgid "Remove excess line breaks"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
-#: source/win-preferences/schema/shortcuts.ts:200
+#: source/win-preferences/schema/shortcuts.ts:222
 msgid "Straighten quotes"
 msgstr "Anführungszeichen begradigen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:89
-#: source/win-preferences/schema/shortcuts.ts:207
+#: source/win-preferences/schema/shortcuts.ts:229
 msgid "Convert quotes to Magic Quotes"
 msgstr "Konvertiere zu typographischen Anführungszeichen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:95
-#: source/win-preferences/schema/shortcuts.ts:214
+#: source/win-preferences/schema/shortcuts.ts:236
 msgid "Ensure double quotes"
 msgstr "Zu doppelten Anführungszeichen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:101
-#: source/win-preferences/schema/shortcuts.ts:221
+#: source/win-preferences/schema/shortcuts.ts:243
 msgid "Double quotes to single"
 msgstr "Zu einfachen Anführungszeichen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:107
-#: source/win-preferences/schema/shortcuts.ts:228
+#: source/win-preferences/schema/shortcuts.ts:250
 msgid "Single quotes to double"
 msgstr "Einfache zu doppelten Anführungszeichen"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:116
-#: source/win-preferences/schema/shortcuts.ts:235
+#: source/win-preferences/schema/shortcuts.ts:257
 msgid "Emdash — Add spaces around"
 msgstr "Erzwinge Leerzeichen um Geviertstriche"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:122
-#: source/win-preferences/schema/shortcuts.ts:242
+#: source/win-preferences/schema/shortcuts.ts:264
 msgid "Emdash — Remove spaces around"
 msgstr "Entferne Leerzeichen um Geviertstriche"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:131
-#: source/win-preferences/schema/shortcuts.ts:249
+#: source/win-preferences/schema/shortcuts.ts:271
 msgid "To sentence case"
 msgstr "Kapitalisiere das erste Wort"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:137
-#: source/win-preferences/schema/shortcuts.ts:256
+#: source/win-preferences/schema/shortcuts.ts:278
 msgid "To title case"
 msgstr "Kapitalisiere als Titel"
 
@@ -1500,12 +1522,8 @@ msgstr "Bild extern öffnen"
 msgid "Could not render Graph:"
 msgstr "Konnte Graph nicht darstellen:"
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
-msgid "Could not render Graph."
-msgstr "Konnte Graph nicht darstellen."
-
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:73
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:88
 msgid "Rendering mermaid graph …"
 msgstr "Lade Mermaid-Graph …"
 
@@ -2203,10 +2221,10 @@ msgid ""
 msgstr ""
 "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-"
 "Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-"
-"Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, Node."
-"js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die Entwicklung "
-"von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, die Zettlr "
-"ermöglichen."
+"Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, "
+"Node.js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die "
+"Entwicklung von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, "
+"die Zettlr ermöglichen."
 
 #: source/tmp/win-about/General-Tab.vue.ts:22
 msgid ""
@@ -2674,8 +2692,8 @@ msgstr "Mehr Statistiken …"
 
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
-msgid "Table size: %s &times; %s"
-msgstr "Tabellengröße: %s &times; %s"
+msgid "Table size: %s × %s"
+msgstr ""
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 #: source/win-preferences/schema/spellchecking.ts:227
@@ -2704,7 +2722,7 @@ msgstr "Verzeichnisse"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:140
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:142
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:64
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Files"
 msgstr "Dateien"
@@ -2720,7 +2738,7 @@ msgid "Words"
 msgstr "Wörter"
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:62
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
 msgid "No results"
 msgstr "Keine Ergebnisse"
 
@@ -2732,47 +2750,47 @@ msgstr "Kein Verzeichnis ausgewählt"
 msgid "Empty directory"
 msgstr "Leeres Verzeichnis"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
 msgid "Workspaces"
 msgstr "Arbeitsverzeichnisse"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
 msgid "No open files or folders"
 msgstr "Keine offenen Dateien oder Ordner"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
 msgstr "Dateien ausblenden"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
 msgstr "Dateien anzeigen"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
 msgstr "Arbeitsverzeichnisse ausblenden"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
 msgstr "Arbeitsverzeichnisse anzeigen"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:73
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
 msgstr "Zur automatischen Sortierung wechseln"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse workspaces"
 msgstr "Arbeitsverzeichnisse einklappen"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse subfolders"
 msgstr "Unterordner einklappen"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:269
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 msgid "Sort workspaces…"
 msgstr "Arbeitsverzeichnisse sortieren…"
 
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:85
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:86
 msgid "Enter a name"
 msgstr "Namen eingeben"
 
@@ -4940,54 +4958,70 @@ msgid "Enable support for admonitions (also known as alerts or callouts)."
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:122
+msgid "Editor Shortcuts"
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:123
+msgid "Customize available editor shortcuts."
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:129
+msgid "Find next search result"
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:136
+msgid "Find previous search result"
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:144
 msgid "Table Shortcuts"
 msgstr "Tastaturkürzel für Tabellen"
 
-#: source/win-preferences/schema/shortcuts.ts:123
+#: source/win-preferences/schema/shortcuts.ts:145
 msgid "Customize the available table shortcuts for the editor."
 msgstr "Passe die verfügbaren Tastaturkürzel für den Editor an."
 
-#: source/win-preferences/schema/shortcuts.ts:129
+#: source/win-preferences/schema/shortcuts.ts:151
 msgid "Align Markdown table under cursor"
 msgstr "Formatiere Tabelle am Textcursor"
 
-#: source/win-preferences/schema/shortcuts.ts:136
+#: source/win-preferences/schema/shortcuts.ts:158
 msgid "Align table column left"
 msgstr "Tabellenspalte linksbündig"
 
-#: source/win-preferences/schema/shortcuts.ts:143
+#: source/win-preferences/schema/shortcuts.ts:165
 msgid "Align table column center"
 msgstr "Tabellenspalte zentiert"
 
-#: source/win-preferences/schema/shortcuts.ts:150
+#: source/win-preferences/schema/shortcuts.ts:172
 msgid "Align table column right"
 msgstr "Tabellenspalte rechtsbündig"
 
-#: source/win-preferences/schema/shortcuts.ts:158
+#: source/win-preferences/schema/shortcuts.ts:180
 msgid "Transform Shortcuts"
 msgstr "Transformations-Kürzel"
 
-#: source/win-preferences/schema/shortcuts.ts:159
+#: source/win-preferences/schema/shortcuts.ts:181
 msgid "Assign shortcuts to your frequently used text transformations here."
 msgstr "Weise oft genutzten Transformationen Tastaturkürzel zu."
 
-#: source/win-preferences/schema/shortcuts.ts:165
+#: source/win-preferences/schema/shortcuts.ts:187
 msgid "Zap Gremlins"
 msgstr "Zap Gremlins"
 
-#: source/win-preferences/schema/shortcuts.ts:264
+#: source/win-preferences/schema/shortcuts.ts:286
 msgid "UI Shortcuts"
 msgstr "Oberflächenkürzel"
 
-#: source/win-preferences/schema/shortcuts.ts:265
+#: source/win-preferences/schema/shortcuts.ts:287
 msgid "Customize general user interface shortcuts here."
 msgstr "Passe generelle UI-Kürzel an."
 
-#: source/win-preferences/schema/shortcuts.ts:271
+#: source/win-preferences/schema/shortcuts.ts:293
 msgid "Switch to next tab"
 msgstr "Nächster Tab"
 
-#: source/win-preferences/schema/shortcuts.ts:278
+#: source/win-preferences/schema/shortcuts.ts:300
 msgid "Switch to previous tab"
 msgstr "Vorheriger Tab"
 
@@ -5257,6 +5291,13 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "Pfad zu Ordner"
+
+#~ msgid "Could not render Graph."
+#~ msgstr "Konnte Graph nicht darstellen."
+
+#, javascript-format
+#~ msgid "Table size: %s &times; %s"
+#~ msgstr "Tabellengröße: %s &times; %s"
 
 #~ msgid "Could not check for updates: Could not establish connection"
 #~ msgstr ""
@@ -5883,8 +5924,8 @@ msgstr "Pfad zu Ordner"
 #~ "Target directory for exported files. <em>Attention:</em> Selecting the "
 #~ "current working directory will overwrite files without warning!"
 #~ msgstr ""
-#~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl &quot;"
-#~ "Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
+#~ "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl "
+#~ "&quot;Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell "
 #~ "vorhandene Dateien!"
 
 #~ msgid "Temporary directory: is regularly expunged"

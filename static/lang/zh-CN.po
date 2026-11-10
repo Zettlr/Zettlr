@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-10-20 02:36+0000\n"
+"POT-Creation-Date: 2026-11-10 02:24+0000\n"
 "PO-Revision-Date: 2026-03-19 04:16+0800\n"
 "Last-Translator: freesrz93 <srzsrz@126.com>\n"
 "Language-Team: \n"
@@ -28,12 +28,30 @@ msgstr ""
 msgid "Booting %s…"
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:259
-#: source/app/service-providers/citeproc/index.ts:426
+#: source/app/service-providers/citeproc/index.ts:284
+#: source/app/service-providers/citeproc/index.ts:465
 msgid "The citation database could not be loaded"
 msgstr "无法加载引文数据库"
 
-#: source/app/service-providers/citeproc/index.ts:413
+#: source/app/service-providers/citeproc/index.ts:359
+msgid "Loading database"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:360
+#, javascript-format
+msgid "Loading database %s"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:364
+msgid "Database loaded"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:365
+#, javascript-format
+msgid "Database %s has been loaded. It contains %s items."
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:452
 msgid "Changes to the library file detected. Reloading …"
 msgstr "检测到库文件更改，重新加载中…"
 
@@ -77,7 +95,7 @@ msgstr "你想要移除 %s?"
 
 #. Else standard val for new dirs.
 #: source/app/service-providers/commands/dir-new.ts:32
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:324
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:325
 msgid "Untitled"
 msgstr "未命名"
 
@@ -792,7 +810,7 @@ msgstr "重做"
 
 #: source/app/service-providers/menu/menu.darwin.ts:347
 #: source/app/service-providers/menu/menu.win32.ts:351
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:239
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:38
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:49
 #: source/common/modules/window-register/register-default-context.ts:75
 msgid "Cut"
@@ -800,7 +818,7 @@ msgstr "剪切"
 
 #: source/app/service-providers/menu/menu.darwin.ts:353
 #: source/app/service-providers/menu/menu.win32.ts:357
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:245
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:44
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:55
 #: source/common/modules/window-register/register-default-context.ts:82
 #: source/tmp/win-main/GlobalSearch.vue.ts:83
@@ -809,14 +827,14 @@ msgstr "复制"
 
 #: source/app/service-providers/menu/menu.darwin.ts:358
 #: source/app/service-providers/menu/menu.win32.ts:362
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:251
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:50
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:61
 msgid "Copy as HTML"
 msgstr "复制为HTML"
 
 #: source/app/service-providers/menu/menu.darwin.ts:367
 #: source/app/service-providers/menu/menu.win32.ts:371
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:257
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:56
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:67
 #: source/common/modules/window-register/register-default-context.ts:88
 msgid "Paste"
@@ -824,14 +842,14 @@ msgstr "粘贴"
 
 #: source/app/service-providers/menu/menu.darwin.ts:372
 #: source/app/service-providers/menu/menu.win32.ts:376
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:263
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:62
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:73
 msgid "Paste without style"
 msgstr "粘贴为纯文本"
 
 #: source/app/service-providers/menu/menu.darwin.ts:381
 #: source/app/service-providers/menu/menu.win32.ts:385
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:272
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:71
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:82
 #: source/common/modules/window-register/register-default-context.ts:98
 msgid "Select all"
@@ -849,7 +867,7 @@ msgstr "在所有文件搜索"
 
 #: source/app/service-providers/menu/menu.darwin.ts:405
 #: source/app/service-providers/menu/menu.win32.ts:409
-#: source/win-preferences/schema/shortcuts.ts:285
+#: source/win-preferences/schema/shortcuts.ts:307
 msgid "Filter files"
 msgstr "过滤文件"
 
@@ -1123,24 +1141,24 @@ msgstr ""
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr "此版本似乎缺少 SHA256 校验文件。"
 
-#: source/app/service-providers/updates/index.ts:564
+#: source/app/service-providers/updates/index.ts:561
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "无法获取 SHA256 校验：%s"
 
-#: source/app/service-providers/updates/index.ts:668
+#: source/app/service-providers/updates/index.ts:665
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
 msgstr "无法验证下载的更新的完整性。请重试或手动更新。"
 
-#: source/app/service-providers/updates/index.ts:680
+#: source/app/service-providers/updates/index.ts:677
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
 msgstr "下载的文件校验和与服务器报告的校验和不同。请重试或手动更新。"
 
-#: source/app/service-providers/updates/index.ts:699
+#: source/app/service-providers/updates/index.ts:696
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr "更新失败。请重试或手动更新。错误信息：%s"
@@ -1162,12 +1180,12 @@ msgid "Close all"
 msgstr "关闭所有"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:199
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:198
 msgid "Close all files"
 msgstr "关闭所有文件"
 
 #: source/app/service-providers/windows/dialog/should-close-all.ts:31
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:277
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:276
 msgid "Close all workspaces"
 msgstr "关闭所有工作区"
 
@@ -1217,15 +1235,19 @@ msgstr "无高亮显示"
 msgid "Open PDF for %s"
 msgstr "为 %s 打开PDF"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:151
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:149
 msgid "No suggestions"
 msgstr "无建议"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:160
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:158
 msgid "Add to dictionary"
 msgstr "加入字典"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:189
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
+msgid "Copy equation code"
+msgstr "复制方程代码"
+
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:26
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:25
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:44
 #: source/win-preferences/schema/editor.ts:164
@@ -1233,75 +1255,75 @@ msgstr "加入字典"
 msgid "Bold"
 msgstr "黑体"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+#: source/common/modules/markdown-editor/context-menu/format-items.ts:32
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:31
 msgid "Italic"
 msgstr "斜体"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:204
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:22
+msgid "Insert"
+msgstr ""
+
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:27
 #: source/common/modules/markdown-editor/table-editor/context-menu.ts:40
 #: source/tmp/win-main/App.vue.ts:402
 msgid "Insert link"
 msgstr "插入链接"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:33
 msgid "Insert unordered list"
 msgstr "插入项目列表"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:215
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:38
 msgid "Insert numbered list"
 msgstr "插入数字列表"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:220
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:43
 #: source/tmp/win-main/App.vue.ts:416
 msgid "Insert task list"
 msgstr "插入任务列表"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:226
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:49
 msgid "Insert blockquote"
 msgstr "插入引用块"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/common/modules/markdown-editor/context-menu/insert-items.ts:54
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "插入表格"
 
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:29
-msgid "Copy equation code"
-msgstr "复制方程代码"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
 msgid "Open link"
 msgstr "打开链接"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
 msgstr "复制电子邮箱地址"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:108
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy link"
 msgstr "复制链接"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:116
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:120
 msgid "Remove link"
 msgstr "删除链接"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:135
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:143
 msgid "Copy image to clipboard"
 msgstr "复制图片到剪贴板"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:141
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:149
 msgid "Open image"
 msgstr "打开图片"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 #: source/tmp/win-main/DocumentTabs.vue.ts:482
 #: source/win-main/file-manager/util/dir-item-context.ts:72
 #: source/win-main/file-manager/util/file-item-context.ts:82
 msgid "Reveal in Finder"
 msgstr "在 Finder 中打开"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:147
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:155
 msgid "Open in File Browser"
 msgstr "在文件管理器中打开"
 
@@ -1314,67 +1336,67 @@ msgid "Zap gremlins"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:56
-#: source/win-preferences/schema/shortcuts.ts:172
+#: source/win-preferences/schema/shortcuts.ts:194
 msgid "Strip duplicate spaces"
 msgstr "删去多余空格"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:62
-#: source/win-preferences/schema/shortcuts.ts:179
+#: source/win-preferences/schema/shortcuts.ts:201
 msgid "Italics to quotes"
 msgstr "将斜体转换成引号"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:68
-#: source/win-preferences/schema/shortcuts.ts:186
+#: source/win-preferences/schema/shortcuts.ts:208
 msgid "Quotes to italics"
 msgstr "将引号转换成斜体"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:74
-#: source/win-preferences/schema/shortcuts.ts:193
+#: source/win-preferences/schema/shortcuts.ts:215
 msgid "Remove excess line breaks"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:83
-#: source/win-preferences/schema/shortcuts.ts:200
+#: source/win-preferences/schema/shortcuts.ts:222
 msgid "Straighten quotes"
 msgstr "使用直引号"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:89
-#: source/win-preferences/schema/shortcuts.ts:207
+#: source/win-preferences/schema/shortcuts.ts:229
 msgid "Convert quotes to Magic Quotes"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:95
-#: source/win-preferences/schema/shortcuts.ts:214
+#: source/win-preferences/schema/shortcuts.ts:236
 msgid "Ensure double quotes"
 msgstr "确保使用双引号"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:101
-#: source/win-preferences/schema/shortcuts.ts:221
+#: source/win-preferences/schema/shortcuts.ts:243
 msgid "Double quotes to single"
 msgstr "将双引号转换成单引号"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:107
-#: source/win-preferences/schema/shortcuts.ts:228
+#: source/win-preferences/schema/shortcuts.ts:250
 msgid "Single quotes to double"
 msgstr "将单引号转换成双引号"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:116
-#: source/win-preferences/schema/shortcuts.ts:235
+#: source/win-preferences/schema/shortcuts.ts:257
 msgid "Emdash — Add spaces around"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:122
-#: source/win-preferences/schema/shortcuts.ts:242
+#: source/win-preferences/schema/shortcuts.ts:264
 msgid "Emdash — Remove spaces around"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:131
-#: source/win-preferences/schema/shortcuts.ts:249
+#: source/win-preferences/schema/shortcuts.ts:271
 msgid "To sentence case"
 msgstr "转换成句子大小写格式"
 
 #: source/common/modules/markdown-editor/context-menu/transform-items.ts:137
-#: source/win-preferences/schema/shortcuts.ts:256
+#: source/win-preferences/schema/shortcuts.ts:278
 msgid "To title case"
 msgstr "转换成标题大小写格式"
 
@@ -1475,12 +1497,8 @@ msgstr "使用外部程序打开图片"
 msgid "Could not render Graph:"
 msgstr "无法渲染图像:"
 
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:52
-msgid "Could not render Graph."
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:75
-#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:90
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:73
+#: source/common/modules/markdown-editor/renderers/render-mermaid.ts:88
 msgid "Rendering mermaid graph …"
 msgstr "渲染 mermaid 图 ..."
 
@@ -2633,8 +2651,8 @@ msgstr "更多数据"
 
 #: source/tmp/win-main/PopoverTable.vue.ts:30
 #, javascript-format
-msgid "Table size: %s &times; %s"
-msgstr "表格大小：%s &times; %s"
+msgid "Table size: %s × %s"
+msgstr ""
 
 #: source/tmp/win-main/PopoverTags.vue.ts:39
 #: source/win-preferences/schema/spellchecking.ts:227
@@ -2663,7 +2681,7 @@ msgstr "目录"
 
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:140
 #: source/tmp/win-main/file-manager/FileItem.vue.ts:142
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:64
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:51
 msgid "Files"
 msgstr "文件"
@@ -2679,7 +2697,7 @@ msgid "Words"
 msgstr "字数"
 
 #: source/tmp/win-main/file-manager/FileList.vue.ts:62
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
 msgid "No results"
 msgstr "没有结果"
 
@@ -2691,47 +2709,47 @@ msgstr "未选中任何目录"
 msgid "Empty directory"
 msgstr "空目录"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:65
 msgid "Workspaces"
 msgstr "工作区"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:67
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:66
 msgid "No open files or folders"
 msgstr "没有打开文件或文件夹"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:68
 msgid "Hide files"
 msgstr "隐藏文件"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:69
 msgid "Show files"
 msgstr "显示文件"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:70
 msgid "Hide workspaces"
 msgstr "隐藏工作区"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:71
 msgid "Show workspaces"
 msgstr "显示工作区"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:73
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:72
 msgid "Switch to automatic sorting"
 msgstr "切换至自动排序"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse workspaces"
 msgstr "折叠工作区"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:264
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:263
 msgid "Collapse subfolders"
 msgstr "折叠子文件夹"
 
-#: source/tmp/win-main/file-manager/FileTree.vue.ts:269
+#: source/tmp/win-main/file-manager/FileTree.vue.ts:268
 msgid "Sort workspaces…"
 msgstr "排序工作区..."
 
-#: source/tmp/win-main/file-manager/TreeItem.vue.ts:85
+#: source/tmp/win-main/file-manager/TreeItem.vue.ts:86
 msgid "Enter a name"
 msgstr "输入名称"
 
@@ -4808,54 +4826,70 @@ msgid "Enable support for admonitions (also known as alerts or callouts)."
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:122
-msgid "Table Shortcuts"
+msgid "Editor Shortcuts"
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:123
-msgid "Customize the available table shortcuts for the editor."
+msgid "Customize available editor shortcuts."
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:129
-msgid "Align Markdown table under cursor"
+msgid "Find next search result"
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:136
-msgid "Align table column left"
+msgid "Find previous search result"
 msgstr ""
 
-#: source/win-preferences/schema/shortcuts.ts:143
-msgid "Align table column center"
+#: source/win-preferences/schema/shortcuts.ts:144
+msgid "Table Shortcuts"
 msgstr ""
 
-#: source/win-preferences/schema/shortcuts.ts:150
-msgid "Align table column right"
+#: source/win-preferences/schema/shortcuts.ts:145
+msgid "Customize the available table shortcuts for the editor."
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:151
+msgid "Align Markdown table under cursor"
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:158
-msgid "Transform Shortcuts"
-msgstr ""
-
-#: source/win-preferences/schema/shortcuts.ts:159
-msgid "Assign shortcuts to your frequently used text transformations here."
+msgid "Align table column left"
 msgstr ""
 
 #: source/win-preferences/schema/shortcuts.ts:165
+msgid "Align table column center"
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:172
+msgid "Align table column right"
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:180
+msgid "Transform Shortcuts"
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:181
+msgid "Assign shortcuts to your frequently used text transformations here."
+msgstr ""
+
+#: source/win-preferences/schema/shortcuts.ts:187
 msgid "Zap Gremlins"
 msgstr ""
 
-#: source/win-preferences/schema/shortcuts.ts:264
+#: source/win-preferences/schema/shortcuts.ts:286
 msgid "UI Shortcuts"
 msgstr ""
 
-#: source/win-preferences/schema/shortcuts.ts:265
+#: source/win-preferences/schema/shortcuts.ts:287
 msgid "Customize general user interface shortcuts here."
 msgstr ""
 
-#: source/win-preferences/schema/shortcuts.ts:271
+#: source/win-preferences/schema/shortcuts.ts:293
 msgid "Switch to next tab"
 msgstr ""
 
-#: source/win-preferences/schema/shortcuts.ts:278
+#: source/win-preferences/schema/shortcuts.ts:300
 msgid "Switch to previous tab"
 msgstr ""
 
@@ -5116,6 +5150,10 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "文件夹路径"
+
+#, javascript-format
+#~ msgid "Table size: %s &times; %s"
+#~ msgstr "表格大小：%s &times; %s"
 
 #~ msgid "Could not check for updates: Could not establish connection"
 #~ msgstr "无法检查更新：无法建立连接"
