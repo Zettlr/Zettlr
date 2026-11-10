@@ -677,8 +677,8 @@ function maybeHighlightSearchResults (): void {
 
   // Construct CodeMirror.Ranges from the results
   const rangesToHighlight = []
+  const lineCount = currentEditor.instance.state.doc.lines
   for (const { line, ranges } of contentResults) {
-    const lineCount = currentEditor.instance.state.doc.lines
     if (line > lineCount) {
       console.warn(`[maybeHighlightSearchResults()] Cannot highlight line ${line}: Document only has ${lineCount} lines.`)
       continue
