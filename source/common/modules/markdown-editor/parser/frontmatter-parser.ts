@@ -27,22 +27,20 @@ export function yamlCodeParse (): ParseWrapper {
     // `node => node.type.name === 'CodeText'`. This then essentially parsed the
     // entire contents of the CodeText, but mounted them as an overlay, which
     // means that the tree was inaccessible to the syntaxTree iterators. Now, we
-    // reversed the logic and checked for a node of type CodeText that has a
-    // parent of YAMLFrontmatter, and do not provide the overlay property. This
-    // way, the entire tree replaces the CodeText node. This makes styling a bit
-    // more difficult since we can't just target the CodeText node anymore to
-    // apply a background color to the YAML frontmatter, but makes available the
+    // reversed the logic, check for a node of type CodeText that has a parent
+    // of YAMLFrontmatter, and do not provide the overlay property. This way,
+    // the entire tree replaces the CodeText node. This makes styling a bit more
+    // difficult since we can't just target the CodeText node anymore to apply a
+    // background color to the YAML frontmatter, but makes available the
     // entirety of the frontmatter to other parts of our code.
-    if (node.type.name === 'YAMLCodeContainer' && node.node.parent?.name === 'CodeText' && node.node.parent?.parent?.name === 'YAMLFrontmatter') {
+    const isYAML = node.type.is('YAMLCodeContainer')
+    const parent = node.node.parent
+    const parentParent = node.node.parent?.parent
+    if (isYAML && parent && parent.type.is('CodeText') && parentParent && parentParent.type.is('YAMLFrontmatter')) {
       return { parser }
     } else {
       return null
     }
-    // if (node.type.name === 'YAMLFrontmatter') {
-    //   return { parser, overlay: node => node.type.name === 'CodeText' }
-    // } else {
-    //   return null
-    // }
   })
 }
 
