@@ -50,6 +50,7 @@
   frontmatters of files. Zettlr now again correctly detects these and they are
   clickable, yielding a search for keywords, which also includes keywords with
   spaces (#2443; #2590; #4498; see PR #6496).
+- Fixed a 404-link to an old documentation page in the onboarding dialog.
 
 ## Under the Hood
 
