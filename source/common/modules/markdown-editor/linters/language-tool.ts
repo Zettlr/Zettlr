@@ -22,7 +22,7 @@ import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import { EditorView, type ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
 import type { LanguageToolIgnoredRuleEntry } from '@providers/config/get-config-template'
-import { ensureSyntaxTree } from '@codemirror/language'
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language'
 
 const ipcRenderer = window.ipc
 
@@ -180,6 +180,117 @@ function needsRefresh (update: ViewUpdate): boolean {
 }
 
 /**
+ * Utility function that returns the ranges of values for text-only YAML
+ * frontmatter properties so that we can lint those through LanguageTool, too.
+ *
+ * @param   {EditorState}  state  The editor state
+ *
+ * @return  {Array}               A list of ranges in the frontmatter that contain text.
+ */
+function extractFrontmatterTextRanges (state: EditorState): Array<{ from: number, to: number }> {
+  // YAML grammar structure (see https://code.haverbeke.berlin/lezer/yaml/src/branch/main/src/yaml.grammar)
+  // NOTE: Also see the `isFrontmatterKeywordOrTag` utility function in the
+  // click-listener plugin for the implementation we took this here from.
+  // TODO: Merge this function with the `isFrontmatterKeywordOrTag` function at
+  // some point, because a lot of the detection logic is actually shared.
+
+  const ranges: Array<{ from: number, to: number }> = []
+
+  // These are the node types of the *values* we accept
+  const ALLOWED_TEXT_NODE_TYPES = [
+    'Literal', // Simple one-line unquoted value
+    'QuotedLiteral', // Simple one-line quoted value
+    'BlockLiteral', // Block/Multiline unquoted value, has one child `BlockLiteralContent` that we want.
+  ]
+  // These are the actual properties we consider "text", loosely oriented at the
+  // variables Pandoc supports: https://pandoc.org/MANUAL.html#variables
+  const TEXT_ONLY_PROPERTIES = [
+    'title',
+    'subtitle',
+    'abstract',
+    'abstract-title',
+    'description',
+    'shorttitle',
+    'shortsubtitle',
+    'thanks'
+  ]
+
+  syntaxTree(state).iterate({
+    enter (node) {
+      if (!ALLOWED_TEXT_NODE_TYPES.some(type => node.type.is(type))) {
+        // console.log(`Wrong node: ${node.type.name}`)
+        return
+      }
+
+      let parent = node.node.parent
+      while (parent !== null) {
+        if (parent.type.is('YAMLFrontmatter')) {
+          break
+        }
+        parent = parent.parent
+      }
+
+      if (!parent || !parent.type.is('YAMLFrontmatter')) {
+        return
+      }
+
+      // It's definitely a YAML (quoted) literal somewhere in the frontmatter. It
+      // must be furthermore a child of a FlowSequence or BlockSequence, or a Pair.
+      // If it's part of a sequence, it additionally has a parent called "Item"
+      const directParent = node.node.parent
+      const valueContainer = directParent?.type.name === 'Item' ? directParent.parent : directParent
+      if (valueContainer == null || ![ 'FlowSequence', 'BlockSequence', 'Pair' ].includes(valueContainer.type.name)) {
+        return
+      }
+
+      // It's a literal in a flow or block sequence, or direct part of a pair.
+      const maybePair = valueContainer.type.name === 'Pair' ? valueContainer : valueContainer.parent
+      if (!maybePair || !maybePair.type.is('Pair')) {
+        return
+      }
+
+      // It's also part of a Pair, which must have a "Key" with either value
+      // "keywords" or "tags".
+      const key = maybePair.getChild('Key')
+      if (key === null) {
+        return
+      }
+
+      const keyValue = state.sliceDoc(key.from, key.to)
+      if (!TEXT_ONLY_PROPERTIES.includes(keyValue)) {
+        return
+      }
+
+      // Final check: This could be a nested property. By definition, tags/keywords
+      // must be the top-level element. Thus, the parent chain of the Pair must be:
+      // Pair -> BlockMapping -> Document
+      // (The frontmatter is one large BlockMapping)
+      if (
+        !maybePair.parent || !maybePair.parent.type.is('BlockMapping')
+        || !maybePair.parent?.parent || !maybePair.parent.parent.type.is('Document')
+      ) {
+        return
+      }
+
+      if (node.type.is('BlockLiteral')) {
+        // `key: | <multiline content>`
+        const content = node.node.getChild('BlockLiteralContent')
+        if (content !== null) {
+          ranges.push({ from: content.from, to: content.to })
+        }
+      } else if (node.type.is('QuotedLiteral')) {
+        ranges.push({ from: node.from + 1, to: node.to - 1 })
+      } else {
+        // Regular literal
+        ranges.push({ from: node.from, to: node.to })
+      }
+    }
+  })
+
+  return ranges
+}
+
+/**
  * Defines a spellchecker that runs over the text content of the document and
  * highlights misspelled words
  */
@@ -201,6 +312,7 @@ const ltLinter = linter(async view => {
   const ast = markdownToAST(view.state.doc.toString(), ensureSyntaxTree(view.state, view.state.doc.length))
   // Extract TextNodes to later filter diagnostics that only cover these nodes.
   const textNodes = extractTextnodes(ast)
+  const yamlTextRanges = extractFrontmatterTextRanges(view.state)
 
   const response: LanguageToolLinterResponse = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
@@ -242,7 +354,12 @@ const ltLinter = linter(async view => {
     const matchTo: number = match.offset + match.length
 
     // Only include diagnostics overlapping with TextNodes.
-    if (!textNodes.some(node => (matchFrom >= node.from && matchTo <= node.to))) { continue }
+    if (
+      !textNodes.some(node => matchFrom >= node.from && matchTo <= node.to) &&
+      !yamlTextRanges.some(range => matchFrom >= range.from && matchTo <= range.to)
+    ) {
+      continue
+    }
 
     const word = view.state.sliceDoc(matchFrom, matchTo)
     const issueType = match.rule.issueType
@@ -282,9 +399,6 @@ const ltLinter = linter(async view => {
       }
     }
 
-    // TODO: Add a class and styling once
-    // https://github.com/codemirror/lint/commit/50bd1188fe15d92b03cc5c1ea4ffbee44f28a090
-    // lands in a release
     actions.push({
       name: trans('Disable Rule'),
       markClass: 'cm-ltDisableAction',

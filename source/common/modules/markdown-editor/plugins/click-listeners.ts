@@ -45,6 +45,8 @@ function isFrontmatterKeywordOrTag (node: SyntaxNodeRef, state: EditorState): bo
   // QuotedLiteral -> Quoted value
   // BlockSequence -> list of Item/Literal nodes (long list)
   // FlowSequence -> list of Item/Literal nodes (one-line array-style list)
+  // TODO: Merge this function with the `extractFrontmatterTextRanges` function
+  // at some point, because a lot of the detection logic is actually shared.
 
   if (!node.type.is('Literal') && !node.type.is('QuotedLiteral')) {
     return false

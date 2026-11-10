@@ -44,7 +44,7 @@ export const yamlLint = linter(async view => {
       })
     }
     return diagnostics
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Could not lint YAML: Linter threw an error', err)
   }
 

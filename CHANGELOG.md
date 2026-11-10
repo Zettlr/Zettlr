@@ -11,6 +11,18 @@
   were left unconfigurable and hard-coded to `Mod-g`. These are now configurable
   so that you can change the default keybinding of `Mod-g` to `F3` if you wish
   (#6575).
+- **Feature**: The LanguageTool linter now also lints text-only properties in
+  the frontmatter, using the same language as the rest of the document. This
+  allows spotting issues with these metadata fields as well. Currently, the
+  linter includes in its detection the following properties:
+    - `title`
+    - `subtitle`
+    - `abstract`
+    - `abstract-title`
+    - `description`
+    - `shorttitle`
+    - `shortsubtitle`
+    - `thanks`
 - **Change**: The styles and layouts of various UI components have been
   adjusted. The following components should now look mostly the same across all
   operating systems:
