@@ -17,6 +17,13 @@
     - Toolbar
     - File Tree
     - Sidebar
+- **Change**: Removed the `.md` extension from the default new filename pattern
+  in the Advanced Preferences menu. This pattern is used as the filename, so the
+  extension is unnecessary. Previously, creating a new file with the default
+  pattern would result in the `.md` extension being added twice to markdown
+  files, or added incorrectly to non-markdown files. Existing users should
+  update the pattern manually by removing `.md` from it. For new installations,
+  the pattern will be correct. (#6638).
 - Fixed a misaligned size distribution between the file manager, editor view,
   and sidebar. Now, when double-clicking the dividers between these three
   components, they will resize so that both sidebars take up 20% of the window
@@ -35,13 +42,6 @@
   underlying bug in the new API (#6625).
 - Fixed an issue that would cause full-text searches to start even as the input
   field was still composing non-latin text (#6597; #6604).
-- Removed the `.md` extension from the default new filename pattern in the
-  Advanced Preferences menu. This pattern is used as the filename, so the
-  extension is unnecessary. Previously, creating a new file with the default
-  pattern would result in the `.md` extension being added twice to markdown
-  files or added incorrectly to non-markdown files. This only impacts new
-  installations of Zettlr. Existing users will have to update the pattern
-  manually (#6638).
 - Fixed the spacing on the changelog entries to make it more pleasant to read.
 - Fixed an issue that could, under the right circumstances, write unusual values
   for resized split views into the configuration, necessitating a configuration
