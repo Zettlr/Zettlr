@@ -17,7 +17,7 @@ import { linter, type Diagnostic, type Action } from '@codemirror/lint'
 import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import type { LanguageToolLinterRequest, LanguageToolLinterResponse } from '@providers/commands/language-tool'
-import { StateEffect, StateField, type Transaction } from '@codemirror/state'
+import { type EditorState, StateEffect, StateField, type Transaction } from '@codemirror/state'
 import extractYamlFrontmatter from 'source/common/util/extract-yaml-frontmatter'
 import { EditorView, type ViewUpdate } from '@codemirror/view'
 import { trans } from 'source/common/i18n-renderer'
@@ -40,6 +40,30 @@ function refreshUserDictionary (): void {
       userDictionary.add(word)
     }
   }).catch(console.error)
+}
+
+/**
+ * Extracts a `lang` property from the state's YAML frontmatter under the
+ * following conditions:
+ *
+ * 1. The state contains something that looks like a YAML frontmatter
+ * 2. The `lang` property is present and valid
+ * 3. The property contains a language code in BCP-47 format.
+ *
+ * If either conditions do not hold, the function returns undefined.
+ *
+ * @param   {EditorState}  state  The Editor state
+ *
+ * @return  {string}              The detected language, undefined otherwise.
+ */
+function extractLangFromYAML (state: EditorState): string|undefined {
+  const { frontmatter } = extractYamlFrontmatter(state.sliceDoc())
+  // NOTE: Relatively simple Regex, nothing to write home about.
+  if (typeof frontmatter?.lang === 'string' && /^[a-z]{2,3}(-[A-Z]{2,})?$/.test(frontmatter.lang)) {
+    return frontmatter.lang
+  } else {
+    return undefined
+  }
 }
 
 // watch the dictionary-provider to update the user dictionary
@@ -103,22 +127,11 @@ export const languageToolState = StateField.define<LanguageToolStateField>({
     // populate the user dictionary
     refreshUserDictionary()
 
-    let overrideLanguage = 'auto'
-    // Extract YAML frontmatter "lang" property if present and correct. This is
-    // only done on startup to save code, and since users will rarely change an
-    // explicitly given language (and when they do, it won't bother them to
-    // once more change the language in the linter when not closing the doc.)
-    const { frontmatter } = extractYamlFrontmatter(state.sliceDoc())
-    // NOTE: Relatively simple Regex, nothing to write home about.
-    if (typeof frontmatter?.lang === 'string' && /^[a-z]{2,3}(-[A-Z]{2,})?/.test(frontmatter.lang)) {
-      overrideLanguage = frontmatter.lang
-    }
-
     return {
       running: false,
       lastDetectedLanguage: 'auto',
       lastError: undefined,
-      overrideLanguage,
+      overrideLanguage: extractLangFromYAML(state) ?? 'auto',
       supportedLanguages: [],
       disabledRules: []
     }
@@ -179,6 +192,12 @@ const ltLinter = linter(async view => {
 
   const diagnostics: Diagnostic[] = []
 
+  // Determine the language: First, extract a potential overrideLanguage. It
+  // will return 
+  const overrideLanguage = extractLangFromYAML(view.state)
+  const oldOverride = view.state.field(languageToolState).overrideLanguage
+  const useOverride = overrideLanguage ?? oldOverride
+
   const ast = markdownToAST(view.state.doc.toString(), ensureSyntaxTree(view.state, view.state.doc.length))
   // Extract TextNodes to later filter diagnostics that only cover these nodes.
   const textNodes = extractTextnodes(ast)
@@ -188,7 +207,7 @@ const ltLinter = linter(async view => {
     payload: {
       // Send the entire document to the API as `text`
       data: { annotation: [{ text: view.state.sliceDoc() }] },
-      language: view.state.field(languageToolState).overrideLanguage
+      language: useOverride
     } satisfies LanguageToolLinterRequest
   })
 
@@ -207,6 +226,7 @@ const ltLinter = linter(async view => {
     effects: updateLTState.of({
       running: false,
       lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code,
+      overrideLanguage: overrideLanguage ?? oldOverride,
       supportedLanguages
     })
   })

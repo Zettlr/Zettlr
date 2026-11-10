@@ -210,7 +210,7 @@ async function fetchSupportedLanguages (server: string): Promise<string[]> {
   return allLanguages
 }
 
-export type LanguageToolLinterRequest = { data: AnnotationData, language: string }
+export type LanguageToolLinterRequest = { data: AnnotationData, language: 'auto'|string }
 export type LanguageToolLinterResponse = [LanguageToolAPIResponse, supportedLanguages: string[]]|string|undefined
 
 export default class LanguageTool extends ZettlrCommand {

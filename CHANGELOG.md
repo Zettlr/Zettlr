@@ -51,6 +51,11 @@
   clickable, yielding a search for keywords, which also includes keywords with
   spaces (#2443; #2590; #4498; see PR #6496).
 - Fixed a 404-link to an old documentation page in the onboarding dialog.
+- Fixed the LanguageTool language overrides. Previously, if you wanted to change
+  the language in which LanguageTool would check your document via the `lang`
+  property (e.g., `lang: fr` to force French instead of autodetection), you had
+  to reload the entire document. Now changes are detected on the fly as you
+  modify the `lang` property in the YAML frontmatter.
 
 ## Under the Hood
 
