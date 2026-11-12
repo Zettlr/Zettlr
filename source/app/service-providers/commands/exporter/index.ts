@@ -128,7 +128,7 @@ export async function makeExport (
         return true
       }
 
-      return await windows.shouldOverwriteExport(target)
+      return await windows.shouldExportOverwrite(target)
     },
     runPandoc: async (defaults: PandocDefaults) => {
       return await runPandoc(logger, defaults, options.cwd)
