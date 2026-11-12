@@ -996,7 +996,7 @@ export default class WindowProvider extends ProviderContract {
     * @param  {string}   filePath  The filename to show in the prompt message.
     * @return {boolean}             Resolves to `true` if the file should be overwritten.
     */
-  async shouldOverwriteExport (filePath: string): Promise<boolean> {
+  async shouldExportOverwrite (filePath: string): Promise<boolean> {
     const firstMainWin = this.getFirstMainWindow()
     if (firstMainWin === undefined) {
       return true
