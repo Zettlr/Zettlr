@@ -71,12 +71,6 @@
     max-width: 800px;
   }
 
-  /* Footnotes */
-  .footnote, .footnote-ref-label {
-    vertical-align: super;
-    font-size: 0.8rem;
-  }
-
   /* NOTE: Disabling because pre-rendered elements will not inherit this font size (see #5999) */
   /* footnote-ref {
     font-size: 0.8rem;
