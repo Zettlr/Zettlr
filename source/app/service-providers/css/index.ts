@@ -52,7 +52,7 @@ export default class CssProvider extends ProviderContract {
     // create an empty one.
     try {
       await fs.lstat(this._filePath)
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Create an empty file with a nice initial comment in it.
       await fs.writeFile(this._filePath, '/* Enter your custom CSS here */\n\n', { encoding: 'utf8' })
     }
@@ -96,8 +96,9 @@ export default class CssProvider extends ProviderContract {
       })
       broadcastIpcMessage('css-provider', { command: 'custom-css-updated' })
       return true
-    } catch (err: any) {
-      this._logger.error(`[CSS Provider] Could not set custom css: ${err.message as string}`, err)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      this._logger.error(`[CSS Provider] Could not set custom css: ${message}`, err)
       return false
     }
   }

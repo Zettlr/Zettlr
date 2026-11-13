@@ -152,7 +152,7 @@ export default function getMarkdownFileParser (
           file.tags.push(...sanitizedKeywords.filter((each) => !file.tags.includes(each)))
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       // The frontmatter was invalid, but it's not of concern for us here
     }
   }

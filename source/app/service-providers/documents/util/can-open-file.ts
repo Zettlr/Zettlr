@@ -18,7 +18,7 @@ export async function canOpenFile (filePath: string): Promise<boolean> {
       FSConstants.R_OK | // We need to read it
       FSConstants.W_OK // And write it
     )
-  } catch (err: any) {
+  } catch (err: unknown) {
     return false
   }
 

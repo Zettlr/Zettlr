@@ -34,9 +34,9 @@ export async function parse (absPath: string, cache: FSALCache): Promise<OtherFi
     attachment.modtime = metadata.modtime
     attachment.creationtime = metadata.birthtime
     attachment.size = metadata.size
-  } catch (err: any) {
-    err.message = `Error reading file ${absPath};: ${err.message as string}`
-    throw err // Rethrow
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    throw new Error(`Error reading file ${absPath}: ${message}`)
   }
 
   if (!await cache.has(attachment.path)) {

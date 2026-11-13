@@ -153,10 +153,11 @@ export default class RootOpen extends ZettlrCommand {
           if (file !== undefined && file.type !== 'other') {
             await this._app.documents.openFile(winKey, leafId, file.path, true)
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : 'Unknown error'
           // Something went wrong, so remove the path again.
           this._app.config.removePath(absPath)
-          this._app.log.error(`Could not open root ${absPath}: ${err.message as string}`, err)
+          this._app.log.error(`Could not open root ${absPath}: ${message}`, err)
           this._app.windows.reportFSError('Could not open new root', err as NodeError)
         }
       }
