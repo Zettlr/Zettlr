@@ -5726,7 +5726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3@npm:^7.9.0":
+"d3@npm:^7.9.0, d3@npm:^7.9.2":
   version: 7.9.2
   resolution: "d3@npm:7.9.2"
   dependencies:
@@ -13713,11 +13713,11 @@ __metadata:
   linkType: hard
 
 "tough-cookie@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "tough-cookie@npm:6.0.2"
+  version: 6.1.0
+  resolution: "tough-cookie@npm:6.1.0"
   dependencies:
     tldts: "npm:^7.0.5"
-  checksum: 10/b231eb744709ce2369ea063f7a3d3816c0c7801a22ccd30a7ab46e90a5bbc531fcbbcc26520f79cfd8516de4340eb9f3568616beb93302548fc989ccb6a974b8
+  checksum: 10/d31b67987b16b5439a995a8ee310876f73c90fa58b036089f86e35996e8b775ec6c418f0aadf91adcccaabd62ac1bffc01b8b1ff546cb570290794edb1c7bfcf
   languageName: node
   linkType: hard
 
@@ -15071,7 +15071,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     css-loader: "npm:^7.1.5"
     csso: "npm:^5.0.5"
-    d3: "npm:^7.9.0"
+    d3: "npm:^7.9.2"
     dompurify: "npm:^3.4.17"
     electron: "npm:^45.2.3"
     electron-builder: "npm:^26.18.1"
