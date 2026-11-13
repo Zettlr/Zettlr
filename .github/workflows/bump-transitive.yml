@@ -7,9 +7,6 @@ on:
   schedule: # Once a month, run the dependency updater
     - cron: '0 20 1 * *'
 
-env:
-  NODE_VERSION: '22'
-
 permissions:
   contents: write
   pull-requests: write
@@ -28,18 +25,15 @@ jobs:
         with:
           ref: 'develop'
           fetch-depth: 0
-      - name: Enable Yarn 4.x
-        run: corepack enable
-      - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+      - name: Setup Node and Yarn
+        uses: ./.github/actions/setup-yarn
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          # No cache
+          cache-yarn: 'false'
+          install-mode: 'skip'
       - name: Enable Yarn and Clear Cache
         # Additionally, this run removes the `enableImmutableInstalls` and
         # clears the cache to allow the creation of a new lockfile.
         run: |
-          sudo corepack enable
           yarn config set -H enableImmutableInstalls false
           yarn cache clean --all
       - name: Create new branch `transitive-deps-${{ github.run_id }}`
