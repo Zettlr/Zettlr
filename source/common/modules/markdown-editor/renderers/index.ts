@@ -24,7 +24,7 @@ import { renderMermaid } from './render-mermaid'
 import { renderTables } from '../table-editor'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
-import { renderCode } from './render-code'
+import { renderPersistentMarks } from './render-persistent-marks'
 import { renderPandoc } from './render-pandoc-div-span'
 import { configField, configUpdateEffect, type EditorConfiguration } from '../util/configuration'
 import type { EditorView } from '@codemirror/view'
@@ -56,7 +56,10 @@ function configureRenderers (config: Partial<EditorConfiguration>, ext?: Extensi
   const isRaw = config.renderingMode === 'raw'
   const isPreview = config.renderingMode === 'preview'
 
-  updateExtension(renderCode, true, ext)
+  // Persistent decoration marks always have to be rendered. This includes
+  // inline code, super- and subscripts, and other elements we have to style
+  // through this decoration mechanism.
+  updateExtension(renderPersistentMarks, true, ext)
 
   updateExtension(renderMermaid, isPreview, ext)
 

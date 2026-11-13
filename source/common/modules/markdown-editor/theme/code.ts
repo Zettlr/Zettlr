@@ -110,11 +110,6 @@ export const defaultCodeVars: CodeThemeVars = {
 
 export const codeTheme = EditorView.baseTheme({
   '&': defaultCodeVars,
-  '.code': {
-    color: 'var(--zettlr-editor-code-base-02)',
-    fontFamily: 'var(--zettlr-editor-code-font)'
-  },
-  '&dark .code': { color: 'var(--zettlr-editor-code-base-1)' },
 
   '.cm-comment': { color: 'var(--zettlr-editor-code-base-00)' },
   '.cm-line-comment': { color: 'var(--zettlr-editor-code-base-00)' },
