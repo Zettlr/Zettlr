@@ -122,14 +122,41 @@ export interface UserReadablePosition {
   ch: number
 }
 
+/**
+ * A unified interface to provide information about a document.
+ */
 export interface DocumentInfo {
+  /**
+   * The total word count in the document
+   */
   words: number
+  /**
+   * The total character count in the document
+   */
   chars: number
+  /**
+   * The current cursor position
+   */
   cursor: UserReadablePosition
+  /**
+   * A list of selections (if any)
+   */
   selections: Array<{
+    /**
+     * The selection anchor
+     */
     anchor: UserReadablePosition
+    /**
+     * The selection head
+     */
     head: UserReadablePosition
+    /**
+     * The word count in this selection
+     */
     words: number
+    /**
+     * The character count in this selection
+     */
     chars: number
   }>
 }

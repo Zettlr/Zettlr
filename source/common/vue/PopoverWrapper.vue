@@ -370,7 +370,7 @@ body .popover {
   table {
     vertical-align: middle;
 
-    td { padding: 4px; }
+    td, th { padding: 4px; }
   }
 
   // Elements inside popups

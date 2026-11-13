@@ -36,6 +36,12 @@
   files, or added incorrectly to non-markdown files. Existing users should
   update the pattern manually by removing `.md` from it. For new installations,
   the pattern will be correct. (#6638).
+- **Change**: The layout of the document information popover is now improved.
+  We have moved the bold styling over to the actually important parts, improved
+  legibility of the popover, and included more information -- notably,
+  regardless of which unit (words or characters) you select in the preferences,
+  the popover will now display both numbers, with your preferred one clearly
+  visible.
 - Fixed a misaligned size distribution between the file manager, editor view,
   and sidebar. Now, when double-clicking the dividers between these three
   components, they will resize so that both sidebars take up 20% of the window
