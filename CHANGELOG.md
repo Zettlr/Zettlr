@@ -6,7 +6,7 @@
 
 ## Under the Hood
 
-(Nothing here)
+- Update Electron to `^45.2.3`.
 
 # 4.10.0
 
