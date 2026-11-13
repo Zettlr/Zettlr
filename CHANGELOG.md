@@ -82,7 +82,12 @@
 
 ## Under the Hood
 
-- Update Electron to `v44.9.3`.
+- Update Electron to `v44.10`.
+- Update Pandoc to `v3.14`. **Caution**: Pandoc 3.13 has switched its underlying
+  YAML parser. For the most part, this change should not affect you, but it
+  could if you relied on odd behavior of YAML, such as treating `no` as `false`
+  instead of a string. If you receive errors during exports, this is a potential
+  cause.
 - Update the `gettext-parser` to `v10`.
 - Added error-handling code in case titlebar overlays cannot be set for windows
   (see #6417).
