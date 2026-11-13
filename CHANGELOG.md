@@ -79,6 +79,12 @@
   small font and set to super or sub alignment.
 - The formatting characters for subscripts and superscripts are now
   appropriately hidden if "Render emphasis" is turned on.
+- Fixed many of the newly customizable shortcuts which would mostly work on just
+  macOS, since we accidentally declared the Mac-specific Command-key to be part
+  of the shortcut, instead of also providing an alternative with the Control
+  key. We remain puzzled why nobody complained about this issue since it
+  affected quite a few important shortcuts. (If you are reading this right now,
+  you're not included in this statement ;).
 
 ## Under the Hood
 
