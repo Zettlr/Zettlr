@@ -433,6 +433,18 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
   })
 }
 
+function getSnippetEntries (state: EditorState): Completion[]  {
+  // NOTE: We need to create a new array, otherwise we're going to have an
+  // emoji party after ten characters typed
+  const entries = [...state.field(snippetsUpdateField).availableSnippets]
+
+  if (state.field(configField).autocompleteSuggestEmojis) {
+    entries.push(...emojis)
+  }
+
+  return entries
+}
+
 /**
  * This facet allows the user to dynamically define which character triggers the
  * autocompletion.
@@ -442,35 +454,29 @@ export const autocompleteTriggerCharacter: Facet<string, string> = Facet.define(
 })
 
 export const snippets: AutocompletePlugin = {
+  filter: false,
+  fields: [snippetsUpdateField],
   applies (ctx) {
     const trigger = ctx.state.facet(autocompleteTriggerCharacter)
-    // A valid snippet applies whenever the user typed a colon
-    if (ctx.state.doc.sliceString(ctx.pos - 1, ctx.pos) !== trigger) {
-      return false // Only applies after the user typed an #
+    if (trigger === '') {
+      return false
     }
 
-    const lineObject = ctx.state.doc.lineAt(ctx.pos)
+    const line = ctx.state.doc.lineAt(ctx.pos)
+    const text = ctx.state.sliceDoc(line.from, ctx.pos)
+    const start = text.lastIndexOf(trigger)
 
-    if (ctx.pos - lineObject.from === 1) {
-      return ctx.pos // Start of Line, so perfectly fine
+    // Only show completions if the trigger is at the start of a line
+    // or preceded by whitespace, so 'something:' doesn't trigger completions
+    if (start === -1 || (start > 0 && text[start - 1] !== ' ')) {
+      return false
     }
 
-    const charBefore = ctx.state.doc.sliceString(ctx.pos - 2, ctx.pos - 1)
-    if (charBefore === ' ') {
-      return ctx.pos // Valid char in front of the colon (so that `something:`
-      // won't trigger)
-    }
-
-    return false
+    return line.from + start + trigger.length
   },
   entries (ctx, query) {
     query = query.toLowerCase()
-    // NOTE: We need to create a new array, otherwise we're going to have an
-    // emoji party after ten characters typed
-    const entries = [...ctx.state.field(snippetsUpdateField).availableSnippets]
-    if (ctx.state.field(configField).autocompleteSuggestEmojis) {
-      entries.push(...emojis)
-    }
+    const entries = getSnippetEntries(ctx.state)
 
     return entries.filter(entry => {
       if (entry.section === undefined) { // Snippets don't have a section
@@ -487,7 +493,6 @@ export const snippets: AutocompletePlugin = {
       }
     })
   },
-  fields: [snippetsUpdateField]
 }
 
 export function nextSnippet (target: EditorView): boolean {

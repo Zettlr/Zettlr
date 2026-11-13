@@ -61,7 +61,7 @@ export const citekeyUpdateField = StateField.define<Completion[]>({
  *
  * @return  {Completion[]}        The sorted completions
  */
-function sortCitationKeysByUsage (state: EditorState): Completion[] {
+function getCitationEntries (state: EditorState): Completion[] {
   // First, get our existing entries in the database, and re-transform them into
   // what the update effect expects
   const entries = state.field(citekeyUpdateField)
@@ -100,22 +100,20 @@ function sortCitationKeysByUsage (state: EditorState): Completion[] {
  */
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   const citeStyle = view.state.field(configField).citeStyle
-  const lineObject = view.state.doc.lineAt(from)
-  const line = lineObject.text
-  const fromCh = from - lineObject.from
-  const toCh = to - lineObject.from
 
-  const afterOpen = line.lastIndexOf('[', fromCh) > line.lastIndexOf(']', fromCh)
-  // Either no open and 1 close bracket or a close bracket after an open bracket
-  const beforeClose = (!line.includes('[', toCh) && line.includes(']', toCh)) || (line.indexOf(']', toCh) < line.indexOf('[', toCh))
-  const noBrackets = !afterOpen && !beforeClose
+  // The possible leading characters are `[` and/or `-`, and `@`.
+  // Possible tailing characters are `]`
+  // Trim whitespace to make the tests simpler.
+  const slice = view.state.sliceDoc(from - 3, to + 1).trim()
+  const noBrackets = !(slice.startsWith('[-@') || slice.startsWith('[@')) && !slice.endsWith(']')
 
   if (citeStyle === 'regular' && noBrackets) {
-    const insert = `[@${completion.label}]`
+    const prefix = charBefore.slice(-2, -1) === '-' ? '-@' : '@'
+    const insert = `[${prefix}${completion.label}]`
     view.dispatch({
-      // Minus 1 is important since we have to overwrite the @-sign with [@
-      changes: [{ from: from - 1, to, insert }],
-      selection: { anchor: from - 1 + insert.length - 1 } // Between citekey and ]
+      // Overwrite any previous citekey
+      changes: [{ from: from - prefix.length, to, insert }],
+      selection: { anchor: from + insert.length - 1 } // Between citekey and ]
     })
   } else if (citeStyle === 'in-text-suffix' && noBrackets) {
     // We should add square brackets after the completion text
@@ -133,30 +131,31 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 }
 
 export const citations: AutocompletePlugin = {
+  filter: false,
+  fields: [citekeyUpdateField],
   applies (ctx) {
-    // A valid citekey position is: Beginning of the line (citekey without square
-    // brackets), after a square bracket open (regular citation without prefix),
-    // or after a space (either a standalone citation or within square brackets
-    // but with a prefix). Also, the citekey can be prefixed with a -.
-    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
-    const textBefore = text.slice(0, ctx.pos - from)
-    if (text.startsWith('@') && ctx.pos - from === 1) {
-      // The line starts with an @ and the cursor is directly behind it
-      return ctx.pos
-    } else if (/(?<=[-[\s(])@[^[\]]*$/.test(textBefore)) {
-      // The text immediately before the cursor matches a valid citation
-      return from + textBefore.lastIndexOf('@') + 1
-    } else {
-      // Nopey
-      return false
+    const token = ctx.tokenBefore([ 'CitationCitekey', 'CitationAtSign' ])
+
+    if (token?.type.is('CitationCitekey') === true) {
+      return token.from
     }
+
+    if (token?.type.is('CitationAtSign') === true) {
+      return ctx.pos
+    }
+
+    // Allow bare `@` or `-@` to trigger autocomplete.
+    if (ctx.matchBefore(/(?:^|\s)-?@/)) {
+      return ctx.pos
+    }
+
+    return false
   },
   entries (ctx, query) {
     query = query.toLowerCase()
-    const entries = sortCitationKeysByUsage(ctx.state)
+    const entries = getCitationEntries(ctx.state)
     return entries.filter(entry => {
       return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
     })
   },
-  fields: [citekeyUpdateField]
 }

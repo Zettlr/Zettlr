@@ -58,26 +58,23 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 }
 
 export const tags: AutocompletePlugin = {
+  filter: true,
+  fields: [tagsUpdateField],
   applies (ctx) {
-    if (ctx.pos === 0) {
-      return false
+    const token = ctx.tokenBefore(['ZknTag'])
+
+    if (token !== null) {
+      return token.from + 1
     }
 
-    const match = ctx.matchBefore(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)?/)
-    if (match === null || match.to < ctx.pos) {
-      return false
-    } else if (match.to === ctx.pos) {
-      return match.from + 1
+    // Allow bare `#` to trigger autocomplete
+    if (ctx.matchBefore(/(?:^|[\s({[])#/)) {
+      return ctx.pos
     }
 
     return false
   },
-  entries (ctx, query) {
-    query = query.toLowerCase()
-    const entries = ctx.state.field(tagsUpdateField)
-    return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query)
-    })
+  entries (ctx) {
+    return ctx.state.field(tagsUpdateField)
   },
-  fields: [tagsUpdateField]
 }
