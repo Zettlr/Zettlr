@@ -25,7 +25,9 @@ import DirSort from './dir-sort'
 import Export from './export'
 import FetchLinkPreview from './fetch-link-preview'
 import FileDelete from './file-delete'
+import FileCopyTo from './file-copy-to'
 import FileDuplicate from './file-duplicate'
+import FileMoveTO from './file-move-to'
 import FileNew from './file-new'
 import FileRename from './file-rename'
 import FileSearch from './file-search'
@@ -67,7 +69,9 @@ export const commands = [
   Export,
   FetchLinkPreview,
   FileDelete,
+  FileCopyTo,
   FileDuplicate,
+  FileMoveTO,
   FileNew,
   FileRename,
   FileSearch,
