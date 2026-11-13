@@ -2,6 +2,17 @@
 
 ## GUI and Functionality
 
+(Nothing here)
+
+## Under the Hood
+
+(Nothing here)
+
+
+# 4.10.0
+
+## GUI and Functionality
+
 - **Feature**: The context menus for links and images now also feature various
   items that may be useful for formatting aspects of the link/image descriptions
   (#6417).
