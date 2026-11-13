@@ -40,7 +40,7 @@ contextBridge.exposeInMainWorld('ipc', {
     // it cannot be removed otherwise.
     const callback = (event: unknown, ...args: unknown[]): void => {
       // Omit the event when calling the listener
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       listener(undefined, ...args)
     }
     ipcRenderer.on(channel, callback)
