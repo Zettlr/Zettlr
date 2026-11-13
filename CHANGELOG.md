@@ -68,6 +68,11 @@
   property (e.g., `lang: fr` to force French instead of autodetection), you had
   to reload the entire document. Now changes are detected on the fly as you
   modify the `lang` property in the YAML frontmatter.
+- Fixed the styles of both subscripts (e.g., `H~2~O`) and superscripts (e.g.,
+  `2^10^`). Previously, both types of elements were not displayed using a
+  small font and set to super or sub alignment.
+- The formatting characters for subscripts and superscripts are now
+  appropriately hidden if "Render emphasis" is turned on.
 
 ## Under the Hood
 
@@ -81,6 +86,8 @@
 - Pin the AppImage toolset in Electron builder to use a more modern one which
   depends on fuse3 instead of the depcecated fuse2 library. This change must be
   reverted once Electron builder is updated to v27 (#6632).
+- Refactored the `render-code` plugin to allow for a generic set of persistent
+  decorators for various elements.
 
 # 4.9.0
 
