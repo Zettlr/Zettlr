@@ -117,7 +117,9 @@ export default class DirProjectExport extends ZettlrCommand {
         if (command !== undefined) {
           await exportUsingCustomCommand(this._app, dir, config, command)
         } else if (profile !== undefined) {
-          await exportUsingProfile(this._app, dir, config, profile)
+          if (!await exportUsingProfile(this._app, dir, config, profile)) {
+            return false
+          }
         }
       } catch (err: unknown) {
         this._app.log.error(err instanceof Error ? err.message : 'unknown error', err)
@@ -240,10 +242,18 @@ async function exportUsingProfile (app: AppServiceContainer, dir: DirDescriptor,
 
   try {
     app.log.info(`[Project] Exporting ${projectTitle} using profile ${profile.name}.`)
-    const result = await makeExport(opt, app.log, app.config, app.assets)
-    if (result.code !== 0) {
+    const result = await makeExport(opt, app.log, app.config, app.assets, app.windows)
+
+    if (result.status === 'cancelled') {
+      app.log.info('Project export cancelled')
+      task.endTask('abort')
+      return false
+    }
+
+    const { output } = result
+    if (output.code !== 0) {
       // Error
-      const err = new Error(trans('Export failed: %s', result.stderr.join('\n')))
+      const err = new Error(trans('Export failed: %s', output.stderr.join('\n')))
       task.update({
         title: trans('Could not export project "%s".', config.title),
         info: trans('Export with profile %s was unsuccessful: %s.', profile.name, err.message)
@@ -256,12 +266,13 @@ async function exportUsingProfile (app: AppServiceContainer, dir: DirDescriptor,
         title: trans('Project "%s" has been exported.', config.title),
         info: trans('Project has been exported to %s.', readableFormat),
         successInteraction: () => {
-          shell.openPath(result.targetFile).catch(err => {
-            app.log.error(`[Project] Could not open file '${result.targetFile}'`, err)
+          shell.openPath(output.targetFile).catch(err => {
+            app.log.error(`[Project] Could not open file '${output.targetFile}'`, err)
           })
         }
       })
       task.endTask('success')
+      return true
     }
   } catch (err: unknown) {
     if (!(err instanceof Error)) {

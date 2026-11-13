@@ -14,11 +14,11 @@
 
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import type { ExporterOptions, ExporterPlugin, ExportResult, ExporterAPI } from './types'
 import { WRITER2EXT } from '@common/pandoc-util/pandoc-maps'
 import { parseReaderWriter } from '@common/pandoc-util/parse-reader-writer'
 
-export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
+export const plugin: ExporterPlugin = async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExportResult> {
   if (typeof options.profile === 'string') {
     throw new Error('Cannot run default exporter plugin: Wrong profile provided!')
   }
@@ -30,23 +30,32 @@ export const plugin: ExporterPlugin = async function (options: ExporterOptions, 
   // First file determines the name of the exported file.
   const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
   const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
-  const target = path.join(options.targetDirectory, `${title}.${extension}`)
+  let target = path.join(options.targetDirectory, `${title}.${extension}`)
 
   // Get the corresponding defaults file
   const defaultKeys = {
     'input-files': sourceFiles,
     'output-file': target
   }
-  const defaultsFile = await ctx.writeDefaults(options.profile.name, defaultKeys)
+  const defaults = await ctx.loadDefaults(options.profile.name, defaultKeys)
+
+  // Update `target` if the defaults profile changed`output-file`
+  if (defaults['output-file'] !== undefined && defaults['output-file'] !== target) {
+    target = await ctx.resolveTargetPath(defaults['output-file'])
+  }
+
+  defaults['output-file'] = target
+
+  if (!await ctx.confirmTargetOverwrite(target)) {
+    return { status: 'cancelled' }
+  }
 
   // Run Pandoc
-  const pandocOutput = await ctx.runPandoc(defaultsFile)
+  const pandocOutput = await ctx.runPandoc(defaults)
 
   // Make sure to propagate the results
   return {
-    code: pandocOutput.code,
-    stdout: pandocOutput.stdout,
-    stderr: pandocOutput.stderr,
-    targetFile: target
+    status: 'completed',
+    output: { ...pandocOutput, targetFile: target }
   }
 }
