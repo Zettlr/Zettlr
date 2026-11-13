@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zettlr 4.7.0\n"
+"Project-Id-Version: Zettlr 4.10.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2026-10-20 02:36+0000\n"
-"PO-Revision-Date: 2026-08-10 22:37+0900\n"
+"PO-Revision-Date: 2026-11-14 02:13+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -1131,11 +1131,12 @@ msgstr "更新を確認できませんでした。%s : %s"
 #: source/app/service-providers/updates/index.ts:447
 #, javascript-format
 msgid "Could not check for updates: %s"
-msgstr ""
+msgstr "更新の確認ができませんでした : %s"
 
 #: source/app/service-providers/updates/index.ts:462
 msgid "Could not check for updates: Server has sent invalid data"
 msgstr ""
+"アップデートを確認できませんでした : サーバーから無効なデータが送信されました"
 
 #: source/app/service-providers/updates/index.ts:540
 msgid "The SHA256 checksums file seems to be missing for this release."
@@ -1473,11 +1474,11 @@ msgstr "メモ"
 
 #: source/common/modules/markdown-editor/renderers/render-admonitions.ts:89
 msgid "Tip"
-msgstr ""
+msgstr "ヒント"
 
 #: source/common/modules/markdown-editor/renderers/render-admonitions.ts:90
 msgid "Important"
-msgstr ""
+msgstr "重要"
 
 #: source/common/modules/markdown-editor/renderers/render-admonitions.ts:91
 #: source/tmp/win-main/file-manager/util/PopoverDirProps.vue.ts:69
@@ -1486,7 +1487,7 @@ msgstr "警告"
 
 #: source/common/modules/markdown-editor/renderers/render-admonitions.ts:92
 msgid "Caution"
-msgstr ""
+msgstr "注意"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:165
 #, javascript-format
@@ -1718,7 +1719,7 @@ msgstr "アストゥリアス語"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Azerbaijani"
-msgstr ""
+msgstr "アゼルバイジャン語"
 
 #: source/common/util/map-lang-code.ts:37
 msgid "Belarus"
@@ -4373,7 +4374,7 @@ msgstr "Pandoc の div と span をレンダリングする"
 
 #: source/win-preferences/schema/editor.ts:130
 msgid "Render admonitions"
-msgstr ""
+msgstr "警告を表示する"
 
 #: source/win-preferences/schema/editor.ts:136
 msgid "Render horizontal rules"
@@ -4909,29 +4910,33 @@ msgstr "コマンド"
 
 #: source/win-preferences/schema/import-export.ts:129
 msgid "Pandoc Extensions"
-msgstr ""
+msgstr "Pandoc 拡張機能"
 
 #: source/win-preferences/schema/import-export.ts:130
 msgid ""
 "Add support for certain Markdown syntax elements during exports. We "
 "recommend to keep all enabled, unless you know what you are doing."
 msgstr ""
+"エクスポート時に特定の Markdown 構文要素のサポートを追加します。特に理由がな"
+"い限り、すべて有効にしておくことを推奨します。"
 
 #: source/win-preferences/schema/import-export.ts:136
 msgid "Mark extension"
-msgstr ""
+msgstr "Mark 拡張機能"
 
 #: source/win-preferences/schema/import-export.ts:137
 msgid "Enable support for ==highlighted== text."
-msgstr ""
+msgstr "==ハイライト== されたテキストのサポートを有効にします。"
 
 #: source/win-preferences/schema/import-export.ts:142
 msgid "Alerts extension"
-msgstr ""
+msgstr "Alerts 拡張機能"
 
 #: source/win-preferences/schema/import-export.ts:143
 msgid "Enable support for admonitions (also known as alerts or callouts)."
 msgstr ""
+"アドモニション (アラートまたはコールアウトとも呼ばれます) のサポートを有効に"
+"します。"
 
 #: source/win-preferences/schema/shortcuts.ts:122
 msgid "Table Shortcuts"
