@@ -46,13 +46,9 @@ export const projectInfoField = StateField.define<ProjectInfo|null>({
     return null
   },
   update (value, transaction) {
-    for (const effect of transaction.effects) {
-      if (effect.is(projectInfoUpdateEffect)) {
-        value = effect.value
-      }
-    }
+    const effect = transaction.effects.findLast(effect => effect.is(projectInfoUpdateEffect))
 
-    return value
+    return effect === undefined ? value : effect.value
   }
 })
 
