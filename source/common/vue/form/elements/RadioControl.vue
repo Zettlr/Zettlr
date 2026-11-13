@@ -80,6 +80,8 @@ function fieldID (key: string): string {
 @input-size: 14px;
 
 body {
+  .radio-group-outside-label { font-size: 13px; }
+
   .radio-group-container {
     break-inside: avoid;
     margin: 10px 0;
@@ -161,8 +163,6 @@ body.darwin {
   label {
     font-family: system-ui, sans-serif;
   }
-
-  .radio-group-outside-label { font-size: 13px; }
 
   label.radio {
     width: @input-size;
