@@ -6330,9 +6330,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^45.2.3":
-  version: 45.2.3
-  resolution: "electron@npm:45.2.3"
+"electron@npm:44.x.x":
+  version: 44.10.2
+  resolution: "electron@npm:44.10.2"
   dependencies:
     "@electron-internal/extract-zip": "npm:^1.0.1"
     "@electron/get": "npm:^5.0.0"
@@ -6340,7 +6340,7 @@ __metadata:
   bin:
     electron: cli.js
     install-electron: install.js
-  checksum: 10/1440c2fb77b5a8ca8e24b27ad422839ae8c297e589bcd7e2da2dfed44031d90d208d32c90af314eeaa78233c34ab5594d178d63cdda904d3b68fd2e20a56b5bb
+  checksum: 10/4c099a01a5fc52eca39fabfef58a77e14224217a965f0367f5df4145802ef4432af8ee177fec80fd7a7832ca831c2bec37d9ddaab33fe14029df436b984786da
   languageName: node
   linkType: hard
 
@@ -15082,7 +15082,7 @@ __metadata:
     csso: "npm:^5.0.5"
     d3: "npm:^7.9.2"
     dompurify: "npm:^3.4.17"
-    electron: "npm:^45.2.3"
+    electron: "npm:44.x.x"
     electron-builder: "npm:^26.18.1"
     electron-devtools-installer: "npm:^4.0.0"
     eslint: "npm:^10.14.0"
