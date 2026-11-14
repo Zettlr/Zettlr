@@ -91,7 +91,7 @@
     "bcp-47": "^2.1.2",
     "bibliojson": "^4.1.0",
     "chalk": "^6.0.1",
-    "chokidar": "^5.0.0",
+    "chokidar": "^6.0.0",
     "citeproc": "^2.4.63",
     "codemirror-lang-elixir": "^4.0.1",
     "codemirror-lang-hcl": "^0.2.0",

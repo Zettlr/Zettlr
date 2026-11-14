@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Update Electron to `^45.2.3`.
+- Update chokidar to `v6.0.0`.
 
 # 4.10.0
 
