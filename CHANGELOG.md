@@ -2,12 +2,14 @@
 
 ## GUI and Functionality
 
-(Nothing here)
+- **Feature**: Zettlr now supports retrieving the accent color from the D-Bus
+  system, meaning that on many Linux desktop environments, it should now pick up
+  your personal accent color.
 
 ## Under the Hood
 
-- Update Electron to `^45.2.3`.
 - Update chokidar to `v6.0.0`.
+- Moved `get-system-colors.ts` utility file into the appearance provider.
 
 # 4.10.0
 
