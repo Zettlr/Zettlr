@@ -15,6 +15,7 @@ import { type DecorationSet, EditorView } from '@codemirror/view'
 import { type EditorState, StateField } from '@codemirror/state'
 import { subviewUpdatePlugin } from './subview'
 import { TableWidget } from './widget'
+import { tableSelection } from './selection'
 
 // TODO: Think of an appropriate place for this. Or do we want to keep this
 // confined to this plugin?
@@ -63,6 +64,7 @@ const COLORS = {
 // Define a StateField that handles the entire TableEditor Schischi, as well as
 // a few helper extensions that are necessary for the functioning of the widgets
 export const renderTables = [
+  tableSelection,
   // The actual TableEditor provider
   StateField.define<DecorationSet>({
     create (state: EditorState) {
@@ -103,6 +105,14 @@ export const renderTables = [
         }
       },
       borderCollapse: 'collapse',
+      '& tr:hover > td:first-child > .plus, & tr:hover > th:first-child > .plus': {
+        opacity: '1',
+        pointerEvents: 'auto'
+      },
+      '&:hover .cm-table-select, &:focus-within .cm-table-select, & .cm-table-select:focus-visible': {
+        opacity: '1',
+        pointerEvents: 'auto'
+      },
       // Implement Artem's theme
       '& td, & th': {
         textAlign: 'left',
@@ -112,12 +122,70 @@ export const renderTables = [
         border: `1px solid ${COLORS.colorNeutral08}`,
         padding: '0px',
         minWidth: '96px',
+        '&.cm-table-cell-selected': {
+          backgroundColor: 'Highlight',
+          color: 'HighlightText'
+        },
         // Content wrapper styles
         '& div.content': {
           padding: '4px 6px',
           '&.editing': {
             paddingLeft: '0px'
           }
+        },
+        '& .cm-table-select, & .cm-table-actions button': {
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxSizing: 'border-box',
+          width: '21px',
+          height: '21px',
+          border: '0',
+          borderRadius: '3px',
+          padding: '3px',
+          backgroundColor: 'transparent',
+          color: COLORS.colorNeutral18,
+          cursor: 'pointer',
+          '&:hover, &:focus-visible': {
+            backgroundColor: COLORS.colorNeutral03
+          },
+          '&:focus-visible': { outline: `1px solid ${COLORS.colorNeutral18}` },
+          '& svg': { width: '15px', height: '15px', flexShrink: '0', pointerEvents: 'none' }
+        },
+        '& .cm-table-select': {
+          opacity: '0',
+          pointerEvents: 'none',
+          '&.column': { top: '-21px', left: '50%', transform: 'translateX(-50%)' },
+          '&.row': { left: '-21px', top: '50%', transform: 'translateY(-50%)' },
+          '&.table': { left: '11px', top: '-21px' }
+        },
+        '&:first-child .cm-table-select.column': { left: 'calc(50% + 11px)' },
+        '& .cm-table-actions': {
+          position: 'absolute',
+          display: 'none',
+          flexWrap: 'wrap',
+          width: 'max-content',
+          maxWidth: 'calc(100% - 2px)',
+          boxSizing: 'border-box',
+          left: '-1px',
+          top: '-1px',
+          zIndex: '4',
+          gap: '2px',
+          padding: '2px',
+          border: `1px solid ${COLORS.colorNeutral08}`,
+          borderRadius: '3px',
+          backgroundColor: COLORS.colorNeutral01,
+          opacity: '0',
+          pointerEvents: 'none',
+          '&.row': { top: 'auto', bottom: '0' },
+          '& button': { position: 'static', flexShrink: '0' },
+          '& button:disabled': { opacity: '0.4', cursor: 'default' }
+        },
+        '& .cm-table-select.row:hover ~ .cm-table-actions.row, & .cm-table-select.column:hover ~ .cm-table-actions.column, & .cm-table-select.row:focus-visible ~ .cm-table-actions.row, & .cm-table-select.column:focus-visible ~ .cm-table-actions.column, & .cm-table-actions:hover, & .cm-table-actions:focus-within': {
+          display: 'flex',
+          opacity: '1',
+          pointerEvents: 'auto'
         },
         // Grab handle styles
         '& .grab-handle': {
@@ -142,7 +210,13 @@ export const renderTables = [
             '& svg': { transform: 'rotate(90deg)' }
           }
         },
+        '&.cm-table-controls-active > .plus, &:hover > .plus, &:focus-within > .plus': {
+          opacity: '1',
+          pointerEvents: 'auto'
+        },
         '& .plus': {
+          opacity: '0',
+          pointerEvents: 'none',
           position: 'absolute',
           display: 'flex',
           alignItems: 'center',
@@ -151,12 +225,19 @@ export const renderTables = [
           padding: '3px',
           width: '21px',
           height: '21px',
+          zIndex: '5',
           '& svg': { width: '15px', height: '15px' },
           '&.top': { top: '-10.5px', left: '-21px' },
           '&.bottom': { bottom: '-10.5px', left: '-21px' },
           '&.left': { top: '-21px', left: '-10.5px' },
           '&.right': { top: '-21px', right: '-10.5px' }
         }
+      }
+    },
+    '@media (hover: none)': {
+      'div.cm-table-editor-widget-wrapper table .cm-table-select, div.cm-table-editor-widget-wrapper table .plus': {
+        opacity: '1',
+        pointerEvents: 'auto'
       }
     },
     // Override the large margins from the main editor view
@@ -167,7 +248,12 @@ export const renderTables = [
       // Implement Artem's theme
       '& td, & th': {
         color: '#d6d6d6',
-        border: `1px solid ${COLORS.colorNeutral22}`
+        border: `1px solid ${COLORS.colorNeutral22}`,
+        '&.cm-table-cell-selected': { color: 'HighlightText' },
+        '& .cm-table-actions': { backgroundColor: COLORS.colorNeutral23, borderColor: COLORS.colorNeutral22 },
+        '& .cm-table-select:hover, & .cm-table-select:focus-visible, & .cm-table-actions button:hover, & .cm-table-actions button:focus-visible': {
+          backgroundColor: COLORS.colorNeutral22
+        }
       }
     }
   }),

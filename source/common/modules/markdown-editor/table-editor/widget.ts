@@ -24,7 +24,9 @@ import { nodeToHTML } from '../../markdown-utils/markdown-to-html'
 import { createSubviewForCell, hiddenSpanField } from './subview'
 import { getCoordinatesForRange } from './commands/util'
 import { generateColumnControls, generateEmptyTableWidgetElement, generateRowControls, tableTD, tableTH, tableTR } from './widget-dom'
+import { updateTableControls } from './selection-controls'
 import { displayTableContextMenu } from './context-menu'
+import { tableSelectionField, setTableSelection, cellIsSelected } from './selection'
 import { CITEPROC_MAIN_DB } from 'source/types/common/citeproc'
 import { configField } from '../util/configuration'
 import { interceptAnchorClicks } from './util/anchor-callbacks'
@@ -304,6 +306,7 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
   table.querySelectorAll('div.grab-handle').forEach(handle => handle.parentElement!.removeChild(handle))
   table.querySelectorAll('div.plus').forEach(plus => plus.parentElement!.removeChild(plus))
 
+  table.dataset.tableFrom = String(tableAST.from)
   const trs = [...table.querySelectorAll('tr')]
   const rowsChanged = trs.length !== tableAST.rows.length
   // Remove now-superfluous TRs. The for-loop below accounts for too few.
@@ -323,7 +326,7 @@ function updateTable (table: HTMLTableElement, tableAST: Table, view: EditorView
       trs.push(tr)
     }
     // Transfer the contents
-    updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, coords)
+    updateRow(trs[i], row, i, tableAST.alignment, view, rowsChanged, tableAST.from, tableAST.rows.length, coords)
   }
 }
 
@@ -345,6 +348,8 @@ function updateRow (
   align: Array<'left'|'center'|'right'|null>,
   view: EditorView,
   rowsChanged: boolean,
+  tableFrom: number,
+  rowCount: number,
   selectionCoords?: { col: number, row: number },
 ): void {
   const tds = [...tr.querySelectorAll(astRow.isHeaderOrFooter ? 'th' : 'td')]
@@ -362,9 +367,10 @@ function updateRow (
   library = library === '' ? CITEPROC_MAIN_DB : library
   const onCitation = window.getCitationCallback(library)
 
+  const tableSelection = view.state.field(tableSelectionField, false)
   for (let i = 0; i < astRow.cells.length; i++) {
     const cell = astRow.cells[i]
-    const selectionInCell = row === idx && col === i
+    const selectionInCell = tableSelection == null && row === idx && col === i
     if (i === tds.length) {
       // We have to create a new TD
       const td = astRow.isHeaderOrFooter ? tableTH() : tableTD()
@@ -384,6 +390,7 @@ function updateRow (
       // we only have to save the cellFrom and cellTo to the TDs dataset each
       // time around (see below).
       td.addEventListener('mousedown', (event) => {
+        if (event.button !== 0 || (event.target instanceof Element && event.target.closest('.cm-table-select, .cm-table-actions') !== null)) { return }
         if (contentWrapper.classList.contains('editing')) {
           // There is already a subview inside this cell to handle selections.
           return
@@ -407,10 +414,20 @@ function updateRow (
         const subview = EditorView.findFromDOM(td)
 
         if (subview === null) {
-          setSelectionToCell(td, cell, view)
+          const selection = view.state.field(tableSelectionField, false)
+          if (cellIsSelected(selection, Number(td.closest('table')?.dataset.tableFrom), Number(td.dataset.row), Number(td.dataset.col))) {
+            // Keep the rectangle, but make row/column commands target the cell
+            // on which the context menu was opened.
+            view.dispatch({
+              selection: { anchor: Number(td.dataset.cellFrom) },
+              effects: setTableSelection.of(selection!)
+            })
+          } else {
+            setSelectionToCell(td, cell, view)
+          }
         }
 
-        displayTableContextMenu(event, view, subview ?? view)
+        displayTableContextMenu(event, view, subview ?? view, Number(td.dataset.cellFrom))
       })
 
       tr.appendChild(td)
@@ -421,15 +438,15 @@ function updateRow (
     // // two update operations here. First, insert handles to first row/col
     // cells, and second verify if we have to simply transfer the contents, or
     // add/remove a subview in this cell based on selection.
-    if (idx === 0 && col === i) {
-      // Selection is in this column
+    if (idx === 0) {
+      // Keep the original insertion controls available on every column edge
       for (const elem of generateColumnControls(view)) {
         tds[i].appendChild(elem)
       }
     }
 
-    if (i === 0 && row === idx) {
-      // Selection is in this row
+    if (i === 0) {
+      // Keep the original insertion controls available on every row edge
       for (const elem of generateRowControls(view)) {
         tds[i].appendChild(elem)
       }
@@ -437,6 +454,12 @@ function updateRow (
 
     // Save the corresponding document offsets appropriately. NOTE that we
     // include whitespace here (minus one space padding if applicable).
+    tds[i].classList.toggle('cm-table-controls-active', (idx === 0 && col === i) || (i === 0 && row === idx))
+    updateTableControls(tds[i], view, idx, i, rowCount, astRow.cells.length)
+    tds[i].dataset.row = String(idx)
+    tds[i].dataset.col = String(i)
+    tds[i].classList.toggle('cm-table-cell-selected', cellIsSelected(tableSelection, tableFrom, idx, i))
+    tds[i].setAttribute('aria-selected', String(cellIsSelected(tableSelection, tableFrom, idx, i)))
     tds[i].dataset.cellFrom = String(cell.from)
     tds[i].dataset.cellTo = String(cell.to)
     tds[i].style.textAlign = align[i] ?? ''
@@ -481,6 +504,9 @@ function updateRow (
       // widget's updateDOM function will be called), so we must wait until that
       // update is complete before we do anything.
       requestAnimationFrame(() => {
+        if (!contentWrapper.isConnected || view.state.field(tableSelectionField, false) != null) {
+          return
+        }
         if (newFrom !== sel.from || newTo !== sel.to) {
           view.dispatch({ selection: { anchor: newFrom, head: newTo } })
         }

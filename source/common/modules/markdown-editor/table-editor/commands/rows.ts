@@ -131,8 +131,8 @@ export function swapNextRow (target: EditorView): boolean {
       if (isPipeTableDelimRow(nextLine.text)) {
         // We have to modify nextLine and the selectionOffset to "jump over" the
         // header row
+        selectionOffset += nextLine.text.length + 1 // Account for the delimiter line
         nextLine = target.state.doc.line(nextLine.number + 1)
-        selectionOffset += nextLine.text.length + 1 // Account for the 2nd \n
       }
       const diff = nextLine.text.length - thisLine.text.length
       selectionOffset += diff

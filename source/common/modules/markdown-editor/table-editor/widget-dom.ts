@@ -38,6 +38,14 @@ export function tableTH (): HTMLTableCellElement {
   return document.createElement('th')
 }
 
+/** Target the clicked edge control even when a cell selection moved the cursor. */
+function targetControlCell (event: MouseEvent, view: EditorView): void {
+  const cell = (event.currentTarget as HTMLElement).closest<HTMLTableCellElement>('td, th')
+  if (cell?.dataset.cellFrom !== undefined) {
+    view.dispatch({ selection: { anchor: Number(cell.dataset.cellFrom) } })
+  }
+}
+
 /**
  * Generates the column modification buttons (add left, add right, and the grab
  * handle).
@@ -59,6 +67,7 @@ export function generateColumnControls (view: EditorView): HTMLElement[] {
   addButtonLeft.addEventListener('mousedown', event => {
     event.preventDefault()
     event.stopPropagation()
+    targetControlCell(event, view)
     addColBefore(view)
   })
 
@@ -68,6 +77,7 @@ export function generateColumnControls (view: EditorView): HTMLElement[] {
   addButtonRight.addEventListener('mousedown', event => {
     event.preventDefault()
     event.stopPropagation()
+    targetControlCell(event, view)
     addColAfter(view)
   })
 
@@ -95,6 +105,7 @@ export function generateRowControls (view: EditorView): HTMLElement[] {
   addButtonTop.addEventListener('mousedown', event => {
     event.preventDefault()
     event.stopPropagation()
+    targetControlCell(event, view)
     addRowBefore(view)
   })
 
@@ -104,6 +115,7 @@ export function generateRowControls (view: EditorView): HTMLElement[] {
   addButtonBottom.addEventListener('mousedown', event => {
     event.preventDefault()
     event.stopPropagation()
+    targetControlCell(event, view)
     addRowAfter(view)
   })
 

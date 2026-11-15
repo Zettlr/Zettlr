@@ -9,10 +9,12 @@ import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRo
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
 import { clearTable, deleteTable, setAlignment } from './commands/tables'
 import { type EditorShortcutName, getCustomShortcut } from '../keymaps/shortcuts'
+import { selectTablePart, selectedTableMarkdown, copyTableSelection } from './selection'
 import { configField } from '../util/configuration'
 import { cmShortcutToElectron } from 'source/common/util/shortcuts'
 
-export function displayTableContextMenu (event: MouseEvent, mainView: EditorView, subviewOrView: EditorView): void {
+export function displayTableContextMenu (event: MouseEvent, mainView: EditorView, subviewOrView: EditorView, cellFrom = mainView.state.selection.main.head): void {
+  const cellSelection = selectedTableMarkdown(mainView.state) !== undefined
   const config = mainView.state.field(configField, false)
 
   const customShortcutMap = config?.shortcuts ?? []
@@ -23,12 +25,14 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
   const template: AnyMenuItem[] = [
     {
       label: trans('Bold'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+B',
       type: 'normal',
       action () { applyBold(subviewOrView) }
     },
     {
       label: trans('Italic'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+I',
       type: 'normal',
       action () { applyItalic(subviewOrView) }
@@ -38,6 +42,7 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
     },
     {
       label: trans('Insert link'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+K',
       type: 'normal',
       action () { insertLink(subviewOrView) }
@@ -49,28 +54,39 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
       label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
       type: 'normal',
-      action () { cut(subviewOrView) }
+      action () {
+        if (cellSelection) {
+          copyTableSelection(mainView, true)
+        } else { cut(subviewOrView) }
+      }
     },
     {
       label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
       type: 'normal',
-      action () { copyAsPlain(subviewOrView) }
+      action () {
+        if (cellSelection) {
+          copyTableSelection(mainView)
+        } else { copyAsPlain(subviewOrView) }
+      }
     },
     {
       label: trans('Copy as HTML'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+Alt+C',
       type: 'normal',
       action () { copyAsHTML(subviewOrView) }
     },
     {
       label: trans('Paste'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+V',
       type: 'normal',
       action () { paste(subviewOrView) }
     },
     {
       label: trans('Paste without style'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+Shift+V',
       type: 'normal',
       action () { pasteAsPlain(subviewOrView) }
@@ -80,6 +96,7 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
     },
     {
       label: trans('Select all'),
+      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+A',
       type: 'normal',
       action () { selectAllCommand(subviewOrView) }
@@ -96,6 +113,12 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
       label: trans('Row'),
       enabled: true,
       submenu: [
+        {
+          type: 'normal',
+          label: trans('Select row'),
+          action () { selectTablePart(mainView, 'row', cellFrom) }
+        },
+        { type: 'separator' },
         {
           type: 'normal',
           label: trans('Insert new row above'),
@@ -138,6 +161,12 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
       type: 'submenu',
       label: trans('Column'),
       submenu: [
+        {
+          type: 'normal',
+          label: trans('Select column'),
+          action () { selectTablePart(mainView, 'column', cellFrom) }
+        },
+        { type: 'separator' },
         {
           type: 'normal',
           label: trans('Insert new column left'),
@@ -212,6 +241,12 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
       type: 'submenu',
       label: trans('Table'),
       submenu: [
+        {
+          type: 'normal',
+          label: trans('Select table'),
+          action () { selectTablePart(mainView, 'table', cellFrom) }
+        },
+        { type: 'separator' },
         {
           type: 'normal',
           label: trans('Clear table'),
