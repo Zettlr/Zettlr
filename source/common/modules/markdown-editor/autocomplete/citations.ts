@@ -108,7 +108,7 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
   const noBrackets = !(slice.startsWith('[-@') || slice.startsWith('[@')) && !slice.endsWith(']')
 
   if (citeStyle === 'regular' && noBrackets) {
-    const prefix = charBefore.slice(-2, -1) === '-' ? '-@' : '@'
+    const prefix = slice.slice(-2, -1) === '-' ? '-@' : '@'
     const insert = `[${prefix}${completion.label}]`
     view.dispatch({
       // Overwrite any previous citekey
