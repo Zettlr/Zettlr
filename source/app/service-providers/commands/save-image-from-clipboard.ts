@@ -16,11 +16,11 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 import path from 'path'
-import md5 from 'md5'
 import { promises as fs } from 'fs'
 import { clipboard, ipcMain, nativeImage } from 'electron'
 import { showNativeNotification } from '@common/util/show-notification'
 import type { AppServiceContainer } from 'source/app/app-service-container'
+import crypto from 'crypto'
 
 export interface SaveImageFromClipboardAPI {
   basePath: string
@@ -85,7 +85,7 @@ export default class SaveImage extends ZettlrCommand {
         // In case there is no potential basename we could extract, simply
         // hash the dataURL. This way we can magically also prevent the same
         // image to be saved twice in the same directory. Such efficiency!
-        name = md5('img' + dataUrl) + '.png'
+        name = crypto.hash('md5', 'img' + dataUrl) + '.png'
       }
       return { dataUrl, name, size: image.getSize(), aspect: image.getAspectRatio() }
     })
