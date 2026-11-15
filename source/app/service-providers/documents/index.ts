@@ -190,7 +190,7 @@ export default class DocumentManager extends ProviderContract {
   /**
    * The process that watches currently opened files for remote changes
    *
-   * @var {chokidar.FSWatcher}
+   * @var {FSALWatchdog}
    */
   private readonly _watcher: FSALWatchdog
 
@@ -600,10 +600,7 @@ export default class DocumentManager extends ProviderContract {
   }
 
   async shutdown (): Promise<void> {
-    // We MUST under all circumstances properly call the close() function on
-    // every chokidar process we utilize. Otherwise, the fsevents dylib will
-    // still hold on to some memory after the Electron process itself shuts down
-    // which will result in a crash report appearing on macOS.
+    // Await close() to release all filesystem watchers before Electron exits.
     await this._watcher.shutdown()
     this._config.shutdown()
   }
