@@ -14,7 +14,6 @@
 
 import replaceStringVariables from './replace-string-variables'
 import generateId from './generate-id'
-import crypto from 'crypto'
 
 /**
  * Generates a new filename based on the configured filename pattern.

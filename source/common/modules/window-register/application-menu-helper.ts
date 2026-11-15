@@ -15,7 +15,6 @@
  *
  * END HEADER
  */
-import crypto from 'crypto'
 
 interface SharedItemInfo {
   id?: string

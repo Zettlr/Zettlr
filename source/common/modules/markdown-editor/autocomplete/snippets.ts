@@ -36,7 +36,6 @@ import generateId from '@common/util/generate-id'
 import { configField } from '../util/configuration'
 import { gemoji } from 'gemoji'
 import { pathBasename, pathDirname, pathExtname } from '@common/util/renderer-path-polyfill'
-import crypto from 'crypto'
 
 /**
  * This utility function inserts an emoji

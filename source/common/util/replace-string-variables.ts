@@ -12,7 +12,6 @@
  */
 
 import { DateTime } from 'luxon'
-import crypto from 'crypto'
 
 /**
  * A utility function that can replace a bunch of variables in strings, used
