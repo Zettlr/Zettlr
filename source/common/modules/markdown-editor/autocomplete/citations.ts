@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import { type EditorState, StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type AutocompletePlugin } from '.'
@@ -113,20 +113,26 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
     view.dispatch({
       // Overwrite any previous citekey
       changes: [{ from: from - prefix.length, to, insert }],
-      selection: { anchor: from + insert.length - 1 } // Between citekey and ]
+      selection: { anchor: from + insert.length - 1 }, // Between citekey and ]
+      annotations: pickedCompletion.of(completion)
     })
   } else if (citeStyle === 'in-text-suffix' && noBrackets) {
     // We should add square brackets after the completion text
     const insert = `${completion.label} []`
     view.dispatch({
       changes: [{ from, to, insert }],
-      selection: { anchor: from + insert.length - 1 } // Inside []
+      selection: { anchor: from + insert.length - 1 }, // Inside []
+      annotations: pickedCompletion.of(completion)
     })
   } else {
     // Otherwise: citeStyle was in-text or there were brackets surrounding the
     // citekey, so we can simply replace it
     const insert = String(completion.label)
-    view.dispatch({ changes: [{ from, to, insert }], selection: { anchor: from + insert.length } })
+    view.dispatch({
+      changes: [{ from, to, insert }],
+      selection: { anchor: from + insert.length },
+      annotations: pickedCompletion.of(completion),
+    })
   }
 }
 

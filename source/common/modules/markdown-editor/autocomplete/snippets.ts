@@ -18,7 +18,7 @@
 // responsible for snippets in the old implementation, but now disentangled from
 // the other autocompletes thanks to the new plugin structure of Codemirror 6.
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import {
   StateEffect,
   StateField,
@@ -44,7 +44,8 @@ import { pathBasename, pathDirname, pathExtname } from '@common/util/renderer-pa
 const applyEmoji = function (view: EditorView, completion: Completion, from: number, to: number): void {
   view.dispatch({
     changes: [{ from: from - 1, to, insert: completion.label }],
-    selection: { anchor: from - 1 + completion.label.length }
+    selection: { anchor: from - 1 + completion.label.length },
+    annotations: pickedCompletion.of(completion),
   })
 }
 
@@ -96,7 +97,8 @@ function applySnippet (view: EditorView, completion: Completion, from: number, t
       view.dispatch({
         changes: [{ from: from - 1, to, insert: textToInsert }],
         selection: firstSelection,
-        effects: snippetTabsEffect.of(selections)
+        effects: snippetTabsEffect.of(selections),
+        annotations: pickedCompletion.of(completion),
       })
     })
     .catch(err => console.error(err))

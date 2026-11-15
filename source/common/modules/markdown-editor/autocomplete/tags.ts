@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import { StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type TagRecord } from '@providers/tags'
@@ -53,7 +53,8 @@ export const tagsUpdateField = StateField.define<Completion[]>({
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   view.dispatch({
     changes: [{ from, to, insert: completion.label }],
-    selection: { anchor: from + completion.label.length }
+    selection: { anchor: from + completion.label.length },
+    annotations: pickedCompletion.of(completion)
   })
 }
 

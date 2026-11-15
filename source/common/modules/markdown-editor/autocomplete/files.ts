@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import { StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type AutocompletePlugin } from '.'
@@ -96,7 +96,8 @@ const apply = (filename: string, fileId: string, displayName: string) => functio
 
   view.dispatch({
     changes: [{ from, to, insert }],
-    selection: { anchor, head }
+    selection: { anchor, head },
+    annotations: pickedCompletion.of(completion)
   })
 }
 

@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import { type EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import { type AutocompletePlugin } from '.'
@@ -33,7 +33,8 @@ function generate (infoString: string): (view: EditorView, completion: Completio
     const delim = /^\s*(`{3,}|~{3,})/.exec(line.text)?.[1] ?? '```'
     view.dispatch({
       changes: [{ from, to, insert: infoString + '\n\n' + delim }],
-      selection: { anchor: from + infoString.length + 1 }
+      selection: { anchor: from + infoString.length + 1 },
+      annotations: pickedCompletion.of(completion),
     })
   }
 }
