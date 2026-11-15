@@ -2944,13 +2944,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/md5@npm:^2.3.6":
-  version: 2.3.6
-  resolution: "@types/md5@npm:2.3.6"
-  checksum: 10/88d041abea4d5509ec27ae43a5e9df9caf836f29dc393e1cee0537132f732275c2bb78350d10847c1db06d068c03cb59786502f02bf06d5c1a220c1c2e6d305d
-  languageName: node
-  linkType: hard
-
 "@types/mdast@npm:^4.0.0":
   version: 4.0.4
   resolution: "@types/mdast@npm:4.0.4"
@@ -4765,13 +4758,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"charenc@npm:0.0.2":
-  version: 0.0.2
-  resolution: "charenc@npm:0.0.2"
-  checksum: 10/81dcadbe57e861d527faf6dd3855dc857395a1c4d6781f4847288ab23cffb7b3ee80d57c15bba7252ffe3e5e8019db767757ee7975663ad2ca0939bb8fcaf2e5
-  languageName: node
-  linkType: hard
-
 "chevrotain@npm:~13.2.0":
   version: 13.2.0
   resolution: "chevrotain@npm:13.2.0"
@@ -5318,13 +5304,6 @@ __metadata:
     srvx:
       optional: true
   checksum: 10/2e277d1a4ca5eb1d74b0e397b3912ebffc71a2c967cd4ceffcc07787020976bcc593e9dbf99ba27ae8fe6e82883d2ad2e8e5db4fc6a85f04c7b39e17f0ab3193
-  languageName: node
-  linkType: hard
-
-"crypt@npm:0.0.2":
-  version: 0.0.2
-  resolution: "crypt@npm:0.0.2"
-  checksum: 10/2c72768de3d28278c7c9ffd81a298b26f87ecdfe94415084f339e6632f089b43fe039f2c93f612bcb5ffe447238373d93b2e8c90894cba6cfb0ac7a74616f8b9
   languageName: node
   linkType: hard
 
@@ -8672,13 +8651,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-buffer@npm:~1.1.6":
-  version: 1.1.6
-  resolution: "is-buffer@npm:1.1.6"
-  checksum: 10/f63da109e74bbe8947036ed529d43e4ae0c5fcd0909921dce4917ad3ea212c6a87c29f525ba1d17c0858c18331cf1046d4fc69ef59ed26896b25c8288a627133
-  languageName: node
-  linkType: hard
-
 "is-callable@npm:^1.2.7":
   version: 1.2.7
   resolution: "is-callable@npm:1.2.7"
@@ -9801,17 +9773,6 @@ __metadata:
   version: 1.1.0
   resolution: "math-intrinsics@npm:1.1.0"
   checksum: 10/11df2eda46d092a6035479632e1ec865b8134bdfc4bd9e571a656f4191525404f13a283a515938c3a8de934dbfd9c09674d9da9fa831e6eb7e22b50b197d2edd
-  languageName: node
-  linkType: hard
-
-"md5@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "md5@npm:2.3.0"
-  dependencies:
-    charenc: "npm:0.0.2"
-    crypt: "npm:0.0.2"
-    is-buffer: "npm:~1.1.6"
-  checksum: 10/88dce9fb8df1a084c2385726dcc18c7f54e0b64c261b5def7cdfe4928c4ee1cd68695c34108b4fab7ecceb05838c938aa411c6143df9fdc0026c4ddb4e4e72fa
   languageName: node
   linkType: hard
 
@@ -15137,7 +15098,6 @@ __metadata:
     "@types/gettext-parser": "npm:^9.0.0"
     "@types/katex": "npm:^0.16.8"
     "@types/luxon": "npm:^3.7.6"
-    "@types/md5": "npm:^2.3.6"
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:^24.19.2"
     "@types/semver": "npm:^7.8.0"
@@ -15182,7 +15142,6 @@ __metadata:
     less: "npm:^4.9.1"
     less-loader: "npm:^13.1.0"
     luxon: "npm:^3.7.2"
-    md5: "npm:^2.3.0"
     mermaid: "npm:^12.3.0"
     mocha: "npm:^12.0.3"
     node-loader: "npm:^2.1.0"
