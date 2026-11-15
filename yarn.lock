@@ -7502,7 +7502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:^2.3.3, fsevents@npm:~2.3.2, fsevents@npm:~2.3.3":
+"fsevents@npm:~2.3.2, fsevents@npm:~2.3.3":
   version: 2.3.3
   resolution: "fsevents@npm:2.3.3"
   dependencies:
@@ -7512,7 +7512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@npm%3A^2.3.3#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A~2.3.2#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A~2.3.3#optional!builtin<compat/fsevents>":
+"fsevents@patch:fsevents@npm%3A~2.3.2#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A~2.3.3#optional!builtin<compat/fsevents>":
   version: 2.3.3
   resolution: "fsevents@patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"
   dependencies:
@@ -15080,7 +15080,6 @@ __metadata:
     eslint-plugin-promise: "npm:^7.3.0"
     eslint-plugin-vue: "npm:^10.12.0"
     fix-path: "npm:^5.0.0"
-    fsevents: "npm:^2.3.3"
     gemoji: "npm:^8.1.0"
     gettext-parser: "npm:^10.0.0"
     jsdom: "npm:^31.0.0"
@@ -15145,8 +15144,6 @@ __metadata:
     webpack: "npm:^5.112.2"
     yaml: "npm:^2.9.1"
   dependenciesMeta:
-    fsevents:
-      optional: true
     nodehun:
       built: true
   languageName: unknown
