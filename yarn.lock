@@ -14230,15 +14230,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^14.0.3":
-  version: 14.0.3
-  resolution: "uuid@npm:14.0.3"
-  bin:
-    uuid: dist-node/bin/uuid
-  checksum: 10/a6ab4e6ef84ff77b574846215c425c915de035395710e09f083f3bc1d4744df63db78598da0d04619a0a60a15a9cce2bc7c1ef10bf302349e761838816d798a7
-  languageName: node
-  linkType: hard
-
 "uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
@@ -15145,7 +15136,6 @@ __metadata:
     typescript: "npm:^5.9.3"
     underscore: "npm:^1.13.8"
     unified: "npm:^11.0.5"
-    uuid: "npm:^14.0.3"
     vue: "npm:^3.5.45"
     vue-eslint-parser: "npm:^10.4.2"
     vue-loader: "npm:^17.4.2"

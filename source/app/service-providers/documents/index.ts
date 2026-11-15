@@ -26,7 +26,6 @@ import { DocumentTree, type DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { type TabManager } from '@providers/documents/document-tree/tab-manager'
 import { DP_EVENTS, type OpenDocument, DocumentType, type BranchNodeJSON, type LeafNodeJSON } from '@dts/common/documents'
-import { v4 as uuid4 } from 'uuid'
 import { type Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import type { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
@@ -37,6 +36,7 @@ import { trans } from '@common/i18n-main'
 import type FSALWatchdog from '@providers/fsal/fsal-watchdog'
 import { getDocumentTypeForExtension, hasImageExt, hasMdOrCodeExt, hasPDFExt } from 'source/common/util/file-extention-checks'
 import isDir from 'source/common/util/is-dir'
+import crypto from 'crypto'
 
 type DocumentWindows = Record<string, DocumentTree>
 type DocumentWindowsJSON = Record<string, BranchNodeJSON|LeafNodeJSON>
@@ -490,7 +490,7 @@ export default class DocumentManager extends ProviderContract {
     if (!await this._config.isInitialized()) {
       this._app.log.info('[Document Manager] Initializing document storage ...')
       const tree = new DocumentTree()
-      const key = uuid4()
+      const key = crypto.randomUUID()
       await this._config.init({ [key]: tree.toJSON() })
     }
 
@@ -522,7 +522,7 @@ export default class DocumentManager extends ProviderContract {
 
     if (Object.keys(treedata).length === 0) {
       this._app.log.warning('[Document Manager] Creating new window since all are closed.')
-      const key = uuid4()
+      const key = crypto.randomUUID()
       this._windows[key] = new DocumentTree()
       this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
     }
@@ -554,9 +554,9 @@ export default class DocumentManager extends ProviderContract {
   public newWindow (): void {
     const newTree = new DocumentTree()
     const existingKeys = Object.keys(this._windows)
-    let key = uuid4()
+    let key = crypto.randomUUID()
     while (existingKeys.includes(key)) {
-      key = uuid4()
+      key = crypto.randomUUID()
     }
 
     this._windows[key] = newTree
