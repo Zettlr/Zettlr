@@ -21,7 +21,7 @@
 import type { BranchNodeJSON } from '@dts/common/documents'
 import { DocumentTree } from './document-tree'
 import { DTLeaf } from './document-tree-leaf'
-import { v4 as uuid4 } from 'uuid'
+import crypto from 'crypto'
 
 export class DTBranch {
   private readonly _nodes: Array<DTLeaf|DTBranch>
@@ -37,14 +37,14 @@ export class DTBranch {
    * @param   {string}                 dir       The direction, can be horizontal or vertical
    * @param   {string}                 id        An optional ID, may be changed to ensure uniqueness
    */
-  constructor (parent: DocumentTree|DTBranch, dir: 'horizontal'|'vertical', id: string = uuid4()) {
+  constructor (parent: DocumentTree|DTBranch, dir: 'horizontal'|'vertical', id: string = crypto.randomUUID()) {
     this._nodes = []
     this._parent = parent
     this._direction = dir
     this._sizes = []
 
     if (typeof id !== 'string') {
-      id = uuid4()
+      id = crypto.randomUUID()
     }
 
     // Ensure a unique ID
@@ -54,7 +54,7 @@ export class DTBranch {
     }
 
     while (root.findBranch(id) !== undefined) {
-      id = uuid4()
+      id = crypto.randomUUID()
     }
 
     this._id = id

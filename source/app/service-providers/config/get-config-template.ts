@@ -14,10 +14,10 @@
 
 import { app, nativeTheme } from 'electron'
 import * as bcp47 from 'bcp-47'
-import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
 import type { EditorShortcutName } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
 import { type MenuShortcutName } from '../menu/shortcuts'
+import crypto from 'crypto'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 
@@ -584,6 +584,6 @@ export function getConfigTemplate (): ConfigOptions {
         'search-find-previous': ''
       }
     },
-    uuid: uuid4() // The app's unique anonymous identifier
+    uuid: crypto.randomUUID() // The app's unique anonymous identifier
   }
 }

@@ -70,11 +70,11 @@
  */
 
 import ProviderContract, { type IPCAPI } from '../provider-contract'
-import { v4 as uuid } from 'uuid'
 import type LogProvider from '../log'
 import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
 import { ipcMain } from 'electron'
 import { type LRT_JSON, LongRunningTask, TaskStatus } from './task'
+import crypto from 'crypto'
 
 export type LRTIPCSyncMessage = IPCAPI<{
   // Retrieve all tasks from main
@@ -180,7 +180,7 @@ export default class LongRunningTaskProvider extends ProviderContract {
    * @return  {LongRunningTask}                      The new task
    */
   public registerTask (title: string, info?: string, successInteraction?: () => void, abortable: boolean = true): LongRunningTask {
-    const task = new LongRunningTask(uuid(), title, info, successInteraction, abortable)
+    const task = new LongRunningTask(crypto.randomUUID(), title, info, successInteraction, abortable)
     this.tasks.push(task)
     broadcastIPCMessage('lrt-provider', { command: 'new-task', payload: { task: task.toJSON() } } as LRTIPCSyncMessage)
     return task
