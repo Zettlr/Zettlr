@@ -139,7 +139,7 @@
     "remark-math": "^6.0.0",
     "remark-stringify": "^11.0.0",
     "rimraf": "^6.1.4",
-    "sanitize-filename": "^1.6.4",
+    "sanitize-filename": "^1.6.5",
     "semver": "^7.8.6",
     "tippy.js": "^6.3.7",
     "underscore": "^1.13.8",

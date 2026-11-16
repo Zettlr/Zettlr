@@ -12763,12 +12763,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sanitize-filename@npm:^1.6.3, sanitize-filename@npm:^1.6.4":
+"sanitize-filename@npm:^1.6.3":
   version: 1.6.4
   resolution: "sanitize-filename@npm:1.6.4"
   dependencies:
     truncate-utf8-bytes: "npm:^1.0.0"
   checksum: 10/9fb32f8ae51b1931eb4f780ac140f3fa9ccbfd8c746231d426cd5f0bc95608557e6e2540186bab81a702b98cd301b622f4a80d3263d82680bebca90a38158b38
+  languageName: node
+  linkType: hard
+
+"sanitize-filename@npm:^1.6.5":
+  version: 1.6.5
+  resolution: "sanitize-filename@npm:1.6.5"
+  dependencies:
+    truncate-utf8-bytes: "npm:^1.0.0"
+  checksum: 10/9e6724419dae707135ea37a957bb658228d6e8fa8f2e048abc9a6960880d1d6612ba938239c12d6a539c8fa072d1fdf82f6413cdb8c29786c22b2df09e799d06
   languageName: node
   linkType: hard
 
@@ -15126,7 +15135,7 @@ __metadata:
     remark-math: "npm:^6.0.0"
     remark-stringify: "npm:^11.0.0"
     rimraf: "npm:^6.1.4"
-    sanitize-filename: "npm:^1.6.4"
+    sanitize-filename: "npm:^1.6.5"
     semver: "npm:^7.8.6"
     style-loader: "npm:^4.0.0"
     tippy.js: "npm:^6.3.7"
