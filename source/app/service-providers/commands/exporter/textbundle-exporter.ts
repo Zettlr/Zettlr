@@ -19,7 +19,7 @@ import {
 import path from 'path'
 import { ZipArchive } from 'archiver'
 import isFile from '@common/util/is-file'
-import removePath from 'source/common/util/remove-path'
+import removePath from '@common/util/remove-path'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
 

@@ -1,6 +1,6 @@
 import type LogProvider from '@providers/log'
+import removePath from '@common/util/remove-path'
 import { shell } from 'electron'
-import removePath from 'source/common/util/remove-path'
 
 export async function safeDelete (absPath: string, deleteOnFail: boolean, logger: LogProvider): Promise<void> {
   try {
