@@ -17,8 +17,6 @@ import { promises as fs, type RmOptions } from 'fs'
 /**
  * Remove a path from the filesystem.
  *
- * If `filepath` is a directory and `recursive` is true, it and all of its contents are removed.
- *
  * If `filepath` is the root directory, the path is not removed and an error is thrown.
  *
  * @param {string}      filepath  The filepath to remove.
