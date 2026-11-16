@@ -10,9 +10,11 @@
 
 - Update chokidar to `v6.0.0`.
 - Moved `get-system-colors.ts` utility file into the appearance provider.
-- Replace the `md5` package with native node.js functionality (#6658)
-- Replace the `uuid` package with native node.js functionality (#6660)
-- Remove the `fsevents` dependency, as it is no longer used by chokidar (#6661)
+- Replace the `md5` package with native node.js functionality (#6658).
+- Replace the `uuid` package with native node.js functionality (#6660).
+- Replace the `rimraf` package with native node.js functionality (#6665).
+- Remove the `fsevents` dependency, as it is no longer used by chokidar (#6661).
+  For packagers, this also removes the `BUNDLE_FSEVENTS` build-time env-var.
 - Remove several unused development dependencies (#6659)
 
 # 4.10.0
