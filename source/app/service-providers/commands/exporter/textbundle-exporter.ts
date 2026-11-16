@@ -18,8 +18,8 @@ import {
 } from 'fs'
 import path from 'path'
 import { ZipArchive } from 'archiver'
-import { rimraf } from 'rimraf'
 import isFile from '@common/util/is-file'
+import removePath from '@common/util/remove-path'
 import type { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import sanitize from 'sanitize-filename'
 
@@ -166,7 +166,7 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
       targetFile = packFile
     })
     // Afterwards remove the source file
-    await rimraf(targetFile.replace('.textpack', '.textbundle'))
+    await removePath(targetFile.replace('.textpack', '.textbundle'), { force: true, recursive: true })
   }
 
   // After all is done, return the written file (folder, to be exact).

@@ -1,6 +1,6 @@
 import type LogProvider from '@providers/log'
+import removePath from '@common/util/remove-path'
 import { shell } from 'electron'
-import { promises as fs } from 'fs'
 
 export async function safeDelete (absPath: string, deleteOnFail: boolean, logger: LogProvider): Promise<void> {
   try {
@@ -9,7 +9,7 @@ export async function safeDelete (absPath: string, deleteOnFail: boolean, logger
     if (deleteOnFail) {
       // If this function throws, there's really something off and we shouldn't recover.
       logger.error(`[FSAL File] Forcing deletion of "${absPath}"!`)
-      await fs.rm(absPath, { recursive: true, force: true })
+      await removePath(absPath, { force: true, recursive: true })
     } else {
       const message = err instanceof Error ? err.message : 'Unknown error'
       throw new Error(`[FSAL File] Could not remove file ${absPath}: ${message}`)
