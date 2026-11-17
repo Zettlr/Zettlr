@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-17 02:26+0000\n"
 "PO-Revision-Date: 2026-03-19 01:25+0000\n"
 "Last-Translator: hugodcnt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Booting %s…"
 msgstr "A iniciar %s…"
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "Não foi possível carregar a base de dados de citações"
 
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 #, fuzzy
 msgid "Changes to the library file detected. Reloading …"
 msgstr ""
@@ -693,12 +693,12 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Existem alterações não guardadas. Queres guardá-las ou descartá-las?"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr "Ficheiro: %s"
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 #, fuzzy
 msgid "File changed on disk"
 msgstr ""
@@ -707,12 +707,12 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Ficheiro alterado no disco"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s foi alterado no disco"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -721,7 +721,7 @@ msgstr ""
 "%s foi alterado no disco, mas o editor contém alterações não guardadas. "
 "Desejas manter o conteúdo actual do editor ou carregar o ficheiro do disco?"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 #, fuzzy
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
@@ -731,26 +731,26 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Queres manter o conteúdo actual do editor ou carregar o ficheiro do disco?"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "Manter conteúdo do editor"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "Carregar alterações do disco"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "Carregar sempre alterações do disco se não houver alterações por guardar no "
 "editor"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "Não foi possível guardar o ficheiro"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "Não foi possível guardar o ficheiro %s: %s"

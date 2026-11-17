@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-17 02:26+0000\n"
 "PO-Revision-Date: 2025-03-04 03:36+0800\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: \n"
@@ -29,7 +29,7 @@ msgid "Booting %s…"
 msgstr ""
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "無法載入引文資料庫"
 
@@ -51,7 +51,7 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 msgid "Changes to the library file detected. Reloading …"
 msgstr "偵測到資源庫檔案的變更，正在重新載入…"
 
@@ -577,21 +577,21 @@ msgstr "尚未儲存的修改"
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "有些尚未儲存的修改。您要放棄它們還是要存檔？"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 msgid "File changed on disk"
 msgstr "檔案在磁碟上已變更"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s 在磁碟上已變更"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -600,29 +600,29 @@ msgstr ""
 "%s 在磁碟上已變更，但編輯器中有尚未儲存的修改。您要保留目前的編輯器內容還是從"
 "磁碟載入檔案？"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr "您要保留目前的編輯器內容還是從磁碟載入檔案？"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "保留編輯器內容"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "從磁碟載入變更"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr "如果編輯器中沒有尚未儲存的修改，則總是從磁碟載入變更"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "無法儲存檔案"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "無法儲存檔案 %s：%s"
