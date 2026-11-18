@@ -5,6 +5,7 @@
 - **Feature**: Zettlr now supports retrieving the accent color from the D-Bus
   system, meaning that on many Linux desktop environments, it should now pick up
   your personal accent color.
+- Fixed image prerendering within table cells (#6672).
 
 ## Under the Hood
 
@@ -15,7 +16,9 @@
 - Replace the `rimraf` package with native node.js functionality (#6665).
 - Remove the `fsevents` dependency, as it is no longer used by chokidar (#6661).
   For packagers, this also removes the `BUNDLE_FSEVENTS` build-time env-var.
-- Remove several unused development dependencies (#6659)
+- Remove several unused development dependencies (#6659).
+- Allow the protocol `safe-file` in DOMPurify runs to facilitate Zettlr-internal
+  image prerendering.
 
 # 4.10.0
 
