@@ -123,9 +123,9 @@ After you have installed Zettlr, [head over to our documentation](https://docs.z
 to get to know Zettlr. The app ships with a small tutorial which covers the basics.
 
 If you are new to Zettlr, refer to our
-[first time users guide](https://docs.zettlr.com/en/first-time-users/first-steps/).
+[first time users guide](https://docs.zettlr.com/en/first-time-users/first-steps.html).
 You might also want to consider
-[installing LaTeX](https://docs.zettlr.com/en/getting-started/installing-latex/)
+[installing LaTeX](https://docs.zettlr.com/en/getting-started/installing-latex.html)
 to unlock all export profiles of the app.
 
 ![The central window of Zettlr using the dark theme](/resources/screenshots/zettlr_view_dark.png)
@@ -302,7 +302,7 @@ You can pass additional [command-line switches](#command-line-switches) such as
 `--clear-cache` as well. They will be passed to the child process.
 
 Additionally, have a look at our
-[full development documentation](https://docs.zettlr.com/en/getting-started/get-involved/).
+[full development documentation](https://docs.zettlr.com/en/getting-started/get-involved.html).
 
 #### `package`
 
