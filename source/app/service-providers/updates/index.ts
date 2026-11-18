@@ -392,10 +392,13 @@ export default class UpdateProvider extends ProviderContract {
         // Then notify the user
         const { tagName } = this.getUpdateState()
         const result = await dialog.showMessageBox({
+          // NOTE: We need to add information into this message box that the
+          // dialog refers to Zettlr. Otherwise, the update check has little
+          // connection to Zettlr. See #6664.
           type: 'info',
-          title: trans('Update available'),
-          message: trans('An update to version %s is available!', tagName),
-          detail: trans('Please update at your earliest convenience. You can open the updater now, or update later.'),
+          title: trans('Zettlr: Update available'),
+          message: trans('An update to Zettlr version %s is available.', tagName),
+          detail: trans('Please update Zettlr at your earliest convenience. You can open the updater now, or update later.'),
           buttons: [
             trans('Open updater'),
             trans('Not now')

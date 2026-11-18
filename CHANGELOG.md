@@ -6,6 +6,8 @@
   system, meaning that on many Linux desktop environments, it should now pick up
   your personal accent color.
 - Fixed image prerendering within table cells (#6672).
+- The update dialog now includes explicit reference to Zettlr so that
+  identifying the source of the update notification becomes easier (#6664).
 
 ## Under the Hood
 
