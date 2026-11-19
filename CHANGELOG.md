@@ -8,6 +8,8 @@
 - Fixed image prerendering within table cells (#6672).
 - The update dialog now includes explicit reference to Zettlr so that
   identifying the source of the update notification becomes easier (#6664).
+- Fixed Mermaid charts defaulting to the light theme until the dark mode setting
+  has been changed after the fact (#5763).
 
 ## Under the Hood
 

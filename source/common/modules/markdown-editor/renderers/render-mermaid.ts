@@ -25,7 +25,7 @@ import { sanitizeHTML } from 'source/common/util/sanitize-html'
 const DEFAULT_MERMAID_OPTIONS: MermaidConfig = {
   securityLevel: 'strict',
   htmlLabels: false,
-  theme: 'default',
+  theme: window.config.get('darkMode') as boolean ? 'dark' : 'default',
   layout: 'dagre',
   startOnLoad: false, // Do not immediately scan the document
   suppressErrorRendering: true // Never render unasked error codes
@@ -41,7 +41,7 @@ ipcRenderer.on('config-provider', (event, { command, payload }) => {
   }
 })
 
-// Initially, set the dark theme
+// Initially, set the correct theme
 mermaid.initialize(DEFAULT_MERMAID_OPTIONS)
 
 function onError (err: unknown, container: HTMLElement) {
