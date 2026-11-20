@@ -18,10 +18,10 @@ import {
   type Completion,
   type CompletionSource,
   type CompletionResult,
+  type CompletionContext,
   autocompletion,
-  type CompletionContext
 } from '@codemirror/autocomplete'
-import { type StateField } from '@codemirror/state'
+import { EditorState, type StateField } from '@codemirror/state'
 import { codeBlocks } from './code-blocks'
 import { citations } from './citations'
 import { snippets } from './snippets'
@@ -31,8 +31,8 @@ import { headings } from './headings'
 
 export interface AutocompletePlugin {
   /**
-   * This function is frequently called and should return true as soon as the
-   * plugin detects a string that it can autocomplete.
+   * This function is frequently called and should return a start position
+   * if the plugin detects a string that it can autocomplete.
    *
    * @param   {CompletionContext}  ctx  The current completion context.
    *
@@ -43,9 +43,8 @@ export interface AutocompletePlugin {
   applies: (ctx: CompletionContext) => number|false
   /**
    * This function is called while an autocompletion is active. It is provided
-   * the current query the user has typed and should return a filtered list of
-   * all autocompletion entries that match that query. NOTE that the query can
-   * be an empty string, in which case all entries are expected to be returned.
+   * the current query the user has typed. The query can be an empty string,
+   * in which case, all entries should be returned
    *
    * @param   {CompletionContext}  ctx    The current completion context.
    * @param   {string}             query  The current query.
@@ -53,64 +52,93 @@ export interface AutocompletePlugin {
    * @return  {Completion[]}              The list of available completions
    */
   entries: (ctx: CompletionContext, query: string) => Completion[]
-  fields?: Array<StateField<any>>
+  /* StateFields required for the plugin */
+  fields?: Array<StateField<unknown>>
+  /**
+   * Whether Codemirror should filter Completion entries
+   *
+   * If `false`, then it is up to the `entries` implementation to
+   * sort and filter Completions appropriately.
+   */
+  filter?: boolean
 }
 
 const forbiddenTokens = [
-  'YAMLFrontmatter',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
   'MathEquation'
 ]
 
-const autocompleteSource: CompletionSource = function (ctx): CompletionResult|null {
-  // This function is called for every keystroke and shall determine whether to
-  // actually start the autocomplete.
-
-  // With this function we check whether we are currently within "forbidden"
-  // tokens (i.e. codeblocks, YAML stuff, etc.)
+/**
+ * Get the first completion plugin which applies for the provided context.
+ *
+ * @param {CompletionContext} ctx
+ *
+ * @return {{ plugin: AutocompletePlugin, from: number }?}
+ */
+function completionContext (ctx: CompletionContext): { plugin: AutocompletePlugin, from: number } | null {
   if (ctx.tokenBefore(forbiddenTokens) !== null) {
     return null
   }
 
-  let plugin: AutocompletePlugin|undefined
-  let startpos = ctx.pos
-
-  // NOTE: Headings has to be checked before tags
-  for (const p of [ codeBlocks, citations, files, headings, tags, snippets ]) {
-    const res = p.applies(ctx)
-    if (res !== false) {
-      plugin = p
-      startpos = res
-      break
+  // Headings must be checked before tags.
+  for (const plugin of [
+    codeBlocks,
+    citations,
+    files,
+    headings,
+    tags,
+    snippets
+  ]) {
+    const from = plugin.applies(ctx)
+    if (from !== false) {
+      return { plugin, from }
     }
   }
 
-  if (plugin !== undefined) {
-    const initialOptions = plugin.entries(ctx, ctx.state.doc.sliceString(startpos, ctx.pos).toLowerCase())
-    return {
-      from: startpos,
-      options: initialOptions,
-      filter: false,
-      update: (current, from, to, ctx) => {
-        const query = ctx.state.doc.sliceString(from, to).toLowerCase()
-        current.options = plugin!.entries(ctx, query)
-        return current
-      }
-    }
-  }
-
-  // Return null to indicate that autocomplete does not apply.
   return null
 }
 
+export const autocompleteSource: CompletionSource = function (ctx): CompletionResult | null {
+  const context = completionContext(ctx)
+  if (context === null) {
+    return null
+  }
+
+  const { plugin, from: startPos } = context
+  const query = ctx.state.sliceDoc(startPos, ctx.pos)
+
+  return {
+    from: startPos,
+    options: plugin.entries(ctx, query),
+    filter: plugin.filter,
+    update: (current, from, to, ctx) => {
+      const context = completionContext(ctx)
+      if (context === null || context.plugin !== plugin || context.from !== from) {
+        return null
+      }
+
+      // Reuse the options if the query is still valid.
+      // This is similar to using `validFor`, but without
+      // maintaining separate regexes per plugin.
+      const options = plugin.filter === false
+        ? plugin.entries(ctx, ctx.state.sliceDoc(from, to))
+        : current.options
+
+      return { ...current, from, to, options }
+    }
+  }
+}
+
 export const autocomplete = [
+  EditorState.languageData.of(() => [
+    { autocomplete: autocompleteSource }
+  ]),
   autocompletion({
     activateOnTyping: true, // Always show immediately
-    selectOnOpen: true, // But never pre-select anything
+    selectOnOpen: true,
     closeOnBlur: true,
     maxRenderedOptions: 20,
-    override: [autocompleteSource],
     // Do not include the default keymap. Instead, we re-define it below to
     // avoid a specific decision by CodeMirror to remap the autocomplete toggle
     // on macOS to Alt+\ which, on an Italian keyboard layout, will fail to
