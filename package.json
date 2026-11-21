@@ -175,7 +175,7 @@
     "@types/node": "^24.19.2",
     "@types/semver": "^7.8.0",
     "@types/underscore": "^1.13.0",
-    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.2",
     "@typescript-eslint/parser": "^8.72.1",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "@vue/devtools-api": "^8.2.1",
