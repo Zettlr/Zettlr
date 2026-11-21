@@ -64,7 +64,9 @@ async function getDescriptorFor (absPath: string|string[]): Promise<AnyDescripto
  * @throws if the path is not a directory
  */
 async function readDirectory (absPath: string): Promise<AnyDescriptor[]> {
-  return await ipcRenderer.invoke('fsal', { command: 'read-directory', payload: absPath })
+  const dirs = await readPathRecursively(absPath)
+
+  return await ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: dirs })
 }
 
 // In order to avoid frequent updates of the workspaceMap on initial load, we
