@@ -57,7 +57,6 @@ export interface AutocompletePlugin {
 }
 
 const forbiddenTokens = [
-  'YAMLFrontmatter',
   'YAMLFrontmatterStart',
   'YAMLFrontmatterEnd',
   'MathEquation'

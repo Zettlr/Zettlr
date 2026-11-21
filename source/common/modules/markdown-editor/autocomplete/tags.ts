@@ -17,6 +17,8 @@ import { StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type TagRecord } from '@providers/tags'
 import { type AutocompletePlugin } from '.'
+import { syntaxTree } from '@codemirror/language'
+import { isAnyLiteralNodeContainingATag } from '@common/modules/markdown-editor/util/yaml-tag-detection'
 
 /**
  * Use this effect to provide the editor state with a set of new tags to autocomplete
@@ -59,6 +61,22 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 
 export const tags: AutocompletePlugin = {
   applies (ctx) {
+    const nodeAt = syntaxTree(ctx.state).resolve(ctx.pos, 0)
+    if ((nodeAt.name === 'CodeText' && nodeAt.prevSibling?.name === 'YAMLFrontmatterStart') ||
+        (nodeAt.name === 'string' && nodeAt.matchContext(['CodeText']) && nodeAt.parent?.prevSibling?.name === 'YAMLFrontmatterStart') ||
+        (nodeAt.name === 'FencedCode' && nodeAt.firstChild?.name === 'YAMLFrontmatterStart') ||
+        nodeAt.name === 'YAMLFrontmatter'
+    ) {
+      const innerNode = syntaxTree(ctx.state).resolveInner(ctx.pos, -1)
+      if (! isAnyLiteralNodeContainingATag(innerNode, ctx.state)) {
+        return false
+      }
+      if ([ '"', "'" ].includes(ctx.state.sliceDoc(innerNode.from, innerNode.to).substring(0, 1))) {
+        return innerNode.from + 1
+      }
+      return innerNode.from
+    }
+
     if (ctx.pos === 0) {
       return false
     }
