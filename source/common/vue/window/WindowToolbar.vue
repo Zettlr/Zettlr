@@ -210,6 +210,7 @@ body div#toolbar {
 
   .toolbar-scroll {
     display: flex;
+    align-items: center;
     gap: 5px;
     flex: 1;
     overflow-x: auto;
@@ -242,6 +243,7 @@ body div#toolbar {
   div.toolbar-group {
     text-align: center;
     display: flex;
+    height: 100%;
 
     span.toolbar-label {
       display: block;
@@ -287,7 +289,9 @@ body.darwin {
   div#toolbar {
     /* On macOS, there is no titlebar, and as such we need to make the toolbar draggable */
     -webkit-app-region: drag;
-    button, .toolbar-text { -webkit-app-region: no-drag; }
+    button, .toolbar-text, .toolbar-search-container {
+      -webkit-app-region: no-drag;
+    }
 
     /* Make space for the traffic lights, either on the left side or the right. */
     &:not(.has-rtl-traffic-lights) {
