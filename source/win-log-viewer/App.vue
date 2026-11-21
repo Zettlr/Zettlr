@@ -51,10 +51,6 @@ const toolbarControls: ToolbarControl[] = [
     content: 'Filter messages:'
   },
   {
-    type: 'spacer',
-    size: '5x'
-  },
-  {
     type: 'toggle',
     label: 'Verbose',
     id: 'verboseToggle',
