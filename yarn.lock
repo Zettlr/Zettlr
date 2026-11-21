@@ -6830,14 +6830,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^10.12.0":
-  version: 10.12.0
-  resolution: "eslint-plugin-vue@npm:10.12.0"
+"eslint-plugin-vue@npm:^10.12.1":
+  version: 10.12.1
+  resolution: "eslint-plugin-vue@npm:10.12.1"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.9.1"
     natural-compare: "npm:^1.4.0"
     nth-check: "npm:^2.1.1"
-    postcss-selector-parser: "npm:^7.1.4"
+    postcss-selector-parser: "npm:^7.1.7"
     semver: "npm:^7.8.5"
     xml-name-validator: "npm:^5.0.0"
   peerDependencies:
@@ -6850,7 +6850,7 @@ __metadata:
       optional: true
     "@typescript-eslint/parser":
       optional: true
-  checksum: 10/bba192e97d6fff05a6d883fac27d37d9c5f67a60e8404c5078f5c3a03363508337cba917d3792224524c30d8f982adb8dcfdb020cef8e78c73935f2030f34b7a
+  checksum: 10/0c0d3f4ea1017367bc891e1cd40d005455dce90f71cf1b9c8eaf215a2f938494369f3c808bc3201f6be5933a99d7dee68939e369a08e05fadba09ec88aadd122
   languageName: node
   linkType: hard
 
@@ -11643,13 +11643,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^7.0.0, postcss-selector-parser@npm:^7.1.4":
+"postcss-selector-parser@npm:^7.0.0":
   version: 7.1.7
   resolution: "postcss-selector-parser@npm:7.1.7"
   dependencies:
     cssesc: "npm:^3.0.0"
     util-deprecate: "npm:^1.0.2"
   checksum: 10/9413749ad38d8e22e4a5e47287e5501493238ab73eea276381476933332604df49468451e99a3d6614463fd3ee96655a80821a93949cfe425ecd6acf210535b0
+  languageName: node
+  linkType: hard
+
+"postcss-selector-parser@npm:^7.1.7":
+  version: 7.1.8
+  resolution: "postcss-selector-parser@npm:7.1.8"
+  dependencies:
+    util-deprecate: "npm:^1.0.2"
+  checksum: 10/4e91895bacc95f23cf150e01e999a479fd8472a842ea006684109bb6d70bb9e84146e78a86cea591782281e5ee5220af6f819c68eb378916499e6e3cfe498bbb
   languageName: node
   linkType: hard
 
@@ -15087,7 +15096,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.32.0"
     eslint-plugin-n: "npm:^18.5.0"
     eslint-plugin-promise: "npm:^7.3.0"
-    eslint-plugin-vue: "npm:^10.12.0"
+    eslint-plugin-vue: "npm:^10.12.1"
     fix-path: "npm:^5.0.0"
     gemoji: "npm:^8.1.0"
     gettext-parser: "npm:^10.0.0"
