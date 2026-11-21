@@ -37,11 +37,21 @@ export function getEditorFields (config: ConfigOptions): PreferencesFieldset[] {
     },
     {
       title: trans('Writing direction'),
-      infoString: trans('We are currently planning on re-introducing bidirectional writing support, which will then be configurable here.'),
+      infoString: trans('Controls the text direction of the editor. Choose "Auto" to let Zettlr automatically detect the writing direction based on the first character.'),
       group: PreferencesGroups.Editor,
       help: undefined, // TODO
       fields: [
-        // TODO: Add field for LTR/RTL
+        {
+          type: 'select',
+          model: 'editor.textDirection',
+          inline: true,
+          label: trans('Writing direction:'),
+          options: {
+            auto: trans('Auto detect'),
+            ltr: trans('Left-to-Right (LTR)'),
+            rtl: trans('Right-to-Left (RTL)')
+          }
+        }
       ]
     },
     {
