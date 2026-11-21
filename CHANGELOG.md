@@ -12,6 +12,7 @@
   has been changed after the fact (#5763).
 - Fixed an issue that prevented search inputs on macOS in the toolbar to not
   work.
+- Improved the log window design and layout.
 
 ## Under the Hood
 

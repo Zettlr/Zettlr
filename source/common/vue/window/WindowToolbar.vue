@@ -300,8 +300,6 @@ body.darwin {
     &.has-rtl-traffic-lights {
       padding-right: 80px;
     }
-
-    color: rgb(100, 100, 100);
   }
 }
 </style>

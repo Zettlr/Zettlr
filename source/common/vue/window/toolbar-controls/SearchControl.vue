@@ -13,6 +13,7 @@
       v-bind:placeholder="props.control.placeholder"
       v-on:input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       v-on:keypress.enter="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      v-on:keydown.esc="($event.target as HTMLInputElement).blur()"
     >
   </div>
 </template>
@@ -116,7 +117,7 @@ body.darwin {
   &.dark {
     .toolbar-search-container {
       background-color: rgb(51, 51, 51);
-      &:hover:not(:focus-within) { background-color: rgb(60, 60, 60,); }
+      &:hover:not(:focus-within) { background-color: rgb(60, 60, 60); }
 
       .toolbar-search::placeholder {
         color: rgb(120, 120, 120);
