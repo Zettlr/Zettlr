@@ -371,7 +371,6 @@ function updateRow (
     if (isDataUrl) {
       return src
     } else {
-      console.log({ valid: makeValidUri(src, basePath), src, basePath })
       return makeValidUri(src, basePath)
     }
   }
