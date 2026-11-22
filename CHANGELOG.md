@@ -30,6 +30,8 @@
 - Remove several unused development dependencies (#6659).
 - Allow the protocol `safe-file` in DOMPurify runs to facilitate Zettlr-internal
   image prerendering.
+- The logger now prints details for any level of event to the console during
+  development.
 
 # 4.10.0
 
