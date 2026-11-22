@@ -1,6 +1,6 @@
 /**
  * @ignore
- * BEGIN HEADER    TODO: MOVE TO LIFECYCLE!
+ * BEGIN HEADER
  *
  * Contains:        attachAppNavigationHandlers function
  * CVM-Role:        Utility function
@@ -13,8 +13,10 @@
  * END HEADER
  */
 
-import { app, shell } from 'electron'
+import { app, dialog, shell } from 'electron'
 import type LogProvider from '../service-providers/log'
+import type ConfigProvider from '../service-providers/config'
+import { trans } from 'source/common/i18n-main'
 
 /**
  * Takes an URL and decides if we should open it externally (web browser,
@@ -22,7 +24,11 @@ import type LogProvider from '../service-providers/log'
  *
  * @param   {string}  url  The URL to check.
  */
-function maybeOpenExternal (url: string): void {
+function maybeOpenExternal (url: string, config: ConfigProvider): void {
+  const parsed = new URL(url)
+  const protocol = parsed.protocol.toLowerCase()
+  const { allowedURIProtocols } = config.get().system
+
   if (url.startsWith('safe-file://')) {
     // will-navigate assumes an URL and will pass an encoded URI, so we have to
     // make sure to decode the url so that %28 becomes ( again.
@@ -35,10 +41,42 @@ function maybeOpenExternal (url: string): void {
     shell.openPath(realPath).catch(err => {
       console.error(`[Window Manager] Could not open path ${realPath}: ${err.message}.`)
     })
-  } else {
+  } else if (allowedURIProtocols.includes(protocol)) {
+    // Regular link with an allowed protocol
     shell.openExternal(url).catch(err => {
       console.error(`[Window Manager] Could not open URL ${url}: ${err.message}.`)
     })
+  } else {
+    // Unknown protocol -> ask user
+    dialog.showMessageBox({
+      title: trans('Open link?'),
+      message: trans('This link uses the protocol "%s". Do you want to open this link?', protocol),
+      type: 'question',
+      buttons: [
+        trans('Cancel'),
+        trans('Open link')
+      ],
+      defaultId: 0,
+      cancelId: 0,
+      // Allow user to trust the protocol
+      checkboxLabel: trans('Always open links using "%s"', protocol),
+      checkboxChecked: false
+    })
+      .then(response => {
+        if (response.response === 0) {
+          return // User has cancelled
+        }
+
+        // Whitelist protocol 
+        if (response.checkboxChecked) {
+          config.set('system.allowedURIProtocols', [ ...allowedURIProtocols, protocol ])
+        }
+
+        shell.openExternal(url).catch(err => {
+          console.error(`[Window Manager] Could not open URL ${url}: ${err.message}.`)
+        })
+      })
+      .catch(err => console.error(err))
   }
 }
 
@@ -54,7 +92,7 @@ function maybeOpenExternal (url: string): void {
  * that opens that URL in the system's actual web browser, or shows the file in
  * the file browser, if applicable.
  */
-export function attachAppNavigationHandlers (log: LogProvider): void {
+export function attachAppNavigationHandlers (log: LogProvider, config: ConfigProvider): void {
   app.on('web-contents-created', (event, webContents) => {
     webContents.setWindowOpenHandler(({ url }) => {
       log.info(`[Navigation Handler] Preventing opening a new window to <${url}>`)
@@ -79,7 +117,7 @@ export function attachAppNavigationHandlers (log: LogProvider): void {
       // into a shell command to open in an actual browser, not within our own
       // browser windows.
       event.preventDefault()
-      maybeOpenExternal(url)
+      maybeOpenExternal(url, config)
     })
   })
 }

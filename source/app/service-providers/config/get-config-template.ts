@@ -260,6 +260,7 @@ export interface ConfigOptions {
     leaveAppRunning: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
+    allowedURIProtocols: string[]
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
   }
@@ -536,6 +537,7 @@ export function getConfigTemplate (): ConfigOptions {
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
+      allowedURIProtocols: [ 'http:', 'https:' ],
       checkForUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
     },

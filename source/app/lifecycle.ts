@@ -67,7 +67,7 @@ export async function bootApplication (): Promise<AppServiceContainer> {
 
   // Prevent navigation away from our main windows and the creation of arbitrary
   // browser windows with external URLs
-  attachAppNavigationHandlers(log)
+  attachAppNavigationHandlers(log, config)
 
   // Now boot up the service container
   await appServiceContainer.boot()

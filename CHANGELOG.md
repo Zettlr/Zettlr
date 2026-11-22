@@ -13,6 +13,10 @@
 - Fixed an issue that prevented search inputs on macOS in the toolbar to not
   work.
 - Improved the log window design and layout.
+- When opening links, Zettlr now checks the protocol of the link, and asks you
+  to confirm whether it should actually follow the link. This introduces
+  transparency into links coming from external documents and allows you to open
+  only links that you trust.
 
 ## Under the Hood
 
