@@ -5,6 +5,13 @@
 - **Feature**: Zettlr now supports retrieving the accent color from the D-Bus
   system, meaning that on many Linux desktop environments, it should now pick up
   your personal accent color.
+- **Change**: Custom export commands now have an additional setting, `shell`,
+  which, if enabled, runs your commands in a shell. This was the case previously
+  for all commands, but to reduce the attack surface and provide a more complete
+  fix for GHSA-qp9r-5xcv-35gx this setting has now changed to false by default.
+  If a custom command requires a shell to function, make sure to enable this
+  with the new parameter in your preferences -> Import/Export -> Custom
+  Commands.
 - Fixed image prerendering within table cells (#6672).
 - The update dialog now includes explicit reference to Zettlr so that
   identifying the source of the update notification becomes easier (#6664).
@@ -20,6 +27,11 @@
 
 ## Under the Hood
 
+- GHSA-qp9r-5xcv-35gx: Completely address security advisory by using `shescape`
+  to properly quote or escape all arguments passed to custom commands so that
+  attacker-controlled shell injections are caught. Additionally, custom commands
+  now do not run in a shell by default anymore, and the user is advised to only
+  enable shell access for commands that require it.
 - Update chokidar to `v6.0.0`.
 - Moved `get-system-colors.ts` utility file into the appearance provider.
 - Replace the `md5` package with native node.js functionality (#6658).

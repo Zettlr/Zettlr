@@ -140,6 +140,7 @@
     "remark-stringify": "^11.0.0",
     "sanitize-filename": "^1.6.5",
     "semver": "^7.8.6",
+    "shescape": "^3.0.2",
     "tippy.js": "^6.3.7",
     "underscore": "^1.13.8",
     "unified": "^11.0.5",

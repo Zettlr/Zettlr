@@ -13057,6 +13057,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"shescape@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "shescape@npm:3.0.2"
+  dependencies:
+    which: "npm:^7.0.0"
+  peerDependencies:
+    "@ericcornelissen/lregexp": ^1.0.9
+  peerDependenciesMeta:
+    "@ericcornelissen/lregexp":
+      optional: true
+  checksum: 10/83c65f0320d8bb2aaca970b87c1c032748a680418ba9505e80107420ec40c964252f0a6afaca2a1a510eae0a69ef0518c48fe9a94a19283249f7667e0a00fbbd
+  languageName: node
+  linkType: hard
+
 "side-channel-list@npm:^1.0.1":
   version: 1.0.1
   resolution: "side-channel-list@npm:1.0.1"
@@ -14708,6 +14722,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"which@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "which@npm:7.0.0"
+  dependencies:
+    isexe: "npm:^4.0.0"
+  bin:
+    node-which: bin/which.js
+  checksum: 10/913a43ac10df37602ba9795a004dd7ab12ba7dd592aca1f08ec333be1fdd6a49bbf119a88c3f8d0ea70eeb6251726e77069251424d73000299a0a840ed000732
+  languageName: node
+  linkType: hard
+
 "widest-line@npm:^6.0.0":
   version: 6.0.0
   resolution: "widest-line@npm:6.0.0"
@@ -15136,6 +15161,7 @@ __metadata:
     remark-stringify: "npm:^11.0.0"
     sanitize-filename: "npm:^1.6.5"
     semver: "npm:^7.8.6"
+    shescape: "npm:^3.0.2"
     style-loader: "npm:^4.0.0"
     tippy.js: "npm:^6.3.7"
     ts-loader: "npm:^9.6.2"
