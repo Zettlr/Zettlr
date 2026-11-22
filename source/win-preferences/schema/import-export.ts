@@ -108,15 +108,15 @@ export function getImportExportFields (): PreferencesFieldset[] {
     },
     {
       title: trans('Custom export commands'),
-      infoString: trans('Specify custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported.'),
+      infoString: trans('Specify custom commands to run the exporter with. Each command receives as its first argument the file or project folder to be exported. If necessary, you may also have Zettlr run a command in the shell.'),
       group: PreferencesGroups.ImportExport,
       help: undefined, // TODO
       fields: [
         {
           type: 'list',
           valueType: 'record',
-          keyNames: [ 'displayName', 'command' ],
-          columnLabels: [ trans('Display name'), trans('Command') ],
+          keyNames: [ 'displayName', 'command', 'shell' ],
+          columnLabels: [ trans('Display name'), trans('Command'), trans('Shell') ],
           model: 'export.customCommands',
           deletable: true,
           searchable: true,

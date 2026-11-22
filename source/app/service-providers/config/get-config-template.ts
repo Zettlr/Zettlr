@@ -134,7 +134,7 @@ export interface ConfigOptions {
     cslStyle: string
     useBundledPandoc: boolean
     exportQmdWithQuarto: boolean
-    customCommands: Array<{ displayName: string, command: string }>
+    customCommands: Array<{ displayName: string, command: string, shell: boolean }>
     selectedProfiles: Array<{ filePath: string, profile: string }>
     lastUsedProfile: string
     forceEnableExtensions: {

@@ -286,6 +286,17 @@ export default class ConfigProvider extends ProviderContract {
         }
       }
     } // END: openPaths migration
+
+    // Custom Commands migration (Zettlr 4.10 -> 4.11)
+    const commands = readConfig.export?.customCommands
+    if (commands !== undefined) {
+      for (const cmd of commands) {
+        if (!('shell' in cmd)) {
+          this._logger.info(`[Config Provider] Migrating custom command ${cmd.displayName} to include a shell parameter (default: false).`)
+          cmd.shell = false
+        }
+      }
+    }
   }
 
   /**
