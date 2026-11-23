@@ -6118,6 +6118,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dompurify@npm:^3.4.18":
+  version: 3.4.18
+  resolution: "dompurify@npm:3.4.18"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10/31e14c5c1dd1156196b71ed648f5f95f78c576f6673120f025c4d4007a05d31ac951e2e9c78a2de578a28eb00e6bbec7cfa7b3617cb6eb231df0d628df94af82
+  languageName: node
+  linkType: hard
+
 "domutils@npm:^2.5.2, domutils@npm:^2.8.0":
   version: 2.8.0
   resolution: "domutils@npm:2.8.0"
@@ -15104,7 +15116,7 @@ __metadata:
     cross-env: "npm:^10.1.0"
     css-loader: "npm:^7.1.5"
     d3: "npm:^7.9.2"
-    dompurify: "npm:^3.4.17"
+    dompurify: "npm:^3.4.18"
     electron: "npm:^44.10.2"
     electron-builder: "npm:^26.18.1"
     electron-devtools-installer: "npm:^4.0.0"
