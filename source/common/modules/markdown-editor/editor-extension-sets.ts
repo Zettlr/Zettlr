@@ -16,7 +16,6 @@
  * END HEADER
  */
 
-import { closeBrackets } from '@codemirror/autocomplete'
 import { type Update } from '@codemirror/collab'
 import { history } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
@@ -76,6 +75,8 @@ import { projectInfoField } from './plugins/project-info-field'
 import { headingGutter } from './renderers/render-headings'
 import { citationTooltips } from './tooltips/citations'
 import { zettlrKeymap } from './keymaps'
+import { markdownBacktickPairing } from './util/markdown-backtick-pairing'
+import { autoCloseBracketsCompartment, autoCloseBracketsExtension } from './util/auto-close-brackets'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -157,11 +158,6 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     inputMode.push(emacs())
   }
 
-  const autoCloseBracketsConfig: Extension[] = []
-  if (options.initialConfig.autoCloseBrackets) {
-    autoCloseBracketsConfig.push(closeBrackets())
-  }
-
   const themes = getMainEditorThemes()
 
   return [
@@ -190,7 +186,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     EditorState.tabSize.from(configField, (val) => val.indentUnit),
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
-    autoCloseBracketsConfig,
+    autoCloseBracketsCompartment.of(autoCloseBracketsExtension(options.initialConfig.autoCloseBrackets)),
 
     // Allow configuration of the trigger character
     autocompleteTriggerCharacter.from(configField, val => val.snippetAutocompleteTriggerCharacter),
@@ -302,6 +298,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 
   return [
     ...getCoreExtensions(options),
+    markdownBacktickPairing,
     // These handlers deal with Markdown specific stuff, for example, pasting
     // HTML should not add the verbatim HTML code, but rather convert it to
     // Markdown prior. Additionally, images should get preferential treatment.

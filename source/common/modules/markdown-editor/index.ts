@@ -81,6 +81,7 @@ import { addNewFootnote } from './commands/footnotes'
 
 // Utilities
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
+import { autoCloseBracketsCompartment, autoCloseBracketsExtension } from './util/auto-close-brackets'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
 
 import safeAssign from '@common/util/safe-assign'
@@ -597,6 +598,7 @@ export default class MarkdownEditor extends EventEmitter {
    */
   private onConfigUpdate (newOptions: Partial<EditorConfiguration>): void {
     const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
+    const autoCloseChanged = newOptions.autoCloseBrackets !== undefined && newOptions.autoCloseBrackets !== this.config.autoCloseBrackets
     const darkModeChanged = newOptions.darkMode !== undefined && newOptions.darkMode !== this.config.darkMode
     const editorModeChanged = newOptions.darkModeEditor !== undefined && newOptions.darkModeEditor !== this.config.darkModeEditor
     const themeChanged = newOptions.theme !== undefined && newOptions.theme !== this.config.theme
@@ -611,6 +613,12 @@ export default class MarkdownEditor extends EventEmitter {
       } else {
         this._instance.dispatch({ effects: inputModeCompartment.reconfigure([]) })
       }
+    }
+
+    if (autoCloseChanged) {
+      this._instance.dispatch({
+        effects: autoCloseBracketsCompartment.reconfigure(autoCloseBracketsExtension(newOptions.autoCloseBrackets === true))
+      })
     }
 
     // Fourth: Switch theme, if applicable
