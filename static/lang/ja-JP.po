@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 4.10.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-24 02:27+0000\n"
 "PO-Revision-Date: 2026-11-14 02:13+0900\n"
 "Last-Translator: coolvitto\n"
 "Language-Team: \n"
@@ -29,7 +29,7 @@ msgid "Booting %s…"
 msgstr "%s を起動…"
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "引用データベースを読み込めませんでした"
 
@@ -51,12 +51,12 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 msgid "Changes to the library file detected. Reloading …"
 msgstr "ライブラリファイルの変更が検出されました。再読み込み中…"
 
 #: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/commands/dir-project-export.ts:95
+#: source/app/service-providers/commands/dir-project-export.ts:96
 #: source/app/service-providers/commands/file-delete.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-close-all.ts:37
@@ -77,6 +77,7 @@ msgstr "OK"
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/util/attach-app-navigation-handlers.ts:56
 #: source/tmp/win-main/GlobalSearch.vue.ts:65
 #: source/tmp/win-paste-image/App.vue.ts:67
 msgid "Cancel"
@@ -105,11 +106,11 @@ msgstr "無題"
 msgid "Could not create directory"
 msgstr "ディレクトリを作成できませんでした"
 
-#: source/app/service-providers/commands/dir-project-export.ts:87
+#: source/app/service-providers/commands/dir-project-export.ts:88
 msgid "Cannot export project"
 msgstr "プロジェクトをエクスポートできません"
 
-#: source/app/service-providers/commands/dir-project-export.ts:88
+#: source/app/service-providers/commands/dir-project-export.ts:89
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
@@ -117,11 +118,11 @@ msgstr ""
 "エクスポート対象として選択されたファイルがありません。プロジェクト設定に含め"
 "るファイルを選択してください。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:93
+#: source/app/service-providers/commands/dir-project-export.ts:94
 msgid "Project File Mismatch"
 msgstr "プロジェクトファイルの不一致"
 
-#: source/app/service-providers/commands/dir-project-export.ts:94
+#: source/app/service-providers/commands/dir-project-export.ts:95
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
@@ -131,64 +132,64 @@ msgstr ""
 "除された可能性があります。エクスポートするファイルがすべて含まれていることを"
 "確認してください。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:135
+#: source/app/service-providers/commands/dir-project-export.ts:136
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
 msgstr ""
 "プロジェクト \"%s\" が正常にエクスポートされました。クリックして表示します。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:136
+#: source/app/service-providers/commands/dir-project-export.ts:137
 msgid "Project Export"
 msgstr "プロジェクトのエクスポート"
 
-#: source/app/service-providers/commands/dir-project-export.ts:160
-#: source/app/service-providers/commands/dir-project-export.ts:199
+#: source/app/service-providers/commands/dir-project-export.ts:161
+#: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting project \"%s\""
 msgstr "プロジェクト \"%s\" をエクスポート中"
 
-#: source/app/service-providers/commands/dir-project-export.ts:161
-#: source/app/service-providers/commands/dir-project-export.ts:200
+#: source/app/service-providers/commands/dir-project-export.ts:162
+#: source/app/service-providers/commands/dir-project-export.ts:201
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting using custom command %s"
 msgstr "カスタムコマンド %s を使用してエクスポート中"
 
-#: source/app/service-providers/commands/dir-project-export.ts:168
+#: source/app/service-providers/commands/dir-project-export.ts:169
 #, javascript-format
 msgid "Project export failed: %s"
 msgstr "プロジェクトのエクスポートに失敗しました : %s"
 
-#: source/app/service-providers/commands/dir-project-export.ts:178
-#: source/app/service-providers/commands/dir-project-export.ts:248
-#: source/app/service-providers/commands/dir-project-export.ts:271
+#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:249
+#: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Could not export project \"%s\"."
 msgstr "プロジェクト \"%s\" をエクスポートできませんでした。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:180
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
 msgstr "コマンド %s によるエクスポートに失敗しました : %s。"
 
 #. Error
-#: source/app/service-providers/commands/dir-project-export.ts:246
+#: source/app/service-providers/commands/dir-project-export.ts:247
 #, javascript-format
 msgid "Export failed: %s"
 msgstr "エクスポートに失敗しました : %s"
 
-#: source/app/service-providers/commands/dir-project-export.ts:249
-#: source/app/service-providers/commands/dir-project-export.ts:272
+#: source/app/service-providers/commands/dir-project-export.ts:250
+#: source/app/service-providers/commands/dir-project-export.ts:273
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
 msgstr "プロファイル %s を使用したエクスポートに失敗しました : %s。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:256
+#: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project \"%s\" has been exported."
 msgstr "プロジェクト \"%s\"  がエクスポートされました。"
 
-#: source/app/service-providers/commands/dir-project-export.ts:257
+#: source/app/service-providers/commands/dir-project-export.ts:258
 #, javascript-format
 msgid "Project has been exported to %s."
 msgstr "プロジェクトが %s にエクスポートされました。"
@@ -309,7 +310,7 @@ msgstr "%s を保持"
 
 #: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:601
+#: source/app/service-providers/config/index.ts:612
 msgid "Confirm"
 msgstr "確認"
 
@@ -548,17 +549,17 @@ msgstr "オプション %s は少なくとも %s (文字数) である必要が�
 msgid "Option %s is required."
 msgstr "オプション %s は必須です。"
 
-#: source/app/service-providers/config/index.ts:593
+#: source/app/service-providers/config/index.ts:604
 msgid "Changing this option requires a restart to take effect."
 msgstr "このオプションを有効にするには再起動が必要です。"
 
-#: source/app/service-providers/config/index.ts:596
+#: source/app/service-providers/config/index.ts:607
 #: source/app/service-providers/menu/menu.darwin.ts:713
 #: source/app/service-providers/menu/menu.win32.ts:689
 msgid "Restart now"
 msgstr "今すぐ再起動"
 
-#: source/app/service-providers/config/index.ts:597
+#: source/app/service-providers/config/index.ts:608
 msgid "Restart later"
 msgstr "あとで再起動"
 
@@ -585,21 +586,21 @@ msgstr "未保存の変更"
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "保存されていない変更があります。保存しますか、それとも破棄しますか?"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr "ファイル : %s"
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 msgid "File changed on disk"
 msgstr "ディスク上のファイルが変更されました"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "ディスク上の %s が変更されました"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -609,32 +610,32 @@ msgstr ""
 "現在のエディタの内容を保存しますか、それともディスクからファイルを読み込みま"
 "すか?"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "現在のエディタの内容を保持しますか、それともディスクからファイルを読み込みま"
 "すか?"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "エディタの内容を保持"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "ディスクから変更を読み込む"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "エディタ内に未保存の変更がない場合は、常にディスクから変更を読み込みます"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "ファイルを保存できませんでした"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "ファイル %s を保存できませんでした : %s"
@@ -1095,44 +1096,41 @@ msgstr "更新を確認できません"
 msgid "There was an error while checking for updates. %s: %s"
 msgstr "更新の確認中にエラーが発生しました。%s : %s"
 
-#: source/app/service-providers/updates/index.ts:396
-#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
-msgid "Update available"
-msgstr "更新が利用可能"
-
-#: source/app/service-providers/updates/index.ts:397
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "バージョン %s への更新が利用可能です！"
-
-#: source/app/service-providers/updates/index.ts:398
-msgid ""
-"Please update at your earliest convenience. You can open the updater now, or "
-"update later."
+#: source/app/service-providers/updates/index.ts:399
+msgid "Zettlr: Update available"
 msgstr ""
-"お早めに更新してください。今すぐアップデーターを開くか、後で更新することもで"
-"きます。"
 
 #: source/app/service-providers/updates/index.ts:400
+#, javascript-format
+msgid "An update to Zettlr version %s is available."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:401
+msgid ""
+"Please update Zettlr at your earliest convenience. You can open the updater "
+"now, or update later."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:403
 msgid "Open updater"
 msgstr "アップデーターを開く"
 
-#: source/app/service-providers/updates/index.ts:401
+#: source/app/service-providers/updates/index.ts:404
 msgid "Not now"
 msgstr "今はしない"
 
-#: source/app/service-providers/updates/index.ts:430
+#: source/app/service-providers/updates/index.ts:433
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "更新の確認ができませんでした : サーバ エラー(ステータス コード : %s)"
 
-#: source/app/service-providers/updates/index.ts:433
+#: source/app/service-providers/updates/index.ts:436
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr ""
 "更新の確認ができませんでした : クライアント エラー(ステータス コード : %s)"
 
-#: source/app/service-providers/updates/index.ts:436
+#: source/app/service-providers/updates/index.ts:439
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1141,31 +1139,31 @@ msgstr ""
 "タス コード : %s)"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:440
+#: source/app/service-providers/updates/index.ts:443
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "更新を確認できませんでした。%s : %s"
 
-#: source/app/service-providers/updates/index.ts:447
+#: source/app/service-providers/updates/index.ts:450
 #, javascript-format
 msgid "Could not check for updates: %s"
 msgstr "更新の確認ができませんでした : %s"
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:465
 msgid "Could not check for updates: Server has sent invalid data"
 msgstr ""
 "アップデートを確認できませんでした : サーバーから無効なデータが送信されました"
 
-#: source/app/service-providers/updates/index.ts:540
+#: source/app/service-providers/updates/index.ts:543
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr "このリリースでは SHA256 チェックサム ファイルが欠落しているようです。"
 
-#: source/app/service-providers/updates/index.ts:561
+#: source/app/service-providers/updates/index.ts:564
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "SHA256 チェックサムを取得できません : %s"
 
-#: source/app/service-providers/updates/index.ts:665
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1173,7 +1171,7 @@ msgstr ""
 "ダウンロードした更新の整合性を検証できませんでした。再試行するか、手動で更新"
 "してください。"
 
-#: source/app/service-providers/updates/index.ts:677
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1181,7 +1179,7 @@ msgstr ""
 "ダウンロードしたファイルのチェックサムがサーバーから報告されたものと異なりま"
 "す。再試行するか、手動で更新してください。"
 
-#: source/app/service-providers/updates/index.ts:696
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1252,6 +1250,26 @@ msgstr "リモートの変更を常に現在のファイルに読み込む"
 msgid "Open project folder"
 msgstr "プロジェクト フォルダーを開く"
 
+#: source/app/util/attach-app-navigation-handlers.ts:52
+msgid "Open link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:53
+#, javascript-format
+msgid "This link uses the protocol \"%s\". Do you want to open this link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:57
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open link"
+msgstr "リンクを開く"
+
+#. Allow user to trust the protocol
+#: source/app/util/attach-app-navigation-handlers.ts:62
+#, javascript-format
+msgid "Always open links using \"%s\""
+msgstr ""
+
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr "強調表示なし"
@@ -1317,10 +1335,6 @@ msgstr "引用を挿入"
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "表を挿入"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
-msgid "Open link"
-msgstr "リンクを開く"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
@@ -2445,6 +2459,10 @@ msgstr "脚注を挿入"
 #: source/tmp/win-main/App.vue.ts:452
 msgid "Pomodoro timer"
 msgstr "ポモドーロ タイマー"
+
+#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
+msgid "Update available"
+msgstr "更新が利用可能"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:391
 msgid "Close tab"
@@ -4072,6 +4090,7 @@ msgid "Hostname"
 msgstr "ホスト名"
 
 #: source/win-preferences/schema/advanced.ts:305
+#: source/win-preferences/schema/advanced.ts:322
 #: source/win-preferences/schema/autocorrect.ts:53
 #: source/win-preferences/schema/spellchecking.ts:42
 #: source/win-preferences/schema/spellchecking.ts:233
@@ -4079,10 +4098,25 @@ msgid "Filter"
 msgstr "フィルター"
 
 #: source/win-preferences/schema/advanced.ts:310
+msgid "Allowed URI protocols"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:311
+msgid ""
+"Some links can cause your computer to perform actions such as controlling "
+"other apps. Zettlr always asks you to confirm before following untrusted "
+"links. The list below lists all previously trusted protocols."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:320
+msgid "Protocol"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:327
 msgid "Watchdog polling"
 msgstr "ウォッチドッグ監視"
 
-#: source/win-preferences/schema/advanced.ts:311
+#: source/win-preferences/schema/advanced.ts:328
 msgid ""
 "In rare instances, Zettlr may be unable to check for changes to your files. "
 "In that case, you can try activating watchdog polling. Do not use this "
@@ -4092,27 +4126,27 @@ msgstr ""
 "チドッグ監視を有効にしてみてください。ただし、監視は非常に遅く、多くのリソー"
 "スを消費するため、必要な場合以外はこのオプションを使用しないでください。"
 
-#: source/win-preferences/schema/advanced.ts:317
+#: source/win-preferences/schema/advanced.ts:334
 msgid "Activate watchdog polling"
 msgstr "ウォッチドッグ監視を有効にする"
 
-#: source/win-preferences/schema/advanced.ts:322
+#: source/win-preferences/schema/advanced.ts:339
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "ファイルの書き込みが完了したと見なされるまでの待機時間 (ミリ秒)"
 
-#: source/win-preferences/schema/advanced.ts:329
+#: source/win-preferences/schema/advanced.ts:346
 msgid "Deleting items"
 msgstr "項目の削除"
 
-#: source/win-preferences/schema/advanced.ts:335
+#: source/win-preferences/schema/advanced.ts:352
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr "ごみ箱への移動に失敗した場合は、項目を元に戻せないように削除します"
 
-#: source/win-preferences/schema/advanced.ts:341
+#: source/win-preferences/schema/advanced.ts:358
 msgid "Debug mode"
 msgstr "デバッグ モード"
 
-#: source/win-preferences/schema/advanced.ts:347
+#: source/win-preferences/schema/advanced.ts:364
 msgid "Enable debug mode"
 msgstr "デバッグ モードを有効にする"
 
@@ -4920,11 +4954,9 @@ msgstr "カスタムエクスポートコマンド"
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
-"its first argument the file or project folder to be exported."
+"its first argument the file or project folder to be exported. If necessary, "
+"you may also have Zettlr run a command in the shell."
 msgstr ""
-"エクスポーターを実行するためのカスタムコマンドを指定します。各コマンドは、最"
-"初の引数としてエクスポートするファイルまたはプロジェクトフォルダーを受け取り"
-"ます。"
 
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Display name"
@@ -4933,6 +4965,10 @@ msgstr "表示"
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Command"
 msgstr "コマンド"
+
+#: source/win-preferences/schema/import-export.ts:119
+msgid "Shell"
+msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:129
 msgid "Pandoc Extensions"
@@ -5299,6 +5335,25 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "フォルダーへのパス"
+
+#, javascript-format
+#~ msgid "An update to version %s is available!"
+#~ msgstr "バージョン %s への更新が利用可能です！"
+
+#~ msgid ""
+#~ "Please update at your earliest convenience. You can open the updater now, "
+#~ "or update later."
+#~ msgstr ""
+#~ "お早めに更新してください。今すぐアップデーターを開くか、後で更新することも"
+#~ "できます。"
+
+#~ msgid ""
+#~ "Specify custom commands to run the exporter with. Each command receives "
+#~ "as its first argument the file or project folder to be exported."
+#~ msgstr ""
+#~ "エクスポーターを実行するためのカスタムコマンドを指定します。各コマンドは、"
+#~ "最初の引数としてエクスポートするファイルまたはプロジェクトフォルダーを受け"
+#~ "取ります。"
 
 #~ msgid "Could not render Graph."
 #~ msgstr "グラフをレンダリングできませんでした。"

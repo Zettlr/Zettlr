@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-24 02:27+0000\n"
 "PO-Revision-Date: 2026-03-19 01:25+0000\n"
 "Last-Translator: hugodcnt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Booting %s…"
 msgstr "A iniciar %s…"
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "Não foi possível carregar a base de dados de citações"
 
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 #, fuzzy
 msgid "Changes to the library file detected. Reloading …"
 msgstr ""
@@ -59,7 +59,7 @@ msgstr ""
 "Foram detectadas alterações ao ficheiro de biblioteca. A recarregar…"
 
 #: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/commands/dir-project-export.ts:95
+#: source/app/service-providers/commands/dir-project-export.ts:96
 #: source/app/service-providers/commands/file-delete.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-close-all.ts:37
@@ -80,6 +80,7 @@ msgstr "Está bem"
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/util/attach-app-navigation-handlers.ts:56
 #: source/tmp/win-main/GlobalSearch.vue.ts:65
 #: source/tmp/win-paste-image/App.vue.ts:67
 msgid "Cancel"
@@ -112,11 +113,11 @@ msgstr "Sem título"
 msgid "Could not create directory"
 msgstr "Não foi possível criar a pasta"
 
-#: source/app/service-providers/commands/dir-project-export.ts:87
+#: source/app/service-providers/commands/dir-project-export.ts:88
 msgid "Cannot export project"
 msgstr "Não é possível exportar o projecto"
 
-#: source/app/service-providers/commands/dir-project-export.ts:88
+#: source/app/service-providers/commands/dir-project-export.ts:89
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
@@ -124,7 +125,7 @@ msgstr ""
 "Não existem ficheiros seleccionados para exportação. Por favor, selecciona "
 "os ficheiros a incluir nas definições do projecto."
 
-#: source/app/service-providers/commands/dir-project-export.ts:93
+#: source/app/service-providers/commands/dir-project-export.ts:94
 #, fuzzy
 msgid "Project File Mismatch"
 msgstr ""
@@ -133,7 +134,7 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Inconsistência nos ficheiros do projecto"
 
-#: source/app/service-providers/commands/dir-project-export.ts:94
+#: source/app/service-providers/commands/dir-project-export.ts:95
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
@@ -143,63 +144,63 @@ msgstr ""
 "encontrados. Podem ter sido movidos ou apagados. Por favor, verifica se "
 "todos os ficheiros que desejas exportar estão incluídos."
 
-#: source/app/service-providers/commands/dir-project-export.ts:135
+#: source/app/service-providers/commands/dir-project-export.ts:136
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
 msgstr "Projecto «%s» exportado com sucesso. Clica para mostrar."
 
-#: source/app/service-providers/commands/dir-project-export.ts:136
+#: source/app/service-providers/commands/dir-project-export.ts:137
 msgid "Project Export"
 msgstr "Exportação de projecto"
 
-#: source/app/service-providers/commands/dir-project-export.ts:160
-#: source/app/service-providers/commands/dir-project-export.ts:199
+#: source/app/service-providers/commands/dir-project-export.ts:161
+#: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting project \"%s\""
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:161
-#: source/app/service-providers/commands/dir-project-export.ts:200
+#: source/app/service-providers/commands/dir-project-export.ts:162
+#: source/app/service-providers/commands/dir-project-export.ts:201
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting using custom command %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:168
+#: source/app/service-providers/commands/dir-project-export.ts:169
 #, javascript-format
 msgid "Project export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:178
-#: source/app/service-providers/commands/dir-project-export.ts:248
-#: source/app/service-providers/commands/dir-project-export.ts:271
+#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:249
+#: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Could not export project \"%s\"."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:180
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
 msgstr ""
 
 #. Error
-#: source/app/service-providers/commands/dir-project-export.ts:246
+#: source/app/service-providers/commands/dir-project-export.ts:247
 #, javascript-format
 msgid "Export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:249
-#: source/app/service-providers/commands/dir-project-export.ts:272
+#: source/app/service-providers/commands/dir-project-export.ts:250
+#: source/app/service-providers/commands/dir-project-export.ts:273
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:256
+#: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project \"%s\" has been exported."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:257
+#: source/app/service-providers/commands/dir-project-export.ts:258
 #, javascript-format
 msgid "Project has been exported to %s."
 msgstr ""
@@ -334,7 +335,7 @@ msgstr "Manter %s"
 
 #: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:601
+#: source/app/service-providers/config/index.ts:612
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -646,7 +647,7 @@ msgstr "A opção %s tem de ter pelo menos %s caracteres."
 msgid "Option %s is required."
 msgstr "A opção %s é obrigatória."
 
-#: source/app/service-providers/config/index.ts:593
+#: source/app/service-providers/config/index.ts:604
 #, fuzzy
 msgid "Changing this option requires a restart to take effect."
 msgstr ""
@@ -655,13 +656,13 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Alterar esta opção requer reiniciar o Zettlr para ter efeito."
 
-#: source/app/service-providers/config/index.ts:596
+#: source/app/service-providers/config/index.ts:607
 #: source/app/service-providers/menu/menu.darwin.ts:713
 #: source/app/service-providers/menu/menu.win32.ts:689
 msgid "Restart now"
 msgstr "Reiniciar agora"
 
-#: source/app/service-providers/config/index.ts:597
+#: source/app/service-providers/config/index.ts:608
 msgid "Restart later"
 msgstr "Reiniciar mais tarde"
 
@@ -693,12 +694,12 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Existem alterações não guardadas. Queres guardá-las ou descartá-las?"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr "Ficheiro: %s"
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 #, fuzzy
 msgid "File changed on disk"
 msgstr ""
@@ -707,12 +708,12 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Ficheiro alterado no disco"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s foi alterado no disco"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -721,7 +722,7 @@ msgstr ""
 "%s foi alterado no disco, mas o editor contém alterações não guardadas. "
 "Desejas manter o conteúdo actual do editor ou carregar o ficheiro do disco?"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 #, fuzzy
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
@@ -731,26 +732,26 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Queres manter o conteúdo actual do editor ou carregar o ficheiro do disco?"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "Manter conteúdo do editor"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "Carregar alterações do disco"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "Carregar sempre alterações do disco se não houver alterações por guardar no "
 "editor"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "Não foi possível guardar o ficheiro"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "Não foi possível guardar o ficheiro %s: %s"
@@ -1304,38 +1305,30 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Ocorreu um erro ao verificar actualizações. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:396
-#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
-msgid "Update available"
-msgstr "Actualização disponível"
-
-#: source/app/service-providers/updates/index.ts:397
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "Está disponível uma actualização para a versão %s!"
-
-#: source/app/service-providers/updates/index.ts:398
-#, fuzzy
-msgid ""
-"Please update at your earliest convenience. You can open the updater now, or "
-"update later."
+#: source/app/service-providers/updates/index.ts:399
+msgid "Zettlr: Update available"
 msgstr ""
-"#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Por favor, actualiza assim que te for possível. Podes abrir o actualizador "
-"agora ou actualizar mais tarde.\n"
-"#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
-"Actualiza assim que puderes. Podes abrir o actualizador agora ou fazê-lo "
-"mais tarde."
 
 #: source/app/service-providers/updates/index.ts:400
+#, javascript-format
+msgid "An update to Zettlr version %s is available."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:401
+msgid ""
+"Please update Zettlr at your earliest convenience. You can open the updater "
+"now, or update later."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:403
 msgid "Open updater"
 msgstr "Abrir actualizador"
 
-#: source/app/service-providers/updates/index.ts:401
+#: source/app/service-providers/updates/index.ts:404
 msgid "Not now"
 msgstr "Agora não"
 
-#: source/app/service-providers/updates/index.ts:430
+#: source/app/service-providers/updates/index.ts:433
 #, fuzzy, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr ""
@@ -1345,7 +1338,7 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Não foi possível verificar actualizações: Erro do servidor (Código: %s)"
 
-#: source/app/service-providers/updates/index.ts:433
+#: source/app/service-providers/updates/index.ts:436
 #, fuzzy, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr ""
@@ -1355,7 +1348,7 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Não foi possível verificar actualizações: Erro do cliente (Código: %s)"
 
-#: source/app/service-providers/updates/index.ts:436
+#: source/app/service-providers/updates/index.ts:439
 #, fuzzy, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1368,21 +1361,21 @@ msgstr ""
 "(Código: %s)"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:440
+#: source/app/service-providers/updates/index.ts:443
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Não foi possível verificar actualizações. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:447
+#: source/app/service-providers/updates/index.ts:450
 #, javascript-format
 msgid "Could not check for updates: %s"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:465
 msgid "Could not check for updates: Server has sent invalid data"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:540
+#: source/app/service-providers/updates/index.ts:543
 #, fuzzy
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr ""
@@ -1392,7 +1385,7 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "O ficheiro de checksums SHA256 parece estar em falta para esta versão."
 
-#: source/app/service-providers/updates/index.ts:561
+#: source/app/service-providers/updates/index.ts:564
 #, fuzzy, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr ""
@@ -1401,7 +1394,7 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Não foi possível obter os checksums SHA256: %s"
 
-#: source/app/service-providers/updates/index.ts:665
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1409,7 +1402,7 @@ msgstr ""
 "Não foi possível verificar a integridade da actualização descarregada. Por "
 "favor, tenta novamente ou actualiza manualmente."
 
-#: source/app/service-providers/updates/index.ts:677
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1417,7 +1410,7 @@ msgstr ""
 "O ficheiro descarregado tem uma soma de controlo diferente da comunicada "
 "pelo servidor. Por favor, tenta novamente ou actualiza manualmente."
 
-#: source/app/service-providers/updates/index.ts:696
+#: source/app/service-providers/updates/index.ts:699
 #, fuzzy, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1522,6 +1515,26 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Abrir pasta do projecto"
 
+#: source/app/util/attach-app-navigation-handlers.ts:52
+msgid "Open link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:53
+#, javascript-format
+msgid "This link uses the protocol \"%s\". Do you want to open this link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:57
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open link"
+msgstr "Abrir ligação"
+
+#. Allow user to trust the protocol
+#: source/app/util/attach-app-navigation-handlers.ts:62
+#, javascript-format
+msgid "Always open links using \"%s\""
+msgstr ""
+
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr "Sem realce"
@@ -1587,10 +1600,6 @@ msgstr "Inserir bloco de citação"
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "Inserir tabela"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
-msgid "Open link"
-msgstr "Abrir ligação"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 #, fuzzy
@@ -2805,6 +2814,10 @@ msgstr "Inserir nota de rodapé"
 #: source/tmp/win-main/App.vue.ts:452
 msgid "Pomodoro timer"
 msgstr "Temporizador Pomodoro"
+
+#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
+msgid "Update available"
+msgstr "Actualização disponível"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:391
 msgid "Close tab"
@@ -4856,6 +4869,7 @@ msgid "Hostname"
 msgstr "Servidor"
 
 #: source/win-preferences/schema/advanced.ts:305
+#: source/win-preferences/schema/advanced.ts:322
 #: source/win-preferences/schema/autocorrect.ts:53
 #: source/win-preferences/schema/spellchecking.ts:42
 #: source/win-preferences/schema/spellchecking.ts:233
@@ -4863,10 +4877,25 @@ msgid "Filter"
 msgstr "Filtro"
 
 #: source/win-preferences/schema/advanced.ts:310
+msgid "Allowed URI protocols"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:311
+msgid ""
+"Some links can cause your computer to perform actions such as controlling "
+"other apps. Zettlr always asks you to confirm before following untrusted "
+"links. The list below lists all previously trusted protocols."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:320
+msgid "Protocol"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:327
 msgid "Watchdog polling"
 msgstr "Monitorização por consulta (polling)"
 
-#: source/win-preferences/schema/advanced.ts:311
+#: source/win-preferences/schema/advanced.ts:328
 msgid ""
 "In rare instances, Zettlr may be unable to check for changes to your files. "
 "In that case, you can try activating watchdog polling. Do not use this "
@@ -4877,7 +4906,7 @@ msgstr ""
 "consulta (polling). Não uses esta opção a menos que seja necessário: a "
 "consulta é muito lenta e consome muitos recursos."
 
-#: source/win-preferences/schema/advanced.ts:317
+#: source/win-preferences/schema/advanced.ts:334
 #, fuzzy
 msgid "Activate watchdog polling"
 msgstr ""
@@ -4886,7 +4915,7 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Activar monitorização por consulta (polling)"
 
-#: source/win-preferences/schema/advanced.ts:322
+#: source/win-preferences/schema/advanced.ts:339
 #, fuzzy
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
@@ -4895,19 +4924,19 @@ msgstr ""
 "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
 "Tempo de espera até considerar a gravação do ficheiro concluída (em ms)"
 
-#: source/win-preferences/schema/advanced.ts:329
+#: source/win-preferences/schema/advanced.ts:346
 msgid "Deleting items"
 msgstr "Eliminação de itens"
 
-#: source/win-preferences/schema/advanced.ts:335
+#: source/win-preferences/schema/advanced.ts:352
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr "Eliminar itens irreversivelmente se a trasfega para o lixo falhar"
 
-#: source/win-preferences/schema/advanced.ts:341
+#: source/win-preferences/schema/advanced.ts:358
 msgid "Debug mode"
 msgstr "Modo de depuração"
 
-#: source/win-preferences/schema/advanced.ts:347
+#: source/win-preferences/schema/advanced.ts:364
 #, fuzzy
 msgid "Enable debug mode"
 msgstr ""
@@ -6086,10 +6115,9 @@ msgstr "Comandos de exportação personalizados"
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
-"its first argument the file or project folder to be exported."
+"its first argument the file or project folder to be exported. If necessary, "
+"you may also have Zettlr run a command in the shell."
 msgstr ""
-"Especifica comandos personalizados para correr o exportador. Cada comando "
-"recebe como primeiro argumento o ficheiro ou a pasta do projecto a exportar."
 
 #: source/win-preferences/schema/import-export.ts:119
 #, fuzzy
@@ -6103,6 +6131,10 @@ msgstr ""
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Command"
 msgstr "Comando"
+
+#: source/win-preferences/schema/import-export.ts:119
+msgid "Shell"
+msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:129
 msgid "Pandoc Extensions"
@@ -6586,6 +6618,30 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "Caminho para a pasta"
+
+#, javascript-format
+#~ msgid "An update to version %s is available!"
+#~ msgstr "Está disponível uma actualização para a versão %s!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please update at your earliest convenience. You can open the updater now, "
+#~ "or update later."
+#~ msgstr ""
+#~ "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
+#~ "Por favor, actualiza assim que te for possível. Podes abrir o "
+#~ "actualizador agora ou actualizar mais tarde.\n"
+#~ "#-#-#-#-#  pt-PT.po (Zettlr 2.3.0)  #-#-#-#-#\n"
+#~ "Actualiza assim que puderes. Podes abrir o actualizador agora ou fazê-lo "
+#~ "mais tarde."
+
+#~ msgid ""
+#~ "Specify custom commands to run the exporter with. Each command receives "
+#~ "as its first argument the file or project folder to be exported."
+#~ msgstr ""
+#~ "Especifica comandos personalizados para correr o exportador. Cada comando "
+#~ "recebe como primeiro argumento o ficheiro ou a pasta do projecto a "
+#~ "exportar."
 
 #, javascript-format
 #~ msgid "Table size: %s &times; %s"

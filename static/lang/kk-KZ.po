@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.4.3\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-24 02:27+0000\n"
 "PO-Revision-Date: 2025-05-17 14:47+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -29,7 +29,7 @@ msgid "Booting %s…"
 msgstr ""
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "Дәйексөз дерекқорын жүктеу мүмкін болмады"
 
@@ -51,12 +51,12 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Кітапхана файлындағы өзгерістер анықталды. Қайта жүктелуде..."
 
 #: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/commands/dir-project-export.ts:95
+#: source/app/service-providers/commands/dir-project-export.ts:96
 #: source/app/service-providers/commands/file-delete.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-close-all.ts:37
@@ -77,6 +77,7 @@ msgstr "Жарайды"
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/util/attach-app-navigation-handlers.ts:56
 #: source/tmp/win-main/GlobalSearch.vue.ts:65
 #: source/tmp/win-paste-image/App.vue.ts:67
 msgid "Cancel"
@@ -105,11 +106,11 @@ msgstr "Атаусыз"
 msgid "Could not create directory"
 msgstr "Қалта жасау мүмкін болмады"
 
-#: source/app/service-providers/commands/dir-project-export.ts:87
+#: source/app/service-providers/commands/dir-project-export.ts:88
 msgid "Cannot export project"
 msgstr "Жобаны экспорттау мүмкін болмады"
 
-#: source/app/service-providers/commands/dir-project-export.ts:88
+#: source/app/service-providers/commands/dir-project-export.ts:89
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
@@ -117,11 +118,11 @@ msgstr ""
 "Экспортқа таңдалған файлдар жоқ. Жоба баптауларында қосылатын файлдарды "
 "таңдаңыз."
 
-#: source/app/service-providers/commands/dir-project-export.ts:93
+#: source/app/service-providers/commands/dir-project-export.ts:94
 msgid "Project File Mismatch"
 msgstr "Жоба файлының сәйкессіздігі"
 
-#: source/app/service-providers/commands/dir-project-export.ts:94
+#: source/app/service-providers/commands/dir-project-export.ts:95
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
@@ -131,63 +132,63 @@ msgstr ""
 "жылжытылған немесе жойылған болуы мүмкін. Экспорттағыңыз келетін барлық "
 "файлдардың қосылғанын тексеріңіз."
 
-#: source/app/service-providers/commands/dir-project-export.ts:135
+#: source/app/service-providers/commands/dir-project-export.ts:136
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
 msgstr "\"%s\" жобасы сәтті экспортталды. Көрсету үшін басыңыз."
 
-#: source/app/service-providers/commands/dir-project-export.ts:136
+#: source/app/service-providers/commands/dir-project-export.ts:137
 msgid "Project Export"
 msgstr "Жобаны экспорттау"
 
-#: source/app/service-providers/commands/dir-project-export.ts:160
-#: source/app/service-providers/commands/dir-project-export.ts:199
+#: source/app/service-providers/commands/dir-project-export.ts:161
+#: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting project \"%s\""
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:161
-#: source/app/service-providers/commands/dir-project-export.ts:200
+#: source/app/service-providers/commands/dir-project-export.ts:162
+#: source/app/service-providers/commands/dir-project-export.ts:201
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting using custom command %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:168
+#: source/app/service-providers/commands/dir-project-export.ts:169
 #, javascript-format
 msgid "Project export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:178
-#: source/app/service-providers/commands/dir-project-export.ts:248
-#: source/app/service-providers/commands/dir-project-export.ts:271
+#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:249
+#: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Could not export project \"%s\"."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:180
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
 msgstr ""
 
 #. Error
-#: source/app/service-providers/commands/dir-project-export.ts:246
+#: source/app/service-providers/commands/dir-project-export.ts:247
 #, javascript-format
 msgid "Export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:249
-#: source/app/service-providers/commands/dir-project-export.ts:272
+#: source/app/service-providers/commands/dir-project-export.ts:250
+#: source/app/service-providers/commands/dir-project-export.ts:273
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:256
+#: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project \"%s\" has been exported."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:257
+#: source/app/service-providers/commands/dir-project-export.ts:258
 #, javascript-format
 msgid "Project has been exported to %s."
 msgstr ""
@@ -308,7 +309,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:601
+#: source/app/service-providers/config/index.ts:612
 msgid "Confirm"
 msgstr "Растау"
 
@@ -543,17 +544,17 @@ msgstr "%s параметрі кем дегенде %s символдан тұр
 msgid "Option %s is required."
 msgstr "%s параметрі міндетті."
 
-#: source/app/service-providers/config/index.ts:593
+#: source/app/service-providers/config/index.ts:604
 msgid "Changing this option requires a restart to take effect."
 msgstr "Бұл параметрді өзгерту күшіне ену үшін қайта іске қосуды қажет етеді."
 
-#: source/app/service-providers/config/index.ts:596
+#: source/app/service-providers/config/index.ts:607
 #: source/app/service-providers/menu/menu.darwin.ts:713
 #: source/app/service-providers/menu/menu.win32.ts:689
 msgid "Restart now"
 msgstr "Қазір қайта іске қосу"
 
-#: source/app/service-providers/config/index.ts:597
+#: source/app/service-providers/config/index.ts:608
 msgid "Restart later"
 msgstr "Кейінірек қайта іске қосу"
 
@@ -582,21 +583,21 @@ msgstr ""
 "Сақталмаған өзгерістер бар. Оларды сақтағыңыз келе ме немесе олардан бас "
 "тартқыңыз келе ме?"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr ""
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 msgid "File changed on disk"
 msgstr "Файл дискіде өзгертілді"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s дискіде өзгертілді"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -606,33 +607,33 @@ msgstr ""
 "Редактордың ағымдағы мазмұнын сақтағыңыз келе ме немесе файлды дискіден "
 "жүктегіңіз келе ме?"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "Редактордың ағымдағы мазмұнын сақтағыңыз келе ме немесе файлды дискіден "
 "жүктегіңіз келе ме?"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "Редактор мазмұнын сақтау"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "Өзгерістерді дискіден жүктеу"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "Егер редакторда сақталмаған өзгерістер болмаса, әрқашан өзгерістерді "
 "дискіден жүктеу"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "Файлды сақтау мүмкін болмады"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "Файлды сақтау мүмкін болмады %s: %s"
@@ -1093,43 +1094,40 @@ msgstr "Жаңартуды тексере алмаймын"
 msgid "There was an error while checking for updates. %s: %s"
 msgstr "Жаңартуларды тексеру кезінде қате пайда болды. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:396
-#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
-msgid "Update available"
-msgstr "Жаңарту қолжетімді"
-
-#: source/app/service-providers/updates/index.ts:397
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "%s нұсқасына жаңарту қолжетімді!"
-
-#: source/app/service-providers/updates/index.ts:398
-msgid ""
-"Please update at your earliest convenience. You can open the updater now, or "
-"update later."
+#: source/app/service-providers/updates/index.ts:399
+msgid "Zettlr: Update available"
 msgstr ""
-"Жаңартуды мүмкіндігінше тезірек орындаңыз. Қазір жаңартушыны аша аласыз "
-"немесе кейінірек жаңарта аласыз."
 
 #: source/app/service-providers/updates/index.ts:400
+#, javascript-format
+msgid "An update to Zettlr version %s is available."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:401
+msgid ""
+"Please update Zettlr at your earliest convenience. You can open the updater "
+"now, or update later."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:403
 msgid "Open updater"
 msgstr "Жаңартушыны ашу"
 
-#: source/app/service-providers/updates/index.ts:401
+#: source/app/service-providers/updates/index.ts:404
 msgid "Not now"
 msgstr "Қазір емес"
 
-#: source/app/service-providers/updates/index.ts:430
+#: source/app/service-providers/updates/index.ts:433
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "Жаңартуларды тексеру мүмкін болмады: Серверлік қате (Статус коды: %s)"
 
-#: source/app/service-providers/updates/index.ts:433
+#: source/app/service-providers/updates/index.ts:436
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "Жаңартуларды тексеру мүмкін болмады: Клиенттік қате (Статус коды: %s)"
 
-#: source/app/service-providers/updates/index.ts:436
+#: source/app/service-providers/updates/index.ts:439
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1138,30 +1136,30 @@ msgstr ""
 "коды: %s)"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:440
+#: source/app/service-providers/updates/index.ts:443
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Жаңартуларды тексеру мүмкін болмады. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:447
+#: source/app/service-providers/updates/index.ts:450
 #, javascript-format
 msgid "Could not check for updates: %s"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:465
 msgid "Could not check for updates: Server has sent invalid data"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:540
+#: source/app/service-providers/updates/index.ts:543
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr "Бұл нұсқа үшін SHA256 бақылау қосындысы файлы жетіспейтін сияқты."
 
-#: source/app/service-providers/updates/index.ts:561
+#: source/app/service-providers/updates/index.ts:564
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "SHA256 бақылау қосындыларын алу мүмкін болмады: %s"
 
-#: source/app/service-providers/updates/index.ts:665
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1169,7 +1167,7 @@ msgstr ""
 "Жүктелген жаңартудың бүтіндігін тексеру мүмкін болмады. Қайта көріп шығыңыз "
 "немесе жаңартуды қолмен орындаңыз."
 
-#: source/app/service-providers/updates/index.ts:677
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1177,7 +1175,7 @@ msgstr ""
 "Жүктелген файлдың бақылау қосындысы сервер хабарлағанмен сәйкес келмейді. "
 "Қайта жүктеп көріңіз немесе жаңартуды қолмен орындаңыз."
 
-#: source/app/service-providers/updates/index.ts:696
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1249,6 +1247,26 @@ msgstr "Әрқашан ағымдағы файлға қашықтан жасал
 msgid "Open project folder"
 msgstr "Жоба қалтасын ашу"
 
+#: source/app/util/attach-app-navigation-handlers.ts:52
+msgid "Open link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:53
+#, javascript-format
+msgid "This link uses the protocol \"%s\". Do you want to open this link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:57
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open link"
+msgstr "Сілтемені ашу"
+
+#. Allow user to trust the protocol
+#: source/app/util/attach-app-navigation-handlers.ts:62
+#, javascript-format
+msgid "Always open links using \"%s\""
+msgstr ""
+
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr "Бөлектеу жоқ"
@@ -1314,10 +1332,6 @@ msgstr "Дәйексөз қою"
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "Кесте қою"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
-msgid "Open link"
-msgstr "Сілтемені ашу"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
@@ -2433,6 +2447,10 @@ msgstr "Түсіндірме қою"
 #: source/tmp/win-main/App.vue.ts:452
 msgid "Pomodoro timer"
 msgstr "Помодоро таймері"
+
+#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
+msgid "Update available"
+msgstr "Жаңарту қолжетімді"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:391
 msgid "Close tab"
@@ -4005,6 +4023,7 @@ msgid "Hostname"
 msgstr "Хост атауы"
 
 #: source/win-preferences/schema/advanced.ts:305
+#: source/win-preferences/schema/advanced.ts:322
 #: source/win-preferences/schema/autocorrect.ts:53
 #: source/win-preferences/schema/spellchecking.ts:42
 #: source/win-preferences/schema/spellchecking.ts:233
@@ -4012,38 +4031,53 @@ msgid "Filter"
 msgstr "Сүзгі"
 
 #: source/win-preferences/schema/advanced.ts:310
+msgid "Allowed URI protocols"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:311
+msgid ""
+"Some links can cause your computer to perform actions such as controlling "
+"other apps. Zettlr always asks you to confirm before following untrusted "
+"links. The list below lists all previously trusted protocols."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:320
+msgid "Protocol"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:327
 msgid "Watchdog polling"
 msgstr "Watchdog сұрауы"
 
-#: source/win-preferences/schema/advanced.ts:311
+#: source/win-preferences/schema/advanced.ts:328
 msgid ""
 "In rare instances, Zettlr may be unable to check for changes to your files. "
 "In that case, you can try activating watchdog polling. Do not use this "
 "option unless necessary: Polling is very slow and resource-heavy."
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:317
+#: source/win-preferences/schema/advanced.ts:334
 msgid "Activate watchdog polling"
 msgstr "Watchdog сұрауын белсендіру"
 
-#: source/win-preferences/schema/advanced.ts:322
+#: source/win-preferences/schema/advanced.ts:339
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "Файлды жазу аяқталды деп есептелгенге дейін күту уақыты (мс)"
 
-#: source/win-preferences/schema/advanced.ts:329
+#: source/win-preferences/schema/advanced.ts:346
 msgid "Deleting items"
 msgstr "Элементтерді жою"
 
-#: source/win-preferences/schema/advanced.ts:335
+#: source/win-preferences/schema/advanced.ts:352
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr ""
 "Егер қоқыс жәшігіне жылжыту сәтсіз аяқталса, элементтерді қайтымсыз жою"
 
-#: source/win-preferences/schema/advanced.ts:341
+#: source/win-preferences/schema/advanced.ts:358
 msgid "Debug mode"
 msgstr "Отладка режимі"
 
-#: source/win-preferences/schema/advanced.ts:347
+#: source/win-preferences/schema/advanced.ts:364
 msgid "Enable debug mode"
 msgstr "Отладка режимін қосу"
 
@@ -4812,7 +4846,8 @@ msgstr "Арнайы экспорт пәрмендері"
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
-"its first argument the file or project folder to be exported."
+"its first argument the file or project folder to be exported. If necessary, "
+"you may also have Zettlr run a command in the shell."
 msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:119
@@ -4822,6 +4857,10 @@ msgstr "Көрсетілетін атау"
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Command"
 msgstr "Пәрмен"
+
+#: source/win-preferences/schema/import-export.ts:119
+msgid "Shell"
+msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:129
 msgid "Pandoc Extensions"
@@ -5169,6 +5208,17 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "Қалтаға жол"
+
+#, javascript-format
+#~ msgid "An update to version %s is available!"
+#~ msgstr "%s нұсқасына жаңарту қолжетімді!"
+
+#~ msgid ""
+#~ "Please update at your earliest convenience. You can open the updater now, "
+#~ "or update later."
+#~ msgstr ""
+#~ "Жаңартуды мүмкіндігінше тезірек орындаңыз. Қазір жаңартушыны аша аласыз "
+#~ "немесе кейінірек жаңарта аласыз."
 
 #, javascript-format
 #~ msgid "Table size: %s &times; %s"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-24 02:27+0000\n"
 "PO-Revision-Date: 2026-06-30 19:02+0200\n"
 "Last-Translator: Justin\n"
 "Language-Team: \n"
@@ -26,7 +26,7 @@ msgid "Booting %s…"
 msgstr "Démarrer %s..."
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "Le fichier de bibliographie n'a pas été chargé"
 
@@ -48,12 +48,12 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Le fichier de la bibliographie a été modifié. Rechargement…"
 
 #: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/commands/dir-project-export.ts:95
+#: source/app/service-providers/commands/dir-project-export.ts:96
 #: source/app/service-providers/commands/file-delete.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-close-all.ts:37
@@ -74,6 +74,7 @@ msgstr "Ok"
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/util/attach-app-navigation-handlers.ts:56
 #: source/tmp/win-main/GlobalSearch.vue.ts:65
 #: source/tmp/win-paste-image/App.vue.ts:67
 msgid "Cancel"
@@ -102,11 +103,11 @@ msgstr "Sans nom"
 msgid "Could not create directory"
 msgstr "Erreur lors de la création du dossier"
 
-#: source/app/service-providers/commands/dir-project-export.ts:87
+#: source/app/service-providers/commands/dir-project-export.ts:88
 msgid "Cannot export project"
 msgstr "Impossible d'exporter le Projet"
 
-#: source/app/service-providers/commands/dir-project-export.ts:88
+#: source/app/service-providers/commands/dir-project-export.ts:89
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
@@ -114,11 +115,11 @@ msgstr ""
 "Aucun fichier n'est sélectionné pour l'export. Sélectionnez les fichiers à "
 "inclure dans les paramètres du projet."
 
-#: source/app/service-providers/commands/dir-project-export.ts:93
+#: source/app/service-providers/commands/dir-project-export.ts:94
 msgid "Project File Mismatch"
 msgstr "Incohérence des fichiers du projet"
 
-#: source/app/service-providers/commands/dir-project-export.ts:94
+#: source/app/service-providers/commands/dir-project-export.ts:95
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
@@ -128,63 +129,63 @@ msgstr ""
 "être trouvés. Ils ont peut-être été déplacés ou supprimés. Merci de vérifier "
 "que tous les fichiers que vous souhaitez exporter ont été inclus."
 
-#: source/app/service-providers/commands/dir-project-export.ts:135
+#: source/app/service-providers/commands/dir-project-export.ts:136
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
 msgstr "Le projet %s a été exporté avec succès. Cliquer pour l'afficher."
 
-#: source/app/service-providers/commands/dir-project-export.ts:136
+#: source/app/service-providers/commands/dir-project-export.ts:137
 msgid "Project Export"
 msgstr "Exporter le projet"
 
-#: source/app/service-providers/commands/dir-project-export.ts:160
-#: source/app/service-providers/commands/dir-project-export.ts:199
+#: source/app/service-providers/commands/dir-project-export.ts:161
+#: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting project \"%s\""
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:161
-#: source/app/service-providers/commands/dir-project-export.ts:200
+#: source/app/service-providers/commands/dir-project-export.ts:162
+#: source/app/service-providers/commands/dir-project-export.ts:201
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting using custom command %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:168
+#: source/app/service-providers/commands/dir-project-export.ts:169
 #, javascript-format
 msgid "Project export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:178
-#: source/app/service-providers/commands/dir-project-export.ts:248
-#: source/app/service-providers/commands/dir-project-export.ts:271
+#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:249
+#: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Could not export project \"%s\"."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:180
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
 msgstr ""
 
 #. Error
-#: source/app/service-providers/commands/dir-project-export.ts:246
+#: source/app/service-providers/commands/dir-project-export.ts:247
 #, javascript-format
 msgid "Export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:249
-#: source/app/service-providers/commands/dir-project-export.ts:272
+#: source/app/service-providers/commands/dir-project-export.ts:250
+#: source/app/service-providers/commands/dir-project-export.ts:273
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:256
+#: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project \"%s\" has been exported."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:257
+#: source/app/service-providers/commands/dir-project-export.ts:258
 #, javascript-format
 msgid "Project has been exported to %s."
 msgstr ""
@@ -305,7 +306,7 @@ msgstr "Conserver %s"
 
 #: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:601
+#: source/app/service-providers/config/index.ts:612
 msgid "Confirm"
 msgstr "Confirmer"
 
@@ -545,17 +546,17 @@ msgstr "L’option %s doit avoir au moins %s (caractères de longueur)."
 msgid "Option %s is required."
 msgstr "L’option %s est obligatoire."
 
-#: source/app/service-providers/config/index.ts:593
+#: source/app/service-providers/config/index.ts:604
 msgid "Changing this option requires a restart to take effect."
 msgstr "Cette option nécessite un redémarrage."
 
-#: source/app/service-providers/config/index.ts:596
+#: source/app/service-providers/config/index.ts:607
 #: source/app/service-providers/menu/menu.darwin.ts:713
 #: source/app/service-providers/menu/menu.win32.ts:689
 msgid "Restart now"
 msgstr "Redémarrer maintenant"
 
-#: source/app/service-providers/config/index.ts:597
+#: source/app/service-providers/config/index.ts:608
 msgid "Restart later"
 msgstr "Redémarrer ultérieurement"
 
@@ -584,21 +585,21 @@ msgstr ""
 "Le fichier contient des modifications non enregistrées. Voulez-vous les "
 "enregistrer ou les abandonner ?"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr "Fichier : %s"
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 msgid "File changed on disk"
 msgstr "Fichier modifié sur le disque"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s a été modifié sur le disque"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -608,32 +609,32 @@ msgstr ""
 "non enregistrées. Souhaitez-vous garer la version de l'éditeur ou charger le "
 "fichier du disque ?"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "Souhaitez-vous conserver la version actuelle ou charger le version du disque?"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "Conserver la version de l'éditeur"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "Charger la version du disque"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "Toujours recharger les fichiers du disque s'il n'y a pas de modifications "
 "non enregistrées dans l'éditeur"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "Impossible de sauvegarder le fichier"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "Impossible de sauvegarder le fichier %s: %s"
@@ -1095,45 +1096,42 @@ msgid "There was an error while checking for updates. %s: %s"
 msgstr ""
 "Une erreur s'est produite pendant la vérification des mises à jour. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:396
-#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
-msgid "Update available"
-msgstr "Une mise à jour est disponible"
-
-#: source/app/service-providers/updates/index.ts:397
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "Une mise à jour vers la version %s est disponible !"
-
-#: source/app/service-providers/updates/index.ts:398
-msgid ""
-"Please update at your earliest convenience. You can open the updater now, or "
-"update later."
+#: source/app/service-providers/updates/index.ts:399
+msgid "Zettlr: Update available"
 msgstr ""
-"Mettez à jour dès que possible. Vous pouvez ouvrir le gestionnaire de mise à "
-"jour maintenant ou plus tard."
 
 #: source/app/service-providers/updates/index.ts:400
+#, javascript-format
+msgid "An update to Zettlr version %s is available."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:401
+msgid ""
+"Please update Zettlr at your earliest convenience. You can open the updater "
+"now, or update later."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:403
 msgid "Open updater"
 msgstr "Ouvrir le gestionnaire de mise à jour"
 
-#: source/app/service-providers/updates/index.ts:401
+#: source/app/service-providers/updates/index.ts:404
 msgid "Not now"
 msgstr "Pas maintenant"
 
-#: source/app/service-providers/updates/index.ts:430
+#: source/app/service-providers/updates/index.ts:433
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr ""
 "Impossible de vérifier les mises à jour : Erreur Serveur (Code d'état : %s)"
 
-#: source/app/service-providers/updates/index.ts:433
+#: source/app/service-providers/updates/index.ts:436
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr ""
 "Impossible de vérifier les mises à jour : Erreur Client (Code d'état : %s)"
 
-#: source/app/service-providers/updates/index.ts:436
+#: source/app/service-providers/updates/index.ts:439
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1142,31 +1140,31 @@ msgstr ""
 "(Code d'état : %s)"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:440
+#: source/app/service-providers/updates/index.ts:443
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Impossible de vérifier les mises à jour. %s : %s"
 
-#: source/app/service-providers/updates/index.ts:447
+#: source/app/service-providers/updates/index.ts:450
 #, javascript-format
 msgid "Could not check for updates: %s"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:465
 msgid "Could not check for updates: Server has sent invalid data"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:540
+#: source/app/service-providers/updates/index.ts:543
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr ""
 "La fichier de somme de contrôle SHA256 semble manquant pour cette version."
 
-#: source/app/service-providers/updates/index.ts:561
+#: source/app/service-providers/updates/index.ts:564
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "Les sommes de contrôle SHA256 sont introuvables: %s"
 
-#: source/app/service-providers/updates/index.ts:665
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1174,7 +1172,7 @@ msgstr ""
 "L'intégrité de la mise à jour téléchargée n'a pu être vérifiée. Vous pouvez "
 "réessayer ou faire une mise à jour manuelle."
 
-#: source/app/service-providers/updates/index.ts:677
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1182,7 +1180,7 @@ msgstr ""
 "Le fichier téléchargé a une somme de contrôle différente de celle du "
 "serveur. Vous pouvez réessayer ou faire une mise à jour manuelle."
 
-#: source/app/service-providers/updates/index.ts:696
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1258,6 +1256,26 @@ msgstr ""
 msgid "Open project folder"
 msgstr "Ouvrir le dossier de proje"
 
+#: source/app/util/attach-app-navigation-handlers.ts:52
+msgid "Open link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:53
+#, javascript-format
+msgid "This link uses the protocol \"%s\". Do you want to open this link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:57
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open link"
+msgstr "Ouvrir le lien"
+
+#. Allow user to trust the protocol
+#: source/app/util/attach-app-navigation-handlers.ts:62
+#, javascript-format
+msgid "Always open links using \"%s\""
+msgstr ""
+
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr "Aucun surlignage"
@@ -1323,10 +1341,6 @@ msgstr "Insérer un bloc de citation"
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "Insérer un tableau"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
-msgid "Open link"
-msgstr "Ouvrir le lien"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
@@ -2467,6 +2481,10 @@ msgstr "Insérer une note de bas de page"
 #: source/tmp/win-main/App.vue.ts:452
 msgid "Pomodoro timer"
 msgstr "Chronomètre Pomodoro"
+
+#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
+msgid "Update available"
+msgstr "Une mise à jour est disponible"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:391
 msgid "Close tab"
@@ -4192,6 +4210,7 @@ msgid "Hostname"
 msgstr "Nom d'hôte"
 
 #: source/win-preferences/schema/advanced.ts:305
+#: source/win-preferences/schema/advanced.ts:322
 #: source/win-preferences/schema/autocorrect.ts:53
 #: source/win-preferences/schema/spellchecking.ts:42
 #: source/win-preferences/schema/spellchecking.ts:233
@@ -4199,10 +4218,25 @@ msgid "Filter"
 msgstr "Filtrer"
 
 #: source/win-preferences/schema/advanced.ts:310
+msgid "Allowed URI protocols"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:311
+msgid ""
+"Some links can cause your computer to perform actions such as controlling "
+"other apps. Zettlr always asks you to confirm before following untrusted "
+"links. The list below lists all previously trusted protocols."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:320
+msgid "Protocol"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:327
 msgid "Watchdog polling"
 msgstr "Décompte du chien de garde"
 
-#: source/win-preferences/schema/advanced.ts:311
+#: source/win-preferences/schema/advanced.ts:328
 msgid ""
 "In rare instances, Zettlr may be unable to check for changes to your files. "
 "In that case, you can try activating watchdog polling. Do not use this "
@@ -4213,31 +4247,31 @@ msgstr ""
 "d'activer le sondage de surveillance. Ne pas utiliser cette option sauf si "
 "nécessaire : Le sondage est très lent et riche en ressources."
 
-#: source/win-preferences/schema/advanced.ts:317
+#: source/win-preferences/schema/advanced.ts:334
 msgid "Activate watchdog polling"
 msgstr "Activer le décompte du chien de garde"
 
-#: source/win-preferences/schema/advanced.ts:322
+#: source/win-preferences/schema/advanced.ts:339
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
 "Temps d'attente avant de considérer l’écriture d’un fichier commeterminée "
 "(en ms)"
 
-#: source/win-preferences/schema/advanced.ts:329
+#: source/win-preferences/schema/advanced.ts:346
 msgid "Deleting items"
 msgstr "Supprimer les éléments"
 
-#: source/win-preferences/schema/advanced.ts:335
+#: source/win-preferences/schema/advanced.ts:352
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr ""
 "Supprimer les éléments de façon irréversible s'il est impossible de les "
 "mettre dans la corbeille"
 
-#: source/win-preferences/schema/advanced.ts:341
+#: source/win-preferences/schema/advanced.ts:358
 msgid "Debug mode"
 msgstr "Mode de diagnostic"
 
-#: source/win-preferences/schema/advanced.ts:347
+#: source/win-preferences/schema/advanced.ts:364
 msgid "Enable debug mode"
 msgstr "Activer le mode de diagnostic"
 
@@ -5080,11 +5114,9 @@ msgstr "Commande d'export personnalisée"
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
-"its first argument the file or project folder to be exported."
+"its first argument the file or project folder to be exported. If necessary, "
+"you may also have Zettlr run a command in the shell."
 msgstr ""
-"Spécifiez les commandes personnalisées pour exécuter l'exportateur avec. "
-"Chaque commande reçoit comme premier argument le dossier de fichier ou de "
-"projet à exporter."
 
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Display name"
@@ -5093,6 +5125,10 @@ msgstr "Afficher le nom"
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Command"
 msgstr "Commande"
+
+#: source/win-preferences/schema/import-export.ts:119
+msgid "Shell"
+msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:129
 msgid "Pandoc Extensions"
@@ -5481,6 +5517,25 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "Chemin vers le dossier"
+
+#, javascript-format
+#~ msgid "An update to version %s is available!"
+#~ msgstr "Une mise à jour vers la version %s est disponible !"
+
+#~ msgid ""
+#~ "Please update at your earliest convenience. You can open the updater now, "
+#~ "or update later."
+#~ msgstr ""
+#~ "Mettez à jour dès que possible. Vous pouvez ouvrir le gestionnaire de "
+#~ "mise à jour maintenant ou plus tard."
+
+#~ msgid ""
+#~ "Specify custom commands to run the exporter with. Each command receives "
+#~ "as its first argument the file or project folder to be exported."
+#~ msgstr ""
+#~ "Spécifiez les commandes personnalisées pour exécuter l'exportateur avec. "
+#~ "Chaque commande reçoit comme premier argument le dossier de fichier ou de "
+#~ "projet à exporter."
 
 #, javascript-format
 #~ msgid "Table size: %s &times; %s"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2026-11-13 18:43+0100\n"
+"POT-Creation-Date: 2026-11-24 02:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Booting %s…"
 msgstr "%s 시작 중…"
 
 #: source/app/service-providers/citeproc/index.ts:284
-#: source/app/service-providers/citeproc/index.ts:465
+#: source/app/service-providers/citeproc/index.ts:462
 msgid "The citation database could not be loaded"
 msgstr "인용 데이터베이스를 불러올 수 없습니다"
 
@@ -49,12 +49,12 @@ msgstr ""
 msgid "Database %s has been loaded. It contains %s items."
 msgstr ""
 
-#: source/app/service-providers/citeproc/index.ts:452
+#: source/app/service-providers/citeproc/index.ts:449
 msgid "Changes to the library file detected. Reloading …"
 msgstr "라이브러리 파일이 변경되었습니다. 다시 읽는 중 ..."
 
 #: source/app/service-providers/commands/dir-delete.ts:36
-#: source/app/service-providers/commands/dir-project-export.ts:95
+#: source/app/service-providers/commands/dir-project-export.ts:96
 #: source/app/service-providers/commands/file-delete.ts:37
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-close-all.ts:37
@@ -75,6 +75,7 @@ msgstr "확인"
 #: source/app/service-providers/windows/dialog/should-close-all.ts:36
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/util/attach-app-navigation-handlers.ts:56
 #: source/tmp/win-main/GlobalSearch.vue.ts:65
 #: source/tmp/win-paste-image/App.vue.ts:67
 msgid "Cancel"
@@ -103,11 +104,11 @@ msgstr "제목 없음"
 msgid "Could not create directory"
 msgstr "디렉토리를 생성할 수 없습니다"
 
-#: source/app/service-providers/commands/dir-project-export.ts:87
+#: source/app/service-providers/commands/dir-project-export.ts:88
 msgid "Cannot export project"
 msgstr "프로젝트를 내보낼 수 없음"
 
-#: source/app/service-providers/commands/dir-project-export.ts:88
+#: source/app/service-providers/commands/dir-project-export.ts:89
 msgid ""
 "There are no files selected for export. Please select files to be included "
 "in the project settings."
@@ -115,11 +116,11 @@ msgstr ""
 "내보내도록 선택된 파일이 없습니다. 프로젝트 설정에서 포함할 파일을 선택해 주"
 "세요."
 
-#: source/app/service-providers/commands/dir-project-export.ts:93
+#: source/app/service-providers/commands/dir-project-export.ts:94
 msgid "Project File Mismatch"
 msgstr "프로젝트 파일 불일치"
 
-#: source/app/service-providers/commands/dir-project-export.ts:94
+#: source/app/service-providers/commands/dir-project-export.ts:95
 msgid ""
 "One or more files specified in the project settings have not been found. "
 "They may have moved or been deleted. Please verify that all files that you "
@@ -128,63 +129,63 @@ msgstr ""
 "프로젝트 설정에 지정된 파일을 하나 이상 찾을 수 없습니다. 파일이 이동되었거"
 "나 삭제되었을 수 있습니다. 내보낼 모든 파일이 포함되어 있는지 확인해 주세요."
 
-#: source/app/service-providers/commands/dir-project-export.ts:135
+#: source/app/service-providers/commands/dir-project-export.ts:136
 #, javascript-format
 msgid "Project \"%s\" successfully exported. Click to show."
 msgstr "프로젝트 \"%s\"을(를) 성공적으로 내보냈습니다. 클릭하여 표시합니다."
 
-#: source/app/service-providers/commands/dir-project-export.ts:136
+#: source/app/service-providers/commands/dir-project-export.ts:137
 msgid "Project Export"
 msgstr "프로젝트 내보내기"
 
-#: source/app/service-providers/commands/dir-project-export.ts:160
-#: source/app/service-providers/commands/dir-project-export.ts:199
+#: source/app/service-providers/commands/dir-project-export.ts:161
+#: source/app/service-providers/commands/dir-project-export.ts:200
 #, javascript-format
 msgid "Exporting project \"%s\""
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:161
-#: source/app/service-providers/commands/dir-project-export.ts:200
+#: source/app/service-providers/commands/dir-project-export.ts:162
+#: source/app/service-providers/commands/dir-project-export.ts:201
 #: source/app/service-providers/commands/export.ts:67
 #, javascript-format
 msgid "Exporting using custom command %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:168
+#: source/app/service-providers/commands/dir-project-export.ts:169
 #, javascript-format
 msgid "Project export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:178
-#: source/app/service-providers/commands/dir-project-export.ts:248
-#: source/app/service-providers/commands/dir-project-export.ts:271
+#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:249
+#: source/app/service-providers/commands/dir-project-export.ts:272
 #, javascript-format
 msgid "Could not export project \"%s\"."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:179
+#: source/app/service-providers/commands/dir-project-export.ts:180
 #, javascript-format
 msgid "Export with command %s was unsuccessful: %s."
 msgstr ""
 
 #. Error
-#: source/app/service-providers/commands/dir-project-export.ts:246
+#: source/app/service-providers/commands/dir-project-export.ts:247
 #, javascript-format
 msgid "Export failed: %s"
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:249
-#: source/app/service-providers/commands/dir-project-export.ts:272
+#: source/app/service-providers/commands/dir-project-export.ts:250
+#: source/app/service-providers/commands/dir-project-export.ts:273
 #, javascript-format
 msgid "Export with profile %s was unsuccessful: %s."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:256
+#: source/app/service-providers/commands/dir-project-export.ts:257
 #, javascript-format
 msgid "Project \"%s\" has been exported."
 msgstr ""
 
-#: source/app/service-providers/commands/dir-project-export.ts:257
+#: source/app/service-providers/commands/dir-project-export.ts:258
 #, javascript-format
 msgid "Project has been exported to %s."
 msgstr ""
@@ -305,7 +306,7 @@ msgstr "%s 유지"
 
 #: source/app/service-providers/commands/file-rename.ts:159
 #: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/config/index.ts:601
+#: source/app/service-providers/config/index.ts:612
 msgid "Confirm"
 msgstr "확인"
 
@@ -543,17 +544,17 @@ msgstr "%s 옵션은 %s (문자 길이) 이상이어야 합니다."
 msgid "Option %s is required."
 msgstr "%s 옵션이 필요합니다."
 
-#: source/app/service-providers/config/index.ts:593
+#: source/app/service-providers/config/index.ts:604
 msgid "Changing this option requires a restart to take effect."
 msgstr "이 옵션을 적용하려면 다시 시작해야 합니다."
 
-#: source/app/service-providers/config/index.ts:596
+#: source/app/service-providers/config/index.ts:607
 #: source/app/service-providers/menu/menu.darwin.ts:713
 #: source/app/service-providers/menu/menu.win32.ts:689
 msgid "Restart now"
 msgstr "지금 다시 시작"
 
-#: source/app/service-providers/config/index.ts:597
+#: source/app/service-providers/config/index.ts:608
 msgid "Restart later"
 msgstr "나중에 다시 시작"
 
@@ -580,21 +581,21 @@ msgstr "저장하지 않은 변경 사항"
 msgid "There are unsaved changes. Do you want to save or discard them?"
 msgstr "저장하지 않은 변경 사항이 있습니다. 저장하거나 버리시겠습니까?"
 
-#: source/app/service-providers/documents/index.ts:948
+#: source/app/service-providers/documents/index.ts:945
 #, javascript-format
 msgid "File: %s"
 msgstr "파일: %s"
 
-#: source/app/service-providers/documents/index.ts:1111
+#: source/app/service-providers/documents/index.ts:1108
 msgid "File changed on disk"
 msgstr "디스크에서 파일이 변경됨"
 
-#: source/app/service-providers/documents/index.ts:1112
+#: source/app/service-providers/documents/index.ts:1109
 #, javascript-format
 msgid "%s changed on disk"
 msgstr "%s이(가) 디스크에서 변경됨"
 
-#: source/app/service-providers/documents/index.ts:1114
+#: source/app/service-providers/documents/index.ts:1111
 #, javascript-format
 msgid ""
 "%s has changed on disk, but the editor contains unsaved changes. Do you want "
@@ -604,31 +605,31 @@ msgstr ""
 "다. 현재 편집기 내용을 유지하시겠습니까, 아니면 디스크의 파일을 불러오시겠습"
 "니까?"
 
-#: source/app/service-providers/documents/index.ts:1115
+#: source/app/service-providers/documents/index.ts:1112
 msgid ""
 "Do you want to keep the current editor contents or load the file from disk?"
 msgstr ""
 "현재 편집기 내용을 유지하시겠습니까, 아니면 디스크의 파일을 불러오시겠습니까?"
 
-#: source/app/service-providers/documents/index.ts:1118
+#: source/app/service-providers/documents/index.ts:1115
 msgid "Keep editor contents"
 msgstr "편집기 내용 유지"
 
-#: source/app/service-providers/documents/index.ts:1119
+#: source/app/service-providers/documents/index.ts:1116
 msgid "Load changes from disk"
 msgstr "디스크의 변경 사항 불러오기"
 
-#: source/app/service-providers/documents/index.ts:1122
+#: source/app/service-providers/documents/index.ts:1119
 msgid ""
 "Always load changes from disk if there are no unsaved changes in the editor"
 msgstr ""
 "편집기에 저장하지 않은 변경 사항이 없으면 항상 디스크의 변경 사항 불러오기"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 msgid "Could not save file"
 msgstr "파일을 저장할 수 없음"
 
-#: source/app/service-providers/documents/index.ts:1592
+#: source/app/service-providers/documents/index.ts:1589
 #, javascript-format
 msgid "Could not save file %s: %s"
 msgstr "파일 %s을(를) 저장할 수 없습니다: %s"
@@ -1088,43 +1089,40 @@ msgstr "업데이트를 확인할 수 없음"
 msgid "There was an error while checking for updates. %s: %s"
 msgstr "업데이트를 확인하는 동안 오류가 발생했습니다. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:396
-#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
-msgid "Update available"
-msgstr "업데이트 사용 가능"
-
-#: source/app/service-providers/updates/index.ts:397
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "버전 %s 업데이트를 사용할 수 있습니다!"
-
-#: source/app/service-providers/updates/index.ts:398
-msgid ""
-"Please update at your earliest convenience. You can open the updater now, or "
-"update later."
+#: source/app/service-providers/updates/index.ts:399
+msgid "Zettlr: Update available"
 msgstr ""
-"가능한 한 빨리 업데이트해 주세요. 지금 업데이터를 열거나 나중에 업데이트할 "
-"수 있습니다."
 
 #: source/app/service-providers/updates/index.ts:400
+#, javascript-format
+msgid "An update to Zettlr version %s is available."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:401
+msgid ""
+"Please update Zettlr at your earliest convenience. You can open the updater "
+"now, or update later."
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:403
 msgid "Open updater"
 msgstr "업데이터 열기"
 
-#: source/app/service-providers/updates/index.ts:401
+#: source/app/service-providers/updates/index.ts:404
 msgid "Not now"
 msgstr "나중에"
 
-#: source/app/service-providers/updates/index.ts:430
+#: source/app/service-providers/updates/index.ts:433
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr "업데이트를 확인할 수 없습니다: 서버 오류 (상태 코드 : %s)"
 
-#: source/app/service-providers/updates/index.ts:433
+#: source/app/service-providers/updates/index.ts:436
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr "업데이트를 확인할 수 없습니다: 클라이언트 오류 (상태 코드 : %s)"
 
-#: source/app/service-providers/updates/index.ts:436
+#: source/app/service-providers/updates/index.ts:439
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -1133,30 +1131,30 @@ msgstr ""
 "%s)"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:440
+#: source/app/service-providers/updates/index.ts:443
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "업데이트를 확인할 수 없습니다. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:447
+#: source/app/service-providers/updates/index.ts:450
 #, javascript-format
 msgid "Could not check for updates: %s"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:462
+#: source/app/service-providers/updates/index.ts:465
 msgid "Could not check for updates: Server has sent invalid data"
 msgstr ""
 
-#: source/app/service-providers/updates/index.ts:540
+#: source/app/service-providers/updates/index.ts:543
 msgid "The SHA256 checksums file seems to be missing for this release."
 msgstr "이 릴리스의 SHA256 체크섬 파일이 없는 것 같습니다."
 
-#: source/app/service-providers/updates/index.ts:561
+#: source/app/service-providers/updates/index.ts:564
 #, javascript-format
 msgid "Cannot retrieve SHA256 checksums: %s"
 msgstr "SHA256 체크섬을 가져올 수 없습니다: %s"
 
-#: source/app/service-providers/updates/index.ts:665
+#: source/app/service-providers/updates/index.ts:668
 msgid ""
 "Could not verify the integrity of the downloaded update. Please retry or "
 "update manually."
@@ -1164,7 +1162,7 @@ msgstr ""
 "다운로드한 업데이트의 무결성을 확인할 수 없습니다. 다시 시도하거나 수동으로 "
 "업데이트해 주세요."
 
-#: source/app/service-providers/updates/index.ts:677
+#: source/app/service-providers/updates/index.ts:680
 msgid ""
 "The downloaded file has a different checksum than the server reported. "
 "Please retry or update manually."
@@ -1172,7 +1170,7 @@ msgstr ""
 "다운로드한 파일의 체크섬이 서버에서 보고한 값과 다릅니다. 다시 시도하거나 수"
 "동으로 업데이트해 주세요."
 
-#: source/app/service-providers/updates/index.ts:696
+#: source/app/service-providers/updates/index.ts:699
 #, javascript-format
 msgid "Could not start update. Please retry or update manually. Error was: %s"
 msgstr ""
@@ -1244,6 +1242,26 @@ msgstr "현재 파일의 외부 수정을 항상 반영"
 msgid "Open project folder"
 msgstr "프로젝트 폴더 열기"
 
+#: source/app/util/attach-app-navigation-handlers.ts:52
+msgid "Open link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:53
+#, javascript-format
+msgid "This link uses the protocol \"%s\". Do you want to open this link?"
+msgstr ""
+
+#: source/app/util/attach-app-navigation-handlers.ts:57
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
+msgid "Open link"
+msgstr "링크 열기"
+
+#. Allow user to trust the protocol
+#: source/app/util/attach-app-navigation-handlers.ts:62
+#, javascript-format
+msgid "Always open links using \"%s\""
+msgstr ""
+
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
 msgstr "강조 없음"
@@ -1309,10 +1327,6 @@ msgstr "인용구 삽입"
 #: source/tmp/win-main/App.vue.ts:423
 msgid "Insert table"
 msgstr "표 삽입"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:105
-msgid "Open link"
-msgstr "링크 열기"
 
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:112
 msgid "Copy email address"
@@ -2433,6 +2447,10 @@ msgstr "각주 삽입"
 #: source/tmp/win-main/App.vue.ts:452
 msgid "Pomodoro timer"
 msgstr "포모도로 타이머"
+
+#: source/tmp/win-main/App.vue.ts:478 source/tmp/win-main/App.vue.ts:480
+msgid "Update available"
+msgstr "업데이트 사용 가능"
 
 #: source/tmp/win-main/DocumentTabs.vue.ts:391
 msgid "Close tab"
@@ -4045,6 +4063,7 @@ msgid "Hostname"
 msgstr "호스트 이름"
 
 #: source/win-preferences/schema/advanced.ts:305
+#: source/win-preferences/schema/advanced.ts:322
 #: source/win-preferences/schema/autocorrect.ts:53
 #: source/win-preferences/schema/spellchecking.ts:42
 #: source/win-preferences/schema/spellchecking.ts:233
@@ -4052,10 +4071,25 @@ msgid "Filter"
 msgstr "필터"
 
 #: source/win-preferences/schema/advanced.ts:310
+msgid "Allowed URI protocols"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:311
+msgid ""
+"Some links can cause your computer to perform actions such as controlling "
+"other apps. Zettlr always asks you to confirm before following untrusted "
+"links. The list below lists all previously trusted protocols."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:320
+msgid "Protocol"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:327
 msgid "Watchdog polling"
 msgstr "Watchdog 폴링"
 
-#: source/win-preferences/schema/advanced.ts:311
+#: source/win-preferences/schema/advanced.ts:328
 msgid ""
 "In rare instances, Zettlr may be unable to check for changes to your files. "
 "In that case, you can try activating watchdog polling. Do not use this "
@@ -4065,27 +4099,27 @@ msgstr ""
 "폴링을 활성화해 보세요. 꼭 필요한 경우가 아니면 이 옵션을 사용하지 마세요. 폴"
 "링은 매우 느리고 리소스를 많이 사용합니다."
 
-#: source/win-preferences/schema/advanced.ts:317
+#: source/win-preferences/schema/advanced.ts:334
 msgid "Activate watchdog polling"
 msgstr "watchdog 폴링 활성화"
 
-#: source/win-preferences/schema/advanced.ts:322
+#: source/win-preferences/schema/advanced.ts:339
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr "파일 쓰기가 완료된 것으로 간주하기 전에 대기할 시간 (밀리초)"
 
-#: source/win-preferences/schema/advanced.ts:329
+#: source/win-preferences/schema/advanced.ts:346
 msgid "Deleting items"
 msgstr "항목 삭제"
 
-#: source/win-preferences/schema/advanced.ts:335
+#: source/win-preferences/schema/advanced.ts:352
 msgid "Delete items irreversibly if moving them to trash fails"
 msgstr "휴지통으로 이동하지 못하면 항목을 영구 삭제"
 
-#: source/win-preferences/schema/advanced.ts:341
+#: source/win-preferences/schema/advanced.ts:358
 msgid "Debug mode"
 msgstr "디버그 모드"
 
-#: source/win-preferences/schema/advanced.ts:347
+#: source/win-preferences/schema/advanced.ts:364
 msgid "Enable debug mode"
 msgstr "디버그 모드 활성화"
 
@@ -4882,10 +4916,9 @@ msgstr "사용자 지정 내보내기 명령"
 #: source/win-preferences/schema/import-export.ts:111
 msgid ""
 "Specify custom commands to run the exporter with. Each command receives as "
-"its first argument the file or project folder to be exported."
+"its first argument the file or project folder to be exported. If necessary, "
+"you may also have Zettlr run a command in the shell."
 msgstr ""
-"내보내기에 사용할 사용자 지정 명령을 지정합니다. 각 명령은 내보낼 파일 또는 "
-"프로젝트 폴더를 첫 번째 인수로 받습니다."
 
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Display name"
@@ -4894,6 +4927,10 @@ msgstr "표시 이름"
 #: source/win-preferences/schema/import-export.ts:119
 msgid "Command"
 msgstr "명령"
+
+#: source/win-preferences/schema/import-export.ts:119
+msgid "Shell"
+msgstr ""
 
 #: source/win-preferences/schema/import-export.ts:129
 msgid "Pandoc Extensions"
@@ -5250,6 +5287,24 @@ msgstr ""
 #: source/win-preferences/schema/zettelkasten.ts:98
 msgid "Path to folder"
 msgstr "폴더 경로"
+
+#, javascript-format
+#~ msgid "An update to version %s is available!"
+#~ msgstr "버전 %s 업데이트를 사용할 수 있습니다!"
+
+#~ msgid ""
+#~ "Please update at your earliest convenience. You can open the updater now, "
+#~ "or update later."
+#~ msgstr ""
+#~ "가능한 한 빨리 업데이트해 주세요. 지금 업데이터를 열거나 나중에 업데이트"
+#~ "할 수 있습니다."
+
+#~ msgid ""
+#~ "Specify custom commands to run the exporter with. Each command receives "
+#~ "as its first argument the file or project folder to be exported."
+#~ msgstr ""
+#~ "내보내기에 사용할 사용자 지정 명령을 지정합니다. 각 명령은 내보낼 파일 또"
+#~ "는 프로젝트 폴더를 첫 번째 인수로 받습니다."
 
 #, javascript-format
 #~ msgid "Table size: %s &times; %s"
