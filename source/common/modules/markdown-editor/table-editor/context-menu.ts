@@ -9,7 +9,7 @@ import { addRowAfter, addRowBefore, clearRow, deleteRow, swapNextRow, swapPrevRo
 import { addColAfter, addColBefore, clearCol, deleteCol, swapNextCol, swapPrevCol } from './commands/columns'
 import { clearTable, deleteTable, setAlignment } from './commands/tables'
 import { type EditorShortcutName, getCustomShortcut } from '../keymaps/shortcuts'
-import { selectTablePart, selectedTableMarkdown, copyTableSelection } from './selection'
+import { selectTablePart, selectedTableMarkdown, copyTableSelection, pasteTableFromClipboard } from './selection'
 import { configField } from '../util/configuration'
 import { cmShortcutToElectron } from 'source/common/util/shortcuts'
 
@@ -79,17 +79,23 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
     },
     {
       label: trans('Paste'),
-      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+V',
       type: 'normal',
-      action () { paste(subviewOrView) }
+      action () {
+        pasteTableFromClipboard(mainView, cellFrom, () => {
+          if (!cellSelection) { paste(subviewOrView) }
+        })
+      }
     },
     {
       label: trans('Paste without style'),
-      enabled: !cellSelection,
       accelerator: 'CmdOrCtrl+Shift+V',
       type: 'normal',
-      action () { pasteAsPlain(subviewOrView) }
+      action () {
+        pasteTableFromClipboard(mainView, cellFrom, () => {
+          if (!cellSelection) { pasteAsPlain(subviewOrView) }
+        })
+      }
     },
     {
       type: 'separator'

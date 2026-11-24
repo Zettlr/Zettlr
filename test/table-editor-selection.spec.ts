@@ -19,7 +19,8 @@ import { parseTableNode } from 'source/common/modules/markdown-utils/markdown-as
 import markdownParser from 'source/common/modules/markdown-editor/parser/markdown-parser'
 import {
   tableSelectionField, setTableSelection, selectTablePart, selectedTableMarkdown,
-  cellIsSelected, clearSelectedCells, copyTableSelection, extendTableSelection, tableSelection
+  cellIsSelected, clearSelectedCells, copyTableSelection, pasteTableSelection,
+  pasteTableFromClipboard, extendTableSelection, tableSelection
 } from 'source/common/modules/markdown-editor/table-editor/selection'
 
 import { updateTableControls } from 'source/common/modules/markdown-editor/table-editor/selection-controls'
@@ -425,6 +426,92 @@ describe('Table cell selections', function () {
           }
         }
       }
+    }
+  })
+
+  it('pastes a copied row from one table into another table and supports undo', function () {
+    const secondTable = '| D | E | F |\n| --- | --- | --- |\n| seven | eight | nine |\n| ten | eleven | twelve |'
+    const doc = `${TABLE}\n\n${secondTable}`
+    const view = editor(doc, doc.indexOf('two'))
+    selectTablePart(view, 'row')
+    const copied = selectedTableMarkdown(view.state)!
+    selectTablePart(view, 'row', doc.indexOf('ten'))
+    strictEqual(pasteTableSelection(view, copied), true)
+    strictEqual(view.state.doc.toString(), [
+      TABLE,
+      '',
+      '| D | E | F |',
+      '| --- | --- | --- |',
+      '| seven | eight | nine |',
+      '| **one** | two | three |'
+    ].join('\n'))
+    strictEqual(undo(view), true)
+    strictEqual(view.state.doc.toString(), doc)
+  })
+
+  it('pastes a copied column from one table into another table and supports undo', function () {
+    const secondTable = '| D | E | F |\n| --- | --- | --- |\n| seven | eight | nine |\n| ten | eleven | twelve |'
+    const doc = `${TABLE}\n\n${secondTable}`
+    const view = editor(doc, doc.indexOf('two'))
+    selectTablePart(view, 'column')
+    const copied = selectedTableMarkdown(view.state)!
+    selectTablePart(view, 'column', doc.indexOf('F'))
+    strictEqual(pasteTableSelection(view, copied), true)
+    strictEqual(view.state.doc.toString(), [
+      TABLE,
+      '',
+      '| D | E | B |',
+      '| --- | --- | --- |',
+      '| seven | eight | two |',
+      '| ten | eleven | five |'
+    ].join('\n'))
+    strictEqual(undo(view), true)
+    strictEqual(view.state.doc.toString(), doc)
+  })
+
+  it('clips pasted cells to the target table bounds and ignores non-table text', function () {
+    const view = editor()
+    rectangle(view, 1, 1, 2, 2)
+    const copied = selectedTableMarkdown(view.state)!
+    strictEqual(pasteTableSelection(view, 'plain text'), false)
+    strictEqual(pasteTableSelection(view, copied, TABLE.indexOf('six')), true)
+    deepStrictEqual(view.state.doc.toString().split('\n'), [
+      '| A | B | C |',
+      '| :--- | ---: | :---: |',
+      '| **one** | two | three |',
+      '| four | five | two |'
+    ])
+    deepStrictEqual(view.state.field(tableSelectionField), {
+      tableFrom: 0,
+      anchor: { row: 2, col: 2 },
+      head: { row: 2, col: 2 }
+    })
+  })
+
+  it('reads from the clipboard and falls back when clipboard text is not a table', async function () {
+    const view = editor()
+    selectTablePart(view, 'column')
+    const copied = selectedTableMarkdown(view.state)!
+    selectTablePart(view, 'column', TABLE.indexOf('C'))
+    const read = navigator.clipboard.readText
+    let fellBack = false
+    try {
+      navigator.clipboard.readText = async () => copied
+      pasteTableFromClipboard(view, undefined, () => { fellBack = true })
+      await Promise.resolve()
+      strictEqual(fellBack, false)
+      deepStrictEqual(view.state.doc.toString().split('\n'), [
+        '| A | B | B |',
+        '| :--- | ---: | :---: |',
+        '| **one** | two | two |',
+        '| four | five | five |'
+      ])
+      navigator.clipboard.readText = async () => 'plain text'
+      pasteTableFromClipboard(view, undefined, () => { fellBack = true })
+      await Promise.resolve()
+      strictEqual(fellBack, true)
+    } finally {
+      navigator.clipboard.readText = read
     }
   })
 

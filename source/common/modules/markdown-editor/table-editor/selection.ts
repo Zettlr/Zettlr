@@ -14,12 +14,13 @@
  * Rectangular table selections are separate from the text selection: selecting
  * a column must not select the intervening cells or the pipe delimiters.
  */
-import { StateEffect, StateField, Prec, EditorSelection, type EditorState } from '@codemirror/state'
+import { StateEffect, StateField, Prec, EditorSelection, EditorState } from '@codemirror/state'
 import { ensureSyntaxTree } from '@codemirror/language'
 import type { EditorView } from '@codemirror/view'
 import { ViewPlugin, keymap } from '@codemirror/view'
 import type { Table } from '../../markdown-utils/markdown-ast'
 import { parseTableNode } from '../../markdown-utils/markdown-ast/parse-table-node'
+import markdownParser from '../parser/markdown-parser'
 import { getCoordinatesForRange } from './commands/util'
 
 export interface CellPosition { row: number, col: number }
@@ -155,6 +156,85 @@ export function copyTableSelection (view: EditorView, cut = false): boolean {
   return true
 }
 
+function parseClipboardTable (text: string, keepHeaderCount?: number): string[][]|undefined {
+  const trimmed = text.trim()
+  if (!trimmed.includes('\n') || !trimmed.includes('|')) { return undefined }
+  const state = EditorState.create({ doc: trimmed, extensions: [markdownParser()] })
+  const node = ensureSyntaxTree(state, state.doc.length, 500)?.topNode.getChild('Table')
+  if (node === null || node === undefined || node.from !== 0 || node.to !== trimmed.length) {
+    return undefined
+  }
+  const table = parseTableNode(node, trimmed)
+  if (table.type !== 'Table' || table.tableType !== 'pipe' || table.rows.length === 0) {
+    return undefined
+  }
+  const rows = table.rows.map(row => row.cells.map(cell => state.sliceDoc(cell.from, cell.to)))
+  // Strip the synthetic blank header added by selectedTableMarkdown for body-only selections.
+  if (rows.length > 1 && rows[0].every(cell => cell.trim() === '') && rows.length !== keepHeaderCount) {
+    return rows.slice(1)
+  }
+  return rows
+}
+
+/** Paste a copied Markdown table rectangle into the target table starting at the active cell or selection. */
+export function pasteTableSelection (view: EditorView, text: string, cellFrom?: number): boolean {
+  const selection = view.state.field(tableSelectionField, false)
+  const targetFrom = cellFrom ?? selection?.tableFrom ?? view.state.selection.main.head
+  const table = tableAt(view.state, targetFrom)
+  if (table === undefined) { return false }
+  const inSelectedTable = selection != null &&
+    selection.tableFrom === table.from &&
+    (cellFrom === undefined || cellFrom === view.state.selection.main.head)
+  const start = inSelectedTable
+    ? {
+      row: Math.min(selection.anchor.row, selection.head.row),
+      col: Math.min(selection.anchor.col, selection.head.col)
+    }
+    : getCoordinatesForRange(EditorSelection.cursor(cellFrom ?? view.state.selection.main.head), table)
+  if (start === undefined) { return false }
+  const selectedRows = inSelectedTable
+    ? Math.abs(selection.head.row - selection.anchor.row) + 1
+    : 1
+  const pasted = parseClipboardTable(text, start.row === 0 ? selectedRows : undefined)
+  if (pasted === undefined || pasted.length === 0) { return false }
+  const changes: Array<{ from: number, to: number, insert: string }> = []
+  let endRow = start.row
+  let endCol = start.col
+  for (let r = 0; r < pasted.length && start.row + r < table.rows.length; r++) {
+    const targetRow = table.rows[start.row + r]
+    for (let c = 0; c < pasted[r].length && start.col + c < targetRow.cells.length; c++) {
+      const cell = targetRow.cells[start.col + c]
+      changes.push({ from: cell.from, to: cell.to, insert: pasted[r][c] })
+      endRow = Math.max(endRow, start.row + r)
+      endCol = Math.max(endCol, start.col + c)
+    }
+  }
+  if (changes.length === 0) { return false }
+  view.dispatch({
+    changes,
+    selection: { anchor: table.rows[start.row].cells[start.col].from },
+    effects: setTableSelection.of({
+      tableFrom: table.from,
+      anchor: start,
+      head: { row: endRow, col: endCol }
+    }),
+    userEvent: 'input.paste'
+  })
+  view.focus()
+  return true
+}
+
+export function pasteTableFromClipboard (view: EditorView, cellFrom?: number, onFallback?: () => void): boolean {
+  const state = view.state
+  navigator.clipboard.readText().then(text => {
+    if (view.state !== state) { return }
+    if (!pasteTableSelection(view, text, cellFrom)) {
+      onFallback?.()
+    }
+  }).catch(err => console.error(err))
+  return true
+}
+
 const mouseSelection = ViewPlugin.fromClass(class {
   private origin: { table: HTMLTableElement, selection: TableSelection }|undefined
   private dragging = false
@@ -163,6 +243,7 @@ const mouseSelection = ViewPlugin.fromClass(class {
     view.dom.addEventListener('mousedown', this.down, true)
     view.dom.addEventListener('copy', this.copy, true)
     view.dom.addEventListener('cut', this.cut, true)
+    view.dom.addEventListener('paste', this.paste, true)
     view.dom.ownerDocument.addEventListener('mousemove', this.move)
     view.dom.ownerDocument.addEventListener('mouseup', this.up)
   }
@@ -232,10 +313,19 @@ const mouseSelection = ViewPlugin.fromClass(class {
     if (selected && event.defaultPrevented) { clearSelectedCells(this.view) }
   }
 
+  private readonly paste = (event: ClipboardEvent): void => {
+    const text = event.clipboardData?.getData('text/plain')
+    if (text !== undefined && text !== '' && pasteTableSelection(this.view, text)) {
+      event.preventDefault()
+      event.stopImmediatePropagation()
+    }
+  }
+
   destroy (): void {
     this.view.dom.removeEventListener('mousedown', this.down, true)
     this.view.dom.removeEventListener('copy', this.copy, true)
     this.view.dom.removeEventListener('cut', this.cut, true)
+    this.view.dom.removeEventListener('paste', this.paste, true)
     this.view.dom.ownerDocument.removeEventListener('mousemove', this.move)
     this.view.dom.ownerDocument.removeEventListener('mouseup', this.up)
   }
@@ -251,6 +341,7 @@ export const tableSelection = [
     { key: 'Shift-ArrowRight', run: view => extendTableSelection(view, 0, 1) },
     { key: 'Mod-c', run: view => copyTableSelection(view) },
     { key: 'Mod-x', run: view => copyTableSelection(view, true) },
+    { key: 'Mod-v', run: view => view.state.field(tableSelectionField) !== null && pasteTableFromClipboard(view) },
     { key: 'Backspace', run: clearSelectedCells },
     { key: 'Delete', run: clearSelectedCells },
     { key: 'Escape', run: view => {
