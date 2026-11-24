@@ -11,7 +11,6 @@
  * END HEADER
  */
 
-import { v4 as uuid4 } from 'uuid'
 import { DateTime } from 'luxon'
 
 /**
@@ -41,5 +40,5 @@ export default function replaceStringVariables (text: string, now?: DateTime): s
     .replace(/%s/g, now.toFormat('ss'))  // 2-digit second
     .replace(/%X/g, now.toFormat('X'))   // UNIX timestamp (seconds)
     .replace(/%o/g, now.toFormat('ooo')) // 3-digit ordinal day of year
-    .replace(/%uuid4/g, uuid4())
+    .replace(/%uuid4/g, crypto.randomUUID())
 }

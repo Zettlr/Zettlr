@@ -34,7 +34,7 @@ export type MenuShortcutName = 'previous-tab'|'next-tab'|'filter-files'
 export const defaultKeybindings: Record<MenuShortcutName, DefaultShortcut> = {
   'previous-tab': { key: 'Ctrl-Shift-Tab' },
   'next-tab': { key: 'Ctrl-Tab' },
-  'filter-files': { key: 'Mod-Shift-t' }
+  'filter-files': { key: 'Ctrl-Shift-T', mac: 'Mod-Shift-t' }
 }
 
 /**

@@ -233,14 +233,14 @@ export default class DictionaryProvider extends ProviderContract {
 
       try {
         aff = await fs.readFile(dictMeta.aff)
-      } catch (err: any) {
+      } catch (err: unknown) {
         this._logger.error(`[Dictionary Provider] Could not load affix file for ${dict}`, err)
         continue
       }
 
       try {
         dic = await fs.readFile(dictMeta.dic)
-      } catch (err: any) {
+      } catch (err: unknown) {
         this._logger.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, err)
         continue
       }

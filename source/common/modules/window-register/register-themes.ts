@@ -16,17 +16,10 @@
 // Import the main.css file which imports CSS for KaTeX, Clarity, Tippy.JS, and
 // the geometry for the application. This will be added to the HTML by Webpack
 // automatically
+import type { SystemColor } from 'source/app/service-providers/appearance/get-system-colors'
 import './assets/main.css'
 
 const ipcRenderer = window.ipc
-
-/**
- * Defines a SystemColour interface as is being returned by the appearance provider
- */
-interface SystemColour {
-  accent: string
-  contrast: string
-}
 
 /**
  * Listens for theming changes (main theme + custom CSS) and handles dark mode
@@ -44,6 +37,13 @@ export default function registerThemes (): void {
   ipcRenderer.on('css-provider', (evt, { command, payload }: { command: 'get-custom-css-path', payload: string }) => {
     if (command === 'get-custom-css-path') {
       setCustomCss(payload)
+    }
+  })
+
+  // Listen to accent color changes
+  ipcRenderer.on('appearance-provider', (evt, { command }) => {
+    if (command === 'accent-color-changed') {
+      setSystemCss()
     }
   })
 
@@ -107,7 +107,7 @@ function setSystemCss (): void {
   }
 
   ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
-    .then((accentColor: SystemColour) => {
+    .then((accentColor: SystemColor) => {
       const style = document.createElement('style')
       style.setAttribute('id', 'system-css')
 

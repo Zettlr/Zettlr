@@ -27,7 +27,8 @@ const emailRe = /^[a-z0-9-.]+@[a-z0-9-.]+\.[a-z0-9-.]{2,}$/i
  * Returns a valid URI, using the available context information
  *
  * @param   {string}  uri   The URI to check
- * @param   {string}  base  The base which can be used to make uri absolute
+ * @param   {string}  base  The base directory which is used to turn relative
+ *                          URIs into absolute URIs.
  *
  * @return  {string}        The absolute, parsed string.
  */

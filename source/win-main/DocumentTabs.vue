@@ -900,10 +900,9 @@ function handleExternalDragleave (event: DragEvent): void {
 }
 </script>
 
-<style lang="less">
-@tabbar-height: 30px;
-
+<style lang="css" scoped>
 body div.document-tablist-wrapper {
+  --tabbar-height: 30px;
   position: relative;
 
   &.scrollers-active { padding: 0 20px; }
@@ -940,8 +939,8 @@ body div.tab-container {
     right: 0;
   }
 
-  // In case of an overflow, hide the scrollbar so that scrolling left/right
-  // remains possible, but no thicc scrollbar in the way!
+  /* In case of an overflow, hide the scrollbar so that scrolling left/right
+     remains possible, but no thicc scrollbar in the way! */
   &::-webkit-scrollbar { display: none; }
   scroll-behavior: smooth;
 
@@ -950,8 +949,8 @@ body div.tab-container {
     position: relative;
     min-width: fit-content;
     max-width: 150px;
-    line-height: @tabbar-height;
-    padding: 0 10px; // Give the filenames a little more spacing
+    line-height: var(--tabbar-height);
+    padding: 0 10px; /* Give the filenames a little more spacing */
 
     &:hover { background-color: rgb(200, 200, 210); }
 
@@ -969,7 +968,7 @@ body div.tab-container {
       opacity: 0.8;
     }
 
-    // Mark modification status classically
+    /* Mark modification status classically */
     &.modified .filename::before {
       content: '* '
     }
@@ -978,10 +977,10 @@ body div.tab-container {
       font-size: 14px;
       margin-left: 5px;
       width: 10px;
-      height: @tabbar-height;
-      line-height: @tabbar-height;
+      height: var(--tabbar-height);
+      line-height: var(--tabbar-height);
       text-align: center;
-      border-radius: @tabbar-height;
+      border-radius: var(--tabbar-height);
       display: inline-block;
     }
 
@@ -1026,8 +1025,8 @@ body.darwin {
       &.pinned .filename { margin: 0; }
 
       &:not(.active) {
-        // As a reminder, from Mozilla docs:
-        // inset | offset-x | offset-y | blur-radius | spread-radius | color
+        /* As a reminder, from Mozilla docs:
+        inset | offset-x | offset-y | blur-radius | spread-radius | color */
         box-shadow: inset 0px 5px 4px -5px rgba(0, 0, 0, .4);
       }
 
@@ -1051,10 +1050,10 @@ body.darwin {
         border-radius: 2px;
         position: absolute;
         right: 0px;
-        width: (@tabbar-height / 3 * 1.9);
-        height: (@tabbar-height / 3 * 1.9);
-        margin: (@tabbar-height / 3 * 0.55);
-        line-height: (@tabbar-height / 3 * 1.9);
+        width: calc(var(--tabbar-height) / 3 * 1.9);
+        height: calc(var(--tabbar-height) / 3 * 1.9);
+        margin: calc(var(--tabbar-height) / 3 * 0.55);
+        line-height: calc(var(--tabbar-height) / 3 * 1.9);
         top: 0;
         left: 0;
 
@@ -1166,11 +1165,11 @@ body.linux {
 
     div[role="tab"] {
       font-size: 12px;
-      background-color: rgb(235, 235, 235); // Almost same colour as toolbar
+      background-color: rgb(235, 235, 235); /* Almost same colour as toolbar */
       &:hover { background-color: rgb(200, 200, 200); }
 
       &:not(:last-child) { border-right: 1px solid rgb(200, 200, 200); }
-      &.active { border-bottom: 3px solid var(--system-accent-color, --c-primary); } // TODO: Which colour?
+      &.active { border-bottom: 3px solid var(--system-accent-color, --c-primary); }
       .close { font-size: 18px; }
     }
   }

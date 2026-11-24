@@ -96,7 +96,7 @@ export default class PersistentDataContainer<T = unknown> {
       await fs.access(this._filePath, FSConstants.R_OK | FSConstants.W_OK)
       const contents = await fs.readFile(this._filePath, 'utf-8')
       return contents.trim() !== ''
-    } catch (err: any) {
+    } catch (err: unknown) {
       return false
     }
   }
@@ -145,8 +145,9 @@ export default class PersistentDataContainer<T = unknown> {
       } else {
         this._data = parseYAML(content)
       }
-    } catch (err: any) {
-      throw new Error('Could not retrieve container contents: Either the contents were malformed, or you forgot to init the container. ' + String(err.message))
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      throw new Error(`Could not retrieve container contents: Either the contents were malformed, or you forgot to init the container. ${message}`)
     }
 
     return this._data

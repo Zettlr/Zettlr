@@ -107,7 +107,7 @@ function select (): void {
 defineExpose({ select, focus })
 </script>
 
-<style lang="less">
+<style lang="css">
 body div.form-control {
   .input-text-button-group {
     display: grid;

@@ -97,7 +97,7 @@ function handleClick (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .pandoc-div-span {
     margin: 5px;

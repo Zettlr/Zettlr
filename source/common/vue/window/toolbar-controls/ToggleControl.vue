@@ -69,18 +69,22 @@ function toggle (): void {
 }
 </script>
 
-<style lang="less">
-body.darwin div#toolbar {
-  button.toggle {
-    &.active {
-      background-color: rgb(200, 200, 200);
+<style lang="css">
+body {
+  div#toolbar {
+    button.toggle {
+      border: 1px solid transparent;
+      &.active {
+        background-color: rgb(215, 215, 215);
+        border-color: currentColor;
+      }
     }
   }
-}
-
-body.darwin.dark div#toolbar {
-  button.toggle.active {
-    background-color: rgb(40, 40, 40);
+  
+  &.dark div#toolbar {
+    button.toggle.active {
+      background-color: rgb(40, 40, 40);
+    }
   }
 }
 </style>

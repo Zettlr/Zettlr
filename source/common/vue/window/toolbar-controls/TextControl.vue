@@ -69,11 +69,11 @@ export interface ToolbarTextControl {
 const props = defineProps<{ control: ToolbarTextControl }>()
 </script>
 
-<style lang="less">
+<style lang="css">
 body .toolbar-text {
   font-size: 11px;
   text-wrap: nowrap;
   padding: 0 10px;
-  width: fit-content; // constrain the text width to accommodate content changes.
+  width: fit-content; /* constrain the text width to accommodate content changes. */
 }
 </style>

@@ -54,7 +54,7 @@ div.shortcut-wrapper {
 
   kbd {
     font-family: inherit;
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-size: 10px;
     border: 1px solid #666;
     color: #666;

@@ -32,7 +32,6 @@ import {
 import { type Command, Decoration, EditorView, WidgetType } from '@codemirror/view'
 import { type AutocompletePlugin } from '.'
 import { DateTime } from 'luxon'
-import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'
 import { configField } from '../util/configuration'
 import { gemoji } from 'gemoji'
@@ -403,7 +402,7 @@ async function replaceSnippetVariables (state: EditorState, text: string): Promi
     CURRENT_MINUTE: (minute < 10) ? '0' + minute.toString() : minute,
     CURRENT_SECOND: (second < 10) ? '0' + second.toString() : second,
     CURRENT_SECONDS_UNIX: now.toSeconds(),
-    UUID: uuid(),
+    UUID: crypto.randomUUID(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
     ZKN_ID: generateId(String(window.config.get('zkn.idGen'))),
     CURRENT_ID: config.metadata.id,

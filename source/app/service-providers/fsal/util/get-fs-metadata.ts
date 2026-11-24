@@ -93,12 +93,12 @@ export async function getFilesystemMetadata (fileOrDirPath: string): Promise<Fil
   try {
     await fs.access(fileOrDirPath, fs.constants.R_OK)
     metadata.readable = true
-  } catch (err: any) {}
+  } catch (err: unknown) {}
 
   try {
     await fs.access(fileOrDirPath, fs.constants.W_OK)
     metadata.writeable = true
-  } catch (err: any) {}
+  } catch (err: unknown) {}
 
   return metadata
 }

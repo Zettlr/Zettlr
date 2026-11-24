@@ -111,7 +111,7 @@ function requestDir (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .form-control .input-button-group {
     display: grid;

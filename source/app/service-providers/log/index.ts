@@ -119,15 +119,11 @@ export default class LogProvider extends ProviderContract {
    * @param {any} details Optional details (completely customisable)
    */
   log (logLevel: LogLevel, message: string, details: any): void {
-    if (details == null) {
-      details = {} // No details -> empty object
-    }
-
     // Simply append to log
     const msg = {
       level: logLevel,
       message,
-      details,
+      details: details ?? {},  // No details -> empty object
       time: this._getTimestamp()
     }
 
@@ -144,12 +140,21 @@ export default class LogProvider extends ProviderContract {
           break
         case LogLevel.info:
           debugConsole.info(output)
+          if (details != null) {
+            debugConsole.info(String(msg.details))
+          }
           break
         case LogLevel.verbose:
           debugConsole.verbose(output)
+          if (details != null) {
+            debugConsole.verbose(String(msg.details))
+          }
           break
         case LogLevel.warning:
           debugConsole.warn(output)
+          if (details != null) {
+            debugConsole.warn(String(msg.details))
+          }
           break
       }
     }

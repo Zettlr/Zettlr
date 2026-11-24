@@ -90,6 +90,16 @@ function hideFormattingCharacters (view: EditorView): RangeSet<Decoration> {
             }
             break
           }
+          case 'Subscript':
+          case 'Superscript':
+            const marks = [
+              ...node.node.getChildren('SuperscriptMark'),
+              ...node.node.getChildren('SubscriptMark')
+            ]
+            for (const mark of marks) {
+              ranges.push(hiddenDeco.range(mark.from, mark.to))
+            }
+            break
           case 'StrongEmphasis':
           case 'Emphasis': {
             const marks = node.node.getChildren('EmphasisMark')

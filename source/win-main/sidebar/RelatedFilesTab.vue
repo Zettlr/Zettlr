@@ -270,3 +270,44 @@ function getTagsLabel (tagList: string[]): string {
   return trans('This relation is based on %s shared tags: %s', tagList.length, tagList.join(', '))
 }
 </script>
+
+<style lang="css" scoped>
+div.related-files-container {
+  div.related-file {
+    /* NOTE: The margin + height equal 42, which was the automatic height
+    before we fixed it here. We have to fix it because the Recycle
+    scroller requires completely fixed heights. */
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 5px 5px;
+    height: 35px;
+    overflow: hidden;
+
+    &:hover { background-color: rgb(200, 200, 200); }
+
+    span.filename {
+      font-size: 11px;
+      flex-grow: 8;
+      /* The next four properties together ensure that we show at most two
+      lines with a nice ellipsis (…) to indicate cut-off lines. */
+      overflow: hidden;
+      display: -webkit-box;
+      /* NOTE: If the linter yells at you to also define `line-clamp`,
+      don't. It doesn't (yet) work the same way as the vendor-prefixed. */
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    span.icons {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 2px;
+      flex-grow: 2;
+      flex-shrink: 0;
+      text-align: right;
+    }
+  }
+}
+</style>

@@ -407,6 +407,10 @@ export const editorTheme = EditorView.baseTheme({
   '.cm-heading': {
     textDecoration: 'var(--zettlr-editor-line-decoration)',
   },
+  '.footnote, .footnote-ref-label': {
+    verticalAlign: 'super',
+    fontSize: '0.8rem'
+  },
   // Don't increase font-size within blockquotes
   '.cm-line:has(:not(.cm-quote).cm-header-1)': {
     font: 'var(--zettlr-editor-header-style) var(--zettlr-editor-header-1-size) var(--zettlr-editor-font)',

@@ -112,7 +112,7 @@ function toggle (state: 'stateOne'|'stateTwo'): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body {
   div#toolbar div.three-way-toggle {
     border-radius: 4px;

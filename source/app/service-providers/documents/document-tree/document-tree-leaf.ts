@@ -18,10 +18,10 @@
 
 import isFile from '@common/util/is-file'
 import type { LeafNodeJSON } from '@dts/common/documents'
-import { v4 as uuid4 } from 'uuid'
 import { DocumentTree } from './document-tree'
 import { DTBranch } from './document-tree-branch'
 import { TabManager } from './tab-manager'
+import crypto from 'crypto'
 
 export class DTLeaf {
   // This is info concerning the tree structure
@@ -38,13 +38,13 @@ export class DTLeaf {
    */
   constructor (
     parent: DTBranch|DocumentTree,
-    id: string = uuid4()
+    id: string = crypto.randomUUID()
   ) {
     this._parent = parent
     this._tabManager = new TabManager()
 
     if (typeof id !== 'string') {
-      id = uuid4()
+      id = crypto.randomUUID()
     }
 
     // Ensure a unique ID
@@ -54,7 +54,7 @@ export class DTLeaf {
     }
 
     while (root.findLeaf(id) !== undefined) {
-      id = uuid4()
+      id = crypto.randomUUID()
     }
 
     this._id = id

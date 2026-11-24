@@ -93,7 +93,7 @@ function selectTheme (themeName: string): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 /*
 * This file contains theme mockup styles, as they are rather large and need
 * their own space. It includes colouring taken from the variables of the
@@ -133,9 +133,8 @@ div#theme-container {
       cursor: pointer;
       transition: 0.5s all ease;
 
-      // On hover scale them up
+      /* On hover scale them up */
       &:hover {
-        // transform: scale(1.2);
         box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, .4);
       }
 
@@ -156,13 +155,12 @@ div#theme-container {
           margin: 2px;
         }
 
-        // macOS traffic light colours
+        /* macOS traffic light colours */
         div.traffic-light-close { background-color: rgb(238, 107, 96); }
         div.traffic-light-min   { background-color: rgb(246, 191, 80); }
         div.traffic-light-full  { background-color: rgb(101, 204, 88); }
       }
 
-      // Toolbar
       div.toolbar {
         position: absolute;
         top: 0;
@@ -172,7 +170,6 @@ div#theme-container {
         background-color: rgba(240, 240, 240, 1);
       }
 
-      // File list
       div.file-list {
         position: absolute;
         top: 14px;
@@ -195,7 +192,6 @@ div#theme-container {
         }
       }
 
-      // Editor
       div.editor {
         width: 70%;
         height: 100%;

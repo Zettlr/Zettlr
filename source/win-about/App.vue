@@ -114,7 +114,7 @@ const windowTitle = computed(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="css">
 div[role="tabpanel"] {
   padding: 10px;
 

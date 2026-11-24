@@ -53,7 +53,7 @@ ky('https://zettlr.com/api/sponsors')
   .catch(e => console.error(e))
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 div#sponsors-tab {
 
   p {

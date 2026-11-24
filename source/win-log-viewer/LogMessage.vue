@@ -160,63 +160,63 @@ function toggleDetails (): void {
 }
 </script>
 
-<style lang="less">
-  .message {
-    width: 100%;
-    transition: 0.1s all ease;
-    border-bottom: 1px solid rgb(128, 128, 128);
-    display: flex;
+<style lang="css">
+.message {
+  width: 100%;
+  transition: 0.1s all ease;
+  border-bottom: 1px solid rgb(128, 128, 128);
+  display: flex;
 
-    .timestamp {
-      flex-grow: 0;
-      font-weight: bold;
-    }
-
-    .msg { flex-grow: 10; }
-
-    .expand-details {
-      flex-grow: 0;
-      color: black;
-    }
-
-    .timestamp, .msg, .expand-details { padding: 4px 10px; }
-
-    .timestamp, .details { font-weight: bold; }
-
-    .details {
-      font-family: 'Menlo', 'Courier New', Courier, monospace;
-      white-space: pre;
-      margin-top: 15px;
-    }
-
-    .message .details .more { color: #000; }
-
-    &.verbose {
-      background-color: #d8d8d8;
-      color: rgb(131, 131, 131);
-
-      &:hover { background-color: white; }
-    }
-
-    &.warning {
-      background-color: rgb(236, 238, 97);
-      color: rgb(139, 139, 24);
-
-      &:hover { background-color: rgb(253, 253, 176); }
-    }
-
-    &.info {
-      background-color: rgb(165, 204, 255);
-      color: rgb(61, 136, 233);
-
-      &:hover { background-color: rgb(217, 233, 255); }
-    }
-
-    &.error {
-      background-color: rgb(255, 130, 130);
-      color: rgb(139, 27, 27);
-
-      &:hover { background-color: rgb(247, 188, 188); }
-    }
+  .timestamp {
+    flex-grow: 0;
+    font-weight: bold;
   }
+
+  .msg { flex-grow: 10; }
+
+  .expand-details {
+    flex-grow: 0;
+    color: black;
+  }
+
+  .timestamp, .msg, .expand-details { padding: 4px 10px; }
+
+  .timestamp, .details { font-weight: bold; }
+
+  .details {
+    font-family: 'Menlo', 'Courier New', Courier, monospace;
+    white-space: pre;
+    margin-top: 15px;
+  }
+
+  .message .details .more { color: #000; }
+
+  &.verbose {
+    background-color: var(--zettlr-note-bg);
+    color: var(--zettlr-note-color);
+
+    &:hover { filter: brightness(120%); }
+  }
+
+  &.warning {
+    color: var(--zettlr-warning-color);
+    background-color: var(--zettlr-warning-bg);
+
+    &:hover { filter: brightness(120%); }
+  }
+
+  &.info {
+    background-color: var(--zettlr-info-bg);
+    color: var(--zettlr-info-color);
+
+    &:hover { filter: brightness(120%); }
+  }
+
+  &.error {
+    background-color: var(--zettlr-caution-bg);
+    color: var(--zettlr-caution-color);
+
+    &:hover { filter: brightness(120%); }
+  }
+}
 </style>

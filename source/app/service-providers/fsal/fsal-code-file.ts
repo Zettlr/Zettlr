@@ -72,9 +72,9 @@ export async function parse (
     file.modtime = metadata.modtime
     file.size = metadata.size
     file.creationtime = metadata.birthtime
-  } catch (err: any) {
-    err.message = 'Error reading file ' + filePath
-    throw err // Re-throw
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    throw new Error(`Error reading file ${filePath}: ${message}`)
   }
 
   // Before reading in the full file and parsing it,

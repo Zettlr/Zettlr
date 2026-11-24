@@ -15,7 +15,6 @@
  *
  * END HEADER
  */
-import { v4 as uuid } from 'uuid'
 
 interface SharedItemInfo {
   id?: string
@@ -108,7 +107,7 @@ function ensureID (item: AnyMenuItem): AnyMenuItem {
   }
 
   if (item.id === undefined) {
-    return { ...item, id: uuid() }
+    return { ...item, id: crypto.randomUUID() }
   }
 
   return { ...item }

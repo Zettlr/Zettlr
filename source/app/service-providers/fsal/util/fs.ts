@@ -28,7 +28,7 @@ export async function pathExists (absPath: string, flags: number = FS_CONSTANTS.
   try {
     await fs.access(absPath, flags)
     return true
-  } catch (err: any) {
+  } catch (err: unknown) {
     return false
   }
 }

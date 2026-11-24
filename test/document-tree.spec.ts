@@ -14,8 +14,8 @@
  */
 
 import { DocumentTree, DTBranch, DTLeaf } from '../source/app/service-providers/documents/document-tree'
-import { v4 as uuid4 } from 'uuid'
 import assert from 'assert'
+import crypto from 'crypto'
 import 'mocha'
 
 describe('Modules#DocumentTree', function () {
@@ -47,7 +47,7 @@ describe('Modules#DocumentTree', function () {
   it('should successfully deserialize from JSON', async function () {
     const json = {
       type: 'leaf',
-      id: uuid4(),
+      id: crypto.randomUUID(),
       openFiles: [],
       activeFile: null
     }

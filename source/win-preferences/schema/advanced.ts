@@ -307,6 +307,23 @@ export function getAdvancedFields (config: ConfigOptions): PreferencesFieldset[]
       ]
     },
     {
+      title: trans('Allowed URI protocols'),
+      infoString: trans('Some links can cause your computer to perform actions such as controlling other apps. Zettlr always asks you to confirm before following untrusted links. The list below lists all previously trusted protocols.'),
+      group: PreferencesGroups.Advanced,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'list',
+          valueType: 'simpleArray',
+          model: 'system.allowedURIProtocols',
+          deletable: true,
+          columnLabels: [trans('Protocol')],
+          searchable: true,
+          searchLabel: trans('Filter')
+        }
+      ]
+    },
+    {
       title: trans('Watchdog polling'),
       infoString: trans('In rare instances, Zettlr may be unable to check for changes to your files. In that case, you can try activating watchdog polling. Do not use this option unless necessary: Polling is very slow and resource-heavy.'),
       group: PreferencesGroups.Advanced,

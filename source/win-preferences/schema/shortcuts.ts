@@ -119,6 +119,28 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
 
   return [
     {
+      title: trans('Editor Shortcuts'),
+      infoString: trans('Customize available editor shortcuts.') + disclaimer,
+      group: PreferencesGroups.Shortcuts,
+      help: undefined, // TODO
+      fields: [
+        {
+          type: 'shortcut',
+          label: trans('Find next search result'),
+          model: 'shortcuts.editor.search-find-next',
+          defaultShortcut: defaultEditorShortcut('search-find-next'),
+          conflicts: conflicts('search-find-next')
+        },
+        {
+          type: 'shortcut',
+          label: trans('Find previous search result'),
+          model: 'shortcuts.editor.search-find-previous',
+          defaultShortcut: defaultEditorShortcut('search-find-previous'),
+          conflicts: conflicts('search-find-previous')
+        },
+      ]
+    },
+    {
       title: trans('Table Shortcuts'),
       infoString: trans('Customize the available table shortcuts for the editor.') + disclaimer,
       group: PreferencesGroups.Shortcuts,

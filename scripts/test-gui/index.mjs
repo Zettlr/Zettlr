@@ -16,7 +16,6 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import { rimraf } from 'rimraf'
 import { spawn } from 'child_process'
 
 import makeConfig from './make-config.mjs'
@@ -61,7 +60,13 @@ async function prepareEnvironment (argv) {
   // First, remove the ./resources/test folder
   try {
     await fs.lstat(TEST_DIRECTORY)
-    await rimraf(TEST_DIRECTORY)
+    await fs.rm(TEST_DIRECTORY, {
+      force: true,
+      recursive: true,
+      // These two options should help in cases of flaky windows removals.
+      maxRetries: 5,
+      retryDelay: 100,
+    })
     success('Removed the old testing directory.')
   } catch (e) {
     // Nothing to do
@@ -71,7 +76,13 @@ async function prepareEnvironment (argv) {
   // Second, same but for the data directory
   try {
     await fs.lstat(CONF_DIRECTORY)
-    await rimraf(CONF_DIRECTORY)
+    await fs.rm(CONF_DIRECTORY, {
+      force: true,
+      recursive: true,
+      // These two options should help in cases of flaky windows removals.
+      maxRetries: 5,
+      retryDelay: 100,
+    })
     success('Removed the old data directory.')
   } catch (e) {
     // Nothing to do

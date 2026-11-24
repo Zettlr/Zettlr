@@ -52,7 +52,7 @@ const emit = defineEmits<{
 const rows = ref(0)
 const cols = ref(0)
 
-const tableSizeLabel = computed(() => trans('Table size: %s &times; %s', rows.value, cols.value))
+const tableSizeLabel = computed(() => trans('Table size: %s × %s', rows.value, cols.value))
 
 function handleClick (): void {
   emit('insert-table', { rows: rows.value, cols: cols.value })
@@ -65,7 +65,7 @@ function setIntermediarySize (rowCount: number, colCount: number): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .table-generator {
     padding: 5px;

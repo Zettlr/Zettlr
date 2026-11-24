@@ -14,10 +14,10 @@
 
 import { app, nativeTheme } from 'electron'
 import * as bcp47 from 'bcp-47'
-import { v4 as uuid4 } from 'uuid'
 import getLanguageFile from '@common/util/get-language-file'
 import type { EditorShortcutName } from 'source/common/modules/markdown-editor/keymaps/shortcuts'
 import { type MenuShortcutName } from '../menu/shortcuts'
+import crypto from 'crypto'
 
 export type MarkdownTheme = 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
 
@@ -45,7 +45,8 @@ export type ConfigurableEditorShortcuts = Extends<
   'tr-ensure-double-quotes'|'tr-italics-to-quotes'|'tr-quotes-to-italics'|
   'tr-quotes-to-magic'|'tr-remove-line-breaks'|'tr-sentence-case'|
   'tr-single-quotes-to-double'|'tr-straighten-quotes'|
-  'tr-strip-duplicate-spaces'|'tr-title-case'
+  'tr-strip-duplicate-spaces'|'tr-title-case'|
+  'search-find-next'|'search-find-previous'
 >
 export type ConfigurableUIShortcuts = Extends<MenuShortcutName, 'previous-tab'|'next-tab'|'filter-files'>
 
@@ -133,7 +134,7 @@ export interface ConfigOptions {
     cslStyle: string
     useBundledPandoc: boolean
     exportQmdWithQuarto: boolean
-    customCommands: Array<{ displayName: string, command: string }>
+    customCommands: Array<{ displayName: string, command: string, shell: boolean }>
     selectedProfiles: Array<{ filePath: string, profile: string }>
     lastUsedProfile: string
     forceEnableExtensions: {
@@ -259,6 +260,7 @@ export interface ConfigOptions {
     leaveAppRunning: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
+    allowedURIProtocols: string[]
     checkForUpdates: boolean
     zoomBehavior: 'gui'|'editor'
   }
@@ -535,6 +537,7 @@ export function getConfigTemplate (): ConfigOptions {
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
+      allowedURIProtocols: [ 'http:', 'https:' ],
       checkForUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
     },
@@ -578,9 +581,11 @@ export function getConfigTemplate (): ConfigOptions {
         'tr-straighten-quotes': '',
         'tr-strip-duplicate-spaces': '',
         'tr-title-case': '',
-        'tr-zap-gremlins': ''
+        'tr-zap-gremlins': '',
+        'search-find-next': '',
+        'search-find-previous': ''
       }
     },
-    uuid: uuid4() // The app's unique anonymous identifier
+    uuid: crypto.randomUUID() // The app's unique anonymous identifier
   }
 }

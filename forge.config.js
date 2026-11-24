@@ -90,16 +90,11 @@ module.exports = {
       }
     },
     generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
-      // Two steps need to be done here. First, we need to set an environment
-      // variable that is then accessible by the webpack process so that we can
-      // either include or not include fsevents for macOS platforms.
-      process.env.BUNDLE_FSEVENTS = (targetPlatform === 'darwin') ? '1' : '0'
-
       // This will be baked into the binary so that we know which commit this
       // build was based off on.
       process.env.GIT_COMMIT_HASH = await getGitHash()
 
-      // Second, we need to make sure we can bundle Pandoc.
+      // Make sure we can bundle Pandoc.
       if (process.env.BUNDLE_PANDOC === '0') {
         console.warn('Detected environment variable BUNDLE_PANDOC -- this build will not be bundled with Pandoc!')
         return

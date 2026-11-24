@@ -19,7 +19,7 @@ import { FSWatcher, type ChokidarOptions } from 'chokidar'
 import type LogProvider from '@providers/log'
 import type ConfigProvider from '@providers/config'
 import path from 'path'
-import type { EventName } from 'chokidar/handler.js'
+import type { EventName } from 'chokidar/runtime'
 import { WATCHDOG_IGNORE_RE } from '@common/util/ignore-path'
 import { type Stats } from 'fs'
 
@@ -105,10 +105,7 @@ export default class FSALWatchdog {
    */
   async shutdown (): Promise<void> {
     this.process.removeAllListeners()
-    // We MUST under all circumstances properly call the close() function on
-    // every chokidar process we utilize. Otherwise, the fsevents dylib will
-    // still hold on to some memory after the Electron process itself shuts down
-    // which will result in a crash report appearing on macOS.
+    // Await close() to release all filesystem watchers before Electron exits.
     await this.process.close()
   }
 

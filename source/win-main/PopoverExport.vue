@@ -214,7 +214,7 @@ function getDisplayText (item: PandocProfileMetadata): string {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body {
   .toolbar-export {
     margin: 5px;
@@ -244,4 +244,3 @@ body {
   }
 }
 </style>
-@common/util/renderer-path-polyfill

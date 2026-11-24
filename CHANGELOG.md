@@ -2,13 +2,93 @@
 
 ## GUI and Functionality
 
+- **Feature**: Zettlr now supports retrieving the accent color from the D-Bus
+  system, meaning that on many Linux desktop environments, it should now pick up
+  your personal accent color.
+- **Change**: Custom export commands now have an additional setting, `shell`,
+  which, if enabled, runs your commands in a shell. This was the case previously
+  for all commands, but to reduce the attack surface and provide a more complete
+  fix for GHSA-qp9r-5xcv-35gx this setting has now changed to false by default.
+  If a custom command requires a shell to function, make sure to enable this
+  with the new parameter in your preferences -> Import/Export -> Custom
+  Commands.
+- Fixed image prerendering within table cells (#6672).
+- The update dialog now includes explicit reference to Zettlr so that
+  identifying the source of the update notification becomes easier (#6664).
+- Fixed Mermaid charts defaulting to the light theme until the dark mode setting
+  has been changed after the fact (#5763).
+- Fixed an issue that prevented search inputs on macOS in the toolbar to not
+  work.
+- Improved the log window design and layout.
+- When opening links, Zettlr now checks the protocol of the link, and asks you
+  to confirm whether it should actually follow the link. This introduces
+  transparency into links coming from external documents and allows you to open
+  only links that you trust.
+
+## Under the Hood
+
+- GHSA-qp9r-5xcv-35gx: Completely address security advisory by using `shescape`
+  to properly quote or escape all arguments passed to custom commands so that
+  attacker-controlled shell injections are caught. Additionally, custom commands
+  now do not run in a shell by default anymore, and the user is advised to only
+  enable shell access for commands that require it.
+- Update chokidar to `v6.0.0`.
+- Moved `get-system-colors.ts` utility file into the appearance provider.
+- Replace the `md5` package with native node.js functionality (#6658).
+- Replace the `uuid` package with native node.js functionality (#6660).
+- Replace the `rimraf` package with native node.js functionality (#6665).
+- Remove the `fsevents` dependency, as it is no longer used by chokidar (#6661).
+  For packagers, this also removes the `BUNDLE_FSEVENTS` build-time env-var.
+- Remove several unused development dependencies (#6659).
+- Allow the protocol `safe-file` in DOMPurify runs to facilitate Zettlr-internal
+  image prerendering.
+- The logger now prints details for any level of event to the console during
+  development.
+
+# 4.10.0
+
+## GUI and Functionality
+
 - **Feature**: The context menus for links and images now also feature various
   items that may be useful for formatting aspects of the link/image descriptions
   (#6417).
-- **Change**: The toolbar styling has now been adjusted. It now looks the same
-  across all operating systems.
-- **Change**: The file tree styling has been adjusted. It now looks mostly the
-  same across all operating systems.
+- **Feature**: Make the "find next" and "find previous" commands of the editor
+  search configurable. Previously, both `Mod-g` and `F3` would move to the next
+  search result, but after implementing custom shortcuts, these two commands
+  were left unconfigurable and hard-coded to `Mod-g`. These are now configurable
+  so that you can change the default keybinding of `Mod-g` to `F3` if you wish
+  (#6575).
+- **Feature**: The LanguageTool linter now also lints text-only properties in
+  the frontmatter, using the same language as the rest of the document. This
+  allows spotting issues with these metadata fields as well. Currently, the
+  linter includes in its detection the following properties:
+    - `title`
+    - `subtitle`
+    - `abstract`
+    - `abstract-title`
+    - `description`
+    - `shorttitle`
+    - `shortsubtitle`
+    - `thanks`
+- **Change**: The styles and layouts of various UI components have been
+  adjusted. The following components should now look mostly the same across all
+  operating systems:
+    - Toolbar
+    - File Tree
+    - Sidebar
+- **Change**: Removed the `.md` extension from the default new filename pattern
+  in the Advanced Preferences menu. This pattern is used as the filename, so the
+  extension is unnecessary. Previously, creating a new file with the default
+  pattern would result in the `.md` extension being added twice to markdown
+  files, or added incorrectly to non-markdown files. Existing users should
+  update the pattern manually by removing `.md` from it. For new installations,
+  the pattern will be correct. (#6638).
+- **Change**: The layout of the document information popover is now improved.
+  We have moved the bold styling over to the actually important parts, improved
+  legibility of the popover, and included more information -- notably,
+  regardless of which unit (words or characters) you select in the preferences,
+  the popover will now display both numbers, with your preferred one clearly
+  visible.
 - Fixed a misaligned size distribution between the file manager, editor view,
   and sidebar. Now, when double-clicking the dividers between these three
   components, they will resize so that both sidebars take up 20% of the window
@@ -25,23 +105,53 @@
   large library files.
 - Fixed a bug that prevented Mermaid diagrams from rendering due to an
   underlying bug in the new API (#6625).
-- Removed the `.md` extension from the default new filename pattern in the
-  Advanced Preferences menu. This pattern is used as the filename, so the
-  extension is unnecessary. Previously, creating a new file with the default
-  pattern would result in the `.md` extension being added twice to markdown
-  files or added incorrectly to non-markdown files. This only impacts new
-  installations of Zettlr. Existing users will have to update the pattern
-  manually (#6638).
+- Fixed an issue that would cause full-text searches to start even as the input
+  field was still composing non-latin text (#6597; #6604).
+- Fixed the spacing on the changelog entries to make it more pleasant to read.
+- Fixed an issue that could, under the right circumstances, write unusual values
+  for resized split views into the configuration, necessitating a configuration
+  modification to render Zettlr usable again (#5829).
+- Fixes various issues pertaining to keywords/tags which are present in YAML
+  frontmatters of files. Zettlr now again correctly detects these and they are
+  clickable, yielding a search for keywords, which also includes keywords with
+  spaces (#2443; #2590; #4498; see PR #6496).
+- Fixed a 404-link to an old documentation page in the onboarding dialog.
+- Fixed the LanguageTool language overrides. Previously, if you wanted to change
+  the language in which LanguageTool would check your document via the `lang`
+  property (e.g., `lang: fr` to force French instead of autodetection), you had
+  to reload the entire document. Now changes are detected on the fly as you
+  modify the `lang` property in the YAML frontmatter.
+- Fixed the styles of both subscripts (e.g., `H~2~O`) and superscripts (e.g.,
+  `2^10^`). Previously, both types of elements were not displayed using a
+  small font and set to super or sub alignment.
+- The formatting characters for subscripts and superscripts are now
+  appropriately hidden if "Render emphasis" is turned on.
+- Fixed many of the newly customizable shortcuts which would mostly work on just
+  macOS, since we accidentally declared the Mac-specific Command-key to be part
+  of the shortcut, instead of also providing an alternative with the Control
+  key. We remain puzzled why nobody complained about this issue since it
+  affected quite a few important shortcuts. (If you are reading this right now,
+  you're not included in this statement ;).
 
 ## Under the Hood
 
-- Update Electron to `v44.9.3`.
+- Update Electron to `v44.10`.
+- Update Pandoc to `v3.14`. **Caution**: Pandoc 3.13 has switched its underlying
+  YAML parser. For the most part, this change should not affect you, but it
+  could if you relied on odd behavior of YAML, such as treating `no` as `false`
+  instead of a string. If you receive errors during exports, this is a potential
+  cause.
 - Update the `gettext-parser` to `v10`.
 - Added error-handling code in case titlebar overlays cannot be set for windows
   (see #6417).
 - Exchanged `biblatex-csl-converter` with `bibliojson`.
 - Refactor the splash screen to silence an error caused by a benign race
   condition during the boot sequence.
+- Pin the AppImage toolset in Electron builder to use a more modern one which
+  depends on fuse3 instead of the depcecated fuse2 library. This change must be
+  reverted once Electron builder is updated to v27 (#6632).
+- Refactored the `render-code` plugin to allow for a generic set of persistent
+  decorators for various elements.
 
 # 4.9.0
 

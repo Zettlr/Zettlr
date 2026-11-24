@@ -35,7 +35,7 @@ const ipcRenderer = window.ipc
 function write (cm: CodeMirror, _params: ExParams): Promise<void> {
   try {
     cm.cm6.state.field(configField)
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Cannot execute write command: configField missing from EditorState')
     return new Promise((resolve, reject) => reject())
   }

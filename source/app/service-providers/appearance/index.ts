@@ -17,7 +17,9 @@ import type ConfigProvider from '@providers/config'
 import { BrowserWindow, ipcMain, nativeTheme, systemPreferences } from 'electron'
 import type LogProvider from '../log'
 import ProviderContract from '../provider-contract'
-import { getSystemColors } from '@common/util/get-system-colors'
+import { getSystemColors } from 'source/app/service-providers/appearance/get-system-colors'
+import broadcastIPCMessage from 'source/common/util/broadcast-ipc-message'
+import { listenToAccentColorChangesFromDBus } from './dbus'
 
 /**
  * Controls the height (in px) of the custom menubar. Will be picked up by the
@@ -164,15 +166,28 @@ export default class AppearanceProvider extends ProviderContract {
       }
     })
 
-    ipcMain.handle('appearance-provider', (event, { command }) => {
-      // This command returns the accent colour including a contrast colour to be used
-      // as the opposite colour, if a good visible contrast is wished for.
+    // Listen to changes in the accent color and inform the renderers where applicable.
+    if ([ 'win32', 'darwin' ].includes(process.platform)) {
+      systemPreferences.addListener('accent-color-changed', (event, newColor) => {
+        this._logger.info(`[Appearance Provider] Accent color changed: ${newColor}`)
+        broadcastIPCMessage('appearance-provider', { command: 'accent-color-changed' })
+      })
+    } else if (process.platform === 'linux') {
+      listenToAccentColorChangesFromDBus(newColor => {
+        this._logger.info(`[Appearance Provider] Accent color changed: #${newColor}`)
+        broadcastIPCMessage('appearance-provider', { command: 'accent-color-changed' })
+      })
+        .catch(err => {
+          const message = err instanceof Error ? err.message : 'Unknown error'
+          this._logger.error(`[Appearance Provider] Could not subscribe to D-Bus accent-color update notifications: ${message}`)
+        })
+    } // Else: Unsupported platform
+
+
+    // Provide the system colors for renderer windows that request them.
+    ipcMain.handle('appearance-provider', async (event, { command }) => {
       if (command === 'get-accent-color') {
-        // A renderer has requested the current accent colour. The accent colour
-        // MUST be returned, and can be retrieved automatically for macOS and
-        // Windows, and will be the Zettlr green on Linux systems. Format is
-        // always RGBA hexadecimal without preceeding #-sign.
-        return getSystemColors()
+        return await getSystemColors()
       }
     })
   }

@@ -25,6 +25,7 @@ import type { AppServiceContainer } from 'source/app/app-service-container'
 import { type PandocProfileMetadata } from '../assets'
 import type { DirDescriptor, ProjectSettings } from 'source/types/common/fsal'
 import { PANDOC_WRITERS } from 'source/common/pandoc-util/pandoc-maps'
+import { type ConfigOptions } from '../config/get-config-template'
 
 /**
  * Converts a path fragment to use Windows path separators by replacing / with \
@@ -155,15 +156,15 @@ export default class DirProjectExport extends ZettlrCommand {
  * @param   {ProjectSettings}      config   The project settings
  * @param   {string}               command  The command
  */
-async function exportUsingCustomCommand (app: AppServiceContainer, dir: DirDescriptor, config: ProjectSettings, command: { displayName: string, command: string }) {
+async function exportUsingCustomCommand (app: AppServiceContainer, dir: DirDescriptor, config: ProjectSettings, command: ConfigOptions['export']['customCommands'][number]) {
   const task = app.lrt.registerTask(
     trans('Exporting project "%s"', config.title),
     trans('Exporting using custom command %s', command.displayName)
   )
 
-  app.log.info(`[Project] Exporting ${config.title} using custom command ${command.displayName}.`)
+  app.log.info(`[Project] Exporting ${config.title} using custom command "${command.displayName}" (shell: ${command.shell}).`)
   try {
-    const output = await runShellCommand(command.command, [`'${dir.path}'`], dir.path)
+    const output = await runShellCommand(command.command, [dir.path], dir.path, command.shell)
     if (output.code !== 0) {
       const err = new Error(trans('Project export failed: %s', output.stderr))
       task.endTask('error', err)

@@ -34,7 +34,7 @@ export interface ToolbarSpacerControl {
 const props = defineProps<{ control: ToolbarSpacerControl }>()
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 body #toolbar .spacer {
   flex-grow: 1;
   &.spacer-5x { flex-grow: 5; }

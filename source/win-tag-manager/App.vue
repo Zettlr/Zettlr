@@ -278,7 +278,7 @@ function changeSorting (which: 'name'|'color'|'count'|'idf'): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 div#tag-manager {
   padding: 10px;
   margin-top: 10px;

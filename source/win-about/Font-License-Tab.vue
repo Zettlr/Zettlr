@@ -70,8 +70,8 @@
  */
 </script>
 
-<style lang="less">
-// Restore the margin which is being taken away by the generics rule in the geometry css
+<style lang="css" scoped>
+/* Restore the margin which is being taken away by the generics rule in the geometry css */
 div#font-license-text * {
   margin: revert;
 }

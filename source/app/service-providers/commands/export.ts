@@ -63,12 +63,12 @@ export default class Export extends ZettlrCommand {
         throw new Error(`Cannot run custom command ${displayName}: Not found`)
       }
 
-      this._app.log.info(`[Export] Running custom export command ${displayName} on file ${file} ...`)
+      this._app.log.info(`[Export] Running custom export command "${foundCommand.displayName}" on file ${file} (using shell: ${foundCommand.shell}) ...`)
       const task = this._app.lrt.registerTask(trans('Exporting file "%s"', path.basename(file)), trans('Exporting using custom command %s', displayName))
       const cwd = path.dirname(file)
 
       try {
-        const output = await runShellCommand(foundCommand.command, [`'${file}'`], cwd)
+        const output = await runShellCommand(foundCommand.command, [file], cwd, foundCommand.shell)
   
         if (output.code !== 0) {
           this._app.log.error(`[Export] Custom export ${displayName} failed with code ${output.code}`, output.stderr)
@@ -83,7 +83,7 @@ export default class Export extends ZettlrCommand {
         }
   
         if (output.stdout.length > 0) {
-          this._app.log.info('This custom export run produced additional output.', output.stdout)
+          this._app.log.info('This custom export run produced additional output:', output.stdout)
         }
       } catch (err: unknown) {
         if (!(err instanceof Error)) {

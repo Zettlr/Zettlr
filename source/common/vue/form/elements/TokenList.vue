@@ -81,7 +81,7 @@ function removeToken (idx: number): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css">
 body {
   div.token-list {
     font-family: system-ui, sans-serif;

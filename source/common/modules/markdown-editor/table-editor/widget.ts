@@ -32,6 +32,8 @@ import { configField } from '../util/configuration'
 import { interceptAnchorClicks } from './util/anchor-callbacks'
 import openMarkdownLink from '../util/open-markdown-link'
 import { sanitizeHTML } from 'source/common/util/sanitize-html'
+import makeValidUri from 'source/common/util/make-valid-uri'
+import { pathDirname } from 'source/common/util/renderer-path-polyfill'
 
 /**
  * This holds the last measured height of each rendered table to provide
@@ -363,11 +365,22 @@ function updateRow (
   const { row, col } = selectionCoords !== undefined ? selectionCoords : { row: -1, col: -1 }
 
   // Prepare the citation callback
-  let { library } = view.state.field(configField).metadata
+  let { library, path } = view.state.field(configField).metadata
+  const basePath = pathDirname(path)
   library = library === '' ? CITEPROC_MAIN_DB : library
   const onCitation = window.getCitationCallback(library)
 
   const tableSelection = view.state.field(tableSelectionField, false)
+  // Also, prepare the onImage callback so that images are properly prerendered
+  const onImageSrc = (src: string) => {
+    const isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(src)
+    if (isDataUrl) {
+      return src
+    } else {
+      return makeValidUri(src, basePath)
+    }
+  }
+
   for (let i = 0; i < astRow.cells.length; i++) {
     const cell = astRow.cells[i]
     const selectionInCell = tableSelection == null && row === idx && col === i
@@ -381,7 +394,7 @@ function updateRow (
 
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, {
-        onCitation, zknLinkFormat,
+        onCitation, onImageSrc, zknLinkFormat,
       }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? sanitizeHTML(html) : '&nbsp;'
 
@@ -474,7 +487,7 @@ function updateRow (
       contentWrapper.classList.remove('editing')
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, {
-        onCitation, zknLinkFormat,
+        onCitation, onImageSrc, zknLinkFormat,
       }, 0).trim()
       contentWrapper.innerHTML = html.length > 0 ? sanitizeHTML(html) : '&nbsp;'
       interceptAnchorClicks(contentWrapper, href => openMarkdownLink(href, view))
@@ -521,7 +534,7 @@ function updateRow (
       // Simply transfer the contents
       const { zknLinkFormat } = view.state.field(configField)
       const html = nodeToHTML(cell.children, {
-        onCitation, zknLinkFormat,
+        onCitation, onImageSrc, zknLinkFormat,
       }, 0).trim()
       if (html !== contentWrapper.innerHTML) {
         contentWrapper.innerHTML = html.length > 0 ? sanitizeHTML(html) : '&nbsp;'

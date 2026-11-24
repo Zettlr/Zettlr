@@ -175,7 +175,7 @@ function stopPomodoro (): void {
 }
 </script>
 
-<style lang="less">
+<style lang="css" scoped>
 p.pomodoro-big {
   font-size: 200%;
   text-align: center;
