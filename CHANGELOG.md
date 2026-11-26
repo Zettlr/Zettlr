@@ -5,13 +5,22 @@
 - **Feature**: Zettlr now supports retrieving the accent color from the D-Bus
   system, meaning that on many Linux desktop environments, it should now pick up
   your personal accent color.
-- **Change**: Custom export commands now have an additional setting, `shell`,
-  which, if enabled, runs your commands in a shell. This was the case previously
-  for all commands, but to reduce the attack surface and provide a more complete
-  fix for GHSA-qp9r-5xcv-35gx this setting has now changed to false by default.
-  If a custom command requires a shell to function, make sure to enable this
-  with the new parameter in your preferences -> Import/Export -> Custom
-  Commands.
+- **Security** (GHSA-qp9r-5xcv-35gx): Custom export commands now have an
+  additional setting, `shell`, which, if enabled, runs your commands in a shell.
+  This was the case previously for all commands, but to reduce the attack
+  surface and provide a more complete fix for the existing advisory, this
+  setting has now changed to false by default. If a custom command requires a
+  shell to function, you will need to explicitly allow this with the new
+  parameter in your preferences -> Import/Export -> Custom Commands.
+- **Security** (GHSA-4c93-g77j-cx8w): When opening links, Zettlr now checks the
+  protocol of the link, and asks you to confirm whether it should actually
+  follow the link. This introduces transparency into links coming from external
+  documents and allows you to open only links that you trust. By default, it
+  only trusts http(s) links. This prevents potential data exfiltration (i.e.,
+  via protocols such as SMB) as well as tricking you into accidentally
+  triggering actions in other apps via deep-links. You can permanently trust
+  certain protocols, and remove trusted protocols from the advanced preferences
+  similar to how iframe whitelisting works.
 - **Change**: The keyboard shortcuts pertaining to inserting and toggling
   comments have been partially restored to previous Zettlr behavior, partially
   harmonized with the behavior in other editors (#6655). Now there are two
@@ -35,10 +44,6 @@
 - Fixed an issue that prevented search inputs on macOS in the toolbar to not
   work.
 - Improved the log window design and layout.
-- When opening links, Zettlr now checks the protocol of the link, and asks you
-  to confirm whether it should actually follow the link. This introduces
-  transparency into links coming from external documents and allows you to open
-  only links that you trust.
 
 ## Under the Hood
 
@@ -47,6 +52,10 @@
   attacker-controlled shell injections are caught. Additionally, custom commands
   now do not run in a shell by default anymore, and the user is advised to only
   enable shell access for commands that require it.
+- GHSA-4c93-g77j-cx8w: Zettlr now applies link filtering and only opens such
+  links with `shell.openExternal` that use known and trusted protocols. For any
+  other links, the user is first prompted to avoid accidental behavior and
+  information leakage.
 - Update chokidar to `v6.0.0`.
 - Moved `get-system-colors.ts` utility file into the appearance provider.
 - Replace the `md5` package with native node.js functionality (#6658).
