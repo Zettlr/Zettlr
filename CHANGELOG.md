@@ -2,6 +2,16 @@
 
 ## GUI and Functionality
 
+(Nothing here)
+
+## Under the Hood
+
+(Nothing here)
+
+# 4.11.0
+
+## GUI and Functionality
+
 - **Feature**: Zettlr now supports retrieving the accent color from the D-Bus
   system, meaning that on many Linux desktop environments, it should now pick up
   your personal accent color.
