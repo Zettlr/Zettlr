@@ -44,6 +44,8 @@
   image prerendering.
 - The logger now prints details for any level of event to the console during
   development.
+- Replace the `Mod` key representation in the shortcut controls with `Meta`, and
+  appropriately expand/contract the `Mod` key per platform.
 
 # 4.10.0
 

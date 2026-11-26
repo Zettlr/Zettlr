@@ -69,10 +69,10 @@ import ShortcutDisplay from '../../ShortcutDisplay.vue'
 import ButtonControl from './ButtonControl.vue'
 import ZtrAdmonition from '../../ZtrAdmonition.vue'
 
-interface ExplodedShortcut {
+export interface ExplodedShortcut {
   altKey: boolean
   shiftKey: boolean
-  modKey: boolean,
+  metaKey: boolean,
   ctrlKey: boolean,
   key: string
 }
@@ -107,14 +107,14 @@ const conflictsWarning = computed(() => {
 const newShortcut = ref<ExplodedShortcut>({
   altKey: false,
   shiftKey: false,
-  modKey: false,
+  metaKey: false,
   ctrlKey: false,
   key: ''
 })
 
 const isNewShortcutEmpty = computed(() => {
   const e = newShortcut.value
-  return !e.altKey && !e.ctrlKey && !e.modKey && !e.shiftKey && !e.key
+  return !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.key
 })
 
 function resetShortcut () {
@@ -126,7 +126,7 @@ function startRecording () {
   const e = newShortcut.value
   e.altKey = false
   e.ctrlKey = false
-  e.modKey = false
+  e.metaKey = false
   e.shiftKey = false
   e.key = ''
 }
@@ -136,7 +136,7 @@ function stopRecording (event: KeyboardEvent|FocusEvent) {
   const e = newShortcut.value
   e.altKey = false
   e.ctrlKey = false
-  e.modKey = false
+  e.metaKey = false
   e.shiftKey = false
   e.key = ''
 
@@ -166,7 +166,7 @@ function handleKeydown (event: KeyboardEvent): void {
   // https://github.com/codemirror/view/blob/main/src/keymap.ts
   newShortcut.value.altKey = event.altKey
   newShortcut.value.shiftKey = event.shiftKey
-  newShortcut.value.modKey = event.metaKey
+  newShortcut.value.metaKey = event.metaKey
   newShortcut.value.ctrlKey = event.ctrlKey
   newShortcut.value.key = key
 
@@ -184,21 +184,37 @@ function handleKeydown (event: KeyboardEvent): void {
   }
 }
 
+/**
+ * Turns a shortcut description (in Codemirror format) into a struct that
+ * includes information on which keys would need to be pressed.
+ *
+ * @param   {string}            shortcut  The shortcut string
+ *
+ * @return  {ExplodedShortcut}            The shortcut descriptor
+ */
 function explodeShortcut (shortcut: string): ExplodedShortcut {
   const keys = shortcut.toLowerCase().split(/-/)
   const altKey = keys.includes('alt') || keys.includes('option')
   const shiftKey = keys.includes('shift')
-  const modKey = keys.includes('mod') || process.platform === 'darwin' && keys.includes('cmd') || process.platform !== 'darwin' && keys.includes('mod')
-  const ctrlKey = keys.includes('ctrl')
+  const ctrlKey = keys.includes('ctrl') || keys.includes('mod') && process.platform !== 'darwin'
+  const metaKey = keys.includes('meta') || keys.includes('cmd') && process.platform === 'darwin'
   return {
     altKey,
     shiftKey,
-    modKey,
+    metaKey,
     ctrlKey,
     key: keys[keys.length - 1]
   }
 }
 
+/**
+ * Turns a shortcut descriptor (in JavaScript format) into a string in
+ * Codemirror-format.
+ *
+ * @param   {ExplodedShortcut}  shortcut  The shortcut descriptor
+ *
+ * @return  {string}                      The Codemirror-compatible string.
+ */
 function implodeShortcut (shortcut: ExplodedShortcut): string {
   let returnVal = shortcut.key
 
@@ -208,8 +224,8 @@ function implodeShortcut (shortcut: ExplodedShortcut): string {
   if (shortcut.shiftKey) {
     returnVal = `Shift-${returnVal}`
   }
-  if (shortcut.modKey) {
-    returnVal = `Mod-${returnVal}`
+  if (shortcut.metaKey) {
+    returnVal = `Meta-${returnVal}`
   }
   if (shortcut.ctrlKey) {
     returnVal = `Ctrl-${returnVal}`

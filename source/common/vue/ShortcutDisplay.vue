@@ -11,8 +11,8 @@
     <template v-if="props.shortcut.ctrlKey">
       <kbd>{{ ctrlKeySymbol }}</kbd>
     </template>
-    <template v-if="props.shortcut.modKey">
-      <kbd>{{ modKeySymbol }}</kbd>
+    <template v-if="props.shortcut.metaKey">
+      <kbd>{{ metaKeySymbol }}</kbd>
     </template>
     <template v-if="props.shortcut.shiftKey">
       <kbd>⇧</kbd>
@@ -24,17 +24,15 @@
 </template>
 
 <script setup lang="ts">
+import { type ExplodedShortcut } from './form/elements/ShortcutCaptureControl.vue'
 
-interface ExplodedShortcut {
-  altKey: boolean
-  shiftKey: boolean
-  modKey: boolean,
-  ctrlKey: boolean,
-  key: string
-}
-
-// Proper key symbols based on platform
-const modKeySymbol = process.platform === 'darwin' ? '⌘' : '⊞'
+// Proper key symbols based on platform. NOTE that this component uses only
+// actually present keys. The "Mod"-key is a Codemirror invention to make
+// writing cross-platform shortcuts simpler, and it is the same as "Cmd/Ctrl"
+// that Electron uses. The "Mod"-key is being expanded into either "Ctrl" or
+// "Cmd" based on platform, meaning that custom shortcuts will *never* include
+// "Mod", only "Meta" or "Ctrl".
+const metaKeySymbol = process.platform === 'darwin' ? '⌘' : '⊞'
 const altKeySymbol = process.platform === 'darwin' ? '⎇' : 'Alt'
 const ctrlKeySymbol = process.platform === 'darwin' ? '⌃' : 'Ctrl'
 
