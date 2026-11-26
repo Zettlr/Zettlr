@@ -18,8 +18,11 @@
       <name>A. Harun Korkmaz</name>
       <email>korkmazaharun@gmail.com</email>
     </translator>
+    <translator>
+      <name>rmz-oz</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:24:00+00:00</updated>
+    <updated>2026-10-26T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -488,7 +491,7 @@
       <multiple>editörler</multiple>
     </term>
     <term name="compiler">
-      <single>derleye</single>
+      <single>derleyen</single>
       <multiple>derleyenler</multiple>
     </term>
     <term name="composer"/> <!-- generally blank -->
@@ -641,52 +644,52 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="chair" form="verb">chaired by</term>
-    <term name="collection-editor" form="verb">edited by</term>
-    <term name="compiler" form="verb">compiled by</term>
+    <term name="chair" form="verb">başkanlık eden</term>
+    <term name="collection-editor" form="verb">editör</term>
+    <term name="compiler" form="verb">derleyen</term>
     <term name="container-author" form="verb">kitap editörü</term>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
+    <term name="contributor" form="verb">katkıda bulunan</term>
+    <term name="curator" form="verb">küratör</term>
     <term name="director" form="verb">direktör</term>
     <term name="editor" form="verb">editör</term>
-    <term name="editor-translator" form="verb">düzenleyen &amp; çeviren by</term>
-    <term name="editortranslator" form="verb">düzenleyen &amp; çeviren by</term>
+    <term name="editor-translator" form="verb">düzenleyen &amp; çeviren</term>
+    <term name="editortranslator" form="verb">düzenleyen &amp; çeviren</term>
     <term name="editorial-director" form="verb">sorumlu editör</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
+    <term name="executive-producer" form="verb">baş yapımcı</term>
+    <term name="guest" form="verb">misafir</term>
+    <term name="host" form="verb">sunan</term>
     <term name="illustrator" form="verb">çizen</term>
     <term name="interviewer" form="verb">röportaj yapan</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
+    <term name="narrator" form="verb">anlatan</term>
+    <term name="organizer" form="verb">düzenleyen</term>
+    <term name="performer" form="verb">icra eden</term>
+    <term name="producer" form="verb">yapımcı</term>
     <term name="recipient" form="verb">alıcı</term>
     <term name="reviewed-author" form="verb">tanıtım yazarı</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="script-writer" form="verb">yazan</term>
+    <term name="series-creator" form="verb">yaratan</term>
     <term name="translator" form="verb">çeviren</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="collection-editor" form="verb-short">ed. by</term>
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
+    <term name="collection-editor" form="verb-short">ed.</term>
+    <term name="compiler" form="verb-short">derleyen</term>
+    <term name="contributor" form="verb-short">katkıda bulunan</term>
+    <term name="curator" form="verb-short">küratör</term>
     <term name="director" form="verb-short">dir.</term>
     <term name="editor" form="verb-short">ed.</term>
     <term name="editor-translator" form="verb-short">ed. &amp; çev.</term>
     <term name="editortranslator" form="verb-short">ed. &amp; çev.</term>
     <term name="editorial-director" form="verb-short">sor.ed.</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
+    <term name="executive-producer" form="verb-short">baş yapımcı</term>
+    <term name="guest" form="verb-short">misafir</term>
+    <term name="host" form="verb-short">sunan</term>
     <term name="illustrator" form="verb-short">çizen</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="narrator" form="verb-short">anlatan</term>
+    <term name="organizer" form="verb-short">düzenleyen</term>
+    <term name="performer" form="verb-short">icra eden</term>
+    <term name="producer" form="verb-short">yapımcı</term>
+    <term name="script-writer" form="verb-short">yazan</term>
+    <term name="series-creator" form="verb-short">yaratan</term>
     <term name="translator" form="verb-short">çev.</term>
 
     <!-- LONG MONTH FORMS -->
