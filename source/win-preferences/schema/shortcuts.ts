@@ -138,6 +138,13 @@ export function getShortcutFields (config: ConfigOptions): PreferencesFieldset[]
           defaultShortcut: defaultEditorShortcut('search-find-previous'),
           conflicts: conflicts('search-find-previous')
         },
+        {
+          type: 'shortcut',
+          label: trans('Insert a comment at the cursor position'),
+          model: 'shortcuts.editor.edit-insert-comment',
+          defaultShortcut: defaultEditorShortcut('edit-insert-comment'),
+          conflicts: conflicts('edit-insert-comment')
+        },
       ]
     },
     {

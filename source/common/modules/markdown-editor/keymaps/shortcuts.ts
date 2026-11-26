@@ -33,7 +33,7 @@ export type EditorShortcutName = 'autocomplete-invoke'|'autocomplete-accept'|
   'selection-undo'|'selection-redo'|'selection-line'|'selection-parent-syntax'|
   'selection-indent'|'selection-all'|
   // Editing commands
-  'edit-toggle-comment'|'edit-toggle-block-comment'|
+  'edit-insert-comment'|'edit-toggle-comment'|
   // Transformations
   'tr-zap-gremlins'|'tr-strip-duplicate-spaces'|'tr-sentence-case'|
   'tr-italics-to-quotes'|'tr-quotes-to-italics'|'tr-remove-line-breaks'|
@@ -82,8 +82,8 @@ export const defaultKeybindings: Record<EditorShortcutName, DefaultShortcut> = {
   'selection-parent-syntax': { mac: 'Mod-i' },
   'selection-indent': { mac: 'Mod-Alt-\\' },
   'selection-all': {},
-  'edit-toggle-comment': { mac: 'Mod-/' },
-  'edit-toggle-block-comment': { mac: 'Mod-C' },
+  'edit-insert-comment': { key: 'Mod-Alt-m' }, // Can insert comments at the cursor
+  'edit-toggle-comment': { key: 'Mod-/' }, // Always comments out entire lines
   'tr-double-quotes-to-single': {},
   'tr-single-quotes-to-double': {},
   'tr-emdash-add-spaces': {},

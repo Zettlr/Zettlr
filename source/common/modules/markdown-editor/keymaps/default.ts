@@ -35,7 +35,7 @@ import {
   cursorMatchingBracket, cursorSyntaxLeft, cursorSyntaxRight, deleteLine,
   indentLess, indentMore, indentSelection, insertBlankLine, moveLineDown,
   moveLineUp, selectAll, selectLine, selectParentSyntax, selectSyntaxLeft,
-  selectSyntaxRight, simplifySelection, toggleBlockComment, toggleComment,
+  selectSyntaxRight, simplifySelection, toggleBlockCommentByLine,
   toggleTabFocusMode, redo, redoSelection, undo, undoSelection
 } from '@codemirror/commands'
 import { foldAll, foldCode, unfoldAll, unfoldCode } from '@codemirror/language'
@@ -267,7 +267,6 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
     { key: sc('md-insert-link'), run: insertLink },
     { key: sc('md-highlight'), run: applyHighlight },
     { key: sc('md-insert-image'), run: insertImage },
-    { key: 'Mod-Shift-c', run: applyComment },
     { key: sc('md-insert-footnote'), run: addNewFootnote },
 
     // historyKeymap, but with our own keyboard shortcuts
@@ -301,8 +300,10 @@ export function mainEditorKeybindings (customShortcutMap: CustomEditorShortcut[]
 
     { key: 'Shift-Mod-\\', run: cursorMatchingBracket },
 
-    { key: sc('edit-toggle-comment'), run: toggleComment },
-    { key: sc('edit-toggle-block-comment'), run: toggleBlockComment },
+    // Always toggles comments at the cursor (with and without selection)
+    { key: sc('edit-insert-comment'), run: applyComment },
+    // Always toggles comments for entire lines (with and without selection)
+    { key: sc('edit-toggle-comment'), run: toggleBlockCommentByLine },
 
     { key: sc('misc-toggle-tab-focus'), run: toggleTabFocusMode },
 

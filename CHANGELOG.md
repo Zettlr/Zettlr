@@ -12,6 +12,21 @@
   If a custom command requires a shell to function, make sure to enable this
   with the new parameter in your preferences -> Import/Export -> Custom
   Commands.
+- **Change**: The keyboard shortcuts pertaining to inserting and toggling
+  comments have been partially restored to previous Zettlr behavior, partially
+  harmonized with the behavior in other editors (#6655). Now there are two
+  explicit shortcuts: one inserts a comment at the cursor position, and one
+  toggles commenting of entire lines. The shortcut to toggle commenting of
+  entire lines has been kept at the common shortcut `Cmd/Ctrl-/`, while the
+  shortcut to insert comments has been moved. It no longer triggers with
+  `Cmd/Ctrl-Shift-C`, and instead now uses `Cmd/Ctrl-Alt-M`, which is the
+  default shortcut to insert comments in Google Docs and Word (only online, the
+  Desktop app does not have a shortcut assigned, maybe because someone forgot to
+  include it). The latter shortcut can be customized to either restore the
+  previous shortcut, or maybe move it to how LibreOffice does it, which is
+  `Cmd/Ctrl-Alt-C`. But that would then conflict with copying the selection as
+  HTML (which has precedence and as such would prevent the shortcut from ever
+  triggering the comment insertion). Keyboards are fun!
 - Fixed image prerendering within table cells (#6672).
 - The update dialog now includes explicit reference to Zettlr so that
   identifying the source of the update notification becomes easier (#6664).
