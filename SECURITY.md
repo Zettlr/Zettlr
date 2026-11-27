@@ -12,7 +12,7 @@ An issue is security-related if there is a possibility that Zettlr is vulnerable
 
 ## What are *not* Security-Related Issues?
 
-Some behavior of the app may look like a security-related issue, and can indeed lead to security-problems when careless, but which is actually **expected behavior**. In order to function well for users, Zettlr has to strike a balance between being secure and being useful. We have outlined where users need to be careful in [our note on security in the documentation](https://docs.zettlr.com/en/getting-started/a-note-on-security/) which we constantly update whenever necessary. We further refer users to the [security notes by Pandoc](https://pandoc.org/MANUAL.html#a-note-on-security), the document converter Zettlr uses under the hood to acknowledge these, too.
+Some behavior of the app may look like a security-related issue, and can indeed lead to security-problems when careless, but which is actually **expected behavior**. In order to function well for users, Zettlr has to strike a balance between being secure and being useful. We have outlined where users need to be careful in [our note on security in the documentation](https://docs.zettlr.com/en/getting-started/a-note-on-security.html) which we constantly update whenever necessary. We further refer users to the [security notes by Pandoc](https://pandoc.org/MANUAL.html#a-note-on-security), the document converter Zettlr uses under the hood to acknowledge these, too.
 
 That being said, **do not report a security vulnerability and do not assign a CVE in the following limited cases**:
 

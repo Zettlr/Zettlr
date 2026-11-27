@@ -160,7 +160,7 @@ changes to the application. GitHub has created a great
 [guide on how to open Pull Requests](https://docs.github.com/en/repositories/working-with-files/managing-files/editing-files#editing-files-in-another-users-repository).
 
 You can find more info in the
-[documentation](https://docs.zettlr.com/en/getting-started/get-involved/), or
+[documentation](https://docs.zettlr.com/en/getting-started/get-involved.html), or
 you can ask our community if you need help.
 
 ### Documentation
