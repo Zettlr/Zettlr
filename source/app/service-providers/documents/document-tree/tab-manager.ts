@@ -261,24 +261,41 @@ export class TabManager {
 
   /**
    * Goes back in the session history and opens the previous file
+   *
+   * @param   {boolean}  replaceActiveTab  If true, the previously active tab
+   *                                       will be closed when navigating opens
+   *                                       a new tab.
+   *
+   * @return  {OpenDocument|null}          The file that was closed, if any.
    */
-  public back (): void {
-    this._moveThroughHistory(-1)
+  public back (replaceActiveTab = false): OpenDocument|null {
+    return this._moveThroughHistory(-1, replaceActiveTab)
   }
 
   /**
    * Goes forward in the session history and opens the next file
+   *
+   * @param   {boolean}  replaceActiveTab  If true, the previously active tab
+   *                                       will be closed when navigating opens
+   *                                       a new tab.
+   *
+   * @return  {OpenDocument|null}          The file that was closed, if any.
    */
-  public forward (): void {
-    this._moveThroughHistory(1)
+  public forward (replaceActiveTab = false): OpenDocument|null {
+    return this._moveThroughHistory(1, replaceActiveTab)
   }
 
   /**
    * Moves through history using the specified direction
    *
-   * @param   {number}  direction  The direction to take. Negative = back, positive = forward
+   * @param   {number}   direction         The direction to take. Negative = back, positive = forward
+   * @param   {boolean}  replaceActiveTab  Whether to close the previous tab if
+   *                                       the target file needs to be opened in
+   *                                       a new one.
+   *
+   * @return  {OpenDocument|null}          The file that was closed, if any.
    */
-  private _moveThroughHistory (direction: number): void {
+  private _moveThroughHistory (direction: number, replaceActiveTab: boolean): OpenDocument|null {
     // Always make sure the session pointer is valid
     if (this._sessionPointer < 0 || this._sessionPointer > this._sessionHistory.length - 1) {
       this._sessionPointer = this._sessionHistory.length - 1
@@ -287,15 +304,32 @@ export class TabManager {
     const targetIndex = this._sessionPointer + direction
 
     if (targetIndex > this._sessionHistory.length - 1 || targetIndex < 0) {
-      return console.log('Out of bounds') // Cannot move: Out of bounds
+      return null // Cannot move: Out of bounds
     }
 
     // Move the pointer
     this._sessionPointer = targetIndex
     const pathToOpen = this._sessionHistory[this._sessionPointer]
 
+    const previousActiveFile = this._activeFile
+    const openFileCount = this._openFiles.length
+
     // Open that file, but tell the opener explicitly not to modify the state
     this.openFile(pathToOpen, false)
+
+    // If the target was not open yet, openFile added a new tab. When tab
+    // replacement is requested, close the previously active tab so that history
+    // navigation respects the "avoid new tabs" setting.
+    if (
+      replaceActiveTab &&
+      previousActiveFile !== null &&
+      this._openFiles.length > openFileCount &&
+      this.closeFile(previousActiveFile)
+    ) {
+      return previousActiveFile
+    }
+
+    return null
   }
 
   /**
