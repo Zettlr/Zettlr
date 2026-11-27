@@ -17,15 +17,19 @@ import { parseReaderWriter, readerWriterToString, PandocReaderWriter } from 'sou
 import assert from 'assert'
 
 const parseTests: Array<{ input: string, expected: PandocReaderWriter }> = [
-  { input: 'markdown-smart', expected: { name: 'markdown', enabledExtensions: [], disabledExtensions: ['smart'] } },
-  { input: 'markdown-smart+pipe_tables', expected: { name: 'markdown', enabledExtensions: ['pipe_tables'], disabledExtensions: ['smart'] } },
-  { input: 'markdown-pipe_tables-smart', expected: { name: 'markdown', enabledExtensions: [], disabledExtensions: ['pipe_tables', 'smart'] } },
+  { input: 'markdown-smart', expected: { name: 'markdown', isCustom: false, enabledExtensions: [], disabledExtensions: ['smart'] } },
+  { input: 'markdown-smart+pipe_tables', expected: { name: 'markdown', isCustom: false, enabledExtensions: ['pipe_tables'], disabledExtensions: ['smart'] } },
+  { input: 'markdown-pipe_tables-smart', expected: { name: 'markdown', isCustom: false, enabledExtensions: [], disabledExtensions: ['pipe_tables', 'smart'] } },
+  { input: 'custom.lua', expected: { name: 'custom.lua', isCustom: true, enabledExtensions: [], disabledExtensions: [] } },
+  { input: 'custom.lua+smart-pipe_tables', expected: { name: 'custom.lua', isCustom: true, enabledExtensions: ['smart'], disabledExtensions: ['pipe_tables'] } },
 ]
 
 const stringifyTests: Array<{ input: PandocReaderWriter, expected: string }> = [
-  { input: { name: 'markdown', enabledExtensions: [], disabledExtensions: ['smart'] }, expected: 'markdown-smart' },
-  { input: { name: 'markdown', enabledExtensions: ['pipe_tables'], disabledExtensions: ['smart'] }, expected: 'markdown+pipe_tables-smart' },
-  { input: { name: 'markdown', enabledExtensions: [], disabledExtensions: ['smart', 'pipe_tables'] }, expected: 'markdown-smart-pipe_tables' },
+  { input: { name: 'markdown', isCustom: false, enabledExtensions: [], disabledExtensions: ['smart'] }, expected: 'markdown-smart' },
+  { input: { name: 'markdown', isCustom: false, enabledExtensions: ['pipe_tables'], disabledExtensions: ['smart'] }, expected: 'markdown+pipe_tables-smart' },
+  { input: { name: 'markdown', isCustom: false, enabledExtensions: [], disabledExtensions: ['smart', 'pipe_tables'] }, expected: 'markdown-smart-pipe_tables' },
+  { input: { name: 'custom.lua', isCustom: true, enabledExtensions: [], disabledExtensions: [] }, expected: 'custom.lua' },
+  { input: { name: 'custom.lua', isCustom: true, enabledExtensions: ['smart'], disabledExtensions: ['pipe_tables'] }, expected: 'custom.lua+smart-pipe_tables' },
 ]
 
 describe('Pandoc#readerWriter()', function () {
