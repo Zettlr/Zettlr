@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import { StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type AutocompletePlugin } from '.'
@@ -96,32 +96,24 @@ const apply = (filename: string, fileId: string, displayName: string) => functio
 
   view.dispatch({
     changes: [{ from, to, insert }],
-    selection: { anchor, head }
+    selection: { anchor, head },
+    annotations: pickedCompletion.of(completion)
   })
 }
 
 export const files: AutocompletePlugin = {
+  filter: true,
+  fields: [filesUpdateField],
   applies (ctx) {
-    // File autocompletion triggers as soon as we detect the start of a link
-    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
-    const lineTextUntilPos = text.slice(0, ctx.pos - from)
-    const linkStartBefore = lineTextUntilPos.lastIndexOf('[[') > lineTextUntilPos.lastIndexOf(']]')
-    const linkStartRange = ctx.state.sliceDoc(ctx.pos - 2, ctx.pos)
+    const token = ctx.tokenBefore(['ZknLinkContent'])
 
-    if (linkStartRange === '[[') {
-      return ctx.pos
-    } else if (linkStartBefore) {
-      return from + lineTextUntilPos.lastIndexOf('[[') + 2
-    } else {
-      return false
+    if (token !== null) {
+      return token.from
     }
+
+    return false
   },
-  entries (ctx, query) {
-    query = query.toLowerCase()
-    const entries = ctx.state.field(filesUpdateField)
-    return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query) === true
-    })
+  entries (ctx) {
+    return ctx.state.field(filesUpdateField)
   },
-  fields: [filesUpdateField]
 }

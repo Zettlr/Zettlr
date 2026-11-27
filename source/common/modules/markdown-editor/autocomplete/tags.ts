@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { type Completion } from '@codemirror/autocomplete'
+import { pickedCompletion, type Completion } from '@codemirror/autocomplete'
 import { StateEffect, StateField } from '@codemirror/state'
 import { type EditorView } from '@codemirror/view'
 import { type TagRecord } from '@providers/tags'
@@ -53,31 +53,29 @@ export const tagsUpdateField = StateField.define<Completion[]>({
 const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   view.dispatch({
     changes: [{ from, to, insert: completion.label }],
-    selection: { anchor: from + completion.label.length }
+    selection: { anchor: from + completion.label.length },
+    annotations: pickedCompletion.of(completion)
   })
 }
 
 export const tags: AutocompletePlugin = {
+  filter: true,
+  fields: [tagsUpdateField],
   applies (ctx) {
-    if (ctx.pos === 0) {
-      return false
+    const token = ctx.tokenBefore(['ZknTag'])
+
+    if (token !== null) {
+      return token.from + 1
     }
 
-    const match = ctx.matchBefore(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)?/)
-    if (match === null || match.to < ctx.pos) {
-      return false
-    } else if (match.to === ctx.pos) {
-      return match.from + 1
+    // Allow bare `#` to trigger autocomplete
+    if (ctx.matchBefore(/(?:^|[\s({[])#/)) {
+      return ctx.pos
     }
 
     return false
   },
-  entries (ctx, query) {
-    query = query.toLowerCase()
-    const entries = ctx.state.field(tagsUpdateField)
-    return entries.filter(entry => {
-      return entry.label.toLowerCase().includes(query)
-    })
+  entries (ctx) {
+    return ctx.state.field(tagsUpdateField)
   },
-  fields: [tagsUpdateField]
 }
