@@ -97,7 +97,7 @@ const typewriterLine = StateField.define<DecorationSet>({
   create (state: EditorState) {
     return renderTypewriterLine(state)
   },
-  update (oldDecoSet, transaction) {
+  update (_value, transaction) {
     return renderTypewriterLine(transaction.state)
   },
   provide: f => EditorView.decorations.from(f)

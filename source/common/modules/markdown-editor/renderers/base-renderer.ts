@@ -187,7 +187,7 @@ export function renderBlockWidgets (
     create (state: EditorState) {
       return renderWidgets(state, [], shouldHandleNode, createWidget)
     },
-    update (oldDecoSet, transactions) {
+    update (_value, transactions) {
       return renderWidgets(transactions.state, [], shouldHandleNode, createWidget)
     },
     provide: f => EditorView.decorations.from(f)
