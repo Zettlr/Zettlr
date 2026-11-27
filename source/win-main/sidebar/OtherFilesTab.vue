@@ -49,11 +49,9 @@
 <script setup lang="ts">
 import { trans } from '@common/i18n-renderer'
 import makeValidUri from '@common/util/make-valid-uri'
-import { type AnyDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@cds/core/icon'
-import { computed, ref, toRef, watch } from 'vue'
-import { useConfigStore, useDocumentTreeStore } from 'source/pinia'
-import { pathDirname } from 'source/common/util/renderer-path-polyfill'
+import { computed } from 'vue'
+import { useConfigStore  } from 'source/pinia'
 import { hasImageExt } from 'source/common/util/file-extention-checks'
 import { useWorkspaceStore } from 'source/pinia/workspace-store'
 import { sanitizeHTML } from 'source/common/util/sanitize-html'
@@ -68,33 +66,11 @@ if (windowId === null) {
 }
 
 const configStore = useConfigStore()
-const documentTreeStore = useDocumentTreeStore()
 const workspaceStore = useWorkspaceStore()
 
 const otherFilesLabel = trans('Other files')
 const openDirLabel = trans('Open directory')
 const noAttachmentsMessage = trans('No other files')
-
-const children = ref<AnyDescriptor[]>([])
-
-watch(toRef(documentTreeStore.lastLeafActiveFile), value => {
-  if (value === undefined) {
-    children.value = []
-    return
-  }
-
-  const descriptor = workspaceStore.descriptorMap.get(pathDirname(value.path))
-  if (descriptor === undefined) {
-    children.value = []
-    return
-  }
-
-  ipcRenderer.invoke('fsal', { command: 'get-descriptor', payload: descriptor.path })
-    .then(childDescriptors => {
-      children.value = childDescriptors
-    })
-    .catch(err => console.error(err))
-})
 
 const attachments = computed(() => workspaceStore.otherFiles)
 
