@@ -2,7 +2,10 @@
 
 ## GUI and Functionality
 
-(Nothing here)
+- The 32x32px and 16x16px PNG app icons were accidentally cut off. They have now
+  been re-exported to avoid the cut off. This has primarily affected Linux
+  distributions which have displayed one of these two sizes as application
+  icons (see repository `flathub/com.zettlr.Zettlr`, #76).
 
 ## Under the Hood
 
